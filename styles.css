@@ -1458,3 +1458,14 @@ body.calm .ob-glow{animation:none;opacity:.85}
 .trmenu{position:absolute;z-index:30;top:110%;left:0;background:#fff;border:2px solid var(--line);border-radius:.8rem;padding:.4rem;display:flex;flex-direction:column;min-width:12rem;box-shadow:0 8px 20px rgba(0,0,0,.12)}
 .trmenu a{padding:.5rem .6rem;color:var(--ink);text-decoration:none;border-radius:.5rem}.trmenu a:hover{background:var(--cream2)}
 .uA-extra{margin-top:1rem}
+.trsmall{font-size:.85rem;color:var(--ink2);text-decoration:underline;margin-left:.4rem}
+.tmbtn{display:inline-flex;margin:.4rem 0 .8rem;text-decoration:none}
+.tmscreen{background:var(--cream,#FFF8E7);min-height:100vh}
+.tmwrap{max-width:52rem;margin:0 auto;padding:1rem 1.2rem 3rem;font-family:Andika,sans-serif;line-height:1.6;letter-spacing:.02em}
+.tmwrap h1{font-size:2rem;margin:.6rem 0 .2rem}.tmlead{font-size:1.15rem;margin:0 0 1.2rem}
+.tmunit h2{font-size:1.4rem;margin:1rem 0 .6rem}
+.tmgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(16rem,1fr));gap:1rem}
+.tmcard{background:#fff;border:2px solid var(--line,#E3D9BC);border-radius:1.2rem;padding:1rem 1.2rem}
+.tmcard h3{font-size:1.3rem;margin:0 0 .7rem}.tmsound{display:inline-block;background:#E8731C;color:#fff;border-radius:.6rem;padding:0 .6rem;font-weight:700}
+.tmlink{display:flex;justify-content:center;text-decoration:none;margin-top:.5rem}.tmnote{margin:.2rem 0 .6rem;font-size:1rem;color:var(--ink2,#4a4a68)}
+.tmlink,.tmlink:visited{color:var(--ink,#26324D)}

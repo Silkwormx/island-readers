@@ -648,7 +648,7 @@ window.IR_DATA_NK = {
   {
    "n": 11,
    "img": "img/nk_p11.webp",
-   "text": "The skunk hops up and bonks the bell with a thunk. Bong! Clang! The orange bell rings! Frill grins. \"That skunk is a champ!\"",
+   "text": "The skunk hops up and bonks the bell with a thunk. Bong! Clang!",
    "words": [
     "The",
     "skunk",
@@ -662,18 +662,7 @@ window.IR_DATA_NK = {
     "a",
     "thunk.",
     "Bong!",
-    "Clang!",
-    "The",
-    "orange",
-    "bell",
-    "rings!",
-    "Frill",
-    "grins.",
-    "\"That",
-    "skunk",
-    "is",
-    "a",
-    "champ!\""
+    "Clang!"
    ],
    "t": [
     [
@@ -727,53 +716,74 @@ window.IR_DATA_NK = {
     [
      5.639,
      6.307
-    ],
-    [
-     7.273,
-     7.472
-    ],
-    [
-     7.486,
-     7.898
-    ],
-    [
-     7.912,
-     8.182
-    ],
-    [
-     8.196,
-     8.778
-    ],
-    [
-     9.759,
-     10.199
-    ],
-    [
-     10.213,
-     10.895
-    ],
-    [
-     11.875,
-     12.23
-    ],
-    [
-     12.244,
-     12.67
-    ],
-    [
-     12.685,
-     12.798
-    ],
-    [
-     12.812,
-     12.884
-    ],
-    [
-     12.898,
-     13.494
     ]
    ],
    "audio": "audio/nk_s_11.mp3"
+  },
+  {
+   "n": 12,
+   "img": "img/nk_p12.webp",
+   "text": "The orange bell rings! Frill grins. \"That skunk is a champ!\"",
+   "words": [
+    "The",
+    "orange",
+    "bell",
+    "rings!",
+    "Frill",
+    "grins.",
+    "\"That",
+    "skunk",
+    "is",
+    "a",
+    "champ!\""
+   ],
+   "t": [
+    [
+     0.107,
+     0.306
+    ],
+    [
+     0.32,
+     0.732
+    ],
+    [
+     0.746,
+     1.016
+    ],
+    [
+     1.03,
+     1.613
+    ],
+    [
+     2.599,
+     3.04
+    ],
+    [
+     3.054,
+     3.736
+    ],
+    [
+     4.716,
+     5.071
+    ],
+    [
+     5.085,
+     5.511
+    ],
+    [
+     5.526,
+     5.639
+    ],
+    [
+     5.653,
+     5.724
+    ],
+    [
+     5.739,
+     6.335
+    ]
+   ],
+   "audio": "audio/nk_s_12.mp3"
   }
  ],
  "heart": [

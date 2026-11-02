@@ -83,7 +83,7 @@
     app.append(h('div', { class: 'screen trailscreen unitpage unitA nkunit' },
       h('header', { class: 'uA-top' }, IR.ui.homeButton(), h('h1', { class: 'uA-title' }, h('small', null, 'Unit 3 \u00b7 Lesson 3.2 \u00b7 '), 'nk'),
         h('span', { class: 'uA-time' }, h('span', { class: 't-long' }, 'About ' + totalMin + ' min total'), h('span', { class: 't-short' }, totalMin + ' min')), IR.ui.gearButton()),
-      IR.unitIntro ? IR.unitIntro('i3') : null, IR.teacherRow ? IR.teacherRow('nk') : null,
+      IR.unitIntro ? IR.unitIntro('i3') : null,
       h('main', { class: 'uA-main' }, left, right), foot));
   }
 

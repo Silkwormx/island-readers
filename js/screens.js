@@ -131,6 +131,7 @@
     const sc = S.check;
     openModal(h('div', { class: 'grown' },
       h('h2', null, 'Grown-up corner'),
+      h('a', { class: 'btn big primary tmbtn', href: '#/teachers', onclick: () => { modalRoot.innerHTML = ''; } }, 'Teacher materials'),
       h('p', null, 'This is an early version of Island Readers. Unit 3 (ng and nk) is open now, and more units are on the way. Progress is saved only on this device. Nothing is sent anywhere.'),
       h('p', null, 'Check best score: ' + (sc.best == null ? 'not taken yet' : sc.best + ' of 10') + (sc.attempts ? ' (' + sc.attempts + ' tries)' : '') + '.'),
       h('label', { class: 'opt' }, calm, ' Calm motion (fish hold still, no wiggles)'),
@@ -345,10 +346,13 @@
   /* "For teachers" row on the ng and nk lesson pages: her own slides and worksheets, linked (not cached offline). */
   const TEACH = {
     ng: { lesson: 'teachers/ng/Lesson3.1_ng_Slides_Lesson_Notes.pdf', deck: 'teachers/ng/Lesson3.1_ng_Slide_Presentation.pptx', ws: 'teachers/ng/Lesson3.1_ng_Worksheets_Student.pdf', key: 'teachers/ng/Lesson3.1_ng_Worksheets_Answer_Key.pdf' },
-    nk: { lesson: 'teachers/nk/Lesson3.2_nk_Slides_Lesson_Notes.pdf', deck: 'teachers/nk/Lesson3.2_nk_Slide_Presentation.pptx', ws: 'teachers/nk/Lesson3.2_nk_Worksheets_Student.pdf', key: 'teachers/nk/Lesson3.2_nk_Worksheets_Answer_Key.pdf' }
+    nk: { pack: 'teachers/nk/Lesson3.2_nk_Teacher_Pack.pdf', deck: 'teachers/nk/Lesson3.2_nk_Slide_Presentation.pptx' }
   };
   function teacherRow(u) {
     const t = TEACH[u]; if (!t) return null;
+    if (t.pack) return h('div', { class: 'teachrow', role: 'group', 'aria-label': 'For teachers' }, h('span', { class: 'trlab' }, 'For teachers'),
+      h('a', { class: 'btn trbtn', href: t.pack, target: '_blank', rel: 'noopener' }, 'Teacher pack (PDF)'),
+      h('a', { class: 'trsmall', href: t.deck, download: '' }, 'Editable slides (.pptx)'));
     const link = (href, label, extra) => href ? h('a', Object.assign({ class: 'btn trbtn', href, target: '_blank', rel: 'noopener' }, extra || {}), label) : h('span', { class: 'btn trbtn off', 'aria-disabled': 'true', title: 'Being updated' }, label);
     const ws = h('details', { class: 'trws' }, h('summary', { class: 'btn trbtn' }, 'Worksheets'),
       h('div', { class: 'trmenu' }, h('a', { href: t.ws, target: '_blank', rel: 'noopener' }, 'Student pages (PDF)'), h('a', { href: t.key, target: '_blank', rel: 'noopener' }, 'Answer key (PDF)')));
@@ -393,7 +397,7 @@
       h('header', { class: 'uA-top' }, homeButton(), h('h1', { class: 'uA-title' }, h('small', null, 'Unit 3 \u00b7 Lesson 3.1 \u00b7 '), 'ng'),
         h('button', { class: 'cartoonpill', type: 'button', 'aria-label': 'Welcome cartoon, optional. Opens a video.', onclick: () => IR.openCartoon() }, icon('play'), h('span', { class: 'cp-long' }, 'Welcome Cartoon (optional)'), h('span', { class: 'cp-short' }, 'Cartoon')),
         h('span', { class: 'uA-time', 'aria-label': 'About ' + totalMin + ' minutes in total' }, h('span', { class: 't-long' }, 'About ' + totalMin + ' min total'), h('span', { class: 't-short' }, totalMin + ' min')), gearButton()),
-      unitIntro('i3'), teacherRow('ng'),
+      unitIntro('i3'),
       h('div', { class: 'ob-cover' }, h('img', { src: 'img/ob_cover_wide.jpg', alt: 'Zip and Frill under the banyan tree with the big orange bell' }),
         h('p', null, h('b', null, 'The big bell has gone quiet.'), ' Help Zip and Frill make it ring again.'),
         h('div', { class: 'ob-meta' }, h('span', null, 'About ' + totalMin + ' min'), h('button', { class: 'ob-cartoon', type: 'button', 'aria-label': 'Welcome cartoon, optional. Opens a video.', onclick: () => IR.openCartoon() }, icon('play'), 'Cartoon'))),
@@ -543,6 +547,25 @@
         p('Readers start with short vowels and simple words, then learn sounds made by two letters, then longer words and word parts. That way no step asks for a skill that has not been taught.')),
       h('div', { class: 'abbottom' }, home2))));
   }
+  /* ---------- Teacher materials (grown-up corner): by unit, then sound ---------- */
+  function teachersScreen() {
+    IR.newScreen();
+    const UNITS = [{ name: 'Unit 3 \u00b7 Glued Sounds', sounds: [
+      { s: 'ng', lesson: 'Lesson 3.1', days: 3, daily: 'teachers/ng/Lesson3.1_ng_Daily_Practice_Sheets.pdf', pack: 'teachers/ng/Lesson3.1_ng_Teacher_Pack.pdf', deck: 'teachers/ng/Lesson3.1_ng_Slide_Presentation.pptx' },
+      { s: 'nk', lesson: 'Lesson 3.2', days: 3, daily: 'teachers/nk/Lesson3.2_nk_Daily_Practice_Sheets.pdf', pack: 'teachers/nk/Lesson3.2_nk_Teacher_Pack.pdf', deck: 'teachers/nk/Lesson3.2_nk_Slide_Presentation.pptx' }] }];
+    const card = (x) => h('div', { class: 'tmcard' }, h('h3', null, h('span', { class: 'tmsound' }, x.s), ' ' + x.lesson),
+      h('a', { class: 'btn big tmlink', href: x.deck, download: '' }, 'Slides \u00b7 ' + x.days + ' days'),
+      h('p', { class: 'tmnote' }, 'One PowerPoint for the whole sound.'),
+      h('a', { class: 'btn big tmlink', href: x.daily, target: '_blank', rel: 'noopener' }, 'Daily practice sheets (PDF)'),
+      h('p', { class: 'tmnote' }, 'Worksheets for each day, labeled Day 1 to Day ' + x.days + '.'),
+      h('a', { class: 'btn big tmlink', href: x.pack, target: '_blank', rel: 'noopener' }, 'Teacher pack (PDF)'),
+      h('p', { class: 'tmnote' }, 'Slides with notes, worksheets and answer key.'));
+    app.append(h('div', { class: 'screen tmscreen' }, h('div', { class: 'tmwrap' },
+      h('div', { class: 'abtop' }, homeButton()),
+      h('h1', null, 'Teacher materials'),
+      h('p', { class: 'tmlead' }, 'For teaching in class. Students practice on their own in the app.'),
+      ...UNITS.map((u) => h('section', { class: 'tmunit' }, h('h2', null, u.name), h('div', { class: 'tmgrid' }, ...u.sounds.map(card)))))));
+  }
   /* ---------- router ---------- */
   function route() {
     const hash = location.hash || '#/home'; modalRoot.innerHTML = '';
@@ -554,6 +577,7 @@
     else if ((m = /^#\/practice\/(\w+)/.exec(hash))) practiceScreen(m[1]);
     else if (hash.startsWith('#/gems')) gemScreen();
     else if (hash.startsWith('#/about')) aboutScreen();
+    else if (hash.startsWith('#/teachers')) teachersScreen();
     else if (hash.startsWith('#/placement')) IR.placement.render(app, (n) => { const id = 'i' + n; if ((D.islands || {})[id]) { location.hash = '#/home'; setTimeout(() => openIsland(id), 0); } else { location.hash = '#/home'; setTimeout(() => toast('Unit ' + n + ' (' + ({1:'blends',2:'sh ch th',3:'ng nk',4:'silent e',5:'long words',6:'bossy r',7:'vowel teams',8:'oi ow aw',9:'word parts',10:'tch dge igh'})[n] + ') is coming soon in the full app. Try Unit 3 for now.'), 50); } });
     else if (hash.startsWith('#/island3')) trailScreen();
     else if (hash.startsWith('#/check')) checkScreen();
