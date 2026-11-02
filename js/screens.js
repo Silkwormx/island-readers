@@ -247,7 +247,7 @@
     /* Read-aloud for the hero text: HOME_INTRO_AUDIO recording if set, else speechSynthesis. Tap again to stop. */
     function readAloudBtn() {
       const TEXT = 'Learn to read with Zip and Frill. Ring every bell by learning its sounds. Start here to find your first bell.';
-      const HOME_INTRO_AUDIO = null; /* set to 'audio/home_intro.m4a' once her recording is added */
+      const HOME_INTRO_AUDIO = 'audio/home_intro.mp3'; /* Zip's lesson voice (edge-tts en-US-RogerNeural +0%); browser speech is only a fallback */
       const b = h('button', { class: 'zfspk', type: 'button', 'aria-label': 'Read aloud', 'aria-pressed': 'false' }, icon('speaker'));
       let au = null, on = false;
       const set = (v) => { on = v; b.classList.toggle('playing', v); b.setAttribute('aria-pressed', v ? 'true' : 'false'); b.textContent = ''; b.append(icon(v ? 'pause' : 'speaker')); };
@@ -258,7 +258,7 @@
         try { Snd.stop(); } catch (e) {}
         set(true);
         const src = HOME_INTRO_AUDIO;
-        if (src) { au = au || new Audio(src); au.onended = () => set(false); au.play().catch(() => speak()); } else speak();
+        if (src) { let fell = false; const fb = () => { if (fell || !on) return; fell = true; speak(); }; if (!au) { au = new Audio(src); } au.onended = () => set(false); au.onerror = fb; au.currentTime = 0; au.play().catch(fb); } else speak();
       });
       window.addEventListener('hashchange', stop, { once: true });
       return b;

@@ -21,17 +21,21 @@
     { n: 10, name: SKILL[10], words: [['catch'], ['bridge'], ['night'], ['plidge', 1], ['zight', 1]] },
   ];
   const KID_LINE = 'Read each word out loud. Some are made-up words, so just sound them out. Try your best!';
-  function speakBtn(text) {
+  let curAudio = null;
+  function speakBtn(text, src) {
     const b = h('button', { class: 'speaker zfread', type: 'button', 'aria-label': 'Read aloud', 'aria-pressed': 'false' }, icon('speaker'));
-    let on = false;
+    let on = false, au = null;
     const set = (v) => { on = v; b.classList.toggle('playing', v); b.setAttribute('aria-pressed', String(v)); b.textContent = ''; b.append(icon(v ? 'pause' : 'speaker')); };
+    const speak = () => { try { const u = new SpeechSynthesisUtterance(text); u.lang = 'en-US'; u.rate = 0.9; u.onend = u.onerror = () => set(false); speechSynthesis.cancel(); speechSynthesis.speak(u); } catch (e) { set(false); } };
     b.addEventListener('click', () => {
-      if (on) { try { speechSynthesis.cancel(); } catch (e) {} set(false); return; }
-      try { Snd.stop(); const u = new SpeechSynthesisUtterance(text); u.lang = 'en-US'; u.rate = 0.9; u.onend = u.onerror = () => set(false); speechSynthesis.cancel(); speechSynthesis.speak(u); set(true); } catch (e) { set(false); }
+      if (on) { if (au) { au.pause(); au.currentTime = 0; } try { speechSynthesis.cancel(); } catch (e) {} set(false); return; }
+      try { Snd.stop(); } catch (e) {}
+      set(true);
+      if (src) { let fell = false; const fb = () => { if (fell || !on) return; fell = true; speak(); }; if (!au) au = new Audio(src); curAudio = au; au.onended = () => set(false); au.onerror = fb; au.currentTime = 0; au.play().catch(fb); } else speak();
     });
     return b;
   }
-  const stopSpeech = () => { try { speechSynthesis.cancel(); } catch (e) {} };
+  const stopSpeech = () => { try { speechSynthesis.cancel(); } catch (e) {} if (curAudio) { try { curAudio.pause(); } catch (e) {} } };
   const list = (arr) => arr.length < 2 ? arr.join('') : arr.slice(0, -1).join(', ') + ' and ' + arr[arr.length - 1];
   const saved = () => { try { const v = parseInt(localStorage.getItem(KEY), 10); return v >= 1 && v <= 10 ? v : null; } catch (e) { return null; } };
 
@@ -49,7 +53,7 @@
         h('div', { class: 'plc-card' },
           h('p', { class: 'plc-adult' }, h('b', null, 'For the grown-up: '), 'Sit with your reader. They read each word out loud. Tap \u2713 if read right, \u2717 if not. About 5 minutes.'),
           h('p', { class: 'plc-small' }, 'Some words are made up, to check sounding out, not memory. The check stops on its own when a group gets tricky. Only the starting bell is saved, on this device. Nothing is recorded or sent.')),
-        h('div', { class: 'plc-card plc-kid' }, h('div', { class: 'zfpics' }, h('img', { src: 'img/zipA.webp', alt: 'Zip' }), h('img', { src: 'img/frill.webp', alt: 'Frill' })), h('p', { class: 'plc-kidline' }, KID_LINE), speakBtn(KID_LINE)),
+        h('div', { class: 'plc-card plc-kid' }, h('div', { class: 'zfpics' }, h('img', { src: 'img/zipA.webp', alt: 'Zip' }), h('img', { src: 'img/frill.webp', alt: 'Frill' })), h('p', { class: 'plc-kidline' }, KID_LINE), speakBtn(KID_LINE, 'audio/place_kid.mp3')),
         h('div', { class: 'plc-actions' }, h('button', { class: 'btn big primary plc-go', type: 'button', onclick: () => run() }, h('span', { 'aria-hidden': 'true' }, '\u{1F514}'), h('span', null, 'Start the sound check')),
           prev ? h('button', { class: 'btn big', type: 'button', onclick: () => result(prev, null) }, 'See last result: Unit ' + prev) : null));
     }

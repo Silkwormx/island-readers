@@ -1421,3 +1421,30 @@ body.calm .ob-glow{animation:none;opacity:.85}
 @keyframes zfglow{0%{box-shadow:0 5px 0 #C27A00,0 0 0 0 rgba(255,201,77,.0)}40%{box-shadow:0 5px 0 #C27A00,0 0 0 12px rgba(255,201,77,.55)}100%{box-shadow:0 5px 0 #C27A00,0 10px 22px rgba(217,142,0,.25)}}
 @media (prefers-reduced-motion:reduce){.zfstart2{animation:none}}
 .aboutbtn{background:transparent!important;border:2px solid var(--line)!important;box-shadow:none!important;font-size:1rem!important;min-height:3rem!important;font-weight:700;color:var(--ink2)!important}
+/* Nov 2 2026: laptop left column must fit one screen (sticky, no internal scroll). Budget = 100vh minus banner and the bottom "You are here" bar. */
+@media (min-width:1100px){
+  .homeside{gap:clamp(.45rem,1.4vh,1rem);max-height:none;overflow:visible}
+  .aboutbtn{min-height:clamp(2.2rem,5vh,3rem)!important;padding:.2rem 1rem!important}
+  .zfhero.zf2{gap:clamp(.35rem,1.2vh,.9rem);padding:clamp(.6rem,1.6vh,1.2rem) 1rem}
+  .zf2 .zfpics{padding:clamp(.3rem,1vh,.7rem) .8rem .2rem}
+  .zf2 .zfpics img{height:clamp(3.6rem,11vh,8rem)!important}
+  .zf2 .zfline{font-size:clamp(1.05rem,2.3vh,1.3rem)}
+  .zf2 .zfsub{font-size:clamp(.9rem,1.9vh,1.05rem);line-height:1.4}
+  .zfspk{width:2.4rem;height:2.4rem}
+  .zfstart2{min-height:clamp(3.2rem,7vh,4.4rem);padding:.4rem 1rem;gap:.6rem}
+  .zfstart2 .zfbell{font-size:clamp(1.4rem,3vh,1.8rem)}
+  .zfst b{font-size:clamp(1.15rem,2.5vh,1.35rem)}.zfst small{font-size:.9rem}
+  .gridhome .practice{gap:clamp(.3rem,.9vh,.6rem);padding:clamp(.5rem,1.4vh,1rem) .9rem}
+  .gridhome .practice h2{font-size:clamp(1rem,2.2vh,1.3rem);margin:0}
+  .gridhome .pbox{min-height:clamp(2.3rem,5vh,3.1rem)!important;padding:.2rem .8rem!important;font-size:clamp(.92rem,1.9vh,1.05rem)!important}
+}
+/* Last resort for very short laptop windows: allow the column itself to scroll. */
+@media (min-width:1100px) and (max-height:699px){
+  .homeside{max-height:calc(100vh - 2rem);overflow-y:auto}
+}
+@media (min-width:1100px){
+  .zf2 .zfpics img{height:clamp(3.4rem,8.5vh,7rem)!important}
+  .gridhome .pbox{min-height:clamp(2.2rem,4.4vh,3rem)!important}
+  .homeside{gap:clamp(.4rem,1.1vh,.9rem)}
+  .homelay{margin-top:clamp(.6rem,1.6vh,1.4rem)}
+}
