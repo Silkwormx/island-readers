@@ -22,37 +22,45 @@
     return /^img\//.test(src) ? h('img', { class: 'nkpic', src, alt: '' }) : h('span', { class: 'nkpic svgpic', html: PIC[src] || '' }); };
 
   /* ---------- the unit: steps in the approved order ---------- */
+  const ACT = IR.nkActs;
   const STEPS = [
     { id: 'meet', title: 'Meet nk', group: 'lesson', run: runMeet, color: '#1FA6A6' },
-    { id: 'ido', title: 'Watch Zip Blend', group: 'activities', run: runIdo, color: '#1F8FD6' },
-    { id: 'wedo', title: 'Blend With Me', group: 'activities', run: runWedo, color: '#E8603C' },
-    { id: 'youdo', title: 'Hear and Pick', group: 'activities', run: runYoudo, color: '#7E57C2' },
-    { id: 'ngnk', title: 'ng or nk?', group: 'activities', run: runNgnk, color: '#2E9E6B' },
-    { id: 'heart', title: 'Heart Words', group: 'activities', run: runHeart, color: '#E0476B' },
     { id: 'listen', title: 'Story Time', group: 'story', run: runListen, color: '#8E5BD6' },
+    { id: 'hear', title: 'Hear and Pick', group: 'activities', run: ACT.hear, color: '#7E57C2' },
+    { id: 'bells', title: 'Make the bell ring', group: 'activities', run: ACT.bells, color: '#E8731C' },
+    { id: 'build', title: 'Build-a-Word', group: 'activities', run: ACT.build, color: '#E8603C' },
+    { id: 'chain', title: 'Word Chains', group: 'activities', run: ACT.chain, color: '#C95A10' },
+    { id: 'scramble', title: 'Scrambled Letters', group: 'activities', run: ACT.scramble, color: '#D9631A' },
+    { id: 'trace', title: 'Trace Trail', group: 'activities', run: ACT.trace, color: '#D98E00' },
+    { id: 'sentence', title: 'Sentence Bridge', group: 'activities', run: ACT.sentence, color: '#2E9E6B' },
     { id: 'read', title: 'Now You Read It', group: 'activities', run: runRead, color: '#8E5BD6' },
-    { id: 'comp', title: 'Story Check', group: 'activities', run: runComp, color: '#D98E00' },
-    { id: 'rhyme', title: 'Rhyme Time', group: 'activities', run: runRhyme, color: '#C2408A' },
-    { id: 'check', title: 'Zip\u2019s Check', group: 'activities', run: runCheck, color: '#2b2540' }
+    { id: 'ngnk', title: 'ng or nk?', group: 'activities', run: runNgnk, color: '#2E9E6B' },
+    { id: 'check', title: 'Zip\u2019s Check', group: 'activities', run: runCheck, color: '#2b2540' },
+    { id: 'comp', title: 'Story Check', group: 'extra', run: runComp, color: '#D98E00' },
+    { id: 'rhyme', title: 'Rhyme Time', group: 'extra', run: runRhyme, color: '#C2408A' }
   ];
+  /* one-line tips for grown-ups, in the same style as the ng unit */
+  const TIPS = { hear: 'Let your child listen first, then point.', bells: 'Ask your child to read the word out loud first.', build: 'Say the word slowly together.', chain: 'Only one letter changes each time.', scramble: 'Say the word slowly, then find each part.', trace: 'Trace with a finger, slowly.', sentence: 'Read the sentence together at the end.', read: 'Reading it 3 times builds fluency.', ngnk: 'Say the word slowly. Listen for the k at the end.', check: 'Let your child work alone. Just cheer.', comp: 'Optional extra. Look back at the story page together.', rhyme: 'Optional extra. Read the poem together for fun.' };
+  IR.nkTips = TIPS;
   const pid = (s) => 'nk_' + s.id;
   function sections() {
     const items = STEPS.map((s, i) => ({ id: s.id, title: s.title, group: s.group, href: '#/nk/' + s.id, num: i + 1, done: IR.isDone(pid(s)), min: (N.minutes || {})[s.id] || 3 }));
     items.filter((r) => r.group === 'activities').forEach((r, k) => { r.act = k + 1; r.label = 'Activity ' + (k + 1) + ': ' + r.title; });
+    items.filter((r) => r.group === 'extra').forEach((r) => { r.optional = true; r.label = 'Extra: ' + r.title; });
     items.forEach((r) => { if (!r.label) r.label = r.title; }); return items;
   }
   IR.nk = { sections, steps: STEPS };
   /* progress for the island picker */
   IR.nkProgress = (id) => {
-    if (id === 'nk') { const s = sections(); return { total: s.length, done: s.filter((r) => r.done).length, min: s.reduce((a, r) => a + r.min, 0) }; }
+    if (id === 'nk') { const s = sections().filter((r) => !r.optional); return { total: s.length, done: s.filter((r) => r.done).length, min: s.reduce((a, r) => a + r.min, 0) }; }
     if (id === 'review') return { total: 1, done: IR.isDone('i3_review') ? 1 : 0, min: 6 };
     return null;
   };
-  const nextUp = () => sections().find((r) => !r.done) || null;
+  const nextUp = () => sections().find((r) => !r.done && !r.optional) || null;
 
   /* ---------- unit page (same layout as the ng unit page) ---------- */
   function unitPage(app) {
-    IR.newScreen(); const secs = sections(); const nx = nextUp(); const doneN = secs.filter((r) => r.done).length; const total = secs.length;
+    IR.newScreen(); const all = sections(); const secs = all.filter((r) => !r.optional); const extras = all.filter((r) => r.optional); const nx = nextUp(); const doneN = secs.filter((r) => r.done).length; const total = secs.length;
     const totalMin = secs.reduce((a, r) => a + r.min, 0);
     const star = (on) => h('span', { class: 'sstar' + (on ? ' on' : ''), 'aria-hidden': 'true' }, icon(on ? 'star' : 'starOutline'));
     const go = (r) => () => { Snd.stop(); location.hash = r.href; };
@@ -64,17 +72,18 @@
           h('span', { class: 'sside' }, h('span', { class: 'slabel ' + (r.done ? 'rev' : isNext ? 'tag' : 'none') }, r.done ? (lesson ? 'Review lesson' : 'Read again') : isNext ? 'Next' : ''))))); };
     const row = (r) => { const isNext = nx && nx.id === r.id;
       return h('li', null, h('button', { class: 'stopcard arow gamestop' + (r.done ? ' done' : '') + (isNext ? ' nextup' : ''), type: 'button', 'data-id': r.id, 'aria-label': r.label + '. ' + r.min + ' minutes.', onclick: go(r) },
-        h('span', { class: 'snum', 'aria-hidden': 'true' }, String(r.act)), h('span', { class: 'stxt' }, h('b', null, r.title)), h('span', { class: 'smin' }, r.min + ' min'),
+        h('span', { class: 'snum', 'aria-hidden': 'true' }, r.optional ? '+' : String(r.act)), h('span', { class: 'stxt' }, h('b', null, r.title), TIPS[r.id] ? h('span', { class: 'sblurb' }, TIPS[r.id]) : null), h('span', { class: 'smin' }, r.min + ' min'),
         h('span', { class: 'sside' }, star(r.done), h('span', { class: 'slabel ' + (isNext ? 'tag' : 'none') }, isNext ? 'Next' : '')))); };
     const left = h('ul', { class: 'uA-left' }, ...secs.filter((r) => r.group !== 'activities').map(big));
-    const right = h('section', { class: 'uA-right' }, h('h2', { class: 'uA-h' }, 'Activities'), h('ol', { class: 'stoplist uA-acts' }, ...secs.filter((r) => r.group === 'activities').map(row)));
+    const right = h('section', { class: 'uA-right' }, h('h2', { class: 'uA-h' }, 'Activities'), h('ol', { class: 'stoplist uA-acts' }, ...secs.filter((r) => r.group === 'activities').map(row)),
+      extras.length ? h('h2', { class: 'uA-h uA-extra' }, 'Extras (optional)') : null, extras.length ? h('ul', { class: 'stoplist uA-acts uA-extras' }, ...extras.map(row)) : null);
     const complete = doneN === total;
     const foot = h('footer', { class: 'uA-foot island4 ' + (complete ? 'open' : 'locked') }, h('span', { class: 'i4ico', 'aria-hidden': 'true' }, icon(complete ? 'star' : 'lock')),
       h('span', { class: 'i4txt' }, h('b', null, 'Unit 3 Review'), h('small', null, complete ? 'Unlocked! Mix ng and nk.' : 'Finish all stars to unlock')), h('span', { class: 'i4count' }, doneN + ' of ' + total));
     app.append(h('div', { class: 'screen trailscreen unitpage unitA nkunit' },
       h('header', { class: 'uA-top' }, IR.ui.homeButton(), h('h1', { class: 'uA-title' }, h('small', null, 'Unit 3 \u00b7 Lesson 3.2 \u00b7 '), 'nk'),
         h('span', { class: 'uA-time' }, h('span', { class: 't-long' }, 'About ' + totalMin + ' min total'), h('span', { class: 't-short' }, totalMin + ' min')), IR.ui.gearButton()),
-      IR.unitIntro ? IR.unitIntro('i3') : null,
+      IR.unitIntro ? IR.unitIntro('i3') : null, IR.teacherRow ? IR.teacherRow('nk') : null,
       h('main', { class: 'uA-main' }, left, right), foot));
   }
 
@@ -93,7 +102,7 @@
       goNext() { Snd.stop(); if (nextH && nextH()) return; location.hash = idx < STEPS.length - 1 ? '#/nk/' + STEPS[idx + 1].id : '#/nk'; },
       setNextLabel(t) { nextBtn.firstChild.textContent = t; }, showNav(on) { nav.style.display = on === false ? 'none' : ''; },
       finish(starsOverride) {
-        const stars = starsOverride || ((S0.id === 'meet' || S0.id === 'listen' || S0.id === 'ido') ? 3 : mistakes <= 1 ? 3 : mistakes <= 3 ? 2 : 1);
+        const stars = starsOverride || ((S0.id === 'meet' || S0.id === 'listen') ? 3 : mistakes <= 1 ? 3 : mistakes <= 3 ? 2 : 1);
         IR.recordActivity(S0.rec || pid(S0), stars); IR.touchStreak(); IR.save(); ctx.progress(1);
         const last = !!OV || idx === STEPS.length - 1; const nx = STEPS[idx + 1];
         const ov = h('div', { class: 'complete' }, h('div', { class: 'cbox' }, IR.celebration(false), h('h1', null, 'Great job!'), h('p', { class: 'lead' }, S0.title),
@@ -128,44 +137,46 @@
     ctx.setInstr('', null); const st = ctx.stage; let i = 0;
     const beats = [{ who: 'zip', p: 'm1', img: 'img/nk_p1.webp' }, { who: 'frill', p: 'm2', img: 'img/nk_p3.webp', tap: true }, { who: 'zip', p: 'm3', img: 'img/nk_p2.webp', tap: true }];
     const show = () => { const b = beats[i]; ctx.progress(i / beats.length); st.innerHTML = '';
-      const card = nkCard(true); const tapBtn = h('button', { class: 'nkcardbtn', type: 'button', 'aria-label': 'Hear the nk sound', onclick: () => { card.classList.add('buzz'); Snd.play(AU.nk).then(() => card.classList.remove('buzz')); } }, card);
+      const card = nkCard(true); const tapBtn = h('div', { class: 'nkcardbtn' }, card, phBtn());
       st.append(h('div', { class: 'activity nkmeet' }, h('div', { class: 'bubble ' + b.who }, h('b', { class: 'who' }, b.who === 'zip' ? 'Zip' : 'Frill'), h('p', null, N.prompts[b.p].text), speakerBtn(() => Snd.play(AU.p(b.p)), 'Hear this again')),
         h('div', { class: 'meetrow' }, h('div', { class: 'panelwrap small' }, h('img', { class: 'panel', src: b.img, alt: '' })), tapBtn),
-        h('p', { class: 'cap' }, 'nk says /ngk/, like in sink'),
+        h('p', { class: 'cap' }, 'n and k glued at the end, like in sink. Tap a word to hear it.'),
         h('div', { class: 'chips' }, ...['sink', 'pink', 'bank', 'junk'].map((w) => h('button', { class: 'chip', type: 'button', onclick: () => say(w) }, colorNk(w))))));
-      ctx.setNextLabel(i === beats.length - 1 ? 'Finish' : 'Next');
-      Snd.seq(b.tap ? [AU.p(b.p), AU.nk] : [AU.p(b.p)], 250); };
-    ctx.setNext(() => { if (i < beats.length - 1) { i++; show(); } else ctx.finish(); return true; });
+      ctx.setNextLabel(i === beats.length - 1 ? 'Watch Zip' : 'Next');
+      Snd.seq([AU.p(b.p)], 250); };
+    ctx.setNext(() => { if (i < beats.length - 1) { i++; show(); } else runIdo(ctx); return true; });
     ctx.setBack(() => { if (i > 0) { i--; show(); return true; } return false; });
     show();
   }
+  /* future recorded nk sound: hidden until audio/phonemes/nk.mp3 exists (her own recording). Computer-made nk_sound / nk_l_* / nk_c_* files are no longer played. */
+  function phBtn() { const b = h('button', { class: 'btn', type: 'button', hidden: true, onclick: () => IR.playPhoneme && IR.playPhoneme('nk') }, icon('speaker'), 'Hear nk'); if (IR.hasPhoneme) IR.hasPhoneme('nk').then((ok) => { if (ok) b.hidden = false; }); return b; }
   const parts = (w) => w.match(/nk|th|./g);
-  function tilesFor(w) { return h('div', { class: 'blendrow' }, ...parts(w).map((l) => h('button', { class: 'btile' + (l === 'nk' ? ' nk' : ''), type: 'button', 'data-l': l, onclick: () => Snd.play(AU.l(l)) }, l))); }
+  function tilesFor(w) { return h('div', { class: 'blendrow' }, ...parts(w).map((l) => h('button', { class: 'btile' + (l === 'nk' ? ' nk' : ''), type: 'button', 'data-l': l, onclick: (e) => e.currentTarget.classList.add('lit') }, l))); }
   /* 2. I do: Zip blends sound by sound */
   function runIdo(ctx) {
-    ctx.setInstr('Watch me. I say each sound, then I blend them.', 'ido'); const st = ctx.stage; let i = 0; const W = N.ido;
+    ctx.setInstr('I do: watch Zip. Zip looks at each letter, then reads the whole word.', 'ido2'); const st = ctx.stage; let i = 0; const W = N.ido;
     const show = async () => { const w = W[i]; ctx.progress(i / W.length); st.innerHTML = ''; const row = tilesFor(w); const out = h('p', { class: 'blendout' }, '\u00a0');
       const play = async () => { Snd.stop(); const id = Snd.id; const ts = $$('.btile', row); out.textContent = '\u00a0';
-        for (const t of ts) { if (Snd.id !== id) return; ts.forEach((x) => x.classList.remove('lit')); t.classList.add('lit'); await Snd.play(AU.l(t.dataset.l), { keep: true }); await sleep(350); }
+        for (const t of ts) { if (Snd.id !== id) return; ts.forEach((x) => x.classList.remove('lit')); t.classList.add('lit'); await sleep(650); }
         if (Snd.id !== id) return; ts.forEach((x) => x.classList.add('lit')); out.innerHTML = ''; out.append(colorNk(w)); await Snd.play(AU.w(w), { keep: true }); };
       st.append(h('div', { class: 'activity' }, h('div', { class: 'zipsays' }, h('img', { class: 'char zip mini', src: 'img/zip.webp', alt: 'Zip' }), h('span', null, 'Zip blends: ' + w)), row, out,
         h('button', { class: 'btn', type: 'button', onclick: play }, icon('replay'), 'Watch again')));
-      ctx.setNextLabel(i === W.length - 1 ? 'Finish' : 'Next'); await Snd.seq([AU.p('ido')], 200); if (ctx.scr.ok()) play(); };
-    ctx.setNext(() => { if (i < W.length - 1) { i++; show(); } else ctx.finish(); return true; });
+      ctx.setNextLabel(i === W.length - 1 ? 'Finish' : 'Next'); if (i === 0) await Snd.seq([AU.p('ido2')], 200); if (ctx.scr.ok()) play(); };
+    ctx.setNext(() => { if (i < W.length - 1) { i++; show(); } else runWedo(ctx); return true; });
     ctx.setBack(() => { if (i > 0) { i--; show(); return true; } return false; });
     show();
   }
   /* 3. We do: tap each letter, then blend */
   function runWedo(ctx) {
-    ctx.setInstr('Tap each letter. Then tap Blend it.', 'wedo'); const st = ctx.stage; let i = 0; const W = N.wedo;
+    ctx.setInstr('We do: tap each letter and say its sound. Then tap Blend it.', 'wedo2'); ctx.setNextLabel('Next'); const st = ctx.stage; let i = 0; const W = N.wedo;
     const show = () => { const w = W[i]; ctx.progress(i / W.length); st.innerHTML = ''; const row = tilesFor(w); const out = h('p', { class: 'blendout' }, '\u00a0');
       const blend = h('button', { class: 'btn big primary', type: 'button', disabled: true }, icon('speaker'), 'Blend it');
       $$('.btile', row).forEach((t) => t.addEventListener('click', () => { t.classList.add('lit'); if ($$('.btile', row).every((x) => x.classList.contains('lit'))) { blend.disabled = false; blend.classList.add('glow'); } }));
-      blend.addEventListener('click', async () => { out.innerHTML = ''; out.append(colorNk(w)); await IR.ding(); await Snd.play(AU.w(w)); if (!ctx.scr.ok()) return; await sleep(500); if (!ctx.scr.ok()) return; if (i < W.length - 1) { i++; show(); } else ctx.finish(); });
+      blend.addEventListener('click', async () => { out.innerHTML = ''; out.append(colorNk(w)); await IR.ding(); await Snd.play(AU.w(w)); if (!ctx.scr.ok()) return; await sleep(500); if (!ctx.scr.ok()) return; if (i < W.length - 1) { i++; show(); } else runYoudo(ctx); });
       st.append(h('div', { class: 'activity' }, h('p', { class: 'bigprompt' }, 'Word ' + (i + 1) + ' of ' + W.length), row, out, blend)); };
-    ctx.setNext(() => { if (i < W.length - 1) { i++; show(); return true; } return false; });
+    ctx.setNext(() => { if (i < W.length - 1) { i++; show(); } else runYoudo(ctx); return true; });
     ctx.setBack(() => { if (i > 0) { i--; show(); return true; } return false; });
-    Snd.play(AU.p('wedo')); show();
+    Snd.play(AU.p('wedo2')); show();
   }
   /* generic "hear it, tap the right choice" round runner (used by You do, ng or nk?, Review) */
   function pickRounds(ctx, rounds, build, onAll) {
@@ -188,7 +199,7 @@
   }
   /* 4. You do: picture choice */
   function runYoudo(ctx) {
-    ctx.setInstr('Listen. Tap the picture of the word you hear.', 'youdo');
+    ctx.setInstr('You do: listen. Tap the picture of the word you hear.', 'youdo');
     pickRounds(ctx, N.youdo, (R) => { const buttons = shuffle(R.choices).map((w) => ({ word: w, ok: w === R.word, el: h('button', { class: 'choice picchoice', type: 'button', 'data-w': w, 'aria-label': w }, picFor(w), h('span', { class: 'pw' }, w)) }));
       return { body: h('div', { class: 'choices pics3' }, ...buttons.map((b) => b.el)), buttons }; });
   }
@@ -200,19 +211,19 @@
       return { body: h('div', null, h('div', { class: 'wordframe' }, h('span', { class: 'onset' }, R.onset), slot), h('div', { class: 'choices two' }, ...buttons.map((b) => b.el))), buttons }; });
   }
   /* 6. Heart words */
-  function runHeart(ctx) {
+  function runHeart(ctx, after) {
     ctx.setInstr('Tap each heart word to hear it.', 'heart'); const seen = new Set();
     const row = h('div', { class: 'hearts' }, ...N.heart.map((it) => h('button', { class: 'heartchip', type: 'button', onclick: (e) => {
       e.currentTarget.classList.add('seen'); seen.add(it.w); ctx.progress(seen.size / N.heart.length); Snd.seq([AU.w(it.w), 'audio/nk_hx_' + it.w + '.mp3'], 200);
       if (seen.size === N.heart.length) done.classList.add('glow'); } }, h('span', { class: 'heartmark', 'aria-hidden': 'true' }, '\u2665'), h('span', { class: 'word' }, it.w))));
-    const done = h('button', { class: 'btn big primary', type: 'button', onclick: () => ctx.finish(3) }, 'I know my heart words', icon('check'));
+    const done = h('button', { class: 'btn big primary', type: 'button', onclick: () => { Snd.stop(); if (after) after(); else ctx.finish(3); } }, 'Listen to the story', icon('next'));
     ctx.stage.append(h('div', { class: 'activity' }, h('p', { class: 'bigprompt' }, 'Heart words'), row, h('div', { class: 'row center' }, done)));
     Snd.play(AU.p('heart'));
   }
   function wordsInto(el, pg) { el.innerHTML = ''; pg.words.forEach((w, k) => el.append(h('span', { class: 'w', 'data-k': k }, w), ' ')); }
   function hl(pg, ws) { return (t) => pg.t.forEach((tt, k) => { const e = ws[k]; if (!e) return; e.classList.toggle('hl', t >= tt[0] - 0.04 && t < (pg.t[k + 1] ? pg.t[k + 1][0] - 0.04 : 99)); e.classList.toggle('read', t >= tt[1]); }); }
   /* 7. Story Time: same behaviour as ng Story Time (auto-read each page, Read again / Next page / Previous page, Finish, tap-to-hear fallback) */
-  function runListen(ctx) {
+  function runListen(ctx) { if (!ctx._heartDone) { ctx._heartDone = true; ctx.setNext(() => { Snd.stop(); runListen(ctx); return true; }); runHeart(ctx, () => runListen(ctx)); return; } ctx.stage.innerHTML = '';
     ctx.setInstr('Listen to the story and follow along.', 'listen'); const st = ctx.stage;
     const pages = N.story; let p = 0, token = 0, mode = 'reading', finished = false; const heard = new Set();
     const picEl = h('img', { class: 'panel', alt: '' }); const sentEl = h('p', { class: 'sentence', 'aria-live': 'polite' });

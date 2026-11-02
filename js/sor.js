@@ -6,7 +6,7 @@
   const IR = window.IR;
   const { h, $$, sleep, shuffle, icon, Snd, A, sayWord, speakerBtn } = IR;
   const P = (id) => 'audio/p_sor_' + id + '.mp3';
-  const SND = { b: 'audio/nk_l_b.mp3', a: 'audio/nk_l_a.mp3', w: 'audio/nk_l_w.mp3', i: 'audio/nk_l_i.mp3', ng: A.ng };
+  const SND = {};   /* Nov 2 2026: computer-made single letter sounds (nk_l_*) turned off; only her recorded phonemes may play here later */
   const SOR = IR.SOR = {
     /* oral items: no letters on screen */
     ears: [
@@ -42,7 +42,7 @@
     return h('span', { class: 'word hw' }, w.slice(0, m.t[0]), h('span', { class: 'tricky' }, w.slice(m.t[0], m.t[1])), w.slice(m.t[1]));
   };
 
-  const playSounds = async (list) => { Snd.stop(); const id = Snd.id; for (const s of list) { if (Snd.id !== id) return; await Snd.play(SND[s], { keep: true }); if (Snd.id !== id) return; await sleep(420); } };
+  const playSounds = async (list) => { Snd.stop(); const id = Snd.id; for (const s of list) { if (Snd.id !== id) return; if (SND[s]) await Snd.play(SND[s], { keep: true }); if (Snd.id !== id) return; await sleep(420); } };
 
   /* ---------- warm-up: Quick review only. The Ears-only items were removed Oct 31 2026 (the isolated sound audio was not good enough). ---------- */
   SOR.ears = [];
@@ -87,7 +87,7 @@
         const boxes = h('div', { class: 'soundboxes' }, ...it.sounds.map((s, k) => {
           const b = h('button', { class: 'sbox', type: 'button', 'aria-label': 'Sound box ' + (k + 1) });
           b.addEventListener('click', async () => {
-            if (k !== n) return; b.classList.add('on'); n++; await Snd.play(SND[s]);
+            if (k !== n) return; b.classList.add('on'); n++; if (SND[s]) await Snd.play(SND[s]); else await sleep(250);
             if (n === it.sounds.length && ctx.scr.ok()) { status.textContent = it.sounds.length + ' sounds!'; await sleep(300); await IR.ding(it.word); if (ctx.scr.ok()) { await sleep(400); if (ctx.scr.ok()) go(step + 1); } }
           });
           return b;

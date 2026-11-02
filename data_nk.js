@@ -3,12 +3,24 @@ window.IR_DATA_NK = {
   {
    "n": 1,
    "img": "img/nk_p1.webp",
-   "text": "Zip and Frill find a big trunk on the bank.",
+   "text": "Zip and Frill must ring the nk bell, but it will not ring! Then Zip spots a big trunk on the bank.",
    "words": [
     "Zip",
     "and",
     "Frill",
-    "find",
+    "must",
+    "ring",
+    "the",
+    "nk",
+    "bell,",
+    "but",
+    "it",
+    "will",
+    "not",
+    "ring!",
+    "Then",
+    "Zip",
+    "spots",
     "a",
     "big",
     "trunk",
@@ -19,46 +31,93 @@ window.IR_DATA_NK = {
    "t": [
     [
      0.107,
-     0.462
+     0.505
     ],
     [
-     0.476,
-     0.59
+     0.519,
+     0.647
     ],
     [
-     0.604,
-     0.973
+     0.661,
+     1.002
     ],
     [
-     0.988,
-     1.257
+     1.016,
+     1.314
     ],
     [
-     1.272,
-     1.328
+     1.328,
+     1.556
     ],
     [
-     1.343,
-     1.598
+     1.57,
+     1.655
     ],
     [
-     1.613,
-     1.968
+     1.669,
+     2.095
     ],
     [
-     1.982,
-     2.11
+     2.11,
+     2.536
     ],
     [
-     2.124,
-     2.209
+     2.763,
+     2.905
     ],
     [
-     2.223,
-     2.749
+     2.919,
+     3.019
+    ],
+    [
+     3.033,
+     3.175
+    ],
+    [
+     3.189,
+     3.473
+    ],
+    [
+     3.487,
+     3.942
+    ],
+    [
+     4.929,
+     5.284
+    ],
+    [
+     5.298,
+     5.597
+    ],
+    [
+     5.611,
+     6.023
+    ],
+    [
+     6.037,
+     6.122
+    ],
+    [
+     6.136,
+     6.406
+    ],
+    [
+     6.42,
+     6.776
+    ],
+    [
+     6.79,
+     6.918
+    ],
+    [
+     6.932,
+     7.017
+    ],
+    [
+     7.031,
+     7.557
     ]
    ],
-   "dur": 3.79,
    "audio": "audio/nk_s_1.mp3"
   },
   {
@@ -114,7 +173,6 @@ window.IR_DATA_NK = {
      5.881
     ]
    ],
-   "dur": 6.91,
    "audio": "audio/nk_s_2.mp3"
   },
   {
@@ -155,16 +213,15 @@ window.IR_DATA_NK = {
      3.423
     ]
    ],
-   "dur": 4.46,
    "audio": "audio/nk_s_3.mp3"
   },
   {
    "n": 4,
    "img": "img/nk_p4.webp",
-   "text": "Zip pulls out a pen with no ink. Junk!",
+   "text": "Zip digs out a pen with no ink. Junk!",
    "words": [
     "Zip",
-    "pulls",
+    "digs",
     "out",
     "a",
     "pen",
@@ -176,51 +233,50 @@ window.IR_DATA_NK = {
    "t": [
     [
      0.107,
-     0.505
+     0.49
     ],
     [
-     0.519,
-     0.86
+     0.505,
+     0.803
     ],
     [
-     0.874,
-     1.059
+     0.817,
+     1.002
     ],
     [
-     1.073,
-     1.13
+     1.016,
+     1.073
     ],
     [
-     1.144,
-     1.47
+     1.087,
+     1.399
     ],
     [
-     1.485,
-     1.641
+     1.414,
+     1.57
     ],
     [
-     1.655,
-     1.925
+     1.584,
+     1.854
     ],
     [
-     1.939,
-     2.351
+     1.868,
+     2.294
     ],
     [
-     3.352,
-     4.006
+     3.295,
+     3.949
     ]
    ],
-   "dur": 5.02,
    "audio": "audio/nk_s_4.mp3"
   },
   {
    "n": 5,
    "img": "img/nk_p5.webp",
-   "text": "Frill pulls out a duck. Honk, honk! Junk!",
+   "text": "Frill digs out a duck. Honk, honk! Junk!",
    "words": [
     "Frill",
-    "pulls",
+    "digs",
     "out",
     "a",
     "duck.",
@@ -235,44 +291,42 @@ window.IR_DATA_NK = {
     ],
     [
      0.576,
-     0.916
+     0.874
     ],
     [
-     0.931,
-     1.115
+     0.888,
+     1.087
     ],
     [
-     1.13,
-     1.215
+     1.101,
+     1.186
     ],
     [
-     1.229,
-     1.74
+     1.201,
+     1.698
     ],
     [
-     2.727,
-     3.125
+     2.685,
+     3.082
     ],
     [
-     3.324,
-     3.835
+     3.281,
+     3.793
     ],
     [
-     4.83,
-     5.483
+     4.787,
+     5.44
     ]
    ],
-   "dur": 6.5,
    "audio": "audio/nk_s_5.mp3"
   },
   {
    "n": 6,
    "img": "img/nk_p6.webp",
-   "text": "Zip pulls out a pink sock. Sniff. Not the stink!",
+   "text": "Zip grabs a pink sock. Sniff. Not the stink!",
    "words": [
     "Zip",
-    "pulls",
-    "out",
+    "grabs",
     "a",
     "pink",
     "sock.",
@@ -284,103 +338,102 @@ window.IR_DATA_NK = {
    "t": [
     [
      0.107,
-     0.547
+     0.49
     ],
     [
-     0.561,
-     0.902
+     0.505,
+     0.931
     ],
     [
-     0.916,
-     1.115
+     0.945,
+     1.03
     ],
     [
-     1.13,
-     1.201
+     1.044,
+     1.343
     ],
     [
-     1.215,
-     1.499
+     1.357,
+     1.925
     ],
     [
-     1.513,
-     2.095
+     2.912,
+     3.75
     ],
     [
-     3.082,
-     3.92
+     4.716,
+     5.071
     ],
     [
-     4.886,
-     5.242
+     5.085,
+     5.199
     ],
     [
-     5.256,
-     5.369
-    ],
-    [
-     5.384,
-     5.98
+     5.213,
+     5.81
     ]
    ],
-   "dur": 7.01,
    "audio": "audio/nk_s_6.mp3"
   },
   {
    "n": 7,
    "img": "img/nk_p7.webp",
-   "text": "Then two eyes blink in the trunk.",
+   "text": "Then eyes blink in the trunk. Gulp!",
    "words": [
     "Then",
-    "two",
     "eyes",
     "blink",
     "in",
     "the",
-    "trunk."
+    "trunk.",
+    "Gulp!"
    ],
    "t": [
     [
      0.107,
-     0.419
+     0.462
     ],
     [
-     0.434,
-     0.675
+     0.476,
+     0.789
     ],
     [
-     0.689,
-     1.002
+     0.803,
+     1.115
     ],
     [
-     1.016,
-     1.328
+     1.13,
+     1.215
     ],
     [
-     1.343,
-     1.428
+     1.229,
+     1.314
     ],
     [
-     1.442,
-     1.513
+     1.328,
+     1.911
     ],
     [
-     1.527,
-     2.11
+     2.898,
+     3.537
     ]
    ],
-   "dur": 3.14,
    "audio": "audio/nk_s_7.mp3"
   },
   {
    "n": 8,
    "img": "img/nk_p8.webp",
-   "text": "Out hops a skunk!",
+   "text": "Out hops a skunk! Zip and Frill jump back.",
    "words": [
     "Out",
     "hops",
     "a",
-    "skunk!"
+    "skunk!",
+    "Zip",
+    "and",
+    "Frill",
+    "jump",
+    "back."
    ],
    "t": [
     [
@@ -398,15 +451,34 @@ window.IR_DATA_NK = {
     [
      0.803,
      1.428
+    ],
+    [
+     2.415,
+     2.798
+    ],
+    [
+     2.812,
+     2.926
+    ],
+    [
+     2.94,
+     3.295
+    ],
+    [
+     3.31,
+     3.58
+    ],
+    [
+     3.594,
+     4.119
     ]
    ],
-   "dur": 2.47,
    "audio": "audio/nk_s_8.mp3"
   },
   {
    "n": 9,
    "img": "img/nk_p9.webp",
-   "text": "\"Thank you!\" says the skunk. \"I was stuck in the junk.\"",
+   "text": "\"Thank you!\" says the skunk. \"I was stuck in that junk. Can I help you?\"",
    "words": [
     "\"Thank",
     "you!\"",
@@ -417,8 +489,12 @@ window.IR_DATA_NK = {
     "was",
     "stuck",
     "in",
-    "the",
-    "junk.\""
+    "that",
+    "junk.",
+    "Can",
+    "I",
+    "help",
+    "you?\""
    ],
    "t": [
     [
@@ -459,76 +535,245 @@ window.IR_DATA_NK = {
     ],
     [
      3.665,
-     3.75
+     3.92
     ],
     [
-     3.764,
-     4.318
+     3.935,
+     4.489
+    ],
+    [
+     5.469,
+     5.696
+    ],
+    [
+     5.71,
+     5.795
+    ],
+    [
+     5.81,
+     6.065
+    ],
+    [
+     6.08,
+     6.392
     ]
    ],
-   "dur": 5.35,
    "audio": "audio/nk_s_9.mp3"
   },
   {
    "n": 10,
    "img": "img/nk_p10.webp",
-   "text": "Frill winks at Zip. \"I think we found the stink!\"",
+   "text": "\"The nk bell will not ring,\" Frill says. The skunk winks. \"I can fix that!\"",
    "words": [
+    "\"The",
+    "nk",
+    "bell",
+    "will",
+    "not",
+    "ring,\"",
     "Frill",
-    "winks",
-    "at",
-    "Zip.",
+    "says.",
+    "The",
+    "skunk",
+    "winks.",
     "\"I",
-    "think",
-    "we",
-    "found",
-    "the",
-    "stink!\""
+    "can",
+    "fix",
+    "that!\""
    ],
    "t": [
     [
      0.107,
-     0.533
+     0.291
     ],
     [
-     0.547,
-     0.874
+     0.306,
+     0.789
     ],
     [
-     0.888,
-     1.016
+     0.803,
+     1.101
     ],
     [
-     1.03,
-     1.527
+     1.115,
+     1.257
     ],
     [
-     2.528,
-     2.713
+     1.272,
+     1.556
     ],
     [
-     2.727,
-     3.011
+     1.57,
+     1.911
     ],
     [
-     3.026,
-     3.153
+     2.166,
+     2.436
     ],
     [
-     3.168,
-     3.494
+     2.451,
+     3.033
     ],
     [
-     3.509,
-     3.594
-    ],
-    [
-     3.608,
+     4.02,
      4.219
+    ],
+    [
+     4.233,
+     4.616
+    ],
+    [
+     4.631,
+     5.256
+    ],
+    [
+     6.236,
+     6.42
+    ],
+    [
+     6.435,
+     6.634
+    ],
+    [
+     6.648,
+     6.974
+    ],
+    [
+     6.989,
+     7.472
     ]
    ],
-   "dur": 5.26,
    "audio": "audio/nk_s_10.mp3"
+  },
+  {
+   "n": 11,
+   "img": "img/units/unit03.webp",
+   "text": "The skunk hops up and bonks the bell with a thunk. Bong! Clang! The nk bell rings! Frill grins. \"That skunk is a champ!\"",
+   "words": [
+    "The",
+    "skunk",
+    "hops",
+    "up",
+    "and",
+    "bonks",
+    "the",
+    "bell",
+    "with",
+    "a",
+    "thunk.",
+    "Bong!",
+    "Clang!",
+    "The",
+    "nk",
+    "bell",
+    "rings!",
+    "Frill",
+    "grins.",
+    "\"That",
+    "skunk",
+    "is",
+    "a",
+    "champ!\""
+   ],
+   "t": [
+    [
+     0.107,
+     0.306
+    ],
+    [
+     0.32,
+     0.703
+    ],
+    [
+     0.718,
+     1.073
+    ],
+    [
+     1.087,
+     1.328
+    ],
+    [
+     1.343,
+     1.47
+    ],
+    [
+     1.485,
+     1.882
+    ],
+    [
+     1.897,
+     1.996
+    ],
+    [
+     2.01,
+     2.28
+    ],
+    [
+     2.294,
+     2.436
+    ],
+    [
+     2.451,
+     2.522
+    ],
+    [
+     2.536,
+     3.09
+    ],
+    [
+     4.077,
+     4.673
+    ],
+    [
+     5.639,
+     6.307
+    ],
+    [
+     7.273,
+     7.443
+    ],
+    [
+     7.457,
+     7.94
+    ],
+    [
+     7.955,
+     8.253
+    ],
+    [
+     8.267,
+     8.864
+    ],
+    [
+     9.844,
+     10.284
+    ],
+    [
+     10.298,
+     10.98
+    ],
+    [
+     11.96,
+     12.315
+    ],
+    [
+     12.33,
+     12.756
+    ],
+    [
+     12.77,
+     12.883
+    ],
+    [
+     12.898,
+     12.969
+    ],
+    [
+     12.983,
+     13.58
+    ]
+   ],
+   "audio": "audio/nk_s_11.mp3"
   }
  ],
  "heart": [
@@ -932,7 +1177,7 @@ window.IR_DATA_NK = {
   },
   "m2": {
    "voice": "Frill",
-   "text": "N K says, nk, like at the end of sink. Tap the card to hear it."
+   "text": "N and K are glued together. You hear them at the end of sink."
   },
   "m3": {
    "voice": "Zip",
@@ -1088,16 +1333,163 @@ window.IR_DATA_NK = {
   }
  },
  "minutes": {
-  "meet": 4,
+  "meet": 8,
   "ido": 3,
   "wedo": 3,
   "youdo": 3,
   "ngnk": 3,
   "heart": 2,
-  "listen": 5,
+  "listen": 6,
   "read": 6,
   "comp": 3,
   "rhyme": 4,
-  "check": 4
- }
+  "check": 4,
+  "hear": 3,
+  "bells": 3,
+  "build": 3,
+  "chain": 3,
+  "scramble": 3,
+  "trace": 3,
+  "sentence": 3
+ },
+ "hear": [
+  {
+   "word": "sink",
+   "choices": [
+    "sink",
+    "sank",
+    "sunk"
+   ]
+  },
+  {
+   "word": "bank",
+   "choices": [
+    "bank",
+    "bunk",
+    "bonk"
+   ]
+  },
+  {
+   "word": "honk",
+   "choices": [
+    "honk",
+    "hunk",
+    "junk"
+   ]
+  },
+  {
+   "word": "think",
+   "choices": [
+    "think",
+    "thank",
+    "thin"
+   ]
+  },
+  {
+   "word": "stink",
+   "choices": [
+    "stink",
+    "sink",
+    "skunk"
+   ]
+  }
+ ],
+ "bells": [
+  "pink",
+  "bank",
+  "junk",
+  "honk",
+  "wink"
+ ],
+ "build": [
+  {
+   "word": "sink",
+   "onset": "s",
+   "chunk": "ink",
+   "altOnset": "p",
+   "altChunk": "unk"
+  },
+  {
+   "word": "bank",
+   "onset": "b",
+   "chunk": "ank",
+   "altOnset": "t",
+   "altChunk": "onk"
+  },
+  {
+   "word": "junk",
+   "onset": "j",
+   "chunk": "unk",
+   "altOnset": "h",
+   "altChunk": "ink"
+  },
+  {
+   "word": "honk",
+   "onset": "h",
+   "chunk": "onk",
+   "altOnset": "b",
+   "altChunk": "ank"
+  },
+  {
+   "word": "wink",
+   "onset": "w",
+   "chunk": "ink",
+   "altOnset": "s",
+   "altChunk": "unk"
+  }
+ ],
+ "chain": [
+  "sink",
+  "sank",
+  "bank",
+  "bunk",
+  "junk",
+  "dunk"
+ ],
+ "scramble": [
+  "pink",
+  "tank",
+  "honk",
+  "skunk",
+  "trunk"
+ ],
+ "sentences": [
+  {
+   "n": 1,
+   "text": "The skunk is in the trunk.",
+   "img": "img/nk_p8.webp",
+   "words": [
+    "The",
+    "skunk",
+    "is",
+    "in",
+    "the",
+    "trunk."
+   ]
+  },
+  {
+   "n": 2,
+   "text": "I think the sock is pink.",
+   "img": "img/nk_p6.webp",
+   "words": [
+    "I",
+    "think",
+    "the",
+    "sock",
+    "is",
+    "pink."
+   ]
+  },
+  {
+   "n": 3,
+   "text": "Frill winks at Zip.",
+   "img": "img/nk_p10.webp",
+   "words": [
+    "Frill",
+    "winks",
+    "at",
+    "Zip."
+   ]
+  }
+ ]
 };

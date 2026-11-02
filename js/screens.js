@@ -340,6 +340,20 @@
   const UNIT_INTRO = { i3: 'This bell holds ng and nk. Let\u2019s learn them!' };
   function unitIntro(id) { const t = UNIT_INTRO[id]; if (!t) return null; return h('p', { class: 'zfintro' }, h('img', { src: 'img/zipA.webp', alt: '' }), h('img', { src: 'img/frill.webp', alt: '' }), h('span', null, t)); }
   IR.unitIntro = unitIntro;
+  /* "For teachers" row on the ng and nk lesson pages: her own slides and worksheets, linked (not cached offline). */
+  const TEACH = {
+    ng: { lesson: 'teachers/ng/Lesson3.1_ng_Slides_Lesson_Notes.pdf', deck: 'teachers/ng/Lesson3.1_ng_Slide_Presentation.pptx', ws: 'teachers/ng/Lesson3.1_ng_Worksheets_Student.pdf', key: 'teachers/ng/Lesson3.1_ng_Worksheets_Answer_Key.pdf' },
+    nk: { lesson: 'teachers/nk/Lesson3.2_nk_Slides_Lesson_Notes.pdf', deck: 'teachers/nk/Lesson3.2_nk_Slide_Presentation.pptx', ws: 'teachers/nk/Lesson3.2_nk_Worksheets_Student.pdf', key: 'teachers/nk/Lesson3.2_nk_Worksheets_Answer_Key.pdf' }
+  };
+  function teacherRow(u) {
+    const t = TEACH[u]; if (!t) return null;
+    const link = (href, label, extra) => href ? h('a', Object.assign({ class: 'btn trbtn', href, target: '_blank', rel: 'noopener' }, extra || {}), label) : h('span', { class: 'btn trbtn off', 'aria-disabled': 'true', title: 'Being updated' }, label);
+    const ws = h('details', { class: 'trws' }, h('summary', { class: 'btn trbtn' }, 'Worksheets'),
+      h('div', { class: 'trmenu' }, h('a', { href: t.ws, target: '_blank', rel: 'noopener' }, 'Student pages (PDF)'), h('a', { href: t.key, target: '_blank', rel: 'noopener' }, 'Answer key (PDF)')));
+    return h('div', { class: 'teachrow', role: 'group', 'aria-label': 'For teachers' }, h('span', { class: 'trlab' }, 'For teachers'),
+      link(t.lesson, 'Slides lesson'), link(t.deck, 'Slide presentation', { download: '' }), ws);
+  }
+  IR.teacherRow = teacherRow;
   /* ---------- Unit page (Option A): Lesson + Story boxes on the left, numbered Activities with minutes on the right, total time on top ---------- */
   function trailScreen() {
     const S = IR.S(); IR.newScreen();
@@ -377,7 +391,7 @@
       h('header', { class: 'uA-top' }, homeButton(), h('h1', { class: 'uA-title' }, h('small', null, 'Unit 3 \u00b7 Lesson 3.1 \u00b7 '), 'ng'),
         h('button', { class: 'cartoonpill', type: 'button', 'aria-label': 'Welcome cartoon, optional. Opens a video.', onclick: () => IR.openCartoon() }, icon('play'), h('span', { class: 'cp-long' }, 'Welcome Cartoon (optional)'), h('span', { class: 'cp-short' }, 'Cartoon')),
         h('span', { class: 'uA-time', 'aria-label': 'About ' + totalMin + ' minutes in total' }, h('span', { class: 't-long' }, 'About ' + totalMin + ' min total'), h('span', { class: 't-short' }, totalMin + ' min')), gearButton()),
-      unitIntro('i3'),
+      unitIntro('i3'), teacherRow('ng'),
       h('div', { class: 'ob-cover' }, h('img', { src: 'img/ob_cover_wide.jpg', alt: 'Zip and Frill under the banyan tree with the big orange bell' }),
         h('p', null, h('b', null, 'The big bell has gone quiet.'), ' Help Zip and Frill make it ring again.'),
         h('div', { class: 'ob-meta' }, h('span', null, 'About ' + totalMin + ' min'), h('button', { class: 'ob-cartoon', type: 'button', 'aria-label': 'Welcome cartoon, optional. Opens a video.', onclick: () => IR.openCartoon() }, icon('play'), 'Cartoon'))),

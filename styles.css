@@ -1448,3 +1448,13 @@ body.calm .ob-glow{animation:none;opacity:.85}
   .homeside{gap:clamp(.4rem,1.1vh,.9rem)}
   .homelay{margin-top:clamp(.6rem,1.6vh,1.4rem)}
 }
+
+/* Nov 2 2026: For teachers row (ng + nk lesson pages) */
+.teachrow{display:flex;flex-wrap:wrap;align-items:center;gap:.5rem;margin:.2rem 1rem .6rem;padding:.5rem .8rem;background:#FFFDF8;border:2px dashed var(--line);border-radius:1rem}
+.trlab{font-weight:700;color:var(--ink2);margin-right:.3rem}
+.trbtn{min-height:2.6rem;padding:.3rem .9rem;font-size:.95rem;text-decoration:none;background:#fff;color:var(--ink);border:2px solid var(--line);box-shadow:none;cursor:pointer;list-style:none}
+.trbtn.off{opacity:.5;cursor:default}
+.trws{position:relative}.trws summary::-webkit-details-marker{display:none}
+.trmenu{position:absolute;z-index:30;top:110%;left:0;background:#fff;border:2px solid var(--line);border-radius:.8rem;padding:.4rem;display:flex;flex-direction:column;min-width:12rem;box-shadow:0 8px 20px rgba(0,0,0,.12)}
+.trmenu a{padding:.5rem .6rem;color:var(--ink);text-decoration:none;border-radius:.5rem}.trmenu a:hover{background:var(--cream2)}
+.uA-extra{margin-top:1rem}
