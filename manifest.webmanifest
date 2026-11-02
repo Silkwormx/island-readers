@@ -1,0 +1,16 @@
+{
+  "name": "Island Readers — Phonics for older struggling readers",
+  "short_name": "Island Readers",
+  "description": "Free phonics app for older kids who missed the reading basics, with extra support for readers who struggle with attention or dyslexia.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#FFF8E7",
+  "theme_color": "#FFF8E7",
+  "icons": [
+    {"src": "img/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any"},
+    {"src": "img/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any"},
+    {"src": "img/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable"}
+  ]
+}
