@@ -154,7 +154,9 @@
       u.complete = u.ready && u.done >= u.total;
       const before = list.slice(0, i); const need = u.kind === 'review' ? before : (prev ? [prev] : []);
       const needDone = need.every((x) => x.complete);
-      u.state = !needDone && !IR.S().settings.openAll ? 'locked' : !u.ready ? 'soon' : 'open';
+      /* Nov 3 2026: lessons are never hard-locked (nk opens even before ng is finished; a gentle 'best after' note shows instead). Only the Review waits. */
+      u.state = u.kind === 'review' && !needDone && !IR.S().settings.openAll ? 'locked' : !u.ready ? 'soon' : 'open';
+      u.soft = u.kind !== 'review' && !needDone && prev ? 'Best after ' + prev.name : '';
       u.lockMsg = !needDone ? (u.kind === 'review' ? 'Unlocks when ' + before.map((x) => x.name).join(' and ') + ' are done' : 'Unlocks when ' + prev.name + ' has all ' + prev.total + ' stars') : u.state === 'soon' ? 'Coming soon' : '';
       prev = u;
     });
@@ -172,7 +174,7 @@
       const kind = u.kind === 'review' ? 'Unit ' + w.n + ' Review' : 'Lesson ' + w.n + '.' + (info.list.indexOf(u) + 1);   /* naming standard: Unit 3 = Island 3; ng = Lesson 3.1, nk = Lesson 3.2 */
       const body = h('div', { class: 'ubody' }, h('div', { class: 'uk' }, kind), h('h2', null, title),
         h('div', { class: 'umin' }, u.min ? 'About ' + u.min + ' min' : ''), u.desc ? h('div', { class: 'rvd' }, u.desc) : null, stars(u),
-        u.state === 'open' ? h('div', { class: 'uprog' }, u.done + ' of ' + u.total + ' stars') : h('div', { class: 'uprog lockmsg' }, icon('lock'), u.lockMsg));
+        u.state === 'open' ? h('div', { class: 'uprog' }, u.done + ' of ' + u.total + ' stars' + (u.soft ? ' \u00b7 ' + u.soft : '')) : h('div', { class: 'uprog lockmsg' }, icon('lock'), u.lockMsg));
       const card = h('div', { class: 'ucard ' + (u.state === 'open' ? 'open' : 'locked') + (u.kind === 'review' ? ' rv' : ''), 'data-unit': u.id, 'data-state': u.state, role: 'group',
         'aria-label': (u.kind === 'review' ? 'Unit ' + w.n + ' Review' : 'Lesson ' + w.n + '.' + (info.list.indexOf(u) + 1) + ': ' + u.name) + '. ' + (u.state === 'open' ? u.done + ' of ' + u.total + ' stars. Open.' : 'Locked. ' + u.lockMsg + '.') }, imgs(u), body);
       if (u.state === 'open') {
