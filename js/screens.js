@@ -244,9 +244,34 @@
       pbox('sight', 'Sight Word Practice', '\u2605'), pbox('fluency', 'Fluency Stories', '\u{1F4D6}'), pbox('spelling', 'Spelling', '\u270E'));
     /* Nov 1 2026 layout: centered banner; sticky left column (Zip + Frill v4 B, then Practice); unit grid on the right */
     const banner = h('header', { class: 'hbanner' }, h('h1', null, 'Island Readers'), IR.ui.gearButton());
-    const hero = h('section', { class: 'zfhero', 'aria-label': 'Learn to read with Zip and Frill' },
+    /* Read-aloud for the hero text: HOME_INTRO_AUDIO recording if set, else speechSynthesis. Tap again to stop. */
+    function readAloudBtn() {
+      const TEXT = 'Learn to read with Zip and Frill. Ring every bell by learning its sounds. Start here to find your first bell.';
+      const HOME_INTRO_AUDIO = null; /* set to 'audio/home_intro.m4a' once her recording is added */
+      const b = h('button', { class: 'zfspk', type: 'button', 'aria-label': 'Read aloud', 'aria-pressed': 'false' }, icon('speaker'));
+      let au = null, on = false;
+      const set = (v) => { on = v; b.classList.toggle('playing', v); b.setAttribute('aria-pressed', v ? 'true' : 'false'); b.textContent = ''; b.append(icon(v ? 'pause' : 'speaker')); };
+      const stop = () => { if (au) { au.pause(); au.currentTime = 0; } try { speechSynthesis.cancel(); } catch (e) {} set(false); };
+      const speak = () => { try { const u = new SpeechSynthesisUtterance(TEXT); u.lang = 'en-US'; u.rate = 0.9; const v = speechSynthesis.getVoices().find((x) => x.lang === 'en-US'); if (v) u.voice = v; u.onend = u.onerror = () => set(false); speechSynthesis.cancel(); speechSynthesis.speak(u); } catch (e) { set(false); } };
+      b.addEventListener('click', async () => {
+        if (on) { stop(); return; }
+        try { Snd.stop(); } catch (e) {}
+        set(true);
+        const src = HOME_INTRO_AUDIO;
+        if (src) { au = au || new Audio(src); au.onended = () => set(false); au.play().catch(() => speak()); } else speak();
+      });
+      window.addEventListener('hashchange', stop, { once: true });
+      return b;
+    }
+    /* Home card layout. 'A' = Zip and Frill image on top (default); 'B' = heading above the image. Test with ?hero=B. */
+    const HERO_VARIANT = (/[?&]hero=B\b/.test(location.search) ? 'B' : 'A');
+    const hero = h('section', { class: 'zfhero zf2 zf' + HERO_VARIANT, 'aria-label': 'Learn to read with Zip and Frill' },
       h('div', { class: 'zfpics' }, h('img', { src: 'img/zipA.webp', alt: 'Zip' }), h('img', { src: 'img/frill.webp', alt: 'Frill' })),
-      h('div', { class: 'zftext' }, h('p', { class: 'zfline' }, 'Learn to read with Zip and Frill'), h('p', { class: 'zfsub' }, 'Join Zip and Frill on an adventure to ring every bell.')));
+      h('div', { class: 'zfhead' }, h('h2', { class: 'zfline' }, 'Learn to read with Zip and Frill'), readAloudBtn()),
+      h('p', { class: 'zfsub' }, 'Ring every bell by learning its sounds.'),
+      h('a', { class: 'zfstart2', href: '#/placement', 'aria-label': 'Start here: find your first bell' },
+        h('span', { class: 'zfbell', 'aria-hidden': 'true' }, '\u{1F514}'),
+        h('span', { class: 'zfst' }, h('b', null, 'Start here'), h('small', null, 'Find your first bell'))));
     const cur = complete ? 4 : 3;
     const youbar = h('button', { class: 'youbar', type: 'button', 'aria-label': 'You are here: Unit ' + cur + ', ' + SKILL[cur] + '. ' + nEarned + ' of 10 gems. Opens the gem box.', onclick: () => { Snd.stop(); location.hash = '#/gems'; } },
       h('span', { class: 'ybtxt' }, 'You are here: ', h('b', null, 'Unit ' + cur + ' \u00b7 ' + SKILL[cur])),
@@ -489,7 +514,7 @@
           'Next come practice activities, a story to read with only the sounds already taught, and heart words (tricky words to learn by heart).',
           ['At the end, Zip\u2019s Check asks 10 quick questions: ', h('b', null, '9\u201310'), ' move on, ', h('b', null, '7\u20138'), ' review first, ', h('b', null, '6 or below'), ' re-teach the lesson.'],
           'Stars and gems show progress. Grown-up tips appear under each activity.',
-          'Coming soon: a quick placement check to show where each reader should start.')),
+          'Not sure where to start? Tap “Start here to find your first bell” on the home screen. A grown-up sits with the reader, who reads short groups of real and made-up words in the same order as the units. A group passes at 4 of 5, and the check stops at the first group that is hard, which shows the starting bell. It takes about 5 minutes. Only the starting bell is saved, on this device. Nothing is recorded or sent, and the microphone is not used.')),
       sec('The research behind it',
         ul(['The National Reading Panel (2000) reviewed the research and found that systematic phonics instruction helps children learn to read. (', a('https://www.nichd.nih.gov/publications/pubs/nrp/smallbook', 'NICHD: National Reading Panel report'), ')'],
           ['The Simple View of Reading (Gough & Tunmer, 1986): reading comprehension depends on both decoding words and understanding language. Island Readers builds the decoding side. (', a('https://doi.org/10.1177/074193258600700104', 'Gough & Tunmer, 1986'), ')'],
@@ -513,6 +538,7 @@
     else if ((m = /^#\/practice\/(\w+)/.exec(hash))) practiceScreen(m[1]);
     else if (hash.startsWith('#/gems')) gemScreen();
     else if (hash.startsWith('#/about')) aboutScreen();
+    else if (hash.startsWith('#/placement')) IR.placement.render(app, (n) => { const id = 'i' + n; if ((D.islands || {})[id]) { location.hash = '#/home'; setTimeout(() => openIsland(id), 0); } else { location.hash = '#/home'; setTimeout(() => toast('Unit ' + n + ' (' + ({1:'blends',2:'sh ch th',3:'ng nk',4:'silent e',5:'long words',6:'bossy r',7:'vowel teams',8:'oi ow aw',9:'word parts',10:'tch dge igh'})[n] + ') is coming soon in the full app. Try Unit 3 for now.'), 50); } });
     else if (hash.startsWith('#/island3')) trailScreen();
     else if (hash.startsWith('#/check')) checkScreen();
     else if (hash.startsWith('#/result')) { IR.newScreen(); app.append(h('div', { class: 'screen resultscreen' })); IR.renderResult($('.resultscreen')); $('.resultscreen').prepend(h('div', { class: 'unitbar' }, homeButton(), unitButton('check'))); }
