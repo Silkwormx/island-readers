@@ -132,7 +132,7 @@
     openModal(h('div', { class: 'grown' },
       h('h2', null, 'Grown-up corner'),
       h('a', { class: 'btn big primary tmbtn', href: '#/teachers', onclick: () => { modalRoot.innerHTML = ''; } }, 'Teacher materials'),
-      h('p', null, 'This is an early version of Island Readers. Unit 3 (ng and nk) is open now, and more units are on the way. Progress is saved only on this device. Nothing is sent anywhere.'),
+      h('p', null, 'This is an early version of Island Readers. Unit 4 (ng and nk) is open now, and more units are on the way. Progress is saved only on this device. Nothing is sent anywhere.'),
       h('p', null, 'Check best score: ' + (sc.best == null ? 'not taken yet' : sc.best + ' of 10') + (sc.attempts ? ' (' + sc.attempts + ' tries)' : '') + '.'),
       h('label', { class: 'opt' }, calm, ' Calm motion (fish hold still, no wiggles)'),
       h('label', { class: 'opt' }, open, ' Open every lesson and the check (for testing)'),
@@ -156,8 +156,8 @@
       const before = list.slice(0, i); const need = u.kind === 'review' ? before : (prev ? [prev] : []);
       const needDone = need.every((x) => x.complete);
       /* Nov 3 2026: lessons are never hard-locked (nk opens even before ng is finished; a gentle 'best after' note shows instead). Only the Review waits. */
-      u.state = u.kind === 'review' && !needDone && !IR.S().settings.openAll ? 'locked' : !u.ready ? 'soon' : 'open';
-      u.soft = u.kind !== 'review' && !needDone && prev ? 'Best after ' + prev.name : '';
+      u.state = !u.ready ? 'soon' : 'open';   /* Nov 3 2026: the Unit Review is always open too (was locked until ng and nk had all their stars) */
+      u.soft = !needDone && prev ? (u.kind === 'review' ? 'Best after ' + before.map((x) => x.name).join(' and ') : 'Best after ' + prev.name) : '';
       u.lockMsg = !needDone ? (u.kind === 'review' ? 'Unlocks when ' + before.map((x) => x.name).join(' and ') + ' are done' : 'Unlocks when ' + prev.name + ' has all ' + prev.total + ' stars') : u.state === 'soon' ? 'Coming soon' : '';
       prev = u;
     });
@@ -166,7 +166,9 @@
   const islandDone = (id) => { const r = islandItems(id); return !!r && r.done; };
   IR.islandDone = islandDone;
   function openIsland(id) {
-    const w = WORLD.find((x) => x.id === id); const info = islandItems(id); if (!info) return;
+    const w0 = WORLD.find((x) => x.id === id); const info = islandItems(id); if (!info) return;
+    /* Nov 3 2026: 22-unit plan. Glued Sounds is Unit 4 (data id stays 'i3', route #/island3). */
+    const w = Object.assign({}, w0, { n: id === 'i3' ? 4 : w0.n });
     Snd.stop();
     const imgs = (u) => h('div', { class: 'uimg' }, ...u.img.map((n) => h('img', { src: 'img/' + ({ zip: 'zipA', frill: 'frillC' }[n] || n) + '.webp', alt: '' })), u.state === 'open' ? null : h('span', { class: 'lk' }, icon('lock')));
     const stars = (u) => h('div', { class: 'dots', 'aria-hidden': 'true' }, ...Array.from({ length: u.total }, (_, k) => h('span', { class: 'sstar' + (k < u.done ? ' on' : '') }, icon('star'))));
@@ -184,12 +186,12 @@
       } else { card.tabIndex = 0; card.addEventListener('click', () => toast(u.lockMsg + '.')); }
       return card;
     });
-    const nextIs = WORLD[WORLD.indexOf(w) + 1];
+    const nextIs0 = WORLD[WORLD.indexOf(w0) + 1]; const nextIs = nextIs0 && nextIs0.kind === 'island' ? { kind: 'island', n: w.n + 1 } : nextIs0;
     const note = nextIs && nextIs.kind === 'island' ? h('div', { class: 'pnote' }, icon(info.done ? 'star' : 'lock'), info.done ? 'Unit ' + nextIs.n + ' is unlocked!' : 'Unit ' + nextIs.n + ' unlocks when the Unit ' + w.n + ' Review is done') : null;
     const close = () => { modalRoot.innerHTML = ''; document.removeEventListener('keydown', onKey); const b = $('[data-id="' + id + '"]'); if (b) b.focus({ preventScroll: true }); };
     const onKey = (e) => { if (e.key === 'Escape') close(); };
     document.addEventListener('keydown', onKey);
-    const panel = h('div', { class: 'panel picker' + (w.n === 3 ? ' orangepick' : ''), role: 'dialog', 'aria-modal': 'true', 'aria-label': 'Unit ' + w.n + ': ' + w.title + '. Pick a lesson.', 'data-island': id },
+    const panel = h('div', { class: 'panel picker' + (id === 'i3' ? ' orangepick' : ''), role: 'dialog', 'aria-modal': 'true', 'aria-label': 'Unit ' + w.n + ': ' + w.title + '. Pick a lesson.', 'data-island': id },
       h('div', { class: 'ph' }, h('button', { class: 'home', type: 'button', onclick: close }, icon('home'), 'Home'),
         h('h1', null, 'Unit ' + w.n + ' \u00b7 ' + w.title, h('small', null, 'Pick a lesson')),
         h('button', { class: 'x', type: 'button', 'aria-label': 'Close', onclick: close }, icon('close'))),
@@ -229,19 +231,36 @@
     const strip = h('button', { class: 'gemstrip', type: 'button', 'aria-label': 'Gem box: ' + nEarned + ' of 10 gems. Opens the gem box.', onclick: () => { Snd.stop(); location.hash = '#/gems'; } },
       h('span', { class: 'gslab' }, 'Gem box \u00b7 ' + nEarned + ' of 10'),
       h('span', { class: 'gsrow' }, ...GEMS.map((g, i) => h('span', { class: 'gs' + (earned[i] ? ' got' : i === nx ? ' next' : '') }, earned[i] || i === nx ? h('img', { src: gemSrc(i), alt: '' }) : null))));
-    const SKILL = { 1: 'blends', 2: 'sh ch th', 3: 'ng nk', 4: 'silent e', 5: 'long words', 6: 'bossy r', 7: 'vowel teams', 8: 'oi ow aw', 9: 'word parts', 10: 'tch dge igh' };
-    /* Grid home (Nov 1 2026, user pick = mockup 2): image card with ONLY a small 'Unit X' box on the art; sound/concept + progress dot below. */
+    /* Nov 3 2026: 22-unit plan tiles (approved mockup home_tiles_part1/2). Built: Unit 4 Glued Sounds = island data 'i3' (#/island3). */
+    const TILES = [null,
+      ['Short Vowels & Floss', 'a e i o u \u00b7 ff ll ss', 4, ['gong']], ['Blends', 'bl \u00b7 st \u00b7 tr \u00b7 -nd \u00b7 -mp', 4, ['red']],
+      ['Digraphs', 'sh \u00b7 ch \u00b7 th \u00b7 wh \u00b7 ck', 2, ['coral']], ['Glued Sounds', 'ng \u00b7 nk', 3, ['orange']],
+      ['Silent e', 'a_e \u00b7 i_e \u00b7 o_e \u00b7 u_e', 3, ['yellow']], ['Endings', '-s \u00b7 -es \u00b7 -ed \u00b7 -ing', 4, ['green']],
+      ['Syllables', 'closed \u00b7 open', 3, ['lblue']], ['Tricky Sounds', 'tch \u00b7 dge \u00b7 -ild \u00b7 -old', 3, ['dblue']],
+      ['Bossy R', 'ar \u00b7 or \u00b7 er \u00b7 ir \u00b7 ur', 4, ['purple']], ['More Bossy R', 'air \u00b7 are \u00b7 ear', 2, ['pink']],
+      ['Long A & E Teams', 'ai \u00b7 ay \u00b7 ee \u00b7 ea \u00b7 ey', 2, ['silver']], ['Long O & I Teams', 'oa \u00b7 ow \u00b7 oe \u00b7 ie \u00b7 igh', 3, ['red', 'red']],
+      ['The oo Sounds', 'oo \u00b7 ew \u00b7 ui \u00b7 ue', 4, ['coral', 'coral']], ['The au Sounds', 'au \u00b7 aw \u00b7 augh \u00b7 ea', 2, ['orange', 'orange']],
+      ['Sliding Vowels', 'oi \u00b7 oy \u00b7 ou \u00b7 ow', 3, ['yellow', 'yellow']], ['Tricky Teams', 'ei \u00b7 eigh \u00b7 ew \u00b7 ough', 3, ['green', 'green']],
+      ['Soft c and g', 'soft c \u00b7 soft g', 1, ['lblue', 'lblue']], ['Silent Letters', 'kn \u00b7 wr \u00b7 mb \u00b7 gn \u00b7 gh', 2, ['dblue', 'dblue']],
+      ['Suffixes', '-er \u00b7 -est \u00b7 -ly \u00b7 -ful', 6, ['purple', 'purple']], ['Suffix Spelling Rules', 'double \u00b7 drop e \u00b7 y to i', 4, ['pink', 'pink']],
+      ['Prefixes', 'un- \u00b7 pre- \u00b7 re- \u00b7 dis-', 5, ['rainbow']], ['Big Endings', '-tion \u00b7 -ture \u00b7 -ment', 6, ['gold']]];
+    const BUILT = 4, BUILT_ID = 'i3';
+    const SKILL = {}; TILES.forEach((t, n) => { if (t) SKILL[n] = t[0]; });
     const unit = (n) => {
-      const w = WORLD.find((x) => x.id === 'i' + n); const isl = !!(D.islands || {})[w.id];
-      const st = n < 3 ? 'done' : n === 3 ? (complete ? 'done' : 'here') : 'locked'; const lit = n === 4 && complete;
-      const label = 'Unit ' + n + ': ' + w.title + ', ' + SKILL[n] + (st === 'here' ? '. You are here. Opens Unit 3.' : n === 3 ? '. Finished. Opens Unit 3.' : st === 'done' ? '. Done.' : lit ? '. Unlocked, coming soon in the full app.' : '. Locked. Coming soon.');
-      const b = h('button', { class: 'gcard g-' + st + (st === 'here' ? ' g-current' : ''), type: 'button', 'data-id': w.id, 'data-kind': 'island', 'data-n': n, 'aria-label': label },
-        h('span', { class: 'gpic' }, h('img', { src: 'img/units/unit' + String(n).padStart(2, '0') + '.webp', alt: '' }), h('span', { class: 'gunit' }, 'Unit ' + n)),
-        h('span', { class: 'gsnd', style: 'border-top-color:' + UCOL[n] }, h('span', { class: 'gdot ' + (st === 'done' ? 'gd-done' : st === 'here' || lit ? 'gd-here' : ''), style: '--uc:' + GEMS[n - 1][2], 'aria-hidden': 'true' }), h('span', { class: 'gbell' }, SKILL[n])));
-      b.addEventListener('click', () => { if (isl) openIsland(w.id); else { Snd.stop(); toast(st === 'done' ? 'Unit ' + n + ' is done. It is part of the full app.' : lit ? 'Unit 4 is unlocked! It is coming soon in the full app.' : 'Unit ' + n + ' is coming soon! Finish Unit 3 first.'); } });
+      const t = TILES[n]; const isl = n === BUILT && !!(D.islands || {})[BUILT_ID];
+      const st = n < BUILT ? 'locked' : n === BUILT ? (complete ? 'done' : 'here') : 'locked'; const lit = n === BUILT + 1 && complete;
+      const note = st === 'here' ? 'You are here' : n === BUILT ? 'Finished' : st === 'done' ? 'Done' : lit ? 'Unlocked' : 'Coming soon';
+      const label = 'Unit ' + n + ': ' + t[0] + ', ' + t[1].replace(/\u00b7/g, ',') + ', ' + t[2] + (t[2] === 1 ? ' lesson. ' : ' lessons. ') + note + (n === BUILT ? '. Opens Unit ' + n + '.' : '.');
+      const b = h('button', { class: 'tcard t-' + st + (st === 'here' ? ' t-current' : ''), type: 'button', 'data-id': 'u' + n, 'data-kind': 'island', 'data-n': n, 'aria-label': label },
+        h('span', { class: 'tpic' }, h('img', { src: 'img/units/tile' + String(n).padStart(2, '0') + '.webp', alt: '', width: 600, height: 600, loading: n > 8 ? 'lazy' : 'eager' })),
+        h('span', { class: 'tbody' },
+          h('span', { class: 'thead' }, h('span', { class: 'tdots', 'aria-hidden': 'true' }, ...t[3].map((c) => h('i', { class: 'tdot td-' + c }))), h('b', { class: 'tnum' }, 'Unit ' + n)),
+          h('span', { class: 'tname' }, t[0]), h('span', { class: 'tsnd' }, ...t[1].split(' \u00b7 ').map((x, i, a) => h('span', null, x + (i < a.length - 1 ? ' \u00b7' : '')))),
+          h('span', { class: 'tmeta' }, t[2] + (t[2] === 1 ? ' lesson' : ' lessons') + ' \u00b7 ' + note)));
+      b.addEventListener('click', () => { if (isl) openIsland(BUILT_ID); else { Snd.stop(); toast(st === 'done' ? 'Unit ' + n + ' is done. It is part of the full app.' : n < BUILT ? 'Unit ' + n + ' is coming soon in the full app!' : lit ? 'Unit ' + n + ' is unlocked! It is coming soon in the full app.' : 'Unit ' + n + ' is coming soon! Finish Unit ' + BUILT + ' first.'); } });
       return b;
     };
-    const grid = h('div', { class: 'ugrid', id: 'skymap' }, ...[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(unit));
+    const grid = h('div', { class: 'ugrid tgrid', id: 'skymap' }, ...Array.from({ length: 22 }, (_, i) => unit(i + 1)));
     const pbox = (key, title, ico) => h('a', { class: 'pbox', href: '#/practice/' + key, 'data-kind': 'practice', 'data-id': key }, h('span', { class: 'pico', 'aria-hidden': 'true' }, ico), h('span', null, title));
     const practice = h('aside', { class: 'practice', 'aria-label': 'Practice' }, h('h2', null, 'Practice'),
       pbox('sight', 'Sight Word Practice', '\u2605'), pbox('fluency', 'Fluency Stories', '\u{1F4D6}'), pbox('spelling', 'Spelling', '\u270E'));
@@ -275,11 +294,22 @@
       h('a', { class: 'zfstart2', href: '#/placement', 'aria-label': 'Start here: find your first bell' },
         h('span', { class: 'zfbell', 'aria-hidden': 'true' }, '\u{1F514}'),
         h('span', { class: 'zfst' }, h('b', null, 'Start here'), h('small', null, 'Find your first bell'))));
-    const cur = complete ? 4 : 3;
-    const youbar = h('button', { class: 'youbar', type: 'button', 'aria-label': 'You are here: Unit ' + cur + ', ' + SKILL[cur] + '. ' + nEarned + ' of 10 gems. Opens the gem box.', onclick: () => { Snd.stop(); location.hash = '#/gems'; } },
+    const cur = complete ? BUILT + 1 : BUILT;
+    const youbar = h('button', { class: 'youbar', type: 'button', 'aria-label': 'You are here: Unit ' + cur + ', ' + SKILL[cur] + '. Dots show all 22 units. ' + nEarned + ' of 10 gems. Opens the gem box.', onclick: () => { Snd.stop(); location.hash = '#/gems'; } },
       h('span', { class: 'ybtxt' }, 'You are here: ', h('b', null, 'Unit ' + cur + ' \u00b7 ' + SKILL[cur])),
-      h('span', { class: 'ybgems', 'aria-hidden': 'true' }, ...GEMS.map((g, i) => h('i', { class: earned[i] ? 'got' : '', style: earned[i] ? 'background:' + g[2] : '' }))));
+      h('span', { class: 'ybdots', 'aria-hidden': 'true' }, ...TILES.slice(1).map((t, i) => h('i', { class: 'tdot td-' + t[3][0] + (i + 1 === cur ? ' ybcur' : complete && i + 1 === BUILT ? ' ybdone' : '') }))));
     app.append(h('div', { class: 'screen home mapscreen gridhome' }, h('div', { class: 'mwrap' }, banner, h('div', { class: 'homelay' }, h('div', { class: 'homeside' }, h('a', { class: 'btn big aboutbtn', href: '#/about' }, 'About Island Readers'), hero, practice), grid)), youbar));
+    /* Nov 3 2026: the whole left sidebar (About, Start here, Practice) stays in one spot while the tiles scroll (wide layouts only). */
+    const side = app.querySelector('.homeside'); const scr = app.querySelector('.screen.home');
+    const pin = () => {
+      if (!side || !scr || !side.isConnected) { window.removeEventListener('resize', pin); return; }
+      side.style.top = ''; side.style.maxHeight = ''; side.style.overflowY = '';
+      if (!matchMedia('(min-width:1100px)').matches) return;
+      const top = Math.round(side.getBoundingClientRect().top - scr.getBoundingClientRect().top + scr.scrollTop);
+      const bar = app.querySelector('.youbar'); const barH = bar ? bar.getBoundingClientRect().height + 24 : 16;
+      side.style.top = top + 'px'; side.style.maxHeight = Math.max(240, innerHeight - top - barH) + 'px'; side.style.overflowY = 'auto';
+    };
+    requestAnimationFrame(pin); window.addEventListener('resize', pin);
   }
   function gemScreen() {
     IR.newScreen(); const earned = gemsEarned(); const nEarned = earned.filter(Boolean).length; const nx = gemNext();
@@ -394,7 +424,7 @@
       h('span', { class: 'i4txt' }, h('small', null, complete ? 'Unit 4 is unlocked!' : 'Unit 4 unlocks when all stars are done')),
       h('span', { class: 'i4count' }, doneN + ' of ' + total));
     app.append(h('div', { class: 'screen trailscreen unitpage unitA orangeunit' },
-      h('header', { class: 'uA-top' }, homeButton(), h('h1', { class: 'uA-title' }, h('small', null, 'Unit 3 \u00b7 Lesson 3.1 \u00b7 '), 'ng'),
+      h('header', { class: 'uA-top' }, homeButton(), h('h1', { class: 'uA-title' }, h('small', null, 'Unit 4 \u00b7 Lesson 4.1 \u00b7 '), 'ng'),
         h('button', { class: 'cartoonpill', type: 'button', 'aria-label': 'Welcome cartoon, optional. Opens a video.', onclick: () => IR.openCartoon() }, icon('play'), h('span', { class: 'cp-long' }, 'Welcome Cartoon (optional)'), h('span', { class: 'cp-short' }, 'Cartoon')),
         h('span', { class: 'uA-time', 'aria-label': 'About ' + totalMin + ' minutes in total' }, h('span', { class: 't-long' }, 'About ' + totalMin + ' min total'), h('span', { class: 't-short' }, totalMin + ' min')), gearButton()),
       unitIntro('i3'),
@@ -494,8 +524,8 @@
     if (key === 'fluency') {
       const si = LESSONS.findIndex((l) => l.id === 'story') + 1;
       return simplePage('Fluency Stories', h('p', { class: 'calm' }, 'Read a story again and again. It gets smoother each time.'),
-        h('div', { class: 'chestlist' }, h('a', { class: 'gchest open', href: '#/lesson/' + si }, h('b', null, 'ng'), h('span', null, 'Now You Read It \u00b7 Unit 3 ng')),
-          h('a', { class: 'gchest open', href: '#/nk/read' }, h('b', null, 'nk'), h('span', null, 'Now You Read It \u00b7 Unit 3 nk'))), h('p', { class: 'calm small' }, 'More stories are coming soon.'));
+        h('div', { class: 'chestlist' }, h('a', { class: 'gchest open', href: '#/lesson/' + si }, h('b', null, 'ng'), h('span', null, 'Now You Read It \u00b7 Unit 4 ng')),
+          h('a', { class: 'gchest open', href: '#/nk/read' }, h('b', null, 'nk'), h('span', null, 'Now You Read It \u00b7 Unit 4 nk'))), h('p', { class: 'calm small' }, 'More stories are coming soon.'));
     }
     if (key === 'spelling') return simplePage('Spelling', h('p', { class: 'calm' }, 'Spelling practice is coming soon.'), h('p', { class: 'calm small' }, 'For now, try Hear it, Spell it inside the Unit 3 lesson.'));
     location.hash = '#/home';
@@ -507,7 +537,7 @@
     const sec = (title, ...kids) => h('section', { class: 'absec' }, h('h2', null, title), ...kids);
     const p = (...k) => h('p', null, ...k);
     const ul = (...items) => h('ul', null, ...items.map((x) => h('li', null, ...[].concat(x))));
-    const UNITS = [['1', 'blends (and floss)'], ['2', 'sh, ch, th'], ['3', 'ng, nk'], ['4', 'silent e and word endings'], ['5', 'longer words'], ['6', 'bossy r'], ['7', 'vowel teams'], ['8', 'oi, ow, aw'], ['9', 'word parts'], ['10', 'tch, dge, igh']];
+    const UNITS = [['1', 'short vowels and floss'], ['2', 'blends'], ['3', 'sh, ch, th, wh, ck'], ['4', 'ng, nk (glued sounds)'], ['5', 'silent e'], ['6', '-s, -es, -ed, -ing'], ['7', 'syllables'], ['8', 'tricky sounds: tch, dge, -ild, -old'], ['9', 'bossy r: ar, or, er, ir, ur'], ['10', 'air, are, ear'], ['11', 'ai, ay, ee, ea, ey'], ['12', 'oa, ow, oe, ie, igh'], ['13', 'oo, ew, ui, ue'], ['14', 'au, aw, augh, ea'], ['15', 'oi, oy, ou, ow'], ['16', 'ei, eigh, ew, ough'], ['17', 'soft c and g'], ['18', 'silent letters: kn, wr, mb, gn, gh'], ['19', 'suffixes: -er, -est, -ly, -ful'], ['20', 'suffix spelling rules'], ['21', 'prefixes: un-, pre-, re-, dis-'], ['22', 'big endings: -tion, -ture, -ment']];
     const home2 = h('button', { class: 'btn big primary abhome', type: 'button', onclick: () => { location.hash = '#/home'; } }, icon('home'), h('span', null, 'Back to Home'));
     app.append(h('div', { class: 'screen aboutscreen' }, h('div', { class: 'abwrap' },
       h('div', { class: 'abtop' }, homeButton()),
@@ -550,9 +580,9 @@
   /* ---------- Teacher materials (grown-up corner): by unit, then sound ---------- */
   function teachersScreen() {
     IR.newScreen();
-    const UNITS = [{ name: 'Unit 3 \u00b7 Glued Sounds', sounds: [
-      { s: 'ng', lesson: 'Lesson 3.1', days: 3, daily: 'teachers/ng/Lesson3.1_ng_Daily_Practice_Sheets.pdf', pack: 'teachers/ng/Lesson3.1_ng_Teacher_Pack.pdf', deck: 'teachers/ng/Lesson3.1_ng_Slide_Presentation.pptx' },
-      { s: 'nk', lesson: 'Lesson 3.2', days: 3, daily: 'teachers/nk/Lesson3.2_nk_Daily_Practice_Sheets.pdf', pack: 'teachers/nk/Lesson3.2_nk_Teacher_Pack.pdf', deck: 'teachers/nk/Lesson3.2_nk_Slide_Presentation.pptx' }] }];
+    const UNITS = [{ name: 'Unit 4 \u00b7 Glued Sounds', sounds: [
+      { s: 'ng', lesson: 'Lesson 4.1', days: 3, daily: 'teachers/ng/Lesson3.1_ng_Daily_Practice_Sheets.pdf', pack: 'teachers/ng/Lesson3.1_ng_Teacher_Pack.pdf', deck: 'teachers/ng/Lesson3.1_ng_Slide_Presentation.pptx' },
+      { s: 'nk', lesson: 'Lesson 4.2', days: 3, daily: 'teachers/nk/Lesson3.2_nk_Daily_Practice_Sheets.pdf', pack: 'teachers/nk/Lesson3.2_nk_Teacher_Pack.pdf', deck: 'teachers/nk/Lesson3.2_nk_Slide_Presentation.pptx' }] }];
     const card = (x) => h('div', { class: 'tmcard' }, h('h3', null, h('span', { class: 'tmsound' }, x.s), ' ' + x.lesson),
       h('a', { class: 'btn big tmlink', href: x.deck, download: '' }, 'Slides \u00b7 ' + x.days + ' days'),
       h('p', { class: 'tmnote' }, 'One PowerPoint for the whole sound.'),

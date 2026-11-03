@@ -1469,3 +1469,43 @@ body.calm .ob-glow{animation:none;opacity:.85}
 .tmcard h3{font-size:1.3rem;margin:0 0 .7rem}.tmsound{display:inline-block;background:#E8731C;color:#fff;border-radius:.6rem;padding:0 .6rem;font-weight:700}
 .tmlink{display:flex;justify-content:center;text-decoration:none;margin-top:.5rem}.tmnote{margin:.2rem 0 .6rem;font-size:1rem;color:var(--ink2,#4a4a68)}
 .tmlink,.tmlink:visited{color:var(--ink,#26324D)}
+/* Nov 3 2026: 22-unit home tiles (approved mockup). Every tile and image identical size. */
+.gridhome .tgrid{grid-auto-rows:1fr!important;align-items:stretch!important}
+.tcard{display:flex;flex-direction:column;width:100%;height:100%;padding:0;border:2px solid #E6D9B8;border-radius:18px;overflow:hidden;background:#fff;font:inherit;font-family:'Andika',system-ui,sans-serif;color:#3b2a1a;text-align:left;cursor:pointer;box-shadow:0 4px 12px rgba(60,40,20,.08)}
+.tcard.t-current{border-color:#F28C00;box-shadow:0 0 0 4px rgba(242,140,0,.25)}
+.tpic{display:block;width:100%;aspect-ratio:1/1;overflow:hidden;background:#EFE7D6}
+.tpic img{display:block;width:100%;height:100%;object-fit:cover}
+.tbody{display:flex;flex-direction:column;gap:.35rem;padding:.8rem .9rem 1rem;min-height:9.6rem;box-sizing:border-box;flex:1}
+.thead{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap}
+.tdots{display:inline-flex;gap:.25rem}
+.tdot{display:inline-block;width:1.05rem;height:1.05rem;border-radius:50%;box-sizing:border-box;border:1px solid rgba(0,0,0,.25)}
+.td-red{background:#d93a2b}.td-coral{background:#f2765a}.td-orange{background:#f08a1c}.td-yellow{background:#f2c21b}.td-green{background:#2fa84f}.td-lblue{background:#5fb4ec}.td-dblue{background:#1f3f8f}.td-purple{background:#8e3fc9}.td-pink{background:#e8609a}
+.td-silver{background:#c0c4cc;border:2px solid #8a8f99}.td-gold{background:#d4a017;border:2px solid #9c7410}.td-gong{background:#9a6a2f;border:2px solid #6b4718}
+.td-rainbow{background:conic-gradient(#d93a2b 0 40deg,#f2765a 0 80deg,#f08a1c 0 120deg,#f2c21b 0 160deg,#2fa84f 0 200deg,#5fb4ec 0 240deg,#1f3f8f 0 280deg,#8e3fc9 0 320deg,#e8609a 0 360deg)}
+.tnum{font-size:1.45rem;font-weight:700;line-height:1.2}
+.tname{font-size:1.05rem;font-weight:700;line-height:1.3;letter-spacing:.01em}
+.tsnd{font-size:.98rem;line-height:1.35;letter-spacing:.03em;word-spacing:.08em;color:#5a4632}
+.tmeta{margin-top:auto;font-size:.85rem;color:#7a6650}
+.thead{flex-wrap:nowrap}.tnum{white-space:nowrap}
+.tsnd{display:flex;flex-wrap:wrap;column-gap:.4em;row-gap:.1em}.tsnd>span{white-space:nowrap}
+.tbody{min-height:0}
+@media (min-width:1100px){.gridhome .ugrid.tgrid{grid-template-columns:repeat(3,minmax(0,1fr))!important}}
+@media (min-width:1600px){.gridhome .ugrid.tgrid{grid-template-columns:repeat(4,minmax(0,1fr))!important}}
+@media (max-width:759px){.tbody{padding:.65rem .65rem .8rem}.tnum{font-size:1.2rem}.tname{font-size:.98rem}.tsnd{font-size:.9rem}.tmeta{font-size:.8rem}.tdot{width:.9rem;height:.9rem}}
+/* Nov 3 2026: true bronze for Unit 1 (gong); 22-dot unit bar */
+.td-gong{background:#CD7F32!important;border:2px solid #8C5520!important}
+.youbar{flex-wrap:wrap;max-width:46rem}
+.ybdots{display:flex;flex-wrap:nowrap;gap:.22rem;align-items:center;flex:none}
+.ybdots .tdot{width:.72rem;height:.72rem;border-width:1px;opacity:.55}
+.ybdots .tdot.ybdone{opacity:1}
+.ybdots .tdot.ybcur{opacity:1;width:1rem;height:1rem;box-shadow:0 0 0 2px #fff,0 0 0 4px #B04A00}
+@media (max-width:759px){.youbar{justify-content:center;row-gap:.45rem}.ybtxt{width:100%;text-align:center}.ybdots{gap:.16rem}.ybdots .tdot{width:.62rem;height:.62rem}.ybdots .tdot.ybcur{width:.85rem;height:.85rem}}
+/* Nov 3 2026 v4: stronger unit dots in the bar */
+.ybdots .tdot{opacity:.88;filter:saturate(.9)}
+.ybdots .tdot.ybdone{opacity:1;filter:none}
+.ybdots .tdot.ybcur{opacity:1;filter:none;width:1.1rem;height:1.1rem}
+@media (max-width:759px){.ybdots .tdot.ybcur{width:.95rem;height:.95rem}}
+/* Nov 3 2026: lesson/review kicker label never clipped */
+.picker .ubody{min-width:0}.picker .uk{display:block;white-space:normal;overflow:visible;line-height:1.3;letter-spacing:.08em;padding-top:.15rem}
+.picker .pcards{overflow-y:auto}.picker .ucard{min-height:fit-content;flex-shrink:0}
+@media (max-width:640px){.picker .ucard.rv .uimg{width:36%;flex:none}.picker .ucard.rv .uimg img{width:50%;max-width:50%;height:auto;object-fit:contain}.picker .ucard.rv .uimg img+img{margin-left:0}}

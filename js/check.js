@@ -81,10 +81,10 @@
     if (score < 7) wrap.append(h('img', { class: 'char zip big', src: 'img/zipA.webp', alt: 'Zip' }));
     if (score >= 9) {
       wrap.append(h('div', { class: 'ob-bellhero ringing' }, h('img', { class: 'ob-scene', src: 'img/ob_cover_wide.jpg', alt: 'The big orange bell glows on the banyan tree' }), h('i', { class: 'ob-glow', 'aria-hidden': 'true' })),
-        h('p', { class: 'ob-kicker' }, 'Lesson 3.1 \u00b7 ' + score + ' of 10'),
+        h('p', { class: 'ob-kicker' }, 'Lesson 4.1 \u00b7 ' + score + ' of 10'),
         h('h1', null, 'The bell rings!'), h('p', { class: 'lead' }, 'You read the glued sound ng. Ding, dong!'),
         h('div', { class: 'ob-gem' }, h('img', { src: 'img/gem_03_amber.png', alt: 'Amber gem' }),
-          h('p', null, h('b', null, 'Amber gem: halfway there.'), ' Finish nk and the Unit 3 Review to put it in your gem box.')),
+          h('p', null, h('b', null, 'Amber gem: halfway there.'), ' Finish nk and the Unit 4 Review to put it in your gem box.')),
         h('p', { class: 'small' }, 'Your ng sticker is on the map.'),
         h('div', { class: 'row' }, home, trail));
     } else if (score >= 7) {

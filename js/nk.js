@@ -79,9 +79,9 @@
       extras.length ? h('h2', { class: 'uA-h uA-extra' }, 'Extras (optional)') : null, extras.length ? h('ul', { class: 'stoplist uA-acts uA-extras' }, ...extras.map(row)) : null);
     const complete = doneN === total;
     const foot = h('footer', { class: 'uA-foot island4 ' + (complete ? 'open' : 'locked') }, h('span', { class: 'i4ico', 'aria-hidden': 'true' }, icon(complete ? 'star' : 'lock')),
-      h('span', { class: 'i4txt' }, h('b', null, 'Unit 3 Review'), h('small', null, complete ? 'Unlocked! Mix ng and nk.' : 'Finish all stars to unlock')), h('span', { class: 'i4count' }, doneN + ' of ' + total));
+      h('span', { class: 'i4txt' }, h('b', null, 'Unit 4 Review'), h('small', null, complete ? 'Unlocked! Mix ng and nk.' : 'Finish all stars to unlock')), h('span', { class: 'i4count' }, doneN + ' of ' + total));
     app.append(h('div', { class: 'screen trailscreen unitpage unitA nkunit' },
-      h('header', { class: 'uA-top' }, IR.ui.homeButton(), h('h1', { class: 'uA-title' }, h('small', null, 'Unit 3 \u00b7 Lesson 3.2 \u00b7 '), 'nk'),
+      h('header', { class: 'uA-top' }, IR.ui.homeButton(), h('h1', { class: 'uA-title' }, h('small', null, 'Unit 4 \u00b7 Lesson 4.2 \u00b7 '), 'nk'),
         h('span', { class: 'uA-time' }, h('span', { class: 't-long' }, 'About ' + totalMin + ' min total'), h('span', { class: 't-short' }, totalMin + ' min')), IR.ui.gearButton()),
       IR.unitIntro ? IR.unitIntro('i3') : null,
       h('main', { class: 'uA-main' }, left, right), foot));
@@ -366,7 +366,7 @@
   }
   /* Island 3 Review: ng and nk mixed */
   function reviewPage(app) {
-    const fake = { id: 'review', rec: 'i3_review', title: 'Unit 3 Review', color: '#0E8584', run: (ctx) => {
+    const fake = { id: 'review', rec: 'i3_review', title: 'Unit 4 Review', color: '#0E8584', run: (ctx) => {
       ctx.setInstr('Listen. Is it ng or nk? Tap the word you hear.', 'review');
       pickRounds(ctx, N.review, (R) => { const buttons = shuffle(R.choices).map((w) => ({ word: w, ok: w === R.word, el: h('button', { class: 'choice', type: 'button', 'data-w': w }, colorNk(w)) }));
         return { body: h('div', { class: 'choices two' }, ...buttons.map((b) => b.el)), buttons }; }, () => ctx.finish());
