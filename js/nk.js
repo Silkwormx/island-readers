@@ -27,7 +27,7 @@
     { id: 'meet', title: 'Meet nk', group: 'lesson', run: runMeet, color: '#1FA6A6' },
     { id: 'listen', title: 'Story Time', group: 'story', run: runListen, color: '#8E5BD6' },
     { id: 'hear', title: 'Hear and Pick', group: 'activities', run: ACT.hear, color: '#7E57C2' },
-    { id: 'bells', title: 'Make the bell ring', group: 'activities', run: ACT.bells, color: '#E8731C' },
+    { id: 'bells', title: 'Ring every bell and learn its sounds', group: 'activities', run: ACT.bells, color: '#E8731C' },
     { id: 'build', title: 'Build-a-Word', group: 'activities', run: ACT.build, color: '#E8603C' },
     { id: 'chain', title: 'Word Chains', group: 'activities', run: ACT.chain, color: '#C95A10' },
     { id: 'scramble', title: 'Scrambled Letters', group: 'activities', run: ACT.scramble, color: '#D9631A' },

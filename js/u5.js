@@ -21,7 +21,7 @@
     const out = []; letters.forEach((l, k) => { (L[l] || L.e)(k ? 620 : 220).forEach((pts, j) => out.push({ letter: l, slot: k, num: j + 1, pts })); }); return out;
   }
   const U5PROG = {}, U5ROUTE = {};
-  ['u51', 'u52', 'u53'].forEach((KEY) => {
+  ['u51', 'u53'].forEach((KEY) => {   /* u51 = Lesson 5.1 Silent e (all vowels); u53 = Lesson 5.2 Tricky silent e (key kept so its audio and saved stars stay) */
   const ACTS = (() => {
     const N = window.IR_DATA_U5[KEY];
     const W = (w) => 'audio/' + KEY + '_w_' + w + '.mp3';
@@ -296,7 +296,7 @@
       { id: 'meet', title: 'Meet ' + N.name, group: 'lesson', run: runMeet, color: '#1FA6A6' },
       { id: 'listen', title: 'Story Time', group: 'story', run: runListen, color: '#8E5BD6' },
       { id: 'hear', title: 'Hear and Pick', group: 'activities', run: ACT.hear, color: '#7E57C2' },
-      { id: 'bells', title: 'Make the bell ring', group: 'activities', run: ACT.bells, color: '#E8731C' },
+      { id: 'bells', title: 'Ring every bell and learn its sounds', group: 'activities', run: ACT.bells, color: '#E8731C' },
       { id: 'build', title: 'Build-a-Word', group: 'activities', run: ACT.build, color: '#E8603C' },
       { id: 'chain', title: 'Word Chains', group: 'activities', run: ACT.chain, color: '#C95A10' },
       { id: 'scramble', title: 'Scrambled Letters', group: 'activities', run: ACT.scramble, color: '#D9631A' },
@@ -655,10 +655,10 @@
   });
   /* the Unit 5 picker (same panel as Unit 4) uses IR.nkProgress for lesson progress */
   const prevProg = IR.nkProgress; IR.nkProgress = (id) => { const k = id === 'u5review' ? 'u53' : id; return U5PROG[k] ? U5PROG[k](id) : (prevProg ? prevProg(id) : null); };
-  IR.u5Route = (hash, app) => { for (const k in U5ROUTE) { if (U5ROUTE[k](hash, app)) return true; } return false; };
+  IR.u5Route = (hash, app) => { if (hash === '#/u52' || hash.indexOf('#/u52/') === 0) { location.replace(hash.replace('#/u52', '#/u51')); return true; }   /* old 5.2 (a_e...) is now part of 5.1 */
+    for (const k in U5ROUTE) { if (U5ROUTE[k](hash, app)) return true; } return false; };
   const D = window.IR_DATA; if (D) { D.islands = D.islands || {}; D.islands.i5 = { units: [
-    { id: 'u51', unitNo: 5, name: 'e_e', href: '#/u51', img: ['zip'], ready: true, stars: 12 },
-    { id: 'u52', unitNo: 5, name: 'a_e, i_e, o_e, u_e', href: '#/u52', img: ['frill'], ready: true, stars: 12 },
-    { id: 'u53', unitNo: 5, name: 'Tricky silent e', href: '#/u53', img: ['zip'], ready: true, stars: 12 }],
+    { id: 'u51', unitNo: 5, name: 'Silent e', href: '#/u51', img: ['zip'], ready: true, stars: 12 },
+    { id: 'u53', unitNo: 5, name: 'Tricky silent e', href: '#/u53', img: ['frill'], ready: true, stars: 12 }],
     review: { id: 'u5review', name: 'Review', href: '#/review5', desc: 'Mixed review: silent e', img: ['zip', 'frill'], ready: true, stars: 1, minutes: 6 } }; }
 })();

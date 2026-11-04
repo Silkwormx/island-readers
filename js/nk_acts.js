@@ -1,4 +1,4 @@
-/* nk activities that mirror the ng unit (Nov 2 2026): Hear and Pick, Make the bell ring, Build-a-Word, Word Chains,
+/* nk activities that mirror the ng unit (Nov 2 2026): Hear and Pick, Ring every bell and learn its sounds, Build-a-Word, Word Chains,
    Scrambled Letters, Trace Trail (n, k), Sentence Bridge. Whole-word and whole-sentence audio only; no isolated sounds.
    Loaded before nk.js, which places them in the unit order. */
 (function () {

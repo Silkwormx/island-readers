@@ -235,7 +235,7 @@
     const TILES = [null,
       ['Short Vowels & Floss', 'a e i o u \u00b7 ff ll ss', 4, ['gong']], ['Blends', 'bl \u00b7 st \u00b7 tr \u00b7 -nd \u00b7 -mp', 4, ['red']],
       ['Digraphs', 'sh \u00b7 ch \u00b7 th \u00b7 wh \u00b7 ck', 2, ['coral']], ['Glued Sounds', 'ng \u00b7 nk', 3, ['orange']],
-      ['Silent e', 'a_e \u00b7 i_e \u00b7 o_e \u00b7 u_e', 3, ['yellow']], ['Endings', '-s \u00b7 -es \u00b7 -ed \u00b7 -ing', 4, ['green']],
+      ['Silent e', 'a_e \u00b7 i_e \u00b7 o_e \u00b7 u_e', 2, ['yellow']], ['Endings', '-s \u00b7 -es \u00b7 -ed \u00b7 -ing', 4, ['green']],
       ['Syllables', 'closed \u00b7 open', 3, ['lblue']], ['Tricky Sounds', 'tch \u00b7 dge \u00b7 -ild \u00b7 -old', 3, ['dblue']],
       ['Bossy R', 'ar \u00b7 or \u00b7 er \u00b7 ir \u00b7 ur', 4, ['purple']], ['More Bossy R', 'air \u00b7 are \u00b7 ear', 2, ['pink']],
       ['Long A & E Teams', 'ai \u00b7 ay \u00b7 ee \u00b7 ea \u00b7 ey', 2, ['silver']], ['Long O & I Teams', 'oa \u00b7 ow \u00b7 oe \u00b7 ie \u00b7 igh', 3, ['red', 'red']],
@@ -616,6 +616,20 @@
     else if (hash.startsWith('#/result')) { IR.newScreen(); app.append(h('div', { class: 'screen resultscreen' })); IR.renderResult($('.resultscreen')); $('.resultscreen').prepend(h('div', { class: 'unitbar' }, homeButton(), unitButton('check'))); }
     else homeScreen();
   }
+  /* Nov 4 2026: "Back to Unit N" on every lesson / activity / game page of a unit. Opens that unit's lesson picker.
+     Shared template: a new unit only needs one row here (route test + picker id + unit number). */
+  IR.UNIT_ROUTES = IR.UNIT_ROUTES || [
+    { n: 4, id: 'i3', test: (hs) => /^#\/(nk|island3|lesson\/|review3|check|result)/.test(hs) },
+    { n: 5, id: 'i5', test: (hs) => /^#\/(u5\d|review5)/.test(hs) }];
+  function addUnitBack() {
+    const hs = location.hash || ''; const u = IR.UNIT_ROUTES.find((r) => r.test(hs));
+    if (!u || app.querySelector('.unitback')) return;
+    const home = app.querySelector('.homebtn'); if (!home) return;
+    const b = h('button', { class: 'back homebtn unitback', type: 'button', 'aria-label': 'Back to Unit ' + u.n + ': pick another lesson', onclick: () => { Snd.stop(); location.hash = '#/home'; setTimeout(() => openIsland(u.id), 0); } }, icon('back'), h('span', null, 'Back to Unit ' + u.n));
+    home.style.marginRight = '0'; home.after(b);
+  }
+  IR.addUnitBack = addUnitBack;
+  const route0 = route; route = function () { route0(); addUnitBack(); setTimeout(addUnitBack, 60); };
   window.addEventListener('hashchange', route);
   IR.applySettings();
   route();

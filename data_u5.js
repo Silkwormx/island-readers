@@ -3,1228 +3,19 @@ window.IR_DATA_U5 = {
  "u51": {
   "key": "u51",
   "n": "5.1",
-  "name": "e_e",
-  "title": "Silent e: e_e",
-  "card": [
-   "e",
-   "_",
-   "e"
-  ],
-  "tip": "e at the end is silent. It makes the first e say its name.",
-  "story": [
-   {
-    "n": 1,
-    "img": "img/u5_s1a.webp",
-    "text": "Zip and Frill trek up a hill. A yellow bell hangs on a big pine.",
-    "words": [
-     "Zip",
-     "and",
-     "Frill",
-     "trek",
-     "up",
-     "a",
-     "hill.",
-     "A",
-     "yellow",
-     "bell",
-     "hangs",
-     "on",
-     "a",
-     "big",
-     "pine."
-    ],
-    "t": [
-     [
-      0.107,
-      0.49
-     ],
-     [
-      0.505,
-      0.618
-     ],
-     [
-      0.632,
-      0.988
-     ],
-     [
-      1.002,
-      1.3
-     ],
-     [
-      1.314,
-      1.456
-     ],
-     [
-      1.47,
-      1.541
-     ],
-     [
-      1.556,
-      2.01
-     ],
-     [
-      3.011,
-      3.125
-     ],
-     [
-      3.139,
-      3.565
-     ],
-     [
-      3.58,
-      3.864
-     ],
-     [
-      3.878,
-      4.261
-     ],
-     [
-      4.276,
-      4.403
-     ],
-     [
-      4.418,
-      4.489
-     ],
-     [
-      4.503,
-      4.787
-     ],
-     [
-      4.801,
-      5.355
-     ]
-    ],
-    "dur": 6.38,
-    "audio": "audio/u51_s_1.mp3"
-   },
-   {
-    "n": 2,
-    "img": "img/u5_s1a.webp",
-    "text": "\"Ring it, Zip!\" says Frill. Zip hits the bell with a stick. Thud. The bell is still.",
-    "words": [
-     "\"Ring",
-     "it,",
-     "Zip!\"",
-     "says",
-     "Frill.",
-     "Zip",
-     "hits",
-     "the",
-     "bell",
-     "with",
-     "a",
-     "stick.",
-     "Thud.",
-     "The",
-     "bell",
-     "is",
-     "still."
-    ],
-    "t": [
-     [
-      0.107,
-      0.448
-     ],
-     [
-      0.462,
-      0.647
-     ],
-     [
-      0.86,
-      1.215
-     ],
-     [
-      1.428,
-      1.755
-     ],
-     [
-      1.769,
-      2.252
-     ],
-     [
-      3.239,
-      3.594
-     ],
-     [
-      3.608,
-      3.906
-     ],
-     [
-      3.92,
-      4.048
-     ],
-     [
-      4.062,
-      4.361
-     ],
-     [
-      4.375,
-      4.531
-     ],
-     [
-      4.545,
-      4.616
-     ],
-     [
-      4.631,
-      5.185
-     ],
-     [
-      6.179,
-      6.832
-     ],
-     [
-      7.798,
-      7.997
-     ],
-     [
-      8.011,
-      8.295
-     ],
-     [
-      8.31,
-      8.452
-     ],
-     [
-      8.466,
-      8.977
-     ]
-    ],
-    "dur": 10.03,
-    "audio": "audio/u51_s_2.mp3"
-   },
-   {
-    "n": 3,
-    "img": "img/u5_s1a.webp",
-    "text": "Then Pete lands on the pine. \"This is my bell,\" says Pete. \"It has not rung in a long spell.\"",
-    "words": [
-     "Then",
-     "Pete",
-     "lands",
-     "on",
-     "the",
-     "pine.",
-     "\"This",
-     "is",
-     "my",
-     "bell,\"",
-     "says",
-     "Pete.",
-     "\"It",
-     "has",
-     "not",
-     "rung",
-     "in",
-     "a",
-     "long",
-     "spell.\""
-    ],
-    "t": [
-     [
-      0.107,
-      0.462
-     ],
-     [
-      0.476,
-      0.774
-     ],
-     [
-      0.789,
-      1.158
-     ],
-     [
-      1.172,
-      1.286
-     ],
-     [
-      1.3,
-      1.371
-     ],
-     [
-      1.385,
-      1.911
-     ],
-     [
-      2.898,
-      3.21
-     ],
-     [
-      3.224,
-      3.352
-     ],
-     [
-      3.366,
-      3.551
-     ],
-     [
-      3.565,
-      4.006
-     ],
-     [
-      4.148,
-      4.432
-     ],
-     [
-      4.446,
-      4.957
-     ],
-     [
-      5.938,
-      6.08
-     ],
-     [
-      6.094,
-      6.293
-     ],
-     [
-      6.307,
-      6.634
-     ],
-     [
-      6.648,
-      6.889
-     ],
-     [
-      6.903,
-      6.974
-     ],
-     [
-      6.989,
-      7.045
-     ],
-     [
-      7.06,
-      7.401
-     ],
-     [
-      7.415,
-      7.926
-     ]
-    ],
-    "dur": 8.98,
-    "audio": "audio/u51_s_3.mp3"
-   },
-   {
-    "n": 4,
-    "img": "img/u5_s1a.webp",
-    "text": "Zip spots a tag on the bell. The tag says Pet. \"I am not Pet!\" says Pete. \"I am Pete!\"",
-    "words": [
-     "Zip",
-     "spots",
-     "a",
-     "tag",
-     "on",
-     "the",
-     "bell.",
-     "The",
-     "tag",
-     "says",
-     "Pet.",
-     "\"I",
-     "am",
-     "not",
-     "Pet!\"",
-     "says",
-     "Pete.",
-     "\"I",
-     "am",
-     "Pete!\""
-    ],
-    "t": [
-     [
-      0.107,
-      0.448
-     ],
-     [
-      0.462,
-      0.874
-     ],
-     [
-      0.888,
-      0.959
-     ],
-     [
-      0.973,
-      1.343
-     ],
-     [
-      1.357,
-      1.47
-     ],
-     [
-      1.485,
-      1.57
-     ],
-     [
-      1.584,
-      2.01
-     ],
-     [
-      2.997,
-      3.196
-     ],
-     [
-      3.21,
-      3.58
-     ],
-     [
-      3.594,
-      3.892
-     ],
-     [
-      3.906,
-      4.219
-     ],
-     [
-      4.276,
-      4.389
-     ],
-     [
-      4.403,
-      4.517
-     ],
-     [
-      4.531,
-      4.815
-     ],
-     [
-      4.83,
-      5.156
-     ],
-     [
-      5.369,
-      5.653
-     ],
-     [
-      5.668,
-      6.136
-     ],
-     [
-      7.116,
-      7.301
-     ],
-     [
-      7.315,
-      7.472
-     ],
-     [
-      7.486,
-      8.04
-     ]
-    ],
-    "dur": 9.07,
-    "audio": "audio/u51_s_4.mp3"
-   },
-   {
-    "n": 5,
-    "img": "img/u5_s1b.webp",
-    "text": "Frill digs in the bag and gets a red e. Frill sticks the e on the end. Pet... Pete!",
-    "words": [
-     "Frill",
-     "digs",
-     "in",
-     "the",
-     "bag",
-     "and",
-     "gets",
-     "a",
-     "red",
-     "e.",
-     "Frill",
-     "sticks",
-     "the",
-     "e",
-     "on",
-     "the",
-     "end.",
-     "Pet...",
-     "Pete!"
-    ],
-    "t": [
-     [
-      0.107,
-      0.519
-     ],
-     [
-      0.533,
-      0.831
-     ],
-     [
-      0.845,
-      0.931
-     ],
-     [
-      0.945,
-      1.03
-     ],
-     [
-      1.044,
-      1.428
-     ],
-     [
-      1.442,
-      1.541
-     ],
-     [
-      1.556,
-      1.811
-     ],
-     [
-      1.826,
-      1.897
-     ],
-     [
-      1.911,
-      2.209
-     ],
-     [
-      2.223,
-      2.522
-     ],
-     [
-      2.848,
-      3.09
-     ],
-     [
-      3.104,
-      3.502
-     ],
-     [
-      3.516,
-      3.63
-     ],
-     [
-      3.644,
-      3.914
-     ],
-     [
-      3.928,
-      4.041
-     ],
-     [
-      4.056,
-      4.127
-     ],
-     [
-      4.141,
-      4.681
-     ],
-     [
-      5.668,
-      6.236
-     ],
-     [
-      7.202,
-      7.798
-     ]
-    ],
-    "dur": 8.81,
-    "audio": "audio/u51_s_5.mp3"
-   },
-   {
-    "n": 6,
-    "img": "img/u5_s1b.webp",
-    "text": "Zip hits the bell. Dong! It rings and rings. \"Thanks!\" says Pete. Pete flaps up on top of the bell.",
-    "words": [
-     "Zip",
-     "hits",
-     "the",
-     "bell.",
-     "Dong!",
-     "It",
-     "rings",
-     "and",
-     "rings.",
-     "\"Thanks!\"",
-     "says",
-     "Pete.",
-     "Pete",
-     "flaps",
-     "up",
-     "on",
-     "top",
-     "of",
-     "the",
-     "bell."
-    ],
-    "t": [
-     [
-      0.107,
-      0.49
-     ],
-     [
-      0.505,
-      0.817
-     ],
-     [
-      0.831,
-      0.959
-     ],
-     [
-      0.973,
-      1.428
-     ],
-     [
-      2.429,
-      3.04
-     ],
-     [
-      4.006,
-      4.247
-     ],
-     [
-      4.261,
-      4.631
-     ],
-     [
-      4.645,
-      4.773
-     ],
-     [
-      4.787,
-      5.383
-     ],
-     [
-      6.364,
-      6.832
-     ],
-     [
-      7.003,
-      7.315
-     ],
-     [
-      7.33,
-      7.855
-     ],
-     [
-      8.835,
-      9.162
-     ],
-     [
-      9.176,
-      9.631
-     ],
-     [
-      9.645,
-      9.844
-     ],
-     [
-      9.858,
-      10.028
-     ],
-     [
-      10.043,
-      10.327
-     ],
-     [
-      10.341,
-      10.426
-     ],
-     [
-      10.44,
-      10.54
-     ],
-     [
-      10.554,
-      11.023
-     ]
-    ],
-    "dur": 12.07,
-    "audio": "audio/u51_s_6.mp3"
-   }
-  ],
-  "heart": [
-   {
-    "w": "the",
-    "ex": "The bell is still."
-   },
-   {
-    "w": "a",
-    "ex": "A yellow bell."
-   },
-   {
-    "w": "is",
-    "ex": "It is a bell."
-   },
-   {
-    "w": "says",
-    "ex": "Ring it, says Frill."
-   },
-   {
-    "w": "I",
-    "ex": "I have a plan."
-   },
-   {
-    "w": "yellow",
-    "ex": "The yellow bell rings!"
-   }
-  ],
-  "ido": [
-   "Pete",
-   "these",
-   "theme"
-  ],
-  "wedo": [
-   "Steve",
-   "eve",
-   "Zeke"
-  ],
-  "chips": [
-   "Pete",
-   "these",
-   "theme",
-   "Steve"
-  ],
-  "meetImgs": [
-   "img/u5_s1a.webp",
-   "img/u5_s1a.webp",
-   "img/u5_s1a.webp"
-  ],
-  "youdo": [
-   {
-    "word": "Pete",
-    "choices": [
-     "Pete",
-     "pen",
-     "peg"
-    ]
-   },
-   {
-    "word": "pen",
-    "choices": [
-     "pen",
-     "Pete",
-     "peg"
-    ]
-   },
-   {
-    "word": "peg",
-    "choices": [
-     "peg",
-     "pen",
-     "Pete"
-    ]
-   }
-  ],
-  "pics": {
-   "cake": "img/u5_c_cake.webp",
-   "kite": "img/u5_c_kite.webp",
-   "bone": "img/u5_c_bone.webp",
-   "cube": "img/u5_c_cube.webp",
-   "snake": "img/u5_c_snake.webp",
-   "pine": "img/u5_c_pine.webp",
-   "rope": "img/u5_c_rope.webp",
-   "mule": "img/u5_c_mule.webp",
-   "glove": "img/u5_c_glove.webp",
-   "dove": "img/u5_c_dove.webp",
-   "hive": "img/u5_c_hive.webp",
-   "five": "img/u5_c_five.webp",
-   "pen": "img/u5_c_pen.webp",
-   "peg": "img/u5_c_peg.webp",
-   "cap": "img/u5_c_cap.webp",
-   "Pete": "img/u5_c_pete.webp"
-  },
-  "pairT": "e or no e?",
-  "opts": [
-   [
-    "",
-    "no e"
-   ],
-   [
-    "e",
-    "e"
-   ]
-  ],
-  "ngnk": [
-   {
-    "word": "Pete",
-    "onset": "Pet",
-    "answer": "e"
-   },
-   {
-    "word": "pet",
-    "onset": "pet",
-    "answer": ""
-   },
-   {
-    "word": "theme",
-    "onset": "them",
-    "answer": "e"
-   },
-   {
-    "word": "them",
-    "onset": "them",
-    "answer": ""
-   },
-   {
-    "word": "these",
-    "onset": "thes",
-    "answer": "e"
-   },
-   {
-    "word": "step",
-    "onset": "step",
-    "answer": ""
-   }
-  ],
-  "hear": [
-   {
-    "word": "Pete",
-    "choices": [
-     "Pete",
-     "pet",
-     "pen"
-    ]
-   },
-   {
-    "word": "theme",
-    "choices": [
-     "theme",
-     "them",
-     "then"
-    ]
-   },
-   {
-    "word": "these",
-    "choices": [
-     "these",
-     "this",
-     "thin"
-    ]
-   },
-   {
-    "word": "Steve",
-    "choices": [
-     "Steve",
-     "step",
-     "stem"
-    ]
-   }
-  ],
-  "bells": [
-   "Pete",
-   "these",
-   "theme",
-   "Steve",
-   "eve"
-  ],
-  "build": [
-   {
-    "word": "Pete",
-    "onset": "P",
-    "chunk": "ete",
-    "altOnset": "St",
-    "altChunk": "eme"
-   },
-   {
-    "word": "Steve",
-    "onset": "St",
-    "chunk": "eve",
-    "altOnset": "th",
-    "altChunk": "ete"
-   },
-   {
-    "word": "theme",
-    "onset": "th",
-    "chunk": "eme",
-    "altOnset": "P",
-    "altChunk": "eve"
-   },
-   {
-    "word": "these",
-    "onset": "th",
-    "chunk": "ese",
-    "altOnset": "Z",
-    "altChunk": "eke"
-   }
-  ],
-  "chain": [
-   "pet",
-   "pen",
-   "ten",
-   "then",
-   "them",
-   "theme"
-  ],
-  "scramble": [
-   "Pete",
-   "these",
-   "theme",
-   "Steve"
-  ],
-  "sentences": [
-   {
-    "n": 1,
-    "text": "Pete is on the bell.",
-    "img": "img/u5_s1a.webp",
-    "words": [
-     "Pete",
-     "is",
-     "on",
-     "the",
-     "bell."
-    ]
-   },
-   {
-    "n": 2,
-    "text": "Zip hits the bell.",
-    "img": "img/u5_s1b.webp",
-    "words": [
-     "Zip",
-     "hits",
-     "the",
-     "bell."
-    ]
-   },
-   {
-    "n": 3,
-    "text": "The bell rings.",
-    "img": "img/u5_s1b.webp",
-    "words": [
-     "The",
-     "bell",
-     "rings."
-    ]
-   }
-  ],
-  "trace": [
-   "e",
-   "e"
-  ],
-  "traceT": "Trace e and e. The last e is the silent e.",
-  "comp": [
-   {
-    "q": "Who lands on the pine?",
-    "kind": "recall",
-    "answer": "Pete",
-    "page": 3,
-    "choices": [
-     [
-      "Pete",
-      "img/u5_c_pete.webp"
-     ],
-     [
-      "Zip",
-      "img/zip.webp"
-     ],
-     [
-      "Frill",
-      "img/frill.webp"
-     ]
-    ]
-   },
-   {
-    "q": "Who sticks the e on the end?",
-    "kind": "recall",
-    "answer": "Frill",
-    "page": 5,
-    "choices": [
-     [
-      "Zip",
-      "img/zip.webp"
-     ],
-     [
-      "Frill",
-      "img/frill.webp"
-     ],
-     [
-      "Pete",
-      "img/u5_c_pete.webp"
-     ]
-    ]
-   },
-   {
-    "q": "How does Pete feel at the end?",
-    "kind": "feeling",
-    "answer": "glad",
-    "page": 6,
-    "choices": [
-     [
-      "glad",
-      "face:glad"
-     ],
-     [
-      "sad",
-      "face:sad"
-     ],
-     [
-      "mad",
-      "face:mad"
-     ]
-    ]
-   }
-  ],
-  "rhyme": [],
-  "check": [
-   {
-    "type": "pick",
-    "word": "Pete",
-    "choices": [
-     "Pete",
-     "pet",
-     "pen",
-     "peg"
-    ]
-   },
-   {
-    "type": "end",
-    "word": "theme",
-    "onset": "them",
-    "answer": "e"
-   },
-   {
-    "type": "pick",
-    "word": "these",
-    "choices": [
-     "these",
-     "this",
-     "then",
-     "thin"
-    ]
-   },
-   {
-    "type": "which",
-    "answer": "Steve",
-    "choices": [
-     "step",
-     "Steve",
-     "stem",
-     "stop"
-    ]
-   },
-   {
-    "type": "end",
-    "word": "pet",
-    "onset": "pet",
-    "answer": ""
-   },
-   {
-    "type": "pick",
-    "word": "eve",
-    "choices": [
-     "eve",
-     "even",
-     "egg",
-     "elf"
-    ]
-   },
-   {
-    "type": "end",
-    "word": "Pete",
-    "onset": "Pet",
-    "answer": "e"
-   },
-   {
-    "type": "pick",
-    "word": "zeme",
-    "choices": [
-     "zeme",
-     "zem",
-     "zim",
-     "zam"
-    ],
-    "silly": true
-   },
-   {
-    "type": "which",
-    "answer": "theme",
-    "choices": [
-     "them",
-     "theme",
-     "then",
-     "thick"
-    ]
-   },
-   {
-    "type": "pick",
-    "word": "bete",
-    "choices": [
-     "bete",
-     "bet",
-     "bit",
-     "bat"
-    ],
-    "silly": true
-   }
-  ],
-  "review": [],
-  "whichQ": "Tap the word with a silent e.",
-  "prompts": {
-   "ido": {
-    "voice": "Zip",
-    "text": "Watch me. I say each sound, then I blend them."
-   },
-   "ido2": {
-    "voice": "Zip",
-    "text": "I do. Watch me. I look at each letter, then I read the whole word."
-   },
-   "wedo": {
-    "voice": "Frill",
-    "text": "Your turn. Tap each letter, then tap blend it."
-   },
-   "wedo2": {
-    "voice": "Frill",
-    "text": "We do. Tap each letter and say its sound. Then tap blend it."
-   },
-   "youdo": {
-    "voice": "Frill",
-    "text": "You do. Listen. Tap the picture of the word you hear."
-   },
-   "ngnk": {
-    "voice": "Frill",
-    "text": "Listen. Does the word end with a silent e? Tap no e or e."
-   },
-   "heart": {
-    "voice": "Frill",
-    "text": "Heart words. Tap each one to hear it. Some letters do not follow the rules, so we learn them by heart."
-   },
-   "listen": {
-    "voice": "Frill",
-    "text": "Listen to the story and follow along."
-   },
-   "read": {
-    "voice": "Frill",
-    "text": "Tap a speaker to hear a sentence. Then you read it!"
-   },
-   "comp": {
-    "voice": "Frill",
-    "text": "Let us think about the story. Listen to the question, then tap the answer."
-   },
-   "rhyme": {
-    "voice": "Zip",
-    "text": "Rhyme time! Listen to each line. Tap the word that rhymes."
-   },
-   "rhyme_end": {
-    "voice": "Zip",
-    "text": "You did it! Now listen to the whole poem and read along."
-   },
-   "check": {
-    "voice": "Zip",
-    "text": "Time for Zip's check! Do your best. Take your time."
-   },
-   "which": {
-    "voice": "Frill",
-    "text": "Tap the word with a silent e."
-   },
-   "end": {
-    "voice": "Frill",
-    "text": "Listen. Tap the ending that finishes the word."
-   },
-   "review": {
-    "voice": "Zip",
-    "text": "Unit review! Listen to the word. Does it have a silent e? Tap the word you hear."
-   },
-   "yay_z": {
-    "voice": "Zip",
-    "text": "Yes! That rhymes!"
-   },
-   "yay_f": {
-    "voice": "Frill",
-    "text": "You got it! Nice rhyme!"
-   },
-   "hint": {
-    "voice": "Frill",
-    "text": "Not quite. Look at the story page, then try again."
-   },
-   "hear": {
-    "voice": "Frill",
-    "text": "Listen. Tap the word you hear."
-   },
-   "bells": {
-    "voice": "Frill",
-    "text": "Read the word out loud. Then tap the bell with the same word."
-   },
-   "build": {
-    "voice": "Frill",
-    "text": "Listen. Build the word with the tiles."
-   },
-   "chain": {
-    "voice": "Frill",
-    "text": "Listen to the new word. Change one letter, or add one, to make it."
-   },
-   "scramble": {
-    "voice": "Frill",
-    "text": "Listen to the word. Tap the tiles in order to spell it."
-   },
-   "sent": {
-    "voice": "Frill",
-    "text": "Listen. Put the words in order to make a sentence."
-   },
-   "trace": {
-    "voice": "Frill",
-    "text": "Trace e and e. The last e is the silent e."
-   },
-   "m1": {
-    "voice": "Zip",
-    "text": "Hi, friends! Meet silent e. It sits at the end of a word and does not say a thing."
-   },
-   "m2": {
-    "voice": "Frill",
-    "text": "Silent e jumps back over one letter and makes the first e say its name. Pet, Pete."
-   },
-   "m3": {
-    "voice": "Zip",
-    "text": "Pet has a short e. Add an e at the end, and it says Pete!"
-   },
-   "q1": {
-    "voice": "Frill",
-    "text": "Who lands on the pine?"
-   },
-   "qh1": {
-    "voice": "Frill",
-    "text": "Look at this page again, then try."
-   },
-   "q2": {
-    "voice": "Frill",
-    "text": "Who sticks the e on the end?"
-   },
-   "qh2": {
-    "voice": "Frill",
-    "text": "Look at this page again, then try."
-   },
-   "q3": {
-    "voice": "Frill",
-    "text": "How does Pete feel at the end?"
-   },
-   "qh3": {
-    "voice": "Frill",
-    "text": "Look at this page again, then try."
-   }
-  },
-  "minutes": {
-   "meet": 8,
-   "listen": 6,
-   "hear": 3,
-   "bells": 3,
-   "build": 3,
-   "chain": 3,
-   "scramble": 3,
-   "trace": 3,
-   "sentence": 3,
-   "read": 6,
-   "ngnk": 3,
-   "check": 4,
-   "comp": 3,
-   "rhyme": 4
-  }
- },
- "u52": {
-  "key": "u52",
-  "n": "5.2",
-  "name": "a_e i_e o_e u_e",
-  "title": "Silent e: a_e, i_e, o_e, u_e",
+  "name": "Silent e",
+  "title": "Silent e: a_e, e_e, i_e, o_e, u_e",
   "card": [
    "a",
    "_",
    "e"
   ],
-  "tip": "Silent e makes the vowel before it say its name.",
+  "tip": "An e at the end makes the vowel say its name.",
   "story": [
    {
     "n": 1,
     "img": "img/u5_s2a.webp",
-    "text": "Zip and Frill take a raft to a cave. The lake is still.",
+    "text": "Zip and Frill take a raft to a cave. A yellow bell hangs in the cave.",
     "words": [
      "Zip",
      "and",
@@ -1235,10 +26,13 @@ window.IR_DATA_U5 = {
      "to",
      "a",
      "cave.",
-     "The",
-     "lake",
-     "is",
-     "still."
+     "A",
+     "yellow",
+     "bell",
+     "hangs",
+     "in",
+     "the",
+     "cave."
     ],
     "t": [
      [
@@ -1279,36 +73,41 @@ window.IR_DATA_U5 = {
      ],
      [
       3.551,
-      3.764
+      3.665
      ],
      [
-      3.778,
-      4.062
+      3.679,
+      4.091
      ],
      [
-      4.077,
-      4.219
+      4.105,
+      4.389
      ],
      [
-      4.233,
-      4.73
+      4.403,
+      4.759
+     ],
+     [
+      4.773,
+      4.858
+     ],
+     [
+      4.872,
+      4.957
+     ],
+     [
+      4.972,
+      5.568
      ]
     ],
-    "dur": 5.78,
-    "audio": "audio/u52_s_1.mp3"
+    "dur": 6.6,
+    "audio": "audio/u51_s_1.mp3"
    },
    {
     "n": 2,
     "img": "img/u5_s2a.webp",
-    "text": "A yellow bell hangs in the cave. Frill taps it. Clunk. It will not ring.",
+    "text": "Frill taps it. Clunk. It will not ring.",
     "words": [
-     "A",
-     "yellow",
-     "bell",
-     "hangs",
-     "in",
-     "the",
-     "cave.",
      "Frill",
      "taps",
      "it.",
@@ -1321,67 +120,39 @@ window.IR_DATA_U5 = {
     "t": [
      [
       0.107,
-      0.22
+      0.533
      ],
      [
-      0.235,
-      0.647
-     ],
-     [
-      0.661,
+      0.547,
       0.945
      ],
      [
       0.959,
-      1.314
+      1.371
      ],
      [
-      1.328,
-      1.414
+      2.372,
+      3.026
      ],
      [
-      1.428,
-      1.513
+      3.991,
+      4.205
      ],
      [
-      1.527,
-      2.124
+      4.219,
+      4.389
      ],
      [
-      3.111,
-      3.537
+      4.403,
+      4.687
      ],
      [
-      3.551,
-      3.949
-     ],
-     [
-      3.963,
-      4.375
-     ],
-     [
-      5.369,
-      6.023
-     ],
-     [
-      6.989,
-      7.202
-     ],
-     [
-      7.216,
-      7.386
-     ],
-     [
-      7.401,
-      7.685
-     ],
-     [
-      7.699,
-      8.111
+      4.702,
+      5.114
      ]
     ],
-    "dur": 9.17,
-    "audio": "audio/u52_s_2.mp3"
+    "dur": 6.17,
+    "audio": "audio/u51_s_2.mp3"
    },
    {
     "n": 3,
@@ -1467,12 +238,12 @@ window.IR_DATA_U5 = {
      ]
     ],
     "dur": 6.31,
-    "audio": "audio/u52_s_3.mp3"
+    "audio": "audio/u51_s_3.mp3"
    },
    {
     "n": 4,
     "img": "img/u5_s2a.webp",
-    "text": "On the bell is cap, kit, and cub.",
+    "text": "On the bell is cap, kit, hop, cub, and Pet.",
     "words": [
      "On",
      "the",
@@ -1480,8 +251,10 @@ window.IR_DATA_U5 = {
      "is",
      "cap,",
      "kit,",
+     "hop,",
+     "cub,",
      "and",
-     "cub."
+     "Pet."
     ],
     "t": [
      [
@@ -1490,40 +263,48 @@ window.IR_DATA_U5 = {
      ],
      [
       0.348,
-      0.448
+      0.462
      ],
      [
-      0.462,
-      0.746
+      0.476,
+      0.76
      ],
      [
-      0.76,
-      0.916
+      0.774,
+      0.931
      ],
      [
-      0.931,
-      1.343
+      0.945,
+      1.357
      ],
      [
-      1.541,
-      1.911
+      1.57,
+      1.939
      ],
      [
-      2.11,
-      2.266
+      2.138,
+      2.394
      ],
      [
-      2.28,
-      2.735
+      2.678,
+      3.033
+     ],
+     [
+      3.218,
+      3.36
+     ],
+     [
+      3.374,
+      3.857
      ]
     ],
-    "dur": 3.79,
-    "audio": "audio/u52_s_4.mp3"
+    "dur": 4.92,
+    "audio": "audio/u51_s_4.mp3"
    },
    {
     "n": 5,
     "img": "img/u5_s2b.webp",
-    "text": "Frill adds an e. Cap is cape! Kit is kite! Zip adds an e. Cub is cube!",
+    "text": "Frill adds an e. Cap is cape! Kit is kite! Hop is hope!",
     "words": [
      "Frill",
      "adds",
@@ -1535,13 +316,9 @@ window.IR_DATA_U5 = {
      "Kit",
      "is",
      "kite!",
-     "Zip",
-     "adds",
-     "an",
-     "e.",
-     "Cub",
+     "Hop",
      "is",
-     "cube!"
+     "hope!"
     ],
     "t": [
      [
@@ -1586,38 +363,83 @@ window.IR_DATA_U5 = {
      ],
      [
       5.426,
-      5.781
+      5.753
      ],
      [
-      5.795,
-      6.08
+      5.767,
+      5.895
      ],
      [
-      6.094,
-      6.236
-     ],
-     [
-      6.25,
-      6.605
-     ],
-     [
-      6.776,
-      7.031
-     ],
-     [
-      7.045,
-      7.187
-     ],
-     [
-      7.202,
-      7.77
+      5.909,
+      6.406
      ]
     ],
-    "dur": 8.81,
-    "audio": "audio/u52_s_5.mp3"
+    "dur": 7.44,
+    "audio": "audio/u51_s_5.mp3"
    },
    {
     "n": 6,
+    "img": "img/u5_s2b.webp",
+    "text": "Zip adds an e. Cub is cube! Pet is Pete!",
+    "words": [
+     "Zip",
+     "adds",
+     "an",
+     "e.",
+     "Cub",
+     "is",
+     "cube!",
+     "Pet",
+     "is",
+     "Pete!"
+    ],
+    "t": [
+     [
+      0.107,
+      0.462
+     ],
+     [
+      0.476,
+      0.76
+     ],
+     [
+      0.774,
+      0.916
+     ],
+     [
+      0.931,
+      1.286
+     ],
+     [
+      1.456,
+      1.712
+     ],
+     [
+      1.726,
+      1.868
+     ],
+     [
+      1.882,
+      2.451
+     ],
+     [
+      3.438,
+      3.736
+     ],
+     [
+      3.75,
+      3.892
+     ],
+     [
+      3.906,
+      4.446
+     ]
+    ],
+    "dur": 5.47,
+    "audio": "audio/u51_s_6.mp3"
+   },
+   {
+    "n": 7,
     "img": "img/u5_s2b.webp",
     "text": "The bell shakes. Bong! It rings in the cave. Zip and Frill smile and ride the raft home.",
     "words": [
@@ -1715,7 +537,7 @@ window.IR_DATA_U5 = {
      ]
     ],
     "dur": 10.06,
-    "audio": "audio/u52_s_6.mp3"
+    "audio": "audio/u51_s_7.mp3"
    }
   ],
   "heart": [
@@ -1746,16 +568,17 @@ window.IR_DATA_U5 = {
   ],
   "ido": [
    "cake",
-   "kite",
-   "bone"
+   "Pete",
+   "kite"
   ],
   "wedo": [
+   "bone",
    "cube",
-   "rope",
-   "pine"
+   "these"
   ],
   "chips": [
    "cake",
+   "Pete",
    "kite",
    "bone",
    "cube"
@@ -1912,20 +735,28 @@ window.IR_DATA_U5 = {
     ]
    },
    {
-    "word": "pine",
+    "word": "Pete",
     "choices": [
-     "pine",
-     "pin",
-     "pan"
+     "Pete",
+     "pet",
+     "pen"
+    ]
+   },
+   {
+    "word": "these",
+    "choices": [
+     "these",
+     "this",
+     "thin"
     ]
    }
   ],
   "bells": [
    "cake",
+   "Pete",
    "kite",
    "bone",
-   "cube",
-   "snake"
+   "cube"
   ],
   "build": [
    {
@@ -1957,9 +788,9 @@ window.IR_DATA_U5 = {
     "altChunk": "one"
    },
    {
-    "word": "pine",
-    "onset": "p",
-    "chunk": "ine",
+    "word": "Pete",
+    "onset": "P",
+    "chunk": "ete",
     "altOnset": "r",
     "altChunk": "ope"
    }
@@ -1974,10 +805,10 @@ window.IR_DATA_U5 = {
   ],
   "scramble": [
    "cake",
+   "these",
    "kite",
    "bone",
-   "cube",
-   "snake"
+   "cube"
   ],
   "sentences": [
    {
@@ -2025,7 +856,7 @@ window.IR_DATA_U5 = {
     "q": "Where is the yellow bell?",
     "kind": "recall",
     "answer": "cave",
-    "page": 2,
+    "page": 1,
     "choices": [
      [
       "cave",
@@ -2065,7 +896,7 @@ window.IR_DATA_U5 = {
     "q": "How do Zip and Frill feel at the end?",
     "kind": "feeling",
     "answer": "glad",
-    "page": 6,
+    "page": 7,
     "choices": [
      [
       "glad",
@@ -2143,9 +974,9 @@ window.IR_DATA_U5 = {
    },
    {
     "type": "end",
-    "word": "cub",
-    "onset": "cub",
-    "answer": ""
+    "word": "Pete",
+    "onset": "Pet",
+    "answer": "e"
    },
    {
     "type": "pick",
@@ -2186,14 +1017,13 @@ window.IR_DATA_U5 = {
    },
    {
     "type": "pick",
-    "word": "bofe",
+    "word": "these",
     "choices": [
-     "bofe",
-     "bof",
-     "bife",
-     "buf"
-    ],
-    "silly": true
+     "these",
+     "this",
+     "then",
+     "thin"
+    ]
    }
   ],
   "review": [],
@@ -2305,15 +1135,15 @@ window.IR_DATA_U5 = {
    },
    "m1": {
     "voice": "Zip",
-    "text": "Silent e works with every vowel! It jumps back over one letter and makes the vowel say its name."
+    "text": "Here is one big rule. An e at the end of a word is silent, but it makes the vowel say its name."
    },
    "m2": {
     "voice": "Frill",
-    "text": "Cap, cape. Kit, kite. Hop, hope. Cub, cube."
+    "text": "Cap, cape. Pet, Pete. Kit, kite. Hop, hope. Cub, cube."
    },
    "m3": {
     "voice": "Zip",
-    "text": "Look at the end first. If you see a silent e, the vowel says its name."
+    "text": "Look at the end first. If you see a silent e, the vowel before it says its name."
    },
    "q1": {
     "voice": "Frill",
@@ -2391,7 +1221,7 @@ window.IR_DATA_U5 = {
  },
  "u53": {
   "key": "u53",
-  "n": "5.3",
+  "n": "5.2",
   "name": "tricky silent e",
   "title": "Silent e: tricky words",
   "card": [

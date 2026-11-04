@@ -1,4 +1,4 @@
-/* Unit 3 orange bell update (Oct 31 2026): orange accents for the ng lesson, "Make the bell ring" (replaces Fish Pond),
+/* Unit 3 orange bell update (Oct 31 2026): orange accents for the ng lesson, "Ring every bell and learn its sounds" (replaces Fish Pond),
    new mascots (Zip A, Frill C) in this lesson. Loaded after sor.js, before screens.js. */
 (function () {
   'use strict';
@@ -11,7 +11,7 @@
   L('story').blurb = 'Read the bell story, then read it 3 times';
 
   const bells = {
-    id: 'bells', title: 'Make the bell ring', blurb: 'Read a bell word, light the bell', color: '#E8731C',
+    id: 'bells', title: 'Ring every bell and learn its sounds', blurb: 'Read a bell word, light the bell', color: '#E8731C',
     run(ctx) {
       const stage = ctx.stage; const words = D.bells || ['ring', 'bang', 'sing', 'gong', 'clang'];
       const order = shuffle(words); let r = 0; const lit = new Set();

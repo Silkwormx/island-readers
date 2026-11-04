@@ -1512,3 +1512,21 @@ body.calm .ob-glow{animation:none;opacity:.85}
 
 /* Unit 5 Silent e: uses the Unit 4 classes; only the tile state is new */
 .tcard.t-open{border-color:#E8B90C;box-shadow:0 0 0 4px rgba(232,185,12,.25)}
+
+/* Nov 4 2026: Back to Unit N button (next to Home on unit pages) */
+.homebtn.unitback{font-family:'Andika',system-ui,sans-serif;margin-left:.5rem!important;margin-right:0!important;white-space:nowrap}
+.top2 .homebtn.unitback,.lesson-top .homebtn.unitback{margin-right:auto!important}
+@media (max-width:480px){.homebtn.unitback{margin-left:.3rem!important}}
+/* Nov 4 2026: phone top bars with Home + Back to Unit N: icon-only Home, wrap if still tight (no sideways scroll) */
+@media (max-width:600px){.homebtn:has(+ .unitback) > span:last-child{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}.homebtn:has(+ .unitback){padding:.3rem .6rem}*:has(> .unitback){flex-wrap:wrap;row-gap:.4rem}.homebtn.unitback{font-size:1rem;padding:.3rem .7rem}.lesson-top .homebtn.unitback{order:9;flex:1 1 100%;justify-content:center;margin:0!important;min-height:2.8rem}}
+/* Nov 4 2026: home left bar always fits the window and stays put; scrolls inside itself on short screens. */
+@media (min-width:1100px){
+  .homeside{position:sticky!important;top:.75rem;align-self:start;max-height:calc(100vh - var(--hside-gap,8.5rem));max-height:calc(100dvh - var(--hside-gap,8.5rem));overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin}
+}
+@media (min-width:1100px) and (max-height:800px){
+  .zf2 .zfpics img{height:clamp(3rem,7vh,5rem)!important}
+  .zf2 .zfsub{display:none}
+  .homeside{gap:.45rem}
+  .gridhome .pbox{min-height:2.4rem!important;font-size:1rem!important}
+  .aboutbtn{min-height:2.4rem!important}
+}
