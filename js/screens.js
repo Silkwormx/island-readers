@@ -248,16 +248,17 @@
     const SKILL = {}; TILES.forEach((t, n) => { if (t) SKILL[n] = t[0]; });
     const unit = (n) => {
       const t = TILES[n]; const isl = n === BUILT && !!(D.islands || {})[BUILT_ID];
-      const st = n < BUILT ? 'locked' : n === BUILT ? (complete ? 'done' : 'here') : 'locked'; const lit = n === BUILT + 1 && complete;
-      const note = st === 'here' ? 'You are here' : n === BUILT ? 'Finished' : st === 'done' ? 'Done' : lit ? 'Unlocked' : 'Coming soon';
-      const label = 'Unit ' + n + ': ' + t[0] + ', ' + t[1].replace(/\u00b7/g, ',') + ', ' + t[2] + (t[2] === 1 ? ' lesson. ' : ' lessons. ') + note + (n === BUILT ? '. Opens Unit ' + n + '.' : '.');
+      const u5 = n === 5 && !!IR.u5Route;   /* Nov 3 2026 local: Unit 5 Silent e is open (js/u5.js, #/u5) */
+      const st = n < BUILT ? 'locked' : n === BUILT ? (complete ? 'done' : 'here') : u5 ? 'open' : 'locked'; const lit = n === BUILT + 1 && complete;
+      const note = u5 ? 'Open' : st === 'here' ? 'You are here' : n === BUILT ? 'Finished' : st === 'done' ? 'Done' : lit ? 'Unlocked' : 'Coming soon';
+      const label = 'Unit ' + n + ': ' + t[0] + ', ' + t[1].replace(/\u00b7/g, ',') + ', ' + t[2] + (t[2] === 1 ? ' lesson. ' : ' lessons. ') + note + (n === BUILT || u5 ? '. Opens Unit ' + n + '.' : '.');
       const b = h('button', { class: 'tcard t-' + st + (st === 'here' ? ' t-current' : ''), type: 'button', 'data-id': 'u' + n, 'data-kind': 'island', 'data-n': n, 'aria-label': label },
         h('span', { class: 'tpic' }, h('img', { src: 'img/units/tile' + String(n).padStart(2, '0') + '.webp', alt: '', width: 600, height: 600, loading: n > 8 ? 'lazy' : 'eager' })),
         h('span', { class: 'tbody' },
           h('span', { class: 'thead' }, h('span', { class: 'tdots', 'aria-hidden': 'true' }, ...t[3].map((c) => h('i', { class: 'tdot td-' + c }))), h('b', { class: 'tnum' }, 'Unit ' + n)),
           h('span', { class: 'tname' }, t[0]), h('span', { class: 'tsnd' }, ...t[1].split(' \u00b7 ').map((x, i, a) => h('span', null, x + (i < a.length - 1 ? ' \u00b7' : '')))),
           h('span', { class: 'tmeta' }, t[2] + (t[2] === 1 ? ' lesson' : ' lessons') + ' \u00b7 ' + note)));
-      b.addEventListener('click', () => { if (isl) openIsland(BUILT_ID); else { Snd.stop(); toast(st === 'done' ? 'Unit ' + n + ' is done. It is part of the full app.' : n < BUILT ? 'Unit ' + n + ' is coming soon in the full app!' : lit ? 'Unit ' + n + ' is unlocked! It is coming soon in the full app.' : 'Unit ' + n + ' is coming soon! Finish Unit ' + BUILT + ' first.'); } });
+      b.addEventListener('click', () => { if (u5) { Snd.stop(); location.hash = '#/u5'; } else if (isl) openIsland(BUILT_ID); else { Snd.stop(); toast(st === 'done' ? 'Unit ' + n + ' is done. It is part of the full app.' : n < BUILT ? 'Unit ' + n + ' is coming soon in the full app!' : lit ? 'Unit ' + n + ' is unlocked! It is coming soon in the full app.' : 'Unit ' + n + ' is coming soon! Finish Unit ' + BUILT + ' first.'); } });
       return b;
     };
     const grid = h('div', { class: 'ugrid tgrid', id: 'skymap' }, ...Array.from({ length: 22 }, (_, i) => unit(i + 1)));
@@ -602,6 +603,7 @@
     app.innerHTML = ''; window.scrollTo(0, 0);
     let m;
     if (IR.nkRoute && IR.nkRoute(hash, app)) { /* nk unit + Island Review (js/nk.js) */ }
+    else if (IR.u5Route && IR.u5Route(hash, app)) { /* Unit 5 Silent e (js/u5.js) */ }
     else if ((m = /^#\/lesson\/(\d+)/.exec(hash))) lessonScreen(parseInt(m[1], 10) - 1);
     else if (/^#\/chest[12]/.test(hash)) IR.chest.render(hash, app);
     else if ((m = /^#\/practice\/(\w+)/.exec(hash))) practiceScreen(m[1]);
