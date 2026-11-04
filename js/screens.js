@@ -168,7 +168,7 @@
   function openIsland(id) {
     const w0 = WORLD.find((x) => x.id === id); const info = islandItems(id); if (!info) return;
     /* Nov 3 2026: 22-unit plan. Glued Sounds is Unit 4 (data id stays 'i3', route #/island3). */
-    const w = Object.assign({}, w0, { n: id === 'i3' ? 4 : w0.n });
+    const w = Object.assign({}, w0, id === 'i5' ? { n: 5, title: 'Silent e' } : { n: id === 'i3' ? 4 : w0.n });
     Snd.stop();
     const imgs = (u) => h('div', { class: 'uimg' }, ...u.img.map((n) => h('img', { src: 'img/' + ({ zip: 'zipA', frill: 'frillC' }[n] || n) + '.webp', alt: '' })), u.state === 'open' ? null : h('span', { class: 'lk' }, icon('lock')));
     const stars = (u) => h('div', { class: 'dots', 'aria-hidden': 'true' }, ...Array.from({ length: u.total }, (_, k) => h('span', { class: 'sstar' + (k < u.done ? ' on' : '') }, icon('star'))));
@@ -248,7 +248,7 @@
     const SKILL = {}; TILES.forEach((t, n) => { if (t) SKILL[n] = t[0]; });
     const unit = (n) => {
       const t = TILES[n]; const isl = n === BUILT && !!(D.islands || {})[BUILT_ID];
-      const u5 = n === 5 && !!IR.u5Route;   /* Nov 3 2026 local: Unit 5 Silent e is open (js/u5.js, #/u5) */
+      const u5 = n === 5 && !!IR.u5Route;   /* Nov 3 2026 local: Unit 5 Silent e is open (js/u5.js: same lesson flow as Unit 4; picker data islands.i5) */
       const st = n < BUILT ? 'locked' : n === BUILT ? (complete ? 'done' : 'here') : u5 ? 'open' : 'locked'; const lit = n === BUILT + 1 && complete;
       const note = u5 ? 'Open' : st === 'here' ? 'You are here' : n === BUILT ? 'Finished' : st === 'done' ? 'Done' : lit ? 'Unlocked' : 'Coming soon';
       const label = 'Unit ' + n + ': ' + t[0] + ', ' + t[1].replace(/\u00b7/g, ',') + ', ' + t[2] + (t[2] === 1 ? ' lesson. ' : ' lessons. ') + note + (n === BUILT || u5 ? '. Opens Unit ' + n + '.' : '.');
@@ -258,7 +258,7 @@
           h('span', { class: 'thead' }, h('span', { class: 'tdots', 'aria-hidden': 'true' }, ...t[3].map((c) => h('i', { class: 'tdot td-' + c }))), h('b', { class: 'tnum' }, 'Unit ' + n)),
           h('span', { class: 'tname' }, t[0]), h('span', { class: 'tsnd' }, ...t[1].split(' \u00b7 ').map((x, i, a) => h('span', null, x + (i < a.length - 1 ? ' \u00b7' : '')))),
           h('span', { class: 'tmeta' }, t[2] + (t[2] === 1 ? ' lesson' : ' lessons') + ' \u00b7 ' + note)));
-      b.addEventListener('click', () => { if (u5) { Snd.stop(); location.hash = '#/u5'; } else if (isl) openIsland(BUILT_ID); else { Snd.stop(); toast(st === 'done' ? 'Unit ' + n + ' is done. It is part of the full app.' : n < BUILT ? 'Unit ' + n + ' is coming soon in the full app!' : lit ? 'Unit ' + n + ' is unlocked! It is coming soon in the full app.' : 'Unit ' + n + ' is coming soon! Finish Unit ' + BUILT + ' first.'); } });
+      b.addEventListener('click', () => { if (u5) { openIsland('i5'); } else if (isl) openIsland(BUILT_ID); else { Snd.stop(); toast(st === 'done' ? 'Unit ' + n + ' is done. It is part of the full app.' : n < BUILT ? 'Unit ' + n + ' is coming soon in the full app!' : lit ? 'Unit ' + n + ' is unlocked! It is coming soon in the full app.' : 'Unit ' + n + ' is coming soon! Finish Unit ' + BUILT + ' first.'); } });
       return b;
     };
     const grid = h('div', { class: 'ugrid tgrid', id: 'skymap' }, ...Array.from({ length: 22 }, (_, i) => unit(i + 1)));
@@ -371,7 +371,7 @@
     return btn;
   }
   /* opening line from Zip and Frill at the top of each unit page (text only, no audio) */
-  const UNIT_INTRO = { i3: 'This bell holds ng and nk. Let\u2019s learn them!' };
+  const UNIT_INTRO = { i3: 'This bell holds ng and nk. Let\u2019s learn them!', i5: 'This yellow bell holds silent e. Let\u2019s learn it!' };
   function unitIntro(id) { const t = UNIT_INTRO[id]; if (!t) return null; return h('p', { class: 'zfintro' }, h('img', { src: 'img/zipA.webp', alt: '' }), h('img', { src: 'img/frill.webp', alt: '' }), h('span', null, t)); }
   IR.unitIntro = unitIntro;
   /* "For teachers" row on the ng and nk lesson pages: her own slides and worksheets, linked (not cached offline). */

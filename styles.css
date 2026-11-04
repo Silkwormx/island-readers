@@ -1510,50 +1510,5 @@ body.calm .ob-glow{animation:none;opacity:.85}
 .picker .pcards{overflow-y:auto}.picker .ucard{min-height:fit-content;flex-shrink:0}
 @media (max-width:640px){.picker .ucard.rv .uimg{width:36%;flex:none}.picker .ucard.rv .uimg img{width:50%;max-width:50%;height:auto;object-fit:contain}.picker .ucard.rv .uimg img+img{margin-left:0}}
 
-/* ---------- Unit 5 Silent e (js/u5.js) ---------- */
-.tcard.t-open{opacity:1;filter:none;border-color:#E8B90C;box-shadow:0 0 0 4px rgba(232,185,12,.25)}
-.u5screen{background:var(--cream);padding:0 1rem 2rem;overflow-x:hidden}
-.u5top{display:flex;align-items:center;gap:.8rem;max-width:1100px;margin:0 auto;padding:.8rem 0}
-.u5title{flex:1;font-size:1.4rem;margin:0;min-width:0}
-.u5screen>.pbar{display:block;max-width:900px;margin:.2rem auto .6rem;flex:none}
-.u5intro{display:flex;align-items:center;gap:1rem;max-width:1100px;margin:0 auto 1rem;background:#FFF3C4;border:3px solid #E8B90C;border-radius:1.4rem;padding:.8rem 1.2rem;flex-wrap:wrap}
-.u5intro p{flex:1;min-width:12rem;margin:0;font-size:1.1rem}
-.u5count{font-weight:700;color:var(--ink2)}
-.u5bell{display:inline-block;width:2.6rem;height:2.6rem;flex:none;background:#E8B90C;border:3px solid #9C7A00;border-radius:50% 50% 12% 12%/70% 70% 12% 12%}
-.u5bell.big{width:5rem;height:5rem}
-.u5main{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:1.2rem}
-.u5story{grid-column:1/-1;display:flex;gap:1rem;align-items:center;background:#fff;border:3px solid var(--line);border-radius:1.4rem;overflow:hidden;color:inherit;text-decoration:none;box-shadow:var(--shadow)}
-.u5story img{width:min(46%,420px);aspect-ratio:16/9;object-fit:cover;display:block}
-.u5story span{display:flex;flex-direction:column;padding:.6rem}.u5story b{font-size:1.3rem}.u5story em{color:var(--green);font-style:normal;font-weight:700}
-.u5lesson{background:#fff;border:3px solid var(--line);border-radius:1.4rem;padding:1rem 1.1rem;box-shadow:var(--shadow)}
-.u5lesson.done{border-color:var(--green)}
-.u5lesson h2{font-size:1.25rem}.u5num{color:#9C7A00}
-.u5rule{font-size:.95rem;color:var(--ink2)}
-.u5words{display:flex;flex-wrap:wrap;gap:.4rem .9rem;font-size:1.3rem;font-weight:700}
-.u5v{color:#C2408A}.u5e{color:#9C7A00;text-decoration:underline dotted}
-.u5acts{list-style:none;padding:0;margin:.6rem 0;display:grid;gap:.5rem}
-.u5act{display:flex;align-items:center;gap:.7rem;padding:.55rem .8rem;border:3px solid var(--line);border-radius:1rem;text-decoration:none;color:inherit;background:var(--cream)}
-.u5act b{flex:1}.u5act .snum{width:2rem;height:2rem;border-radius:50%;background:#E8B90C;display:inline-flex;align-items:center;justify-content:center;font-weight:700}
-.u5act .sstar{color:#C9B98F}.u5act .sstar.on{color:#E8A400}
-.u5teach{display:inline-block;margin-top:.3rem;font-weight:700;color:var(--teal-d)}
-.u5end{grid-column:1/-1;display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;margin-top:.5rem}
-.u5chk{background:#FFF3C4;border-color:#9C7A00;box-shadow:0 5px 0 #9C7A00}
-.u5instr{max-width:900px;margin:.3rem auto;font-size:1.2rem;text-align:center}
-.u5stage{max-width:900px;margin:0 auto;display:flex;flex-direction:column;align-items:center;gap:1rem}
-.u5card{display:flex;align-items:center;justify-content:center;gap:1rem;flex-wrap:wrap;background:#fff;border:3px solid var(--line);border-radius:1.4rem;padding:1rem 1.4rem;min-width:min(100%,320px);text-align:center}
-.u5pic{font-size:4.2rem;line-height:1}.choice .u5pic{font-size:3.4rem}
-.u5sent{font-size:1.6rem;font-weight:700}
-.u5bins{display:grid;grid-template-columns:1fr 1fr;gap:1rem;width:100%;max-width:640px}.u5bin{font-size:1.3rem}
-.u5arrow{font-size:2.4rem}
-.u5screen .choice.right{border-color:var(--green);background:#DDF4E6}.u5screen .choice.tried{opacity:.45}.u5screen .choice.picked{background:#FFF3C4}
-.u5screen .status{text-align:center;font-size:1.1rem;min-height:1.6em}
-.u5page{max-width:960px;margin:0 auto}
-.u5pimg{width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:1.2rem;display:block}
-.u5ptxt{display:flex;gap:1rem;align-items:center;margin:.8rem 0}.u5ptxt p{flex:1;font-size:1.55rem;line-height:1.7;margin:0}
-.u5page .lesson-nav{display:flex;justify-content:space-between;align-items:center;gap:.6rem}.u5pn{font-weight:700;color:var(--ink2)}
-.u5q{display:flex;align-items:center;gap:1rem;font-size:1.2rem}
-.u5res h2{font-size:2.4rem;width:100%}.u5res{flex-direction:column}
-.u5tmain{max-width:820px;margin:0 auto;background:#fff;border:3px solid var(--line);border-radius:1.4rem;padding:1rem 1.4rem}
-.u5ts h2{font-size:1.2rem;color:#9C7A00}.u5ts li{margin:.3rem 0}
-@media (max-width:600px){.u5story{flex-direction:column;align-items:stretch}.u5story img{width:100%}.u5ptxt p{font-size:1.3rem}.u5title{font-size:1.1rem}.u5top .homebtn>span:not(.ico){display:none}}
-@media print{.u5top,.u5teachscr .row{display:none}.u5screen{position:static;overflow:visible}body{overflow:visible}}
+/* Unit 5 Silent e: uses the Unit 4 classes; only the tile state is new */
+.tcard.t-open{border-color:#E8B90C;box-shadow:0 0 0 4px rgba(232,185,12,.25)}
