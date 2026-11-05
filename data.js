@@ -685,7 +685,7 @@ window.IR_DATA = {
   "hear": 2,
   "bells": 2,
   "build": 4,
-  "trace": 3,
+  "feed": 3,
   "sentence": 3,
   "story": 6,
   "check": 4

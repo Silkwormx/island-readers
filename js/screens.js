@@ -328,10 +328,10 @@
   /* ---------- "In this unit" progress sheet: quiet toggle on every unit screen, collapsed by default ---------- */
   /* The unit in its recommended order, in three groups: Lesson (Meet ng), Story (Story Time), Activities (numbered Activity 1, 2, 3 ...). */
   const GROUPS = [{ id: 'lesson', title: 'Lesson', sub: 'Learn it once', ids: ['intro'] }, { id: 'story', title: 'Story', sub: 'Listen and read along', ids: ['listen'] },
-    { id: 'activities', title: 'Activities', sub: 'Play as often as you like', ids: ['hear', 'bells', 'build', 'chain', 'scramble', 'trace', 'sentence', 'story', 'check'] }];
-  const OPTIONAL = [];   /* Nov 1 2026: Trace Trail is a regular activity (was optional) */
+    { id: 'activities', title: 'Activities', sub: 'Play as often as you like', ids: ['hear', 'bells', 'build', 'chain', 'scramble', 'feed', 'sentence', 'story', 'check'] }];
+  const OPTIONAL = [];   /* Nov 4 2026: Feed Zip replaced Trace Trail */
   /* one-line tips for grown-ups, shown small under each activity */
-  const TIPS = { hear: 'Let your child listen first, then point.', bells: 'Ask your child to read the word out loud first.', build: 'Say the word slowly together.', chain: 'Only one letter changes each time.', scramble: 'Say the word slowly, then find each part.', trace: 'Trace with a finger, slowly.', sentence: 'Read the sentence together at the end.', story: 'Reading it 3 times builds fluency.', check: 'Let your child work alone. Just cheer.' };   /* optional extra: not needed to finish the unit, not counted in the total time */
+  const TIPS = { hear: 'Let your child listen first, then point.', bells: 'Ask your child to read the word out loud first.', build: 'Say the word slowly together.', chain: 'Only one letter changes each time.', scramble: 'Say the word slowly, then find each part.', feed: 'Ask your child to read the word out loud, then feed Zip.', sentence: 'Read the sentence together at the end.', story: 'Reading it 3 times builds fluency.', check: 'Let your child work alone. Just cheer.' };   /* optional extra: not needed to finish the unit, not counted in the total time */
   const GICON = { lesson: 'book', story: 'speaker', activities: 'play' };
   function unitSections() {
     const items = LESSONS.map((L, i) => ({ id: L.id, title: L.title, blurb: L.blurb, href: '#/lesson/' + (i + 1), color: L.color }))

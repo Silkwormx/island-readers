@@ -31,7 +31,7 @@
     { id: 'build', title: 'Build-a-Word', group: 'activities', run: ACT.build, color: '#E8603C' },
     { id: 'chain', title: 'Word Chains', group: 'activities', run: ACT.chain, color: '#C95A10' },
     { id: 'scramble', title: 'Scrambled Letters', group: 'activities', run: ACT.scramble, color: '#D9631A' },
-    { id: 'trace', title: 'Trace Trail', group: 'activities', run: ACT.trace, color: '#D98E00' },
+    { id: 'feed', title: 'Feed Zip', group: 'activities', run: ACT.feed, color: '#D98E00' },
     { id: 'sentence', title: 'Sentence Bridge', group: 'activities', run: ACT.sentence, color: '#2E9E6B' },
     { id: 'read', title: 'Now You Read It', group: 'activities', run: runRead, color: '#8E5BD6' },
     { id: 'ngnk', title: 'ng or nk?', group: 'activities', run: runNgnk, color: '#2E9E6B' },
@@ -40,7 +40,7 @@
     { id: 'rhyme', title: 'Rhyme Time', group: 'extra', run: runRhyme, color: '#C2408A' }
   ];
   /* one-line tips for grown-ups, in the same style as the ng unit */
-  const TIPS = { hear: 'Let your child listen first, then point.', bells: 'Ask your child to read the word out loud first.', build: 'Say the word slowly together.', chain: 'Only one letter changes each time.', scramble: 'Say the word slowly, then find each part.', trace: 'Trace with a finger, slowly.', sentence: 'Read the sentence together at the end.', read: 'Reading it 3 times builds fluency.', ngnk: 'Say the word slowly. Listen for the k at the end.', check: 'Let your child work alone. Just cheer.', comp: 'Optional extra. Look back at the story page together.', rhyme: 'Optional extra. Read the poem together for fun.' };
+  const TIPS = { hear: 'Let your child listen first, then point.', bells: 'Ask your child to read the word out loud first.', build: 'Say the word slowly together.', chain: 'Only one letter changes each time.', scramble: 'Say the word slowly, then find each part.', feed: 'Ask your child to read the word out loud, then feed Zip.', sentence: 'Read the sentence together at the end.', read: 'Reading it 3 times builds fluency.', ngnk: 'Say the word slowly. Listen for the k at the end.', check: 'Let your child work alone. Just cheer.', comp: 'Optional extra. Look back at the story page together.', rhyme: 'Optional extra. Read the poem together for fun.' };
   IR.nkTips = TIPS;
   const pid = (s) => 'nk_' + s.id;
   function sections() {

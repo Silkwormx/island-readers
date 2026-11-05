@@ -1364,7 +1364,7 @@ window.IR_DATA_NK = {
   "build": 3,
   "chain": 3,
   "scramble": 3,
-  "trace": 3,
+  "feed": 3,
   "sentence": 3
  },
  "hear": [
