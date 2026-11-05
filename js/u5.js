@@ -328,7 +328,14 @@
     const nextUp = () => sections().find((r) => !r.done && !r.optional) || null;
   
     /* ---------- unit page (same layout as the ng unit page) ---------- */
+    const LIGHT_KEY = 'ir_sess_' + KEY;
+    function loadLights() { try { return JSON.parse(sessionStorage.getItem(LIGHT_KEY) || '{}'); } catch (e) { return {}; } }
+    function markLight(id) { const L = loadLights(); L[id] = 1; sessionStorage.setItem(LIGHT_KEY, JSON.stringify(L)); }
+    function resetLights() { sessionStorage.removeItem(LIGHT_KEY); }
     function unitPage(app) {
+      /* Completion lights reset when this lesson menu is opened from outside the unit (or closed). */
+      const prev = IR['_u5Was_' + KEY] || '';
+      if (!new RegExp('^#/' + KEY + '(/|$)').test(prev) && prev !== '#/review5') resetLights();
       IR.newScreen(); const all = sections(); const secs = all.filter((r) => !r.optional); const extras = all.filter((r) => r.optional); const nx = nextUp(); const doneN = secs.filter((r) => r.done).length; const total = secs.length;
       const totalMin = secs.reduce((a, r) => a + r.min, 0);
       const star = (on) => h('span', { class: 'sstar' + (on ? ' on' : ''), 'aria-hidden': 'true' }, icon(on ? 'star' : 'starOutline'));
@@ -343,8 +350,12 @@
         return h('li', null, h('button', { class: 'stopcard arow gamestop' + (r.done ? ' done' : '') + (isNext ? ' nextup' : ''), type: 'button', 'data-id': r.id, 'aria-label': r.label + '. ' + r.min + ' minutes.', onclick: go(r) },
           h('span', { class: 'snum', 'aria-hidden': 'true' }, r.optional ? '+' : String(r.act)), h('span', { class: 'stxt' }, h('b', null, r.title), TIPS[r.id] ? h('span', { class: 'sblurb' }, TIPS[r.id]) : null), h('span', { class: 'smin' }, r.min + ' min'),
           h('span', { class: 'sside' }, star(r.done), h('span', { class: 'slabel ' + (isNext ? 'tag' : 'none') }, isNext ? 'Next' : '')))); };
+      const lit = loadLights();
+      const lights = h('div', { class: 'clights', role: 'status', 'aria-label': 'Session progress lights' },
+        h('span', { class: 'clab' }, 'This visit:'),
+        ...secs.map((r) => h('span', { class: 'clight' + (lit[r.id] || r.done ? ' on' : ''), 'data-kind': r.group, 'data-id': r.id, title: r.title, 'aria-label': r.title + (lit[r.id] || r.done ? ' done this visit' : ' not yet') })));
       const left = h('ul', { class: 'uA-left' }, ...secs.filter((r) => r.group !== 'activities').map(big));
-      const right = h('section', { class: 'uA-right' }, h('h2', { class: 'uA-h' }, 'Activities'), h('ol', { class: 'stoplist uA-acts' }, ...secs.filter((r) => r.group === 'activities').map(row)),
+      const right = h('section', { class: 'uA-right' }, lights, h('h2', { class: 'uA-h' }, 'Activities'), h('ol', { class: 'stoplist uA-acts' }, ...secs.filter((r) => r.group === 'activities').map(row)),
         extras.length ? h('h2', { class: 'uA-h uA-extra' }, 'Extras (optional)') : null, extras.length ? h('ul', { class: 'stoplist uA-acts uA-extras' }, ...extras.map(row)) : null);
       const complete = doneN === total;
       const foot = h('footer', { class: 'uA-foot island4 ' + (complete ? 'open' : 'locked') }, h('span', { class: 'i4ico', 'aria-hidden': 'true' }, icon(complete ? 'star' : 'lock')),
@@ -372,7 +383,7 @@
         setNextLabel(t) { nextBtn.firstChild.textContent = t; }, showNav(on) { nav.style.display = on === false ? 'none' : ''; },
         finish(starsOverride) {
           const stars = starsOverride || ((S0.id === 'meet' || S0.id === 'listen') ? 3 : mistakes <= 1 ? 3 : mistakes <= 3 ? 2 : 1);
-          IR.recordActivity(S0.rec || pid(S0), stars); IR.touchStreak(); IR.save(); ctx.progress(1);
+          markLight(S0.id); IR.recordActivity(S0.rec || pid(S0), stars); IR.touchStreak(); IR.save(); ctx.progress(1);
           const last = !!OV || idx === STEPS.length - 1; const nx = STEPS[idx + 1];
           const ov = h('div', { class: 'complete' }, h('div', { class: 'cbox' }, IR.celebration(false), h('h1', null, 'Great job!'), h('p', { class: 'lead' }, S0.title),
             h('div', { class: 'bigstars', 'aria-label': stars + ' stars' }, ...[1, 2, 3].map((k) => icon(k <= stars ? 'star' : 'starOutline', (k <= stars ? 'on' : 'off') + ' k' + k))),
@@ -384,7 +395,7 @@
       const nextBtn = h('button', { class: 'btn big next', type: 'button', 'aria-label': 'Next', onclick: () => ctx.goNext() }, 'Next', icon('next'));
       const nav = h('div', { class: 'lesson-nav' }, h('button', { class: 'btn big back', type: 'button', 'aria-label': 'Back', onclick: () => ctx.goBack() }, icon('back'), 'Back'), nextBtn);
       const x = h('button', { class: 'xbtn', type: 'button', 'aria-label': 'Back to the unit', onclick: () => { location.hash = BASE; } }, icon('close'));
-      app.append(h('div', { class: 'screen lessonscreen nkstep u5step nk-' + S0.id, style: '--c:' + S0.color }, h('header', { class: 'lesson-top' }, x, bar, IR.ui.homeButton(), unitSheetBtn(S0.id)), instrBox, stage, nav));
+      app.append(h('div', { class: 'screen lessonscreen nkstep u5step nk-' + S0.id, style: '--c:' + S0.color }, h('header', { class: 'lesson-top' }, x, bar, IR.ui.homeButton(), unitSheetBtn(S0.id), IR.ui.gearButton()), instrBox, stage, nav));
       ctx.progress(0); S0.run(ctx);
     }
     function unitSheetBtn(cur) {
@@ -481,30 +492,48 @@
     }
     /* 6. Heart words */
     function runHeart(ctx, after) {
-      ctx.setInstr('Tap each heart word to hear it.', 'heart'); const seen = new Set();
-      const row = h('div', { class: 'hearts' }, ...N.heart.map((it) => h('button', { class: 'heartchip', type: 'button', onclick: (e) => {
-        e.currentTarget.classList.add('seen'); seen.add(it.w); ctx.progress(seen.size / N.heart.length); Snd.seq([AU.w(it.w), 'audio/' + KEY + '_hx_' + it.w + '.mp3'], 200);
-        if (seen.size === N.heart.length) done.classList.add('glow'); } }, h('span', { class: 'heartmark', 'aria-hidden': 'true' }, '\u2665'), h('span', { class: 'word' }, it.w))));
+      ctx.setInstr('Tap each new or heart word to hear it before the story.', 'heart'); const seen = new Set();
+      const words = (N.heart || []).concat(N.newWords || []);
+      const total = Math.max(1, words.length);
+      const row = h('div', { class: 'hearts' }, ...words.map((it) => {
+        const w = it.w || it; const irregular = !!(it.w);
+        return h('button', { class: 'heartchip' + (irregular ? '' : ' newchip'), type: 'button', onclick: (e) => {
+          e.currentTarget.classList.add('seen'); seen.add(w); ctx.progress(seen.size / total);
+          const hx = irregular ? ('audio/' + KEY + '_hx_' + w + '.mp3') : null;
+          Snd.seq([AU.w(w)].concat(hx ? [hx] : []), 200);
+          if (seen.size === total) done.classList.add('glow'); } }, irregular ? h('span', { class: 'heartmark', 'aria-hidden': 'true' }, '\u2665') : h('span', { class: 'heartmark newmark', 'aria-hidden': 'true' }, '\u2605'), h('span', { class: 'word' }, w)); }));
       const done = h('button', { class: 'btn big primary', type: 'button', onclick: () => { Snd.stop(); if (after) after(); else ctx.finish(3); } }, 'Listen to the story', icon('next'));
-      ctx.stage.append(h('div', { class: 'activity' }, h('p', { class: 'bigprompt' }, 'Heart words'), row, h('div', { class: 'row center' }, done)));
+      ctx.stage.append(h('div', { class: 'activity' }, h('p', { class: 'bigprompt' }, 'Heart words and new words'), row, h('p', { class: 'small heartnote' }, 'Hearts are irregular. Stars are new words in this story.'), h('div', { class: 'row center' }, done)));
       Snd.play(AU.p('heart'));
     }
     function wordsInto(el, pg) { el.innerHTML = ''; pg.words.forEach((w, k) => el.append(h('span', { class: 'w', 'data-k': k }, w), ' ')); }
     function hl(pg, ws) { return (t) => pg.t.forEach((tt, k) => { const e = ws[k]; if (!e) return; e.classList.toggle('hl', t >= tt[0] - 0.04 && t < (pg.t[k + 1] ? pg.t[k + 1][0] - 0.04 : 99)); e.classList.toggle('read', t >= tt[1]); }); }
     /* 7. Story Time: same behaviour as ng Story Time (auto-read each page, Read again / Next page / Previous page, Finish, tap-to-hear fallback) */
-    function runListen(ctx) { if (!ctx._heartDone) { ctx._heartDone = true; ctx.setNext(() => { Snd.stop(); runListen(ctx); return true; }); runHeart(ctx, () => runListen(ctx)); return; } ctx.stage.innerHTML = '';
-      ctx.setInstr('Listen to the story and follow along.', 'listen'); const st = ctx.stage;
+    function runListen(ctx) { ctx.showNav(false); if (!ctx._heartDone) { ctx._heartDone = true; ctx.setNext(() => { Snd.stop(); runListen(ctx); return true; }); runHeart(ctx, () => runListen(ctx)); return; } ctx.stage.innerHTML = ''; ctx.setInstr('Listen to the story and follow along.', 'listen'); const st = ctx.stage;
       const pages = N.story; let p = 0, token = 0, mode = 'reading', finished = false; const heard = new Set();
       const picEl = h('img', { class: 'panel', alt: '' }); const sentEl = h('p', { class: 'sentence', 'aria-live': 'polite' });
       const dots = h('div', { class: 'pagedots' }, ...pages.map(() => h('i'))); const label = h('p', { class: 'small story-say' }); const ctl = h('div', { class: 'row center story-ctl' });
       const allHeard = () => heard.size >= pages.length; const firstUnheard = () => pages.findIndex((_, k) => !heard.has(k));
       const btn = (cls, ico, text, fn) => { const b = h('button', { class: 'btn big ' + cls, type: 'button' }, ico ? icon(ico) : null, text); b.addEventListener('click', fn); return b; };
-      function renderCtl() { ctl.innerHTML = ''; const last = p === pages.length - 1; const prev = p > 0 ? btn('story-prev', 'back', 'Previous page', () => goPage(p - 1)) : null;
-        if (mode === 'reading') { label.textContent = 'Page ' + (p + 1) + ' of ' + pages.length + '. Listening\u2026'; ctl.append(...[prev, btn('story-stop', 'pause', 'Stop', () => { halt(); mode = 'stopped'; renderCtl(); })].filter(Boolean)); }
-        else if (mode === 'blocked') { label.textContent = 'Page ' + (p + 1) + ' of ' + pages.length; ctl.append(...[prev, btn('primary story-tap', 'speaker', 'Tap to hear this page', () => playPage())].filter(Boolean)); }
-        else { label.textContent = 'Page ' + (p + 1) + ' of ' + pages.length + '. Read it again, or go on.'; const u = firstUnheard(); let t = 'Next page', fn = () => goPage(p + 1);
-          if (last) { if (allHeard()) { t = 'Finish'; fn = finishNow; } else { t = 'Hear page ' + (u + 1); fn = () => goPage(u); } }
-          const nb = btn('primary story-nextpage glow', null, t, fn); nb.append(icon('next')); ctl.append(...[prev, btn('story-again', 'replay', 'Read again', () => playPage()), nb].filter(Boolean)); } }
+      function renderCtl() { ctl.innerHTML = ''; const last = p === pages.length - 1;
+        const prev = btn('story-prev', 'back', 'Previous page', () => { if (p > 0) goPage(p - 1); }); if (p === 0) prev.disabled = true;
+        let mid, nextLbl = 'Next page', nextFn = () => { if (p < pages.length - 1) goPage(p + 1); };
+        if (mode === 'reading') {
+          label.textContent = 'Page ' + (p + 1) + ' of ' + pages.length + '. Listening\u2026';
+          mid = btn('story-stop', 'pause', 'Pause', () => { halt(); mode = 'stopped'; renderCtl(); });
+          nextFn = () => { halt(); if (p < pages.length - 1) goPage(p + 1); };
+        } else if (mode === 'blocked') {
+          label.textContent = 'Page ' + (p + 1) + ' of ' + pages.length;
+          mid = btn('primary story-tap', 'speaker', 'Tap to hear', () => playPage());
+        } else {
+          label.textContent = 'Page ' + (p + 1) + ' of ' + pages.length + '.';
+          mid = btn('story-again', 'replay', 'Read again', () => playPage());
+          const u = firstUnheard();
+          if (last) { if (allHeard()) { nextLbl = 'Finish'; nextFn = finishNow; } else { nextLbl = 'Hear page ' + (u + 1); nextFn = () => goPage(u); } }
+        }
+        const nb = btn('primary story-nextpage' + (mode !== 'reading' ? ' glow' : ''), null, nextLbl, nextFn); nb.append(icon('next'));
+        if (last && mode !== 'reading' && allHeard()) { /* ok */ } else if (last && mode === 'reading') nb.disabled = true;
+        ctl.append(prev, mid, nb); }
       function setPage(i) { p = i; picEl.src = pages[p].img; wordsInto(sentEl, pages[p]); $$('i', dots).forEach((d, k) => { d.classList.toggle('cur', k === p); d.classList.toggle('seen', heard.has(k)); }); ctx.progress(heard.size / pages.length); }
       function playPage() { const pg = pages[p]; const ws = $$('.w', sentEl); const my = ++token; mode = 'reading'; Snd.hideFallback(); renderCtl();
         return Snd.play(pg.audio, { onTime: hl(pg, ws) }).then((ok) => { ws.forEach((e) => e.classList.remove('hl', 'read')); if (my !== token || !ctx.scr.ok()) return;
@@ -644,6 +673,9 @@
       $('.nkstep').classList.add('reviewstep'); $('.nkstep .pbar').style.display = 'none';
     }
     U5ROUTE[KEY] = function (hash, app) {
+      const was = IR['_u5Was_' + KEY] || '';
+      if (new RegExp('^#/' + KEY + '(/|$)').test(was) && !new RegExp('^#/' + KEY + '(/|$)').test(hash) && hash !== '#/review5') resetLights();
+      IR['_u5Was_' + KEY] = hash;
       let m;
       if (hash === BASE || hash === BASE + '/') { unitPage(app); return true; }
       if (hash.startsWith(BASE + '/result')) { resultPage(app); return true; }

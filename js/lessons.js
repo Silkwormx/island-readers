@@ -115,27 +115,34 @@
       /* part A: heart-word peek (tap to hear, nothing to answer) */
       function heartPeek() {
         ctx.progress(0); stage.innerHTML = ''; ctx.showNav(true); ctx.setNextLabel('Next'); ctx.setBack(null); ctx.setNext(() => { Snd.stop(); storyListen(); return true; });
-        ctx.setInstr('Tap each heart word to hear it.', 'p_listen1');
+        ctx.setInstr('Tap each heart word and each new word to hear it.', 'p_listen1');
         const seen = new Set();
         const go = h('button', { class: 'btn big primary', type: 'button' }, 'Listen to the story', icon('next'));
         const row = h('div', { class: 'hearts' });
-        const note = h('p', { class: 'heartnote', 'aria-live': 'polite' }, 'Most letters follow the rules. The colored part is the one to know by heart.');
-        D.heart.forEach((it) => {
-          row.append(h('button', { class: 'heartchip', type: 'button', onclick: (e) => {
-            e.currentTarget.classList.add('seen'); seen.add(it.w); IR.S().heart[it.w] = true; IR.save(); ctx.progress(0.4 * seen.size / D.heart.length);
-            Snd.seq([A.word(it.w), 'audio/hx_' + it.w + '.mp3'], 200);
-            note.textContent = (IR.SOR && IR.SOR.heart[it.w]) ? it.w + ': ' + IR.SOR.heart[it.w].note : '';
-          } }, h('span', { class: 'heartmark', 'aria-hidden': 'true' }, '\u2665'), IR.heartWord ? IR.heartWord(it.w) : h('span', { class: 'word' }, it.w)));
+        const note = h('p', { class: 'heartnote', 'aria-live': 'polite' }, 'Hearts are irregular. Stars are new words in this story.');
+        const heartWs = D.heart.map((it) => ({ w: it.w, irregular: true, ex: it.ex }));
+        const newWs = (D.newWords || []).map((w) => ({ w: typeof w === 'string' ? w : w.w, irregular: false }));
+        const all = heartWs.concat(newWs);
+        all.forEach((it) => {
+          row.append(h('button', { class: 'heartchip' + (it.irregular ? '' : ' newchip'), type: 'button', onclick: (e) => {
+            e.currentTarget.classList.add('seen'); seen.add(it.w); if (it.irregular) { IR.S().heart[it.w] = true; IR.save(); }
+            ctx.progress(0.4 * seen.size / all.length);
+            const hx = it.irregular ? ('audio/hx_' + it.w + '.mp3') : null;
+            Snd.seq([A.word(it.w)].concat(hx ? [hx] : []), 200);
+            note.textContent = it.irregular
+              ? ((IR.SOR && IR.SOR.heart[it.w]) ? it.w + ': ' + IR.SOR.heart[it.w].note : (it.ex || ''))
+              : (it.w + ' is a new word in this story.');
+          } }, it.irregular ? h('span', { class: 'heartmark', 'aria-hidden': 'true' }, '♥') : h('span', { class: 'heartmark newmark', 'aria-hidden': 'true' }, '★'), IR.heartWord && it.irregular ? IR.heartWord(it.w) : h('span', { class: 'word' }, it.w)));
         });
         go.addEventListener('click', () => { Snd.stop(); storyListen(); });
-        stage.append(h('div', { class: 'activity' }, h('p', { class: 'bigprompt' }, 'Heart words'), note, row, h('div', { class: 'row center' }, go)));
+        stage.append(h('div', { class: 'activity' }, h('p', { class: 'bigprompt' }, 'Heart words and new words'), note, row, h('div', { class: 'row center' }, go)));
       }
       /* part B: the comic, read aloud. Each page starts reading by itself the moment it opens (it is opened by a tap: "Listen to the story", "Next page" or "Read again", so iOS Safari allows the sound).
          When the page ends the child chooses "Read again" or "Next page". If the browser still blocks the sound, a big "Tap to hear this page" button appears (never a silent failure).
          Stop is always there while reading. Only a page heard to the END counts toward the star. */
       function storyListen() {
         stage.innerHTML = ''; ctx.setInstr('Listen to the story and follow along.', 'p_listen2');
-        const pages = D.story; let p = 0; let token = 0; let finished = false; let mode = 'reading'; ctx.showNav(true);
+        const pages = D.story; let p = 0; let token = 0; let finished = false; let mode = 'reading'; ctx.showNav(false);
         const picEl = h('img', { class: 'panel', alt: '' });
         const sentEl = h('p', { class: 'sentence', 'aria-live': 'polite' });
         const dots = h('div', { class: 'pagedots' }, ...pages.map(() => h('i')));
@@ -145,19 +152,16 @@
         const allHeard = () => heard.size >= pages.length;
         const firstUnheard = () => pages.findIndex((_, k) => !heard.has(k));
         const btn = (cls, ico, text, fn, extra) => { const b = h('button', { class: 'btn ' + cls + (extra ? ' ' + extra : ''), type: 'button' }, ico ? icon(ico) : null, text); b.addEventListener('click', fn); return b; };
-        function renderCtl() {          /* the buttons depend on what the page is doing */
+        function renderCtl() {
           ctl.innerHTML = '';
           const last = p === pages.length - 1;
-          const prev = p > 0 ? btn('big story-prev', 'back', 'Previous page', () => goPage(p - 1)) : null;
-          if (mode === 'reading') { label.textContent = 'Page ' + (p + 1) + ' of ' + pages.length + '. Listening\u2026'; ctl.append(...[prev, btn('big story-stop', 'pause', 'Stop', () => { halt(); mode = 'stopped'; renderCtl(); })].filter(Boolean)); }
-          else if (mode === 'blocked') { label.textContent = 'Page ' + (p + 1) + ' of ' + pages.length; ctl.append(...[prev, btn('big primary story-tap', 'speaker', 'Tap to hear this page', () => playPage())].filter(Boolean)); }
-          else {
-            label.textContent = 'Page ' + (p + 1) + ' of ' + pages.length + '. Read it again, or go on.';
-            const u = firstUnheard(); let nextTxt = 'Next page'; let nextFn = () => goPage(p + 1);
-            if (last) { if (allHeard()) { nextTxt = 'Finish'; nextFn = () => finishNow(); } else { nextTxt = 'Hear page ' + (u + 1); nextFn = () => goPage(u); } }
-            ctl.append(...[prev, btn('big story-again', 'replay', 'Read again', () => playPage()), btn('big primary story-nextpage', null, nextTxt, nextFn, 'glow')].filter(Boolean));
-            ctl.lastChild.append(icon('next'));
-          }
+          const prev = btn('big story-prev', 'back', 'Previous page', () => { if (p > 0) goPage(p - 1); }); if (p === 0) prev.disabled = true;
+          let mid, nextTxt = 'Next page', nextFn = () => { if (p < pages.length - 1) goPage(p + 1); };
+          if (mode === 'reading') { label.textContent = 'Page ' + (p + 1) + ' of ' + pages.length + '. Listening\u2026'; mid = btn('big story-stop', 'pause', 'Pause', () => { halt(); mode = 'stopped'; renderCtl(); }); nextFn = () => { halt(); if (p < pages.length - 1) goPage(p + 1); }; }
+          else if (mode === 'blocked') { label.textContent = 'Page ' + (p + 1) + ' of ' + pages.length; mid = btn('big primary story-tap', 'speaker', 'Tap to hear', () => playPage()); }
+          else { label.textContent = 'Page ' + (p + 1) + ' of ' + pages.length + '.'; mid = btn('big story-again', 'replay', 'Read again', () => playPage()); const u = firstUnheard(); if (last) { if (allHeard()) { nextTxt = 'Finish'; nextFn = () => finishNow(); } else { nextTxt = 'Hear page ' + (u + 1); nextFn = () => goPage(u); } } }
+          const nb = btn('big primary story-nextpage' + (mode !== 'reading' ? ' glow' : ''), null, nextTxt, nextFn); nb.append(icon('next'));
+          ctl.append(prev, mid, nb);
         }
         function setPage(i) {
           p = i; const pg = pages[p]; picEl.src = pg.img; sentEl.innerHTML = '';

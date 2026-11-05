@@ -1,3 +1,4 @@
+/* nk unit data */
 window.IR_DATA_NK = {
  "story": [
   {
@@ -1505,5 +1506,15 @@ window.IR_DATA_NK = {
     "Zip."
    ]
   }
+ ],
+ "newWords": [
+  "trunk",
+  "stink",
+  "junk",
+  "skunk",
+  "thunk",
+  "bonks",
+  "rings",
+  "grins"
  ]
 };

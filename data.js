@@ -18,23 +18,27 @@ window.IR_DATA = {
   },
   {
    "w": "to",
-   "ex": "Frill swung up to the bell."
+   "ex": "Frill swings up to the bell."
+  },
+  {
+   "w": "orange",
+   "ex": "The orange bell rings!"
   }
  ],
  "story": [
   {
    "n": 1,
-   "img": "img/ob_p1.jpg",
-   "text": "The big bell hung on a long, thick branch. It did not ring.",
+   "img": "img/ng_p01.webp",
+   "text": "The big orange bell hung on a long branch. It did not ring.",
    "words": [
     "The",
     "big",
+    "orange",
     "bell",
     "hung",
     "on",
     "a",
-    "long,",
-    "thick",
+    "long",
     "branch.",
     "It",
     "did",
@@ -48,59 +52,59 @@ window.IR_DATA = {
     ],
     [
      0.32,
-     0.576
+     0.604
     ],
     [
-     0.59,
-     0.86
+     0.618,
+     0.973
     ],
     [
-     0.874,
-     1.172
+     0.988,
+     1.257
     ],
     [
-     1.186,
-     1.3
+     1.272,
+     1.612
     ],
     [
-     1.314,
-     1.385
+     1.627,
+     1.726
     ],
     [
-     1.399,
+     1.74,
      1.797
     ],
     [
-     2.024,
-     2.323
+     1.811,
+     2.124
     ],
     [
-     2.337,
-     2.933
+     2.138,
+     2.749
     ],
     [
-     3.92,
-     4.134
+     3.75,
+     3.963
     ],
     [
-     4.148,
-     4.347
+     3.977,
+     4.176
     ],
     [
-     4.361,
-     4.659
+     4.19,
+     4.489
     ],
     [
-     4.673,
-     5.099
+     4.503,
+     4.929
     ]
    ],
-   "dur": 6.14
+   "dur": 5.98
   },
   {
    "n": 2,
-   "img": "img/ob_p2.jpg",
-   "text": "Zip and Frill ran up the hill. What is up with the bell?",
+   "img": "img/ng_p02.webp",
+   "text": "Zip and Frill ran up the path to the bell.",
    "words": [
     "Zip",
     "and",
@@ -108,81 +112,63 @@ window.IR_DATA = {
     "ran",
     "up",
     "the",
-    "hill.",
-    "What",
-    "is",
-    "up",
-    "with",
+    "path",
+    "to",
     "the",
-    "bell?"
+    "bell."
    ],
    "t": [
     [
      0.107,
-     0.476
+     0.462
     ],
     [
-     0.49,
-     0.618
+     0.476,
+     0.59
     ],
     [
-     0.632,
-     1.044
+     0.604,
+     1.016
     ],
     [
-     1.059,
-     1.314
+     1.03,
+     1.286
     ],
     [
-     1.328,
-     1.485
+     1.3,
+     1.456
     ],
     [
-     1.499,
-     1.598
+     1.47,
+     1.57
     ],
     [
-     1.613,
-     2.081
+     1.584,
+     1.968
     ],
     [
-     3.082,
-     3.381
+     1.982,
+     2.095
     ],
     [
-     3.395,
-     3.537
+     2.11,
+     2.223
     ],
     [
-     3.551,
-     3.736
-    ],
-    [
-     3.75,
-     3.878
-    ],
-    [
-     3.892,
-     4.006
-    ],
-    [
-     4.02,
-     4.446
+     2.237,
+     2.678
     ]
    ],
-   "dur": 5.47
+   "dur": 3.72
   },
   {
    "n": 3,
-   "img": "img/ob_p3.jpg",
-   "text": "Frill swung up to the bell on a long string.",
+   "img": "img/ng_p03.webp",
+   "text": "Frill swings up on a long string.",
    "words": [
     "Frill",
-    "swung",
+    "swings",
     "up",
-    "to",
-    "the",
-    "bell",
     "on",
     "a",
     "long",
@@ -191,56 +177,44 @@ window.IR_DATA = {
    "t": [
     [
      0.107,
-     0.561
+     0.547
     ],
     [
-     0.576,
-     0.945
+     0.561,
+     0.959
     ],
     [
-     0.959,
-     1.115
+     0.973,
+     1.172
     ],
     [
-     1.13,
-     1.215
+     1.186,
+     1.314
     ],
     [
-     1.229,
-     1.357
+     1.328,
+     1.385
     ],
     [
-     1.371,
-     1.684
+     1.399,
+     1.74
     ],
     [
-     1.698,
-     1.811
-    ],
-    [
-     1.826,
-     1.882
-    ],
-    [
-     1.897,
-     2.237
-    ],
-    [
-     2.252,
-     2.806
+     1.755,
+     2.294
     ]
    ],
-   "dur": 3.84
+   "dur": 3.34
   },
   {
    "n": 4,
-   "img": "img/ob_p4.jpg",
-   "text": "Twigs and moss sat in the bell. Yuck!",
+   "img": "img/ng_p04.webp",
+   "text": "Twigs and moss sit in the bell. Yuck!",
    "words": [
     "Twigs",
     "and",
     "moss",
-    "sat",
+    "sit",
     "in",
     "the",
     "bell.",
@@ -249,31 +223,31 @@ window.IR_DATA = {
    "t": [
     [
      0.107,
-     0.533
+     0.547
     ],
     [
-     0.547,
-     0.647
+     0.561,
+     0.675
     ],
     [
-     0.661,
-     0.987
+     0.689,
+     1.03
     ],
     [
-     1.002,
-     1.272
+     1.044,
+     1.243
     ],
     [
-     1.286,
-     1.357
+     1.257,
+     1.343
     ],
     [
-     1.371,
-     1.456
+     1.357,
+     1.442
     ],
     [
-     1.47,
-     1.925
+     1.456,
+     1.911
     ],
     [
      2.912,
@@ -284,207 +258,16 @@ window.IR_DATA = {
   },
   {
    "n": 5,
-   "img": "img/ob_p5.jpg",
-   "text": "Zip and Frill flung the twigs and moss off the branch.",
+   "img": "img/ng_p05.webp",
+   "text": "Zip and Frill fling the twigs off.",
    "words": [
     "Zip",
     "and",
     "Frill",
-    "flung",
+    "fling",
     "the",
     "twigs",
-    "and",
-    "moss",
-    "off",
-    "the",
-    "branch."
-   ],
-   "t": [
-    [
-     0.107,
-     0.476
-    ],
-    [
-     0.49,
-     0.618
-    ],
-    [
-     0.632,
-     1.002
-    ],
-    [
-     1.016,
-     1.328
-    ],
-    [
-     1.343,
-     1.442
-    ],
-    [
-     1.456,
-     1.925
-    ],
-    [
-     1.939,
-     2.053
-    ],
-    [
-     2.067,
-     2.394
-    ],
-    [
-     2.408,
-     2.593
-    ],
-    [
-     2.607,
-     2.72
-    ],
-    [
-     2.735,
-     3.345
-    ]
-   ],
-   "dur": 4.39
-  },
-  {
-   "n": 6,
-   "img": "img/ob_p6.jpg",
-   "text": "Zip hit the bell with a ring thing. Ding!",
-   "words": [
-    "Zip",
-    "hit",
-    "the",
-    "bell",
-    "with",
-    "a",
-    "ring",
-    "thing.",
-    "Ding!"
-   ],
-   "t": [
-    [
-     0.107,
-     0.49
-    ],
-    [
-     0.505,
-     0.732
-    ],
-    [
-     0.746,
-     0.845
-    ],
-    [
-     0.86,
-     1.158
-    ],
-    [
-     1.172,
-     1.328
-    ],
-    [
-     1.343,
-     1.414
-    ],
-    [
-     1.428,
-     1.698
-    ],
-    [
-     1.712,
-     2.181
-    ],
-    [
-     3.182,
-     3.807
-    ]
-   ],
-   "dur": 4.82
-  },
-  {
-   "n": 7,
-   "img": "img/ob_p7.jpg",
-   "text": "Ding, dong. Just a bit. The bell is not strong yet.",
-   "words": [
-    "Ding,",
-    "dong.",
-    "Just",
-    "a",
-    "bit.",
-    "The",
-    "bell",
-    "is",
-    "not",
-    "strong",
-    "yet."
-   ],
-   "t": [
-    [
-     0.107,
-     0.59
-    ],
-    [
-     0.86,
-     1.399
-    ],
-    [
-     2.401,
-     2.784
-    ],
-    [
-     2.798,
-     2.883
-    ],
-    [
-     2.898,
-     3.338
-    ],
-    [
-     4.332,
-     4.517
-    ],
-    [
-     4.531,
-     4.815
-    ],
-    [
-     4.83,
-     4.972
-    ],
-    [
-     4.986,
-     5.27
-    ],
-    [
-     5.284,
-     5.653
-    ],
-    [
-     5.668,
-     6.108
-    ]
-   ],
-   "dur": 7.15
-  },
-  {
-   "n": 8,
-   "img": "img/ob_p8.jpg",
-   "text": "Zip and Frill sing a long song. The bell will ring and ring!",
-   "words": [
-    "Zip",
-    "and",
-    "Frill",
-    "sing",
-    "a",
-    "long",
-    "song.",
-    "The",
-    "bell",
-    "will",
-    "ring",
-    "and",
-    "ring!"
+    "off."
    ],
    "t": [
     [
@@ -501,55 +284,287 @@ window.IR_DATA = {
     ],
     [
      1.03,
-     1.286
+     1.343
     ],
     [
-     1.3,
-     1.371
+     1.357,
+     1.456
     ],
     [
-     1.385,
-     1.726
+     1.47,
+     1.868
     ],
     [
-     1.74,
-     2.266
-    ],
-    [
-     3.267,
-     3.466
-    ],
-    [
-     3.48,
-     3.75
-    ],
-    [
-     3.764,
-     3.963
-    ],
-    [
-     3.977,
-     4.332
-    ],
-    [
-     4.347,
-     4.489
-    ],
-    [
-     4.503,
-     4.972
+     1.882,
+     2.337
     ]
    ],
-   "dur": 6.0
+   "dur": 3.38
+  },
+  {
+   "n": 6,
+   "img": "img/ng_p06.webp",
+   "text": "Still no ding. The bell is stuck.",
+   "words": [
+    "Still",
+    "no",
+    "ding.",
+    "The",
+    "bell",
+    "is",
+    "stuck."
+   ],
+   "t": [
+    [
+     0.107,
+     0.547
+    ],
+    [
+     0.561,
+     0.774
+    ],
+    [
+     0.789,
+     1.215
+    ],
+    [
+     2.216,
+     2.401
+    ],
+    [
+     2.415,
+     2.685
+    ],
+    [
+     2.699,
+     2.841
+    ],
+    [
+     2.855,
+     3.395
+    ]
+   ],
+   "dur": 4.44
+  },
+  {
+   "n": 7,
+   "img": "img/ng_p07.webp",
+   "text": "Zip brings a strong stick.",
+   "words": [
+    "Zip",
+    "brings",
+    "a",
+    "strong",
+    "stick."
+   ],
+   "t": [
+    [
+     0.107,
+     0.547
+    ],
+    [
+     0.561,
+     0.874
+    ],
+    [
+     0.888,
+     0.959
+    ],
+    [
+     0.973,
+     1.414
+    ],
+    [
+     1.428,
+     1.982
+    ]
+   ],
+   "dur": 3.02
+  },
+  {
+   "n": 8,
+   "img": "img/ng_p08.webp",
+   "text": "Frill sings a long song.",
+   "words": [
+    "Frill",
+    "sings",
+    "a",
+    "long",
+    "song."
+   ],
+   "t": [
+    [
+     0.107,
+     0.519
+    ],
+    [
+     0.533,
+     0.888
+    ],
+    [
+     0.902,
+     0.973
+    ],
+    [
+     0.988,
+     1.343
+    ],
+    [
+     1.357,
+     1.882
+    ]
+   ],
+   "dur": 2.93
+  },
+  {
+   "n": 9,
+   "img": "img/ng_p09.webp",
+   "text": "Zip hits the bell. Ding!",
+   "words": [
+    "Zip",
+    "hits",
+    "the",
+    "bell.",
+    "Ding!"
+   ],
+   "t": [
+    [
+     0.107,
+     0.49
+    ],
+    [
+     0.505,
+     0.817
+    ],
+    [
+     0.831,
+     0.959
+    ],
+    [
+     0.973,
+     1.428
+    ],
+    [
+     2.429,
+     3.054
+    ]
+   ],
+   "dur": 4.08
+  },
+  {
+   "n": 10,
+   "img": "img/ng_p10.webp",
+   "text": "Ding, dong! The orange bell rings strong!",
+   "words": [
+    "Ding,",
+    "dong!",
+    "The",
+    "orange",
+    "bell",
+    "rings",
+    "strong!"
+   ],
+   "t": [
+    [
+     0.107,
+     0.561
+    ],
+    [
+     0.817,
+     1.357
+    ],
+    [
+     2.344,
+     2.543
+    ],
+    [
+     2.557,
+     2.983
+    ],
+    [
+     2.997,
+     3.295
+    ],
+    [
+     3.31,
+     3.636
+    ],
+    [
+     3.651,
+     4.247
+    ]
+   ],
+   "dur": 5.28
+  },
+  {
+   "n": 11,
+   "img": "img/ng_p11.webp",
+   "text": "Zip and Frill sing. The bell will ring and ring!",
+   "words": [
+    "Zip",
+    "and",
+    "Frill",
+    "sing.",
+    "The",
+    "bell",
+    "will",
+    "ring",
+    "and",
+    "ring!"
+   ],
+   "t": [
+    [
+     0.107,
+     0.505
+    ],
+    [
+     0.519,
+     0.632
+    ],
+    [
+     0.647,
+     0.973
+    ],
+    [
+     0.988,
+     1.485
+    ],
+    [
+     2.486,
+     2.685
+    ],
+    [
+     2.699,
+     2.969
+    ],
+    [
+     2.983,
+     3.182
+    ],
+    [
+     3.196,
+     3.551
+    ],
+    [
+     3.565,
+     3.707
+    ],
+    [
+     3.722,
+     4.19
+    ]
+   ],
+   "dur": 5.23
   }
  ],
  "sentences": [
   {
    "n": 1,
-   "img": "img/ob_p1.jpg",
-   "text": "The bell hung on a branch.",
+   "img": "img/ng_p01.webp",
+   "text": "The orange bell hung on a branch.",
    "words": [
     "The",
+    "orange",
     "bell",
     "hung",
     "on",
@@ -559,27 +574,29 @@ window.IR_DATA = {
   },
   {
    "n": 2,
-   "img": "img/ob_p3.jpg",
-   "text": "Frill swung up to the bell.",
+   "img": "img/ng_p03.webp",
+   "text": "Frill swings up on a long string.",
    "words": [
     "Frill",
-    "swung",
+    "swings",
     "up",
-    "to",
-    "the",
-    "bell."
+    "on",
+    "a",
+    "long",
+    "string."
    ]
   },
   {
    "n": 3,
-   "img": "img/ob_p8.jpg",
-   "text": "Zip and Frill sing a song.",
+   "img": "img/ng_p11.webp",
+   "text": "Zip and Frill sing a long song.",
    "words": [
     "Zip",
     "and",
     "Frill",
     "sing",
     "a",
+    "long",
     "song."
    ]
   }
@@ -664,7 +681,7 @@ window.IR_DATA = {
  ],
  "minutes": {
   "intro": 6,
-  "listen": 3,
+  "listen": 6,
   "hear": 2,
   "bells": 2,
   "build": 4,
@@ -1714,5 +1731,16 @@ window.IR_DATA = {
    ],
    "text": "I could see it."
   }
+ ],
+ "newWords": [
+  "hung",
+  "branch",
+  "string",
+  "twigs",
+  "moss",
+  "fling",
+  "strong",
+  "stuck",
+  "sings"
  ]
 };

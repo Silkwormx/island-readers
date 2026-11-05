@@ -187,7 +187,9 @@
       return card;
     });
     const nextIs0 = WORLD[WORLD.indexOf(w0) + 1]; const nextIs = nextIs0 && nextIs0.kind === 'island' ? { kind: 'island', n: w.n + 1 } : nextIs0;
-    const note = nextIs && nextIs.kind === 'island' ? h('div', { class: 'pnote' }, icon(info.done ? 'star' : 'lock'), info.done ? 'Unit ' + nextIs.n + ' is unlocked!' : 'Unit ' + nextIs.n + ' unlocks when the Unit ' + w.n + ' Review is done') : null;
+    /* Unit 5 Silent e is already open locally/live; do not say it still unlocks after Unit 4 Review. */
+    const nextOpen = nextIs && ((nextIs.n === 5 && !!IR.u5Route) || info.done);
+    const note = nextIs && nextIs.kind === 'island' ? h('div', { class: 'pnote' }, icon(nextOpen ? 'star' : 'lock'), nextOpen ? 'Unit ' + nextIs.n + ' is unlocked!' : 'Unit ' + nextIs.n + ' unlocks when the Unit ' + w.n + ' Review is done') : null;
     const close = () => { modalRoot.innerHTML = ''; document.removeEventListener('keydown', onKey); const b = $('[data-id="' + id + '"]'); if (b) b.focus({ preventScroll: true }); };
     const onKey = (e) => { if (e.key === 'Escape') close(); };
     document.addEventListener('keydown', onKey);
@@ -418,8 +420,14 @@
         h('span', { class: 'smin' + (r.optional ? ' opt' : '') }, r.optional ? 'Optional' : r.min + ' min'),
         h('span', { class: 'sside' }, star(r.done), h('span', { class: 'slabel ' + (isNext ? 'tag' : 'none') }, isNext ? 'Next' : ''))));
     }
+    const LK = 'ir_sess_ng'; const prevH = IR._ngHashWas || '';
+    if (!/^#\/(island3|lesson\/|check)/.test(prevH)) try { sessionStorage.removeItem(LK); } catch (e) {}
+    IR._ngHashWas = location.hash || '#/island3';
+    let lit = {}; try { lit = JSON.parse(sessionStorage.getItem(LK) || '{}'); } catch (e) {}
+    const lights = h('div', { class: 'clights', role: 'status', 'aria-label': 'Session progress lights' }, h('span', { class: 'clab' }, 'This visit:'),
+      ...secs.map((r) => h('span', { class: 'clight' + (lit[r.id] || r.done ? ' on' : ''), 'data-kind': r.group, 'data-id': r.id, title: r.title })));
     const left = h('section', { class: 'uA-sec uA-start' }, h('h2', { class: 'uA-h' }, 'Start here'), h('ul', { class: 'uA-left' }, ...secs.filter((r) => r.group !== 'activities').map(bigBox)));
-    const right = h('section', { class: 'uA-sec uA-right' }, h('h2', { class: 'uA-h' }, 'Activities'), h('ol', { class: 'stoplist uA-acts' }, ...secs.filter((r) => r.group === 'activities').map(actRow)));
+    const right = h('section', { class: 'uA-sec uA-right' }, lights, h('h2', { class: 'uA-h' }, 'Activities'), h('ol', { class: 'stoplist uA-acts' }, ...secs.filter((r) => r.group === 'activities').map(actRow)));
     const foot = h('footer', { class: 'uA-foot island4 ' + (complete ? 'open' : 'locked'), 'aria-live': 'polite' },
       h('span', { class: 'i4ico', 'aria-hidden': 'true' }, icon(complete ? 'star' : 'lock')),
       h('span', { class: 'i4txt' }, h('small', null, complete ? 'Unit 4 is unlocked!' : 'Unit 4 unlocks when all stars are done')),
@@ -485,7 +493,7 @@
         h('div', { class: 'row' }, backBtn, nextBtn)));
       app.append(ov); Snd.play(A.sfx.done);
     }
-    app.append(h('div', { class: 'screen lessonscreen', style: '--c:' + L.color }, h('header', { class: 'lesson-top' }, x, bar, starTop, unitButton(L.id)), instrBox, stage, nav));
+    app.append(h('div', { class: 'screen lessonscreen', style: '--c:' + L.color }, h('header', { class: 'lesson-top' }, x, bar, starTop, unitButton(L.id), gearButton()), instrBox, stage, nav));
     setBar(); L.run(ctx);
   }
 
@@ -501,10 +509,17 @@
     ctx.goNext = () => { Snd.stop(); if (nextHandler && nextHandler()) return; location.hash = '#/island3'; };
     const nav = h('div', { class: 'lesson-nav' }, h('button', { class: 'btn big back', type: 'button', 'aria-label': 'Back', onclick: () => ctx.goBack() }, icon('back'), 'Back'),
       h('button', { class: 'btn big next', type: 'button', 'aria-label': 'Next question', onclick: () => ctx.goNext() }, 'Next', icon('next')));
-    app.append(h('div', { class: 'screen lessonscreen checkscreen', style: '--c:#2b2540' }, h('header', { class: 'lesson-top' }, x, bar, homeButton(), unitButton('check')), instrBox, stage, nav));
+    app.append(h('div', { class: 'screen lessonscreen checkscreen', style: '--c:#2b2540' }, h('header', { class: 'lesson-top' }, x, bar, homeButton(), unitButton('check'), gearButton()), instrBox, stage, nav));
     ctx.progress(0); IR.runCheck(ctx);
   }
 
+  /* Nov 4 2026: session completion lights (reset when a unit menu is opened from outside / closed) */
+  const _rec0 = IR.recordActivity; IR.recordActivity = function (id, stars) {
+    try { const m = /^(nk_|u5\d_|i3_|lesson)/.exec(id) || /^(\w+)_/.exec(id); const key = id.indexOf('u5') === 0 ? 'ir_sess_' + id.split('_')[0] : id.indexOf('nk_') === 0 ? 'ir_sess_nk' : 'ir_sess_ng';
+      const L = JSON.parse(sessionStorage.getItem(key) || '{}'); const sid = id.replace(/^(nk_|u51_|u53_|u5\d_)/, '').replace(/^i3_/, '');
+      L[sid] = 1; if (id.indexOf('nk_') === 0) L[id.slice(3)] = 1; sessionStorage.setItem(key, JSON.stringify(L)); } catch (e) {}
+    return _rec0.apply(this, arguments);
+  };
   IR.ui = { chips, gearButton, homeButton, toast, modalRoot, app };
   /* ---------- Practice pages (Nov 1 2026) ---------- */
   function simplePage(title, ...kids) {
@@ -582,10 +597,12 @@
   function teachersScreen() {
     IR.newScreen();
     const UNITS = [{ name: 'Unit 4 \u00b7 Glued Sounds', sounds: [
-      { s: 'ng', lesson: 'Lesson 4.1', days: 3, daily: 'teachers/ng/Lesson3.1_ng_Daily_Practice_Sheets.pdf', pack: 'teachers/ng/Lesson3.1_ng_Teacher_Pack.pdf', deck: 'teachers/ng/Lesson3.1_ng_Slide_Presentation.pptx' },
-      { s: 'nk', lesson: 'Lesson 4.2', days: 3, daily: 'teachers/nk/Lesson3.2_nk_Daily_Practice_Sheets.pdf', pack: 'teachers/nk/Lesson3.2_nk_Teacher_Pack.pdf', deck: 'teachers/nk/Lesson3.2_nk_Slide_Presentation.pptx' }] }];
+      { s: 'ng', lesson: 'Lesson 4.1', days: 3, daily: 'teachers/ng/Lesson3.1_ng_Daily_Practice_Sheets.pdf', pack: 'teachers/ng/Lesson3.1_ng_Teacher_Pack.pdf', deck: 'teachers/ng/Lesson3.1_ng_Slide_Presentation.pptx', view: '#/teachers/slides/ng' },
+      { s: 'nk', lesson: 'Lesson 4.2', days: 3, daily: 'teachers/nk/Lesson3.2_nk_Daily_Practice_Sheets.pdf', pack: 'teachers/nk/Lesson3.2_nk_Teacher_Pack.pdf', deck: 'teachers/nk/Lesson3.2_nk_Slide_Presentation.pptx', view: '#/teachers/slides/nk' }] }];
     const card = (x) => h('div', { class: 'tmcard' }, h('h3', null, h('span', { class: 'tmsound' }, x.s), ' ' + x.lesson),
-      h('a', { class: 'btn big tmlink', href: x.deck, download: '' }, 'Slides \u00b7 ' + x.days + ' days'),
+      h('a', { class: 'btn big tmlink primary', href: x.view }, 'Open on smartboard'),
+      h('p', { class: 'tmnote' }, 'Full-screen slide show in the browser. No download needed.'),
+      h('a', { class: 'btn big tmlink', href: x.deck, download: '' }, 'Download slides \u00b7 ' + x.days + ' days (PPTX)'),
       h('p', { class: 'tmnote' }, 'One PowerPoint for the whole sound.'),
       h('a', { class: 'btn big tmlink', href: x.daily, target: '_blank', rel: 'noopener' }, 'Daily practice sheets (PDF)'),
       h('p', { class: 'tmnote' }, 'Worksheets for each day, labeled Day 1 to Day ' + x.days + '.'),
@@ -596,6 +613,49 @@
       h('h1', null, 'Teacher materials'),
       h('p', { class: 'tmlead' }, 'For teaching in class. Students practice on their own in the app.'),
       ...UNITS.map((u) => h('section', { class: 'tmunit' }, h('h2', null, u.name), h('div', { class: 'tmgrid' }, ...u.sounds.map(card)))))));
+  }
+  /* In-app week-deck slideshow for smartboard (ng / nk). Keeps PPTX download on the teachers page. */
+  function slidesViewer(sound) {
+    IR.newScreen();
+    const root = h('div', { class: 'screen slidescreen', tabindex: '0' });
+    const stage = h('div', { class: 'slide-stage' });
+    const img = h('img', { class: 'slide-img', alt: sound + ' week slide' });
+    const counter = h('div', { class: 'slide-count', 'aria-live': 'polite' }, '');
+    const prev = h('button', { class: 'slide-nav slide-prev', type: 'button', 'aria-label': 'Previous slide' }, '\u25C0');
+    const next = h('button', { class: 'slide-nav slide-next', type: 'button', 'aria-label': 'Next slide' }, '\u25B6');
+    const top = h('div', { class: 'slide-top' },
+      h('a', { class: 'btn small ghost slide-back', href: '#/teachers' }, icon('back'), 'Teacher materials'),
+      h('h1', { class: 'slide-title' }, sound + ' week slides'),
+      counter, gearButton());
+    stage.append(prev, img, next);
+    root.append(top, stage);
+    app.append(root);
+    let slides = []; let i = 0; let keyHandler = null;
+    function show() {
+      if (!slides.length) { img.removeAttribute('src'); counter.textContent = 'No slides'; prev.disabled = true; next.disabled = true; return; }
+      img.src = slides[i];
+      counter.textContent = (i + 1) + ' / ' + slides.length;
+      prev.disabled = i <= 0; next.disabled = i >= slides.length - 1;
+      root.focus({ preventScroll: true });
+    }
+    function go(d) { if (!slides.length) return; i = Math.max(0, Math.min(slides.length - 1, i + d)); show(); }
+    prev.addEventListener('click', () => go(-1));
+    next.addEventListener('click', () => go(1));
+    keyHandler = (e) => {
+      if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); go(-1); }
+      else if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') { e.preventDefault(); go(1); }
+      else if (e.key === 'Home') { e.preventDefault(); i = 0; show(); }
+      else if (e.key === 'End') { e.preventDefault(); i = slides.length - 1; show(); }
+      else if (e.key === 'Escape') { location.hash = '#/teachers'; }
+    };
+    window.addEventListener('keydown', keyHandler);
+    const oldCleanup = IR._slideCleanup; if (typeof oldCleanup === 'function') oldCleanup();
+    IR._slideCleanup = () => { window.removeEventListener('keydown', keyHandler); };
+    fetch('teachers/' + sound + '/slides.json').then((r) => r.json()).then((man) => {
+      slides = man.slides || []; i = 0; show();
+      if (man.title) top.querySelector('.slide-title').textContent = man.title;
+    }).catch(() => { counter.textContent = 'Could not load slides'; });
+    show();
   }
   /* ---------- router ---------- */
   function route() {
@@ -609,7 +669,8 @@
     else if ((m = /^#\/practice\/(\w+)/.exec(hash))) practiceScreen(m[1]);
     else if (hash.startsWith('#/gems')) gemScreen();
     else if (hash.startsWith('#/about')) aboutScreen();
-    else if (hash.startsWith('#/teachers')) teachersScreen();
+    else if ((m = /^#\/teachers\/slides\/(ng|nk)$/.exec(hash))) slidesViewer(m[1]);
+    else if (hash.startsWith('#/teachers')) { if (IR._slideCleanup) { IR._slideCleanup(); IR._slideCleanup = null; } teachersScreen(); }
     else if (hash.startsWith('#/placement')) IR.placement.render(app, (n) => { const id = 'i' + n; if ((D.islands || {})[id]) { location.hash = '#/home'; setTimeout(() => openIsland(id), 0); } else { location.hash = '#/home'; setTimeout(() => toast('Unit ' + n + ' (' + ({1:'blends',2:'sh ch th',3:'ng nk',4:'silent e',5:'long words',6:'bossy r',7:'vowel teams',8:'oi ow aw',9:'word parts',10:'tch dge igh'})[n] + ') is coming soon in the full app. Try Unit 3 for now.'), 50); } });
     else if (hash.startsWith('#/island3')) trailScreen();
     else if (hash.startsWith('#/check')) checkScreen();

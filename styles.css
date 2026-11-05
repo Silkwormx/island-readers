@@ -1530,3 +1530,109 @@ body.calm .ob-glow{animation:none;opacity:.85}
   .gridhome .pbox{min-height:2.4rem!important;font-size:1rem!important}
   .aboutbtn{min-height:2.4rem!important}
 }
+
+/* Nov 4 2026: settings gear always top-right on unit + lesson pages */
+.uA-top,.lesson-top{position:relative;padding-right:4.4rem}
+.uA-top .gear,.lesson-top .gear{
+  position:absolute!important;top:50%;right:.7rem;transform:translateY(-50%);
+  margin:0!important;flex:none!important;z-index:8}
+.uA-top .uA-time{margin-left:auto}
+@media (max-width:600px){
+  .uA-top,.lesson-top{padding-right:3.6rem}
+  .uA-top .gear,.lesson-top .gear{right:.45rem;width:2.8rem;height:2.8rem;padding:.4rem}
+  .lesson-top .homebtn.unitback{order:9}
+}
+
+/* Nov 4 2026 brief: unbunched activity rows, completion lights, story one-screen */
+.unitpage.unitA .uA-acts,
+.unitpage .uA-acts{
+  display:flex!important;flex-direction:column!important;
+  grid-template-columns:none!important;grid-auto-rows:auto!important;
+  gap:.85rem!important;height:auto!important;min-height:0!important;flex:none!important}
+.unitpage.unitA .uA-acts>li,
+.unitpage .uA-acts>li{
+  display:block!important;height:auto!important;min-height:0!important;
+  padding:0!important;border-bottom:0!important;margin:0}
+.unitpage.unitA .arow,
+.unitpage .arow{
+  min-height:4.6rem!important;max-height:none!important;height:auto!important;
+  padding:1rem 1.1rem!important;margin:0!important;position:relative;z-index:1}
+@media (min-width:1000px){
+  .unitpage.unitA .uA-acts{display:grid!important;grid-template-columns:1fr 1fr!important;column-gap:1.2rem!important;row-gap:.85rem!important}
+}
+/* completion lights row on unit menu (session; resets on open/close) */
+.clights{display:flex;flex-wrap:wrap;align-items:center;gap:.45rem;margin:.2rem 0 1rem;padding:.55rem .8rem;background:#FFF8E8;border:2px dashed var(--line);border-radius:1rem}
+.clights .clab{font-weight:800;font-size:.95rem;color:var(--ink2);margin-right:.3rem}
+.clights .clight{width:1.15rem;height:1.15rem;border-radius:50%;border:2px solid var(--ink);background:#E8E0D0;box-shadow:inset 0 -2px 0 rgba(0,0,0,.12)}
+.clights .clight.on{background:#3CB371;border-color:#1B6B3A;box-shadow:0 0 0 3px rgba(60,179,113,.25)}
+.clights .clight[data-kind=lesson].on{background:#E8731C;border-color:#A84E0C}
+.clights .clight[data-kind=story].on{background:#8E5BD6;border-color:#5A2F9A}
+/* story: one screen, bigger art, single control row; hide bottom Back/Next while listening */
+.lessonscreen:has(.listenmode) .lesson-nav{display:none!important}
+.lessonscreen:has(.listenmode){height:100dvh;max-height:100dvh;overflow:hidden;display:flex;flex-direction:column}
+.lessonscreen:has(.listenmode) .stage{flex:1 1 auto;min-height:0;overflow:hidden}
+.lessonscreen:has(.listenmode) .activity.story.listenmode{
+  height:100%;max-height:100%;overflow:hidden;display:grid;
+  grid-template-rows:minmax(0,1fr) auto auto auto auto;gap:.35rem;padding:.2rem .4rem .4rem}
+.lessonscreen:has(.listenmode) .panelwrap{min-height:0;height:100%;display:flex;align-items:center;justify-content:center}
+.lessonscreen:has(.listenmode) .panelwrap .panel,
+.lessonscreen:has(.listenmode) img.panel{
+  width:auto!important;height:100%!important;max-height:100%!important;max-width:100%!important;
+  object-fit:contain;border-radius:1rem}
+.lessonscreen:has(.listenmode) .sentrow{flex:0 0 auto}
+.lessonscreen:has(.listenmode) .sentence{font-size:clamp(1.15rem,2.6vw,1.55rem);line-height:1.35;margin:.15rem 0}
+.lessonscreen:has(.listenmode) .story-ctl{
+  display:flex!important;flex-wrap:nowrap;justify-content:center;align-items:center;gap:.55rem;margin:.15rem 0 0}
+.lessonscreen:has(.listenmode) .story-ctl .btn{flex:1 1 0;min-width:0;min-height:3.4rem;font-size:1.05rem;padding:.45rem .7rem;white-space:nowrap}
+@media (max-width:480px){
+  .lessonscreen:has(.listenmode) .story-ctl{gap:.35rem}
+  .lessonscreen:has(.listenmode) .story-ctl .btn{font-size:.92rem;padding:.4rem .45rem;min-height:3.1rem}
+  .lessonscreen:has(.listenmode) .sentence{font-size:1.1rem}
+}
+.unitpage .lesson-nav{display:none!important}
+
+.heartchip.newchip{background:#E8F6FF;border-color:#1F8FD6}.heartchip .newmark{color:#1F8FD6}
+
+/* Nov 4 2026: force unbunched activities (override older one-screen squeeze) */
+.unitpage .uA-acts, .unitpage.unitA .uA-acts, .unitA .uA-acts{
+  display:flex!important;flex-direction:column!important;
+  grid:none!important;grid-template-columns:none!important;grid-template-rows:none!important;
+  grid-auto-rows:auto!important;grid-auto-flow:row!important;
+  gap:.9rem!important;height:auto!important;max-height:none!important;min-height:0!important;
+  flex:0 0 auto!important;overflow:visible!important}
+.unitpage .uA-acts>li, .unitpage.unitA .uA-acts>li{
+  height:auto!important;min-height:0!important;max-height:none!important;
+  display:block!important;padding:0!important;margin:0!important;border:0!important;
+  position:relative!important;transform:none!important}
+.unitpage .arow, .unitpage.unitA .arow{
+  position:relative!important;height:auto!important;min-height:4.8rem!important;max-height:none!important;
+  margin:0!important;transform:none!important;overflow:visible!important}
+.unitpage .uA-main, .unitpage.unitA .uA-main{
+  height:auto!important;max-height:none!important;overflow:visible!important;
+  grid-template-rows:none!important}
+@media (min-width:1000px){
+  .unitpage.unitA .uA-acts{display:grid!important;grid-template-columns:1fr 1fr!important;
+    grid-auto-rows:auto!important;column-gap:1.2rem!important;row-gap:.9rem!important}
+}
+
+.lessonscreen:has(.hearts) .lesson-nav,.lessonscreen:has(.listenmode) .lesson-nav{display:none!important}
+
+/* Teacher smartboard slideshow viewer */
+.slidescreen{position:fixed;inset:0;z-index:40;background:#111;color:#fff;display:flex;flex-direction:column;outline:none}
+.slide-top{display:flex;align-items:center;gap:.75rem;padding:.55rem 1rem;background:rgba(0,0,0,.72);flex:none}
+.slide-top .slide-back{color:#fff;border-color:rgba(255,255,255,.35)}
+.slide-title{font-size:1.15rem;margin:0;flex:1;font-weight:700;letter-spacing:.01em}
+.slide-count{font-size:1.2rem;font-weight:700;min-width:5.5rem;text-align:right}
+.slide-top .gear{margin-left:.25rem;background:#fff}
+.slide-stage{position:relative;flex:1;min-height:0;display:flex;align-items:center;justify-content:center;padding:0 4.5rem}
+.slide-img{max-width:100%;max-height:100%;object-fit:contain;background:#000;border-radius:.4rem;box-shadow:0 8px 40px rgba(0,0,0,.45)}
+.slide-nav{position:absolute;top:50%;transform:translateY(-50%);width:4.2rem;height:4.2rem;border-radius:999px;border:3px solid rgba(255,255,255,.55);background:rgba(0,0,0,.55);color:#fff;font-size:1.8rem;line-height:1;cursor:pointer;z-index:2}
+.slide-nav:disabled{opacity:.25;cursor:default}
+.slide-prev{left:.7rem}.slide-next{right:.7rem}
+.slide-nav:not(:disabled):hover{background:rgba(232,115,28,.9);border-color:#fff}
+@media (max-width:700px){
+  .slide-stage{padding:0 3.2rem}
+  .slide-nav{width:3.2rem;height:3.2rem;font-size:1.35rem}
+  .slide-title{font-size:1rem}
+  .slide-count{font-size:1rem;min-width:4.2rem}
+}

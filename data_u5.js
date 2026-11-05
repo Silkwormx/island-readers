@@ -14,8 +14,8 @@ window.IR_DATA_U5 = {
   "story": [
    {
     "n": 1,
-    "img": "img/u5_s2a.webp",
-    "text": "Zip and Frill take a raft to a cave. A yellow bell hangs in the cave.",
+    "img": "img/u5_p2_01.webp",
+    "text": "Zip and Frill take a raft to a cave.",
     "words": [
      "Zip",
      "and",
@@ -25,13 +25,6 @@ window.IR_DATA_U5 = {
      "raft",
      "to",
      "a",
-     "cave.",
-     "A",
-     "yellow",
-     "bell",
-     "hangs",
-     "in",
-     "the",
      "cave."
     ],
     "t": [
@@ -70,42 +63,60 @@ window.IR_DATA_U5 = {
      [
       1.968,
       2.564
-     ],
-     [
-      3.551,
-      3.665
-     ],
-     [
-      3.679,
-      4.091
-     ],
-     [
-      4.105,
-      4.389
-     ],
-     [
-      4.403,
-      4.759
-     ],
-     [
-      4.773,
-      4.858
-     ],
-     [
-      4.872,
-      4.957
-     ],
-     [
-      4.972,
-      5.568
      ]
     ],
-    "dur": 6.6,
+    "dur": 3.6,
     "audio": "audio/u51_s_1.mp3"
    },
    {
     "n": 2,
-    "img": "img/u5_s2a.webp",
+    "img": "img/u5_p2_02.webp",
+    "text": "A yellow bell hangs in the cave.",
+    "words": [
+     "A",
+     "yellow",
+     "bell",
+     "hangs",
+     "in",
+     "the",
+     "cave."
+    ],
+    "t": [
+     [
+      0.107,
+      0.22
+     ],
+     [
+      0.235,
+      0.647
+     ],
+     [
+      0.661,
+      0.945
+     ],
+     [
+      0.959,
+      1.314
+     ],
+     [
+      1.328,
+      1.414
+     ],
+     [
+      1.428,
+      1.513
+     ],
+     [
+      1.527,
+      2.124
+     ]
+    ],
+    "dur": 3.17,
+    "audio": "audio/u51_s_2.mp3"
+   },
+   {
+    "n": 3,
+    "img": "img/u5_p2_03.webp",
     "text": "Frill taps it. Clunk. It will not ring.",
     "words": [
      "Frill",
@@ -152,12 +163,12 @@ window.IR_DATA_U5 = {
      ]
     ],
     "dur": 6.17,
-    "audio": "audio/u51_s_2.mp3"
+    "audio": "audio/u51_s_3.mp3"
    },
    {
-    "n": 3,
-    "img": "img/u5_s2a.webp",
-    "text": "Zip spots a note on the bell. \"Add e to wake the bell,\" it says.",
+    "n": 4,
+    "img": "img/u5_p2_04.webp",
+    "text": "Zip spots a note on the bell.",
     "words": [
      "Zip",
      "spots",
@@ -165,15 +176,7 @@ window.IR_DATA_U5 = {
      "note",
      "on",
      "the",
-     "bell.",
-     "\"Add",
-     "e",
-     "to",
-     "wake",
-     "the",
-     "bell,\"",
-     "it",
-     "says."
+     "bell."
     ],
     "t": [
      [
@@ -203,46 +206,70 @@ window.IR_DATA_U5 = {
      [
       1.513,
       1.939
-     ],
-     [
-      2.926,
-      3.253
-     ],
-     [
-      3.267,
-      3.395
-     ],
-     [
-      3.409,
-      3.537
-     ],
-     [
-      3.551,
-      3.835
-     ],
-     [
-      3.849,
-      3.963
-     ],
-     [
-      3.977,
-      4.361
-     ],
-     [
-      4.56,
-      4.702
-     ],
-     [
-      4.716,
-      5.284
      ]
     ],
-    "dur": 6.31,
-    "audio": "audio/u51_s_3.mp3"
+    "dur": 2.98,
+    "audio": "audio/u51_s_4.mp3"
    },
    {
-    "n": 4,
-    "img": "img/u5_s2a.webp",
+    "n": 5,
+    "img": "img/u5_p2_05.webp",
+    "text": "\"Add e to wake the bell,\" the note says.",
+    "words": [
+     "\"Add",
+     "e",
+     "to",
+     "wake",
+     "the",
+     "bell,\"",
+     "the",
+     "note",
+     "says."
+    ],
+    "t": [
+     [
+      0.107,
+      0.419
+     ],
+     [
+      0.434,
+      0.561
+     ],
+     [
+      0.576,
+      0.703
+     ],
+     [
+      0.718,
+      0.988
+     ],
+     [
+      1.002,
+      1.101
+     ],
+     [
+      1.115,
+      1.527
+     ],
+     [
+      1.684,
+      1.783
+     ],
+     [
+      1.797,
+      2.095
+     ],
+     [
+      2.11,
+      2.664
+     ]
+    ],
+    "dur": 3.7,
+    "audio": "audio/u51_s_5.mp3"
+   },
+   {
+    "n": 6,
+    "img": "img/u5_p2_06.webp",
     "text": "On the bell is cap, kit, hop, cub, and Pet.",
     "words": [
      "On",
@@ -299,12 +326,12 @@ window.IR_DATA_U5 = {
      ]
     ],
     "dur": 4.92,
-    "audio": "audio/u51_s_4.mp3"
+    "audio": "audio/u51_s_6.mp3"
    },
    {
-    "n": 5,
-    "img": "img/u5_s2b.webp",
-    "text": "Frill adds an e. Cap is cape! Kit is kite! Hop is hope!",
+    "n": 7,
+    "img": "img/u5_p2_07.webp",
+    "text": "Frill adds an e. Cap is cape!",
     "words": [
      "Frill",
      "adds",
@@ -312,13 +339,7 @@ window.IR_DATA_U5 = {
      "e.",
      "Cap",
      "is",
-     "cape!",
-     "Kit",
-     "is",
-     "kite!",
-     "Hop",
-     "is",
-     "hope!"
+     "cape!"
     ],
     "t": [
      [
@@ -348,38 +369,55 @@ window.IR_DATA_U5 = {
      [
       1.939,
       2.465
-     ],
-     [
-      3.452,
-      3.707
-     ],
-     [
-      3.722,
-      3.878
-     ],
-     [
-      3.892,
-      4.446
-     ],
-     [
-      5.426,
-      5.753
-     ],
-     [
-      5.767,
-      5.895
-     ],
-     [
-      5.909,
-      6.406
      ]
     ],
-    "dur": 7.44,
-    "audio": "audio/u51_s_5.mp3"
+    "dur": 3.5,
+    "audio": "audio/u51_s_7.mp3"
    },
    {
-    "n": 6,
-    "img": "img/u5_s2b.webp",
+    "n": 8,
+    "img": "img/u5_p2_08.webp",
+    "text": "Kit is kite! Hop is hope!",
+    "words": [
+     "Kit",
+     "is",
+     "kite!",
+     "Hop",
+     "is",
+     "hope!"
+    ],
+    "t": [
+     [
+      0.107,
+      0.362
+     ],
+     [
+      0.377,
+      0.533
+     ],
+     [
+      0.547,
+      1.101
+     ],
+     [
+      2.088,
+      2.415
+     ],
+     [
+      2.429,
+      2.557
+     ],
+     [
+      2.571,
+      3.068
+     ]
+    ],
+    "dur": 4.1,
+    "audio": "audio/u51_s_8.mp3"
+   },
+   {
+    "n": 9,
+    "img": "img/u5_p2_09.webp",
     "text": "Zip adds an e. Cub is cube! Pet is Pete!",
     "words": [
      "Zip",
@@ -436,12 +474,12 @@ window.IR_DATA_U5 = {
      ]
     ],
     "dur": 5.47,
-    "audio": "audio/u51_s_6.mp3"
+    "audio": "audio/u51_s_9.mp3"
    },
    {
-    "n": 7,
-    "img": "img/u5_s2b.webp",
-    "text": "The bell shakes. Bong! It rings in the cave. Zip and Frill smile and ride the raft home.",
+    "n": 10,
+    "img": "img/u5_p2_10.webp",
+    "text": "The bell shakes. Bong! It rings in the cave.",
     "words": [
      "The",
      "bell",
@@ -451,16 +489,7 @@ window.IR_DATA_U5 = {
      "rings",
      "in",
      "the",
-     "cave.",
-     "Zip",
-     "and",
-     "Frill",
-     "smile",
-     "and",
-     "ride",
-     "the",
-     "raft",
-     "home."
+     "cave."
     ],
     "t": [
      [
@@ -498,46 +527,66 @@ window.IR_DATA_U5 = {
      [
       4.645,
       5.27
-     ],
-     [
-      6.25,
-      6.591
-     ],
-     [
-      6.605,
-      6.733
-     ],
-     [
-      6.747,
-      7.06
-     ],
-     [
-      7.074,
-      7.642
-     ],
-     [
-      7.656,
-      7.812
-     ],
-     [
-      7.827,
-      8.111
-     ],
-     [
-      8.125,
-      8.239
-     ],
-     [
-      8.253,
-      8.594
-     ],
-     [
-      8.608,
-      9.034
      ]
     ],
-    "dur": 10.06,
-    "audio": "audio/u51_s_7.mp3"
+    "dur": 6.31,
+    "audio": "audio/u51_s_10.mp3"
+   },
+   {
+    "n": 11,
+    "img": "img/u5_p2_11.webp",
+    "text": "Zip and Frill smile and ride the raft home.",
+    "words": [
+     "Zip",
+     "and",
+     "Frill",
+     "smile",
+     "and",
+     "ride",
+     "the",
+     "raft",
+     "home."
+    ],
+    "t": [
+     [
+      0.107,
+      0.448
+     ],
+     [
+      0.462,
+      0.59
+     ],
+     [
+      0.604,
+      0.916
+     ],
+     [
+      0.931,
+      1.499
+     ],
+     [
+      1.513,
+      1.669
+     ],
+     [
+      1.684,
+      1.968
+     ],
+     [
+      1.982,
+      2.095
+     ],
+     [
+      2.11,
+      2.451
+     ],
+     [
+      2.465,
+      2.891
+     ]
+    ],
+    "dur": 3.94,
+    "audio": "audio/u51_s_11.mp3"
    }
   ],
   "heart": [
@@ -566,6 +615,16 @@ window.IR_DATA_U5 = {
     "ex": "The yellow bell rings!"
    }
   ],
+  "newWords": [
+   "raft",
+   "cave",
+   "note",
+   "cape",
+   "kite",
+   "hope",
+   "cube",
+   "Pete"
+  ],
   "ido": [
    "cake",
    "Pete",
@@ -584,9 +643,9 @@ window.IR_DATA_U5 = {
    "cube"
   ],
   "meetImgs": [
-   "img/u5_s2a.webp",
-   "img/u5_s2a.webp",
-   "img/u5_s2a.webp"
+   "img/u5_p2_01.webp",
+   "img/u5_p2_02.webp",
+   "img/u5_p2_03.webp"
   ],
   "youdo": [
    {
@@ -1055,7 +1114,7 @@ window.IR_DATA_U5 = {
    },
    "heart": {
     "voice": "Frill",
-    "text": "Heart words. Tap each one to hear it. Some letters do not follow the rules, so we learn them by heart."
+    "text": "Tap each heart word and each new word before the story."
    },
    "listen": {
     "voice": "Frill",
@@ -1232,22 +1291,161 @@ window.IR_DATA_U5 = {
   "story": [
    {
     "n": 1,
-    "img": "img/u5_s3a.webp",
-    "text": "Zip and Frill come to a big dune. A yellow bell is stuck in the sand.",
+    "img": "img/u5_p3_01.webp",
+    "text": "Zip and Frill hike to a big dune.",
     "words": [
      "Zip",
      "and",
      "Frill",
-     "come",
+     "hike",
      "to",
      "a",
      "big",
-     "dune.",
+     "dune."
+    ],
+    "t": [
+     [
+      0.107,
+      0.476
+     ],
+     [
+      0.49,
+      0.604
+     ],
+     [
+      0.618,
+      0.931
+     ],
+     [
+      0.945,
+      1.314
+     ],
+     [
+      1.328,
+      1.442
+     ],
+     [
+      1.456,
+      1.556
+     ],
+     [
+      1.57,
+      1.811
+     ],
+     [
+      1.826,
+      2.28
+     ]
+    ],
+    "dur": 3.31,
+    "audio": "audio/u53_s_1.mp3"
+   },
+   {
+    "n": 2,
+    "img": "img/u5_p3_02.webp",
+    "text": "A yellow bell sits on the dune.",
+    "words": [
      "A",
      "yellow",
      "bell",
-     "is",
-     "stuck",
+     "sits",
+     "on",
+     "the",
+     "dune."
+    ],
+    "t": [
+     [
+      0.107,
+      0.22
+     ],
+     [
+      0.235,
+      0.647
+     ],
+     [
+      0.661,
+      0.973
+     ],
+     [
+      0.988,
+      1.3
+     ],
+     [
+      1.314,
+      1.456
+     ],
+     [
+      1.47,
+      1.556
+     ],
+     [
+      1.57,
+      2.053
+     ]
+    ],
+    "dur": 3.1,
+    "audio": "audio/u53_s_2.mp3"
+   },
+   {
+    "n": 3,
+    "img": "img/u5_p3_03.webp",
+    "text": "Zip tugs the rope. It will not go.",
+    "words": [
+     "Zip",
+     "tugs",
+     "the",
+     "rope.",
+     "It",
+     "will",
+     "not",
+     "go."
+    ],
+    "t": [
+     [
+      0.107,
+      0.533
+     ],
+     [
+      0.547,
+      0.888
+     ],
+     [
+      0.902,
+      1.03
+     ],
+     [
+      1.044,
+      1.556
+     ],
+     [
+      2.543,
+      2.741
+     ],
+     [
+      2.756,
+      2.926
+     ],
+     [
+      2.94,
+      3.21
+     ],
+     [
+      3.224,
+      3.679
+     ]
+    ],
+    "dur": 4.73,
+    "audio": "audio/u53_s_3.mp3"
+   },
+   {
+    "n": 4,
+    "img": "img/u5_p3_04.webp",
+    "text": "Frill spots a note in the sand.",
+    "words": [
+     "Frill",
+     "spots",
+     "a",
+     "note",
      "in",
      "the",
      "sand."
@@ -1255,287 +1453,179 @@ window.IR_DATA_U5 = {
     "t": [
      [
       0.107,
-      0.533
+      0.505
      ],
      [
-      0.547,
-      0.661
+      0.519,
+      0.931
      ],
      [
-      0.675,
+      0.945,
       1.002
      ],
      [
       1.016,
-      1.243
+      1.3
      ],
      [
-      1.257,
-      1.371
+      1.314,
+      1.385
      ],
      [
-      1.385,
-      1.485
+      1.399,
+      1.499
      ],
      [
-      1.499,
-      1.74
-     ],
-     [
-      1.755,
-      2.223
-     ],
-     [
-      3.21,
-      3.324
-     ],
-     [
-      3.338,
-      3.75
-     ],
-     [
-      3.764,
-      4.062
-     ],
-     [
-      4.077,
-      4.219
-     ],
-     [
-      4.233,
-      4.545
-     ],
-     [
-      4.56,
-      4.645
-     ],
-     [
-      4.659,
-      4.744
-     ],
-     [
-      4.759,
-      5.369
+      1.513,
+      2.11
      ]
     ],
-    "dur": 6.41,
-    "audio": "audio/u53_s_1.mp3"
-   },
-   {
-    "n": 2,
-    "img": "img/u5_s3a.webp",
-    "text": "\"Some sand is in the bell,\" says Frill. \"It can not ring.\"",
-    "words": [
-     "\"Some",
-     "sand",
-     "is",
-     "in",
-     "the",
-     "bell,\"",
-     "says",
-     "Frill.",
-     "\"It",
-     "can",
-     "not",
-     "ring.\""
-    ],
-    "t": [
-     [
-      0.107,
-      0.49
-     ],
-     [
-      0.505,
-      0.916
-     ],
-     [
-      0.931,
-      1.03
-     ],
-     [
-      1.044,
-      1.13
-     ],
-     [
-      1.144,
-      1.229
-     ],
-     [
-      1.243,
-      1.669
-     ],
-     [
-      1.868,
-      2.138
-     ],
-     [
-      2.152,
-      2.578
-     ],
-     [
-      3.565,
-      3.793
-     ],
-     [
-      3.807,
-      4.02
-     ],
-     [
-      4.034,
-      4.318
-     ],
-     [
-      4.332,
-      4.744
-     ]
-    ],
-    "dur": 5.78,
-    "audio": "audio/u53_s_2.mp3"
-   },
-   {
-    "n": 3,
-    "img": "img/u5_s3a.webp",
-    "text": "\"I have a plan,\" says Zip. Zip gives Frill the rope.",
-    "words": [
-     "\"I",
-     "have",
-     "a",
-     "plan,\"",
-     "says",
-     "Zip.",
-     "Zip",
-     "gives",
-     "Frill",
-     "the",
-     "rope."
-    ],
-    "t": [
-     [
-      0.107,
-      0.291
-     ],
-     [
-      0.306,
-      0.519
-     ],
-     [
-      0.533,
-      0.618
-     ],
-     [
-      0.632,
-      1.144
-     ],
-     [
-      1.3,
-      1.598
-     ],
-     [
-      1.613,
-      2.081
-     ],
-     [
-      3.082,
-      3.494
-     ],
-     [
-      3.509,
-      3.835
-     ],
-     [
-      3.849,
-      4.105
-     ],
-     [
-      4.119,
-      4.233
-     ],
-     [
-      4.247,
-      4.759
-     ]
-    ],
-    "dur": 5.78,
-    "audio": "audio/u53_s_3.mp3"
-   },
-   {
-    "n": 4,
-    "img": "img/u5_s3a.webp",
-    "text": "Frill tugs. Zip digs. The sand slips off the bell.",
-    "words": [
-     "Frill",
-     "tugs.",
-     "Zip",
-     "digs.",
-     "The",
-     "sand",
-     "slips",
-     "off",
-     "the",
-     "bell."
-    ],
-    "t": [
-     [
-      0.107,
-      0.533
-     ],
-     [
-      0.547,
-      1.215
-     ],
-     [
-      2.202,
-      2.614
-     ],
-     [
-      2.628,
-      3.224
-     ],
-     [
-      4.205,
-      4.403
-     ],
-     [
-      4.418,
-      4.872
-     ],
-     [
-      4.886,
-      5.27
-     ],
-     [
-      5.284,
-      5.483
-     ],
-     [
-      5.497,
-      5.611
-     ],
-     [
-      5.625,
-      6.065
-     ]
-    ],
-    "dur": 7.1,
+    "dur": 3.14,
     "audio": "audio/u53_s_4.mp3"
    },
    {
     "n": 5,
-    "img": "img/u5_s3b.webp",
-    "text": "At last the bell is up. Zip hangs it on a pole.",
+    "img": "img/u5_p3_05.webp",
+    "text": "\"Have, give, come, and some,\" it says.",
     "words": [
-     "At",
-     "last",
-     "the",
-     "bell",
-     "is",
-     "up.",
-     "Zip",
-     "hangs",
+     "\"Have,",
+     "give,",
+     "come,",
+     "and",
+     "some,\"",
      "it",
-     "on",
-     "a",
-     "pole."
+     "says."
+    ],
+    "t": [
+     [
+      0.107,
+      0.576
+     ],
+     [
+      0.774,
+      1.115
+     ],
+     [
+      1.328,
+      1.669
+     ],
+     [
+      1.84,
+      1.996
+     ],
+     [
+      2.01,
+      2.422
+     ],
+     [
+      2.593,
+      2.735
+     ],
+     [
+      2.749,
+      3.303
+     ]
+    ],
+    "dur": 4.34,
+    "audio": "audio/u53_s_5.mp3"
+   },
+   {
+    "n": 6,
+    "img": "img/u5_p3_06.webp",
+    "text": "Frill taps have. The e is still.",
+    "words": [
+     "Frill",
+     "taps",
+     "have.",
+     "The",
+     "e",
+     "is",
+     "still."
+    ],
+    "t": [
+     [
+      0.107,
+      0.519
+     ],
+     [
+      0.533,
+      0.931
+     ],
+     [
+      0.945,
+      1.442
+     ],
+     [
+      2.443,
+      2.628
+     ],
+     [
+      2.642,
+      2.883
+     ],
+     [
+      2.898,
+      3.097
+     ],
+     [
+      3.111,
+      3.594
+     ]
+    ],
+    "dur": 4.63,
+    "audio": "audio/u53_s_6.mp3"
+   },
+   {
+    "n": 7,
+    "img": "img/u5_p3_07.webp",
+    "text": "Zip taps come. O says /u/.",
+    "words": [
+     "Zip",
+     "taps",
+     "come.",
+     "O",
+     "says",
+     "/u/."
+    ],
+    "t": [
+     [
+      0.107,
+      0.476
+     ],
+     [
+      0.49,
+      0.888
+     ],
+     [
+      0.902,
+      1.357
+     ],
+     [
+      2.358,
+      2.585
+     ],
+     [
+      2.599,
+      2.983
+     ],
+     [
+      2.997,
+      3.352
+     ]
+    ],
+    "dur": 4.39,
+    "audio": "audio/u53_s_7.mp3"
+   },
+   {
+    "n": 8,
+    "img": "img/u5_p3_08.webp",
+    "text": "They tap give and some.",
+    "words": [
+     "They",
+     "tap",
+     "give",
+     "and",
+     "some."
     ],
     "t": [
      [
@@ -1544,182 +1634,171 @@ window.IR_DATA_U5 = {
      ],
      [
       0.334,
-      0.746
+      0.675
      ],
      [
-      0.76,
-      0.86
+      0.689,
+      0.931
      ],
      [
-      0.874,
-      1.13
+      0.945,
+      1.073
      ],
      [
-      1.144,
-      1.3
-     ],
-     [
-      1.314,
-      1.712
-     ],
-     [
-      2.699,
-      3.111
-     ],
-     [
-      3.125,
-      3.452
-     ],
-     [
-      3.466,
-      3.551
-     ],
-     [
-      3.565,
-      3.736
-     ],
-     [
-      3.75,
-      3.821
-     ],
-     [
-      3.835,
-      4.347
+      1.087,
+      1.556
      ]
     ],
-    "dur": 5.4,
-    "audio": "audio/u53_s_5.mp3"
+    "dur": 2.59,
+    "audio": "audio/u53_s_8.mp3"
    },
    {
-    "n": 6,
-    "img": "img/u5_s3b.webp",
-    "text": "\"Come and ring it!\" says Frill. Zip gives it a whack. Bong! \"I love this bell!\" says Frill. \"The job is done,\" says Zip.",
+    "n": 9,
+    "img": "img/u5_p3_09.webp",
+    "text": "Frill tugs the rope. The bell tips.",
     "words": [
-     "\"Come",
-     "and",
-     "ring",
-     "it!\"",
-     "says",
-     "Frill.",
-     "Zip",
-     "gives",
-     "it",
-     "a",
-     "whack.",
-     "Bong!",
-     "\"I",
-     "love",
-     "this",
-     "bell!\"",
-     "says",
-     "Frill.",
-     "\"The",
-     "job",
-     "is",
-     "done,\"",
-     "says",
-     "Zip."
+     "Frill",
+     "tugs",
+     "the",
+     "rope.",
+     "The",
+     "bell",
+     "tips."
     ],
     "t": [
      [
       0.107,
-      0.405
-     ],
-     [
-      0.419,
       0.547
      ],
      [
       0.561,
-      0.789
+      0.916
      ],
      [
-      0.803,
-      0.959
+      0.931,
+      1.044
      ],
      [
-      1.186,
+      1.059,
+      1.556
+     ],
+     [
+      2.543,
+      2.741
+     ],
+     [
+      2.756,
+      3.04
+     ],
+     [
+      3.054,
+      3.693
+     ]
+    ],
+    "dur": 4.73,
+    "audio": "audio/u53_s_9.mp3"
+   },
+   {
+    "n": 10,
+    "img": "img/u5_p3_10.webp",
+    "text": "Bong! The yellow bell rings on the dune.",
+    "words": [
+     "Bong!",
+     "The",
+     "yellow",
+     "bell",
+     "rings",
+     "on",
+     "the",
+     "dune."
+    ],
+    "t": [
+     [
+      0.107,
+      0.703
+     ],
+     [
+      1.676,
+      1.818
+     ],
+     [
+      1.832,
+      2.244
+     ],
+     [
+      2.259,
+      2.571
+     ],
+     [
+      2.585,
+      2.94
+     ],
+     [
+      2.955,
+      3.082
+     ],
+     [
+      3.097,
+      3.196
+     ],
+     [
+      3.21,
+      3.693
+     ]
+    ],
+    "dur": 4.73,
+    "audio": "audio/u53_s_10.mp3"
+   },
+   {
+    "n": 11,
+    "img": "img/u5_p3_11.webp",
+    "text": "Zip and Frill grin. The bell can ring!",
+    "words": [
+     "Zip",
+     "and",
+     "Frill",
+     "grin.",
+     "The",
+     "bell",
+     "can",
+     "ring!"
+    ],
+    "t": [
+     [
+      0.107,
+      0.519
+     ],
+     [
+      0.533,
+      0.647
+     ],
+     [
+      0.661,
+      0.987
+     ],
+     [
+      1.002,
       1.499
      ],
      [
-      1.513,
-      1.982
+      2.5,
+      2.699
      ],
      [
-      2.969,
-      3.409
+      2.713,
+      3.011
      ],
      [
-      3.423,
+      3.026,
+      3.224
+     ],
+     [
+      3.239,
       3.693
-     ],
-     [
-      3.707,
-      3.793
-     ],
-     [
-      3.807,
-      3.878
-     ],
-     [
-      3.892,
-      4.432
-     ],
-     [
-      5.412,
-      6.008
-     ],
-     [
-      6.974,
-      7.131
-     ],
-     [
-      7.145,
-      7.472
-     ],
-     [
-      7.486,
-      7.713
-     ],
-     [
-      7.727,
-      8.139
-     ],
-     [
-      8.352,
-      8.679
-     ],
-     [
-      8.693,
-      9.133
-     ],
-     [
-      10.114,
-      10.284
-     ],
-     [
-      10.298,
-      10.639
-     ],
-     [
-      10.653,
-      10.795
-     ],
-     [
-      10.81,
-      11.193
-     ],
-     [
-      11.406,
-      11.719
-     ],
-     [
-      11.733,
-      12.216
      ]
     ],
-    "dur": 13.25,
-    "audio": "audio/u53_s_6.mp3"
+    "dur": 4.73,
+    "audio": "audio/u53_s_11.mp3"
    }
   ],
   "heart": [
@@ -1748,6 +1827,16 @@ window.IR_DATA_U5 = {
     "ex": "The yellow bell rings!"
    }
   ],
+  "newWords": [
+   "dune",
+   "rope",
+   "sand",
+   "have",
+   "give",
+   "come",
+   "some",
+   "grin"
+  ],
   "ido": [
    "have",
    "give",
@@ -1765,9 +1854,9 @@ window.IR_DATA_U5 = {
    "done"
   ],
   "meetImgs": [
-   "img/u5_s3a.webp",
-   "img/u5_s3a.webp",
-   "img/u5_s3a.webp"
+   "img/u5_p3_01.webp",
+   "img/u5_p3_02.webp",
+   "img/u5_p3_03.webp"
   ],
   "youdo": [
    {
@@ -2249,7 +2338,7 @@ window.IR_DATA_U5 = {
    },
    "heart": {
     "voice": "Frill",
-    "text": "Heart words. Tap each one to hear it. Some letters do not follow the rules, so we learn them by heart."
+    "text": "Tap each heart word and each new word before the story."
    },
    "listen": {
     "voice": "Frill",
