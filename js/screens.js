@@ -267,7 +267,7 @@
     const pbox = (key, title, ico) => h('a', { class: 'pbox', href: '#/practice/' + key, 'data-kind': 'practice', 'data-id': key }, h('span', { class: 'pico', 'aria-hidden': 'true' }, ico), h('span', null, title));
     const practice = h('aside', { class: 'practice', 'aria-label': 'Practice' }, h('h2', null, 'Practice'),
       pbox('sight', 'Sight Word Practice', '\u2605'), pbox('fluency', 'Fluency Stories', '\u{1F4D6}'), pbox('spelling', 'Spelling', '\u270E'));
-    /* Nov 1 2026 layout: centered banner; sticky left column (Zip + Frill v4 B, then Practice); unit grid on the right */
+    /* Nov 6 2026: full-width home feature (approved banyan scene), then About + Practice beside the unit grid */
     const banner = h('header', { class: 'hbanner' }, h('h1', null, 'Island Readers'), IR.ui.gearButton());
     /* Read-aloud for the hero text: HOME_INTRO_AUDIO recording if set, else speechSynthesis. Tap again to stop. */
     function readAloudBtn() {
@@ -288,20 +288,22 @@
       window.addEventListener('hashchange', stop, { once: true });
       return b;
     }
-    /* Home card layout. 'A' = Zip and Frill image on top (default); 'B' = heading above the image. Test with ?hero=B. */
+    /* Home feature. 'A' = approved scene on top (default); 'B' = heading above the scene. Test with ?hero=B.
+       The picture is the approved mirrored file as-is: Brick and Dash and the treehouse on the left, island view on the right. Do not flip it. */
     const HERO_VARIANT = (/[?&]hero=B\b/.test(location.search) ? 'B' : 'A');
-    const hero = h('section', { class: 'zfhero zf2 zf' + HERO_VARIANT, 'aria-label': 'Learn to read with Zip and Frill' },
-      h('div', { class: 'zfpics' }, h('img', { src: 'img/zipA.webp', alt: 'Zip' }), h('img', { src: 'img/frill.webp', alt: 'Frill' })),
-      h('div', { class: 'zfhead' }, h('h2', { class: 'zfline' }, 'Learn to read with Zip and Frill'), readAloudBtn()),
-      h('p', { class: 'zfsub' }, 'Ring every bell by learning its sounds.'),
-      h('a', { class: 'zfstart2', href: '#/placement', 'aria-label': 'Start here: find your first bell' },
-        h('span', { class: 'zfbell', 'aria-hidden': 'true' }, '\u{1F514}'),
-        h('span', { class: 'zfst' }, h('b', null, 'Start here'), h('small', null, 'Find your first bell'))));
+    const hero = h('section', { class: 'homefeature zf' + HERO_VARIANT, 'aria-label': 'Learn to read with Zip and Frill' },
+      h('div', { class: 'hfscene' }, h('img', { class: 'homescene', src: 'img/home_banyan_c.jpg', alt: 'Brick and Dash stand on a path beside a banyan treehouse, looking toward a green island coast under a bright open sky' })),
+      h('div', { class: 'hfbody' },
+        h('div', { class: 'zfhead' }, h('h2', { class: 'zfline' }, 'Learn to read with Zip and Frill'), readAloudBtn()),
+        h('p', { class: 'zfsub' }, 'Ring every bell by learning its sounds.'),
+        h('a', { class: 'zfstart2', href: '#/placement', 'aria-label': 'Start here: find your first bell' },
+          h('span', { class: 'zfbell', 'aria-hidden': 'true' }, '\u{1F514}'),
+          h('span', { class: 'zfst' }, h('b', null, 'Start here'), h('small', null, 'Find your first bell')))));
     const cur = complete ? BUILT + 1 : BUILT;
     const youbar = h('button', { class: 'youbar', type: 'button', 'aria-label': 'You are here: Unit ' + cur + ', ' + SKILL[cur] + '. Dots show all 22 units. ' + nEarned + ' of 10 gems. Opens the gem box.', onclick: () => { Snd.stop(); location.hash = '#/gems'; } },
       h('span', { class: 'ybtxt' }, 'You are here: ', h('b', null, 'Unit ' + cur + ' \u00b7 ' + SKILL[cur])),
       h('span', { class: 'ybdots', 'aria-hidden': 'true' }, ...TILES.slice(1).map((t, i) => h('i', { class: 'tdot td-' + t[3][0] + (i + 1 === cur ? ' ybcur' : complete && i + 1 === BUILT ? ' ybdone' : '') }))));
-    app.append(h('div', { class: 'screen home mapscreen gridhome' }, h('div', { class: 'mwrap' }, banner, h('div', { class: 'homelay' }, h('div', { class: 'homeside' }, h('a', { class: 'btn big aboutbtn', href: '#/about' }, 'About Island Readers'), hero, practice), grid)), youbar));
+    app.append(h('div', { class: 'screen home mapscreen gridhome' }, h('div', { class: 'mwrap' }, banner, hero, h('div', { class: 'homelay' }, h('div', { class: 'homeside' }, h('a', { class: 'btn big aboutbtn', href: '#/about' }, 'About Island Readers'), practice), grid)), youbar));
     /* Nov 3 2026: the whole left sidebar (About, Start here, Practice) stays in one spot while the tiles scroll (wide layouts only). */
     const side = app.querySelector('.homeside'); const scr = app.querySelector('.screen.home');
     const pin = () => {
@@ -546,7 +548,7 @@
     if (key === 'spelling') return simplePage('Spelling', h('p', { class: 'calm' }, 'Spelling practice is coming soon.'), h('p', { class: 'calm small' }, 'For now, try Hear it, Spell it inside the Unit 3 lesson.'));
     location.hash = '#/home';
   }
-  /* ---------- About Island Readers: guide for grown-ups (Nov 2 2026) ---------- */
+  /* ---------- About Island Readers (approved copy, Nov 6 2026) ---------- */
   function aboutScreen() {
     IR.newScreen();
     const a = (href, t) => h('a', { href, target: '_blank', rel: 'noopener' }, t);
@@ -559,22 +561,24 @@
       h('div', { class: 'abtop' }, homeButton()),
       h('h1', null, 'About Island Readers'),
       h('p', { class: 'ablead' }, 'A guide for families, schools and anyone helping a reader.'),
-      sec('Why Island Readers exists',
-        p('Reading basics like letter sounds and phonics are taught in the early grades. Many students struggle, or simply are not ready, when those skills are first taught. By the time they are ready, the class has moved on.'),
-        p('So the gaps stay hidden, and they grow. In the upper grades there is rarely time to go back and reteach the foundations, and it is hard to find exactly which skills each student is missing. Island Readers gives those readers a second chance to learn the basics.'),
-        h('h3', null, 'The national picture'),
-        ul(['In 2024, 33% of U.S. 8th graders read below the NAEP Basic level, the highest share ever recorded. (', a('https://www.nagb.gov/powered-by-naep/the-2024-nations-report-card/10-takeaways-from-2024-naep-results.html', 'National Assessment Governing Board'), ')'],
-          ['Around 40% of 4th graders read below NAEP Basic, the most since 2002. (', a('https://www.nagb.gov/news-and-events/news-releases/2025/nations-report-card-decline-in-reading-progress-in-math.html', 'NAGB'), ')'],
-          ['Many readers who struggle are likely to benefit from systematic, explicit reading instruction, according to the International Dyslexia Association. (', a('https://dyslexiaida.org/dyslexia-basics/', 'IDA: Dyslexia Basics'), ')'])),
-      sec('Why now',
-        ul('AI tools now make it possible to build and offer a program like this for free.',
-          ['At least 40 states have passed science of reading laws, but most focus on 3rd grade and below, leaving older readers with less support. (', a('https://www.edweek.org/policy-politics/state-reading-laws-focus-on-k-3-what-about-older-students-who-struggle/2025/11', 'Education Week, Nov 2025'), ')'],
-          ['Reading scores fell again in 2024. (', a('https://www.nagb.gov/news-and-events/news-releases/2025/nations-report-card-decline-in-reading-progress-in-math.html', 'NAGB'), ')'],
-          'Island Readers is a free web app that can be added to the home screen. It runs on the phones, tablets and Chromebooks families and schools already have, with no app store and no cost to install.')),
-      sec('What Island Readers is',
-        p('Island Readers is a free-to-try phonics app that teaches reading skills directly and in order. Readers join Zip, a gecko inventor, and Frill, a nudibranch, on an adventure across the islands. Each island has a bell, and readers ring it by learning that unit\u2019s sounds.'),
-        p('It is made for older kids, so it looks like an adventure, not a baby book. It gives extra support to readers who struggle with attention or dyslexia: short steps, plenty of review, and clear, explicit teaching. English learners can use it too.')),
+      sec('Building reading confidence through phonics practice',
+        p('Island Readers gives older children a way to revisit the skills they need to become confident readers without being treated like younger learners. Through engaging stories, puzzles and games, the program sparks curiosity and makes reading practice something children want to do.')),
+      sec('Background',
+        p('I\u2019ve taught special education for over 15 years and have seen many reading programs come and go. My own reading journey began when technology meant a record player, a rotary phone and a television with a turn dial and antenna. The tools have changed, but the importance of clear teaching, meaningful practice and encouragement hasn\u2019t. Island Readers distills the best of what I\u2019ve learned in the classroom into a resource parents can use to support reading practice at home while keeping learning fun.')),
+      sec('Foundational skills, not a younger experience',
+        p('When reading foundations are first taught, some children aren\u2019t ready to master them. Others miss key pieces along the way. By the time they reach the upper grades, the class has moved on, and there\u2019s often little time to revisit those skills.'),
+        p('Older readers still need those foundations, but they don\u2019t need materials that make them feel like they\u2019re back in kindergarten. Island Readers combines direct phonics teaching with puzzles, games and illustrated adventures designed to respect their age while meeting their learning needs.')),
+      sec('Start with what\u2019s missing',
+        p('A short placement check helps identify a starting point and skills that need attention. From there, Island Readers teaches those skills directly, building on what readers already know rather than asking them to start over or keep guessing.'),
+        p('Drawing on the science of reading, lessons progress from phonemic awareness (hearing and working with sounds) to letter\u2013sound relationships and decoding. Strengthening decoding helps readers develop fluency: reading accurately, smoothly and with expression, as naturally as they speak, while freeing their attention to understand what they\u2019re reading.'),
+        p('Readers also practice frequently used words, building toward recognizing them automatically as sight words, rather than needing to sound them out each time they appear.')),
+      sec('Practice with a purpose',
+        p('Island Readers brings teaching methods used in the classroom into home practice, with a clear purpose behind each activity.'),
+        p('Word chains help readers notice how changing one sound changes a word and its spelling. Mnemonics provide memorable clues for recalling sounds, while colors help readers recognize and organize spelling patterns. Puzzles encourage them to apply what they know and work through words step by step. Rhyming stories provide repeated practice with each unit\u2019s sounds in a story that makes readers want to keep going.'),
+        p('Visuals, short instructions and positive feedback keep practice manageable and help build confidence. These supports draw on approaches used with learners with dyslexia, ADHD and language-processing difficulties, but can benefit many different readers.')),
       sec('How to use it',
+        p('Island Readers is a free-to-try phonics app that teaches reading skills directly and in order. Readers join Zip, a gecko inventor, and Frill, a nudibranch, on an adventure across the islands. Each island has a bell, and readers ring it by learning that unit\u2019s sounds. It is made for older kids, so it looks like an adventure, not a baby book. English learners can use it too.'),
+        p('It is a free web app that can be added to the home screen. It runs on the phones, tablets and Chromebooks families and schools already have, with no app store and no cost to install.'),
         ul('Plan about 20\u201330 minutes a session. Steps are short, and it is fine to take breaks.',
           'Each unit starts with a lesson: I do (Zip shows the skill), we do (you try it together), you do (you try it on your own).',
           'Next come practice activities, a story to read with only the sounds already taught, and heart words (tricky words to learn by heart).',
