@@ -45,14 +45,18 @@ test('home uses the approved scene and does not flip it', () => {
   assert.ok(home.includes('Brick and Dash stand on a path beside a banyan treehouse'));
   assert.equal(home.includes('img/zipA.webp'), false);
   assert.equal(home.includes('img/frill.webp'), false);
-  const featureCss = css.slice(css.indexOf('Nov 6 2026: approved home scene'));
+  const featureCss = css.slice(css.indexOf('approved scene in the original left column'));
   assert.equal(/scaleX\s*\(\s*-1|rotateY\(180/.test(home + featureCss), false);
   assert.ok(featureCss.includes('.homescene'));
   assert.ok(home.includes("href: '#/about'"));
   assert.ok(home.includes("href: '#/placement'"));
   assert.ok(home.includes("Learn to read with Brick and Dash"));
   assert.equal(home.includes('Learn to read with Zip and Frill'), false);
-  assert.ok(home.includes('Learn to read with Brick and Dash. Ring every bell by learning its sounds. Start here to find your first bell.'));
+  assert.ok(home.includes("Learn each sound to fix the bells."));
+  assert.equal(home.includes('Ring every bell by learning its sounds.'), false);
+  assert.ok(home.includes('Learn to read with Brick and Dash. Learn each sound to fix the bells. Start here to find your first bell.'));
+  assert.ok(home.includes('hero, practice), grid'));
+  assert.equal(home.includes('banner, hero,'), false);
 });
 
 test('approved image file is the installed jpeg', () => {

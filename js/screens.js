@@ -271,7 +271,7 @@
     const banner = h('header', { class: 'hbanner' }, h('h1', null, 'Island Readers'), IR.ui.gearButton());
     /* Read-aloud for the hero text: HOME_INTRO_AUDIO recording if set, else speechSynthesis. Tap again to stop. */
     function readAloudBtn() {
-      const TEXT = 'Learn to read with Brick and Dash. Ring every bell by learning its sounds. Start here to find your first bell.';
+      const TEXT = 'Learn to read with Brick and Dash. Learn each sound to fix the bells. Start here to find your first bell.';
       const HOME_INTRO_AUDIO = 'audio/home_intro.mp3'; /* same free edge-tts voice as before (en-US-RogerNeural +0%); browser speech is only a fallback */
       const b = h('button', { class: 'zfspk', type: 'button', 'aria-label': 'Read aloud', 'aria-pressed': 'false' }, icon('speaker'));
       let au = null, on = false;
@@ -288,14 +288,14 @@
       window.addEventListener('hashchange', stop, { once: true });
       return b;
     }
-    /* Home feature. 'A' = approved scene on top (default); 'B' = heading above the scene. Test with ?hero=B.
+    /* Home card in the original left column. 'A' = scene above the heading (default); 'B' = heading above the scene. Test with ?hero=B.
        The picture is the approved mirrored file as-is: Brick and Dash and the treehouse on the left, island view on the right. Do not flip it. */
     const HERO_VARIANT = (/[?&]hero=B\b/.test(location.search) ? 'B' : 'A');
     const hero = h('section', { class: 'homefeature zf' + HERO_VARIANT, 'aria-label': 'Learn to read with Brick and Dash' },
       h('div', { class: 'hfscene' }, h('img', { class: 'homescene', src: 'img/home_banyan_c.jpg', alt: 'Brick and Dash stand on a path beside a banyan treehouse, looking toward a green island coast under a bright open sky' })),
       h('div', { class: 'hfbody' },
         h('div', { class: 'zfhead' }, h('h2', { class: 'zfline' }, 'Learn to read with Brick and Dash'), readAloudBtn()),
-        h('p', { class: 'zfsub' }, 'Ring every bell by learning its sounds.'),
+        h('p', { class: 'zfsub' }, 'Learn each sound to fix the bells.'),
         h('a', { class: 'zfstart2', href: '#/placement', 'aria-label': 'Start here: find your first bell' },
           h('span', { class: 'zfbell', 'aria-hidden': 'true' }, '\u{1F514}'),
           h('span', { class: 'zfst' }, h('b', null, 'Start here'), h('small', null, 'Find your first bell')))));
@@ -303,7 +303,7 @@
     const youbar = h('button', { class: 'youbar', type: 'button', 'aria-label': 'You are here: Unit ' + cur + ', ' + SKILL[cur] + '. Dots show all 22 units. ' + nEarned + ' of 10 gems. Opens the gem box.', onclick: () => { Snd.stop(); location.hash = '#/gems'; } },
       h('span', { class: 'ybtxt' }, 'You are here: ', h('b', null, 'Unit ' + cur + ' \u00b7 ' + SKILL[cur])),
       h('span', { class: 'ybdots', 'aria-hidden': 'true' }, ...TILES.slice(1).map((t, i) => h('i', { class: 'tdot td-' + t[3][0] + (i + 1 === cur ? ' ybcur' : complete && i + 1 === BUILT ? ' ybdone' : '') }))));
-    app.append(h('div', { class: 'screen home mapscreen gridhome' }, h('div', { class: 'mwrap' }, banner, hero, h('div', { class: 'homelay' }, h('div', { class: 'homeside' }, h('a', { class: 'btn big aboutbtn', href: '#/about' }, 'About Island Readers'), practice), grid)), youbar));
+    app.append(h('div', { class: 'screen home mapscreen gridhome' }, h('div', { class: 'mwrap' }, banner, h('div', { class: 'homelay' }, h('div', { class: 'homeside' }, h('a', { class: 'btn big aboutbtn', href: '#/about' }, 'About Island Readers'), hero, practice), grid)), youbar));
     /* Nov 3 2026: the whole left sidebar (About, Start here, Practice) stays in one spot while the tiles scroll (wide layouts only). */
     const side = app.querySelector('.homeside'); const scr = app.querySelector('.screen.home');
     const pin = () => {
