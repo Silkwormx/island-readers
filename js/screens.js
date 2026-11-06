@@ -271,8 +271,8 @@
     const banner = h('header', { class: 'hbanner' }, h('h1', null, 'Island Readers'), IR.ui.gearButton());
     /* Read-aloud for the hero text: HOME_INTRO_AUDIO recording if set, else speechSynthesis. Tap again to stop. */
     function readAloudBtn() {
-      const TEXT = 'Learn to read with Zip and Frill. Ring every bell by learning its sounds. Start here to find your first bell.';
-      const HOME_INTRO_AUDIO = 'audio/home_intro.mp3'; /* Zip's lesson voice (edge-tts en-US-RogerNeural +0%); browser speech is only a fallback */
+      const TEXT = 'Learn to read with Brick and Dash. Ring every bell by learning its sounds. Start here to find your first bell.';
+      const HOME_INTRO_AUDIO = 'audio/home_intro.mp3'; /* same free edge-tts voice as before (en-US-RogerNeural +0%); browser speech is only a fallback */
       const b = h('button', { class: 'zfspk', type: 'button', 'aria-label': 'Read aloud', 'aria-pressed': 'false' }, icon('speaker'));
       let au = null, on = false;
       const set = (v) => { on = v; b.classList.toggle('playing', v); b.setAttribute('aria-pressed', v ? 'true' : 'false'); b.textContent = ''; b.append(icon(v ? 'pause' : 'speaker')); };
@@ -291,10 +291,10 @@
     /* Home feature. 'A' = approved scene on top (default); 'B' = heading above the scene. Test with ?hero=B.
        The picture is the approved mirrored file as-is: Brick and Dash and the treehouse on the left, island view on the right. Do not flip it. */
     const HERO_VARIANT = (/[?&]hero=B\b/.test(location.search) ? 'B' : 'A');
-    const hero = h('section', { class: 'homefeature zf' + HERO_VARIANT, 'aria-label': 'Learn to read with Zip and Frill' },
+    const hero = h('section', { class: 'homefeature zf' + HERO_VARIANT, 'aria-label': 'Learn to read with Brick and Dash' },
       h('div', { class: 'hfscene' }, h('img', { class: 'homescene', src: 'img/home_banyan_c.jpg', alt: 'Brick and Dash stand on a path beside a banyan treehouse, looking toward a green island coast under a bright open sky' })),
       h('div', { class: 'hfbody' },
-        h('div', { class: 'zfhead' }, h('h2', { class: 'zfline' }, 'Learn to read with Zip and Frill'), readAloudBtn()),
+        h('div', { class: 'zfhead' }, h('h2', { class: 'zfline' }, 'Learn to read with Brick and Dash'), readAloudBtn()),
         h('p', { class: 'zfsub' }, 'Ring every bell by learning its sounds.'),
         h('a', { class: 'zfstart2', href: '#/placement', 'aria-label': 'Start here: find your first bell' },
           h('span', { class: 'zfbell', 'aria-hidden': 'true' }, '\u{1F514}'),

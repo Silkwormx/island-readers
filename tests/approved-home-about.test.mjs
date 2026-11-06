@@ -50,6 +50,9 @@ test('home uses the approved scene and does not flip it', () => {
   assert.ok(featureCss.includes('.homescene'));
   assert.ok(home.includes("href: '#/about'"));
   assert.ok(home.includes("href: '#/placement'"));
+  assert.ok(home.includes("Learn to read with Brick and Dash"));
+  assert.equal(home.includes('Learn to read with Zip and Frill'), false);
+  assert.ok(home.includes('Learn to read with Brick and Dash. Ring every bell by learning its sounds. Start here to find your first bell.'));
 });
 
 test('approved image file is the installed jpeg', () => {
