@@ -40,26 +40,27 @@ test('about uses the approved copy and keeps the placement check wording', () =>
   assert.equal(about.includes('The national picture'), false);
 });
 
-test('home uses the approved scene and does not flip it', () => {
-  assert.ok(home.includes("src: 'img/home_banyan_c.jpg'"));
-  assert.ok(home.includes('Brick and Dash stand on a path beside a banyan treehouse'));
-  assert.equal(home.includes('img/zipA.webp'), false);
-  assert.equal(home.includes('img/frill.webp'), false);
-  const featureCss = css.slice(css.indexOf('same left-column card'));
+test('home shows Zip and Frill again and keeps the left-column layout', () => {
+  assert.ok(home.includes("src: 'img/zipA.webp', alt: 'Zip'"));
+  assert.ok(home.includes("src: 'img/frill.webp', alt: 'Frill'"));
+  assert.equal(home.includes('home_banyan_c.jpg'), false);
+  assert.equal(home.includes('frillC.webp'), false);
+  const featureCss = css.slice(css.indexOf('Zip and Frill portraits back in the left-column card'));
   assert.equal(/scaleX\s*\(\s*-1|rotateY\(180/.test(home + featureCss), false);
-  assert.ok(featureCss.includes('.homescene'));
+  assert.ok(featureCss.includes('.homefeature .zfpics'));
   assert.ok(home.includes("href: '#/about'"));
   assert.ok(home.includes("href: '#/placement'"));
-  assert.ok(home.includes('Read with Brick and Dash.'));
+  assert.ok(home.includes('Learn to read with Zip and Frill'));
+  assert.equal(home.includes('Read with Brick and Dash'), false);
   assert.equal(home.includes('Learn to read with Brick and Dash'), false);
-  assert.equal(home.includes('Learn to read with Zip and Frill'), false);
-  assert.ok(home.includes('Learn each sound to fix the bells.'));
-  assert.equal(home.includes('Ring every bell by learning its sounds.'), false);
-  assert.ok(home.includes('Read with Brick and Dash. Learn each sound to fix the bells. Start here to find your first bell.'));
-  assert.ok(featureCss.includes('width:100%'));
-  assert.equal(featureCss.includes('max-height:4.4rem'), false);
+  assert.ok(home.includes('Ring every bell by learning its sounds.'));
+  assert.equal(home.includes('Learn each sound to fix the bells.'), false);
+  assert.ok(home.includes('Learn to read with Zip and Frill. Ring every bell by learning its sounds. Start here to find your first bell.'));
   assert.ok(home.includes('hero, practice), grid'));
   assert.equal(home.includes('banner, hero,'), false);
+  const sw = fs.readFileSync(new URL('../sw.js', import.meta.url), 'utf8');
+  assert.equal(sw.includes('home_banyan_c.jpg'), false);
+  assert.ok(sw.includes('ir-20261110a'));
 });
 
 test('approved image file is the installed jpeg', () => {
