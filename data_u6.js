@@ -9,9 +9,9 @@ window.IR_DATA_U6 = {
       "endings": ["s", "es"],
       "example": { "base": "cat", "end": "s", "word": "cats" },
       "meet": [
-        { "who": "zip", "text": "I add s to cat. Cats. The ending hisses." },
-        { "who": "frill", "text": "I add es to box. Boxes. I hear an extra beat." },
-        { "who": "zip", "text": "Bugs. The s can buzz. Play the sound, not the letter name." }
+        { "who": "zip", "audio": "u61_m1", "word": "cats", "chips": ["cat", "cats"], "cap": "Add s. The ending hisses, like in cats.", "text": "We add s to a word. Cat becomes cats. The ending sound is the hiss in cats." },
+        { "who": "frill", "audio": "u61_m2", "word": "boxes", "chips": ["box", "boxes", "dishes"], "cap": "When the word already hisses, like box or dish, add es.", "text": "When the word already hisses, like box or dish, we use the extra ending. Box becomes boxes. You hear an extra beat, like in boxes." },
+        { "who": "zip", "audio": "u61_m3", "word": "bugs", "chips": ["bug", "bugs"], "cap": "Listen to the sound, not the letter name.", "text": "Bug becomes bugs. That ending buzzes, like in bugs. Listen to the sound, not the letter name." }
       ],
       "hear": [
         { "word": "cats", "choices": ["cat", "cats", "caps"] },
@@ -83,9 +83,9 @@ window.IR_DATA_U6 = {
       "endings": ["s", "es", "ed"],
       "example": { "base": "jump", "end": "ed", "word": "jumped" },
       "meet": [
-        { "who": "zip", "text": "I add ed to jump. Jumped. The ending is a quick /t/." },
-        { "who": "frill", "text": "I add ed to fill. Filled. This ending buzzes, /d/." },
-        { "who": "zip", "text": "I add ed to land. Landed. This ending has its own beat, /id/." }
+        { "who": "zip", "audio": "u62_m1", "word": "jumped", "chips": ["jump", "jumped"], "cap": "The ending sound is like the end of jumped.", "text": "We add ed when it already happened. Jump becomes jumped. The ending sound is like the end of jumped." },
+        { "who": "frill", "audio": "u62_m2", "word": "banged", "chips": ["bang", "banged", "filled"], "cap": "This ending is the sound at the end of banged.", "text": "Bang becomes banged. The sound at the end of banged." },
+        { "who": "zip", "audio": "u62_m3", "word": "landed", "chips": ["land", "landed"], "cap": "This ending has its own extra beat.", "text": "Land becomes landed. The ending sound is the extra beat in landed." }
       ],
       "hear": [
         { "word": "jumped", "choices": ["jump", "jumped", "jumps"] },
@@ -157,9 +157,9 @@ window.IR_DATA_U6 = {
       "endings": ["s", "es", "ed", "ing"],
       "example": { "base": "hang", "end": "ing", "word": "hanging" },
       "meet": [
-        { "who": "frill", "text": "I add ing to hang. Hanging. It is happening now." },
-        { "who": "zip", "text": "Lifting. Ringing. The ending is the sound /ing/." },
-        { "who": "frill", "text": "Hangs and hanging are different jobs. Listen to the ending." }
+        { "who": "frill", "audio": "u63_m1", "word": "hanging", "chips": ["hang", "hanging"], "cap": "Add ing to the base word.", "text": "We add ing to a base word. Hang becomes hanging. It is happening now." },
+        { "who": "zip", "audio": "u63_m2", "word": "ringing", "chips": ["lift", "lifting", "ring", "ringing"], "cap": "The ending sound is ing, like in ringing.", "text": "Lift becomes lifting. The ending sound is ing, like in ringing." },
+        { "who": "frill", "audio": "u63_m3", "word": "hanging", "chips": ["hangs", "hanging"], "cap": "Hangs and hanging do different jobs.", "text": "Hangs and hanging do different jobs. Listen for the ending." }
       ],
       "hear": [
         { "word": "hanging", "choices": ["hang", "hangs", "hanging"] },

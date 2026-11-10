@@ -1,7 +1,7 @@
 /* Island Readers sample service worker.
    Code (HTML/JS/CSS/data) is network-first so a new version always wins; the cache is only an offline fallback.
    Media (images/audio/video) is cache-first. Install never fails because of one file. */
-const CACHE = 'ir-20261110i';
+const CACHE = 'ir-20261110j';
 const ASSETS = [
  "./",
  "./index.html",
@@ -689,6 +689,16 @@ const ASSETS = [
  "./audio/u6_line2.mp3",
  "./audio/u6_line3.mp3",
  "./audio/u6_p_bells.mp3",
+ "./audio/u6_p_yesno.mp3",
+ "./audio/u6_p_u61_m1.mp3",
+ "./audio/u6_p_u61_m2.mp3",
+ "./audio/u6_p_u61_m3.mp3",
+ "./audio/u6_p_u62_m1.mp3",
+ "./audio/u6_p_u62_m2.mp3",
+ "./audio/u6_p_u62_m3.mp3",
+ "./audio/u6_p_u63_m1.mp3",
+ "./audio/u6_p_u63_m2.mp3",
+ "./audio/u6_p_u63_m3.mp3",
  "./audio/u6_p_build.mp3",
  "./audio/u6_p_chain.mp3",
  "./audio/u6_p_check.mp3",
