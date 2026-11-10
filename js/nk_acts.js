@@ -82,27 +82,18 @@
   }
 
   function chain(ctx) {
-    const CHAIN = N.chain; const stage = ctx.stage; let r = 1;
-    ctx.setInstr('Listen to the new word. Change one letter to make it.', 'chain');
-    const cur = h('div', { class: 'wcur' }); const pool = h('div', { class: 'wpool' }); const status = h('p', { class: 'status', 'aria-live': 'polite' }, '\u00a0');
-    const hearB = h('button', { class: 'btn big', type: 'button', onclick: () => say(CHAIN[r]) }, icon('speaker'), 'Hear the new word'); const trail = h('p', { class: 'wtrail' });
-    stage.append(h('div', { class: 'activity wordplay' }, trail, cur, h('div', { class: 'row center' }, hearB), h('p', { class: 'small center' }, 'Tap a letter in the word, then tap the new letter.'), pool, status));
-    let parts = split(CHAIN[0]); let pick = -1;
-    function show() {
-      ctx.progress((r - 1) / (CHAIN.length - 1)); trail.textContent = CHAIN.slice(0, r).join(' \u2192 ');
-      cur.innerHTML = ''; parts.forEach((p, i) => { const t = tile(p, i === pick ? ' sel' : ''); t.addEventListener('click', () => { pick = i; show(); }); cur.append(t); });
-      pool.innerHTML = ''; const target = split(CHAIN[r]); const need = target.find((t, i) => t !== parts[i]);
-      shuffle([need, ...shuffle(['a', 'i', 'o', 'u', 's', 'b', 'j', 'd', 'h', 't'].filter((x) => x !== need && !parts.includes(x))).slice(0, 3)]).forEach((t) => { const b = tile(t); b.addEventListener('click', () => place(t, b)); pool.append(b); });
-    }
-    async function place(t, b) {
-      if (pick < 0) { status.textContent = 'First tap the letter in the word you want to change.'; return; }
-      const next = parts.slice(); next[pick] = t;
-      if (next.join('') !== CHAIN[r]) { ctx.miss(); b.classList.add('nudge'); setTimeout(() => b.classList.remove('nudge'), 500); status.textContent = 'Not quite. Listen again and look at each letter.'; await tryAgain(W(CHAIN[r])); return; }
-      parts = split(CHAIN[r]); pick = -1; status.textContent = CHAIN[r] + '!'; await ding(CHAIN[r]); if (!ctx.scr.ok()) return;
-      r++; if (r >= CHAIN.length) { ctx.progress(1); trail.textContent = CHAIN.join(' \u2192 '); status.textContent = 'You made the whole chain!'; await sleep(400); if (ctx.scr.ok()) ctx.finish(); return; }
-      status.textContent = '\u00a0'; show(); await sleep(300); say(CHAIN[r]);
-    }
-    show(); Snd.seq(['audio/nk_p_chain.mp3', W(CHAIN[1])], 300);
+    IR.runLetterChain(ctx, {
+      words: N.chain,
+      split: split,
+      say: say,
+      pics: N.pics || {},
+      ding: (w) => ding(w),
+      tryAgain: (w) => tryAgain(W(w)),
+      promptAudio: 'audio/nk_p_chain.mp3',
+      promptKey: 'chain',
+      modelA: 'audio/chain_model_a.mp3',
+      modelB: 'audio/chain_model_b.mp3'
+    });
   }
 
   function scramble(ctx) {

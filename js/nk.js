@@ -162,7 +162,19 @@
   /* future recorded nk sound: hidden until audio/phonemes/nk.mp3 exists (her own recording). Computer-made nk_sound / nk_l_* / nk_c_* files are no longer played. */
   function phBtn() { const b = h('button', { class: 'btn', type: 'button', hidden: true, onclick: () => IR.playPhoneme && IR.playPhoneme('nk') }, icon('speaker'), 'Hear nk'); if (IR.hasPhoneme) IR.hasPhoneme('nk').then((ok) => { if (ok) b.hidden = false; }); return b; }
   const parts = (w) => w.match(/nk|th|./g);
-  function tilesFor(w) { return h('div', { class: 'blendrow' }, ...parts(w).map((l) => h('button', { class: 'btile' + (l === 'nk' ? ' nk' : ''), type: 'button', 'data-l': l, onclick: (e) => e.currentTarget.classList.add('lit') }, l))); }
+  function tilesFor(w) {
+    const gs = parts(w) || [];
+    return h('div', { class: 'blendrow' }, ...gs.map((l, i) => {
+      const silent = i === gs.length - 1 && l === 'e';
+      return h('button', { class: 'btile' + (l === 'nk' ? ' nk' : '') + (silent ? ' silent' : ''), type: 'button', 'data-l': l, 'data-silent': silent ? '1' : '0' }, l);
+    }));
+  }
+  function armBlend(row, blend) {
+    const tiles = $$('.btile', row).map((t) => ({ silent: t.dataset.silent === '1', lit: t.classList.contains('lit') }));
+    const ready = IR.blendSoundsReady(tiles);
+    blend.disabled = !ready;
+    blend.classList.toggle('glow', ready);
+  }
   /* 2. I do: Zip blends sound by sound */
   function runIdo(ctx) {
     ctx.setInstr('I do: watch Zip. Zip looks at each letter, then reads the whole word.', 'ido2'); const st = ctx.stage; let i = 0; const W = N.ido;
@@ -182,8 +194,12 @@
     ctx.setInstr('We do: tap each letter and say its sound. Then tap Blend it.', 'wedo2'); ctx.setNextLabel('Next'); const st = ctx.stage; let i = 0; const W = N.wedo;
     const show = () => { const w = W[i]; ctx.progress(i / W.length); st.innerHTML = ''; const row = tilesFor(w); const out = h('p', { class: 'blendout' }, '\u00a0');
       const blend = h('button', { class: 'btn big primary', type: 'button', disabled: true }, icon('speaker'), 'Blend it');
-      $$('.btile', row).forEach((t) => t.addEventListener('click', () => { t.classList.add('lit'); if ($$('.btile', row).every((x) => x.classList.contains('lit'))) { blend.disabled = false; blend.classList.add('glow'); } }));
-      blend.addEventListener('click', async () => { out.innerHTML = ''; out.append(colorNk(w)); await IR.ding(); await Snd.play(AU.w(w)); if (!ctx.scr.ok()) return; await sleep(500); if (!ctx.scr.ok()) return; if (i < W.length - 1) { i++; show(); } else runYoudo(ctx); });
+      $$('.btile', row).forEach((t) => {
+        const mark = () => { t.classList.add('lit'); armBlend(row, blend); };
+        t.addEventListener('pointerup', mark);
+        t.addEventListener('click', mark);
+      });
+      blend.addEventListener('click', async () => { if (blend.disabled) return; out.innerHTML = ''; out.append(colorNk(w)); await IR.ding(); await Snd.play(AU.w(w)); if (!ctx.scr.ok()) return; await sleep(500); if (!ctx.scr.ok()) return; if (i < W.length - 1) { i++; show(); } else runYoudo(ctx); });
       st.append(h('div', { class: 'activity' }, h('p', { class: 'bigprompt' }, 'Word ' + (i + 1) + ' of ' + W.length), row, out, blend)); };
     ctx.setNext(() => { if (i < W.length - 1) { i++; show(); } else runYoudo(ctx); return true; });
     ctx.setBack(() => { if (i > 0) { i--; show(); return true; } return false; });
