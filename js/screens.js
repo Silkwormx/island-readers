@@ -377,7 +377,7 @@
     return btn;
   }
   /* opening line from Zip and Frill at the top of each unit page (text only, no audio) */
-  const UNIT_INTRO = { i3: 'This bell holds ng and nk. Let\u2019s learn them!', i5: 'This yellow bell holds silent e. Let\u2019s learn it!' };
+  const UNIT_INTRO = { i3: 'This bell holds ng and nk. Let\u2019s learn them!', i5: 'This bell holds silent e. Let\u2019s learn it!' };
   function unitIntro(id) { const t = UNIT_INTRO[id]; if (!t) return null; return h('p', { class: 'zfintro' }, h('img', { src: 'img/zipA.webp', alt: '' }), h('img', { src: 'img/frill.webp', alt: '' }), h('span', null, t)); }
   IR.unitIntro = unitIntro;
   /* "For teachers" row on the ng and nk lesson pages: her own slides and worksheets, linked (not cached offline). */
