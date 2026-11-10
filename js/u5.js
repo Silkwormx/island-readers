@@ -353,8 +353,8 @@
         const tapBtn = h('div', { class: 'nkcardbtn' }, card, phBtn());
         st.append(h('div', { class: 'activity nkmeet' }, h('div', { class: 'bubble ' + b.who }, h('b', { class: 'who' }, b.who === 'zip' ? 'Zip' : 'Frill'), h('p', null, N.prompts[b.p].text), speakerBtn(() => Snd.play(AU.p(b.p)), 'Hear this again')),
           h('div', { class: 'meetrow' + (uSay ? ' u5sayrow' : '') }, uSay ? null : h('div', { class: 'panelwrap small' }, h('img', { class: 'panel', src: b.img, alt: '' })), tapBtn),
-          h('p', { class: 'cap' }, N.tip + ' Tap a word to hear it.'),
-          h('div', { class: 'chips' }, ...N.chips.map((w) => h('button', { class: 'chip', type: 'button', onclick: () => say(w) }, colorNk(w))))));
+          h('p', { class: 'cap' }, uSay ? 'In come, some, and done, o says /u/. The e is silent. Tap a word to hear it.' : N.tip + ' Tap a word to hear it.'),
+          h('div', { class: 'chips' }, ...(uSay ? ['come', 'some', 'done'] : N.chips).map((w) => h('button', { class: 'chip', type: 'button', onclick: () => say(w) }, colorNk(w))))));
         ctx.setNextLabel(i === beats.length - 1 ? 'Watch Zip' : 'Next');
         Snd.seq([AU.p(b.p)], 250); };
       ctx.setNext(() => { if (i < beats.length - 1) { i++; show(); } else runIdo(ctx); return true; });
