@@ -6,7 +6,7 @@
   const { h, sleep, shuffle, icon, Snd, A } = IR;
   const LINE = 'Listen. Feed Zip the word you hear.';
   const BITES = 8;
-  const SNACKS = [['leaf', '\u{1F343}'], ['berry', '\u{1F353}'], ['bug', '\u{1F41B}'], ['nut', '\u{1F95C}']];
+  const COLORS = ['leaf', 'berry', 'bug', 'nut'];
 
   IR.runFeedZip = function (ctx, opts) {
     const pool = (opts.words || []).filter(Boolean);
@@ -55,9 +55,8 @@
       const field = h('div', { class: 'fz-field' });
       const streak = h('p', { class: 'fz-streak' }, 'In a row: ' + row);
       shuffle([w].concat(others(w))).forEach((choice, i) => {
-        const kind = SNACKS[i % SNACKS.length];
-        const b = h('button', { class: 'fz-bubble fz-snack ' + kind[0], type: 'button', 'data-w': choice, 'aria-label': 'Snack ' + (i + 1) + ', ' + choice },
-          h('span', { class: 'fz-food', 'aria-hidden': 'true' }, kind[1]),
+        const kind = COLORS[i % COLORS.length];
+        const b = h('button', { class: 'fz-bubble fz-snack ' + kind, type: 'button', 'data-w': choice, 'aria-label': 'Choice ' + (i + 1) + ', ' + choice },
           h('span', { class: 'fz-w' }, colorWord(choice)));
         b.addEventListener('pointerup', () => choose(choice, b));
         b.addEventListener('click', () => choose(choice, b));
