@@ -1,92 +1,112 @@
-/* Feed Zip: quick decoding game. Child reads a word, then taps the matching bubble to feed Zip.
-   Shared by ng / nk / Unit 5. No gambling / FOMO. Dyslexia-friendly: big type, high contrast, calm pace. */
+/* Feed Zip: listen, then choose the word on a snack card. Shared by ng, nk, Unit 5, and Unit 6.
+   Built for a classroom smartboard: big cards, big numbers, a tummy that fills. No timers, no lost lives. */
 (function () {
   'use strict';
   const IR = window.IR;
-  const { h, $$, sleep, shuffle, icon, Snd, A, speakerBtn } = IR;
+  const { h, sleep, shuffle, icon, Snd, A } = IR;
+  const LINE = 'Listen. Feed Zip the word you hear.';
+  const BITES = 8;
+  const SNACKS = [['leaf', '\u{1F343}'], ['berry', '\u{1F353}'], ['bug', '\u{1F41B}'], ['nut', '\u{1F95C}']];
 
-  /** @param {object} ctx lesson context
-   *  @param {{ words:string[], say:(w:string)=>any, colorWord?:(w:string)=>Node, pics?:Record<string,string>, prompt?:string, promptAudio?:string|null, rounds?:number }} opts */
   IR.runFeedZip = function (ctx, opts) {
     const pool = (opts.words || []).filter(Boolean);
     const say = opts.say || ((w) => IR.sayWord && IR.sayWord(w));
     const colorWord = opts.colorWord || ((w) => document.createTextNode(w));
-    const pics = opts.pics || {};
-    const need = Math.min(opts.rounds || 6, pool.length || 1);
-    const targets = shuffle(pool.slice()).slice(0, need);
-    let r = 0;
-    const got = new Set();
     const stage = ctx.stage;
-    ctx.setInstr(opts.prompt || 'Read the word. Then tap the bubble that matches to feed Zip.', opts.promptKey || null);
-    if (opts.promptAudio) Snd.play(opts.promptAudio);
+    const targets = [];
+    for (let i = 0; i < BITES; i++) targets.push(pool[i % Math.max(1, pool.length)]);
+    shuffle(targets);
+    let r = 0;
+    let row = 0;
+    let token = 0;
+    ctx.setInstr(LINE, opts.promptKey || null);
 
-    function distractors(w) {
-      const others = shuffle(pool.filter((x) => x !== w));
-      const pick = others.slice(0, 2);
-      while (pick.length < 2 && pool.length > 1) {
-        const x = pool[Math.floor(Math.random() * pool.length)];
-        if (x !== w && !pick.includes(x)) pick.push(x);
-        else break;
+    function others(w) {
+      const rest = shuffle(pool.filter((x) => x !== w));
+      const pick = rest.slice(0, 3);
+      let guard = 0;
+      while (pick.length < 2 && pool.length > 1 && guard < 6) {
+        const x = pool[guard % pool.length];
+        if (x !== w && pick.indexOf(x) < 0) pick.push(x);
+        guard++;
       }
       return pick;
     }
 
-    function bubble(w) {
-      const pic = pics[w];
-      const inner = [];
-      if (pic) inner.push(h('img', { class: 'fz-pic', src: pic, alt: '' }));
-      inner.push(h('span', { class: 'fz-w' }, colorWord(w)));
-      return h('button', { class: 'fz-bubble' + (pic ? ' haspic' : ''), type: 'button', 'data-w': w, 'aria-label': 'Feed Zip: ' + w }, ...inner);
+    function tummy() {
+      const bits = [];
+      for (let i = 0; i < BITES; i++) bits.push(h('i', { class: i < r ? 'full' : '' }));
+      return h('div', { class: 'fz-tummy', 'aria-label': r + ' of ' + BITES + ' bites' }, h('span', null, "Zip's tummy"), h('span', { class: 'fz-bites' }, ...bits), h('b', null, r + ' / ' + BITES));
     }
 
     function round() {
-      if (r >= targets.length) { ctx.progress(1); ctx.finish(); return; }
+      if (!pool.length) { ctx.finish(); return; }
+      if (r >= BITES) { ctx.progress(1); ctx.finish(); return; }
+      const my = ++token;
       const w = targets[r];
-      ctx.progress(got.size / targets.length);
+      ctx.progress(r / BITES);
       stage.innerHTML = '';
       let locked = false;
       const status = h('p', { class: 'status', 'aria-live': 'polite' }, '\u00a0');
       const zip = h('div', { class: 'fz-zip', 'aria-hidden': 'true' },
         h('img', { class: 'fz-zipimg', src: 'img/zipA.webp', alt: '' }),
-        h('span', { class: 'fz-mouth' }, '\u25CF'));
-      const card = h('div', { class: 'fz-card' },
-        h('p', { class: 'fz-ask' }, 'Read this word'),
-        h('div', { class: 'fz-word' }, colorWord(w)),
-        speakerBtn(() => say(w), 'Hear the word'));
-      const field = h('div', { class: 'fz-field' }, ...shuffle([w].concat(distractors(w))).map(bubble));
-      ctx.setBack(() => { if (r > 0) { Snd.stop(); r--; round(); return true; } return false; });
-      ctx.setNext(() => { if (r < targets.length - 1) { Snd.stop(); r++; round(); return true; } return false; });
-
-      $$('.fz-bubble', field).forEach((b) => {
-        b.addEventListener('click', async () => {
-          if (locked || b.classList.contains('tried')) return;
-          const x = b.getAttribute('data-w');
-          if (x === w) {
-            locked = true;
-            b.classList.add('right', 'eaten');
-            zip.classList.add('yum');
-            status.textContent = 'Yum! Zip ate ' + w + '!';
-            $$('.fz-bubble', field).forEach((o) => { if (o !== b) o.classList.add('fade'); });
-            await Snd.seq([A.sfx.ding].concat(typeof say === 'function' ? [] : []), 80);
-            await say(w);
-            if (!ctx.scr.ok()) return;
-            await sleep(550);
-            if (!ctx.scr.ok()) return;
-            got.add(r); r++; round();
-          } else {
-            b.classList.add('tried');
-            status.textContent = 'Not that one. Read the word again.';
-            ctx.miss && ctx.miss();
-            await Snd.play(A.sfx.tryagain);
-          }
-        });
+        h('span', { class: 'fz-mouth' }, ''));
+      const replay = h('button', { class: 'btn big primary fz-replay', type: 'button', onclick: () => say(w) }, icon('replay'), 'Hear the word');
+      const field = h('div', { class: 'fz-field' });
+      const streak = h('p', { class: 'fz-streak' }, 'In a row: ' + row);
+      shuffle([w].concat(others(w))).forEach((choice, i) => {
+        const kind = SNACKS[i % SNACKS.length];
+        const b = h('button', { class: 'fz-bubble fz-snack ' + kind[0], type: 'button', 'data-w': choice, 'aria-label': 'Snack ' + (i + 1) + ', ' + choice },
+          h('span', { class: 'fz-food', 'aria-hidden': 'true' }, kind[1]),
+          h('span', { class: 'fz-w' }, colorWord(choice)));
+        b.addEventListener('pointerup', () => choose(choice, b));
+        b.addEventListener('click', () => choose(choice, b));
+        field.append(b);
       });
-
       stage.append(h('div', { class: 'activity feedzip' },
-        h('div', { class: 'fz-top' }, zip, card),
-        h('p', { class: 'fz-hint' }, 'Tap the bubble that matches'),
+        h('div', { class: 'fz-top' }, zip, h('div', { class: 'fz-side' }, tummy(), replay, streak)),
+        h('p', { class: 'bigprompt' }, LINE),
         field, status));
+      say(w);
+
+      async function choose(choice, b) {
+        if (locked || my !== token || b.classList.contains('tried') || b.dataset.hit === '1') return;
+        b.dataset.hit = '1';
+        if (choice === w) {
+          locked = true;
+          row++;
+          b.classList.add('right', 'feeding');
+          zip.classList.add('yum');
+          status.textContent = 'Yum! Zip munched ' + w + '.';
+          streak.textContent = 'In a row: ' + row;
+          const dots = document.querySelectorAll('.fz-bites i');
+          if (dots[r]) dots[r].classList.add('full');
+          const count = document.querySelector('.fz-tummy b');
+          if (count) count.textContent = (r + 1) + ' / ' + BITES;
+          $$fade();
+          await Snd.play('audio/sfx_munch.mp3');
+          if (!ctx.scr.ok() || my !== token) return;
+          r++;
+          ctx.progress(r / BITES);
+          await sleep(700);
+          if (ctx.scr.ok() && my === token) round();
+        } else {
+          b.classList.add('tried');
+          row = 0;
+          streak.textContent = 'In a row: 0';
+          status.textContent = "Zip isn't hungry for that one, listen again.";
+          if (ctx.miss) ctx.miss();
+          await Snd.play(A.sfx.tryagain);
+          if (ctx.scr.ok() && my === token) say(w);
+        }
+      }
+      function $$fade() {
+        [...field.children].forEach((el) => { if (!el.classList.contains('right')) el.classList.add('fade'); });
+      }
     }
+
+    ctx.setBack(() => { if (r > 0) { token++; r--; if (row > 0) row--; round(); return true; } return false; });
+    ctx.setNext(() => { if (r < BITES - 1) { token++; r++; round(); return true; } return false; });
     round();
   };
 })();

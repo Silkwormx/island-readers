@@ -212,7 +212,7 @@
   }
 
   function runFeed(ctx) {
-    IR.runFeedZip(ctx, { words: N.feed, say, colorWord: colorEnd, prompt: 'Read the word. Then tap the bubble that matches to feed Zip.', promptAudio: P('feed'), rounds: 4 });
+    IR.runFeedZip(ctx, { words: N.feed, say, colorWord: colorEnd, promptKey: 'feed', promptAudio: P('feed') });
   }
 
   function runSentence(ctx) {

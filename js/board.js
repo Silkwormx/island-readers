@@ -11,8 +11,9 @@
       clear() { this.slots.fill(null); render(); },
       render: () => render()
     };
+    opts.tiles.forEach((t, i) => { if (t.n == null) t.n = i + 1; });
     function tileEl(t) {
-      const el = h('button', { type: 'button', class: 'tile ' + (t.cls || ''), 'data-id': t.id, style: t.style || '' }, t.text);
+      const el = h('button', { type: 'button', class: 'tile ' + (t.cls || ''), 'data-id': t.id, 'data-n': String(t.n), style: t.style || '' }, t.text);
       if (board.hint === t.id) el.classList.add('hint');
       attach(el, t.id);
       return el;

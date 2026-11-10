@@ -58,25 +58,55 @@
     }
   
     function bells(ctx) {
-      const stage = ctx.stage; const words = N.bells; const order = shuffle(words); let r = 0; const lit = new Set();
-      ctx.setInstr('Read the word out loud. Then tap the bell with the same word.', 'bells');
-      const row = h('div', { class: 'bellrow' }); const card = h('div', { class: 'bellcard' });
-      const status = h('p', { class: 'status', 'aria-live': 'polite' }, '\u00a0');
-      words.forEach((w) => { const b = h('button', { class: 'bellbtn', type: 'button', 'aria-label': 'Bell: ' + w }, h('img', { src: 'img/bell_unlit.png', alt: '' }), h('span', null, w)); b.addEventListener('click', () => tapBell(w, b)); row.append(b); });
-      const hearB = h('button', { class: 'btn big', type: 'button', onclick: () => say(order[r]) }, icon('speaker'), 'Hear it');
-      stage.append(h('div', { class: 'activity bellgame' }, h('div', { class: 'bellscene', style: 'background-image:url(img/ob_scene.jpg)' }), row, card,
-        h('p', { class: 'small' }, N.tip), h('div', { class: 'row center' }, hearB), status));
-      const show = () => { ctx.progress(lit.size / words.length); card.innerHTML = ''; card.append(h('span', { class: 'bigword' }, colorNk(order[r]))); status.textContent = '\u00a0'; };
-      async function tapBell(w, b) {
-        if (lit.has(w)) { say(w); return; }
-        if (w !== order[r]) { ctx.miss(); b.classList.add('nudge'); setTimeout(() => b.classList.remove('nudge'), 500); status.textContent = 'Look again. Find the bell that says ' + order[r] + '.'; await tryAgain(); return; }
-        lit.add(w); b.classList.add('lit'); b.querySelector('img').src = 'img/bell_lit.png'; status.textContent = w + '! The bell lights up.';
-        await ding(w); if (!ctx.scr.ok()) return; r++;
-        if (r >= order.length) { ctx.progress(1); status.textContent = 'All the bells are lit!'; await Snd.play(A.sfx.gong); if (ctx.scr.ok()) ctx.finish(); return; }
-        await sleep(300); if (ctx.scr.ok()) show();
+      /* Replaces Ring the bell. A picture and three numbered words, so a class can call out the number. */
+      const stage = ctx.stage;
+      ctx.setInstr('Which word matches the picture? Call out the number.', 'match');
+      const pics = N.pics || {};
+      const wanted = new Set([].concat(N.bells || [], (N.youdo || []).map((r) => r.word), (N.hear || []).map((r) => r.word)));
+      let targets = Object.keys(pics).filter((w) => wanted.has(w));
+      if (targets.length < 3) targets = Object.keys(pics);
+      const bank = Array.from(new Set(targets.concat(N.bells || [], (N.hear || []).map((r) => r.word))));
+      const rounds = shuffle(targets).slice(0, Math.min(5, targets.length));
+      let r = 0;
+      function round() {
+        const word = rounds[r];
+        ctx.progress(r / rounds.length);
+        stage.innerHTML = '';
+        let locked = false;
+        const status = h('p', { class: 'status', 'aria-live': 'polite' }, '\u00a0');
+        const dist = shuffle(bank.filter((w) => w !== word)).slice(0, 2);
+        const grid = h('div', { class: 'choices three' });
+        shuffle([word].concat(dist)).forEach((w) => {
+          const b = h('button', { class: 'choice', type: 'button', 'data-w': w }, colorNk(w));
+          b.addEventListener('click', async () => {
+            if (locked || b.classList.contains('tried')) return;
+            if (w === word) {
+              locked = true; b.classList.add('right');
+              $$('.choice', grid).forEach((o) => { if (o !== b) o.classList.add('fade'); });
+              status.textContent = 'Yes! ' + w;
+              await ding(w);
+              if (!ctx.scr.ok()) return;
+              await sleep(450);
+              if (!ctx.scr.ok()) return;
+              r++;
+              if (r >= rounds.length) { ctx.progress(1); ctx.finish(); } else round();
+            } else {
+              ctx.miss(); b.classList.add('tried');
+              status.textContent = 'Not that one. Look at the picture again.';
+              await tryAgain(W(word));
+            }
+          });
+          grid.append(b);
+        });
+        stage.append(h('div', { class: 'activity matchgame' },
+          h('img', { class: 'matchpic', src: pics[word], alt: '' }),
+          h('p', { class: 'bigprompt' }, 'Which word matches the picture?'),
+          grid, status));
       }
-      ctx.setNext(() => { if (r < order.length - 1) { Snd.stop(); r++; show(); return true; } return false; });
-      show(); Snd.play('audio/' + KEY + '_p_bells.mp3');
+      ctx.setBack(() => { if (r > 0) { Snd.stop(); r--; round(); return true; } return false; });
+      ctx.setNext(() => { if (r < rounds.length - 1) { Snd.stop(); r++; round(); return true; } return false; });
+      round();
+      Snd.play('audio/' + KEY + '_p_match.mp3');
     }
   
     function build(ctx) {
@@ -100,27 +130,18 @@
     }
   
     function chain(ctx) {
-      const CHAIN = N.chain; const stage = ctx.stage; let r = 1;
-      ctx.setInstr('Listen to the new word. Change one letter to make it.', 'chain');
-      const cur = h('div', { class: 'wcur' }); const pool = h('div', { class: 'wpool' }); const status = h('p', { class: 'status', 'aria-live': 'polite' }, '\u00a0');
-      const hearB = h('button', { class: 'btn big', type: 'button', onclick: () => say(CHAIN[r]) }, icon('speaker'), 'Hear the new word'); const trail = h('p', { class: 'wtrail' });
-      stage.append(h('div', { class: 'activity wordplay' }, trail, cur, h('div', { class: 'row center' }, hearB), h('p', { class: 'small center' }, 'Tap a letter in the word, then tap the new letter.'), pool, status));
-      let parts = split(CHAIN[0]); let pick = -1;
-      function show() {
-        ctx.progress((r - 1) / (CHAIN.length - 1)); trail.textContent = CHAIN.slice(0, r).join(' \u2192 ');
-        cur.innerHTML = ''; const grow = split(CHAIN[r]).length > parts.length; (grow ? parts.concat(['+']) : parts).forEach((p, i) => { const t = tile(p, i === pick ? ' sel' : ''); t.addEventListener('click', () => { pick = i; show(); }); cur.append(t); });
-        pool.innerHTML = ''; const target = split(CHAIN[r]); const need = target.find((t, i) => t !== parts[i]) || target[target.length - 1];
-        shuffle([need, ...shuffle(['a', 'i', 'o', 'u', 's', 'b', 'j', 'd', 'h', 't'].filter((x) => x !== need && !parts.includes(x))).slice(0, 3)]).forEach((t) => { const b = tile(t); b.addEventListener('click', () => place(t, b)); pool.append(b); });
-      }
-      async function place(t, b) {
-        if (pick < 0) { status.textContent = 'First tap the letter in the word you want to change.'; return; }
-        const next = parts.slice(); next[pick] = t; if (pick >= parts.length) next.length = pick + 1;
-        if (next.join('') !== CHAIN[r]) { ctx.miss(); b.classList.add('nudge'); setTimeout(() => b.classList.remove('nudge'), 500); status.textContent = 'Not quite. Listen again and look at each letter.'; await tryAgain(W(CHAIN[r])); return; }
-        parts = split(CHAIN[r]); pick = -1; status.textContent = CHAIN[r] + '!'; await ding(CHAIN[r]); if (!ctx.scr.ok()) return;
-        r++; if (r >= CHAIN.length) { ctx.progress(1); trail.textContent = CHAIN.join(' \u2192 '); status.textContent = 'You made the whole chain!'; await sleep(400); if (ctx.scr.ok()) ctx.finish(); return; }
-        status.textContent = '\u00a0'; show(); await sleep(300); say(CHAIN[r]);
-      }
-      show(); Snd.seq(['audio/' + KEY + '_p_chain.mp3', W(CHAIN[1])], 300);
+      IR.runLetterChain(ctx, {
+        words: N.chain,
+        split: (w) => w.match(/sh|ch|th|ck|St|./g) || [],
+        say: say,
+        pics: N.pics || {},
+        ding: (w) => ding(w),
+        tryAgain: (w) => tryAgain(W(w)),
+        promptAudio: 'audio/' + KEY + '_p_chain.mp3',
+        promptKey: 'chain',
+        modelA: 'audio/chain_model_a.mp3',
+        modelB: 'audio/chain_model_b.mp3'
+      });
     }
   
     function scramble(ctx) {
@@ -204,7 +225,7 @@
       { id: 'meet', title: 'Meet ' + N.name, group: 'lesson', run: runMeet, color: '#1FA6A6' },
       { id: 'listen', title: 'Story Time', group: 'story', run: runListen, color: '#8E5BD6' },
       { id: 'hear', title: 'Hear and Pick', group: 'activities', run: ACT.hear, color: '#7E57C2' },
-      { id: 'bells', title: 'Ring every bell and learn its sounds', group: 'activities', run: ACT.bells, color: '#E8731C' },
+      { id: 'bells', title: 'Match the word', group: 'activities', run: ACT.bells, color: '#E8731C' },
       { id: 'build', title: 'Build-a-Word', group: 'activities', run: ACT.build, color: '#E8603C' },
       { id: 'chain', title: 'Word Chains', group: 'activities', run: ACT.chain, color: '#C95A10' },
       { id: 'scramble', title: 'Scrambled Letters', group: 'activities', run: ACT.scramble, color: '#D9631A' },
@@ -217,7 +238,7 @@
       { id: 'rhyme', title: 'Rhyme Time', group: 'extra', run: runRhyme, color: '#C2408A' }
     ].filter((s) => !(s.id === 'rhyme' && !(N.rhyme || []).length));
     /* one-line tips for grown-ups, in the same style as the ng unit */
-    const TIPS = { hear: 'Let your child listen first, then point.', bells: 'Ask your child to read the word out loud first.', build: 'Say the word slowly together.', chain: 'Only one letter changes each time.', scramble: 'Say the word slowly, then find each part.', feed: 'Ask your child to read the word out loud, then feed Zip.', sentence: 'Read the sentence together at the end.', read: 'Reading it 3 times builds fluency.', ngnk: 'Say the word slowly. Listen to the end.', check: 'Let your child work alone. Just cheer.', comp: 'Optional extra. Look back at the story page together.', rhyme: 'Optional extra. Read the poem together for fun.' };
+    const TIPS = { hear: 'Let your child listen first, then point.', bells: 'Ask the class to call out the number of the matching word.', build: 'Say the word slowly together.', chain: 'The glowing letter is the one that changes. Call out a number.', scramble: 'Say the word slowly, then find each part.', feed: 'Ask your child to read the word out loud, then feed Zip.', sentence: 'Read the sentence together at the end.', read: 'Reading it 3 times builds fluency.', ngnk: 'Say the word slowly. Listen to the end.', check: 'Let your child work alone. Just cheer.', comp: 'Optional extra. Look back at the story page together.', rhyme: 'Optional extra. Read the poem together for fun.' };
     
     const pid = (s) => KEY + '_' + s.id;
     function sections() {
@@ -325,9 +346,13 @@
       ctx.setInstr('', null); const st = ctx.stage; let i = 0;
       const beats = [{ who: 'zip', p: 'm1', img: N.meetImgs[0] }, { who: 'frill', p: 'm2', img: N.meetImgs[1], tap: true }, { who: 'zip', p: 'm3', img: N.meetImgs[2], tap: true }];
       const show = () => { const b = beats[i]; ctx.progress(i / beats.length); st.innerHTML = '';
-        const card = nkCard(true); const tapBtn = h('div', { class: 'nkcardbtn' }, card, phBtn());
+        const uSay = KEY === 'u53' && b.p === 'm3';
+        const card = uSay ? h('div', { class: 'u5usay' },
+          h('div', { class: 'u5words' }, ...['come', 'some', 'done'].map((w) => h('span', { class: 'u5word' }, ...w.split('').map((ch, i) => h('span', { class: 'u5ch' + (ch === 'o' ? ' sayu' : '') + (i === w.length - 1 ? ' silent' : '') }, ch))))),
+          h('p', { class: 'u5cue' }, 'o says /u/')) : nkCard(true);
+        const tapBtn = h('div', { class: 'nkcardbtn' }, card, phBtn());
         st.append(h('div', { class: 'activity nkmeet' }, h('div', { class: 'bubble ' + b.who }, h('b', { class: 'who' }, b.who === 'zip' ? 'Zip' : 'Frill'), h('p', null, N.prompts[b.p].text), speakerBtn(() => Snd.play(AU.p(b.p)), 'Hear this again')),
-          h('div', { class: 'meetrow' }, h('div', { class: 'panelwrap small' }, h('img', { class: 'panel', src: b.img, alt: '' })), tapBtn),
+          h('div', { class: 'meetrow' + (uSay ? ' u5sayrow' : '') }, uSay ? null : h('div', { class: 'panelwrap small' }, h('img', { class: 'panel', src: b.img, alt: '' })), tapBtn),
           h('p', { class: 'cap' }, N.tip + ' Tap a word to hear it.'),
           h('div', { class: 'chips' }, ...N.chips.map((w) => h('button', { class: 'chip', type: 'button', onclick: () => say(w) }, colorNk(w))))));
         ctx.setNextLabel(i === beats.length - 1 ? 'Watch Zip' : 'Next');
@@ -339,7 +364,19 @@
     /* future recorded nk sound: hidden until audio/phonemes/nk.mp3 exists (her own recording). Computer-made nk_sound / nk_l_* / nk_c_* files are no longer played. */
     function phBtn() { return null; }
     const parts = (w) => w.match(/sh|ch|th|ck|St|./g);
-    function tilesFor(w) { return h('div', { class: 'blendrow' }, ...parts(w).map((l) => h('button', { class: 'btile' + (l === 'e' && false ? ' nk' : ''), type: 'button', 'data-l': l, onclick: (e) => e.currentTarget.classList.add('lit') }, l))); }
+    function tilesFor(w) {
+      const gs = parts(w) || [];
+      return h('div', { class: 'blendrow' }, ...gs.map((l, i) => {
+        const silent = i === gs.length - 1 && l === 'e';
+        return h('button', { class: 'btile' + (silent ? ' silent' : ''), type: 'button', 'data-l': l, 'data-silent': silent ? '1' : '0' }, l);
+      }));
+    }
+    function armBlend(row, blend) {
+      const tiles = $$('.btile', row).map((t) => ({ silent: t.dataset.silent === '1', lit: t.classList.contains('lit') }));
+      const ready = IR.blendSoundsReady(tiles);
+      blend.disabled = !ready;
+      blend.classList.toggle('glow', ready);
+    }
     /* 2. I do: Zip blends sound by sound */
     function runIdo(ctx) {
       ctx.setInstr('I do: watch Zip. Zip looks at each letter, then reads the whole word.', 'ido2'); const st = ctx.stage; let i = 0; const W = N.ido;
@@ -359,8 +396,13 @@
       ctx.setInstr('We do: tap each letter and say its sound. Then tap Blend it.', 'wedo2'); ctx.setNextLabel('Next'); const st = ctx.stage; let i = 0; const W = N.wedo;
       const show = () => { const w = W[i]; ctx.progress(i / W.length); st.innerHTML = ''; const row = tilesFor(w); const out = h('p', { class: 'blendout' }, '\u00a0');
         const blend = h('button', { class: 'btn big primary', type: 'button', disabled: true }, icon('speaker'), 'Blend it');
-        $$('.btile', row).forEach((t) => t.addEventListener('click', () => { t.classList.add('lit'); if ($$('.btile', row).every((x) => x.classList.contains('lit'))) { blend.disabled = false; blend.classList.add('glow'); } }));
-        blend.addEventListener('click', async () => { out.innerHTML = ''; out.append(colorNk(w)); await IR.ding(); await Snd.play(AU.w(w)); if (!ctx.scr.ok()) return; await sleep(500); if (!ctx.scr.ok()) return; if (i < W.length - 1) { i++; show(); } else runYoudo(ctx); });
+        $$('.btile', row).forEach((t) => {
+          const mark = () => { t.classList.add('lit'); armBlend(row, blend); };
+          t.addEventListener('pointerup', mark);
+          t.addEventListener('click', mark);
+        });
+        blend.disabled = true;
+        blend.addEventListener('click', async () => { if (blend.disabled) return; out.innerHTML = ''; out.append(colorNk(w)); await IR.ding(); await Snd.play(AU.w(w)); if (!ctx.scr.ok()) return; await sleep(500); if (!ctx.scr.ok()) return; if (i < W.length - 1) { i++; show(); } else runYoudo(ctx); });
         st.append(h('div', { class: 'activity' }, h('p', { class: 'bigprompt' }, 'Word ' + (i + 1) + ' of ' + W.length), row, out, blend)); };
       ctx.setNext(() => { if (i < W.length - 1) { i++; show(); } else runYoudo(ctx); return true; });
       ctx.setBack(() => { if (i > 0) { i--; show(); return true; } return false; });
