@@ -282,7 +282,7 @@ window.IR_DATA_U6 = {
   ],
   "story": [
     {
-      "img": "img/ob_p2.jpg",
+      "img": "img/u6_p1.webp",
       "audio": "audio/u6_s1.mp3",
       "text": "Zip packs the cups and the hats.",
       "words": [
@@ -326,7 +326,7 @@ window.IR_DATA_U6 = {
       ]
     },
     {
-      "img": "img/ob_p4.jpg",
+      "img": "img/u6_p2.webp",
       "audio": "audio/u6_s2.mp3",
       "text": "Frill said, I can help. The bugs hop in the boxes.",
       "words": [
@@ -390,7 +390,7 @@ window.IR_DATA_U6 = {
       ]
     },
     {
-      "img": "img/ob_scene.jpg",
+      "img": "img/u6_p3.webp",
       "audio": "audio/u6_s3.mp3",
       "text": "Zip is fishing. A fish is jumping in the pond.",
       "words": [
@@ -449,7 +449,7 @@ window.IR_DATA_U6 = {
       ]
     },
     {
-      "img": "img/ob_cover_wide.jpg",
+      "img": "img/u6_p4.webp",
       "audio": "audio/u6_s4.mp3",
       "text": "Zip and Frill sing. The bells ding.",
       "words": [
