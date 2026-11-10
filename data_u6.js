@@ -61,18 +61,18 @@ window.IR_DATA_U6 = {
         { "type": "pick", "word": "rings", "choices": ["rings", "ring", "rinks"] }
       ],
       "story": [
-        { "text": "Zip packs his pack. Frill hikes up the path.", "img": "img/ng_p02.webp" },
-        { "text": "The orange bell hangs on a long rope.", "img": "img/ng_p01.webp" },
-        { "text": "Zip spots boxes on the path by the bell.", "img": "img/ng_p05.webp" },
-        { "text": "Cups and dishes sit in the boxes.", "img": "img/ng_p04.webp" },
-        { "text": "Zip tugs the rope. The bell hits the boxes.", "img": "img/ng_p03.webp" },
-        { "text": "Clunk. The orange bell will not ring.", "img": "img/ng_p06.webp" },
-        { "text": "\"I can shift the boxes,\" said Zip.", "img": "img/ng_p07.webp" },
-        { "text": "Zip shifts the boxes. Frill shifts the dishes.", "img": "img/ng_p08.webp" },
-        { "text": "Zip taps the bell. The bell still hits.", "img": "img/ng_p09.webp" },
-        { "text": "\"Zip, the rope is long,\" said Frill.", "img": "img/ng_p10.webp" },
-        { "text": "Frill tucks the rope on the branch. The bell hangs up.", "img": "img/ng_p11.webp" },
-        { "text": "Zip taps the bell. Ding! It rings.", "img": "img/u6_p4.webp" }
+        { "text": "Zip packs his pack. Frill hikes up the path.", "voice": "Zip", "img": "img/ng_p02.webp" },
+        { "text": "The orange bell hangs on a long rope.", "voice": "Zip", "img": "img/ng_p01.webp" },
+        { "text": "Zip spots boxes on the path by the bell.", "voice": "Zip", "img": "img/ng_p05.webp" },
+        { "text": "Cups and dishes sit in the boxes.", "voice": "Zip", "img": "img/ng_p04.webp" },
+        { "text": "Zip tugs the rope. The bell hits the boxes.", "voice": "Zip", "img": "img/ng_p03.webp" },
+        { "text": "Clunk. The orange bell will not ring.", "voice": "Zip", "img": "img/ng_p06.webp" },
+        { "text": "\"I can shift the boxes,\" said Zip.", "voice": "Zip", "img": "img/ng_p07.webp" },
+        { "text": "Zip shifts the boxes. Frill shifts the dishes.", "voice": "Zip", "img": "img/ng_p08.webp" },
+        { "text": "Zip taps the bell. The bell still hits.", "voice": "Zip", "img": "img/ng_p09.webp" },
+        { "text": "\"Zip, the rope is long,\" said Frill.", "voice": "Frill", "img": "img/ng_p10.webp" },
+        { "text": "Frill tucks the rope on the branch. The bell hangs up.", "voice": "Zip", "img": "img/ng_p11.webp" },
+        { "text": "Zip taps the bell. Ding! It rings.", "voice": "Zip", "img": "img/u6_p4.webp" }
       ]
     },
     {
@@ -135,18 +135,18 @@ window.IR_DATA_U6 = {
         { "type": "pick", "word": "helped", "choices": ["helped", "help", "helps"] }
       ],
       "story": [
-        { "text": "Zip and Frill hike to the orange bell.", "img": "img/ng_p02.webp" },
-        { "text": "A thick branch landed on the bell.", "img": "img/ng_p01.webp" },
-        { "text": "Zip taps the bell. Clunk. It will not ring.", "img": "img/ng_p09.webp" },
-        { "text": "Zip spots the branch on the bell.", "img": "img/ng_p06.webp" },
-        { "text": "\"The branch is on it,\" said Frill.", "img": "img/ng_p08.webp" },
-        { "text": "Zip lifted the thick branch off the bell.", "img": "img/ng_p03.webp" },
-        { "text": "The branch bumped the bell. Zip missed the gap.", "img": "img/ng_p05.webp" },
-        { "text": "Frill helped Zip. Zip lifted it up.", "img": "img/ng_p07.webp" },
-        { "text": "Frill packed a stick. It filled the gap.", "img": "img/ng_p04.webp" },
-        { "text": "The thick branch rested on the stick.", "img": "img/ng_p10.webp" },
-        { "text": "Zip jumped up and hit the bell.", "img": "img/ng_p11.webp" },
-        { "text": "Ding! The orange bell rings. The job is done.", "img": "img/u6_p1.webp" }
+        { "text": "Zip and Frill hike to the orange bell.", "voice": "Zip", "img": "img/ng_p02.webp" },
+        { "text": "A thick branch landed on the bell.", "voice": "Zip", "img": "img/ng_p01.webp" },
+        { "text": "Zip taps the bell. Clunk. It will not ring.", "voice": "Zip", "img": "img/ng_p09.webp" },
+        { "text": "Zip spots the branch on the bell.", "voice": "Zip", "img": "img/ng_p06.webp" },
+        { "text": "\"The branch is on it,\" said Frill.", "voice": "Frill", "img": "img/ng_p08.webp" },
+        { "text": "Zip lifted the thick branch off the bell.", "voice": "Zip", "img": "img/ng_p03.webp" },
+        { "text": "The branch bumped the bell. Zip missed the gap.", "voice": "Zip", "img": "img/ng_p05.webp" },
+        { "text": "Frill helped Zip. Zip lifted it up.", "voice": "Zip", "img": "img/ng_p07.webp" },
+        { "text": "Frill packed a stick. It filled the gap.", "voice": "Zip", "img": "img/ng_p04.webp" },
+        { "text": "The thick branch rested on the stick.", "voice": "Zip", "img": "img/ng_p10.webp" },
+        { "text": "Zip jumped up and hit the bell.", "voice": "Zip", "img": "img/ng_p11.webp" },
+        { "text": "Ding! The orange bell rings. The job is done.", "voice": "Zip", "img": "img/u6_p1.webp" }
       ]
     },
     {
@@ -209,18 +209,18 @@ window.IR_DATA_U6 = {
         { "type": "pick", "word": "ringing", "choices": ["ringing", "ring", "rings"] }
       ],
       "story": [
-        { "text": "The orange bell is hanging on the branch.", "img": "img/ng_p01.webp" },
-        { "text": "Zip and Frill hike up the path.", "img": "img/ng_p02.webp" },
-        { "text": "A long stick is hanging by the bell.", "img": "img/ng_p07.webp" },
-        { "text": "The stick is bumping the bell. Clunk.", "img": "img/ng_p09.webp" },
-        { "text": "Zip tugs the rope. The bell will not ring.", "img": "img/ng_p03.webp" },
-        { "text": "\"The stick is bumping it,\" said Frill.", "img": "img/ng_p08.webp" },
-        { "text": "Zip is lifting the long stick up.", "img": "img/ng_p05.webp" },
-        { "text": "The stick is swinging back. It hits the bell.", "img": "img/ng_p06.webp" },
-        { "text": "Frill is helping Zip lift the stick.", "img": "img/ng_p10.webp" },
-        { "text": "Frill is shifting the stick off the path.", "img": "img/ng_p11.webp" },
-        { "text": "The stick is resting on the path.", "img": "img/u6_p2.webp" },
-        { "text": "Zip is ringing the bell. Ding! It rings.", "img": "img/u6_p3.webp" }
+        { "text": "The orange bell is hanging on the branch.", "voice": "Zip", "img": "img/ng_p01.webp" },
+        { "text": "Zip and Frill hike up the path.", "voice": "Zip", "img": "img/ng_p02.webp" },
+        { "text": "A long stick is hanging by the bell.", "voice": "Zip", "img": "img/ng_p07.webp" },
+        { "text": "The stick is bumping the bell. Clunk.", "voice": "Zip", "img": "img/ng_p09.webp" },
+        { "text": "Zip tugs the rope. The bell will not ring.", "voice": "Zip", "img": "img/ng_p03.webp" },
+        { "text": "\"The stick is bumping it,\" said Frill.", "voice": "Frill", "img": "img/ng_p08.webp" },
+        { "text": "Zip is lifting the long stick up.", "voice": "Zip", "img": "img/ng_p05.webp" },
+        { "text": "The stick is swinging back. It hits the bell.", "voice": "Zip", "img": "img/ng_p06.webp" },
+        { "text": "Frill is helping Zip lift the stick.", "voice": "Zip", "img": "img/ng_p10.webp" },
+        { "text": "Frill is shifting the stick off the path.", "voice": "Zip", "img": "img/ng_p11.webp" },
+        { "text": "The stick is resting on the path.", "voice": "Zip", "img": "img/u6_p2.webp" },
+        { "text": "Zip is ringing the bell. Ding! It rings.", "voice": "Zip", "img": "img/u6_p3.webp" }
       ]
     }
   ]

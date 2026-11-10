@@ -80,14 +80,21 @@
 
   /* ---------- persistent state (localStorage, with in-memory fallback) ---------- */
   const blank = () => ({
-    v: 1, lessons: {}, check: { best: null, last: null, attempts: 0 }, sticker: false, badge: false,
-    streak: { count: 0, last: null, restWeek: null }, heart: {}, reads: {}, settings: { calm: false, openAll: false },
+    v: 2, lessons: {}, check: { best: null, last: null, attempts: 0 }, sticker: false, badge: false,
+    streak: { count: 0, last: null, restWeek: null }, heart: {}, reads: {}, settings: { calm: false, openAll: false, autoplay: true },
     /* The one clean progress record (ready for future per-student tracking; no accounts yet): activities[id] = { id, stars, completed, firstCompletedAt, lastCompletedAt, attempts } */
     progress: { v: 1, studentId: null, unit: 'island3-ng', activities: {}, updatedAt: null }
   });
   let mem = null;
   function load() {
-    try { const r = localStorage.getItem(KEY); if (r) return migrate(Object.assign(blank(), JSON.parse(r))); } catch (e) { /* ignore */ }
+    try {
+      const r = localStorage.getItem(KEY);
+      if (r) {
+        const s = migrate(Object.assign(blank(), JSON.parse(r)));
+        if (s._migratedAutoplay) { delete s._migratedAutoplay; try { localStorage.setItem(KEY, JSON.stringify(s)); } catch (e2) { /* ignore */ } }
+        return s;
+      }
+    } catch (e) { /* ignore */ }
     return mem || blank();
   }
   function migrate(s) {          /* older saves (before the progress record) get one built from their lessons / check result */
@@ -95,6 +102,10 @@
     const now = new Date().toISOString();
     for (const id in s.lessons) if (s.lessons[id] && s.lessons[id].done && !s.progress.activities[id]) s.progress.activities[id] = { id, stars: s.lessons[id].stars || 1, completed: true, firstCompletedAt: now, lastCompletedAt: now, attempts: s.lessons[id].tries || 1 };
     if (s.check && s.check.last != null && !s.progress.activities.check) s.progress.activities.check = { id: 'check', stars: s.check.best >= 9 ? 3 : s.check.best >= 7 ? 2 : 1, completed: true, firstCompletedAt: now, lastCompletedAt: now, attempts: s.check.attempts || 1 };
+    if (!s.settings) s.settings = { calm: false, openAll: false, autoplay: true };
+    /* v1 saves have no autoplay flag, or it was left off. Turn it on once so lessons speak on their own, the same as Unit 4. */
+    if ((s.v || 1) < 2) { s.settings.autoplay = true; s.v = 2; s._migratedAutoplay = true; }
+    else if (s.settings.autoplay == null) { s.settings.autoplay = true; s._migratedAutoplay = true; }
     return s;
   }
   let S = load();
@@ -146,16 +157,17 @@
      play() rejections are never swallowed: they show a small "Sound off? Tap to enable" button that unlocks and replays. */
   const SILENT = 'data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAIA+AAACABAAZGF0YQAAAAA=';
   const Snd = {
-    el: null, id: 0, unlocked: false, last: null, blocked: false, log: [],
+    el: null, id: 0, unlocked: false, last: null, blocked: false, log: [], pending: null, manual: false,
     init() {
       if (this.el) return this.el;
       const a = document.createElement('audio'); a.preload = 'auto'; a.setAttribute('playsinline', ''); a.style.display = 'none';
       document.body.append(a); this.el = a;
       try { if (navigator.audioSession) navigator.audioSession.type = 'playback'; } catch (e) { /* not supported */ }
       const unlock = () => {
+        const again = this.pending; this.pending = null;
+        if (again) { this.unlocked = true; again(); return; }
         if (this.unlocked) return; this.unlocked = true;
         if (!this.playing) { try { a.src = SILENT; const p = a.play(); if (p && p.catch) p.catch(() => {}); } catch (e) { /* */ } }
-        ['pointerdown', 'touchend', 'click', 'keydown'].forEach((ev) => document.removeEventListener(ev, unlock, true));
       };
       ['pointerdown', 'touchend', 'click', 'keydown'].forEach((ev) => document.addEventListener(ev, unlock, true));
       return a;
@@ -174,7 +186,10 @@
     hideFallback() { this.blocked = false; const b = $('#soundfix'); if (b) b.remove(); },
     /* Resolves true when it finished, false on error/rejection. If another sound stops it, it never resolves (the old flow is cancelled). */
     play(src, opts) {
-      opts = opts || {}; const a = this.init();
+      opts = opts || {};
+      const auto = load().settings.autoplay !== false;
+      if (!opts.manual && !this.manual && !auto) return Promise.resolve(false);
+      const a = this.init();
       if (!opts.keep) this.stop();
       const id = this.id; this.log.push(src); this.last = () => this.play(src, opts);
       return new Promise((resolve) => {
@@ -196,7 +211,14 @@
           lastT = a.currentTime; if (stuck > 6000) { this.showFallback(); fin(false); }
         }, 100);
         let p; try { p = a.play(); } catch (e) { p = Promise.reject(e); }
-        if (p && p.catch) p.catch((e) => { if (this.id !== id) return; if (e && e.name === 'AbortError') return; this.showFallback(); fin(false); });
+        if (p && p.catch) p.catch((e) => {
+          if (this.id !== id) return;
+          if (e && e.name === 'AbortError') return;
+          /* The tap that opened the screen already happened. Replay on the next (or this) gesture, the same way Unit 4 unlocks audio. */
+          this.pending = () => this.play(src, opts);
+          if (!this.unlocked) this.showFallback();
+          fin(false);
+        });
       });
     },
     async seq(list, gap) {
@@ -236,7 +258,8 @@
     const b = h('button', { class: 'speaker', type: 'button', 'aria-label': label || 'Hear it' }, icon('speaker'));
     b.addEventListener('click', () => {
       b.classList.add('playing');
-      const r = onClick();
+      Snd.manual = true;
+      let r; try { r = onClick(); } finally { Snd.manual = false; }
       Promise.resolve(r).finally(() => b.classList.remove('playing'));
     });
     return b;
