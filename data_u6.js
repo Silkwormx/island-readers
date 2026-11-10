@@ -1,495 +1,226 @@
-/* Unit 6 Endings. Original word lists and story. Not copied from a published program. */
+/* Unit 6 Endings: three lessons. Words and stories from the Nov 10 2026 teacher plan. */
 window.IR_DATA_U6 = {
-  "name": "Endings",
-  "minutes": {
-    "meet": 10,
-    "listen": 4,
-    "hear": 3,
-    "bells": 3,
-    "build": 3,
-    "chain": 3,
-    "scramble": 3,
-    "feed": 3,
-    "sentence": 3,
-    "read": 4,
-    "fish": 3,
-    "check": 4
-  },
-  "heart": [
-    "the",
-    "a",
-    "to",
-    "I",
-    "is",
-    "said"
-  ],
-  "hear": [
+  "lessons": [
     {
-      "word": "cats",
-      "choices": [
-        "cats",
-        "hats",
-        "cups"
-      ]
-    },
-    {
-      "word": "boxes",
-      "choices": [
-        "boxes",
-        "buses",
-        "foxes"
-      ]
-    },
-    {
-      "word": "jumped",
-      "choices": [
-        "jumped",
-        "packed",
-        "rested"
-      ]
-    },
-    {
-      "word": "fishing",
-      "choices": [
-        "fishing",
-        "singing",
-        "helping"
-      ]
-    },
-    {
-      "word": "hugged",
-      "choices": [
-        "hugged",
-        "filled",
-        "ended"
-      ]
-    },
-    {
-      "word": "maps",
-      "choices": [
-        "maps",
-        "hats",
-        "bugs"
-      ]
-    }
-  ],
-  "bells": [
-    "cups",
-    "bugs",
-    "dishes",
-    "hugged",
-    "helping",
-    "maps"
-  ],
-  "build": [
-    {
-      "word": "cats",
-      "onset": "cat",
-      "ending": "s",
-      "altOnset": "hat",
-      "altEnding": "es"
-    },
-    {
-      "word": "boxes",
-      "onset": "box",
-      "ending": "es",
-      "altOnset": "bus",
-      "altEnding": "s"
-    },
-    {
-      "word": "jumped",
-      "onset": "jump",
-      "ending": "ed",
-      "altOnset": "pack",
-      "altEnding": "ing"
-    },
-    {
-      "word": "fishing",
-      "onset": "fish",
-      "ending": "ing",
-      "altOnset": "sing",
-      "altEnding": "ed"
-    }
-  ],
-  "chains": [
-    [
-      "cat",
-      "cats",
-      "hats"
-    ],
-    [
-      "box",
-      "boxes"
-    ],
-    [
-      "jump",
-      "jumped",
-      "jumping"
-    ]
-  ],
-  "scramble": [
-    "hats",
-    "bugs",
-    "rested",
-    "singing"
-  ],
-  "feed": [
-    "dogs",
-    "buses",
-    "packed",
-    "resting",
-    "filled",
-    "maps"
-  ],
-  "sentences": [
-    [
-      "Zip",
-      "packs",
-      "the",
-      "cups"
-    ],
-    [
-      "A",
-      "fish",
-      "is",
-      "jumping"
-    ],
-    [
-      "The",
-      "bugs",
-      "hop"
-    ]
-  ],
-  "fish": {
-    "need": 4,
-    "yes": [
-      "cats",
-      "boxes",
-      "jumped",
-      "fishing",
-      "hats",
-      "resting"
-    ],
-    "no": [
-      "cat",
-      "box",
-      "jump",
-      "fish",
-      "hat",
-      "rest"
-    ]
-  },
-  "check": [
-    {
-      "type": "pick",
-      "word": "cats",
-      "choices": [
-        "cat",
-        "cats",
-        "cup"
-      ]
-    },
-    {
-      "type": "pick",
-      "word": "boxes",
-      "choices": [
-        "box",
-        "boxes",
-        "bus"
-      ]
-    },
-    {
-      "type": "pick",
-      "word": "jumped",
-      "choices": [
-        "jump",
-        "jumped",
-        "jumping"
-      ]
-    },
-    {
-      "type": "pick",
-      "word": "fishing",
-      "choices": [
-        "fish",
-        "fishing",
-        "sing"
-      ]
-    },
-    {
-      "type": "which",
-      "prompt": "has_es",
-      "ask": "Tap the word that has es.",
-      "answer": "boxes",
-      "choices": [
-        "maps",
-        "boxes",
-        "cats"
-      ]
-    },
-    {
-      "type": "which",
-      "prompt": "has_ing",
-      "ask": "Tap the word that has ing.",
-      "answer": "packing",
-      "choices": [
-        "packed",
-        "packing",
-        "packs"
-      ]
-    },
-    {
-      "type": "end",
-      "word": "hugged",
-      "onset": "hug",
-      "answer": "ed",
-      "choices": [
-        "s",
-        "es",
-        "ed",
-        "ing"
-      ]
-    },
-    {
-      "type": "pick",
-      "word": "rested",
-      "choices": [
-        "rest",
-        "rested",
-        "resting"
-      ]
-    },
-    {
-      "type": "which",
-      "prompt": "has_s",
-      "ask": "Tap the word that ends with s, not es.",
-      "answer": "hats",
-      "choices": [
-        "foxes",
-        "hats",
-        "dishes"
-      ]
-    },
-    {
-      "type": "pick",
-      "word": "singing",
-      "choices": [
-        "sing",
-        "sings",
-        "singing"
-      ]
-    }
-  ],
-  "story": [
-    {
-      "img": "img/u6_p1.webp",
-      "audio": "audio/u6_s1.mp3",
-      "text": "Zip packs the cups and the hats.",
-      "words": [
-        "Zip",
-        "packs",
-        "the",
-        "cups",
-        "and",
-        "the",
-        "hats."
+      "key": "u61",
+      "n": "6.1",
+      "name": "-s and -es",
+      "storyTitle": "The Boxes on the Path",
+      "endings": ["s", "es"],
+      "example": { "base": "cat", "end": "s", "word": "cats" },
+      "meet": [
+        { "who": "zip", "text": "I add s to cat. Cats. The ending hisses." },
+        { "who": "frill", "text": "I add es to box. Boxes. I hear an extra beat." },
+        { "who": "zip", "text": "Bugs. The s can buzz. Play the sound, not the letter name." }
       ],
-      "t": [
-        [
-          0.0,
-          0.43
-        ],
-        [
-          0.43,
-          0.86
-        ],
-        [
-          0.86,
-          1.29
-        ],
-        [
-          1.29,
-          1.71
-        ],
-        [
-          1.71,
-          2.14
-        ],
-        [
-          2.14,
-          2.57
-        ],
-        [
-          2.57,
-          3.0
-        ]
+      "hear": [
+        { "word": "cats", "choices": ["cat", "cats", "caps"] },
+        { "word": "boxes", "choices": ["box", "boxes", "foxes"] },
+        { "word": "dishes", "choices": ["dish", "dishes", "wishes"] },
+        { "word": "bugs", "choices": ["bug", "bugs", "bags"] },
+        { "word": "hangs", "choices": ["hang", "hangs", "hugs"] },
+        { "word": "wishes", "choices": ["wish", "wishes", "dishes"] }
+      ],
+      "bells": { "yes": ["hats", "dishes", "bugs", "foxes", "rings", "maps", "packs", "boxes"], "no": ["hat", "dish", "bug", "fox", "ring", "map", "pack", "box"] },
+      "build": [
+        { "base": "cat", "end": "s", "word": "cats", "sound": "s" },
+        { "base": "box", "end": "es", "word": "boxes", "sound": "iz" },
+        { "base": "dish", "end": "es", "word": "dishes", "sound": "iz" },
+        { "base": "bug", "end": "s", "word": "bugs", "sound": "z" },
+        { "base": "wish", "end": "es", "word": "wishes", "sound": "iz" },
+        { "base": "hat", "end": "s", "word": "hats", "sound": "s" }
+      ],
+      "chains": [["hats", "cats", "cups", "bugs"], ["box", "boxes", "foxes", "dishes"], ["hang", "hangs", "rings", "tugs"]],
+      "feedYes": ["packs", "spots", "boxes", "dishes", "hangs", "rings"],
+      "feedNo": ["pack", "spot", "box", "dish", "hang", "ring"],
+      "sentences": [
+        { "text": "Zip packs the cups.", "words": ["Zip", "packs", "the", "cups."] },
+        { "text": "The bugs hop in the boxes.", "words": ["The", "bugs", "hop", "in", "the", "boxes."] },
+        { "text": "Frill shifts the dishes.", "words": ["Frill", "shifts", "the", "dishes."] },
+        { "text": "The orange bell hangs and rings.", "words": ["The", "orange", "bell", "hangs", "and", "rings."] }
+      ],
+      "rhyme": [
+        { "prompt": "cats", "choices": ["hats", "cups", "bugs"], "answer": "hats" },
+        { "prompt": "maps", "choices": ["dogs", "caps", "bells"], "answer": "caps" },
+        { "prompt": "bugs", "choices": ["hugs", "hats", "cups"], "answer": "hugs" },
+        { "prompt": "boxes", "choices": ["dishes", "buses", "foxes"], "answer": "foxes" },
+        { "prompt": "dishes", "choices": ["wishes", "boxes", "foxes"], "answer": "wishes" }
+      ],
+      "fishYes": ["cats", "boxes", "dishes", "bugs", "hangs", "rings"],
+      "fishNo": ["cat", "box", "dish", "bug", "hang", "ring"],
+      "check": [
+        { "type": "pick", "word": "cats", "choices": ["cats", "cat", "caps"] },
+        { "type": "pick", "word": "boxes", "choices": ["boxes", "box", "foxes"] },
+        { "type": "pick", "word": "dishes", "choices": ["dishes", "dish", "wishes"] },
+        { "type": "sound", "sound": "iz", "choices": ["boxes", "cats", "maps"], "answer": "boxes" },
+        { "type": "sound", "sound": "s", "choices": ["hats", "foxes", "dishes"], "answer": "hats" },
+        { "type": "sound", "sound": "z", "choices": ["bugs", "cups", "maps"], "answer": "bugs" },
+        { "type": "pick", "word": "hangs", "choices": ["hangs", "hang", "hugs"] },
+        { "type": "finish", "base": "dish", "choices": ["s", "es"], "answer": "es", "word": "dishes" },
+        { "type": "finish", "base": "cup", "choices": ["s", "es"], "answer": "s", "word": "cups" },
+        { "type": "pick", "word": "rings", "choices": ["rings", "ring", "rinks"] }
+      ],
+      "story": [
+        { "text": "Zip packs his pack. Frill hikes up the path.", "img": "img/ng_p02.webp" },
+        { "text": "The orange bell hangs on a long rope.", "img": "img/ng_p01.webp" },
+        { "text": "Zip spots boxes on the path by the bell.", "img": "img/ng_p05.webp" },
+        { "text": "Cups and dishes sit in the boxes.", "img": "img/ng_p04.webp" },
+        { "text": "Zip tugs the rope. The bell hits the boxes.", "img": "img/ng_p03.webp" },
+        { "text": "Clunk. The orange bell will not ring.", "img": "img/ng_p06.webp" },
+        { "text": "\"I can shift the boxes,\" said Zip.", "img": "img/ng_p07.webp" },
+        { "text": "Zip shifts the boxes. Frill shifts the dishes.", "img": "img/ng_p08.webp" },
+        { "text": "Zip taps the bell. The bell still hits.", "img": "img/ng_p09.webp" },
+        { "text": "\"Zip, the rope is long,\" said Frill.", "img": "img/ng_p10.webp" },
+        { "text": "Frill tucks the rope on the branch. The bell hangs up.", "img": "img/ng_p11.webp" },
+        { "text": "Zip taps the bell. Ding! It rings.", "img": "img/u6_p4.webp" }
       ]
     },
     {
-      "img": "img/u6_p2.webp",
-      "audio": "audio/u6_s2.mp3",
-      "text": "Frill said, I can help. The bugs hop in the boxes.",
-      "words": [
-        "Frill",
-        "said,",
-        "I",
-        "can",
-        "help.",
-        "The",
-        "bugs",
-        "hop",
-        "in",
-        "the",
-        "boxes."
+      "key": "u62",
+      "n": "6.2",
+      "name": "-ed",
+      "storyTitle": "The Branch on the Bell",
+      "endings": ["s", "es", "ed"],
+      "example": { "base": "jump", "end": "ed", "word": "jumped" },
+      "meet": [
+        { "who": "zip", "text": "I add ed to jump. Jumped. The ending is a quick /t/." },
+        { "who": "frill", "text": "I add ed to fill. Filled. This ending buzzes, /d/." },
+        { "who": "zip", "text": "I add ed to land. Landed. This ending has its own beat, /id/." }
       ],
-      "t": [
-        [
-          0.0,
-          0.47
-        ],
-        [
-          0.47,
-          0.95
-        ],
-        [
-          0.95,
-          1.42
-        ],
-        [
-          1.42,
-          1.89
-        ],
-        [
-          1.89,
-          2.37
-        ],
-        [
-          2.37,
-          2.84
-        ],
-        [
-          2.84,
-          3.31
-        ],
-        [
-          3.31,
-          3.79
-        ],
-        [
-          3.79,
-          4.26
-        ],
-        [
-          4.26,
-          4.73
-        ],
-        [
-          4.73,
-          5.21
-        ]
+      "hear": [
+        { "word": "jumped", "choices": ["jump", "jumped", "jumps"] },
+        { "word": "packed", "choices": ["pack", "packed", "packs"] },
+        { "word": "filled", "choices": ["fill", "filled", "lifted"] },
+        { "word": "landed", "choices": ["land", "landed", "ended"] },
+        { "word": "helped", "choices": ["help", "helped", "helps"] },
+        { "word": "rested", "choices": ["rest", "rested", "tested"] }
+      ],
+      "bells": { "yes": ["jumped", "packed", "filled", "landed", "helped", "rested", "missed", "handed"], "no": ["jump", "pack", "fill", "land", "help", "rest", "miss", "hand"] },
+      "build": [
+        { "base": "jump", "end": "ed", "word": "jumped", "sound": "ed_t" },
+        { "base": "pack", "end": "ed", "word": "packed", "sound": "ed_t" },
+        { "base": "fill", "end": "ed", "word": "filled", "sound": "ed_d" },
+        { "base": "land", "end": "ed", "word": "landed", "sound": "ed_id" },
+        { "base": "help", "end": "ed", "word": "helped", "sound": "ed_t" },
+        { "base": "rest", "end": "ed", "word": "rested", "sound": "ed_id" }
+      ],
+      "chains": [["jump", "jumped", "bumped", "packed"], ["pack", "packed", "stacked", "missed"], ["rest", "rested", "tested", "lifted"], ["land", "landed", "handed", "ended"]],
+      "feedYes": ["jumped", "packed", "filled", "landed", "helped", "rested"],
+      "feedNo": ["jump", "pack", "fill", "land", "help", "rest"],
+      "sentences": [
+        { "text": "Zip jumped and packed the stick.", "words": ["Zip", "jumped", "and", "packed", "the", "stick."] },
+        { "text": "The branch landed on the bell.", "words": ["The", "branch", "landed", "on", "the", "bell."] },
+        { "text": "Frill helped. Zip lifted it.", "words": ["Frill", "helped.", "Zip", "lifted", "it."] },
+        { "text": "The stick filled the gap. The branch rested.", "words": ["The", "stick", "filled", "the", "gap.", "The", "branch", "rested."] }
+      ],
+      "rhyme": [
+        { "prompt": "jumped", "choices": ["packed", "bumped", "landed"], "answer": "bumped" },
+        { "prompt": "packed", "choices": ["stacked", "jumped", "filled"], "answer": "stacked" },
+        { "prompt": "wished", "choices": ["packed", "filled", "fished"], "answer": "fished" },
+        { "prompt": "rested", "choices": ["tested", "landed", "jumped"], "answer": "tested" },
+        { "prompt": "landed", "choices": ["packed", "handed", "rested"], "answer": "handed" }
+      ],
+      "fishYes": ["jumped", "packed", "helped", "filled", "landed", "rested"],
+      "fishNo": ["jump", "pack", "help", "fill", "land", "rest"],
+      "check": [
+        { "type": "pick", "word": "jumped", "choices": ["jumped", "jump", "jumps"] },
+        { "type": "pick", "word": "filled", "choices": ["filled", "fill", "lifted"] },
+        { "type": "pick", "word": "landed", "choices": ["landed", "land", "ended"] },
+        { "type": "sound", "sound": "ed_t", "choices": ["jumped", "filled", "landed"], "answer": "jumped" },
+        { "type": "sound", "sound": "ed_d", "choices": ["filled", "packed", "rested"], "answer": "filled" },
+        { "type": "sound", "sound": "ed_id", "choices": ["lifted", "jumped", "packed"], "answer": "lifted" },
+        { "type": "pick", "word": "packed", "choices": ["packed", "pack", "packs"] },
+        { "type": "pick", "word": "rested", "choices": ["rested", "rest", "tested"] },
+        { "type": "finish", "base": "jump", "choices": ["s", "es", "ed"], "answer": "ed", "word": "jumped" },
+        { "type": "pick", "word": "helped", "choices": ["helped", "help", "helps"] }
+      ],
+      "story": [
+        { "text": "Zip and Frill hike to the orange bell.", "img": "img/ng_p02.webp" },
+        { "text": "A thick branch landed on the bell.", "img": "img/ng_p01.webp" },
+        { "text": "Zip taps the bell. Clunk. It will not ring.", "img": "img/ng_p09.webp" },
+        { "text": "Zip spots the branch on the bell.", "img": "img/ng_p06.webp" },
+        { "text": "\"The branch is on it,\" said Frill.", "img": "img/ng_p08.webp" },
+        { "text": "Zip lifted the thick branch off the bell.", "img": "img/ng_p03.webp" },
+        { "text": "The branch bumped the bell. Zip missed the gap.", "img": "img/ng_p05.webp" },
+        { "text": "Frill helped Zip. Zip lifted it up.", "img": "img/ng_p07.webp" },
+        { "text": "Frill packed a stick. It filled the gap.", "img": "img/ng_p04.webp" },
+        { "text": "The thick branch rested on the stick.", "img": "img/ng_p10.webp" },
+        { "text": "Zip jumped up and hit the bell.", "img": "img/ng_p11.webp" },
+        { "text": "Ding! The orange bell rings. The job is done.", "img": "img/u6_p1.webp" }
       ]
     },
     {
-      "img": "img/u6_p3.webp",
-      "audio": "audio/u6_s3.mp3",
-      "text": "Zip is fishing. A fish is jumping in the pond.",
-      "words": [
-        "Zip",
-        "is",
-        "fishing.",
-        "A",
-        "fish",
-        "is",
-        "jumping",
-        "in",
-        "the",
-        "pond."
+      "key": "u63",
+      "n": "6.3",
+      "name": "-ing",
+      "storyTitle": "The Stick by the Bell",
+      "endings": ["s", "es", "ed", "ing"],
+      "example": { "base": "hang", "end": "ing", "word": "hanging" },
+      "meet": [
+        { "who": "frill", "text": "I add ing to hang. Hanging. It is happening now." },
+        { "who": "zip", "text": "Lifting. Ringing. The ending is the sound /ing/." },
+        { "who": "frill", "text": "Hangs and hanging are different jobs. Listen to the ending." }
       ],
-      "t": [
-        [
-          0.0,
-          0.45
-        ],
-        [
-          0.45,
-          0.91
-        ],
-        [
-          0.91,
-          1.36
-        ],
-        [
-          1.36,
-          1.81
-        ],
-        [
-          1.81,
-          2.27
-        ],
-        [
-          2.27,
-          2.72
-        ],
-        [
-          2.72,
-          3.18
-        ],
-        [
-          3.18,
-          3.63
-        ],
-        [
-          3.63,
-          4.08
-        ],
-        [
-          4.08,
-          4.54
-        ]
-      ]
-    },
-    {
-      "img": "img/u6_p4.webp",
-      "audio": "audio/u6_s4.mp3",
-      "text": "Zip and Frill sing. The bells ding.",
-      "words": [
-        "Zip",
-        "and",
-        "Frill",
-        "sing.",
-        "The",
-        "bells",
-        "ding."
+      "hear": [
+        { "word": "hanging", "choices": ["hang", "hangs", "hanging"] },
+        { "word": "bumping", "choices": ["bump", "bumped", "bumping"] },
+        { "word": "lifting", "choices": ["lift", "lifted", "lifting"] },
+        { "word": "swinging", "choices": ["swing", "swings", "swinging"] },
+        { "word": "helping", "choices": ["help", "helped", "helping"] },
+        { "word": "ringing", "choices": ["ring", "rings", "ringing"] }
       ],
-      "t": [
-        [
-          0.0,
-          0.54
-        ],
-        [
-          0.54,
-          1.08
-        ],
-        [
-          1.08,
-          1.63
-        ],
-        [
-          1.63,
-          2.17
-        ],
-        [
-          2.17,
-          2.71
-        ],
-        [
-          2.71,
-          3.25
-        ],
-        [
-          3.25,
-          3.79
-        ]
+      "bells": { "yes": ["hanging", "bumping", "lifting", "helping", "shifting", "resting", "ringing", "jumping"], "no": ["hang", "bump", "lift", "help", "shift", "rest", "ring", "jump"] },
+      "build": [
+        { "base": "hang", "end": "ing", "word": "hanging", "sound": "ing" },
+        { "base": "bump", "end": "ing", "word": "bumping", "sound": "ing" },
+        { "base": "lift", "end": "ing", "word": "lifting", "sound": "ing" },
+        { "base": "help", "end": "ing", "word": "helping", "sound": "ing" },
+        { "base": "ring", "end": "ing", "word": "ringing", "sound": "ing" },
+        { "base": "jump", "end": "ing", "word": "jumping", "sound": "ing" }
+      ],
+      "chains": [["jump", "jumping", "bumping", "packing"], ["pack", "packing", "stacking", "wishing"], ["hang", "hanging", "ringing", "singing"], ["lift", "lifting", "shifting", "resting"]],
+      "feedYes": ["hanging", "bumping", "lifting", "helping", "shifting", "ringing"],
+      "feedNo": ["hang", "bump", "lift", "help", "shift", "ring"],
+      "sentences": [
+        { "text": "The orange bell is hanging on the branch.", "words": ["The", "orange", "bell", "is", "hanging", "on", "the", "branch."] },
+        { "text": "The stick is bumping the bell.", "words": ["The", "stick", "is", "bumping", "the", "bell."] },
+        { "text": "Zip is lifting the stick. Frill is helping.", "words": ["Zip", "is", "lifting", "the", "stick.", "Frill", "is", "helping."] },
+        { "text": "Zip is ringing the bell.", "words": ["Zip", "is", "ringing", "the", "bell."] }
+      ],
+      "rhyme": [
+        { "prompt": "jumping", "choices": ["packing", "bumping", "ringing"], "answer": "bumping" },
+        { "prompt": "packing", "choices": ["stacking", "helping", "singing"], "answer": "stacking" },
+        { "prompt": "fishing", "choices": ["ringing", "lifting", "wishing"], "answer": "wishing" },
+        { "prompt": "singing", "choices": ["ringing", "packing", "lifting"], "answer": "ringing" },
+        { "prompt": "lifting", "choices": ["resting", "shifting", "packing"], "answer": "shifting" }
+      ],
+      "fishYes": ["hanging", "bumping", "lifting", "helping", "ringing", "jumping"],
+      "fishNo": ["hang", "bump", "lift", "help", "ring", "jump"],
+      "check": [
+        { "type": "pick", "word": "hanging", "choices": ["hanging", "hang", "hangs"] },
+        { "type": "pick", "word": "bumping", "choices": ["bumping", "bump", "bumped"] },
+        { "type": "pick", "word": "lifting", "choices": ["lifting", "lift", "lifted"] },
+        { "type": "sound", "sound": "ing", "choices": ["ringing", "rings", "rang"], "answer": "ringing" },
+        { "type": "sound", "sound": "ing", "choices": ["helping", "helped", "helps"], "answer": "helping" },
+        { "type": "pick", "word": "shifting", "choices": ["shifting", "shift", "shifts"] },
+        { "type": "pick", "word": "resting", "choices": ["resting", "rest", "rested"] },
+        { "type": "finish", "base": "ring", "choices": ["s", "ed", "ing"], "answer": "ing", "word": "ringing" },
+        { "type": "pick", "word": "swinging", "choices": ["swinging", "swing", "swings"] },
+        { "type": "pick", "word": "ringing", "choices": ["ringing", "ring", "rings"] }
+      ],
+      "story": [
+        { "text": "The orange bell is hanging on the branch.", "img": "img/ng_p01.webp" },
+        { "text": "Zip and Frill hike up the path.", "img": "img/ng_p02.webp" },
+        { "text": "A long stick is hanging by the bell.", "img": "img/ng_p07.webp" },
+        { "text": "The stick is bumping the bell. Clunk.", "img": "img/ng_p09.webp" },
+        { "text": "Zip tugs the rope. The bell will not ring.", "img": "img/ng_p03.webp" },
+        { "text": "\"The stick is bumping it,\" said Frill.", "img": "img/ng_p08.webp" },
+        { "text": "Zip is lifting the long stick up.", "img": "img/ng_p05.webp" },
+        { "text": "The stick is swinging back. It hits the bell.", "img": "img/ng_p06.webp" },
+        { "text": "Frill is helping Zip lift the stick.", "img": "img/ng_p10.webp" },
+        { "text": "Frill is shifting the stick off the path.", "img": "img/ng_p11.webp" },
+        { "text": "The stick is resting on the path.", "img": "img/u6_p2.webp" },
+        { "text": "Zip is ringing the bell. Ding! It rings.", "img": "img/u6_p3.webp" }
       ]
     }
   ]

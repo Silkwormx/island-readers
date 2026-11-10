@@ -141,6 +141,7 @@
       }
     }
 
-    model();
+    if (opts.skipModel) round();
+    else model();
   };
 })();
