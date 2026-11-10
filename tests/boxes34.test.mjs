@@ -42,9 +42,14 @@ test('boxes 3 and 4 have 50 words, fill-in rounds, and every audio file', () => 
 
 test('fluency page lists the stories that exist and drops the coming-soon line', () => {
   const screens = read('js/screens.js');
+  const data = read('data.js');
+  const nk = read('data_nk.js');
   assert.equal(screens.includes('More stories are coming soon.'), false);
   assert.match(screens, /function fluencyStories/);
-  assert.match(screens, /storyTitle/);
+  assert.match(screens, /Unit ' \+ unit \+ ' \\u00b7 Lesson ' \+ lesson/);
+  assert.match(screens, /class: 'fl-title'/);
   assert.match(screens, /#\/u6\/' \+ L\.key \+ '\/read/);
   assert.match(screens, /#\/nk\/read/);
+  assert.match(data, /"storyTitle": "The Twigs in the Bell"/);
+  assert.match(nk, /"storyTitle": "The Skunk in the Trunk"/);
 });

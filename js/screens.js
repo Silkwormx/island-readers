@@ -531,26 +531,24 @@
     const back = h('button', { class: 'back homebtn', type: 'button', onclick: () => { location.hash = '#/home'; } }, icon('back'), h('span', null, 'Home'));
     app.append(h('div', { class: 'screen home simplepage' }, h('div', { class: 'mwrap' }, h('div', { class: 'gtop' }, back), h('h1', null, title), ...kids)));
   }
-  /* Stories that exist in this build, in unit order. Later lessons show up when their data is present (storyTitle when the lesson has one). */
+  /* Same lesson line as the unit pages: "Unit 4 · Lesson 4.1 · ng". The small line is storyTitle from that lesson's data. */
   function fluencyStories() {
     const out = [];
-    const add = (code, unit, name, title, href) => {
-      const story = title || (name === 'ng' || name === 'nk' ? name : name.charAt(0).toUpperCase() + name.slice(1));
-      out.push({ code, href, label: unit + ' \u00b7 ' + story });
-    };
+    const lessonName = (name) => { const s = String(name || ''); if (s === 'ng' || s === 'nk' || s.charAt(0) === '-') return s; return /^[a-z]/.test(s) ? s.charAt(0).toUpperCase() + s.slice(1) : s; };
+    const add = (unit, lesson, name, title, href) => out.push({ href, lesson: 'Unit ' + unit + ' \u00b7 Lesson ' + lesson + ' \u00b7 ' + lessonName(name), title: title || '' });
     if (Array.isArray(D.story) && D.story.length) {
       const i = LESSONS.findIndex((l) => l.id === 'story');
-      if (i >= 0) add('ng', 'Unit 4', 'ng', D.storyTitle, '#/lesson/' + (i + 1));
+      if (i >= 0) add('4', '4.1', 'ng', D.storyTitle, '#/lesson/' + (i + 1));
     }
     const nk = window.IR_DATA_NK;
-    if (nk && Array.isArray(nk.story) && nk.story.length) add('nk', 'Unit 4', 'nk', nk.storyTitle, '#/nk/read');
+    if (nk && Array.isArray(nk.story) && nk.story.length) add('4', '4.2', 'nk', nk.storyTitle, '#/nk/read');
     const u5 = window.IR_DATA_U5;
     if (u5) Object.keys(u5).map((k) => u5[k]).filter((L) => L && Array.isArray(L.story) && L.story.length).sort((a, b) => String(a.n || a.key).localeCompare(String(b.n || b.key), undefined, { numeric: true })).forEach((L) => {
-      add(L.n || L.key, 'Unit ' + (L.n || L.key), L.name || L.title, L.storyTitle, '#/' + (L.key || '') + '/read');
+      add('5', L.n || L.key, L.name || L.title, L.storyTitle, '#/' + (L.key || '') + '/read');
     });
     const u6 = window.IR_DATA_U6;
-    if (u6 && Array.isArray(u6.lessons)) u6.lessons.forEach((L) => { if (L && Array.isArray(L.story) && L.story.length) add(L.n || L.key, 'Unit ' + (L.n || L.key), L.name, L.storyTitle, '#/u6/' + L.key + '/read'); });
-    else if (u6 && Array.isArray(u6.story) && u6.story.length) add('6', 'Unit 6', u6.name || 'Endings', u6.storyTitle, '#/u6/read');
+    if (u6 && Array.isArray(u6.lessons)) u6.lessons.forEach((L) => { if (L && Array.isArray(L.story) && L.story.length) add('6', L.n || L.key, L.name, L.storyTitle, '#/u6/' + L.key + '/read'); });
+    else if (u6 && Array.isArray(u6.story) && u6.story.length) add('6', '6', u6.name || 'Endings', u6.storyTitle, '#/u6/read');
     return out;
   }
   function practiceScreen(key) {
@@ -565,9 +563,10 @@
     }
     if (key === 'fluency') {
       const stories = fluencyStories();
-      const cards = stories.map((s) => h('a', { class: 'gchest open', href: s.href }, h('b', null, s.code), h('span', null, s.label)));
+      const cards = stories.map((s) => h('a', { class: 'gchest open fluencycard', href: s.href, 'aria-label': s.lesson + (s.title ? '. ' + s.title : '') },
+        h('span', { class: 'fl-lesson' }, s.lesson), s.title ? h('span', { class: 'fl-title' }, s.title) : null));
       return simplePage('Fluency Stories', h('p', { class: 'calm' }, 'Read a story again and again. It gets smoother each time.'),
-        h('div', { class: 'chestlist' }, ...cards));
+        h('div', { class: 'chestlist fluencylist' }, ...cards));
     }
     if (key === 'spelling') return simplePage('Spelling', h('p', { class: 'calm' }, 'Spelling practice is coming soon.'), h('p', { class: 'calm small' }, 'For now, try Hear it, Spell it inside the Unit 3 lesson.'));
     location.hash = '#/home';
