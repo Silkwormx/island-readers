@@ -60,7 +60,7 @@ test('home shows Zip and Frill again and keeps the left-column layout', () => {
   assert.equal(home.includes('banner, hero,'), false);
   const sw = fs.readFileSync(new URL('../sw.js', import.meta.url), 'utf8');
   assert.equal(sw.includes('home_banyan_c.jpg'), false);
-  assert.ok(sw.includes('ir-20261110a'));
+  assert.ok(sw.includes('ir-20261110b'));
 });
 
 test('approved image file is the installed jpeg', () => {

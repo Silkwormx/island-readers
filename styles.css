@@ -1605,14 +1605,15 @@ body.calm .ob-glow{animation:none;opacity:.85}
   width:auto!important;height:100%!important;max-height:100%!important;max-width:100%!important;
   object-fit:contain;border-radius:1rem}
 .lessonscreen:has(.listenmode) .sentrow{flex:0 0 auto}
-.lessonscreen:has(.listenmode) .sentence{font-size:clamp(1.15rem,2.6vw,1.55rem);line-height:1.35;margin:.15rem 0}
+.lessonscreen:has(.listenmode) .sentrow{min-width:0;width:100%}
+.lessonscreen:has(.listenmode) .sentence{font-size:clamp(1.15rem,2.6vw,1.55rem);line-height:1.35;margin:.15rem 0;max-width:100%;min-width:0;overflow-wrap:anywhere}
 .lessonscreen:has(.listenmode) .story-ctl{
   display:flex!important;flex-wrap:nowrap;justify-content:center;align-items:center;gap:.55rem;margin:.15rem 0 0}
 .lessonscreen:has(.listenmode) .story-ctl .btn{flex:1 1 0;min-width:0;min-height:3.4rem;font-size:1.05rem;padding:.45rem .7rem;white-space:nowrap}
 @media (max-width:480px){
-  .lessonscreen:has(.listenmode) .story-ctl{gap:.35rem}
-  .lessonscreen:has(.listenmode) .story-ctl .btn{font-size:.92rem;padding:.4rem .45rem;min-height:3.1rem}
-  .lessonscreen:has(.listenmode) .sentence{font-size:1.1rem}
+  .lessonscreen:has(.listenmode) .story-ctl{gap:.35rem;flex-wrap:wrap!important}
+  .lessonscreen:has(.listenmode) .story-ctl .btn{flex:1 1 30%;font-size:.92rem;padding:.4rem .45rem;min-height:3.1rem}
+  .lessonscreen:has(.listenmode) .sentence{font-size:1.05rem;max-width:100%}
 }
 .unitpage .lesson-nav{display:none!important}
 
@@ -1720,11 +1721,14 @@ body.calm .ob-glow{animation:none;opacity:.85}
 .unitpage .arow .sside{flex:none;display:flex;align-items:center;gap:.25rem}
 .unitpage .arow .sstar{width:1.45rem!important;height:1.45rem!important}
 @media (max-width:600px){
-  .unitpage .uA-acts{gap:.45rem!important}
-  .unitpage .arow{min-height:3.7rem!important;padding:.45rem .55rem!important;gap:.45rem!important}
+  .unitpage .uA-acts,
+  .unitpage.unitA .uA-acts{grid-template-columns:1fr!important;gap:.45rem!important}
+  .unitpage .arow{min-height:3.7rem!important;padding:.45rem .7rem!important;gap:.55rem!important}
   .unitpage .arow .snum{width:1.85rem!important;height:1.85rem!important;font-size:.95rem!important}
-  .unitpage .arow .stxt b{font-size:.88rem!important}
-  .unitpage .arow .smin{font-size:.72rem}
+  .unitpage .arow .stxt{min-width:0;flex:1 1 auto}
+  .unitpage .arow .stxt b{width:100%;font-size:.95rem!important}
+  .unitpage .arow .smin{font-size:.78rem}
+  .unitpage.unitA .uA-main{padding-bottom:6.5rem!important}
 }
 
 /* Feed Zip */
@@ -1755,3 +1759,8 @@ body.calm .ob-glow{animation:none;opacity:.85}
   .fz-word{font-size:2.1rem}
   .fz-bubble{min-width:5.6rem;min-height:3.6rem;font-size:1.25rem;padding:.4rem .75rem}
 }
+.u6tips{background:#fff;border:3px solid var(--line,#2b2540);border-radius:16px;padding:.85rem 1rem;text-align:left;margin:.7rem auto;max-width:40rem}
+.u6tips h2{font-size:1.2rem;margin:0 0 .3rem}
+.u6tips p,.u6tips li{font-size:1.05rem;line-height:1.4}
+.u6tips ol{margin:.25rem 0 0;padding-left:1.25rem}
+.u6tips li{margin:.35rem 0}
