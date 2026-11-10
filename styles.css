@@ -108,6 +108,7 @@ p{margin:.4em 0}
 
 /* ---------- LESSON SHELL ---------- */
 .lessonscreen{display:flex;flex-direction:column;background:var(--cream)}
+.lessonscreen.is-lesson{background:#D7EEE8}
 .lesson-top{display:flex;align-items:center;gap:1rem;padding:.8rem 1.2rem;flex:0 0 auto}
 .xbtn{width:3.4rem;height:3.4rem;border-radius:50%;border:3px solid var(--line);background:#fff;padding:.7rem;flex:0 0 3.4rem;color:var(--ink2)}
 .pbar{position:relative;flex:1;height:1.4rem;background:#EADFC3;border-radius:1rem;overflow:hidden;border:3px solid #E0D2AE}
@@ -130,6 +131,23 @@ p{margin:.4em 0}
 .choice.tried{background:#EFE9DA;border-color:#B9AF96;box-shadow:none;color:#8b839e;transform:translateY(4px)}
 .choice.fade{opacity:.35}
 .choice.hint{animation:glow 1.2s ease-in-out infinite}
+/* Unit 6: long words stay inside the tile, and Yes/No are two solid squares */
+.u6step .choices{width:min(100%,46rem)}
+.u6step .choice:not(.yn){font-size:clamp(.95rem,2.8vw,1.85rem);min-height:4.6rem;height:auto;padding:.7rem .55rem .4rem;line-height:1.15;text-align:center;max-width:100%}
+.u6step .choice:not(.yn) > span{white-space:nowrap;max-width:100%}
+.u6step .bigword{font-size:clamp(1.55rem,6vw,2.8rem);max-width:100%;overflow-wrap:anywhere;line-height:1.15;text-align:center}
+.u6step .yn-row{grid-template-columns:repeat(2,minmax(0,12rem));justify-content:center;width:min(100%,28rem)}
+.u6step .yn{color:#fff;font-size:clamp(2rem,7vw,3.1rem);aspect-ratio:auto;width:100%;min-height:8.2rem;height:auto;padding:1.1rem .4rem .55rem}
+.u6step .yn-yes{background:#1E8F4A;border-color:#146636;box-shadow:0 6px 0 #146636}
+.u6step .yn-no{background:#D23B32;border-color:#8E241E;box-shadow:0 6px 0 #8E241E}
+.u6step .yn.right{outline:4px solid #1a1a1a;outline-offset:3px}
+.u6step .yn-yes.right{background:#1E8F4A;border-color:#146636}
+.u6step .yn-no.right{background:#D23B32;border-color:#8E241E;box-shadow:0 6px 0 #8E241E}
+.u6step .fz-bubble{font-size:clamp(1.05rem,3.2vw,1.8rem);min-width:0;width:100%;white-space:normal;overflow-wrap:anywhere;line-height:1.1;height:auto}
+@media (max-width:420px){
+  .u6step .choices.three{grid-template-columns:1fr}
+  .u6step .choice:not(.yn){font-size:1.45rem}
+}
 .choice.picked{background:#E3F3F3;border-color:var(--teal-d);box-shadow:0 6px 0 var(--teal-d)}
 @keyframes glow{50%{box-shadow:0 0 0 10px #ffe08a99,0 6px 0 var(--ink)}}
 .choices.chunks .choice{font-size:2.4rem}

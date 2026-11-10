@@ -497,7 +497,7 @@
         h('div', { class: 'row' }, backBtn, nextBtn)));
       app.append(ov); Snd.play(A.sfx.done);
     }
-    app.append(h('div', { class: 'screen lessonscreen', style: '--c:' + L.color }, h('header', { class: 'lesson-top' }, x, bar, starTop, unitButton(L.id), gearButton()), instrBox, stage, nav));
+    app.append(h('div', { class: 'screen lessonscreen' + (L.id === 'intro' ? ' is-lesson' : ''), style: '--c:' + L.color }, h('header', { class: 'lesson-top' }, x, bar, starTop, unitButton(L.id), gearButton()), instrBox, stage, nav));
     setBar(); L.run(ctx);
   }
 
