@@ -689,7 +689,7 @@
   IR.UNIT_ROUTES = IR.UNIT_ROUTES || [
     { n: 4, id: 'i3', test: (hs) => /^#\/(nk|island3|lesson\/|review3|check|result)/.test(hs) },
     { n: 5, id: 'i5', test: (hs) => /^#\/(u5\d|review5)/.test(hs) },
-    { n: 6, id: 'u6', href: '#/u6', test: (hs) => /^#\/u6\//.test(hs) }];
+    { n: 6, id: 'u6', href: '#/u6', test: (hs) => /^#\/u6(\/|$)/.test(hs) }];
   function addUnitBack() {
     const hs = location.hash || ''; const u = IR.UNIT_ROUTES.find((r) => r.test(hs));
     if (!u || app.querySelector('.unitback')) return;
