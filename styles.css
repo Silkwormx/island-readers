@@ -1343,6 +1343,11 @@ body.calm .ob-glow{animation:none;opacity:.85}
 @media (min-width:760px){.chestlist{grid-template-columns:repeat(2,minmax(0,17rem));grid-auto-rows:10.5rem}}
 @media (max-width:759px){.chestlist{grid-auto-rows:11.5rem}}
 .chestlist .sbox .mine-tag{white-space:normal;max-width:100%;box-sizing:border-box;line-height:1.25;text-align:center}
+/* Fluency Stories: one lesson line, then the story title, same shape on every card */
+.chestlist.fluencylist{grid-auto-rows:11.5rem}
+.chestlist .fluencycard{gap:.45rem!important;padding:.85rem .7rem!important}
+.chestlist .fluencycard .fl-lesson{font-size:1.15rem;font-weight:800;line-height:1.25;text-wrap:balance}
+.chestlist .fluencycard .fl-title{font-size:.98rem;font-weight:700;line-height:1.3;color:#5c5348}
 /* Banyan Bells mockup (Nov 2 2026) */
 .zftext{display:flex;flex-direction:column;gap:.35rem}
 .zfsub{margin:0;font-size:1rem;line-height:1.5;color:var(--ink2);font-weight:400}

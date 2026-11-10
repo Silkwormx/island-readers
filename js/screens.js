@@ -5,7 +5,7 @@
   const { D, h, $, $$, sleep, icon, Snd, A, say } = IR;
   const app = $('#app'); const modalRoot = $('#modal-root');
   const LESSONS = IR.LESSONS;
-  /* The whole world in order: Ground Level, Islands 1-10, two Review Reefs, four treasure boxes (after Islands 2, 4, 6, 8). Only the ng unit (Island 3) and treasure chest 1 are playable. */
+  /* The whole world in order: Ground Level, Islands 1-10, two Review Reefs, four treasure boxes (after Islands 2, 4, 6, 8). All four treasure chests open from the map data and from Sight Word Practice. */
   const WORLD = [
     { id: 'ground', kind: 'ground', title: 'Ground Level', sub: 'Where the journey starts' },
     { id: 'i1', kind: 'island', n: 1, title: 'Blends and Floss' }, { id: 'i2', kind: 'island', n: 2, title: 'Digraphs' },
@@ -15,9 +15,9 @@
     { id: 'chest2', kind: 'chest', n: 2, title: 'Treasure chest 2', sub: 'Level 2 \u00b7 Word games', href: '#/chest2' },
     { id: 'i5', kind: 'island', n: 5, title: 'Longer Words' }, { id: 'reef1', kind: 'reef', title: 'Review Reef', sub: 'After Island 5' },
     { id: 'i6', kind: 'island', n: 6, title: 'Bossy r' },
-    { id: 'chest3', kind: 'chest', n: 3, title: 'Treasure chest 3', sub: 'Level 3' },
+    { id: 'chest3', kind: 'chest', n: 3, title: 'Treasure chest 3', sub: 'Level 3 \u00b7 Word games', href: '#/chest3' },
     { id: 'i7', kind: 'island', n: 7, title: 'Vowel Teams' }, { id: 'i8', kind: 'island', n: 8, title: 'Other Vowels' },
-    { id: 'chest4', kind: 'chest', n: 4, title: 'Treasure chest 4', sub: 'Level 4' },
+    { id: 'chest4', kind: 'chest', n: 4, title: 'Treasure chest 4', sub: 'Level 4 \u00b7 Word games', href: '#/chest4' },
     { id: 'i9', kind: 'island', n: 9, title: 'Word Parts' }, { id: 'i10', kind: 'island', n: 10, title: 'Spelling Patterns' },
     { id: 'reef2', kind: 'reef', title: 'Review Reef', sub: 'After Island 10' }
   ];
@@ -531,6 +531,26 @@
     const back = h('button', { class: 'back homebtn', type: 'button', onclick: () => { location.hash = '#/home'; } }, icon('back'), h('span', null, 'Home'));
     app.append(h('div', { class: 'screen home simplepage' }, h('div', { class: 'mwrap' }, h('div', { class: 'gtop' }, back), h('h1', null, title), ...kids)));
   }
+  /* Same lesson line as the unit pages: "Unit 4 · Lesson 4.1 · ng". The small line is storyTitle from that lesson's data. */
+  function fluencyStories() {
+    const out = [];
+    const lessonName = (name) => { const s = String(name || ''); if (s === 'ng' || s === 'nk' || s.charAt(0) === '-') return s; return /^[a-z]/.test(s) ? s.charAt(0).toUpperCase() + s.slice(1) : s; };
+    const add = (unit, lesson, name, title, href) => out.push({ href, lesson: 'Unit ' + unit + ' \u00b7 Lesson ' + lesson + ' \u00b7 ' + lessonName(name), title: title || '' });
+    if (Array.isArray(D.story) && D.story.length) {
+      const i = LESSONS.findIndex((l) => l.id === 'story');
+      if (i >= 0) add('4', '4.1', 'ng', D.storyTitle, '#/lesson/' + (i + 1));
+    }
+    const nk = window.IR_DATA_NK;
+    if (nk && Array.isArray(nk.story) && nk.story.length) add('4', '4.2', 'nk', nk.storyTitle, '#/nk/read');
+    const u5 = window.IR_DATA_U5;
+    if (u5) Object.keys(u5).map((k) => u5[k]).filter((L) => L && Array.isArray(L.story) && L.story.length).sort((a, b) => String(a.n || a.key).localeCompare(String(b.n || b.key), undefined, { numeric: true })).forEach((L) => {
+      add('5', L.n || L.key, L.name || L.title, L.storyTitle, '#/' + (L.key || '') + '/read');
+    });
+    const u6 = window.IR_DATA_U6;
+    if (u6 && Array.isArray(u6.lessons)) u6.lessons.forEach((L) => { if (L && Array.isArray(L.story) && L.story.length) add('6', L.n || L.key, L.name, L.storyTitle, '#/u6/' + L.key + '/read'); });
+    else if (u6 && Array.isArray(u6.story) && u6.story.length) add('6', '6', u6.name || 'Endings', u6.storyTitle, '#/u6/read');
+    return out;
+  }
   function practiceScreen(key) {
     if (key === 'sight') {
       const curUnit = islandDone('i3') ? 4 : 3; const curBox = Math.ceil(curUnit / 2);   /* same rule as the You-are-here bar */
@@ -542,10 +562,11 @@
       return simplePage('Sight Word Practice', h('div', { class: 'chestlist' }, ...rows), h('p', { class: 'calm small' }, 'Units 9\u201310: sight words come later.'));
     }
     if (key === 'fluency') {
-      const si = LESSONS.findIndex((l) => l.id === 'story') + 1;
+      const stories = fluencyStories();
+      const cards = stories.map((s) => h('a', { class: 'gchest open fluencycard', href: s.href, 'aria-label': s.lesson + (s.title ? '. ' + s.title : '') },
+        h('span', { class: 'fl-lesson' }, s.lesson), s.title ? h('span', { class: 'fl-title' }, s.title) : null));
       return simplePage('Fluency Stories', h('p', { class: 'calm' }, 'Read a story again and again. It gets smoother each time.'),
-        h('div', { class: 'chestlist' }, h('a', { class: 'gchest open', href: '#/lesson/' + si }, h('b', null, 'ng'), h('span', null, 'Now You Read It \u00b7 Unit 4 ng')),
-          h('a', { class: 'gchest open', href: '#/nk/read' }, h('b', null, 'nk'), h('span', null, 'Now You Read It \u00b7 Unit 4 nk'))), h('p', { class: 'calm small' }, 'More stories are coming soon.'));
+        h('div', { class: 'chestlist fluencylist' }, ...cards));
     }
     if (key === 'spelling') return simplePage('Spelling', h('p', { class: 'calm' }, 'Spelling practice is coming soon.'), h('p', { class: 'calm small' }, 'For now, try Hear it, Spell it inside the Unit 3 lesson.'));
     location.hash = '#/home';
@@ -672,7 +693,7 @@
     else if (IR.u5Route && IR.u5Route(hash, app)) { /* Unit 5 Silent e (js/u5.js) */ }
     else if (IR.u6Route && IR.u6Route(hash, app)) { /* Unit 6 Endings (js/u6.js) */ }
     else if ((m = /^#\/lesson\/(\d+)/.exec(hash))) lessonScreen(parseInt(m[1], 10) - 1);
-    else if (/^#\/chest[12]/.test(hash)) IR.chest.render(hash, app);
+    else if (/^#\/chest[1-4]/.test(hash)) IR.chest.render(hash, app);
     else if ((m = /^#\/practice\/(\w+)/.exec(hash))) practiceScreen(m[1]);
     else if (hash.startsWith('#/gems')) gemScreen();
     else if (hash.startsWith('#/about')) aboutScreen();

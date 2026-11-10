@@ -1,4 +1,4 @@
-/* Treasure chests 1 and 2: one game menu with 10 games per chest, on that chest's 50 words (D.box1, D.box2). Rounds are 6 to 10 words; every game can Keep going round after round. Replayable, never blocks progress, no timers, no scores to lose. */
+/* Treasure chests 1-4: one game menu with 10 games per chest, on that chest's 50 words (D.box1 .. D.box4). Rounds are 6 to 10 words; every game can Keep going round after round. Replayable, never blocks progress, no timers, no scores to lose. */
 (function () {
   'use strict';
   const IR = window.IR;
@@ -21,7 +21,7 @@
   const navFor = (id) => { const i = GAMES.findIndex((g) => g.id === id); const pv = GAMES[i - 1], nx = GAMES[i + 1];
     return { backHref: pv ? P + '/' + pv.id : P, backLabel: pv ? 'Back: ' + pv.title : 'Back to the chest', nextHref: nx ? P + '/' + nx.id : P, nextLabel: nx ? 'Next game: ' + nx.title : 'Next: back to the chest' }; };
   const LETTERS = 'abcdefghijklmnopqrstuvwxyz'; const VOWELS = 'aeiou';
-  const poolOf = (min, max) => WORDS.filter((w) => w.length >= min && w.length <= max && w !== 'I');
+  const poolOf = (min, max) => WORDS.filter((w) => /^[a-z]+$/i.test(w) && w.length >= min && w.length <= max && w !== 'I');
   const state = () => { const S = IR.S(); const k = 'chest' + N; if (!S[k]) S[k] = { plays: {}, read: {} }; return S[k]; };
   const taught = (w) => D.heart.some((x) => x.w === w) && (!!IR.S().heart[w] || IR.isDone('listen'));     /* heart words already taught show a star */
   /* Round words: every game walks through its own fixed shuffled order of the pool, n words at a time, so the words in one round are unique, each replay moves to the next n words, and the whole pool is used before any word comes round again. */
@@ -311,7 +311,7 @@
   }
   /* ---- game 8: Word Sort (tap the group a word belongs to; the group pairs rotate every round) ---- */
   const SORT_BOARDS = [
-    { id: 'len', A: { name: '2 or 3 letters', words: WORDS.filter((w) => w.length <= 3), key: 'two' }, B: { name: '5 or more letters', words: WORDS.filter((w) => w.length >= 5), key: 'four' }, ask: 'How many letters?' },
+    { id: 'len', A: { name: '2 or 3 letters', words: WORDS.filter((w) => /^[a-z]+$/i.test(w) && w.length <= 3), key: 'two' }, B: { name: '5 or more letters', words: WORDS.filter((w) => /^[a-z]+$/i.test(w) && w.length >= 5), key: 'four' }, ask: 'How many letters?' },
     { id: 'heart', A: { name: 'Heart word (tricky part)', words: HEARTW, key: 'heart' }, B: { name: 'Sound it out', words: SOUNDW, key: 'sound' }, ask: 'Heart word or sound it out?' },
     { id: 'vowel', A: { name: 'Starts with a vowel', words: WORDS.filter((w) => /^[aeiouAEIOU]/.test(w)), key: 'vowel' }, B: { name: 'Starts with another letter', words: WORDS.filter((w) => !/^[aeiouAEIOU]/.test(w)), key: 'other' }, ask: 'What does it start with?' }
   ];
@@ -413,7 +413,12 @@
   const S1 = ['an', 'as', 'ask', 'had', 'has', 'him', 'his', 'if', 'just', 'let', 'stop', 'them', 'then', 'thank', 'think', 'when'];
   const H2 = ['again', 'any', 'could', 'every', 'once', 'through', 'great', 'goes', 'gave', 'read', 'means', 'years'];
   const S2 = ['best', 'end', 'fast', 'its', 'men', 'man', 'much', 'off', 'set', 'sit', 'such', 'us', 'sing', 'things'];
-  const boxes = { 1: make(1, D.box1, D.fillin || [], H1, S1), 2: make(2, D.box2, D.fillin2 || [], H2, S2) };
+  const H3 = ['answer', 'country', 'learn', 'mother', 'move', 'school', 'should', 'study', 'very', 'wash', 'work', 'world', 'buy', 'pull', 'own'];
+  const S3 = ['add', 'back', 'hand', 'land', 'last', 'plant', 'spell', 'still', 'tell', 'wish', 'which', 'upon'];
+  const H4 = ['because', 'been', 'children', 'does', 'eyes', 'father', 'group', 'many', 'often', 'their', 'thought', 'would', 'your', 'earth'];
+  const S4 = ['got', 'left', 'next', 'until', 'together', 'something', 'never', 'begin'];
+  const boxes = { 1: make(1, D.box1, D.fillin || [], H1, S1), 2: make(2, D.box2, D.fillin2 || [], H2, S2), 3: make(3, D.box3 || [], D.fillin3 || [], H3, S3), 4: make(4, D.box4 || [], D.fillin4 || [], H4, S4) };
   IR.chests = boxes;
-  IR.chest = { render: (hash, app) => boxes[/^#\/chest2/.test(hash) ? 2 : 1].render(hash, app), checklist: () => h('div', null, boxes[1].checklist(), boxes[2].checklist()), WORDS: D.box1, GAMES: boxes[1].GAMES, ROUND: boxes[1].ROUND, rounds: boxes[1].rounds };
+  const which = (hash) => { const m = /^#\/chest(\d)/.exec(hash || ''); const n = m ? +m[1] : 1; return boxes[n] ? n : 1; };
+  IR.chest = { render: (hash, app) => boxes[which(hash)].render(hash, app), checklist: () => h('div', null, ...[1, 2, 3, 4].map((n) => boxes[n].checklist())), WORDS: D.box1, GAMES: boxes[1].GAMES, ROUND: boxes[1].ROUND, rounds: boxes[1].rounds };
 })();

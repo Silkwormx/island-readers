@@ -4,6 +4,7 @@ window.IR_DATA_U5 = {
   "key": "u51",
   "n": "5.1",
   "name": "Silent e",
+  "storyTitle": "The Cut Rope",
   "title": "Silent e: a_e, e_e, i_e, o_e, u_e",
   "card": [
    "a",
@@ -1362,6 +1363,7 @@ window.IR_DATA_U5 = {
   "key": "u53",
   "n": "5.2",
   "name": "tricky silent e",
+  "storyTitle": "The Dove in the Bell",
   "title": "Silent e: tricky words",
   "card": [
    "v",

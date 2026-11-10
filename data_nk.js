@@ -1,5 +1,6 @@
 /* nk unit data */
 window.IR_DATA_NK = {
+ "storyTitle": "The Skunk in the Trunk",
  "story": [
   {
    "n": 1,
