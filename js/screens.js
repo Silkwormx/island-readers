@@ -172,16 +172,7 @@
     Snd.stop();
     const imgs = (u) => h('div', { class: 'uimg' }, ...u.img.map((n) => h('img', { src: 'img/' + ({ zip: 'zipA', frill: 'frillC' }[n] || n) + '.webp', alt: '' })), u.state === 'open' ? null : h('span', { class: 'lk' }, icon('lock')));
     const stars = (u) => h('div', { class: 'dots', 'aria-hidden': 'true' }, ...Array.from({ length: u.total }, (_, k) => h('span', { class: 'sstar' + (k < u.done ? ' on' : '') }, icon('star'))));
-    const storyFor = (u, index) => {
-      if (u.kind === 'review') return null;
-      if (u.id === 'ng') return { num: '4.1', title: D.storyTitle || '', href: (LESSONS.findIndex((l) => l.id === 'story') >= 0 ? '#/lesson/' + (LESSONS.findIndex((l) => l.id === 'story') + 1) : '#/island3'), thumb: (D.story && D.story[0] && D.story[0].img) || '' };
-      const nk = window.IR_DATA_NK;
-      if (u.id === 'nk' && nk) return { num: '4.2', title: nk.storyTitle || '', href: '#/nk/read', thumb: (nk.story && nk.story[0] && nk.story[0].img) || '' };
-      const u5 = window.IR_DATA_U5 && window.IR_DATA_U5[u.id];
-      if (u5 && u5.story && u5.story.length) return { num: u5.n || (w.n + '.' + (index + 1)), title: u5.storyTitle || '', href: '#/' + u.id + '/read', thumb: (u5.story[0] && u5.story[0].img) || '' };
-      return null;
-    };
-    const cards = info.list.map((u, index) => {
+    const cards = info.list.map((u) => {
       const title = u.kind === 'review' ? 'Review' : u.name;
       const kind = u.kind === 'review' ? 'Unit ' + w.n + ' Review' : 'Lesson ' + w.n + '.' + (info.list.indexOf(u) + 1);   /* naming standard: Unit 3 = Island 3; ng = Lesson 3.1, nk = Lesson 3.2 */
       const body = h('div', { class: 'ubody' }, h('div', { class: 'uk' }, kind), h('h2', null, title),
@@ -193,9 +184,7 @@
         const b = h('button', { class: 'obtn', type: 'button', onclick: () => { modalRoot.innerHTML = ''; location.hash = u.href; } }, 'Open lesson'); body.append(b);
         card.addEventListener('click', (e) => { if (e.target.closest('button')) return; b.click(); });
       } else { card.tabIndex = 0; card.addEventListener('click', () => toast(u.lockMsg + '.')); }
-      const story = storyFor(u, index);
-      if (!story || !story.title) return card;
-      return h('div', { class: 'lessonrow' }, card, IR.storyCard(story));
+      return card;
     });
     const nextIs0 = WORLD[WORLD.indexOf(w0) + 1]; const nextIs = nextIs0 && nextIs0.kind === 'island' ? { kind: 'island', n: w.n + 1 } : nextIs0;
     /* Unit 5 Silent e is already open locally/live; do not say it still unlocks after Unit 4 Review. */
@@ -418,13 +407,13 @@
     function bigBox(r) {
       const isNext = nx && nx.id === r.id; const lesson = r.group === 'lesson';
       const rev = r.done ? (lesson ? 'Review lesson' : 'Read again') : isNext ? 'Next' : '';
-      return h('button', { class: 'stopcard bigbox ' + (lesson ? 'lessonstop' : 'storystop') + (r.done ? ' done' : '') + (isNext ? ' nextup' : ''), type: 'button', 'data-id': r.id, 'data-group': r.group,
+      return h('li', { class: 'bigli' }, h('button', { class: 'stopcard bigbox ' + (lesson ? 'lessonstop' : 'storystop') + (r.done ? ' done' : '') + (isNext ? ' nextup' : ''), type: 'button', 'data-id': r.id, 'data-group': r.group,
         'aria-label': aria(r, lesson ? 'Lesson.' : 'Story.'), 'aria-current': isNext ? 'step' : null, onclick: () => { Snd.stop(); location.hash = r.href; } },
         h('span', { class: 'bkind' }, lesson ? 'Lesson' : 'Story'),
         r.done ? h('span', { class: 'bstar' }, star(true)) : null,
         h('img', { class: 'bimg', src: lesson ? 'img/zipA.webp' : 'img/frillC.webp', alt: '' }),
         h('span', { class: 'stxt bbot' }, h('b', null, r.title), h('span', { class: 'smin' }, r.min + ' min'),
-          h('span', { class: 'sside' }, h('span', { class: 'slabel ' + (r.done ? 'rev' : isNext ? 'tag' : 'none') }, rev))));
+          h('span', { class: 'sside' }, h('span', { class: 'slabel ' + (r.done ? 'rev' : isNext ? 'tag' : 'none') }, rev)))));
     }
     function actRow(r) {
       const isNext = nx && nx.id === r.id;
@@ -441,11 +430,7 @@
     let lit = {}; try { lit = JSON.parse(sessionStorage.getItem(LK) || '{}'); } catch (e) {}
     const lights = h('div', { class: 'clights', role: 'status', 'aria-label': 'Session progress lights' }, h('span', { class: 'clab' }, 'This visit:'),
       ...secs.map((r) => h('span', { class: 'clight' + (lit[r.id] || r.done ? ' on' : ''), 'data-kind': r.group, 'data-id': r.id, title: r.title })));
-    const tops = secs.filter((r) => r.group !== 'activities');
-    const lessonBox = tops.filter((r) => r.group === 'lesson')[0];
-    const ngThumb = (D.story && D.story[0] && D.story[0].img) || '';
-    const left = h('section', { class: 'uA-sec uA-start' }, h('h2', { class: 'uA-h' }, 'Start here'), h('ul', { class: 'uA-left has-pairs' },
-      h('li', { class: 'lessonrow' }, bigBox(lessonBox), IR.storyCard({ num: '4.1', title: D.storyTitle || 'Story', href: '#/lesson/' + (LESSONS.findIndex((l) => l.id === 'story') + 1), thumb: ngThumb }))));
+    const left = h('section', { class: 'uA-sec uA-start' }, h('h2', { class: 'uA-h' }, 'Start here'), h('ul', { class: 'uA-left' }, ...secs.filter((r) => r.group !== 'activities').map(bigBox)));
     const right = h('section', { class: 'uA-sec uA-right' }, lights, h('h2', { class: 'uA-h' }, 'Activities'), h('ol', { class: 'stoplist uA-acts' }, ...secs.filter((r) => r.group === 'activities').map(actRow)));
     const foot = h('footer', { class: 'uA-foot island4 ' + (complete ? 'open' : 'locked'), 'aria-live': 'polite' },
       h('span', { class: 'i4ico', 'aria-hidden': 'true' }, icon(complete ? 'star' : 'lock')),
