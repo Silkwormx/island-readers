@@ -71,17 +71,17 @@ test('chains change one sound, and later patterns stay out of earlier lessons', 
   assert.ok(!u62.words.some((w) => w.endsWith('ing')));
 });
 
-test('spelling cards sit on each lesson menu and the cache moved', () => {
+test('spelling lives on the practice page, not on lesson menus', () => {
   const u6 = fs.readFileSync(new URL('../js/u6.js', import.meta.url), 'utf8');
   const u5 = fs.readFileSync(new URL('../js/u5.js', import.meta.url), 'utf8');
   const nk = fs.readFileSync(new URL('../js/nk.js', import.meta.url), 'utf8');
   const screens = fs.readFileSync(new URL('../js/screens.js', import.meta.url), 'utf8');
   const sw = fs.readFileSync(new URL('../sw.js', import.meta.url), 'utf8');
   const html = fs.readFileSync(new URL('../index.html', import.meta.url), 'utf8');
-  assert.match(u6, /IR\.spellCard\(L\.key\)/);
-  assert.match(u5, /IR\.spellCard\(KEY\)/);
-  assert.match(nk, /IR\.spellCard\('nk'\)/);
-  assert.match(screens, /IR\.spellCard\('ng'\)/);
+  assert.doesNotMatch(u6, /spellCard/);
+  assert.doesNotMatch(u5, /spellCard/);
+  assert.doesNotMatch(nk, /spellCard/);
+  assert.doesNotMatch(screens, /spellCard/);
   assert.match(screens, /Spelling Practice/);
   assert.match(screens, /function spellUnitOpen/);
   assert.match(screens, /Unit ' \+ n \+ ' is coming soon in the full app!/);

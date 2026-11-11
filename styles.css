@@ -1945,10 +1945,7 @@ button.tapcard:focus-visible{outline:4px solid #1F6FEB;outline-offset:3px}
 .unitpage .arow .sstar{display:inline-flex;align-items:center;justify-content:center}
 /* Spelling: Andika, cream, big spaces, big taps. Same peach card and orange button as lessons. */
 .spellstop{background:#FFE9D6!important;border:4px solid var(--ink);border-radius:1.8rem;box-shadow:0 7px 0 rgba(43,37,64,.2);color:var(--ink)}
-.spellpreview{display:flex;gap:.7rem;justify-content:center;align-items:center;font-family:Andika,sans-serif;font-size:2.4rem;font-weight:700;letter-spacing:.08em;margin:.4rem 0}
-.spellpreview .spellgap{min-width:2.2rem;border-bottom:4px solid var(--ink)}
 .spellsteps{list-style:none;margin:0;padding:0 1rem 2rem;display:flex;flex-direction:column;gap:1rem}
-.spellinmenu{padding:0 0 .8rem}
 .spelllead{font-family:Andika,sans-serif;font-size:1.35rem;line-height:1.45;text-align:center;margin:.4rem 1rem 1rem}
 .spellstop.locked{opacity:.72}
 .spellstop .cardgo.off{background:#E7E0D4;border-color:#8A8175;box-shadow:none;color:#5c5648}

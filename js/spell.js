@@ -58,29 +58,12 @@
   }
 
   IR.spellLessons = plans;
-  IR.spellCard = function (id) {
-    const L = lessonById(id);
-    if (!L) return null;
-    const done = STEPS.every((s) => IR.isDone(doneId(id, s.id)));
-    return h('li', { class: 'bigli spellli' }, IR.tapCard({
-      className: 'stopcard bigbox spellstop' + (done ? ' done' : ''),
-      label: 'Spelling. ' + L.n + ' ' + L.name + '. Opens spelling.',
-      href: '#/spell/' + id,
-      kids: [
-        h('span', { class: 'bkind' }, 'Spelling'),
-        done ? h('span', { class: 'bstar' }, h('span', { class: 'sstar on', 'aria-hidden': 'true' }, icon('star'))) : null,
-        h('span', { class: 'spellpreview', 'aria-hidden': 'true' }, h('span', null, 'c'), h('span', { class: 'spellgap' }, '_'), h('span', null, 'p')),
-        h('span', { class: 'stxt bbot' }, h('b', null, L.n + ' ' + L.name)),
-        h('span', { class: 'cardgo', 'aria-hidden': 'true' }, 'Spell')
-      ]
-    }));
-  };
 
   function shell(app, L, title) {
     IR.newScreen();
     const stage = h('div', { class: 'stage' });
     const instr = h('div', { class: 'instr' });
-    const x = h('button', { class: 'xbtn', type: 'button', 'aria-label': 'Back to the lesson', onclick: () => { Snd.stop(); location.hash = L.back; } }, icon('close'));
+    const x = h('button', { class: 'xbtn', type: 'button', 'aria-label': 'Back to Spelling Practice', onclick: () => { Snd.stop(); location.hash = '#/practice/spelling'; } }, icon('close'));
     app.append(h('div', { class: 'screen lessonscreen spellstep' },
       h('header', { class: 'lesson-top' }, x, IR.ui.homeButton(), IR.ui.gearButton()),
       h('h2', { class: 'acttitle' }, title),
@@ -95,7 +78,7 @@
 
   function menu(app, L) {
     IR.newScreen();
-    const x = h('button', { class: 'xbtn', type: 'button', 'aria-label': 'Back to the lesson', onclick: () => { location.hash = L.back; } }, icon('close'));
+    const x = h('button', { class: 'xbtn', type: 'button', 'aria-label': 'Back to Spelling Practice', onclick: () => { location.hash = '#/practice/spelling'; } }, icon('close'));
     const cards = STEPS.map((s, i) => {
       const open = unlocked(L.id, i);
       const done = IR.isDone(doneId(L.id, s.id));
