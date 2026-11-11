@@ -41,16 +41,25 @@ test('check bands and ending-sound correction', () => {
   assert.match(u6, /Never say the letter names/);
 });
 
-test('stories are the three planned repairs with no em dash', () => {
-  assert.match(data, /The Boxes on the Path/);
-  assert.match(data, /The Branch on the Bell/);
+test('stories are Lunch Crabs, Kite That Zipped, and Stick by the Bell', () => {
+  assert.match(data, /The Lunch Crabs/);
+  assert.match(data, /The Kite That Zipped/);
   assert.match(data, /The Stick by the Bell/);
-  assert.match(data, /Frill tucks the rope on the branch/);
-  assert.match(data, /A thick branch landed on the bell/);
+  assert.match(data, /Six crabs pop up from the sand/);
+  assert.match(data, /The kite zipped and flipped past the green bell/);
   assert.match(data, /Zip is ringing the bell/);
+  assert.match(data, /"newWords": \["gone"\]/);
+  assert.match(data, /"w": "from"/);
+  assert.match(data, /"w": "are"/);
+  assert.match(data, /"newWords": \["wind", "hole", "snack"\]/);
+  assert.match(data, /"w": "as"/);
+  assert.doesNotMatch(data, /The Boxes on the Path/);
+  assert.doesNotMatch(data, /The Branch on the Bell/);
+  assert.doesNotMatch(data, /Frill tucks the rope on the branch/);
+  assert.doesNotMatch(data, /A thick branch landed on the bell/);
   assert.doesNotMatch(data, /Zip packs the cups and the hats/);
   assert.doesNotMatch(u6 + data, /\u2014|—/);
-  assert.match(sw, /ir-20261111k/);
+  assert.match(sw, /ir-20261111l/);
   const rules = fs.readFileSync(new URL('../js/gamerules.js', import.meta.url), 'utf8');
   assert.match(rules, /IR\.pairCard/);
   assert.match(rules, /lesson \? 'Learn' : 'Read'/);
@@ -64,8 +73,8 @@ test('every Unit 6 speaker line is tagged, and Frill is not Zip', () => {
   assert.equal(meets.length, 10);
   assert.ok(meets.includes('frill') && meets.includes('zip'));
   const pages = [...data.matchAll(/"voice": "(Zip|Frill)"/g)].map((m) => m[1]);
-  assert.equal(pages.length, 36);
-  assert.equal(pages.filter((v) => v === 'Frill').length, 3);
+  assert.equal(pages.length, 32);
+  assert.equal(pages.filter((v) => v === 'Frill').length, 1);
   assert.match(u6, /en-US-AriaNeural, rate -10%/);
   assert.match(u6, /en-US-RogerNeural, rate \+0%/);
   assert.match(core, /autoplay: true/);

@@ -307,26 +307,55 @@
     round();
   }
 
+  function heartItems(L) {
+    const hearts = (L.heart || []).map((it) => ({ w: it.w || it, irregular: true }));
+    const stars = (L.newWords || []).map((w) => ({ w: typeof w === 'string' ? w : w.w, irregular: false }));
+    return hearts.concat(stars);
+  }
+
   function runRead(ctx, L) {
-    const pages = L.story; let p = 0; const st = ctx.stage;
-    ctx.setInstr('Read the story. One page at a time.', 'listen');
-    const pic = h('img', { class: 'panel', alt: '' });
-    const sent = h('p', { class: 'sentence' });
-    const label = h('p', { class: 'small' });
-    const pageAudio = () => 'audio/' + L.key + '_s_' + (p + 1) + '.mp3';
-    const replay = speakerBtn(() => Snd.play(pageAudio()), 'Hear this page'); replay.classList.add('huge');
-    function show() {
-      pic.src = pages[p].img; sent.textContent = pages[p].text;
-      label.textContent = 'Page ' + (p + 1) + ' of ' + pages.length;
-      ctx.progress(p / pages.length);
-      Snd.play(pageAudio());
+    const pages = L.story; const words = heartItems(L); let p = 0; const st = ctx.stage; const seen = new Set();
+    function showHeart() {
+      st.innerHTML = '';
+      ctx.setInstr('Tap each new or heart word to hear it before the story.', 'heart');
+      ctx.progress(0);
+      ctx.setNextLabel('Listen to the story');
+      const row = h('div', { class: 'hearts' }, ...words.map((it) => h('button', {
+        class: 'heartchip' + (it.irregular ? '' : ' newchip'), type: 'button', onclick: (e) => {
+          e.currentTarget.classList.add('seen'); seen.add(it.w); ctx.progress(seen.size / words.length);
+          Snd.play(W(it.w));
+          if (seen.size === words.length) done.classList.add('glow');
+        }
+      }, it.irregular ? h('span', { class: 'heartmark', 'aria-hidden': 'true' }, '\u2665') : h('span', { class: 'heartmark newmark', 'aria-hidden': 'true' }, '\u2605'), h('span', { class: 'word' }, it.w))));
+      const done = h('button', { class: 'btn big primary', type: 'button', onclick: () => { Snd.stop(); showPages(); } }, 'Listen to the story', icon('next'));
+      st.append(h('div', { class: 'activity' }, h('p', { class: 'bigprompt' }, 'Heart words and new words'), row, h('p', { class: 'small heartnote' }, 'Hearts are irregular. Stars are new words in this story.'), h('div', { class: 'row center' }, done)));
+      ctx.setBack(() => false);
+      ctx.setNext(() => { Snd.stop(); showPages(); return true; });
+      Snd.play(P('heart'));
     }
-    const prev = h('button', { class: 'btn big', type: 'button', onclick: () => { if (p > 0) { p--; show(); } } }, icon('back'), 'Previous page');
-    const next = h('button', { class: 'btn big primary', type: 'button', onclick: () => { if (p < pages.length - 1) { p++; show(); } else ctx.finish(); } }, 'Next page', icon('next'));
-    st.append(h('div', { class: 'activity story' }, h('div', { class: 'panelwrap' }, pic), h('div', { class: 'sentrow' }, replay, sent), label, h('div', { class: 'row center' }, prev, next)));
-    ctx.setBack(() => { if (p > 0) { p--; show(); return true; } return false; });
-    ctx.setNext(() => { if (p < pages.length - 1) { p++; show(); return true; } ctx.finish(); return true; });
-    show();
+    function showPages() {
+      p = 0; st.innerHTML = '';
+      ctx.setInstr('Read the story. One page at a time.', 'listen');
+      ctx.setNextLabel('Next');
+      const pic = h('img', { class: 'panel', alt: '' });
+      const sent = h('p', { class: 'sentence' });
+      const label = h('p', { class: 'small' });
+      const pageAudio = () => 'audio/' + L.key + '_s_' + (p + 1) + '.mp3';
+      const replay = speakerBtn(() => Snd.play(pageAudio()), 'Hear this page'); replay.classList.add('huge');
+      function show() {
+        pic.src = pages[p].img; sent.textContent = pages[p].text;
+        label.textContent = 'Page ' + (p + 1) + ' of ' + pages.length;
+        ctx.progress(p / pages.length);
+        Snd.play(pageAudio());
+      }
+      const prev = h('button', { class: 'btn big', type: 'button', onclick: () => { if (p > 0) { p--; show(); } else if (words.length) showHeart(); } }, icon('back'), 'Previous page');
+      const next = h('button', { class: 'btn big primary', type: 'button', onclick: () => { if (p < pages.length - 1) { p++; show(); } else ctx.finish(); } }, 'Next page', icon('next'));
+      st.append(h('div', { class: 'activity story' }, h('div', { class: 'panelwrap' }, pic), h('div', { class: 'sentrow' }, replay, sent), label, h('div', { class: 'row center' }, prev, next)));
+      ctx.setBack(() => { if (p > 0) { p--; show(); return true; } if (words.length) { showHeart(); return true; } return false; });
+      ctx.setNext(() => { if (p < pages.length - 1) { p++; show(); return true; } ctx.finish(); return true; });
+      show();
+    }
+    if (words.length) showHeart(); else showPages();
   }
 
   function runRhyme(ctx, L) {
