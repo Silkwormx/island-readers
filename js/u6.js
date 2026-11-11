@@ -445,11 +445,17 @@
     const go = (r) => () => { Snd.stop(); location.hash = r.href; };
     /* Same two boxes as Unit 4: Lesson on the left, Story on the right. */
     const big = (r) => { const isNext = nx && nx.id === r.id; const lesson = r.group === 'lesson';
-      return h('li', { class: 'bigli' }, h('button', { class: 'stopcard bigbox ' + (lesson ? 'lessonstop' : 'storystop') + (r.done ? ' done' : '') + (isNext ? ' nextup' : ''), type: 'button', 'aria-label': (lesson ? 'Lesson. ' : 'Story. ') + r.title + '. ' + r.min + ' minutes.', onclick: go(r) },
+      const body = [
         h('span', { class: 'bkind' }, lesson ? 'Lesson' : 'Story'), r.done ? h('span', { class: 'bstar' }, star(true)) : null,
-        h('img', { class: 'bimg', src: lesson ? 'img/zipA.webp' : 'img/frillC.webp', alt: '' }),
-        h('span', { class: 'stxt bbot' }, h('b', null, r.title), h('span', { class: 'smin' }, r.min + ' min'),
-          h('span', { class: 'sside' }, h('span', { class: 'slabel ' + (r.done ? 'rev' : isNext ? 'tag' : 'none') }, r.done ? (lesson ? 'Review lesson' : 'Read again') : isNext ? 'Next' : ''))))); };
+        IR.artFrame(lesson ? IR.lessonArt : 'img/frillC.webp', lesson ? '' : r.title),
+        h('span', { class: 'stxt bbot' }, h('b', null, r.title), h('span', { class: 'smin' }, r.min + ' min'))
+      ];
+      if (lesson) {
+        body.push(h('span', { class: 'sside' }, h('span', { class: 'slabel ' + (r.done ? 'rev' : isNext ? 'tag' : 'none') }, r.done ? 'Review lesson' : isNext ? 'Next' : '')));
+        return h('li', { class: 'bigli' }, h('button', { class: 'stopcard bigbox lessonstop' + (r.done ? ' done' : '') + (isNext ? ' nextup' : ''), type: 'button', 'aria-label': 'Lesson. ' + r.title + '. ' + r.min + ' minutes.', onclick: go(r) }, ...body));
+      }
+      body.push(IR.storyRead(r.href));
+      return h('li', { class: 'bigli' }, h('div', { class: 'stopcard bigbox storystop' + (r.done ? ' done' : '') + (isNext ? ' nextup' : '') }, ...body)); };
     const row = (r) => h('li', null, h('button', { class: 'stopcard arow gamestop' + (r.done ? ' done' : '') + (nx && nx.id === r.id ? ' nextup' : ''), type: 'button', 'data-id': r.id, onclick: go(r) },
       h('span', { class: 'snum' }, String(r.act)), h('span', { class: 'stxt' }, h('b', null, r.title), TIPS[r.id] ? h('span', { class: 'sblurb' }, TIPS[r.id]) : null),
       h('span', { class: 'sside' }, star(r.done))));
@@ -468,11 +474,12 @@
     IR.newScreen();
     const cards = PACK.lessons.flatMap((L) => {
       const lesson = h('li', { class: 'bigli' }, h('button', { class: 'stopcard bigbox lessonstop', type: 'button', onclick: () => { location.hash = '#/u6/' + L.key; } },
-        h('span', { class: 'bkind' }, 'Lesson ' + L.n), h('img', { class: 'bimg', src: L.n === '6.2' ? 'img/frill.webp' : 'img/zipA.webp', alt: '' }),
+        h('span', { class: 'bkind' }, 'Lesson ' + L.n), IR.artFrame(L.n === '6.2' ? 'img/frill.webp' : IR.lessonArt, ''),
         h('span', { class: 'stxt bbot' }, h('b', null, L.name))));
-      const story = h('li', { class: 'bigli' }, h('button', { class: 'stopcard bigbox storystop', type: 'button', 'aria-label': 'Story. ' + L.storyTitle + '. Opens the story.', onclick: () => { Snd.stop(); location.hash = '#/u6/' + L.key + '/read'; } },
-        h('span', { class: 'bkind' }, 'Story'), h('img', { class: 'bimg', src: 'img/frillC.webp', alt: '' }),
-        h('span', { class: 'stxt bbot' }, h('b', null, L.storyTitle), h('span', { class: 'smin' }, '6 min'))));
+      const story = h('li', { class: 'bigli' }, h('div', { class: 'stopcard bigbox storystop' },
+        h('span', { class: 'bkind' }, 'Story'), IR.artFrame('img/frillC.webp', L.storyTitle),
+        h('span', { class: 'stxt bbot' }, h('b', null, L.storyTitle), h('span', { class: 'smin' }, '6 min')),
+        IR.storyRead('#/u6/' + L.key + '/read')));
       return [lesson, story];
     });
     app.append(h('div', { class: 'screen trailscreen unitpage unitA' },

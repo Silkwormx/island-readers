@@ -1919,5 +1919,20 @@ body.calm .ob-glow{animation:none;opacity:.85}
 @media (max-width:759px){
   .homefeature .zfpics img.homeart{width:auto;height:clamp(6.2rem,18vw,8.5rem)}
 }
-/* ng Story Time card uses the old top-story illustration as its cover. */
-.unitpage.unitA .bigbox .bimg.storycover{width:100%;height:auto;max-width:100%;max-height:13rem;object-fit:cover;object-position:center 68%;border-radius:.9rem;flex:none;filter:none}
+/* Story Time cards use the same frame, type, and chrome as the lesson card beside them. */
+.bigbox .bframe{display:flex;align-items:center;justify-content:center;width:min(100%,12rem);aspect-ratio:4/3;margin:0 auto;border-radius:1rem;overflow:hidden;flex:none;background:rgba(255,255,255,.45)}
+.bigbox .bframe img{display:block;width:100%;height:100%;max-width:100%;max-height:100%;object-fit:contain;object-position:center;border-radius:1rem;filter:none}
+.unitpage .bigbox.storystop,.bigbox.storystop{border-radius:1.8rem;border:4px solid var(--ink);border-left-width:4px;box-shadow:0 7px 0 rgba(43,37,64,.2);color:var(--ink);background:#FFF1D6}
+.storyread{flex:none;min-height:3rem;min-width:6.5rem;margin-top:.2rem;padding:.45rem 1.5rem;border-radius:1.15rem;border:3px solid #B5510D;background:#E8731C;color:#2B2540;font-family:Andika,sans-serif;font-weight:700;font-size:1.25rem;letter-spacing:.04em;line-height:1.2;box-shadow:0 4px 0 #B5510D;cursor:pointer}
+.storyread:focus-visible{outline:4px solid #1F6FEB;outline-offset:3px}
+/* Progress dots: one size, one baseline, columns that line up when they wrap. */
+.clightdots{display:grid;grid-template-columns:repeat(auto-fill,1.4rem);gap:.4rem;align-items:center;justify-items:center;flex:1 1 14rem;min-width:8rem}
+.clights{align-items:center}
+.clights .clight{width:1.15rem;height:1.15rem;margin:0;box-sizing:border-box;justify-self:center}
+.clights .clight.on{box-shadow:none}
+.picker .dots{display:grid;grid-template-columns:repeat(auto-fill,1.45rem);justify-content:center;justify-items:center;align-items:center;gap:.35rem;width:100%}
+.picker .dots .sstar,.picker .dots .sstar .ico,.picker .dots .sstar svg{width:1.25rem;height:1.25rem;display:flex;align-items:center;justify-content:center}
+.picker .dots .sstar svg{display:block}
+.unitpage .arow{align-items:center}
+.unitpage .arow .sstar,.unitpage .arow .sstar .ico,.unitpage .arow .sstar svg{width:1.7rem;height:1.7rem}
+.unitpage .arow .sstar{display:inline-flex;align-items:center;justify-content:center}

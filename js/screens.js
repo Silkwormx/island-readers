@@ -406,13 +406,22 @@
     function bigBox(r) {
       const isNext = nx && nx.id === r.id; const lesson = r.group === 'lesson';
       const rev = r.done ? (lesson ? 'Review lesson' : 'Read again') : isNext ? 'Next' : '';
-      return h('li', { class: 'bigli' }, h('button', { class: 'stopcard bigbox ' + (lesson ? 'lessonstop' : 'storystop') + (r.done ? ' done' : '') + (isNext ? ' nextup' : ''), type: 'button', 'data-id': r.id, 'data-group': r.group,
-        'aria-label': aria(r, lesson ? 'Lesson.' : 'Story.'), 'aria-current': isNext ? 'step' : null, onclick: () => { Snd.stop(); location.hash = r.href; } },
+      const frame = lesson
+        ? IR.artFrame(IR.lessonArt, '')
+        : IR.artFrame('img/ob_cover_wide.jpg', 'Zip and Frill under the banyan tree with the big orange bell');
+      const body = [
         h('span', { class: 'bkind' }, lesson ? 'Lesson' : 'Story'),
         r.done ? h('span', { class: 'bstar' }, star(true)) : null,
-        h('img', { class: 'bimg' + (lesson ? '' : ' storycover'), src: lesson ? 'img/zipA.webp' : 'img/ob_cover_wide.jpg', alt: lesson ? '' : 'Zip and Frill under the banyan tree with the big orange bell' }),
-        h('span', { class: 'stxt bbot' }, h('b', null, r.title), h('span', { class: 'smin' }, r.min + ' min'),
-          h('span', { class: 'sside' }, h('span', { class: 'slabel ' + (r.done ? 'rev' : isNext ? 'tag' : 'none') }, rev)))));
+        frame,
+        h('span', { class: 'stxt bbot' }, h('b', null, r.title), h('span', { class: 'smin' }, r.min + ' min'))
+      ];
+      if (lesson) {
+        body.push(h('span', { class: 'sside' }, h('span', { class: 'slabel ' + (r.done ? 'rev' : isNext ? 'tag' : 'none') }, rev)));
+        return h('li', { class: 'bigli' }, h('button', { class: 'stopcard bigbox lessonstop' + (r.done ? ' done' : '') + (isNext ? ' nextup' : ''), type: 'button', 'data-id': r.id, 'data-group': r.group,
+          'aria-label': aria(r, 'Lesson.'), 'aria-current': isNext ? 'step' : null, onclick: () => { Snd.stop(); location.hash = r.href; } }, ...body));
+      }
+      body.push(IR.storyRead(r.href));
+      return h('li', { class: 'bigli' }, h('div', { class: 'stopcard bigbox storystop' + (r.done ? ' done' : '') + (isNext ? ' nextup' : ''), 'data-id': r.id, 'data-group': r.group }, ...body));
     }
     function actRow(r) {
       const isNext = nx && nx.id === r.id;
@@ -428,7 +437,7 @@
     IR._ngHashWas = location.hash || '#/island3';
     let lit = {}; try { lit = JSON.parse(sessionStorage.getItem(LK) || '{}'); } catch (e) {}
     const lights = h('div', { class: 'clights', role: 'status', 'aria-label': 'Session progress lights' }, h('span', { class: 'clab' }, 'This visit:'),
-      ...secs.map((r) => h('span', { class: 'clight' + (lit[r.id] || r.done ? ' on' : ''), 'data-kind': r.group, 'data-id': r.id, title: r.title })));
+      h('span', { class: 'clightdots' }, ...secs.map((r) => h('span', { class: 'clight' + (lit[r.id] || r.done ? ' on' : ''), 'data-kind': r.group, 'data-id': r.id, title: r.title }))));
     const left = h('section', { class: 'uA-sec uA-start' }, h('h2', { class: 'uA-h' }, 'Start here'), h('ul', { class: 'uA-left' }, ...secs.filter((r) => r.group !== 'activities').map(bigBox)));
     const right = h('section', { class: 'uA-sec uA-right' }, lights, h('h2', { class: 'uA-h' }, 'Activities'), h('ol', { class: 'stoplist uA-acts' }, ...secs.filter((r) => r.group === 'activities').map(actRow)));
     const foot = h('footer', { class: 'uA-foot island4 ' + (complete ? 'open' : 'locked'), 'aria-live': 'polite' },

@@ -5,6 +5,17 @@
   'use strict';
   const IR = window.IR;
   const { h } = IR;
+  /* One picture for every lesson card. Swap this when the shared teaching art arrives. */
+  IR.lessonArt = 'img/zipA.webp';
+  IR.artFrame = function (src, alt) {
+    return h('span', { class: 'bframe' }, h('img', { src: src, alt: alt || '' }));
+  };
+  IR.storyRead = function (href) {
+    return h('button', {
+      class: 'storyread', type: 'button',
+      onclick: function (e) { e.stopPropagation(); IR.Snd.stop(); location.hash = href; }
+    }, 'Read');
+  };
 
   IR.attachGameRules = function (ctx, screen, title) {
     if (!screen || screen.querySelector('.acttitle')) return ctx;
