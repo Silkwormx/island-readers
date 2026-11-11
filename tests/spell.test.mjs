@@ -82,6 +82,9 @@ test('spelling cards sit on each lesson menu and the cache moved', () => {
   assert.match(u5, /IR\.spellCard\(KEY\)/);
   assert.match(nk, /IR\.spellCard\('nk'\)/);
   assert.match(screens, /IR\.spellCard\('ng'\)/);
+  assert.match(screens, /Spelling Practice/);
+  assert.match(screens, /function spellUnitOpen/);
+  assert.match(screens, /Unit ' \+ n \+ ' is coming soon in the full app!/);
   assert.match(screens, /IR\.spellRoute/);
   assert.match(html, /js\/spell\.js/);
   assert.match(sw, /ir-20261111m/);

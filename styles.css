@@ -1971,3 +1971,14 @@ button.tapcard:focus-visible{outline:4px solid #1F6FEB;outline-offset:3px}
 .spelltip img{width:4.5rem;height:auto}
 .calm .spelltile.wiggle{animation:none}
 @keyframes spellwiggle{0%,100%{transform:translateX(0)}25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+.spellindex{display:flex;flex-direction:column;gap:.65rem;margin-top:.6rem}
+.spellubox.on{background:#FFF8E7;border:3px solid var(--ink);border-radius:1.2rem;padding:.35rem}
+.spellunit{display:flex;align-items:center;gap:.6rem;width:100%;min-height:3.5rem;padding:.5rem .85rem;border:3px solid var(--ink);border-radius:1.05rem;background:#FFF8E7;font-family:Andika,sans-serif;font-size:1.2rem;font-weight:700;text-align:left;color:var(--ink);cursor:pointer}
+.spellubox.on .spellunit{border-color:transparent;background:transparent;box-shadow:none}
+.spellunit .su-n{min-width:4.8rem}
+.spellunit .su-name{flex:1;line-height:1.2}
+.spellunit .su-go,.spellesson .su-spell{flex:none;background:#E8731C;border:3px solid #B5510D;border-radius:.8rem;padding:.15rem .7rem;box-shadow:0 3px 0 #B5510D;color:#2B2540}
+.spellunit.locked{background:#F3EEE4;color:#6d6578}
+.spellunit .su-lock{display:inline-flex;width:1.6rem;height:1.6rem}
+.spellessons{display:flex;flex-direction:column;gap:.45rem;padding:0 .35rem .4rem}
+.spellesson{display:flex;align-items:center;justify-content:space-between;gap:.6rem;width:100%;min-height:3.3rem;padding:.4rem .7rem;border:3px solid var(--ink);border-radius:1rem;background:#fff;font-family:Andika,sans-serif;font-size:1.2rem;font-weight:700;text-align:left;color:var(--ink);cursor:pointer}
