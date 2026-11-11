@@ -1913,3 +1913,34 @@ body.calm .ob-glow{animation:none;opacity:.85}
 .chainwords { display: flex; align-items: center; gap: .6rem; flex-wrap: wrap; justify-content: center; }
 .chainarrow { font-size: 2rem; font-weight: 700; }
 .calm .chainslot.glow { animation: none; }
+/* Home left column: one full scene of Zip and Frill, same card, no crop. */
+.homefeature .zfpics{padding:0;background:transparent}
+.homefeature .zfpics img.homeart{width:100%;max-width:100%;height:auto;object-fit:contain;border-radius:1.05rem}
+@media (max-width:759px){
+  .homefeature .zfpics img.homeart{width:auto;height:clamp(6.2rem,18vw,8.5rem)}
+}
+/* Lesson and Story cards are one pair: same fill, same wide picture, buttons on the same bottom line. */
+.unitpage .bigbox.lessonstop,.unitpage .bigbox.storystop{background:#FFE9D6!important;border-radius:1.8rem;border:4px solid var(--ink);border-left-width:4px;box-shadow:0 7px 0 rgba(43,37,64,.2);color:var(--ink)}
+.bigli{display:flex}
+.unitpage .bigli>.bigbox{width:100%;height:100%!important;display:flex;flex-direction:column;align-items:stretch;text-align:center}
+.bigbox .bframe{display:block;width:100%;aspect-ratio:16/9;margin:0;border-radius:1rem;overflow:hidden;flex:none;background:transparent}
+.bigbox .bframe img{display:block;width:100%;height:100%;max-width:none;max-height:none;object-fit:cover;object-position:center;border-radius:0;filter:none}
+.bigbox .bbot{align-items:center}
+.storyread,.actdots{flex:none;width:100%;min-height:3rem;margin-top:auto;border-radius:1.15rem;box-sizing:border-box;cursor:pointer;font-family:Andika,sans-serif}
+.storyread{padding:.45rem 1.2rem;border:3px solid #B5510D;background:#E8731C;color:#2B2540;font-weight:700;font-size:1.25rem;letter-spacing:.04em;line-height:1.2;box-shadow:0 4px 0 #B5510D}
+.actdots{display:flex;align-items:center;justify-content:center;padding:.4rem .55rem;border:3px solid var(--ink);background:#fff;box-shadow:0 4px 0 rgba(43,37,64,.18)}
+.actdots .dots{display:grid;grid-template-columns:repeat(5,.72rem);justify-content:center;justify-items:center;align-items:center;gap:.28rem .34rem}
+.actdots .dot{width:.72rem;height:.72rem;border-radius:50%;box-sizing:border-box;border:2px solid var(--ink);background:#E8E0D0;display:block}
+.actdots .dot.on{background:#3CB371;border-color:#1B6B3A}
+.storyread:focus-visible,.actdots:focus-visible{outline:4px solid #1F6FEB;outline-offset:3px}
+/* Progress dots elsewhere: one size, columns that line up when they wrap. */
+.clightdots{display:grid;grid-template-columns:repeat(auto-fill,1.4rem);gap:.4rem;align-items:center;justify-items:center;flex:1 1 14rem;min-width:8rem}
+.clights{align-items:center}
+.clights .clight{width:1.15rem;height:1.15rem;margin:0;box-sizing:border-box;justify-self:center}
+.clights .clight.on{box-shadow:none}
+.picker .dots{display:grid;grid-template-columns:repeat(auto-fill,1.45rem);justify-content:center;justify-items:center;align-items:center;gap:.35rem;width:100%}
+.picker .dots .sstar,.picker .dots .sstar .ico,.picker .dots .sstar svg{width:1.25rem;height:1.25rem;display:flex;align-items:center;justify-content:center}
+.picker .dots .sstar svg{display:block}
+.unitpage .arow{align-items:center}
+.unitpage .arow .sstar,.unitpage .arow .sstar .ico,.unitpage .arow .sstar svg{width:1.7rem;height:1.7rem}
+.unitpage .arow .sstar{display:inline-flex;align-items:center;justify-content:center}

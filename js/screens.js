@@ -290,11 +290,10 @@
       window.addEventListener('hashchange', stop, { once: true });
       return b;
     }
-    /* Home card in the left column. 'A' = Zip and Frill portraits on top (default); 'B' = heading above the portraits. Test with ?hero=B.
-       Portraits are the existing v4 B files already in the repo: img/zipA.webp and img/frill.webp. */
+    /* Home card in the left column. 'A' = the picture on top (default); 'B' = heading above the picture. Test with ?hero=B. */
     const HERO_VARIANT = (/[?&]hero=B\b/.test(location.search) ? 'B' : 'A');
     const hero = h('section', { class: 'homefeature zf' + HERO_VARIANT, 'aria-label': 'Learn to read with Zip and Frill' },
-      h('div', { class: 'zfpics' }, h('img', { src: 'img/zipA.webp', alt: 'Zip' }), h('img', { src: 'img/frill.webp', alt: 'Frill' })),
+      h('div', { class: 'zfpics' }, h('img', { class: 'homeart', src: 'img/home_zip_frill.webp', width: 1280, height: 720, alt: 'Zip and Frill sit on a tree root reading a book together. An orange bell hangs from the banyan behind them, and the island coast glows at sunset.' })),
       h('div', { class: 'hfbody' },
         h('div', { class: 'zfhead' }, h('h2', { class: 'zfline' }, 'Learn to read with Zip and Frill'), readAloudBtn()),
         h('p', { class: 'zfsub' }, 'Ring every bell by learning its sounds.'),
@@ -404,16 +403,22 @@
     const totalMin = req.reduce((a, r) => a + r.min, 0);
     const star = (on) => h('span', { class: 'sstar' + (on ? ' on' : ''), 'aria-hidden': 'true' }, icon(on ? 'star' : 'starOutline'));
     const aria = (r, extra) => r.label + '. ' + r.min + ' minutes. ' + extra + (r.done ? ' Done, star earned.' : nx && nx.id === r.id ? ' Next up.' : '');
+    const actFlags = secs.filter((r) => r.group === 'activities').map((r) => !!r.done);
     function bigBox(r) {
       const isNext = nx && nx.id === r.id; const lesson = r.group === 'lesson';
-      const rev = r.done ? (lesson ? 'Review lesson' : 'Read again') : isNext ? 'Next' : '';
-      return h('li', { class: 'bigli' }, h('button', { class: 'stopcard bigbox ' + (lesson ? 'lessonstop' : 'storystop') + (r.done ? ' done' : '') + (isNext ? ' nextup' : ''), type: 'button', 'data-id': r.id, 'data-group': r.group,
-        'aria-label': aria(r, lesson ? 'Lesson.' : 'Story.'), 'aria-current': isNext ? 'step' : null, onclick: () => { Snd.stop(); location.hash = r.href; } },
+      const frame = lesson
+        ? IR.artFrame(IR.lessonArt, IR.lessonArtAlt)
+        : IR.artFrame(IR.storyCovers['4.1'], 'The Twigs in the Bell');
+      const body = [
         h('span', { class: 'bkind' }, lesson ? 'Lesson' : 'Story'),
         r.done ? h('span', { class: 'bstar' }, star(true)) : null,
-        h('img', { class: 'bimg', src: lesson ? 'img/zipA.webp' : 'img/frillC.webp', alt: '' }),
-        h('span', { class: 'stxt bbot' }, h('b', null, r.title), h('span', { class: 'smin' }, r.min + ' min'),
-          h('span', { class: 'sside' }, h('span', { class: 'slabel ' + (r.done ? 'rev' : isNext ? 'tag' : 'none') }, rev)))));
+        frame,
+        h('span', { class: 'stxt bbot' }, h('b', null, r.title), h('span', { class: 'smin' }, r.min + ' min'))
+      ];
+      const cardClass = 'stopcard bigbox ' + (lesson ? 'lessonstop' : 'storystop') + (r.done ? ' done' : '') + (isNext ? ' nextup' : '');
+      if (lesson) body.push(IR.actButton(r.href, actFlags));
+      else body.push(IR.storyRead(r.href));
+      return h('li', { class: 'bigli' }, h('div', { class: cardClass, 'data-id': r.id, 'data-group': r.group }, ...body));
     }
     function actRow(r) {
       const isNext = nx && nx.id === r.id;
@@ -429,7 +434,7 @@
     IR._ngHashWas = location.hash || '#/island3';
     let lit = {}; try { lit = JSON.parse(sessionStorage.getItem(LK) || '{}'); } catch (e) {}
     const lights = h('div', { class: 'clights', role: 'status', 'aria-label': 'Session progress lights' }, h('span', { class: 'clab' }, 'This visit:'),
-      ...secs.map((r) => h('span', { class: 'clight' + (lit[r.id] || r.done ? ' on' : ''), 'data-kind': r.group, 'data-id': r.id, title: r.title })));
+      h('span', { class: 'clightdots' }, ...secs.map((r) => h('span', { class: 'clight' + (lit[r.id] || r.done ? ' on' : ''), 'data-kind': r.group, 'data-id': r.id, title: r.title }))));
     const left = h('section', { class: 'uA-sec uA-start' }, h('h2', { class: 'uA-h' }, 'Start here'), h('ul', { class: 'uA-left' }, ...secs.filter((r) => r.group !== 'activities').map(bigBox)));
     const right = h('section', { class: 'uA-sec uA-right' }, lights, h('h2', { class: 'uA-h' }, 'Activities'), h('ol', { class: 'stoplist uA-acts' }, ...secs.filter((r) => r.group === 'activities').map(actRow)));
     const foot = h('footer', { class: 'uA-foot island4 ' + (complete ? 'open' : 'locked'), 'aria-live': 'polite' },
@@ -441,9 +446,6 @@
         h('button', { class: 'cartoonpill', type: 'button', 'aria-label': 'Welcome cartoon, optional. Opens a video.', onclick: () => IR.openCartoon() }, icon('play'), h('span', { class: 'cp-long' }, 'Welcome Cartoon (optional)'), h('span', { class: 'cp-short' }, 'Cartoon')),
         h('span', { class: 'uA-time', 'aria-label': 'About ' + totalMin + ' minutes in total' }, h('span', { class: 't-long' }, 'About ' + totalMin + ' min total'), h('span', { class: 't-short' }, totalMin + ' min')), gearButton()),
       unitIntro('i3'),
-      h('div', { class: 'ob-cover' }, h('img', { src: 'img/ob_cover_wide.jpg', alt: 'Zip and Frill under the banyan tree with the big orange bell' }),
-        h('p', null, h('b', null, 'The big bell has gone quiet.'), ' Help Zip and Frill make it ring again.'),
-        h('div', { class: 'ob-meta' }, h('span', null, 'About ' + totalMin + ' min'), h('button', { class: 'ob-cartoon', type: 'button', 'aria-label': 'Welcome cartoon, optional. Opens a video.', onclick: () => IR.openCartoon() }, icon('play'), 'Cartoon'))),
       h('main', { class: 'uA-main' }, left, right), foot));
   }
 

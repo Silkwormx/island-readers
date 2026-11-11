@@ -443,13 +443,23 @@
     const nx = items.find((r) => !r.done) || null;
     const star = (on) => h('span', { class: 'sstar' + (on ? ' on' : '') }, icon(on ? 'star' : 'starOutline'));
     const go = (r) => () => { Snd.stop(); location.hash = r.href; };
-    const big = (r) => h('li', { class: 'bigli' }, h('button', { class: 'stopcard bigbox lessonstop' + (r.done ? ' done' : '') + (nx && nx.id === r.id ? ' nextup' : ''), type: 'button', onclick: go(r) },
-      h('span', { class: 'bkind' }, 'Lesson'), h('img', { class: 'bimg', src: 'img/zipA.webp', alt: '' }),
-      h('span', { class: 'stxt bbot' }, h('b', null, r.title), h('span', { class: 'smin' }, r.min + ' min'))));
+    /* Same two boxes as Unit 4: Lesson on the left, Story on the right. */
+    const actFlags = items.filter((r) => r.group === 'activities').map((r) => !!r.done);
+    const big = (r) => { const isNext = nx && nx.id === r.id; const lesson = r.group === 'lesson';
+      const body = [
+        h('span', { class: 'bkind' }, lesson ? 'Lesson' : 'Story'), r.done ? h('span', { class: 'bstar' }, star(true)) : null,
+        IR.artFrame(lesson ? IR.lessonArt : IR.storyCovers[L.n], lesson ? IR.lessonArtAlt : r.title),
+        h('span', { class: 'stxt bbot' }, h('b', null, r.title), h('span', { class: 'smin' }, r.min + ' min'))
+      ];
+      if (lesson) body.push(IR.actButton(r.href, actFlags));
+      else body.push(IR.storyRead(r.href));
+      return h('li', { class: 'bigli' }, h('div', { class: 'stopcard bigbox ' + (lesson ? 'lessonstop' : 'storystop') + (r.done ? ' done' : '') + (isNext ? ' nextup' : '') }, ...body)); };
     const row = (r) => h('li', null, h('button', { class: 'stopcard arow gamestop' + (r.done ? ' done' : '') + (nx && nx.id === r.id ? ' nextup' : ''), type: 'button', 'data-id': r.id, onclick: go(r) },
       h('span', { class: 'snum' }, String(r.act)), h('span', { class: 'stxt' }, h('b', null, r.title), TIPS[r.id] ? h('span', { class: 'sblurb' }, TIPS[r.id]) : null),
       h('span', { class: 'sside' }, star(r.done))));
-    const left = h('ul', { class: 'uA-left' }, ...items.filter((r) => r.group !== 'activities').map(big));
+    const meet = items.filter((r) => r.group !== 'activities')[0];
+    const story = { id: 'read', title: L.storyTitle, group: 'story', href: '#/u6/' + L.key + '/read', done: !!(lights(L.key).read), min: 6 };
+    const left = h('ul', { class: 'uA-left' }, big(meet), big(story));
     const right = h('section', { class: 'uA-right' }, h('h2', { class: 'uA-h' }, 'Activities'), h('ol', { class: 'stoplist uA-acts' }, ...items.filter((r) => r.group === 'activities').map(row)),
       h('p', { class: 'small' }, GROWN));
     app.append(h('div', { class: 'screen trailscreen unitpage unitA' },
@@ -460,9 +470,18 @@
 
   function picker(app) {
     IR.newScreen();
-    const cards = PACK.lessons.map((L) => h('li', { class: 'bigli' }, h('button', { class: 'stopcard bigbox lessonstop', type: 'button', onclick: () => { location.hash = '#/u6/' + L.key; } },
-      h('span', { class: 'bkind' }, 'Lesson ' + L.n), h('img', { class: 'bimg', src: L.n === '6.2' ? 'img/frill.webp' : 'img/zipA.webp', alt: '' }),
-      h('span', { class: 'stxt bbot' }, h('b', null, L.name), h('span', null, L.storyTitle)))));
+    const cards = PACK.lessons.flatMap((L) => {
+      const flags = stepsFor(L).filter((s) => s.group === 'activities').map((s) => !!(lights(L.key)[s.id] || IR.isDone(L.key + '_' + s.id)));
+      const lesson = h('li', { class: 'bigli' }, h('div', { class: 'stopcard bigbox lessonstop' },
+        h('span', { class: 'bkind' }, 'Lesson ' + L.n), IR.artFrame(IR.lessonArt, IR.lessonArtAlt),
+        h('span', { class: 'stxt bbot' }, h('b', null, L.name)),
+        IR.actButton('#/u6/' + L.key, flags)));
+      const story = h('li', { class: 'bigli' }, h('div', { class: 'stopcard bigbox storystop' },
+        h('span', { class: 'bkind' }, 'Story'), IR.artFrame(IR.storyCovers[L.n], L.storyTitle),
+        h('span', { class: 'stxt bbot' }, h('b', null, L.storyTitle), h('span', { class: 'smin' }, '6 min')),
+        IR.storyRead('#/u6/' + L.key + '/read')));
+      return [lesson, story];
+    });
     app.append(h('div', { class: 'screen trailscreen unitpage unitA' },
       h('header', { class: 'uA-top' }, IR.ui.homeButton(), h('h1', { class: 'uA-title' }, h('small', null, 'Unit 6 \u00b7 '), 'Endings'), IR.ui.gearButton()),
       h('main', { class: 'uA-main' }, h('ul', { class: 'uA-left' }, ...cards),

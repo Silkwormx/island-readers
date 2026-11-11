@@ -71,12 +71,16 @@
     const totalMin = secs.reduce((a, r) => a + r.min, 0);
     const star = (on) => h('span', { class: 'sstar' + (on ? ' on' : ''), 'aria-hidden': 'true' }, icon(on ? 'star' : 'starOutline'));
     const go = (r) => () => { Snd.stop(); location.hash = r.href; };
+    const actFlags = secs.filter((r) => r.group === 'activities').map((r) => !!r.done);
     const big = (r) => { const isNext = nx && nx.id === r.id; const lesson = r.group === 'lesson';
-      return h('li', { class: 'bigli' }, h('button', { class: 'stopcard bigbox ' + (lesson ? 'lessonstop' : 'storystop') + (r.done ? ' done' : '') + (isNext ? ' nextup' : ''), type: 'button', 'data-id': r.id, 'aria-label': r.label + '. ' + r.min + ' minutes.', onclick: go(r) },
+      const body = [
         h('span', { class: 'bkind' }, lesson ? 'Lesson' : 'Story'), r.done ? h('span', { class: 'bstar' }, star(true)) : null,
-        h('img', { class: 'bimg', src: lesson ? 'img/zipA.webp' : 'img/frillC.webp', alt: '' }),
-        h('span', { class: 'stxt bbot' }, h('b', null, r.title), h('span', { class: 'smin' }, r.min + ' min'),
-          h('span', { class: 'sside' }, h('span', { class: 'slabel ' + (r.done ? 'rev' : isNext ? 'tag' : 'none') }, r.done ? (lesson ? 'Review lesson' : 'Read again') : isNext ? 'Next' : ''))))); };
+        IR.artFrame(lesson ? IR.lessonArt : IR.storyCovers['4.2'], lesson ? IR.lessonArtAlt : 'The Skunk in the Trunk'),
+        h('span', { class: 'stxt bbot' }, h('b', null, r.title), h('span', { class: 'smin' }, r.min + ' min'))
+      ];
+      if (lesson) body.push(IR.actButton(r.href, actFlags));
+      else body.push(IR.storyRead(r.href));
+      return h('li', { class: 'bigli' }, h('div', { class: 'stopcard bigbox ' + (lesson ? 'lessonstop' : 'storystop') + (r.done ? ' done' : '') + (isNext ? ' nextup' : ''), 'data-id': r.id }, ...body)); };
     const row = (r) => { const isNext = nx && nx.id === r.id;
       return h('li', null, h('button', { class: 'stopcard arow gamestop' + (r.done ? ' done' : '') + (isNext ? ' nextup' : ''), type: 'button', 'data-id': r.id, 'aria-label': r.label + '. ' + r.min + ' minutes.', onclick: go(r) },
         h('span', { class: 'snum', 'aria-hidden': 'true' }, r.optional ? '+' : String(r.act)), h('span', { class: 'stxt' }, h('b', null, r.title), TIPS[r.id] ? h('span', { class: 'sblurb' }, TIPS[r.id]) : null), h('span', { class: 'smin' }, r.min + ' min'),
@@ -84,7 +88,7 @@
     const lit = loadLights();
     const lights = h('div', { class: 'clights', role: 'status', 'aria-label': 'Session progress lights' },
       h('span', { class: 'clab' }, 'This visit:'),
-      ...secs.map((r) => h('span', { class: 'clight' + (lit[r.id] || r.done ? ' on' : ''), 'data-kind': r.group, 'data-id': r.id, title: r.title, 'aria-label': r.title + (lit[r.id] || r.done ? ' done this visit' : ' not yet') })));
+      h('span', { class: 'clightdots' }, ...secs.map((r) => h('span', { class: 'clight' + (lit[r.id] || r.done ? ' on' : ''), 'data-kind': r.group, 'data-id': r.id, title: r.title, 'aria-label': r.title + (lit[r.id] || r.done ? ' done this visit' : ' not yet') }))));
     const left = h('ul', { class: 'uA-left' }, ...secs.filter((r) => r.group !== 'activities').map(big));
     const right = h('section', { class: 'uA-right' }, lights, h('h2', { class: 'uA-h' }, 'Activities'), h('ol', { class: 'stoplist uA-acts' }, ...secs.filter((r) => r.group === 'activities').map(row)),
       extras.length ? h('h2', { class: 'uA-h uA-extra' }, 'Extras (optional)') : null, extras.length ? h('ul', { class: 'stoplist uA-acts uA-extras' }, ...extras.map(row)) : null);

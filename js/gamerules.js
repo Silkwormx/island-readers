@@ -5,6 +5,39 @@
   'use strict';
   const IR = window.IR;
   const { h } = IR;
+  /* One picture for every lesson card. Swap this when the shared teaching art arrives. */
+  IR.lessonArt = 'img/lesson_zip_frill.webp';
+  IR.lessonArtAlt = 'Zip and Frill teaching at a chalkboard';
+  IR.artFrame = function (src, alt) {
+    return h('span', { class: 'bframe' }, h('img', { src: src, alt: alt || '' }));
+  };
+  IR.storyCovers = {
+    '4.1': 'img/cover_u41.webp',
+    '4.2': 'img/cover_u42.webp',
+    '5.1': 'img/cover_u51.webp',
+    '5.2': 'img/cover_u52.webp',
+    '6.1': 'img/cover_u61.webp',
+    '6.2': 'img/cover_u62.webp',
+    '6.3': 'img/cover_u63.webp'
+  };
+  IR.actButton = function (href, flags) {
+    flags = flags || [];
+    const done = flags.filter(Boolean).length;
+    return h('button', {
+      class: 'actdots', type: 'button',
+      'aria-label': 'Activities. ' + done + ' of ' + flags.length + ' done.',
+      onclick: function (e) { e.stopPropagation(); IR.Snd.stop(); location.hash = href; }
+    }, h('span', { class: 'dots' }, ...flags.map(function (on) {
+      return h('i', { class: 'dot' + (on ? ' on' : '') });
+    })));
+  };
+
+  IR.storyRead = function (href) {
+    return h('button', {
+      class: 'storyread', type: 'button',
+      onclick: function (e) { e.stopPropagation(); IR.Snd.stop(); location.hash = href; }
+    }, 'Read');
+  };
 
   IR.attachGameRules = function (ctx, screen, title) {
     if (!screen || screen.querySelector('.acttitle')) return ctx;
