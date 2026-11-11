@@ -403,25 +403,22 @@
     const totalMin = req.reduce((a, r) => a + r.min, 0);
     const star = (on) => h('span', { class: 'sstar' + (on ? ' on' : ''), 'aria-hidden': 'true' }, icon(on ? 'star' : 'starOutline'));
     const aria = (r, extra) => r.label + '. ' + r.min + ' minutes. ' + extra + (r.done ? ' Done, star earned.' : nx && nx.id === r.id ? ' Next up.' : '');
+    const actFlags = secs.filter((r) => r.group === 'activities').map((r) => !!r.done);
     function bigBox(r) {
       const isNext = nx && nx.id === r.id; const lesson = r.group === 'lesson';
-      const rev = r.done ? (lesson ? 'Review lesson' : 'Read again') : isNext ? 'Next' : '';
       const frame = lesson
         ? IR.artFrame(IR.lessonArt, IR.lessonArtAlt)
-        : IR.artFrame('img/ob_cover_wide.jpg', 'Zip and Frill under the banyan tree with the big orange bell');
+        : IR.artFrame(IR.storyCovers['4.1'], 'The Twigs in the Bell');
       const body = [
         h('span', { class: 'bkind' }, lesson ? 'Lesson' : 'Story'),
         r.done ? h('span', { class: 'bstar' }, star(true)) : null,
         frame,
         h('span', { class: 'stxt bbot' }, h('b', null, r.title), h('span', { class: 'smin' }, r.min + ' min'))
       ];
-      if (lesson) {
-        body.push(h('span', { class: 'sside' }, h('span', { class: 'slabel ' + (r.done ? 'rev' : isNext ? 'tag' : 'none') }, rev)));
-        return h('li', { class: 'bigli' }, h('button', { class: 'stopcard bigbox lessonstop' + (r.done ? ' done' : '') + (isNext ? ' nextup' : ''), type: 'button', 'data-id': r.id, 'data-group': r.group,
-          'aria-label': aria(r, 'Lesson.'), 'aria-current': isNext ? 'step' : null, onclick: () => { Snd.stop(); location.hash = r.href; } }, ...body));
-      }
-      body.push(IR.storyRead(r.href));
-      return h('li', { class: 'bigli' }, h('div', { class: 'stopcard bigbox storystop' + (r.done ? ' done' : '') + (isNext ? ' nextup' : ''), 'data-id': r.id, 'data-group': r.group }, ...body));
+      const cardClass = 'stopcard bigbox ' + (lesson ? 'lessonstop' : 'storystop') + (r.done ? ' done' : '') + (isNext ? ' nextup' : '');
+      if (lesson) body.push(IR.actButton(r.href, actFlags));
+      else body.push(IR.storyRead(r.href));
+      return h('li', { class: 'bigli' }, h('div', { class: cardClass, 'data-id': r.id, 'data-group': r.group }, ...body));
     }
     function actRow(r) {
       const isNext = nx && nx.id === r.id;

@@ -269,18 +269,16 @@
       const totalMin = secs.reduce((a, r) => a + r.min, 0);
       const star = (on) => h('span', { class: 'sstar' + (on ? ' on' : ''), 'aria-hidden': 'true' }, icon(on ? 'star' : 'starOutline'));
       const go = (r) => () => { Snd.stop(); location.hash = r.href; };
+      const actFlags = secs.filter((r) => r.group === 'activities').map((r) => !!r.done);
       const big = (r) => { const isNext = nx && nx.id === r.id; const lesson = r.group === 'lesson';
         const body = [
           h('span', { class: 'bkind' }, lesson ? 'Lesson' : 'Story'), r.done ? h('span', { class: 'bstar' }, star(true)) : null,
-          IR.artFrame(lesson ? IR.lessonArt : 'img/frillC.webp', lesson ? IR.lessonArtAlt : r.title),
+          IR.artFrame(lesson ? IR.lessonArt : IR.storyCovers[NUM], lesson ? IR.lessonArtAlt : (N.storyTitle || 'Story')),
           h('span', { class: 'stxt bbot' }, h('b', null, r.title), h('span', { class: 'smin' }, r.min + ' min'))
         ];
-        if (lesson) {
-          body.push(h('span', { class: 'sside' }, h('span', { class: 'slabel ' + (r.done ? 'rev' : isNext ? 'tag' : 'none') }, r.done ? 'Review lesson' : isNext ? 'Next' : '')));
-          return h('li', { class: 'bigli' }, h('button', { class: 'stopcard bigbox lessonstop' + (r.done ? ' done' : '') + (isNext ? ' nextup' : ''), type: 'button', 'data-id': r.id, 'aria-label': r.label + '. ' + r.min + ' minutes.', onclick: go(r) }, ...body));
-        }
-        body.push(IR.storyRead(r.href));
-        return h('li', { class: 'bigli' }, h('div', { class: 'stopcard bigbox storystop' + (r.done ? ' done' : '') + (isNext ? ' nextup' : ''), 'data-id': r.id }, ...body)); };
+        if (lesson) body.push(IR.actButton(r.href, actFlags));
+        else body.push(IR.storyRead(r.href));
+        return h('li', { class: 'bigli' }, h('div', { class: 'stopcard bigbox ' + (lesson ? 'lessonstop' : 'storystop') + (r.done ? ' done' : '') + (isNext ? ' nextup' : ''), 'data-id': r.id }, ...body)); };
       const row = (r) => { const isNext = nx && nx.id === r.id;
         return h('li', null, h('button', { class: 'stopcard arow gamestop' + (r.done ? ' done' : '') + (isNext ? ' nextup' : ''), type: 'button', 'data-id': r.id, 'aria-label': r.label + '. ' + r.min + ' minutes.', onclick: go(r) },
           h('span', { class: 'snum', 'aria-hidden': 'true' }, r.optional ? '+' : String(r.act)), h('span', { class: 'stxt' }, h('b', null, r.title), TIPS[r.id] ? h('span', { class: 'sblurb' }, TIPS[r.id]) : null), h('span', { class: 'smin' }, r.min + ' min'),
