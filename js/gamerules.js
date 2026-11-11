@@ -20,23 +20,44 @@
     '6.2': 'img/cover_u62.webp',
     '6.3': 'img/cover_u63.webp'
   };
-  IR.actButton = function (href, flags) {
-    flags = flags || [];
-    const done = flags.filter(Boolean).length;
+  /* One button for the whole card. Inner Read label and activity dots are not separate controls. */
+  IR.tapCard = function (opts) {
+    opts = opts || {};
+    let opened = false;
+    const open = function () {
+      if (opened) return;
+      opened = true;
+      setTimeout(function () { opened = false; }, 350);
+      if (typeof opts.onOpen === 'function') opts.onOpen();
+      else if (opts.href) { IR.Snd.stop(); location.hash = opts.href; }
+    };
     return h('button', {
-      class: 'actdots', type: 'button',
-      'aria-label': 'Activities. ' + done + ' of ' + flags.length + ' done.',
-      onclick: function (e) { e.stopPropagation(); IR.Snd.stop(); location.hash = href; }
-    }, h('span', { class: 'dots' }, ...flags.map(function (on) {
-      return h('i', { class: 'dot' + (on ? ' on' : '') });
-    })));
+      class: 'tapcard ' + (opts.className || ''),
+      type: 'button',
+      'aria-label': opts.label || null,
+      onclick: open
+    }, ...(opts.kids || []));
   };
-
-  IR.storyRead = function (href) {
-    return h('button', {
-      class: 'storyread', type: 'button',
-      onclick: function (e) { e.stopPropagation(); IR.Snd.stop(); location.hash = href; }
-    }, 'Read');
+  /* Lesson or Story Time card. Future units call this and the whole card is the tap target. */
+  IR.pairCard = function (o) {
+    o = o || {};
+    const lesson = !!o.lesson;
+    const kids = [
+      h('span', { class: 'bkind' }, o.kicker || (lesson ? 'Lesson' : 'Story')),
+      o.done ? h('span', { class: 'bstar' }, h('span', { class: 'sstar on', 'aria-hidden': 'true' }, IR.icon('star'))) : null,
+      IR.artFrame(o.img, o.alt || ''),
+      h('span', { class: 'stxt bbot' }, h('b', null, o.title || ''), o.min != null && o.min !== '' ? h('span', { class: 'smin' }, o.min + ' min') : null),
+      h('span', { class: 'cardgo', 'aria-hidden': 'true' }, lesson ? 'Learn' : 'Read')
+    ];
+    const label = o.label || (lesson
+      ? 'Lesson. ' + (o.title || '') + '. Opens the lesson.'
+      : 'Story. ' + (o.title || '') + '. Opens the story.');
+    return h('li', { class: 'bigli' }, IR.tapCard({
+      className: 'stopcard bigbox ' + (lesson ? 'lessonstop' : 'storystop') + (o.done ? ' done' : '') + (o.next ? ' nextup' : ''),
+      label: label,
+      href: o.href,
+      kids: kids
+    }));
   };
 
   IR.attachGameRules = function (ctx, screen, title) {
