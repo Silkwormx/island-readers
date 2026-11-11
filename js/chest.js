@@ -70,8 +70,11 @@
     const nav = h('div', { class: 'lesson-nav' },
       h('button', { class: 'btn big back', type: 'button', 'aria-label': backLabel || 'Back', onclick: () => { Snd.stop(); location.hash = backHref; } }, icon('back'), 'Back'),
       h('button', { class: 'btn big next', type: 'button', 'aria-label': nextLabel || 'Next', onclick: () => { Snd.stop(); location.hash = nextHref; } }, 'Next', icon('next')));
-    app.append(h('div', { class: 'screen lessonscreen chestscreen ' + (cls || ''), style: '--c:#A9693B' },
-      h('header', { class: 'lesson-top' }, x, h('div', { class: 'chest-title' }, h('span', { class: 'chestmini', html: IR.chestSVG(N) }), title), IR.ui.homeButton()), h('div', { class: 'stage' }, body), nav));
+    const countEl = h('p', { class: 'qcount', 'aria-live': 'polite' }, '');
+    const screen = h('div', { class: 'screen lessonscreen chestscreen ' + (cls || ''), style: '--c:#A9693B' },
+      h('header', { class: 'lesson-top' }, x, h('h2', { class: 'acttitle chest-title' }, h('span', { class: 'chestmini', html: IR.chestSVG(N) }), title), IR.ui.homeButton()), h('div', { class: 'stage' }, body), countEl, nav);
+    app.append(screen);
+    screen._qcount = countEl;
   }
   /* One play session of a game: tracks the round, keeps the words fresh, and runs "Keep going" (rounds follow each other until the child taps Stop or Home). Nothing here can block or take anything away. */
   function session(app, id, pool, n, gen) {
@@ -81,7 +84,11 @@
     S.again = () => { location.hash = P + '/' + id; route(); };
     S.keep = () => { keepNext[id] = true; S.again(); };
     S.stopBtn = () => S.endless ? h('button', { class: 'btn small stopbtn', type: 'button', onclick: () => S.stop() }, icon('pause'), 'Stop') : null;
-    S.head = () => h('div', { class: 'roundhead' }, h('p', { class: 'small' }, (S.noun || 'Word') + ' ' + (S.r + 1) + ' of ' + S.targets.length + (S.endless ? ' \u00b7 Round ' + S.roundNo : '')), S.stopBtn());
+    S.head = () => {
+      const q = app.querySelector('.chestscreen .qcount');
+      if (q) q.textContent = (S.r + 1) + ' of ' + S.targets.length;
+      return h('div', { class: 'roundhead' }, h('p', { class: 'small' }, (S.noun || 'Word') + ' ' + (S.r + 1) + ' of ' + S.targets.length + (S.endless ? ' \u00b7 Round ' + S.roundNo : '')), S.stopBtn());
+    };
     S.stop = () => { S.stopped = true; Snd.stop(); const w = S.r > 0 ? S.targets.slice(0, S.r) : (S.last.length ? S.last : S.targets); endCard(app, id, w, S); };
     /* a round is finished: count it, then either show the end card or glide straight into the next round (Keep going) */
     S.finish = async (next) => {

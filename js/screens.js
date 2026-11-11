@@ -497,7 +497,9 @@
         h('div', { class: 'row' }, backBtn, nextBtn)));
       app.append(ov); Snd.play(A.sfx.done);
     }
-    app.append(h('div', { class: 'screen lessonscreen' + (L.id === 'intro' ? ' is-lesson' : ''), style: '--c:' + L.color }, h('header', { class: 'lesson-top' }, x, bar, starTop, unitButton(L.id), gearButton()), instrBox, stage, nav));
+    const screen = h('div', { class: 'screen lessonscreen' + (L.id === 'intro' ? ' is-lesson' : ''), style: '--c:' + L.color }, h('header', { class: 'lesson-top' }, x, bar, starTop, unitButton(L.id), gearButton()), instrBox, stage, nav);
+    app.append(screen);
+    if (L.id !== 'intro' && L.id !== 'listen' && L.id !== 'read') IR.attachGameRules(ctx, screen, L.title);
     setBar(); L.run(ctx);
   }
 
@@ -513,7 +515,9 @@
     ctx.goNext = () => { Snd.stop(); if (nextHandler && nextHandler()) return; location.hash = '#/island3'; };
     const nav = h('div', { class: 'lesson-nav' }, h('button', { class: 'btn big back', type: 'button', 'aria-label': 'Back', onclick: () => ctx.goBack() }, icon('back'), 'Back'),
       h('button', { class: 'btn big next', type: 'button', 'aria-label': 'Next question', onclick: () => ctx.goNext() }, 'Next', icon('next')));
-    app.append(h('div', { class: 'screen lessonscreen checkscreen', style: '--c:#2b2540' }, h('header', { class: 'lesson-top' }, x, bar, homeButton(), unitButton('check'), gearButton()), instrBox, stage, nav));
+    const screen = h('div', { class: 'screen lessonscreen checkscreen', style: '--c:#2b2540' }, h('header', { class: 'lesson-top' }, x, bar, homeButton(), unitButton('check'), gearButton()), instrBox, stage, nav);
+    app.append(screen);
+    IR.attachGameRules(ctx, screen, 'Zip\u2019s Check');
     ctx.progress(0); IR.runCheck(ctx);
   }
 

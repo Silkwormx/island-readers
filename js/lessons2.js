@@ -29,7 +29,7 @@
       ctx.setInstr('Listen. Put the words in order to make a sentence.', 'p_sent');
       const rounds = D.sentences; let r = 0; const stage = ctx.stage;
       function round() {
-        const R = rounds[r]; ctx.progress(r / rounds.length); stage.innerHTML = ''; let misses = 0;
+        const R = rounds[r]; ctx.progress(r / rounds.length); if (ctx.count) ctx.count(r + 1, rounds.length); stage.innerHTML = ''; let misses = 0;
         const audio = 'audio/b_' + R.n + '.mp3';
         const spk = speakerBtn(() => Snd.play(audio), 'Hear the sentence');
         const slotsEl = h('div', { class: 'slots sent' }); const bankEl = h('div', { class: 'bank' });
@@ -37,7 +37,7 @@
         const tiles = shuffle(R.words.map((w, i) => ({ id: 'w' + i, text: w, cls: 'word' })));
         const bridge = h('div', { class: 'bridgebar' }, ...R.words.map(() => h('i')));
         const board = IR.TileBoard({
-          tiles, nSlots: R.words.length, slotsEl, bankEl,
+          tiles, nSlots: R.words.length, slotsEl, bankEl, onTap: (text) => IR.sayWord(String(text).replace(/[^a-z]/gi, '')),
           onChange: (b) => { $$('i', bridge).forEach((el, k) => el.classList.toggle('on', b.slots[k] != null)); },
           onFull: async (texts, b) => {
             b.locked = true;

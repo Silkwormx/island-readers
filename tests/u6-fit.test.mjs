@@ -58,7 +58,7 @@ test('Unit 6 word tiles do not overflow at phone, tablet, and smartboard widths'
       await send('Page.navigate', { url: 'http://127.0.0.1:' + port + '/?fit=' + Date.now() + hash }, sessionId);
       const t0 = Date.now();
       while (Date.now() - t0 < 8000) {
-        if (await ev(`document.querySelectorAll('.u6step .choice, .u6step .bigword, .u6step .fz-bubble').length > 0`)) return;
+        if (await ev(`document.querySelectorAll('.u6step .choice, .u6step .bigword, .u6step .fz-bubble, .u6step .chainfrom').length > 0`)) return;
         await new Promise((r) => setTimeout(r, 80));
       }
       throw new Error('no tiles for ' + hash);
@@ -76,7 +76,7 @@ test('Unit 6 word tiles do not overflow at phone, tablet, and smartboard widths'
       });
       return bad;
     })()`);
-    const routes = ['#/u6/u61/hear', '#/u6/u61/bells', '#/u6/u61/sentence', '#/u6/u62/hear', '#/u6/u62/sentence', '#/u6/u63/hear', '#/u6/u61/feed'];
+    const routes = ['#/u6/u61/hear', '#/u6/u61/bells', '#/u6/u61/sentence', '#/u6/u62/hear', '#/u6/u62/sentence', '#/u6/u63/hear', '#/u6/u61/feed', '#/u6/u61/chain'];
     const widths = [375, 768, 1280];
     const problems = [];
     for (const width of widths) {
@@ -85,6 +85,16 @@ test('Unit 6 word tiles do not overflow at phone, tablet, and smartboard widths'
         await new Promise((r) => setTimeout(r, 150));
         const bad = await overflow();
         if (bad.length) problems.push(width + ' ' + hash + ' ' + bad.join('; '));
+        if (hash.endsWith('/feed') || hash.endsWith('/chain')) {
+          const scrolls = await ev(`(() => {
+            const stage = document.querySelector('.stage');
+            const page = document.scrollingElement;
+            const pageScroll = page.scrollHeight > window.innerHeight + 8;
+            const stageScroll = stage && stage.scrollHeight > stage.clientHeight + 8;
+            return pageScroll || stageScroll;
+          })()`);
+          if (scrolls) problems.push(width + ' ' + hash + ' scrolls');
+        }
       }
     }
     bws.close();

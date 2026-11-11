@@ -39,7 +39,7 @@
       const rounds = N.hear; let r = 0; const got = new Set(); const stage = ctx.stage;
       const nextOpen = () => { for (let k = 1; k <= rounds.length; k++) { const j = (r + k) % rounds.length; if (!got.has(j)) return j; } return -1; };
       function round() {
-        const R = rounds[r]; ctx.progress(got.size / rounds.length); stage.innerHTML = ''; let misses = 0, locked = false;
+        const R = rounds[r]; ctx.progress(got.size / rounds.length); if (ctx.count) ctx.count(r + 1, rounds.length); stage.innerHTML = ''; let misses = 0, locked = false;
         ctx.setBack(() => { if (r > 0) { Snd.stop(); r--; round(); return true; } return false; });
         ctx.setNext(() => { if (r < rounds.length - 1) { Snd.stop(); r++; round(); return true; } return false; });
         const spk = speakerBtn(() => say(R.word), 'Hear the word'); spk.classList.add('huge');
@@ -70,7 +70,7 @@
       let r = 0;
       function round() {
         const word = rounds[r];
-        ctx.progress(r / rounds.length);
+        ctx.progress(r / rounds.length); if (ctx.count) ctx.count(r + 1, rounds.length);
         stage.innerHTML = '';
         let locked = false;
         const status = h('p', { class: 'status', 'aria-live': 'polite' }, '\u00a0');
@@ -113,7 +113,7 @@
       ctx.setInstr('Listen. Build the word with the tiles.', 'build');
       const rounds = N.build; let r = 0; const stage = ctx.stage;
       function round() {
-        const R = rounds[r]; ctx.progress(r / rounds.length); stage.innerHTML = ''; let misses = 0;
+        const R = rounds[r]; ctx.progress(r / rounds.length); if (ctx.count) ctx.count(r + 1, rounds.length); stage.innerHTML = ''; let misses = 0;
         const spk = speakerBtn(() => say(R.word), 'Hear the word'); spk.classList.add('huge');
         const slotsEl = h('div', { class: 'slots' }); const bankEl = h('div', { class: 'bank' });
         const status = h('p', { class: 'status', 'aria-live': 'polite' }, 'Tap or drag tiles into the boxes.');
@@ -152,7 +152,7 @@
       let parts, mix, got;
       const undo = h('button', { class: 'btn', type: 'button', onclick: () => { if (got.length) { got.pop(); draw(); } } }, 'Undo');
       stage.append(h('div', { class: 'activity wordplay' }, h('div', { class: 'row center' }, hearB), slots, pool, h('div', { class: 'row center' }, undo), status));
-      function start() { parts = split(order[r]); do { mix = shuffle(parts.map((t, i) => ({ t, i }))); } while (mix.length > 1 && mix.every((m, k) => m.t === parts[k])); got = []; status.textContent = '\u00a0'; draw(); ctx.progress(r / order.length); }
+      function start() { parts = split(order[r]); do { mix = shuffle(parts.map((t, i) => ({ t, i }))); } while (mix.length > 1 && mix.every((m, k) => m.t === parts[k])); got = []; status.textContent = '\u00a0'; draw(); ctx.progress(r / order.length); if (ctx.count) ctx.count(r + 1, order.length); }
       function draw() {
         slots.innerHTML = ''; parts.forEach((p, k) => slots.append(h('span', { class: 'wslot' + (p === 'nk' ? ' ngslot' : '') }, got[k] ? got[k].t : '')));
         pool.innerHTML = ''; mix.forEach((m) => { const used = got.includes(m); const b = tile(m.t, used ? ' used' : ''); b.disabled = used; b.addEventListener('click', () => put(m, b)); pool.append(b); });
@@ -172,13 +172,13 @@
       ctx.setInstr('Listen. Put the words in order to make a sentence.', 'sent');
       const rounds = N.sentences; let r = 0; const stage = ctx.stage;
       function round() {
-        const R = rounds[r]; ctx.progress(r / rounds.length); stage.innerHTML = ''; let misses = 0; const audio = 'audio/' + KEY + '_b_' + R.n + '.mp3';
+        const R = rounds[r]; ctx.progress(r / rounds.length); if (ctx.count) ctx.count(r + 1, rounds.length); stage.innerHTML = ''; let misses = 0; const audio = 'audio/' + KEY + '_b_' + R.n + '.mp3';
         const spk = speakerBtn(() => Snd.play(audio), 'Hear the sentence');
         const slotsEl = h('div', { class: 'slots sent' }); const bankEl = h('div', { class: 'bank' });
         const status = h('p', { class: 'status', 'aria-live': 'polite' }, 'Tap or drag the words into the boxes.');
         const tiles = shuffle(R.words.map((w, i) => ({ id: 'w' + i, text: w, cls: 'word' })));
         const bridge = h('div', { class: 'bridgebar' }, ...R.words.map(() => h('i')));
-        IR.TileBoard({ tiles, nSlots: R.words.length, slotsEl, bankEl,
+        IR.TileBoard({ tiles, nSlots: R.words.length, slotsEl, bankEl, onTap: (text) => say(String(text).replace(/[^a-z]/gi, '')),
           onChange: (b) => { $$('i', bridge).forEach((el, k) => el.classList.toggle('on', b.slots[k] != null)); },
           onFull: async (texts, b) => {
             b.locked = true;
@@ -186,7 +186,7 @@
             else { misses++; ctx.miss(); status.textContent = 'Almost! Listen again and try again.'; slotsEl.classList.add('almost'); await tryAgain(audio); if (!ctx.scr.ok()) return; slotsEl.classList.remove('almost'); b.slots.fill(null); if (misses >= 2) b.hint = tiles.find((t) => t.text === R.words[0]).id; b.locked = false; b.render(); }
           } });
         stage.append(h('div', { class: 'activity sentact' }, h('div', { class: 'pic' }, h('img', { src: R.img, alt: 'A picture from the story' })), h('div', { class: 'row center' }, spk), slotsEl, bridge, bankEl, status));
-        Snd.play(audio);
+        if (r === 0) IR.sayItem(ctx, 'audio/' + KEY + '_p_sent.mp3', audio); else Snd.play(audio);
       }
       round();
     }
@@ -324,7 +324,9 @@
       const nextBtn = h('button', { class: 'btn big next', type: 'button', 'aria-label': 'Next', onclick: () => ctx.goNext() }, 'Next', icon('next'));
       const nav = h('div', { class: 'lesson-nav' }, h('button', { class: 'btn big back', type: 'button', 'aria-label': 'Back', onclick: () => ctx.goBack() }, icon('back'), 'Back'), nextBtn);
       const x = h('button', { class: 'xbtn', type: 'button', 'aria-label': 'Back to the unit', onclick: () => { location.hash = BASE; } }, icon('close'));
-      app.append(h('div', { class: 'screen lessonscreen nkstep u5step nk-' + S0.id + (S0.group === 'lesson' ? ' is-lesson' : ''), style: '--c:' + S0.color }, h('header', { class: 'lesson-top' }, x, bar, IR.ui.homeButton(), unitSheetBtn(S0.id), IR.ui.gearButton()), instrBox, stage, nav));
+      const screen = h('div', { class: 'screen lessonscreen nkstep u5step nk-' + S0.id + (S0.group === 'lesson' ? ' is-lesson' : ''), style: '--c:' + S0.color }, h('header', { class: 'lesson-top' }, x, bar, IR.ui.homeButton(), unitSheetBtn(S0.id), IR.ui.gearButton()), instrBox, stage, nav);
+      app.append(screen);
+      if (S0.group === 'activities') IR.attachGameRules(ctx, screen, S0.title);
       ctx.progress(0); S0.run(ctx);
     }
     function unitSheetBtn(cur) {
@@ -411,7 +413,7 @@
     /* generic "hear it, tap the right choice" round runner (used by You do, ng or nk?, Review) */
     function pickRounds(ctx, rounds, build, onAll) {
       let r = 0; const got = new Set(); const st = ctx.stage;
-      const round = () => { const R = rounds[r]; ctx.progress(got.size / rounds.length); st.innerHTML = ''; let locked = false, misses = 0;
+      const round = () => { const R = rounds[r]; ctx.progress(got.size / rounds.length); if (ctx.count) ctx.count(r + 1, rounds.length); st.innerHTML = ''; let locked = false, misses = 0;
         const status = h('p', { class: 'status', 'aria-live': 'polite' }, '\u00a0');
         const { body, buttons } = build(R);
         buttons.forEach(({ el, ok, word }) => el.addEventListener('click', async () => {
@@ -580,6 +582,7 @@
         S[KEY + 'Check'].last = score; S[KEY + 'Check'].attempts++; S[KEY + 'Check'].best = Math.max(S[KEY + 'Check'].best || 0, score); if (score >= 9) S[KEY + 'Sticker'] = true;
         IR.recordActivity(KEY + '_check', score >= 9 ? 3 : score >= 7 ? 2 : 1); IR.touchStreak(); IR.save(); location.hash = BASE + '/result'; };
       const step = () => { if (q >= items.length) return finish(); const it = items[q]; const my = ++tok; ctx.progress(q / items.length); st.innerHTML = '';
+        const cat = IR.catCount(items, q, (x) => x.type || 'q'); if (ctx.count) ctx.count(cat.i, cat.n);
         const status = h('p', { class: 'status' }, 'Question ' + (q + 1) + ' of ' + items.length); let locked = false;
         const ans = async (ok, b) => { if (locked) return; locked = true; recs[q] = !!ok; b.classList.add('picked'); $$('.choice', st).forEach((x) => { if (x !== b) x.classList.add('fade'); });
           status.textContent = 'Thank you! Next one.'; Snd.play(IR.A.sfx.tap); const qq = q; await sleep(700); if (!ctx.scr.ok() || my !== tok || q !== qq) return; q++; step(); };

@@ -203,7 +203,7 @@
       const stage = ctx.stage;
       const nextOpen = () => { for (let k = 1; k <= rounds.length; k++) { const j = (r + k) % rounds.length; if (!got.has(j)) return j; } return -1; };
       async function round() {
-        const R = rounds[r]; ctx.progress(got.size / rounds.length);
+        const R = rounds[r]; ctx.progress(got.size / rounds.length); if (ctx.count) ctx.count(r + 1, rounds.length);
         ctx.setBack(() => { if (r > 0) { Snd.stop(); r--; round(); return true; } return false; });      /* Back = previous item, from item 1 the previous lesson */
         ctx.setNext(() => { if (r < rounds.length - 1) { Snd.stop(); r++; round(); return true; } return false; });   /* Next = skip this item (no credit); after the last item = next mini lesson */
         stage.innerHTML = '';
@@ -297,7 +297,7 @@
       ctx.setInstr('Listen. Build the word with the tiles.', 'p_build');
       const rounds = D.build; let r = 0; const stage = ctx.stage;
       function round() {
-        const R = rounds[r]; ctx.progress(r / rounds.length); stage.innerHTML = '';
+        const R = rounds[r]; ctx.progress(r / rounds.length); if (ctx.count) ctx.count(r + 1, rounds.length); stage.innerHTML = '';
         let misses = 0;
         const spk = speakerBtn(() => sayWord(R.word), 'Hear the word'); spk.classList.add('huge');
         const slotsEl = h('div', { class: 'slots' }); const bankEl = h('div', { class: 'bank' });

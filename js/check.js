@@ -19,6 +19,7 @@
     function step() {
       if (q >= items.length) return finish();
       const it = items[q]; const my = ++qtoken; ctx.progress(q / items.length); stage.innerHTML = '';
+      const cat = IR.catCount(items, q, (x) => x.type || 'q'); if (ctx.count) ctx.count(cat.i, cat.n);
       const status = h('p', { class: 'status' }, 'Question ' + (q + 1) + ' of ' + items.length);
       let locked = false;
       const answered = async (ok, btn) => {

@@ -7,6 +7,26 @@
   const LINE = 'Listen. Feed Zip the word you hear.';
   const BITES = 8;
   const COLORS = ['leaf', 'berry', 'bug', 'nut'];
+  const YUMS = ['audio/sfx_yum1.mp3', 'audio/sfx_yum2.mp3', 'audio/sfx_yum3.mp3', 'audio/sfx_yum4.mp3', 'audio/sfx_yum5.mp3'];
+  const TREATS = ['img/fz_cupcake.webp', 'img/fz_candy.webp', 'img/fz_pizza.webp', 'img/fz_icecream.webp', 'img/fz_cookie.webp'];
+  const GROSS = ['img/fz_sock.webp', 'img/fz_fish.webp'];
+  let lastYum = '';
+  let lastGross = false;
+  function nextYum() {
+    let pick = YUMS[Math.floor(Math.random() * YUMS.length)];
+    if (pick === lastYum) pick = YUMS[(YUMS.indexOf(pick) + 1) % YUMS.length];
+    lastYum = pick;
+    return pick;
+  }
+  function nextTreat() {
+    let force = '';
+    try { force = sessionStorage.getItem('ir_feed_force') || ''; } catch (e) { /* */ }
+    const gross = force === 'yuck' ? true : force === 'yum' ? false : (!lastGross && Math.random() < (1 / 7));
+    lastGross = gross;
+    const set = gross ? GROSS : TREATS;
+    const src = set[Math.floor(Math.random() * set.length)];
+    return { src: src, yuck: gross };
+  }
 
   IR.runFeedZip = function (ctx, opts) {
     const pool = (opts.words || []).filter(Boolean);
@@ -20,6 +40,7 @@
     let row = 0;
     let token = 0;
     ctx.setInstr(LINE, opts.promptKey || null);
+    const rule = opts.promptAudio || 'audio/p_feed_rule.mp3';
 
     function others(w) {
       const rest = shuffle(pool.filter((x) => x !== w));
@@ -45,6 +66,7 @@
       const my = ++token;
       const w = targets[r];
       ctx.progress(r / BITES);
+      if (ctx.count) ctx.count(r + 1, BITES);
       stage.innerHTML = '';
       let locked = false;
       const status = h('p', { class: 'status', 'aria-live': 'polite' }, '\u00a0');
@@ -64,9 +86,18 @@
       });
       stage.append(h('div', { class: 'activity feedzip' },
         h('div', { class: 'fz-top' }, zip, h('div', { class: 'fz-side' }, tummy(), replay, streak)),
-        h('p', { class: 'bigprompt' }, LINE),
         field, status));
-      say(w);
+      const myBite = my;
+      (async () => {
+        if (!ctx._saidInstr) ctx._saidInstr = Object.create(null);
+        if (rule && !ctx._saidInstr[rule]) {
+          ctx._saidInstr[rule] = 1;
+          await Snd.play(rule);
+          if (!ctx.scr.ok() || myBite !== token) return;
+          await sleep(180);
+        }
+        if (ctx.scr.ok() && myBite === token) say(w);
+      })();
 
       async function choose(choice, b) {
         if (locked || my !== token || b.classList.contains('tried') || b.dataset.hit === '1') return;
@@ -76,14 +107,17 @@
           row++;
           b.classList.add('right', 'feeding');
           zip.classList.add('yum');
-          status.textContent = 'Yum! Zip munched ' + w + '.';
+          const treat = nextTreat();
+          status.textContent = treat.yuck ? 'Yuck!' : 'Yum! Zip munched ' + w + '.';
           streak.textContent = 'In a row: ' + row;
           const dots = document.querySelectorAll('.fz-bites i');
           if (dots[r]) dots[r].classList.add('full');
           const count = document.querySelector('.fz-tummy b');
           if (count) count.textContent = (r + 1) + ' / ' + BITES;
           $$fade();
-          await Snd.play('audio/sfx_munch.mp3');
+          const pop = h('img', { class: 'fz-treat' + (treat.yuck ? ' yuck' : ''), src: treat.src, alt: treat.yuck ? 'A silly snack Zip does not like' : 'A treat for Zip' });
+          zip.append(pop);
+          await Snd.play(treat.yuck ? 'audio/sfx_yuck.mp3' : nextYum());
           if (!ctx.scr.ok() || my !== token) return;
           r++;
           ctx.progress(r / BITES);
