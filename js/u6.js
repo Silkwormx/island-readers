@@ -1,5 +1,8 @@
 /* Unit 6 Endings: three lessons (6.1 -s/-es, 6.2 -ed, 6.3 -ing). Data: data_u6.js.
-   Ten activities each. Fish Pond is 9. Zip's Check is last. */
+   Ten activities each. Fish Pond is 9. Zip's Check is last.
+   Voices match Unit 4 ng/nk. Zip: en-US-RogerNeural, rate +0%, pitch +0Hz.
+   Frill: en-US-AriaNeural, rate -10%, pitch +0Hz. Meet `who` and story `voice` pick the speaker.
+   Narration and game prompts use Zip's voice. Sounds are real ending sounds, never letter names. */
 (function () {
   'use strict';
   const IR = window.IR;
@@ -443,13 +446,15 @@
       progress(f) { fill.style.width = Math.round(((idx + Math.max(0, Math.min(1, f))) / STEPS.length) * 100) + '%'; },
       setInstr(text, p) { instrBox.innerHTML = ''; if (!text) { instrBox.style.display = 'none'; return; } instrBox.style.display = ''; instrBox.append(speakerBtn(() => { if (p) Snd.play(P(p)); }, 'Hear the directions'), h('span', { class: 'itext' }, text)); if (p && p !== 'yesno' && p !== 'tapword' && p !== 'finish' && p !== 'sentence' && p !== 'fish' && p !== 'listen' && p !== 'rhymewhich') Snd.play(P(p)); },
       setBack(fn) { backH = fn; }, setNext(fn) { nextH = fn; },
+      setNextLabel(t) { if (nextBtn.firstChild) nextBtn.firstChild.textContent = t; },
       goBack() { Snd.stop(); if (backH && backH()) return; location.hash = idx > 0 ? base + '/' + STEPS[idx - 1].id : base; },
       goNext() { Snd.stop(); if (nextH && nextH()) return; location.hash = idx < STEPS.length - 1 ? base + '/' + STEPS[idx + 1].id : base; },
       finish() { mark(L.key, S0.id); IR.recordActivity(L.key + '_' + S0.id, mistakes <= 1 ? 3 : mistakes <= 3 ? 2 : 1); IR.save(); location.hash = base; }
     };
+    const nextBtn = h('button', { class: 'btn big next', type: 'button', onclick: () => ctx.goNext() }, 'Next', icon('next'));
     const nav = h('div', { class: 'lesson-nav' },
       h('button', { class: 'btn big back', type: 'button', onclick: () => ctx.goBack() }, icon('back'), 'Back'),
-      h('button', { class: 'btn big next', type: 'button', onclick: () => ctx.goNext() }, 'Next', icon('next')));
+      nextBtn);
     const x = h('button', { class: 'xbtn', type: 'button', 'aria-label': 'Back to the lesson', onclick: () => { location.hash = base; } }, icon('close'));
     app.append(h('div', { class: 'screen lessonscreen u6step' + (S0.group === 'lesson' ? ' is-lesson' : ''), style: '--c:' + S0.color }, h('header', { class: 'lesson-top' }, x, bar, IR.ui.homeButton(), IR.ui.gearButton()), instrBox, stage, nav));
     S0.run(ctx);

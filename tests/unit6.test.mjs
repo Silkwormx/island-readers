@@ -7,6 +7,7 @@ const data = fs.readFileSync(new URL('../data_u6.js', import.meta.url), 'utf8');
 const screens = fs.readFileSync(new URL('../js/screens.js', import.meta.url), 'utf8');
 const html = fs.readFileSync(new URL('../index.html', import.meta.url), 'utf8');
 const sw = fs.readFileSync(new URL('../sw.js', import.meta.url), 'utf8');
+const core = fs.readFileSync(new URL('../js/core.js', import.meta.url), 'utf8');
 
 test('Unit 6 is the Endings tile and opens from home', () => {
   assert.match(screens, /\['Endings', '-s \\u00b7 -es \\u00b7 -ed \\u00b7 -ing'/);
@@ -49,5 +50,19 @@ test('stories are the three planned repairs with no em dash', () => {
   assert.match(data, /Zip is ringing the bell/);
   assert.doesNotMatch(data, /Zip packs the cups and the hats/);
   assert.doesNotMatch(u6 + data, /\u2014|—/);
-  assert.match(sw, /ir-20261110j/);
+  assert.match(sw, /ir-20261110k/);
+});
+
+test('every Unit 6 speaker line is tagged, and Frill is not Zip', () => {
+  const meets = [...data.matchAll(/"who": "(zip|frill)"/g)].map((m) => m[1]);
+  assert.equal(meets.length, 9);
+  assert.ok(meets.includes('frill') && meets.includes('zip'));
+  const pages = [...data.matchAll(/"voice": "(Zip|Frill)"/g)].map((m) => m[1]);
+  assert.equal(pages.length, 36);
+  assert.equal(pages.filter((v) => v === 'Frill').length, 3);
+  assert.match(u6, /en-US-AriaNeural, rate -10%/);
+  assert.match(u6, /en-US-RogerNeural, rate \+0%/);
+  assert.match(core, /autoplay: true/);
+  assert.match(core, /s\.settings\.autoplay = true/);
+  assert.match(u6, /setNextLabel/);
 });

@@ -685,8 +685,12 @@
     show();
   }
   /* ---------- router ---------- */
+  let lastRouted = '';
   function route() {
-    const hash = location.hash || '#/home'; modalRoot.innerHTML = '';
+    const hash = location.hash || '#/home';
+    if (hash === lastRouted && app.childElementCount) return;
+    lastRouted = hash;
+    modalRoot.innerHTML = '';
     app.innerHTML = ''; window.scrollTo(0, 0);
     let m;
     if (IR.nkRoute && IR.nkRoute(hash, app)) { /* nk unit + Island Review (js/nk.js) */ }
@@ -720,7 +724,10 @@
   }
   IR.addUnitBack = addUnitBack;
   const route0 = route; route = function () { route0(); addUnitBack(); setTimeout(addUnitBack, 60); };
-  window.addEventListener('hashchange', route);
+  /* Route inside the click that opened the screen, so the first tap can start audio the way Unit 4 does. */
+  let routeQueued = false;
+  document.addEventListener('click', () => { if (routeQueued) return; routeQueued = true; queueMicrotask(() => { routeQueued = false; route(); }); }, true);
+  window.addEventListener('hashchange', () => { if (routeQueued) return; route(); });
   IR.applySettings();
   route();
   window.addEventListener('error', (e) => { window.__irErrors = (window.__irErrors || []).concat(String(e.message)); });
