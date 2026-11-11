@@ -5,7 +5,7 @@ window.IR_DATA_U6 = {
       "key": "u61",
       "n": "6.1",
       "name": "-s and -es",
-      "storyTitle": "The Boxes on the Path",
+      "storyTitle": "The Lunch Crabs",
       "endings": ["s", "es"],
       "example": { "base": "cat", "end": "s", "word": "cats" },
       "meet": [
@@ -60,26 +60,33 @@ window.IR_DATA_U6 = {
         { "type": "finish", "base": "cup", "choices": ["s", "es"], "answer": "s", "word": "cups" },
         { "type": "pick", "word": "rings", "choices": ["rings", "ring", "rinks"] }
       ],
+      "heart": [
+        { "w": "the" },
+        { "w": "a" },
+        { "w": "and" },
+        { "w": "for" },
+        { "w": "from" },
+        { "w": "are" }
+      ],
+      "newWords": ["gone"],
       "story": [
-        { "text": "Zip packs his pack. Frill hikes up the path.", "voice": "Zip", "img": "img/ng_p02.webp" },
-        { "text": "The orange bell hangs on a long rope.", "voice": "Zip", "img": "img/ng_p01.webp" },
-        { "text": "Zip spots boxes on the path by the bell.", "voice": "Zip", "img": "img/ng_p05.webp" },
-        { "text": "Cups and dishes sit in the boxes.", "voice": "Zip", "img": "img/ng_p04.webp" },
-        { "text": "Zip tugs the rope. The bell hits the boxes.", "voice": "Zip", "img": "img/ng_p03.webp" },
-        { "text": "Clunk. The orange bell will not ring.", "voice": "Zip", "img": "img/ng_p06.webp" },
-        { "text": "\"I can shift the boxes,\" said Zip.", "voice": "Zip", "img": "img/ng_p07.webp" },
-        { "text": "Zip shifts the boxes. Frill shifts the dishes.", "voice": "Zip", "img": "img/ng_p08.webp" },
-        { "text": "Zip taps the bell. The bell still hits.", "voice": "Zip", "img": "img/ng_p09.webp" },
-        { "text": "\"Zip, the rope is long,\" said Frill.", "voice": "Frill", "img": "img/ng_p10.webp" },
-        { "text": "Frill tucks the rope on the branch. The bell hangs up.", "voice": "Zip", "img": "img/ng_p11.webp" },
-        { "text": "Zip taps the bell. Ding! It rings.", "voice": "Zip", "img": "img/u6_p4.webp" }
+        { "text": "Zip and Frill pack lunches in boxes.", "voice": "Zip", "img": "img/u61_p01.webp" },
+        { "text": "Zip sets the boxes on a rock and naps.", "voice": "Zip", "img": "img/u61_p02.webp" },
+        { "text": "Six crabs pop up from the sand!", "voice": "Zip", "img": "img/u61_p03.webp" },
+        { "text": "The crabs grab the boxes and run.", "voice": "Zip", "img": "img/u61_p04.webp" },
+        { "text": "Zip wakes up. The lunches are gone!", "voice": "Zip", "img": "img/u61_p05.webp" },
+        { "text": "Zip and Frill dash past the shells and rocks.", "voice": "Zip", "img": "img/u61_p06.webp" },
+        { "text": "Frill spots six red claws in a log.", "voice": "Zip", "img": "img/u61_p07.webp" },
+        { "text": "Zip pokes the log. The crabs pinch Zip! Zip yelps.", "voice": "Zip", "img": "img/u61_p08.webp" },
+        { "text": "Frill has a plan. Frill sets out snacks for the crabs.", "voice": "Zip", "img": "img/u61_p09.webp" },
+        { "text": "The crabs and the pals munch lunch on the rocks.", "voice": "Zip", "img": "img/u61_p10.webp" }
       ]
     },
     {
       "key": "u62",
       "n": "6.2",
       "name": "-ed",
-      "storyTitle": "The Branch on the Bell",
+      "storyTitle": "The Kite That Zipped",
       "endings": ["s", "es", "ed"],
       "example": { "base": "jump", "end": "ed", "word": "jumped" },
       "soundGroups": [
@@ -140,19 +147,25 @@ window.IR_DATA_U6 = {
         { "type": "finish", "base": "jump", "choices": ["s", "es", "ed"], "answer": "ed", "word": "jumped" },
         { "type": "pick", "word": "helped", "choices": ["helped", "help", "helps"] }
       ],
+      "heart": [
+        { "w": "the" },
+        { "w": "a" },
+        { "w": "and" },
+        { "w": "for" },
+        { "w": "as" }
+      ],
+      "newWords": ["wind", "hole", "snack"],
       "story": [
-        { "text": "Zip and Frill hike to the orange bell.", "voice": "Zip", "img": "img/ng_p02.webp" },
-        { "text": "A thick branch landed on the bell.", "voice": "Zip", "img": "img/ng_p01.webp" },
-        { "text": "Zip taps the bell. Clunk. It will not ring.", "voice": "Zip", "img": "img/ng_p09.webp" },
-        { "text": "Zip spots the branch on the bell.", "voice": "Zip", "img": "img/ng_p06.webp" },
-        { "text": "\"The branch is on it,\" said Frill.", "voice": "Frill", "img": "img/ng_p08.webp" },
-        { "text": "Zip lifted the thick branch off the bell.", "voice": "Zip", "img": "img/ng_p03.webp" },
-        { "text": "The branch bumped the bell. Zip missed the gap.", "voice": "Zip", "img": "img/ng_p05.webp" },
-        { "text": "Frill helped Zip. Zip lifted it up.", "voice": "Zip", "img": "img/ng_p07.webp" },
-        { "text": "Frill packed a stick. It filled the gap.", "voice": "Zip", "img": "img/ng_p04.webp" },
-        { "text": "The thick branch rested on the stick.", "voice": "Zip", "img": "img/ng_p10.webp" },
-        { "text": "Zip jumped up and hit the bell.", "voice": "Zip", "img": "img/ng_p11.webp" },
-        { "text": "Ding! The orange bell rings. The job is done.", "voice": "Zip", "img": "img/u6_p1.webp" }
+        { "text": "Zip and Frill made a red kite.", "voice": "Zip", "img": "img/u62_p01.webp" },
+        { "text": "Zip tugged the string. The kite lifted up!", "voice": "Zip", "img": "img/u62_p02.webp" },
+        { "text": "The wind huffed and puffed.", "voice": "Zip", "img": "img/u62_p03.webp" },
+        { "text": "The kite zipped and flipped past the green bell.", "voice": "Zip", "img": "img/u62_p04.webp" },
+        { "text": "Snap! The string popped.", "voice": "Zip", "img": "img/u62_p05.webp" },
+        { "text": "The kite drifted and landed on the sand.", "voice": "Zip", "img": "img/u62_p06.webp" },
+        { "text": "A crab grabbed the kite and hid in a hole.", "voice": "Zip", "img": "img/u62_p07.webp" },
+        { "text": "Zip and Frill hunted and hunted.", "voice": "Zip", "img": "img/u62_p08.webp" },
+        { "text": "Frill spotted a red tip by a rock. The crab had it!", "voice": "Zip", "img": "img/u62_p09.webp" },
+        { "text": "Frill swapped the crab a snack for the kite. Zip fixed the string, and the pals yelled as it lifted up!", "voice": "Zip", "img": "img/u62_p10.webp" }
       ]
     },
     {
