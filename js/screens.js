@@ -290,11 +290,10 @@
       window.addEventListener('hashchange', stop, { once: true });
       return b;
     }
-    /* Home card in the left column. 'A' = Zip and Frill portraits on top (default); 'B' = heading above the portraits. Test with ?hero=B.
-       Portraits are the existing v4 B files already in the repo: img/zipA.webp and img/frill.webp. */
+    /* Home card in the left column. 'A' = the picture on top (default); 'B' = heading above the picture. Test with ?hero=B. */
     const HERO_VARIANT = (/[?&]hero=B\b/.test(location.search) ? 'B' : 'A');
     const hero = h('section', { class: 'homefeature zf' + HERO_VARIANT, 'aria-label': 'Learn to read with Zip and Frill' },
-      h('div', { class: 'zfpics' }, h('img', { src: 'img/zipA.webp', alt: 'Zip' }), h('img', { src: 'img/frill.webp', alt: 'Frill' })),
+      h('div', { class: 'zfpics' }, h('img', { class: 'homeart', src: 'img/home_zip_frill.webp', width: 1280, height: 720, alt: 'Zip and Frill sit on a tree root reading a book together. An orange bell hangs from the banyan behind them, and the island coast glows at sunset.' })),
       h('div', { class: 'hfbody' },
         h('div', { class: 'zfhead' }, h('h2', { class: 'zfline' }, 'Learn to read with Zip and Frill'), readAloudBtn()),
         h('p', { class: 'zfsub' }, 'Ring every bell by learning its sounds.'),

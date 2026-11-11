@@ -1913,3 +1913,9 @@ body.calm .ob-glow{animation:none;opacity:.85}
 .chainwords { display: flex; align-items: center; gap: .6rem; flex-wrap: wrap; justify-content: center; }
 .chainarrow { font-size: 2rem; font-weight: 700; }
 .calm .chainslot.glow { animation: none; }
+/* Home left column: one full scene of Zip and Frill, same card, no crop. */
+.homefeature .zfpics{padding:0;background:transparent}
+.homefeature .zfpics img.homeart{width:100%;max-width:100%;height:auto;object-fit:contain;border-radius:1.05rem}
+@media (max-width:759px){
+  .homefeature .zfpics img.homeart{width:auto;height:clamp(6.2rem,18vw,8.5rem)}
+}
