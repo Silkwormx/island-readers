@@ -410,7 +410,7 @@
         'aria-label': aria(r, lesson ? 'Lesson.' : 'Story.'), 'aria-current': isNext ? 'step' : null, onclick: () => { Snd.stop(); location.hash = r.href; } },
         h('span', { class: 'bkind' }, lesson ? 'Lesson' : 'Story'),
         r.done ? h('span', { class: 'bstar' }, star(true)) : null,
-        h('img', { class: 'bimg', src: lesson ? 'img/zipA.webp' : 'img/frillC.webp', alt: '' }),
+        h('img', { class: 'bimg' + (lesson ? '' : ' storycover'), src: lesson ? 'img/zipA.webp' : 'img/ob_cover_wide.jpg', alt: lesson ? '' : 'Zip and Frill under the banyan tree with the big orange bell' }),
         h('span', { class: 'stxt bbot' }, h('b', null, r.title), h('span', { class: 'smin' }, r.min + ' min'),
           h('span', { class: 'sside' }, h('span', { class: 'slabel ' + (r.done ? 'rev' : isNext ? 'tag' : 'none') }, rev)))));
     }
@@ -440,9 +440,6 @@
         h('button', { class: 'cartoonpill', type: 'button', 'aria-label': 'Welcome cartoon, optional. Opens a video.', onclick: () => IR.openCartoon() }, icon('play'), h('span', { class: 'cp-long' }, 'Welcome Cartoon (optional)'), h('span', { class: 'cp-short' }, 'Cartoon')),
         h('span', { class: 'uA-time', 'aria-label': 'About ' + totalMin + ' minutes in total' }, h('span', { class: 't-long' }, 'About ' + totalMin + ' min total'), h('span', { class: 't-short' }, totalMin + ' min')), gearButton()),
       unitIntro('i3'),
-      h('div', { class: 'ob-cover' }, h('img', { src: 'img/ob_cover_wide.jpg', alt: 'Zip and Frill under the banyan tree with the big orange bell' }),
-        h('p', null, h('b', null, 'The big bell has gone quiet.'), ' Help Zip and Frill make it ring again.'),
-        h('div', { class: 'ob-meta' }, h('span', null, 'About ' + totalMin + ' min'), h('button', { class: 'ob-cartoon', type: 'button', 'aria-label': 'Welcome cartoon, optional. Opens a video.', onclick: () => IR.openCartoon() }, icon('play'), 'Cartoon'))),
       h('main', { class: 'uA-main' }, left, right), foot));
   }
 

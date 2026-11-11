@@ -1919,3 +1919,5 @@ body.calm .ob-glow{animation:none;opacity:.85}
 @media (max-width:759px){
   .homefeature .zfpics img.homeart{width:auto;height:clamp(6.2rem,18vw,8.5rem)}
 }
+/* ng Story Time card uses the old top-story illustration as its cover. */
+.unitpage.unitA .bigbox .bimg.storycover{width:100%;height:auto;max-width:100%;max-height:13rem;object-fit:cover;object-position:center 68%;border-radius:.9rem;flex:none;filter:none}
