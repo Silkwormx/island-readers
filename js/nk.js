@@ -74,7 +74,7 @@
     const big = (r) => { const isNext = nx && nx.id === r.id; const lesson = r.group === 'lesson';
       const body = [
         h('span', { class: 'bkind' }, lesson ? 'Lesson' : 'Story'), r.done ? h('span', { class: 'bstar' }, star(true)) : null,
-        IR.artFrame(lesson ? IR.lessonArt : 'img/frillC.webp', lesson ? '' : r.title),
+        IR.artFrame(lesson ? IR.lessonArt : 'img/frillC.webp', lesson ? IR.lessonArtAlt : r.title),
         h('span', { class: 'stxt bbot' }, h('b', null, r.title), h('span', { class: 'smin' }, r.min + ' min'))
       ];
       if (lesson) {

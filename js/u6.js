@@ -447,7 +447,7 @@
     const big = (r) => { const isNext = nx && nx.id === r.id; const lesson = r.group === 'lesson';
       const body = [
         h('span', { class: 'bkind' }, lesson ? 'Lesson' : 'Story'), r.done ? h('span', { class: 'bstar' }, star(true)) : null,
-        IR.artFrame(lesson ? IR.lessonArt : 'img/frillC.webp', lesson ? '' : r.title),
+        IR.artFrame(lesson ? IR.lessonArt : 'img/frillC.webp', lesson ? IR.lessonArtAlt : r.title),
         h('span', { class: 'stxt bbot' }, h('b', null, r.title), h('span', { class: 'smin' }, r.min + ' min'))
       ];
       if (lesson) {
@@ -474,7 +474,7 @@
     IR.newScreen();
     const cards = PACK.lessons.flatMap((L) => {
       const lesson = h('li', { class: 'bigli' }, h('button', { class: 'stopcard bigbox lessonstop', type: 'button', onclick: () => { location.hash = '#/u6/' + L.key; } },
-        h('span', { class: 'bkind' }, 'Lesson ' + L.n), IR.artFrame(L.n === '6.2' ? 'img/frill.webp' : IR.lessonArt, ''),
+        h('span', { class: 'bkind' }, 'Lesson ' + L.n), IR.artFrame(IR.lessonArt, IR.lessonArtAlt),
         h('span', { class: 'stxt bbot' }, h('b', null, L.name))));
       const story = h('li', { class: 'bigli' }, h('div', { class: 'stopcard bigbox storystop' },
         h('span', { class: 'bkind' }, 'Story'), IR.artFrame('img/frillC.webp', L.storyTitle),

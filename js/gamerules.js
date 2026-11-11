@@ -6,7 +6,8 @@
   const IR = window.IR;
   const { h } = IR;
   /* One picture for every lesson card. Swap this when the shared teaching art arrives. */
-  IR.lessonArt = 'img/zipA.webp';
+  IR.lessonArt = 'img/lesson_zip_frill.webp';
+  IR.lessonArtAlt = 'Zip and Frill teaching at a chalkboard';
   IR.artFrame = function (src, alt) {
     return h('span', { class: 'bframe' }, h('img', { src: src, alt: alt || '' }));
   };

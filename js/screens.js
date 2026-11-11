@@ -407,7 +407,7 @@
       const isNext = nx && nx.id === r.id; const lesson = r.group === 'lesson';
       const rev = r.done ? (lesson ? 'Review lesson' : 'Read again') : isNext ? 'Next' : '';
       const frame = lesson
-        ? IR.artFrame(IR.lessonArt, '')
+        ? IR.artFrame(IR.lessonArt, IR.lessonArtAlt)
         : IR.artFrame('img/ob_cover_wide.jpg', 'Zip and Frill under the banyan tree with the big orange bell');
       const body = [
         h('span', { class: 'bkind' }, lesson ? 'Lesson' : 'Story'),
