@@ -104,9 +104,13 @@
       const body = h('div', { class: 'bubble ' + b.who }, h('b', { class: 'who' }, b.who === 'zip' ? 'Zip' : 'Frill'), h('p', null, b.text), replay);
       let visual;
       if (groups) {
+        const edWord = (w) => h('button', { class: 'edword', type: 'button', onclick: () => say(w) }, w.slice(0, -2), h('span', { class: 'edmark' }, 'ed'));
         visual = h('div', { class: 'edgroups' }, ...groups.map((g) => h('section', { class: 'edgroup' + (b.focus === g.id ? ' on' : '') },
-          h('button', { class: 'btn', type: 'button', onclick: () => Snd.play(SND(g.sound)) }, icon('speaker'), g.caption),
-          h('div', { class: 'edwords' }, ...g.words.map((w) => h('button', { class: 'chip', type: 'button', onclick: () => say(w) }, colorEnd(w)))))));
+          h('button', { class: 'edhead', type: 'button', onclick: () => Snd.play(SND(g.sound)) },
+            h('span', { class: 'edspell' }, 'ed'),
+            h('span', { class: 'edsep' }, ' \u2013 '),
+            h('span', { class: 'edsay' }, g.say)),
+          h('div', { class: 'edwords' }, ...g.words.map(edWord)))));
       } else if (b.pairs) {
         visual = h('div', { class: 'pairlist' }, ...b.pairs.map((pair) => pairRow(pair[0], pair[1])));
       } else {
@@ -121,10 +125,7 @@
         groups ? h('div', { class: 'meetrow' }, h('div', { class: 'panelwrap small' }, h('img', { class: 'panel', src: face, alt: '' }))) : null,
         visual));
       ctx.setNextLabel(i === beats.length - 1 ? 'Activities' : 'Next');
-      const bits = [P(b.audio)];
-      if (b.sound) bits.push(SND(b.sound));
-      if (bits.length > 1) Snd.seq(bits, 180);
-      else Snd.play(bits[0]);
+      Snd.play(P(b.audio));
     };
     ctx.setNext(() => { if (i < beats.length - 1) { i++; show(); return true; } return false; });
     ctx.setBack(() => { if (i > 0) { i--; show(); return true; } return false; });

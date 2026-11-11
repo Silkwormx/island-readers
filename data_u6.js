@@ -83,9 +83,9 @@ window.IR_DATA_U6 = {
       "endings": ["s", "es", "ed"],
       "example": { "base": "jump", "end": "ed", "word": "jumped" },
       "soundGroups": [
-        { "id": "ed", "caption": "extra beat", "sound": "ed_cut", "words": ["landed", "rested", "melted"] },
-        { "id": "d", "caption": "like filled", "sound": "d_cut", "words": ["filled", "hugged", "banged"] },
-        { "id": "t", "caption": "like jumped", "sound": "t_cut", "words": ["jumped", "helped", "kissed"] }
+        { "id": "ed", "say": "/ed/", "sound": "ed_cut", "words": ["landed", "rested", "melted"] },
+        { "id": "d", "say": "/d/", "sound": "d_cut", "words": ["filled", "hugged", "banged"] },
+        { "id": "t", "say": "/t/", "sound": "t_cut", "words": ["jumped", "helped", "kissed"] }
       ],
       "meet": [
         { "who": "zip", "audio": "u62_m1", "focus": "", "text": "Letters e and d make three sounds when they end a word." },

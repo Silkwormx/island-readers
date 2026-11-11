@@ -50,7 +50,7 @@ test('stories are the three planned repairs with no em dash', () => {
   assert.match(data, /Zip is ringing the bell/);
   assert.doesNotMatch(data, /Zip packs the cups and the hats/);
   assert.doesNotMatch(u6 + data, /\u2014|—/);
-  assert.match(sw, /ir-20261111b/);
+  assert.match(sw, /ir-20261111c/);
 });
 
 test('every Unit 6 speaker line is tagged, and Frill is not Zip', () => {
@@ -67,6 +67,11 @@ test('every Unit 6 speaker line is tagged, and Frill is not Zip', () => {
   assert.match(u6, /setNextLabel/);
   assert.match(data, /"pairs": \[\["box", "boxes"\], \["dish", "dishes"\]\]/);
   assert.match(data, /Letters e and d make three sounds when they end a word/);
+  assert.match(data, /"say": "\/ed\/"/);
+  assert.match(data, /"say": "\/d\/"/);
+  assert.match(data, /"say": "\/t\/"/);
+  assert.match(u6, /class: 'edsay'/);
+  assert.match(u6, /class: 'edmark'/);
   assert.match(u6, /Answer 1 for yes, 2 for no/);
   assert.match(u6, /yn-secret/);
   assert.match(u6, /from: 'cat', to: 'cats'/);

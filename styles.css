@@ -360,17 +360,29 @@ body.calm .strokemark.now .startdot circle{animation:none}
 .pairrow{display:flex;align-items:center;justify-content:center;gap:.7rem;flex-wrap:wrap}
 .pairword{margin:0}
 .pairarrow{font-size:2rem;font-weight:800}
-.edgroups{display:flex;flex-direction:column;gap:.4rem;width:min(100%,40rem)}
-.nkmeet:has(.edgroups){gap:.35rem;padding-top:0}
+.edgroups{display:grid;grid-template-columns:1fr;gap:.55rem;width:min(100%,56rem)}
+@media (min-width:700px){.edgroups{grid-template-columns:repeat(3,minmax(0,1fr));gap:.7rem}}
+.nkmeet:has(.edgroups){gap:.4rem;padding-top:0}
 .nkmeet:has(.edgroups) .meetrow{display:none}
 .nkmeet:has(.edgroups) .bubble{padding:.45rem .8rem}
 .nkmeet:has(.edgroups) .bubble p{margin:.15rem 0 0;font-size:1.05rem}
-.lessonscreen:has(.edgroups) .stage{padding-top:.1rem;padding-bottom:.2rem;overflow:hidden}
-.edgroup .btn{min-height:0;padding:.15rem .7rem;font-size:.95rem}
-.edgroup{background:#fff;border:4px solid var(--line);border-radius:1rem;padding:.35rem .55rem;display:flex;flex-direction:column;gap:.25rem;align-items:center}
-.edwords .chip{font-size:1.35rem;padding:.2rem .55rem;min-height:0}
+.lessonscreen:has(.edgroups) .stage{padding-top:.15rem;padding-bottom:.3rem}
+.edgroup{background:#fff;border:4px solid var(--line);border-radius:1rem;padding:.55rem .4rem .7rem;display:flex;flex-direction:column;gap:.45rem;align-items:center;min-width:0}
 .edgroup.on{border-color:#E8731C;box-shadow:0 0 0 4px #ffe08a}
-.edwords{display:flex;flex-wrap:wrap;gap:.45rem;justify-content:center}
+.edhead{display:flex;align-items:baseline;justify-content:center;flex-wrap:wrap;gap:0;width:100%;background:transparent;border:0;padding:.1rem .2rem;font:800 clamp(1.25rem,3.2vw,1.85rem)/1.15 Andika,sans-serif;color:var(--ink);cursor:pointer}
+.edspell{color:var(--ink)}
+.edsep{color:var(--ink)}
+.edsay{color:#0E8584}
+.edwords{display:flex;flex-direction:column;align-items:center;gap:.35rem;width:100%}
+.edword{background:#fff;border:3px solid var(--line);border-radius:.8rem;padding:.25rem .7rem;font:700 clamp(1.15rem,2.6vw,1.6rem)/1.2 Andika,sans-serif;color:var(--ink);cursor:pointer;max-width:100%}
+.edmark{color:#0E8584;text-decoration:underline;text-underline-offset:.12em}
+@media (max-width:699px){
+  .edgroups{gap:.3rem}
+  .edgroup{padding:.28rem .3rem .4rem;gap:.2rem}
+  .edword{padding:.1rem .5rem}
+  .nkmeet:has(.edgroups) .bubble{padding:.3rem .65rem}
+  .nkmeet:has(.edgroups) .bubble p{font-size:.98rem}
+}
 .lesson-nav{display:flex;justify-content:flex-start;padding:.6rem 1rem 1rem}
 .lessonscreen .lesson-nav{max-width:64rem;margin:0 auto;width:100%}
 /* "In this unit" quiet toggle + bottom sheet */
