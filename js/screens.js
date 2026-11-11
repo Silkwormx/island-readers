@@ -178,12 +178,10 @@
       const body = h('div', { class: 'ubody' }, h('div', { class: 'uk' }, kind), h('h2', null, title),
         h('div', { class: 'umin' }, u.min ? 'About ' + u.min + ' min' : ''), u.desc ? h('div', { class: 'rvd' }, u.desc) : null, stars(u),
         u.state === 'open' ? h('div', { class: 'uprog' }, u.done + ' of ' + u.total + ' stars' + (u.soft ? ' \u00b7 ' + u.soft : '')) : h('div', { class: 'uprog lockmsg' }, icon('lock'), u.lockMsg));
-      const card = h('div', { class: 'ucard ' + (u.state === 'open' ? 'open' : 'locked') + (u.kind === 'review' ? ' rv' : ''), 'data-unit': u.id, 'data-state': u.state, role: 'group',
-        'aria-label': (u.kind === 'review' ? 'Unit ' + w.n + ' Review' : 'Lesson ' + w.n + '.' + (info.list.indexOf(u) + 1) + ': ' + u.name) + '. ' + (u.state === 'open' ? u.done + ' of ' + u.total + ' stars. Open.' : 'Locked. ' + u.lockMsg + '.') }, imgs(u), body);
-      if (u.state === 'open') {
-        const b = h('button', { class: 'obtn', type: 'button', onclick: () => { modalRoot.innerHTML = ''; location.hash = u.href; } }, 'Open lesson'); body.append(b);
-        card.addEventListener('click', (e) => { if (e.target.closest('button')) return; b.click(); });
-      } else { card.tabIndex = 0; card.addEventListener('click', () => toast(u.lockMsg + '.')); }
+      const card = h('button', { class: 'tapcard ucard ' + (u.state === 'open' ? 'open' : 'locked') + (u.kind === 'review' ? ' rv' : ''), type: 'button', 'data-unit': u.id, 'data-state': u.state,
+        'aria-label': (u.kind === 'review' ? 'Unit ' + w.n + ' Review' : 'Lesson ' + w.n + '.' + (info.list.indexOf(u) + 1) + ': ' + u.name) + '. ' + (u.state === 'open' ? u.done + ' of ' + u.total + ' stars. Open.' : 'Locked. ' + u.lockMsg + '.'),
+        onclick: () => { Snd.stop(); if (u.state === 'open') { modalRoot.innerHTML = ''; location.hash = u.href; } else toast(u.lockMsg + '.'); } }, imgs(u), body);
+      if (u.state === 'open') body.append(h('span', { class: 'obtn' }, 'Open lesson'));
       return card;
     });
     const nextIs0 = WORLD[WORLD.indexOf(w0) + 1]; const nextIs = nextIs0 && nextIs0.kind === 'island' ? { kind: 'island', n: w.n + 1 } : nextIs0;
@@ -201,7 +199,7 @@
     modalRoot.innerHTML = '';
     const scrim = h('div', { class: 'scrim picker-scrim' }, panel); scrim.addEventListener('click', (e) => { if (e.target === scrim) close(); });
     modalRoot.append(scrim);
-    const first = $('.ucard.open .obtn', panel); (first || $('.x', panel)).focus({ preventScroll: true });
+    const first = $('.ucard.open', panel); (first || $('.x', panel)).focus({ preventScroll: true });
   }
   IR.openIsland = openIsland;
 
@@ -405,20 +403,19 @@
     const aria = (r, extra) => r.label + '. ' + r.min + ' minutes. ' + extra + (r.done ? ' Done, star earned.' : nx && nx.id === r.id ? ' Next up.' : '');
     const actFlags = secs.filter((r) => r.group === 'activities').map((r) => !!r.done);
     function bigBox(r) {
-      const isNext = nx && nx.id === r.id; const lesson = r.group === 'lesson';
-      const frame = lesson
-        ? IR.artFrame(IR.lessonArt, IR.lessonArtAlt)
-        : IR.artFrame(IR.storyCovers['4.1'], 'The Twigs in the Bell');
-      const body = [
-        h('span', { class: 'bkind' }, lesson ? 'Lesson' : 'Story'),
-        r.done ? h('span', { class: 'bstar' }, star(true)) : null,
-        frame,
-        h('span', { class: 'stxt bbot' }, h('b', null, r.title), h('span', { class: 'smin' }, r.min + ' min'))
-      ];
-      const cardClass = 'stopcard bigbox ' + (lesson ? 'lessonstop' : 'storystop') + (r.done ? ' done' : '') + (isNext ? ' nextup' : '');
-      if (lesson) body.push(IR.actButton(r.href, actFlags));
-      else body.push(IR.storyRead(r.href));
-      return h('li', { class: 'bigli' }, h('div', { class: cardClass, 'data-id': r.id, 'data-group': r.group }, ...body));
+      const lesson = r.group === 'lesson';
+      return IR.pairCard({
+        lesson: lesson,
+        kicker: lesson ? 'Lesson' : 'Story',
+        title: r.title,
+        min: r.min,
+        href: r.href,
+        img: lesson ? IR.lessonArt : IR.storyCovers['4.1'],
+        alt: lesson ? IR.lessonArtAlt : 'The Twigs in the Bell',
+        done: r.done,
+        next: nx && nx.id === r.id,
+        flags: actFlags
+      });
     }
     function actRow(r) {
       const isNext = nx && nx.id === r.id;
