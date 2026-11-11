@@ -50,7 +50,9 @@ test('stories are the three planned repairs with no em dash', () => {
   assert.match(data, /Zip is ringing the bell/);
   assert.doesNotMatch(data, /Zip packs the cups and the hats/);
   assert.doesNotMatch(u6 + data, /\u2014|—/);
-  assert.match(sw, /ir-20261111c/);
+  assert.match(sw, /ir-20261111d/);
+  assert.match(u6, /class: 'lessonrow'/);
+  assert.match(u6, /#\/u6\/' \+ L\.key \+ '\/read'/);
 });
 
 test('every Unit 6 speaker line is tagged, and Frill is not Zip', () => {

@@ -443,13 +443,15 @@
     const nx = items.find((r) => !r.done) || null;
     const star = (on) => h('span', { class: 'sstar' + (on ? ' on' : '') }, icon(on ? 'star' : 'starOutline'));
     const go = (r) => () => { Snd.stop(); location.hash = r.href; };
-    const big = (r) => h('li', { class: 'bigli' }, h('button', { class: 'stopcard bigbox lessonstop' + (r.done ? ' done' : '') + (nx && nx.id === r.id ? ' nextup' : ''), type: 'button', onclick: go(r) },
+    const big = (r) => h('button', { class: 'stopcard bigbox lessonstop' + (r.done ? ' done' : '') + (nx && nx.id === r.id ? ' nextup' : ''), type: 'button', onclick: go(r) },
       h('span', { class: 'bkind' }, 'Lesson'), h('img', { class: 'bimg', src: 'img/zipA.webp', alt: '' }),
-      h('span', { class: 'stxt bbot' }, h('b', null, r.title), h('span', { class: 'smin' }, r.min + ' min'))));
+      h('span', { class: 'stxt bbot' }, h('b', null, r.title), h('span', { class: 'smin' }, r.min + ' min')));
     const row = (r) => h('li', null, h('button', { class: 'stopcard arow gamestop' + (r.done ? ' done' : '') + (nx && nx.id === r.id ? ' nextup' : ''), type: 'button', 'data-id': r.id, onclick: go(r) },
       h('span', { class: 'snum' }, String(r.act)), h('span', { class: 'stxt' }, h('b', null, r.title), TIPS[r.id] ? h('span', { class: 'sblurb' }, TIPS[r.id]) : null),
       h('span', { class: 'sside' }, star(r.done))));
-    const left = h('ul', { class: 'uA-left' }, ...items.filter((r) => r.group !== 'activities').map(big));
+    const meet = items.filter((r) => r.group !== 'activities')[0];
+    const thumb = (L.story && L.story[0] && L.story[0].img) || '';
+    const left = h('ul', { class: 'uA-left has-pairs' }, h('li', { class: 'lessonrow' }, big(meet), IR.storyCard({ num: L.n, title: L.storyTitle, href: '#/u6/' + L.key + '/read', thumb: thumb })));
     const right = h('section', { class: 'uA-right' }, h('h2', { class: 'uA-h' }, 'Activities'), h('ol', { class: 'stoplist uA-acts' }, ...items.filter((r) => r.group === 'activities').map(row)),
       h('p', { class: 'small' }, GROWN));
     app.append(h('div', { class: 'screen trailscreen unitpage unitA' },
@@ -460,12 +462,17 @@
 
   function picker(app) {
     IR.newScreen();
-    const cards = PACK.lessons.map((L) => h('li', { class: 'bigli' }, h('button', { class: 'stopcard bigbox lessonstop', type: 'button', onclick: () => { location.hash = '#/u6/' + L.key; } },
-      h('span', { class: 'bkind' }, 'Lesson ' + L.n), h('img', { class: 'bimg', src: L.n === '6.2' ? 'img/frill.webp' : 'img/zipA.webp', alt: '' }),
-      h('span', { class: 'stxt bbot' }, h('b', null, L.name), h('span', null, L.storyTitle)))));
-    app.append(h('div', { class: 'screen trailscreen unitpage unitA' },
+    const cards = PACK.lessons.map((L) => {
+      const lesson = h('button', { class: 'stopcard bigbox lessonstop', type: 'button', onclick: () => { location.hash = '#/u6/' + L.key; } },
+        h('span', { class: 'bkind' }, 'Lesson ' + L.n), h('img', { class: 'bimg', src: L.n === '6.2' ? 'img/frill.webp' : 'img/zipA.webp', alt: '' }),
+        h('span', { class: 'stxt bbot' }, h('b', null, L.name)));
+      const thumb = (L.story && L.story[0] && L.story[0].img) || '';
+      const story = IR.storyCard({ num: L.n, title: L.storyTitle, href: '#/u6/' + L.key + '/read', thumb: thumb });
+      return h('li', { class: 'lessonrow' }, lesson, story);
+    });
+    app.append(h('div', { class: 'screen trailscreen unitpage unitA u6pick' },
       h('header', { class: 'uA-top' }, IR.ui.homeButton(), h('h1', { class: 'uA-title' }, h('small', null, 'Unit 6 \u00b7 '), 'Endings'), IR.ui.gearButton()),
-      h('main', { class: 'uA-main' }, h('ul', { class: 'uA-left' }, ...cards),
+      h('main', { class: 'uA-main' }, h('ul', { class: 'uA-left has-pairs' }, ...cards),
         h('section', { class: 'uA-right' }, h('h2', { class: 'uA-h' }, 'Three lessons'), h('p', null, '6.1 is -s and -es. 6.2 is -ed. 6.3 is -ing. Each lesson has ten activities. Zip\u2019s Check is last.'), h('p', { class: 'small' }, GROWN)))));
   }
 

@@ -34,6 +34,22 @@
   };
 
   /* Index of this question inside its category (same type), 1-based. */
+  /* Lesson number large, story title underneath. Opens the story reader. */
+  IR.storyCard = function (opts) {
+    opts = opts || {};
+    const num = opts.num || '';
+    const title = opts.title || 'Story';
+    return h('button', {
+      class: 'storycard',
+      type: 'button',
+      'aria-label': 'Lesson ' + num + '. ' + title + '. Opens the story.',
+      onclick: () => { IR.Snd.stop(); location.hash = opts.href; }
+    },
+      opts.thumb ? h('img', { class: 'storythumb', src: opts.thumb, alt: '' }) : null,
+      h('span', { class: 'storynum' }, num),
+      h('span', { class: 'storyname' }, title));
+  };
+
   IR.catCount = function (items, q, keyFn) {
     const key = keyFn(items[q]);
     const same = [];
