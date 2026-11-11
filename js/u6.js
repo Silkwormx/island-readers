@@ -491,7 +491,7 @@
     const meet = items.filter((r) => r.group !== 'activities')[0];
     const story = { id: 'read', title: L.storyTitle, group: 'story', href: '#/u6/' + L.key + '/read', done: !!(lights(L.key).read), min: 6 };
     const left = h('ul', { class: 'uA-left' }, big(meet), big(story));
-    const right = h('section', { class: 'uA-right' }, h('h2', { class: 'uA-h' }, 'Activities'), h('ol', { class: 'stoplist uA-acts' }, ...items.filter((r) => r.group === 'activities').map(row)),
+    const right = h('section', { class: 'uA-right' }, h('h2', { class: 'uA-h' }, 'Activities'), IR.spellCard ? h('ul', { class: 'spellsteps spellinmenu' }, IR.spellCard(L.key)) : null, h('ol', { class: 'stoplist uA-acts' }, ...items.filter((r) => r.group === 'activities').map(row)),
       h('p', { class: 'small' }, GROWN));
     app.append(h('div', { class: 'screen trailscreen unitpage unitA' },
       h('header', { class: 'uA-top' }, IR.ui.homeButton(), h('h1', { class: 'uA-title' }, h('small', null, 'Unit 6 \u00b7 Lesson ' + L.n + ' \u00b7 '), L.name),

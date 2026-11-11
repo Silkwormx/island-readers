@@ -433,7 +433,7 @@
     const lights = h('div', { class: 'clights', role: 'status', 'aria-label': 'Session progress lights' }, h('span', { class: 'clab' }, 'This visit:'),
       h('span', { class: 'clightdots' }, ...secs.map((r) => h('span', { class: 'clight' + (lit[r.id] || r.done ? ' on' : ''), 'data-kind': r.group, 'data-id': r.id, title: r.title }))));
     const left = h('section', { class: 'uA-sec uA-start' }, h('h2', { class: 'uA-h' }, 'Start here'), h('ul', { class: 'uA-left' }, ...secs.filter((r) => r.group !== 'activities').map(bigBox)));
-    const right = h('section', { class: 'uA-sec uA-right' }, lights, h('h2', { class: 'uA-h' }, 'Activities'), h('ol', { class: 'stoplist uA-acts' }, ...secs.filter((r) => r.group === 'activities').map(actRow)));
+    const right = h('section', { class: 'uA-sec uA-right' }, lights, h('h2', { class: 'uA-h' }, 'Activities'), IR.spellCard ? h('ul', { class: 'spellsteps spellinmenu' }, IR.spellCard('ng')) : null, h('ol', { class: 'stoplist uA-acts' }, ...secs.filter((r) => r.group === 'activities').map(actRow)));
     const foot = h('footer', { class: 'uA-foot island4 ' + (complete ? 'open' : 'locked'), 'aria-live': 'polite' },
       h('span', { class: 'i4ico', 'aria-hidden': 'true' }, icon(complete ? 'star' : 'lock')),
       h('span', { class: 'i4txt' }, h('small', null, complete ? 'Unit 4 is unlocked!' : 'Unit 4 unlocks when all stars are done')),
@@ -571,7 +571,11 @@
       return simplePage('Fluency Stories', h('p', { class: 'calm' }, 'Read a story again and again. It gets smoother each time.'),
         h('div', { class: 'chestlist fluencylist' }, ...cards));
     }
-    if (key === 'spelling') return simplePage('Spelling', h('p', { class: 'calm' }, 'Spelling practice is coming soon.'), h('p', { class: 'calm small' }, 'For now, try Hear it, Spell it inside the Unit 3 lesson.'));
+    if (key === 'spelling') {
+      const cards = (IR.spellLessons ? IR.spellLessons() : []).map((L) => IR.spellCard(L.id)).filter(Boolean);
+      return simplePage('Spelling', h('p', { class: 'calm' }, 'Each lesson has five spelling steps. They use only the sounds from that lesson and earlier ones.'),
+        h('ul', { class: 'spellsteps' }, ...cards));
+    }
     location.hash = '#/home';
   }
   /* ---------- About Island Readers (approved copy, Nov 6 2026) ---------- */
@@ -696,7 +700,8 @@
     modalRoot.innerHTML = '';
     app.innerHTML = ''; window.scrollTo(0, 0);
     let m;
-    if (IR.nkRoute && IR.nkRoute(hash, app)) { /* nk unit + Island Review (js/nk.js) */ }
+    if (IR.spellRoute && IR.spellRoute(hash, app)) { /* spelling for every lesson */ }
+    else if (IR.nkRoute && IR.nkRoute(hash, app)) { /* nk unit + Island Review (js/nk.js) */ }
     else if (IR.u5Route && IR.u5Route(hash, app)) { /* Unit 5 Silent e (js/u5.js) */ }
     else if (IR.u6Route && IR.u6Route(hash, app)) { /* Unit 6 Endings (js/u6.js) */ }
     else if ((m = /^#\/lesson\/(\d+)/.exec(hash))) lessonScreen(parseInt(m[1], 10) - 1);
@@ -715,9 +720,9 @@
   /* Nov 4 2026: "Back to Unit N" on every lesson / activity / game page of a unit. Opens that unit's lesson picker.
      Shared template: a new unit only needs one row here (route test + picker id + unit number). */
   IR.UNIT_ROUTES = IR.UNIT_ROUTES || [
-    { n: 4, id: 'i3', test: (hs) => /^#\/(nk|island3|lesson\/|review3|check|result)/.test(hs) },
-    { n: 5, id: 'i5', test: (hs) => /^#\/(u5\d|review5)/.test(hs) },
-    { n: 6, id: 'u6', href: '#/u6', test: (hs) => /^#\/u6(\/|$)/.test(hs) }];
+    { n: 4, id: 'i3', test: (hs) => /^#\/(nk|island3|lesson\/|review3|check|result)/.test(hs) || /^#\/spell\/(ng|nk)(\/|$)/.test(hs) },
+    { n: 5, id: 'i5', test: (hs) => /^#\/(u5\d|review5)/.test(hs) || /^#\/spell\/u5(\/|$)/.test(hs) },
+    { n: 6, id: 'u6', href: '#/u6', test: (hs) => /^#\/u6(\/|$)/.test(hs) || /^#\/spell\/u6(\/|$)/.test(hs) }];
   function addUnitBack() {
     const hs = location.hash || ''; const u = IR.UNIT_ROUTES.find((r) => r.test(hs));
     if (!u || app.querySelector('.unitback')) return;
