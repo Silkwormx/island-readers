@@ -100,7 +100,12 @@
         const ch = a[i] || '';
         slotEls.push(h('span', { class: 'wtile chainslot' + (i === idx ? ' glow' : '') + (ch ? '' : ' empty') }, ch));
       }
-      const others = shuffle(distractors.filter((x) => x !== need && b.indexOf(x) < 0)).slice(0, 3);
+      const ending = /^(s|es|ed|ing|ng|nk|sh|ch|th|ck)$/;
+      const letters = 'abcdefghijklmnopqrstuvwxyz'.split('');
+      const graphemes = ending.test(need)
+        ? ['s', 'es', 'ed', 'ing', 'ng', 'nk', 'sh', 'ch', 'th'].filter((x) => ending.test(x))
+        : letters;
+      const others = shuffle(graphemes.filter((x) => x !== need && b.indexOf(x) < 0)).slice(0, 3);
       const pool = h('div', { class: 'chainopts' });
       shuffle([need].concat(others)).forEach((t) => {
         const btn = h('button', { class: 'wtile chainpick', type: 'button', 'data-t': t }, t);
