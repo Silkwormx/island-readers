@@ -37,8 +37,8 @@ test('Unit 5 keeps 10 activities, check last, and replaces the bell game', () =>
 });
 
 test('letter chain and choice numbers are shared', () => {
-  assert.match(chain, /Listen\. Change one letter to make the new word\./);
-  assert.match(chain, /This is cap\./);
+  assert.match(chain, /Change one letter to make a new word\./);
+  assert.match(chain, /from: 'cap', to: 'cape'/);
   assert.match(chain, /glow/);
   assert.match(nk, /blendSoundsReady/);
   assert.match(css, /counter-increment: irpick/);

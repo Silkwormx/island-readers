@@ -68,7 +68,7 @@
       { id: 'build', title: 'Add the ending', group: 'activities', run: (c) => runBuild(c, L), color: '#E8603C' },
       { id: 'chain', title: 'Word Chains', group: 'activities', run: (c) => runChain(c, L), color: '#C95A10' },
       { id: 'feed', title: 'Feed Zip', group: 'activities', run: (c) => runFeed(c, L), color: '#D98E00' },
-      { id: 'sentence', title: 'Sentence Bridge', group: 'activities', run: (c) => runSentence(c, L), color: '#2E9E6B' },
+      { id: 'sentence', title: 'Tap each word that has an ending', group: 'activities', run: (c) => runSentence(c, L), color: '#2E9E6B' },
       { id: 'read', title: 'Now You Read It', group: 'activities', run: (c) => runRead(c, L), color: '#8E5BD6' },
       { id: 'rhyme', title: 'Rhyme Call', group: 'activities', run: (c) => runRhyme(c, L), color: '#C2408A' },
       { id: 'fish', title: 'Fish Pond', group: 'activities', run: (c) => runFish(c, L), color: '#1F8FD6' },
@@ -86,22 +86,45 @@
     return grid;
   }
 
+  function pairRow(a, b) {
+    return h('div', { class: 'pairrow' },
+      h('span', { class: 'bigword pairword' }, colorEnd(a)),
+      h('span', { class: 'pairarrow', 'aria-hidden': 'true' }, '\u2192'),
+      h('span', { class: 'bigword pairword' }, colorEnd(b)));
+  }
+
   function runMeet(ctx, L) {
     const beats = L.meet; let i = 0; const st = ctx.stage;
+    const groups = L.soundGroups || null;
     const show = () => {
       const b = beats[i]; ctx.progress(i / beats.length); st.innerHTML = '';
       ctx.setInstr('', null);
       const face = b.who === 'frill' ? 'img/frill.webp' : 'img/zipA.webp';
       const replay = speakerBtn(() => Snd.play(P(b.audio)), 'Hear this again');
-      st.append(h('div', { class: 'activity nkmeet' },
-        h('div', { class: 'bubble ' + b.who }, h('b', { class: 'who' }, b.who === 'zip' ? 'Zip' : 'Frill'), h('p', null, b.text), replay),
-        h('div', { class: 'meetrow' },
-          h('div', { class: 'panelwrap small' }, h('img', { class: 'panel', src: face, alt: b.who === 'frill' ? 'Frill' : 'Zip' })),
-          h('p', { class: 'bigword' }, colorEnd(b.word))),
-        h('p', { class: 'cap' }, b.cap),
-        h('div', { class: 'chips' }, ...b.chips.map((w) => h('button', { class: 'chip', type: 'button', onclick: () => say(w) }, colorEnd(w))))));
+      const body = h('div', { class: 'bubble ' + b.who }, h('b', { class: 'who' }, b.who === 'zip' ? 'Zip' : 'Frill'), h('p', null, b.text), replay);
+      let visual;
+      if (groups) {
+        visual = h('div', { class: 'edgroups' }, ...groups.map((g) => h('section', { class: 'edgroup' + (b.focus === g.id ? ' on' : '') },
+          h('button', { class: 'btn', type: 'button', onclick: () => Snd.play(SND(g.sound)) }, icon('speaker'), g.caption),
+          h('div', { class: 'edwords' }, ...g.words.map((w) => h('button', { class: 'chip', type: 'button', onclick: () => say(w) }, colorEnd(w)))))));
+      } else if (b.pairs) {
+        visual = h('div', { class: 'pairlist' }, ...b.pairs.map((pair) => pairRow(pair[0], pair[1])));
+      } else {
+        visual = h('div', null,
+          h('div', { class: 'meetrow' },
+            h('div', { class: 'panelwrap small' }, h('img', { class: 'panel', src: face, alt: b.who === 'frill' ? 'Frill' : 'Zip' })),
+            h('p', { class: 'bigword' }, colorEnd(b.word))),
+          b.cap ? h('p', { class: 'cap' }, b.cap) : null,
+          h('div', { class: 'chips' }, ...(b.chips || []).map((w) => h('button', { class: 'chip', type: 'button', onclick: () => say(w) }, colorEnd(w)))));
+      }
+      st.append(h('div', { class: 'activity nkmeet' }, body,
+        groups ? h('div', { class: 'meetrow' }, h('div', { class: 'panelwrap small' }, h('img', { class: 'panel', src: face, alt: '' }))) : null,
+        visual));
       ctx.setNextLabel(i === beats.length - 1 ? 'Activities' : 'Next');
-      Snd.play(P(b.audio));
+      const bits = [P(b.audio)];
+      if (b.sound) bits.push(SND(b.sound));
+      if (bits.length > 1) Snd.seq(bits, 180);
+      else Snd.play(bits[0]);
     };
     ctx.setNext(() => { if (i < beats.length - 1) { i++; show(); return true; } return false; });
     ctx.setBack(() => { if (i > 0) { i--; show(); return true; } return false; });
@@ -112,7 +135,7 @@
     const rounds = L.hear; let r = 0; const st = ctx.stage;
     ctx.setInstr('Tap the word you hear.', 'tapword');
     function round() {
-      const R = rounds[r]; ctx.progress(r / rounds.length); st.innerHTML = '';
+      const R = rounds[r]; ctx.progress(r / rounds.length); if (ctx.count) ctx.count(r + 1, rounds.length); st.innerHTML = '';
       let locked = false;
       const status = h('p', { class: 'status' }, '\u00a0');
       const spk = speakerBtn(() => say(R.word), 'Hear the word'); spk.classList.add('huge');
@@ -122,7 +145,7 @@
         else { ctx.miss(); b.classList.add('tried'); status.textContent = 'Listen again.'; await Snd.seq([P('listenagain'), W(R.word), SND(soundFor(R.word))], 180); }
       });
       st.append(h('div', { class: 'activity' }, spk, grid, status));
-      Snd.seq([P('tapword'), W(R.word)], 180);
+      IR.sayItem(ctx, P('tapword'), W(R.word));
     }
     ctx.setBack(() => { if (r > 0) { r--; round(); return true; } return false; });
     ctx.setNext(() => { if (r < rounds.length - 1) { r++; round(); return true; } return false; });
@@ -149,24 +172,27 @@
   function runBells(ctx, L) {
     const items = shuffle(L.bells.yes.map((w) => ({ w, yes: true })).concat(L.bells.no.map((w) => ({ w, yes: false }))));
     let r = 0; const st = ctx.stage;
-    ctx.setInstr('Does this word have the ending? Call 1 for yes or 2 for no.', 'yesno');
+    ctx.setInstr('Does this word have the ending? Listen first. Answer 1 for yes, 2 for no.', 'yesno');
     function round() {
-      const it = items[r]; ctx.progress(r / items.length); st.innerHTML = '';
+      const it = items[r]; ctx.progress(r / items.length); if (ctx.count) ctx.count(r + 1, items.length); st.innerHTML = '';
       let locked = false;
-      const status = h('p', { class: 'status' }, '\u00a0');
+      const status = h('p', { class: 'status' }, 'Listen.');
+      const word = h('p', { class: 'bigword yn-secret' }, '\u00a0');
+      const reveal = () => { word.classList.remove('yn-secret'); word.textContent = ''; word.append(colorEnd(it.w)); };
       const grid = h('div', { class: 'choices two yn-row' });
       [['yes', 'Yes', 'yn yn-yes'], ['no', 'No', 'yn yn-no']].forEach(([id, lab, cls]) => {
         const b = h('button', { class: 'choice ' + cls, type: 'button', 'data-w': id }, lab);
         b.addEventListener('click', async () => {
           if (locked) return;
           const ok = (id === 'yes') === it.yes;
-          if (ok) { locked = true; b.classList.add('right'); status.textContent = 'Yes.'; await ding(it.w); if (!ctx.scr.ok()) return; r++; if (r >= items.length) ctx.finish(); else round(); }
-          else { ctx.miss(); b.classList.add('tried'); status.textContent = 'Listen again.'; await Snd.seq([P('listenagain'), W(it.w)], 160); }
+          reveal();
+          if (ok) { locked = true; b.classList.add('right'); status.textContent = 'Yes. ' + it.w + '.'; await ding(it.w); if (!ctx.scr.ok()) return; r++; if (r >= items.length) ctx.finish(); else round(); }
+          else { ctx.miss(); b.classList.add('tried'); status.textContent = 'Not this time. The word is ' + it.w + '.'; await Snd.seq([P('listenagain'), W(it.w)], 160); }
         });
         grid.append(b);
       });
-      st.append(h('div', { class: 'activity' }, h('p', { class: 'bigword' }, colorEnd(it.w)), speakerBtn(() => say(it.w), 'Hear the word'), grid, status));
-      Snd.seq([P('yesno'), W(it.w)], 180);
+      st.append(h('div', { class: 'activity' }, word, speakerBtn(() => say(it.w), 'Hear the word'), grid, status));
+      IR.sayItem(ctx, P('yesno'), W(it.w));
     }
     ctx.setNext(() => { if (r < items.length - 1) { r++; round(); return true; } return false; });
     ctx.setBack(() => { if (r > 0) { r--; round(); return true; } return false; });
@@ -187,7 +213,7 @@
       Snd.seq([W(ex.base), W(ex.word)], 280);
     }
     function round() {
-      const R = rounds[r]; ctx.progress(r / rounds.length); st.innerHTML = '';
+      const R = rounds[r]; ctx.progress(r / rounds.length); if (ctx.count) ctx.count(r + 1, rounds.length); st.innerHTML = '';
       let locked = false; let misses = 0;
       ctx.setInstr('Listen. Pick the ending that makes this word.', 'finish');
       const status = h('p', { class: 'status' }, '\u00a0');
@@ -212,7 +238,7 @@
         speakerBtn(() => say(R.word), 'Hear the word'),
         h('p', { class: 'bigword' }, colorEnd(R.base), h('span', { class: 'chunk', style: 'color:#9C7A00' }, ' + ?')),
         grid, status));
-      Snd.seq([P('finish'), W(R.word)], 180);
+      IR.sayItem(ctx, P('finish'), W(R.word));
     }
     ctx.setNext(() => { if (!showed) { round(); return true; } if (r < rounds.length - 1) { r++; round(); return true; } return false; });
     ctx.setBack(() => { if (r > 0) { r--; round(); return true; } if (showed) { showed = false; example(); return true; } return false; });
@@ -222,17 +248,20 @@
   function runChain(ctx, L) {
     let c = 0;
     const done = ctx.finish.bind(ctx);
+    const MODELS = {
+      u61: { from: 'cat', to: 'cats', audioA: 'audio/u6_chain_u61_a.mp3', audioB: 'audio/u6_chain_u61_b.mp3' },
+      u62: { from: 'jump', to: 'jumped', audioA: 'audio/u6_chain_u62_a.mp3', audioB: 'audio/u6_chain_u62_b.mp3' },
+      u63: { from: 'hang', to: 'hanging', audioA: 'audio/u6_chain_u63_a.mp3', audioB: 'audio/u6_chain_u63_b.mp3' }
+    };
     const opts = {
       split: splitChain,
       say: say,
-      pics: {},
       distractors: ['s', 'es', 'ed', 'ing', 'a', 't', 'p', 'm', 'b', 'h', 'c', 'r'],
       ding: (w) => ding(w),
       tryAgain: (w) => tryAgain(W(w)),
-      promptAudio: P('finish'),
-      promptKey: 'finish',
-      modelA: 'audio/chain_model_a.mp3',
-      modelB: 'audio/chain_model_b.mp3'
+      promptAudio: 'audio/p_chain_rule.mp3',
+      promptKey: null,
+      model: MODELS[L.key]
     };
     function start() {
       ctx.finish = () => { c++; if (c < L.chains.length) start(); else done(); };
@@ -243,14 +272,14 @@
 
   function runFeed(ctx, L) {
     const words = L.feedYes.concat(L.feedNo);
-    IR.runFeedZip(ctx, { words: words, say: say, colorWord: colorEnd, promptKey: 'tapword', promptAudio: P('tapword') });
+    IR.runFeedZip(ctx, { words: words, say: say, colorWord: colorEnd, promptKey: null, promptAudio: 'audio/p_feed_rule.mp3' });
   }
 
   function runSentence(ctx, L) {
     const rounds = L.sentences; let r = 0; const st = ctx.stage;
-    ctx.setInstr('Tap each word that has the ending.', 'sentence');
+    ctx.setInstr('Tap each word that has an ending.', 'sentence');
     function round() {
-      const R = rounds[r]; ctx.progress(r / rounds.length); st.innerHTML = '';
+      const R = rounds[r]; ctx.progress(r / rounds.length); if (ctx.count) ctx.count(r + 1, rounds.length); st.innerHTML = '';
       const need = new Set(); const got = new Set();
       R.words.forEach((w, i) => { if (hasLessonEnd(w, L)) need.add(i); });
       const status = h('p', { class: 'status' }, 'Tap every word with the ending.');
@@ -259,6 +288,7 @@
         const b = h('button', { class: 'choice', type: 'button', 'data-w': w }, colorEnd(w));
         b.addEventListener('click', async () => {
           if (b.classList.contains('right') || b.classList.contains('tried')) return;
+          say(w);
           if (need.has(i)) {
             b.classList.add('right'); got.add(i);
             if (got.size === need.size) { status.textContent = 'Yes. That is every one.'; await ding(); if (!ctx.scr.ok()) return; r++; if (r >= rounds.length) ctx.finish(); else round(); }
@@ -267,7 +297,9 @@
         grid.append(b);
       });
       st.append(h('div', { class: 'activity' }, h('p', { class: 'bigprompt' }, R.text), grid, status));
-      Snd.play(P('sentence'));
+      const spoken = R.words.map((w) => W(w));
+      if (r === 0) IR.sayItem(ctx, P('sentence'), null).then(() => { if (ctx.scr.ok()) Snd.seq(spoken, 140); });
+      else Snd.seq(spoken, 140);
     }
     ctx.setNext(() => { if (r < rounds.length - 1) { r++; round(); return true; } return false; });
     ctx.setBack(() => { if (r > 0) { r--; round(); return true; } return false; });
@@ -300,7 +332,7 @@
     const rounds = L.rhyme; let r = 0; const st = ctx.stage;
     ctx.setInstr('Which word rhymes with this?', 'rhymewhich');
     function round() {
-      const R = rounds[r]; ctx.progress(r / rounds.length); st.innerHTML = '';
+      const R = rounds[r]; ctx.progress(r / rounds.length); if (ctx.count) ctx.count(r + 1, rounds.length); st.innerHTML = '';
       let locked = false;
       const status = h('p', { class: 'status' }, 'Call out 1, 2, or 3.');
       const spk = speakerBtn(() => say(R.prompt), 'Hear the word'); spk.classList.add('huge');
@@ -310,7 +342,7 @@
         else { ctx.miss(); b.classList.add('tried'); status.textContent = 'Listen again.'; await Snd.seq([P('listenagain'), W(R.prompt)], 160); }
       }, 'three');
       st.append(h('div', { class: 'activity' }, h('p', { class: 'bigprompt' }, 'Which word rhymes with ' + R.prompt + '?'), spk, grid, status));
-      Snd.seq([P('rhymewhich'), W(R.prompt)], 200);
+      IR.sayItem(ctx, P('rhymewhich'), W(R.prompt));
     }
     ctx.setNext(() => { if (r < rounds.length - 1) { r++; round(); return true; } return false; });
     ctx.setBack(() => { if (r > 0) { r--; round(); return true; } return false; });
@@ -332,8 +364,9 @@
       });
       pond.append(b);
     });
+    if (ctx.count) ctx.count(1, need);
     st.append(h('div', { class: 'activity' }, h('p', { class: 'bigprompt' }, 'Fish Pond'), pond, status));
-    Snd.play(P('fish'));
+    IR.sayItem(ctx, P('fish'), null);
   }
 
   function runCheck(ctx, L) {
@@ -346,6 +379,7 @@
     function step() {
       if (q >= items.length) return finish();
       const it = items[q]; const my = ++tok; ctx.progress(q / items.length); st.innerHTML = '';
+      const cat = IR.catCount(items, q, (x) => x.type || 'q'); if (ctx.count) ctx.count(cat.i, cat.n);
       let locked = false;
       const status = h('p', { class: 'status' }, 'Question ' + (q + 1) + ' of ' + items.length);
       const ans = async (ok, b) => {
@@ -356,11 +390,11 @@
       if (it.type === 'pick') {
         ctx.setInstr('Tap the word you hear.', 'tapword');
         body = h('div', { class: 'activity' }, speakerBtn(() => say(it.word), 'Hear the word'), choiceGrid(shuffle(it.choices), (w, b) => ans(w === it.word, b)), status);
-        say(it.word);
+        IR.sayItem(ctx, P('tapword'), W(it.word));
       } else if (it.type === 'sound') {
         ctx.setInstr('Which word has this ending?', 'whichending');
         body = h('div', { class: 'activity' }, speakerBtn(() => Snd.play(SND(it.sound)), 'Hear the ending'), choiceGrid(shuffle(it.choices), (w, b) => ans(w === it.answer, b)), status);
-        Snd.seq([P('whichending'), SND(it.sound)], 200);
+        IR.sayItem(ctx, P('whichending'), SND(it.sound));
       } else {
         ctx.setInstr('Finish the word.', 'finish');
         const grid = h('div', { class: 'choices two' });
@@ -370,7 +404,7 @@
           grid.append(b);
         });
         body = h('div', { class: 'activity' }, h('p', { class: 'bigword' }, colorEnd(it.base), ' + ?'), grid, status);
-        Snd.play(P('finish'));
+        IR.sayItem(ctx, P('finish'), null);
       }
       st.append(body);
     }
@@ -444,7 +478,7 @@
     const ctx = {
       scr, stage, miss() { mistakes++; },
       progress(f) { fill.style.width = Math.round(((idx + Math.max(0, Math.min(1, f))) / STEPS.length) * 100) + '%'; },
-      setInstr(text, p) { instrBox.innerHTML = ''; if (!text) { instrBox.style.display = 'none'; return; } instrBox.style.display = ''; instrBox.append(speakerBtn(() => { if (p) Snd.play(P(p)); }, 'Hear the directions'), h('span', { class: 'itext' }, text)); if (p && p !== 'yesno' && p !== 'tapword' && p !== 'finish' && p !== 'sentence' && p !== 'fish' && p !== 'listen' && p !== 'rhymewhich') Snd.play(P(p)); },
+      setInstr(text, p) { instrBox.innerHTML = ''; if (!text) { instrBox.style.display = 'none'; return; } instrBox.style.display = ''; instrBox.append(speakerBtn(() => { if (p) Snd.play(P(p)); }, 'Hear the directions'), h('span', { class: 'itext' }, text)); },
       setBack(fn) { backH = fn; }, setNext(fn) { nextH = fn; },
       setNextLabel(t) { if (nextBtn.firstChild) nextBtn.firstChild.textContent = t; },
       goBack() { Snd.stop(); if (backH && backH()) return; location.hash = idx > 0 ? base + '/' + STEPS[idx - 1].id : base; },
@@ -456,7 +490,9 @@
       h('button', { class: 'btn big back', type: 'button', onclick: () => ctx.goBack() }, icon('back'), 'Back'),
       nextBtn);
     const x = h('button', { class: 'xbtn', type: 'button', 'aria-label': 'Back to the lesson', onclick: () => { location.hash = base; } }, icon('close'));
-    app.append(h('div', { class: 'screen lessonscreen u6step' + (S0.group === 'lesson' ? ' is-lesson' : ''), style: '--c:' + S0.color }, h('header', { class: 'lesson-top' }, x, bar, IR.ui.homeButton(), IR.ui.gearButton()), instrBox, stage, nav));
+    const screen = h('div', { class: 'screen lessonscreen u6step' + (S0.group === 'lesson' ? ' is-lesson' : ''), style: '--c:' + S0.color }, h('header', { class: 'lesson-top' }, x, bar, IR.ui.homeButton(), IR.ui.gearButton()), instrBox, stage, nav);
+    app.append(screen);
+    if (S0.group === 'activities') IR.attachGameRules(ctx, screen, S0.title);
     S0.run(ctx);
   }
 

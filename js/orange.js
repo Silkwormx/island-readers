@@ -31,7 +31,7 @@
       stage.append(h('div', { class: 'activity bellgame' },
         h('div', { class: 'bellscene', style: 'background-image:url(img/ob_scene.jpg)' }), row, card, hint, h('div', { class: 'row center' }, hear), status));
       function show() {
-        ctx.progress(lit.size / words.length); card.innerHTML = ''; card.append(h('span', { class: 'bigword' }, colorWord(order[r])));
+        ctx.progress(lit.size / words.length); if (ctx.count) ctx.count(r + 1, words.length); card.innerHTML = ''; card.append(h('span', { class: 'bigword' }, colorWord(order[r])));
         status.textContent = '\u00a0';
       }
       async function tapBell(w, b) {

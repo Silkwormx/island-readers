@@ -126,7 +126,9 @@
     const nextBtn = h('button', { class: 'btn big next', type: 'button', 'aria-label': 'Next', onclick: () => ctx.goNext() }, 'Next', icon('next'));
     const nav = h('div', { class: 'lesson-nav' }, h('button', { class: 'btn big back', type: 'button', 'aria-label': 'Back', onclick: () => ctx.goBack() }, icon('back'), 'Back'), nextBtn);
     const x = h('button', { class: 'xbtn', type: 'button', 'aria-label': 'Back to the unit', onclick: () => { location.hash = '#/nk'; } }, icon('close'));
-    app.append(h('div', { class: 'screen lessonscreen nkstep nk-' + S0.id + (S0.group === 'lesson' ? ' is-lesson' : ''), style: '--c:' + S0.color }, h('header', { class: 'lesson-top' }, x, bar, IR.ui.homeButton(), unitSheetBtn(S0.id), IR.ui.gearButton()), instrBox, stage, nav));
+    const screen = h('div', { class: 'screen lessonscreen nkstep nk-' + S0.id + (S0.group === 'lesson' ? ' is-lesson' : ''), style: '--c:' + S0.color }, h('header', { class: 'lesson-top' }, x, bar, IR.ui.homeButton(), unitSheetBtn(S0.id), IR.ui.gearButton()), instrBox, stage, nav);
+    app.append(screen);
+    if (S0.group === 'activities') IR.attachGameRules(ctx, screen, S0.title);
     ctx.progress(0); S0.run(ctx);
   }
   function unitSheetBtn(cur) {
@@ -377,6 +379,7 @@
       S.nkCheck.last = score; S.nkCheck.attempts++; S.nkCheck.best = Math.max(S.nkCheck.best || 0, score); if (score >= 9) S.nkSticker = true;
       IR.recordActivity('nk_check', score >= 9 ? 3 : score >= 7 ? 2 : 1); IR.touchStreak(); IR.save(); location.hash = '#/nk/result'; };
     const step = () => { if (q >= items.length) return finish(); const it = items[q]; const my = ++tok; ctx.progress(q / items.length); st.innerHTML = '';
+      const cat = IR.catCount(items, q, (x) => x.type || 'q'); if (ctx.count) ctx.count(cat.i, cat.n);
       const status = h('p', { class: 'status' }, 'Question ' + (q + 1) + ' of ' + items.length); let locked = false;
       const ans = async (ok, b) => { if (locked) return; locked = true; recs[q] = !!ok; b.classList.add('picked'); $$('.choice', st).forEach((x) => { if (x !== b) x.classList.add('fade'); });
         status.textContent = 'Thank you! Next one.'; Snd.play(IR.A.sfx.tap); const qq = q; await sleep(700); if (!ctx.scr.ok() || my !== tok || q !== qq) return; q++; step(); };

@@ -31,8 +31,9 @@
     function tap(id) {
       if (board.locked) return;
       const si = board.slots.indexOf(id);
+      const tile = board.tiles.find((t) => t.id === id);
       if (si >= 0) board.slots[si] = null;
-      else { const e = board.slots.indexOf(null); if (e < 0) return; board.slots[e] = id; }
+      else { const e = board.slots.indexOf(null); if (e < 0) return; board.slots[e] = id; if (opts.onTap && tile) opts.onTap(tile.text); }
       render(); checkFull();
     }
     function dropOn(id, slotIdx) {

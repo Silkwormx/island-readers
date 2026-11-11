@@ -205,7 +205,8 @@
         timer = setInterval(() => {
           if (this.id !== id) { cleanup(); return; }
           const d = a.duration;
-          if (a.ended || (isFinite(d) && d > 0 && a.currentTime >= d - 0.03)) return fin(true);
+          /* Do not stop early. A 30ms cutoff was clipping the last consonant. Files keep a quiet tail, and playback runs until the end. */
+          if (a.ended || (isFinite(d) && d > 0 && a.currentTime >= d - 0.01)) return fin(true);
           if (a.currentTime === lastT && !a.paused) stuck += 100; else if (a.currentTime !== lastT) stuck = 0;
           if (a.paused && a.currentTime === 0) stuck += 100;
           lastT = a.currentTime; if (stuck > 6000) { this.showFallback(); fin(false); }

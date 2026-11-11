@@ -21,7 +21,7 @@
     const rounds = N.hear; let r = 0; const got = new Set(); const stage = ctx.stage;
     const nextOpen = () => { for (let k = 1; k <= rounds.length; k++) { const j = (r + k) % rounds.length; if (!got.has(j)) return j; } return -1; };
     function round() {
-      const R = rounds[r]; ctx.progress(got.size / rounds.length); stage.innerHTML = ''; let misses = 0, locked = false;
+      const R = rounds[r]; ctx.progress(got.size / rounds.length); if (ctx.count) ctx.count(r + 1, rounds.length); stage.innerHTML = ''; let misses = 0, locked = false;
       ctx.setBack(() => { if (r > 0) { Snd.stop(); r--; round(); return true; } return false; });
       ctx.setNext(() => { if (r < rounds.length - 1) { Snd.stop(); r++; round(); return true; } return false; });
       const spk = speakerBtn(() => say(R.word), 'Hear the word'); spk.classList.add('huge');
@@ -34,7 +34,7 @@
             got.add(r); const nx = got.size >= rounds.length ? -1 : nextOpen(); if (nx < 0) { ctx.progress(1); ctx.finish(); } else { r = nx; round(); } }
           else { misses++; ctx.miss(); b.classList.add('tried'); status.textContent = 'Not that one. Listen again.'; await tryAgain(W(R.word)); if (misses >= 2) $$('.choice', grid).forEach((o) => { if (o.dataset.w === R.word) o.classList.add('hint'); }); }
         }); grid.append(b); });
-      stage.append(h('div', { class: 'activity' }, spk, grid, status)); say(R.word);
+      stage.append(h('div', { class: 'activity' }, spk, grid, status)); IR.sayItem(ctx, 'audio/nk_p_hear.mp3', W(R.word));
     }
     round();
   }
@@ -48,7 +48,7 @@
     const hearB = h('button', { class: 'btn big', type: 'button', onclick: () => say(order[r]) }, icon('speaker'), 'Hear it');
     stage.append(h('div', { class: 'activity bellgame' }, h('div', { class: 'bellscene', style: 'background-image:url(img/ob_scene.jpg)' }), row, card,
       h('p', { class: 'small' }, 'nk is glued: n and k stay together at the end.'), h('div', { class: 'row center' }, hearB), status));
-    const show = () => { ctx.progress(lit.size / words.length); card.innerHTML = ''; card.append(h('span', { class: 'bigword' }, colorNk(order[r]))); status.textContent = '\u00a0'; };
+    const show = () => { ctx.progress(lit.size / words.length); if (ctx.count) ctx.count(r + 1, words.length); card.innerHTML = ''; card.append(h('span', { class: 'bigword' }, colorNk(order[r]))); status.textContent = '\u00a0'; };
     async function tapBell(w, b) {
       if (lit.has(w)) { say(w); return; }
       if (w !== order[r]) { ctx.miss(); b.classList.add('nudge'); setTimeout(() => b.classList.remove('nudge'), 500); status.textContent = 'Look again. Find the bell that says ' + order[r] + '.'; await tryAgain(); return; }
@@ -65,7 +65,7 @@
     ctx.setInstr('Listen. Build the word with the tiles.', 'build');
     const rounds = N.build; let r = 0; const stage = ctx.stage;
     function round() {
-      const R = rounds[r]; ctx.progress(r / rounds.length); stage.innerHTML = ''; let misses = 0;
+      const R = rounds[r]; ctx.progress(r / rounds.length); if (ctx.count) ctx.count(r + 1, rounds.length); stage.innerHTML = ''; let misses = 0;
       const spk = speakerBtn(() => say(R.word), 'Hear the word'); spk.classList.add('huge');
       const slotsEl = h('div', { class: 'slots' }); const bankEl = h('div', { class: 'bank' });
       const status = h('p', { class: 'status', 'aria-live': 'polite' }, 'Tap or drag tiles into the boxes.');
@@ -76,7 +76,7 @@
         if (texts.join('') === R.word) { status.textContent = 'Yes! ' + R.word; slotsEl.classList.add('right'); await ding(R.word); if (!ctx.scr.ok()) return; await sleep(500); if (!ctx.scr.ok()) return; r++; if (r < rounds.length) round(); else { ctx.progress(1); ctx.finish(); } }
         else { misses++; ctx.miss(); status.textContent = 'Almost! Listen again and try again.'; slotsEl.classList.add('almost'); await tryAgain(W(R.word)); if (!ctx.scr.ok()) return; slotsEl.classList.remove('almost'); b.slots.fill(null); if (misses >= 2) b.hint = 'o1'; b.locked = false; b.render(); }
       } });
-      stage.append(h('div', { class: 'activity' }, spk, slotsEl, bankEl, status)); say(R.word);
+      stage.append(h('div', { class: 'activity' }, spk, slotsEl, bankEl, status)); IR.sayItem(ctx, 'audio/nk_p_build.mp3', W(R.word));
     }
     round();
   }
@@ -104,7 +104,7 @@
     let parts, mix, got;
     const undo = h('button', { class: 'btn', type: 'button', onclick: () => { if (got.length) { got.pop(); draw(); } } }, 'Undo');
     stage.append(h('div', { class: 'activity wordplay' }, h('div', { class: 'row center' }, hearB), slots, pool, h('div', { class: 'row center' }, undo), status));
-    function start() { parts = split(order[r]); do { mix = shuffle(parts.map((t, i) => ({ t, i }))); } while (mix.length > 1 && mix.every((m, k) => m.t === parts[k])); got = []; status.textContent = '\u00a0'; draw(); ctx.progress(r / order.length); }
+    function start() { parts = split(order[r]); do { mix = shuffle(parts.map((t, i) => ({ t, i }))); } while (mix.length > 1 && mix.every((m, k) => m.t === parts[k])); got = []; status.textContent = '\u00a0'; draw(); ctx.progress(r / order.length); if (ctx.count) ctx.count(r + 1, order.length); }
     function draw() {
       slots.innerHTML = ''; parts.forEach((p, k) => slots.append(h('span', { class: 'wslot' + (p === 'nk' ? ' ngslot' : '') }, got[k] ? got[k].t : '')));
       pool.innerHTML = ''; mix.forEach((m) => { const used = got.includes(m); const b = tile(m.t, used ? ' used' : ''); b.disabled = used; b.addEventListener('click', () => put(m, b)); pool.append(b); });
@@ -124,13 +124,13 @@
     ctx.setInstr('Listen. Put the words in order to make a sentence.', 'sent');
     const rounds = N.sentences; let r = 0; const stage = ctx.stage;
     function round() {
-      const R = rounds[r]; ctx.progress(r / rounds.length); stage.innerHTML = ''; let misses = 0; const audio = 'audio/nk_b_' + R.n + '.mp3';
+      const R = rounds[r]; ctx.progress(r / rounds.length); if (ctx.count) ctx.count(r + 1, rounds.length); stage.innerHTML = ''; let misses = 0; const audio = 'audio/nk_b_' + R.n + '.mp3';
       const spk = speakerBtn(() => Snd.play(audio), 'Hear the sentence');
       const slotsEl = h('div', { class: 'slots sent' }); const bankEl = h('div', { class: 'bank' });
       const status = h('p', { class: 'status', 'aria-live': 'polite' }, 'Tap or drag the words into the boxes.');
       const tiles = shuffle(R.words.map((w, i) => ({ id: 'w' + i, text: w, cls: 'word' })));
       const bridge = h('div', { class: 'bridgebar' }, ...R.words.map(() => h('i')));
-      IR.TileBoard({ tiles, nSlots: R.words.length, slotsEl, bankEl,
+      IR.TileBoard({ tiles, nSlots: R.words.length, slotsEl, bankEl, onTap: (text) => say(String(text).replace(/[^a-z]/gi, '')),
         onChange: (b) => { $$('i', bridge).forEach((el, k) => el.classList.toggle('on', b.slots[k] != null)); },
         onFull: async (texts, b) => {
           b.locked = true;
@@ -138,7 +138,7 @@
           else { misses++; ctx.miss(); status.textContent = 'Almost! Listen again and try again.'; slotsEl.classList.add('almost'); await tryAgain(audio); if (!ctx.scr.ok()) return; slotsEl.classList.remove('almost'); b.slots.fill(null); if (misses >= 2) b.hint = tiles.find((t) => t.text === R.words[0]).id; b.locked = false; b.render(); }
         } });
       stage.append(h('div', { class: 'activity sentact' }, h('div', { class: 'pic' }, h('img', { src: R.img, alt: 'A picture from the story' })), h('div', { class: 'row center' }, spk), slotsEl, bridge, bankEl, status));
-      Snd.play(audio);
+      if (r === 0) IR.sayItem(ctx, 'audio/nk_p_sent.mp3', audio); else Snd.play(audio);
     }
     round();
   }

@@ -10,7 +10,7 @@ window.IR_DATA_U6 = {
       "example": { "base": "cat", "end": "s", "word": "cats" },
       "meet": [
         { "who": "zip", "audio": "u61_m1", "word": "cats", "chips": ["cat", "cats"], "cap": "Add s. The ending hisses, like in cats.", "text": "We add s to a word. Cat becomes cats. The ending sound is the hiss in cats." },
-        { "who": "frill", "audio": "u61_m2", "word": "boxes", "chips": ["box", "boxes", "dishes"], "cap": "When the word already hisses, like box or dish, add es.", "text": "When the word already hisses, like box or dish, we use the extra ending. Box becomes boxes. You hear an extra beat, like in boxes." },
+        { "who": "frill", "audio": "u61_m2", "pairs": [["box", "boxes"], ["dish", "dishes"]], "cap": "When the word already hisses, like box or dish, add es.", "text": "When the word already hisses, like box or dish, we use the extra ending. Box becomes boxes. Dish becomes dishes. You hear an extra beat, like in boxes." },
         { "who": "zip", "audio": "u61_m3", "word": "bugs", "chips": ["bug", "bugs"], "cap": "Listen to the sound, not the letter name.", "text": "Bug becomes bugs. That ending buzzes, like in bugs. Listen to the sound, not the letter name." }
       ],
       "hear": [
@@ -82,10 +82,16 @@ window.IR_DATA_U6 = {
       "storyTitle": "The Branch on the Bell",
       "endings": ["s", "es", "ed"],
       "example": { "base": "jump", "end": "ed", "word": "jumped" },
+      "soundGroups": [
+        { "id": "ed", "caption": "extra beat", "sound": "ed_cut", "words": ["landed", "rested", "melted"] },
+        { "id": "d", "caption": "like filled", "sound": "d_cut", "words": ["filled", "hugged", "banged"] },
+        { "id": "t", "caption": "like jumped", "sound": "t_cut", "words": ["jumped", "helped", "kissed"] }
+      ],
       "meet": [
-        { "who": "zip", "audio": "u62_m1", "word": "jumped", "chips": ["jump", "jumped"], "cap": "The ending sound is like the end of jumped.", "text": "We add ed when it already happened. Jump becomes jumped. The ending sound is like the end of jumped." },
-        { "who": "frill", "audio": "u62_m2", "word": "banged", "chips": ["bang", "banged", "filled"], "cap": "This ending is the sound at the end of banged.", "text": "Bang becomes banged. The sound at the end of banged." },
-        { "who": "zip", "audio": "u62_m3", "word": "landed", "chips": ["land", "landed"], "cap": "This ending has its own extra beat.", "text": "Land becomes landed. The ending sound is the extra beat in landed." }
+        { "who": "zip", "audio": "u62_m1", "focus": "", "text": "Letters e and d make three sounds when they end a word." },
+        { "who": "frill", "audio": "u62_ed", "focus": "ed", "sound": "ed_cut", "text": "This sound is the extra beat at the end of landed. Landed. Rested. Melted." },
+        { "who": "zip", "audio": "u62_d", "focus": "d", "sound": "d_cut", "text": "This sound is short. Filled, hugged, and banged." },
+        { "who": "frill", "audio": "u62_t", "focus": "t", "sound": "t_cut", "text": "This sound is the end of jumped. Jumped. Helped. Kissed." }
       ],
       "hear": [
         { "word": "jumped", "choices": ["jump", "jumped", "jumps"] },
