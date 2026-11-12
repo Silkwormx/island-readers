@@ -266,7 +266,7 @@
     const grid = h('div', { class: 'ugrid tgrid', id: 'skymap' }, ...Array.from({ length: 22 }, (_, i) => unit(i + 1)));
     const pbox = (key, title, ico) => h('a', { class: 'pbox', href: '#/practice/' + key, 'data-kind': 'practice', 'data-id': key }, h('span', { class: 'pico', 'aria-hidden': 'true' }, ico), h('span', null, title));
     const practice = h('aside', { class: 'practice', 'aria-label': 'Practice' }, h('h2', null, 'Practice'),
-      pbox('sight', 'Sight Word Practice', '\u2605'), pbox('fluency', 'Fluency Stories', '\u{1F4D6}'), pbox('spelling', 'Spelling', '\u270E'));
+      pbox('sight', 'Sight Word Practice', '\u2605'), pbox('fluency', 'Fluency Stories', '\u{1F4D6}'), pbox('spelling', 'Spelling Practice', '\u270E'));
     /* Nov 6 2026: full-width home feature (approved banyan scene), then About + Practice beside the unit grid */
     const banner = h('header', { class: 'hbanner' }, h('h1', null, 'Island Readers'), IR.ui.gearButton());
     /* Read-aloud for the hero text: HOME_INTRO_AUDIO recording if set, else speechSynthesis. Tap again to stop. */
@@ -554,6 +554,47 @@
     else if (u6 && Array.isArray(u6.story) && u6.story.length) add('6', '6', u6.name || 'Endings', u6.storyTitle, '#/u6/read');
     return out;
   }
+  /* Same open/locked rule as the home map: Units 4, 5, and 6 are open. Earlier and later units are still coming soon. */
+  function spellUnitOpen(n) {
+    return n === 4 || (n === 5 && !!IR.u5Route) || (n === 6 && !!IR.u6Route);
+  }
+  function spellingPractice() {
+    const NAMES = [null, 'Short Vowels & Floss', 'Blends', 'Digraphs', 'Glued Sounds', 'Silent e', 'Endings', 'Syllables', 'Tricky Sounds', 'Bossy R', 'More Bossy R', 'Long A & E Teams', 'Long O & I Teams', 'The oo Sounds', 'The au Sounds', 'Sliding Vowels', 'Tricky Teams', 'Soft c and g', 'Silent Letters', 'Suffixes', 'Suffix Spelling Rules', 'Prefixes', 'Big Endings'];
+    const lessons = IR.spellLessons ? IR.spellLessons() : [];
+    const lockMsg = (n) => n < 4 ? 'Unit ' + n + ' is coming soon in the full app!' : 'Unit ' + n + ' is coming soon! Finish Unit 4 first.';
+    let opened = 4;
+    const host = h('div', { class: 'spellindex' });
+    function render() {
+      host.innerHTML = '';
+      for (let n = 1; n <= 22; n++) {
+        const open = spellUnitOpen(n);
+        const mine = lessons.filter((L) => L.unit === n);
+        const expanded = open && opened === n;
+        const head = h('button', { class: 'spellunit' + (open ? ' open' : ' locked') + (expanded ? ' on' : ''), type: 'button', 'aria-expanded': open ? String(expanded) : 'false',
+          'aria-label': 'Unit ' + n + ', ' + NAMES[n] + (open ? (expanded ? '. Hide lessons.' : '. Show lessons.') : '. Locked.') },
+          h('span', { class: 'su-n' }, 'Unit ' + n),
+          h('span', { class: 'su-name' }, NAMES[n]),
+          open ? h('span', { class: 'su-go', 'aria-hidden': 'true' }, expanded ? 'Hide' : 'Lessons') : h('span', { class: 'su-lock', 'aria-hidden': 'true' }, icon('lock')));
+        head.addEventListener('click', () => {
+          if (!open) { Snd.stop(); toast(lockMsg(n)); return; }
+          opened = expanded ? 0 : n;
+          render();
+        });
+        const box = [head];
+        if (expanded) {
+          const rows = mine.map((L) => {
+            const done = ['gap', 'boxes', 'tiles', 'chain', 'pattern'].every((s) => IR.isDone('spell_' + L.id + '_' + s));
+            return h('button', { class: 'spellesson', type: 'button', 'aria-label': 'Lesson ' + L.n + ' ' + L.name + '. Opens spelling.', onclick: () => { Snd.stop(); location.hash = '#/spell/' + L.id; } },
+              h('span', null, L.n + ' ' + L.name), done ? h('span', { class: 'sstar on', 'aria-hidden': 'true' }, icon('star')) : h('span', { class: 'su-spell' }, 'Spell'));
+          });
+          box.push(h('div', { class: 'spellessons' }, ...(rows.length ? rows : [h('p', { class: 'calm small' }, 'Lessons for this unit are coming soon.')])));
+        }
+        host.append(h('section', { class: 'spellubox' + (expanded ? ' on' : '') }, ...box));
+      }
+    }
+    render();
+    return simplePage('Spelling Practice', h('p', { class: 'calm' }, 'Pick a unit, then a lesson. Each lesson has five spelling steps.'), host);
+  }
   function practiceScreen(key) {
     if (key === 'sight') {
       const curUnit = islandDone('i3') ? 4 : 3; const curBox = Math.ceil(curUnit / 2);   /* same rule as the You-are-here bar */
@@ -571,7 +612,7 @@
       return simplePage('Fluency Stories', h('p', { class: 'calm' }, 'Read a story again and again. It gets smoother each time.'),
         h('div', { class: 'chestlist fluencylist' }, ...cards));
     }
-    if (key === 'spelling') return simplePage('Spelling', h('p', { class: 'calm' }, 'Spelling practice is coming soon.'), h('p', { class: 'calm small' }, 'For now, try Hear it, Spell it inside the Unit 3 lesson.'));
+    if (key === 'spelling') return spellingPractice();
     location.hash = '#/home';
   }
   /* ---------- About Island Readers (approved copy, Nov 6 2026) ---------- */
@@ -696,7 +737,8 @@
     modalRoot.innerHTML = '';
     app.innerHTML = ''; window.scrollTo(0, 0);
     let m;
-    if (IR.nkRoute && IR.nkRoute(hash, app)) { /* nk unit + Island Review (js/nk.js) */ }
+    if (IR.spellRoute && IR.spellRoute(hash, app)) { /* spelling for every lesson */ }
+    else if (IR.nkRoute && IR.nkRoute(hash, app)) { /* nk unit + Island Review (js/nk.js) */ }
     else if (IR.u5Route && IR.u5Route(hash, app)) { /* Unit 5 Silent e (js/u5.js) */ }
     else if (IR.u6Route && IR.u6Route(hash, app)) { /* Unit 6 Endings (js/u6.js) */ }
     else if ((m = /^#\/lesson\/(\d+)/.exec(hash))) lessonScreen(parseInt(m[1], 10) - 1);
@@ -715,9 +757,9 @@
   /* Nov 4 2026: "Back to Unit N" on every lesson / activity / game page of a unit. Opens that unit's lesson picker.
      Shared template: a new unit only needs one row here (route test + picker id + unit number). */
   IR.UNIT_ROUTES = IR.UNIT_ROUTES || [
-    { n: 4, id: 'i3', test: (hs) => /^#\/(nk|island3|lesson\/|review3|check|result)/.test(hs) },
-    { n: 5, id: 'i5', test: (hs) => /^#\/(u5\d|review5)/.test(hs) },
-    { n: 6, id: 'u6', href: '#/u6', test: (hs) => /^#\/u6(\/|$)/.test(hs) }];
+    { n: 4, id: 'i3', test: (hs) => /^#\/(nk|island3|lesson\/|review3|check|result)/.test(hs) || /^#\/spell\/(ng|nk)(\/|$)/.test(hs) },
+    { n: 5, id: 'i5', test: (hs) => /^#\/(u5\d|review5)/.test(hs) || /^#\/spell\/u5(\/|$)/.test(hs) },
+    { n: 6, id: 'u6', href: '#/u6', test: (hs) => /^#\/u6(\/|$)/.test(hs) || /^#\/spell\/u6(\/|$)/.test(hs) }];
   function addUnitBack() {
     const hs = location.hash || ''; const u = IR.UNIT_ROUTES.find((r) => r.test(hs));
     if (!u || app.querySelector('.unitback')) return;
