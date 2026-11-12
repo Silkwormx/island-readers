@@ -547,6 +547,9 @@
     S0.run(ctx);
   }
 
+  IR.u6SkillSteps = function () {
+    return PACK.lessons.map((L) => ({ key: L.key, n: L.n, name: L.name, unit: 6, steps: stepsFor(L) }));
+  };
   IR.u6Route = function (hash, app) {
     IR._u6HashWas = hash;
     if (hash === '#/u6' || hash === '#/u6/') { picker(app); return true; }
