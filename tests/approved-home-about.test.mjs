@@ -32,6 +32,10 @@ test('about uses the approved copy and keeps the placement check wording', () =>
   assert.ok(about.includes('A group passes at 4 of 5'));
   assert.ok(about.includes('Nothing is recorded or sent, and the microphone is not used.'));
   assert.ok(about.includes("['22', 'big endings: -tion, -ture, -ment']"));
+  assert.ok(about.includes('Island Readers is a phonics app that teaches reading skills directly and in order.'));
+  assert.ok(about.includes('It is a web app that can be added to the home screen.'));
+  assert.ok(about.includes('with no app store needed.'));
+  assert.equal(/\bfree\b/i.test(about), false);
   assert.ok(about.includes('National Reading Panel'));
   assert.equal(about.includes('\\u2014'), false);
   assert.equal(about.includes('\u2014'), false);
