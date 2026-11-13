@@ -612,20 +612,25 @@
         if (expanded) {
           const groups = [];
           mine.forEach((it) => {
-            const key = it.lesson + ' ' + it.name;
+            const key = String(it.lesson).toLowerCase();
+            const label = (String(it.lesson) + ' ' + it.name).replace(/\s+/g, ' ').trim();
             let g = groups.filter((x) => x.key === key)[0];
-            if (!g) { g = { key: key, items: [] }; groups.push(g); }
+            if (!g) { g = { key: key, label: label, items: [] }; groups.push(g); }
+            else if (/[A-Z]/.test(label) && !/[A-Z]/.test(g.label)) g.label = label;
             g.items.push(it);
           });
           const rows = [];
           if (!groups.length) rows.push(h('p', { class: 'calm small' }, 'Nothing in this unit yet.'));
+          const entryLabel = (lessonLabel, it) => {
+            const title = it.title || '';
+            if (!title || lessonLabel.toLowerCase().indexOf(title.toLowerCase()) >= 0) return lessonLabel;
+            return lessonLabel + ' \u00b7 ' + title;
+          };
           groups.forEach((g) => {
-            const one = g.items[0];
-            const extra = one.title && one.title !== 'Spelling' ? ' \u00b7 ' + one.title : '';
-            if (g.items.length === 1) rows.push(skillButton(one, g.key.trim() + extra));
+            if (g.items.length === 1) rows.push(skillButton(g.items[0], entryLabel(g.label, g.items[0])));
             else {
-              rows.push(h('p', { class: 'skilllesson' }, g.key.trim()));
-              g.items.forEach((it) => rows.push(skillButton(it, it.title)));
+              rows.push(h('p', { class: 'skilllesson' }, g.label));
+              g.items.forEach((it) => rows.push(skillButton(it, entryLabel(g.label, it))));
             }
           });
           box.push(h('div', { class: 'spellessons' }, ...rows));

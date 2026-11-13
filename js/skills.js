@@ -1,11 +1,17 @@
 /* Skill Practice catalog. Points at activities that already exist. Does not copy their games. */
 (function (root) {
   'use strict';
+  /* A step can practice more than one skill. Lesson games stay in the lesson and also appear here. */
   const KIND = {
-    rhyme: 'rhyme',
-    hear: 'pa',
-    bells: 'pa',
-    fish: 'pa'
+    rhyme: ['rhyme'],
+    hear: ['pa'],
+    bells: ['pa'],
+    fish: ['pa'],
+    feed: ['fluency'],
+    sentence: ['fluency'],
+    scramble: ['spelling'],
+    chain: ['spelling', 'pa'],
+    ngnk: ['pa']
   };
   const SKILLS = [
     { id: 'fluency', name: 'Fluency', blurb: 'Read a story again until it is smooth.' },
@@ -16,18 +22,26 @@
     { id: 'sight', name: 'Heart / Sight Words', blurb: 'Practice the tricky words you have met.' }
   ];
 
+  function showName(name) {
+    const s = String(name || '');
+    if (/^[a-z]/.test(s) && s.indexOf(' ') >= 0 && !/[A-Z]/.test(s)) return s.charAt(0).toUpperCase() + s.slice(1);
+    return s;
+  }
+
   function lessonSteps(list, lesson) {
-    const out = { rhyme: [], pa: [] };
+    const out = { fluency: [], spelling: [], rhyme: [], pa: [] };
     (list || []).forEach((step) => {
-      const kind = KIND[step.id];
-      if (!kind) return;
-      out[kind].push({
-        unit: lesson.unit,
-        lesson: lesson.lesson,
-        name: lesson.name,
-        title: step.title,
-        href: lesson.href(step),
-        type: kind
+      const kinds = KIND[step.id];
+      if (!kinds) return;
+      kinds.forEach((kind) => {
+        out[kind].push({
+          unit: lesson.unit,
+          lesson: lesson.lesson,
+          name: showName(lesson.name),
+          title: step.title,
+          href: lesson.href(step),
+          type: kind
+        });
       });
     });
     return out;
@@ -44,7 +58,7 @@
     });
     function take(steps, lesson) {
       const part = lessonSteps(steps, lesson);
-      ['rhyme', 'pa'].forEach((k) => { bags[k] = bags[k].concat(part[k]); });
+      ['fluency', 'spelling', 'rhyme', 'pa'].forEach((k) => { bags[k] = bags[k].concat(part[k]); });
     }
     take(src.ng || [], { unit: 4, lesson: '4.1', name: 'ng', href: (step) => '#/lesson/' + ((src.ng || []).indexOf(step) + 1) });
     take(src.nk || [], { unit: 4, lesson: '4.2', name: 'nk', href: (step) => '#/nk/' + step.id });
