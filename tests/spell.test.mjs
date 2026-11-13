@@ -88,6 +88,6 @@ test('spelling lives on the practice page, not on lesson menus', () => {
   assert.match(screens, /Unit ' \+ n \+ ' is coming soon in the full app!/);
   assert.match(screens, /IR\.spellRoute/);
   assert.match(html, /js\/spell\.js/);
-  assert.match(sw, /ir-20261112a/);
+  assert.match(sw, /ir-20261113a/);
   assert.match(sw, /js\/spell\.js/);
 });

@@ -5,12 +5,7 @@
     rhyme: 'rhyme',
     hear: 'pa',
     bells: 'pa',
-    fish: 'pa',
-    feed: 'games',
-    scramble: 'games',
-    chain: 'games',
-    sentence: 'games',
-    ngnk: 'games'
+    fish: 'pa'
   };
   const SKILLS = [
     { id: 'fluency', name: 'Fluency', blurb: 'Read a story again until it is smooth.' },
@@ -18,12 +13,11 @@
     { id: 'rhyme', name: 'Rhyme', blurb: 'Rhyme Call and Rhyme Time.' },
     { id: 'pa', name: 'Phonemic Awareness', blurb: 'Hear a sound, then find the word.' },
     { id: 'families', name: 'Word Families', blurb: 'Coming soon.', soon: true },
-    { id: 'sight', name: 'Heart / Sight Words', blurb: 'Practice the tricky words you have met.' },
-    { id: 'games', name: 'Games', blurb: 'Word chains, Feed Zip, and letter games.' }
+    { id: 'sight', name: 'Heart / Sight Words', blurb: 'Practice the tricky words you have met.' }
   ];
 
   function lessonSteps(list, lesson) {
-    const out = { rhyme: [], pa: [], games: [] };
+    const out = { rhyme: [], pa: [] };
     (list || []).forEach((step) => {
       const kind = KIND[step.id];
       if (!kind) return;
@@ -41,7 +35,7 @@
 
   function collectSkills(src) {
     src = src || {};
-    const bags = { fluency: [], spelling: [], rhyme: [], pa: [], games: [], sight: [] };
+    const bags = { fluency: [], spelling: [], rhyme: [], pa: [], sight: [] };
     (src.stories || []).forEach((s) => {
       bags.fluency.push({ unit: +s.unit || 0, lesson: s.lessonN || '', name: s.name || '', title: s.title || 'Read the story', href: s.href, type: 'Fluency' });
     });
@@ -50,7 +44,7 @@
     });
     function take(steps, lesson) {
       const part = lessonSteps(steps, lesson);
-      ['rhyme', 'pa', 'games'].forEach((k) => { bags[k] = bags[k].concat(part[k]); });
+      ['rhyme', 'pa'].forEach((k) => { bags[k] = bags[k].concat(part[k]); });
     }
     take(src.ng || [], { unit: 4, lesson: '4.1', name: 'ng', href: (step) => '#/lesson/' + ((src.ng || []).indexOf(step) + 1) });
     take(src.nk || [], { unit: 4, lesson: '4.2', name: 'nk', href: (step) => '#/nk/' + step.id });
