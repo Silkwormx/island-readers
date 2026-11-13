@@ -41,8 +41,8 @@ test('about uses the approved copy and keeps the placement check wording', () =>
 });
 
 test('home shows Zip and Frill again and keeps the left-column layout', () => {
-  assert.ok(home.includes("src: 'img/home_zip_frill.webp'"));
-  assert.ok(home.includes('Zip and Frill sit on a tree root reading a book together.'));
+  assert.ok(screens.includes("src: 'img/home_zip_frill.webp'"));
+  assert.ok(screens.includes('Zip and Frill sit on a tree root reading a book together.'));
   assert.equal(home.includes("src: 'img/zipA.webp'"), false);
   assert.equal(home.includes("src: 'img/frill.webp'"), false);
   assert.equal(home.includes('home_banyan_c.jpg'), false);
@@ -50,8 +50,8 @@ test('home shows Zip and Frill again and keeps the left-column layout', () => {
   const featureCss = css.slice(css.indexOf('Zip and Frill portraits back in the left-column card'));
   assert.equal(/scaleX\s*\(\s*-1|rotateY\(180/.test(home + featureCss), false);
   assert.ok(featureCss.includes('.homefeature .zfpics'));
-  assert.ok(home.includes("href: '#/about'"));
-  assert.ok(home.includes("href: '#/placement'"));
+  assert.ok(screens.includes("href: '#/about'"));
+  assert.ok(screens.includes("href: '#/placement'"));
   assert.ok(home.includes('Learn to read with Zip and Frill'));
   assert.equal(home.includes('Read with Brick and Dash'), false);
   assert.equal(home.includes('Learn to read with Brick and Dash'), false);
@@ -62,7 +62,7 @@ test('home shows Zip and Frill again and keeps the left-column layout', () => {
   assert.equal(home.includes('banner, hero,'), false);
   const sw = fs.readFileSync(new URL('../sw.js', import.meta.url), 'utf8');
   assert.equal(sw.includes('home_banyan_c.jpg'), false);
-  assert.ok(sw.includes('ir-20261113b'));
+  assert.ok(sw.includes('ir-20261113c'));
   assert.ok(sw.includes('home_zip_frill.webp'));
 });
 

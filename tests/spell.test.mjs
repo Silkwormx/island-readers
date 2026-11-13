@@ -82,12 +82,12 @@ test('spelling lives on the practice page, not on lesson menus', () => {
   assert.doesNotMatch(u5, /spellCard/);
   assert.doesNotMatch(nk, /spellCard/);
   assert.doesNotMatch(screens, /spellCard/);
-  assert.match(screens, /Skill Practice/);
+  assert.match(screens, /Targeted Skills/);
   assert.match(screens, /practice\/skills/);
   assert.match(screens, /function spellUnitOpen/);
   assert.match(screens, /Unit ' \+ n \+ ' is coming soon in the full app!/);
   assert.match(screens, /IR\.spellRoute/);
   assert.match(html, /js\/spell\.js/);
-  assert.match(sw, /ir-20261113b/);
+  assert.match(sw, /ir-20261113c/);
   assert.match(sw, /js\/spell\.js/);
 });
