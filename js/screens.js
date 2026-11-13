@@ -281,7 +281,7 @@
     const youbar = h('button', { class: 'youbar', type: 'button', 'aria-label': 'You are here: Unit ' + cur + ', ' + SKILL[cur] + '. Dots show all 22 units. ' + nEarned + ' of 10 gems. Opens the gem box.', onclick: () => { Snd.stop(); location.hash = '#/gems'; } },
       h('span', { class: 'ybtxt' }, 'You are here: ', h('b', null, 'Unit ' + cur + ' \u00b7 ' + SKILL[cur])),
       h('span', { class: 'ybdots', 'aria-hidden': 'true' }, ...TILES.slice(1).map((t, i) => h('i', { class: 'tdot td-' + t[3][0] + (i + 1 === cur ? ' ybcur' : complete && i + 1 === BUILT ? ' ybdone' : '') }))));
-    app.append(h('div', { class: 'screen home mapscreen gridhome' }, h('div', { class: 'mwrap' }, banner, h('div', { class: 'homelay' }, h('div', { class: 'homeside' }, hero, practice), grid)), youbar));
+    app.append(h('div', { class: 'screen home mapscreen gridhome' }, h('div', { class: 'mwrap' }, banner, h('div', { class: 'homelay' }, h('div', { class: 'homeside' }, h('a', { class: 'btn big aboutbtn', href: '#/about' }, 'About Island Readers'), hero, practice), grid)), youbar));
     /* Nov 3 2026: the whole left sidebar (About, Start here, Practice) stays in one spot while the tiles scroll (wide layouts only). */
     const side = app.querySelector('.homeside'); const scr = app.querySelector('.screen.home');
     const pin = () => {

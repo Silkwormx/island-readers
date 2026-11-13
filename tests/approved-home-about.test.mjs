@@ -50,7 +50,7 @@ test('home shows Zip and Frill again and keeps the left-column layout', () => {
   const featureCss = css.slice(css.indexOf('Zip and Frill portraits back in the left-column card'));
   assert.equal(/scaleX\s*\(\s*-1|rotateY\(180/.test(home + featureCss), false);
   assert.ok(featureCss.includes('.homefeature .zfpics'));
-  assert.ok(screens.includes("href: '#/about'"));
+  assert.ok(home.includes("h('a', { class: 'btn big aboutbtn', href: '#/about' }, 'About Island Readers'), hero, practice"));
   assert.ok(screens.includes("href: '#/placement'"));
   assert.ok(home.includes('Learn to read with Zip and Frill'));
   assert.equal(home.includes('Read with Brick and Dash'), false);
