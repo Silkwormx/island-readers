@@ -266,7 +266,7 @@
     const grid = h('div', { class: 'ugrid tgrid', id: 'skymap' }, ...Array.from({ length: 22 }, (_, i) => unit(i + 1)));
     const pbox = (key, title, ico) => h('a', { class: 'pbox', href: '#/practice/' + key, 'data-kind': 'practice', 'data-id': key }, h('span', { class: 'pico', 'aria-hidden': 'true' }, ico), h('span', null, title));
     const practice = h('aside', { class: 'practice', 'aria-label': 'Practice' }, h('h2', null, 'Practice'),
-      pbox('sight', 'Sight Word Practice', '\u2605'), pbox('fluency', 'Fluency Stories', '\u{1F4D6}'), pbox('spelling', 'Spelling Practice', '\u270E'));
+      pbox('skills', 'Skill Practice', '\u2726'));
     /* Nov 6 2026: full-width home feature (approved banyan scene), then About + Practice beside the unit grid */
     const banner = h('header', { class: 'hbanner' }, h('h1', null, 'Island Readers'), IR.ui.gearButton());
     /* Read-aloud for the hero text: HOME_INTRO_AUDIO recording if set, else speechSynthesis. Tap again to stop. */
@@ -538,7 +538,7 @@
   function fluencyStories() {
     const out = [];
     const lessonName = (name) => { const s = String(name || ''); if (s === 'ng' || s === 'nk' || s.charAt(0) === '-') return s; return /^[a-z]/.test(s) ? s.charAt(0).toUpperCase() + s.slice(1) : s; };
-    const add = (unit, lesson, name, title, href) => out.push({ href, lesson: 'Unit ' + unit + ' \u00b7 Lesson ' + lesson + ' \u00b7 ' + lessonName(name), title: title || '' });
+    const add = (unit, lesson, name, title, href) => out.push({ href, unit: +unit, lessonN: lesson, name: lessonName(name), lesson: 'Unit ' + unit + ' \u00b7 Lesson ' + lesson + ' \u00b7 ' + lessonName(name), title: title || '' });
     if (Array.isArray(D.story) && D.story.length) {
       const i = LESSONS.findIndex((l) => l.id === 'story');
       if (i >= 0) add('4', '4.1', 'ng', D.storyTitle, '#/lesson/' + (i + 1));
@@ -558,23 +558,51 @@
   function spellUnitOpen(n) {
     return n === 4 || (n === 5 && !!IR.u5Route) || (n === 6 && !!IR.u6Route);
   }
-  function spellingPractice() {
-    const NAMES = [null, 'Short Vowels & Floss', 'Blends', 'Digraphs', 'Glued Sounds', 'Silent e', 'Endings', 'Syllables', 'Tricky Sounds', 'Bossy R', 'More Bossy R', 'Long A & E Teams', 'Long O & I Teams', 'The oo Sounds', 'The au Sounds', 'Sliding Vowels', 'Tricky Teams', 'Soft c and g', 'Silent Letters', 'Suffixes', 'Suffix Spelling Rules', 'Prefixes', 'Big Endings'];
-    const lessons = IR.spellLessons ? IR.spellLessons() : [];
+  const UNIT_NAMES = [null, 'Short Vowels & Floss', 'Blends', 'Digraphs', 'Glued Sounds', 'Silent e', 'Endings', 'Syllables', 'Tricky Sounds', 'Bossy R', 'More Bossy R', 'Long A & E Teams', 'Long O & I Teams', 'The oo Sounds', 'The au Sounds', 'Sliding Vowels', 'Tricky Teams', 'Soft c and g', 'Silent Letters', 'Suffixes', 'Suffix Spelling Rules', 'Prefixes', 'Big Endings'];
+  function skillCatalog() {
+    const chests = [1, 2, 3, 4].map((n) => {
+      const w = WORLD.find((x) => x.id === 'chest' + n);
+      return { unit: n * 2 - 1, lesson: 'Units ' + (n * 2 - 1) + '\u2013' + (n * 2), name: 'Sight words ' + n, title: 'Sight words ' + n, href: w && w.href ? w.href : '' };
+    });
+    return IR.collectSkills({
+      stories: fluencyStories(),
+      spells: IR.spellLessons ? IR.spellLessons() : [],
+      ng: IR.LESSONS || [],
+      nk: (IR.nk && IR.nk.steps) || [],
+      u5: IR.u5Lessons || [],
+      u6: IR.u6SkillSteps ? IR.u6SkillSteps() : [],
+      chests: chests
+    });
+  }
+  function skillGo(label) {
+    if (label === 'Spelling') return 'Spell';
+    if (label === 'Fluency' || label === 'Read the story') return 'Read';
+    return 'Open';
+  }
+  function skillButton(it, label) {
+    const go = skillGo(it.type || label);
+    return h('button', { class: 'spellesson', type: 'button', 'aria-label': label + '. Opens ' + (it.title || label) + '.', onclick: () => { Snd.stop(); location.hash = it.href; } },
+      h('span', null, label), h('span', { class: 'su-spell' }, go));
+  }
+  function skillList(skill) {
     const lockMsg = (n) => n < 4 ? 'Unit ' + n + ' is coming soon in the full app!' : 'Unit ' + n + ' is coming soon! Finish Unit 4 first.';
-    let opened = 4;
+    const sight = skill.id === 'sight';
+    const nums = sight ? [...new Set(skill.items.map((it) => it.unit))] : Array.from({ length: 22 }, (_, i) => i + 1);
+    let opened = nums.filter((n) => (sight ? skill.items.some((it) => it.unit === n && it.href) : spellUnitOpen(n)) && skill.items.some((it) => it.unit === n))[0] || 0;
     const host = h('div', { class: 'spellindex' });
     function render() {
       host.innerHTML = '';
-      for (let n = 1; n <= 22; n++) {
-        const open = spellUnitOpen(n);
-        const mine = lessons.filter((L) => L.unit === n);
+      nums.forEach((n) => {
+        const mine = skill.items.filter((it) => it.unit === n);
+        const open = sight ? mine.some((it) => it.href) : spellUnitOpen(n);
         const expanded = open && opened === n;
+        const uname = sight && mine[0] ? mine[0].lesson : UNIT_NAMES[n];
         const head = h('button', { class: 'spellunit' + (open ? ' open' : ' locked') + (expanded ? ' on' : ''), type: 'button', 'aria-expanded': open ? String(expanded) : 'false',
-          'aria-label': 'Unit ' + n + ', ' + NAMES[n] + (open ? (expanded ? '. Hide lessons.' : '. Show lessons.') : '. Locked.') },
-          h('span', { class: 'su-n' }, 'Unit ' + n),
-          h('span', { class: 'su-name' }, NAMES[n]),
+          'aria-label': 'Unit ' + n + ', ' + uname + (open ? (expanded ? '. Hide lessons.' : '. Show lessons.') : '. Locked.') },
+          h('span', { class: 'su-n' }, sight ? '' : 'Unit ' + n),
+          h('span', { class: 'su-name' }, sight ? uname : uname),
           open ? h('span', { class: 'su-go', 'aria-hidden': 'true' }, expanded ? 'Hide' : 'Lessons') : h('span', { class: 'su-lock', 'aria-hidden': 'true' }, icon('lock')));
+        if (sight) head.querySelector('.su-n').remove();
         head.addEventListener('click', () => {
           if (!open) { Snd.stop(); toast(lockMsg(n)); return; }
           opened = expanded ? 0 : n;
@@ -582,18 +610,80 @@
         });
         const box = [head];
         if (expanded) {
-          const rows = mine.map((L) => {
-            const done = ['gap', 'boxes', 'tiles', 'chain', 'pattern'].every((s) => IR.isDone('spell_' + L.id + '_' + s));
-            return h('button', { class: 'spellesson', type: 'button', 'aria-label': 'Lesson ' + L.n + ' ' + L.name + '. Opens spelling.', onclick: () => { Snd.stop(); location.hash = '#/spell/' + L.id; } },
-              h('span', null, L.n + ' ' + L.name), done ? h('span', { class: 'sstar on', 'aria-hidden': 'true' }, icon('star')) : h('span', { class: 'su-spell' }, 'Spell'));
+          const groups = [];
+          mine.forEach((it) => {
+            const key = String(it.lesson).toLowerCase();
+            const label = (String(it.lesson) + ' ' + it.name).replace(/\s+/g, ' ').trim();
+            let g = groups.filter((x) => x.key === key)[0];
+            if (!g) { g = { key: key, label: label, items: [] }; groups.push(g); }
+            else if (/[A-Z]/.test(label) && !/[A-Z]/.test(g.label)) g.label = label;
+            g.items.push(it);
           });
-          box.push(h('div', { class: 'spellessons' }, ...(rows.length ? rows : [h('p', { class: 'calm small' }, 'Lessons for this unit are coming soon.')])));
+          const rows = [];
+          if (!groups.length) rows.push(h('p', { class: 'calm small' }, 'Nothing in this unit yet.'));
+          const entryLabel = (lessonLabel, it) => {
+            const title = it.title || '';
+            if (!title || lessonLabel.toLowerCase().indexOf(title.toLowerCase()) >= 0) return lessonLabel;
+            return lessonLabel + ' \u00b7 ' + title;
+          };
+          groups.forEach((g) => {
+            if (g.items.length === 1) rows.push(skillButton(g.items[0], entryLabel(g.label, g.items[0])));
+            else {
+              rows.push(h('p', { class: 'skilllesson' }, g.label));
+              g.items.forEach((it) => rows.push(skillButton(it, entryLabel(g.label, it))));
+            }
+          });
+          box.push(h('div', { class: 'spellessons' }, ...rows));
         }
         host.append(h('section', { class: 'spellubox' + (expanded ? ' on' : '') }, ...box));
-      }
+      });
     }
     render();
-    return simplePage('Spelling Practice', h('p', { class: 'calm' }, 'Pick a unit, then a lesson. Each lesson has five spelling steps.'), host);
+    const lead = skill.id === 'spelling'
+      ? 'Pick a unit, then a lesson. Each lesson has five spelling steps.'
+      : skill.blurb;
+    return simplePage(skill.name, h('p', { class: 'calm' }, lead), host);
+  }
+  function skillHub() {
+    const skills = skillCatalog();
+    const input = h('input', { class: 'skillsearch', type: 'search', placeholder: 'Search by name or type', 'aria-label': 'Search activities by name or type' });
+    const results = h('div', { class: 'skillresults' });
+    const tiles = h('div', { class: 'skillgrid' });
+    skills.forEach((s) => {
+      const card = IR.tapCard({
+        className: 'stopcard bigbox skilltile' + (s.soon ? ' soon' : ''),
+        label: s.name + (s.soon ? '. Coming soon.' : '. ' + s.items.length + ' activities. Opens ' + s.name + '.'),
+        href: '#/practice/skills/' + s.id,
+        kids: [
+          h('span', { class: 'bkind' }, 'Skill'),
+          h('span', { class: 'stxt bbot' }, h('b', null, s.name), h('span', { class: 'smin' }, s.soon ? 'Coming soon' : s.items.length + (s.items.length === 1 ? ' activity' : ' activities'))),
+          h('span', { class: 'cardgo' + (s.soon ? ' off' : ''), 'aria-hidden': 'true' }, s.soon ? 'Soon' : 'Open')
+        ]
+      });
+      tiles.append(card);
+    });
+    function paint() {
+      const q = input.value.trim();
+      results.innerHTML = '';
+      tiles.hidden = !!q;
+      if (!q) return;
+      const hits = IR.searchSkills(skills, q);
+      if (!hits.length) { results.append(h('p', { class: 'calm' }, 'No activities match.')); return; }
+      hits.forEach((it) => {
+        if (it.soon) { results.append(h('p', { class: 'calm' }, 'Word Families is coming soon.')); return; }
+        const label = it.skill + ' \u00b7 Unit ' + it.unit + ' \u00b7 ' + it.lesson + ' ' + it.name + (it.title && it.title !== 'Spelling' ? ' \u00b7 ' + it.title : '');
+        results.append(skillButton(it, label));
+      });
+    }
+    input.addEventListener('input', paint);
+    return simplePage('Skill Practice', h('p', { class: 'calm' }, 'Choose a skill. Each one opens by unit, then by lesson.'), input, results, tiles);
+  }
+  function skillScreen(id) {
+    if (!id) return skillHub();
+    if (id === 'families') return simplePage('Word Families', h('p', { class: 'calm' }, 'Word Families is coming soon.'));
+    const skill = skillCatalog().filter((s) => s.id === id)[0];
+    if (!skill) { location.hash = '#/practice/skills'; return; }
+    return skillList(skill);
   }
   function practiceScreen(key) {
     if (key === 'sight') {
@@ -612,7 +702,7 @@
       return simplePage('Fluency Stories', h('p', { class: 'calm' }, 'Read a story again and again. It gets smoother each time.'),
         h('div', { class: 'chestlist fluencylist' }, ...cards));
     }
-    if (key === 'spelling') return spellingPractice();
+    if (key === 'spelling' || key === 'fluency' || key === 'sight') { location.replace('#/practice/skills/' + key); return; }
     location.hash = '#/home';
   }
   /* ---------- About Island Readers (approved copy, Nov 6 2026) ---------- */
@@ -743,6 +833,8 @@
     else if (IR.u6Route && IR.u6Route(hash, app)) { /* Unit 6 Endings (js/u6.js) */ }
     else if ((m = /^#\/lesson\/(\d+)/.exec(hash))) lessonScreen(parseInt(m[1], 10) - 1);
     else if (/^#\/chest[1-4]/.test(hash)) IR.chest.render(hash, app);
+    else if (hash === '#/practice/spelling' || hash === '#/practice/fluency' || hash === '#/practice/sight') { location.replace(hash.replace('#/practice/', '#/practice/skills/')); return; }
+    else if ((m = /^#\/practice\/skills(?:\/([a-z]+))?$/.exec(hash))) skillScreen(m[1]);
     else if ((m = /^#\/practice\/(\w+)/.exec(hash))) practiceScreen(m[1]);
     else if (hash.startsWith('#/gems')) gemScreen();
     else if (hash.startsWith('#/about')) aboutScreen();

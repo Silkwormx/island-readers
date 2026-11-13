@@ -1979,3 +1979,9 @@ button.tapcard:focus-visible{outline:4px solid #1F6FEB;outline-offset:3px}
 .spellunit .su-lock{display:inline-flex;width:1.6rem;height:1.6rem}
 .spellessons{display:flex;flex-direction:column;gap:.45rem;padding:0 .35rem .4rem}
 .spellesson{display:flex;align-items:center;justify-content:space-between;gap:.6rem;width:100%;min-height:3.3rem;padding:.4rem .7rem;border:3px solid var(--ink);border-radius:1rem;background:#fff;font-family:Andika,sans-serif;font-size:1.2rem;font-weight:700;text-align:left;color:var(--ink);cursor:pointer}
+.skillgrid{display:flex;flex-direction:column;gap:.8rem;margin-top:.8rem}
+.skilltile{background:#FFE9D6!important;border:4px solid var(--ink);border-radius:1.4rem;box-shadow:0 6px 0 rgba(43,37,64,.18);padding:.9rem .8rem;min-height:0}
+.skilltile .cardgo.off{background:#E7E0D4;border-color:#8A8175;box-shadow:none;color:#5c5648}
+.skillsearch{display:block;width:100%;box-sizing:border-box;min-height:3.2rem;margin:.4rem 0 .2rem;padding:.45rem .9rem;border:3px solid var(--ink);border-radius:1rem;background:#fff;font-family:Andika,sans-serif;font-size:1.25rem;color:var(--ink)}
+.skillresults{display:flex;flex-direction:column;gap:.55rem;margin-top:.7rem}
+.skilllesson{margin:.35rem 0 0;font-family:Andika,sans-serif;font-size:1.15rem;font-weight:700}

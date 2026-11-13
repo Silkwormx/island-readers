@@ -237,6 +237,7 @@
       { id: 'comp', title: 'Story Check', group: 'extra', run: runComp, color: '#D98E00' },
       { id: 'rhyme', title: 'Rhyme Time', group: 'extra', run: runRhyme, color: '#C2408A' }
     ].filter((s) => !(s.id === 'rhyme' && !(N.rhyme || []).length));
+    (IR.u5Lessons = IR.u5Lessons || []).push({ key: KEY, n: NUM, name: N.name, unit: 5, steps: STEPS });
     /* one-line tips for grown-ups, in the same style as the ng unit */
     const TIPS = { hear: 'Let your child listen first, then point.', bells: 'Ask the class to call out the number of the matching word.', build: 'Say the word slowly together.', chain: 'The glowing letter is the one that changes. Call out a number.', scramble: 'Say the word slowly, then find each part.', feed: 'Ask your child to read the word out loud, then feed Zip.', sentence: 'Read the sentence together at the end.', read: 'Reading it 3 times builds fluency.', ngnk: 'Say the word slowly. Listen to the end.', check: 'Let your child work alone. Just cheer.', comp: 'Optional extra. Look back at the story page together.', rhyme: 'Optional extra. Read the poem together for fun.' };
     
