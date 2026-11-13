@@ -1335,6 +1335,21 @@ body.calm .ob-glow{animation:none;opacity:.85}
 .hbanner h1{margin:0;font-size:clamp(1.9rem,4vw,2.8rem);letter-spacing:.04em;color:#2B2540;text-align:center}
 .hbanner h1::after{content:'';display:block;width:4.5rem;height:.35rem;border-radius:1rem;background:#F28C00;margin:.35rem auto 0}
 .hbanner .gear{position:absolute;right:0;top:50%;transform:translateY(-50%);margin:0}
+.hbanner .grownwrap{position:absolute;right:.2rem;top:50%;transform:translateY(-50%);display:flex;align-items:center;gap:.35rem;max-width:9rem;z-index:2}
+.hbanner .grownwrap .gear{position:static;transform:none;right:auto;top:auto}
+.grownlab{font-family:Andika,sans-serif;font-size:.72rem;font-weight:700;line-height:1.15;text-align:right;color:#2B2540}
+.sidenav{display:flex;flex-direction:column;gap:.7rem}
+.gridhome .homeside{padding-bottom:6rem}
+.sideentry{display:flex;flex-direction:column;gap:.45rem;padding:.75rem .7rem;background:#FFE9D6;border:4px solid var(--ink);border-radius:1.3rem;text-decoration:none;color:var(--ink);box-shadow:0 5px 0 rgba(43,37,64,.18)}
+.sideentry .sidetext{display:flex;flex-direction:column;gap:.15rem;font-family:Andika,sans-serif}
+.sideentry b{font-size:1.25rem;line-height:1.2}
+.sideentry small{font-size:1rem;font-weight:700;line-height:1.25}
+.sideentry .cardgo{min-height:2.6rem;font-size:1.1rem}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.traingo{display:flex;text-decoration:none;margin-top:.8rem}
+.trailhold .homeart{width:100%;height:auto;border-radius:1rem}
+.roomh{font-family:Andika,sans-serif;font-size:1.6rem;margin:1.1rem 0 .3rem}
+.su-soon{font-family:Andika,sans-serif;font-weight:700;color:#6d6578}
 .homeside{display:flex;flex-direction:column;gap:1rem}
 .zfhero{display:flex;align-items:center;gap:.9rem;background:#FFFDF8;border-radius:1.4rem;padding:.8rem 1rem;box-shadow:0 6px 18px rgba(60,40,20,.1)}
 .zfpics{display:flex;align-items:flex-end;flex:none}
@@ -1363,14 +1378,14 @@ body.calm .ob-glow{animation:none;opacity:.85}
 }
 @media (min-width:1100px){.gridhome .mwrap{padding-bottom:0!important}.homelay{padding-bottom:calc(7rem + env(safe-area-inset-bottom))}}
 @media (max-width:759px){
-  .hbanner{padding:.3rem 3.4rem 0}.hbanner h1{font-size:1.9rem;white-space:nowrap}
+  .hbanner{padding:.3rem 8.8rem 0 .4rem}.hbanner h1{font-size:1.35rem;white-space:normal}
   .zfpics img{height:4.4rem}.zfline{font-size:1.1rem}
   .gridhome .practice{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.5rem;padding:.7rem}
   .gridhome .practice h2{grid-column:1/-1;font-size:1.05rem;margin:0}
   .gridhome .pbox{flex-direction:column;justify-content:center;gap:.2rem;min-height:4.6rem;padding:.4rem .3rem;font-size:.92rem;text-align:center;line-height:1.2}
   .gridhome .pico{width:auto;font-size:1.3rem}
 }
-@media (max-width:759px){.hbanner{padding:.3rem 3.2rem 0}.hbanner h1{font-size:1.6rem}.hbanner .gear{width:2.6rem;height:2.6rem;padding:.4rem}}
+@media (max-width:759px){.hbanner{padding:.3rem 8.8rem 0 .4rem}.hbanner h1{font-size:1.35rem}.hbanner .grownwrap .gear{width:2.6rem;height:2.6rem;padding:.4rem}}
 /* unit-colored progress dot: filled = done, thick ring + tint = up next, thin ring = not started */
 .gridhome .gdot{border:2px solid var(--uc)!important;background:transparent!important;opacity:.85}
 .gridhome .gdot.gd-done{background:var(--uc)!important;opacity:1}

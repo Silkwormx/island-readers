@@ -9,7 +9,7 @@ HOW TO TRY IT
       cd app_sample
       python3 -m http.server 8000
    then open http://localhost:8000 in Chrome or Edge. Use the browser menu: Install app / Add to Home Screen.
-3) Free hosting later (not done yet): upload this folder to a GitHub Pages repo (or Netlify Drop / Cloudflare Pages).
+3) Hosting later (not done yet): upload this folder to a GitHub Pages repo (or Netlify Drop / Cloudflare Pages).
    It works from a sub-folder URL, because every path is relative. Needs https for install and offline.
 
 LESSON ORDER (Island 3, Stop 1): 1 Meet ng (the sound alone first, then ang/ing/ong/ung, then the words sang/sing/song/sung)

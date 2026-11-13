@@ -34,12 +34,12 @@
     return h('button', { class: 'back homebtn', type: 'button', 'aria-label': 'Home: the world map', onclick: () => { Snd.stop(); location.hash = '#/home'; } }, icon('home'), h('span', null, 'Home'));
   }
   function gearButton() {
-    const b = h('button', { class: 'gear', type: 'button', 'aria-label': 'Grown-ups: press and hold' }, icon('gear'));
+    const b = h('button', { class: 'gear', type: 'button', 'aria-label': 'Parent and Teacher Materials. Press and hold.' }, icon('gear'));
     let t = null;
     const start = () => { b.classList.add('holding'); t = setTimeout(() => { b.classList.remove('holding'); openGrownups(); }, 800); };
     const stop = () => { b.classList.remove('holding'); clearTimeout(t); };
     b.addEventListener('pointerdown', start); b.addEventListener('pointerup', stop); b.addEventListener('pointerleave', stop); b.addEventListener('pointercancel', stop);
-    b.addEventListener('click', () => toast('Grown-ups: press and hold this button.'));
+    b.addEventListener('click', () => toast('Parent and Teacher Materials: press and hold.'));
     b.addEventListener('keydown', (e) => { if (e.key === 'Enter') openGrownups(); });
     return b;
   }
@@ -130,8 +130,9 @@
     hearNg.addEventListener('click', () => IR.playPhoneme('ng')); IR.hasPhoneme('ng').then((ok) => { if (ok) hearNg.hidden = false; });
     const sc = S.check;
     openModal(h('div', { class: 'grown' },
-      h('h2', null, 'Grown-up corner'),
-      h('a', { class: 'btn big primary tmbtn', href: '#/teachers', onclick: () => { modalRoot.innerHTML = ''; } }, 'Teacher materials'),
+      h('h2', null, 'Parent and Teacher Materials'),
+      h('a', { class: 'btn big primary tmbtn', href: '#/about', onclick: () => { modalRoot.innerHTML = ''; } }, 'About Island Readers'),
+      h('a', { class: 'btn big tmbtn', href: '#/teachers', onclick: () => { modalRoot.innerHTML = ''; } }, 'Teacher materials'),
       h('p', null, 'This is an early version of Island Readers. Unit 4 (ng and nk) is open now, and more units are on the way. Progress is saved only on this device. Nothing is sent anywhere.'),
       h('p', null, 'Check best score: ' + (sc.best == null ? 'not taken yet' : sc.best + ' of 10') + (sc.attempts ? ' (' + sc.attempts + ' tries)' : '') + '.'),
       h('label', { class: 'opt' }, calm, ' Calm motion (fish hold still, no wiggles)'),
@@ -264,40 +265,18 @@
       return b;
     };
     const grid = h('div', { class: 'ugrid tgrid', id: 'skymap' }, ...Array.from({ length: 22 }, (_, i) => unit(i + 1)));
-    const pbox = (key, title, ico) => h('a', { class: 'pbox', href: '#/practice/' + key, 'data-kind': 'practice', 'data-id': key }, h('span', { class: 'pico', 'aria-hidden': 'true' }, ico), h('span', null, title));
-    const practice = h('aside', { class: 'practice', 'aria-label': 'Practice' }, h('h2', null, 'Practice'),
-      pbox('skills', 'Skill Practice', '\u2726'));
-    /* Nov 6 2026: full-width home feature (approved banyan scene), then About + Practice beside the unit grid */
-    const banner = h('header', { class: 'hbanner' }, h('h1', null, 'Island Readers'), IR.ui.gearButton());
-    /* Read-aloud for the hero text: HOME_INTRO_AUDIO recording if set, else speechSynthesis. Tap again to stop. */
-    function readAloudBtn() {
-      const TEXT = 'Learn to read with Zip and Frill. Ring every bell by learning its sounds. Start here to find your first bell.';
-      const HOME_INTRO_AUDIO = 'audio/home_intro.mp3'; /* Zip's lesson voice (edge-tts en-US-RogerNeural +0%); browser speech is only a fallback */
-      const b = h('button', { class: 'zfspk', type: 'button', 'aria-label': 'Read aloud', 'aria-pressed': 'false' }, icon('speaker'));
-      let au = null, on = false;
-      const set = (v) => { on = v; b.classList.toggle('playing', v); b.setAttribute('aria-pressed', v ? 'true' : 'false'); b.textContent = ''; b.append(icon(v ? 'pause' : 'speaker')); };
-      const stop = () => { if (au) { au.pause(); au.currentTime = 0; } try { speechSynthesis.cancel(); } catch (e) {} set(false); };
-      const speak = () => { try { const u = new SpeechSynthesisUtterance(TEXT); u.lang = 'en-US'; u.rate = 0.9; const v = speechSynthesis.getVoices().find((x) => x.lang === 'en-US'); if (v) u.voice = v; u.onend = u.onerror = () => set(false); speechSynthesis.cancel(); speechSynthesis.speak(u); } catch (e) { set(false); } };
-      b.addEventListener('click', async () => {
-        if (on) { stop(); return; }
-        try { Snd.stop(); } catch (e) {}
-        set(true);
-        const src = HOME_INTRO_AUDIO;
-        if (src) { let fell = false; const fb = () => { if (fell || !on) return; fell = true; speak(); }; if (!au) { au = new Audio(src); } au.onended = () => set(false); au.onerror = fb; au.currentTime = 0; au.play().catch(fb); } else speak();
-      });
-      window.addEventListener('hashchange', stop, { once: true });
-      return b;
-    }
-    /* Home card in the left column. 'A' = the picture on top (default); 'B' = heading above the picture. Test with ?hero=B. */
-    const HERO_VARIANT = (/[?&]hero=B\b/.test(location.search) ? 'B' : 'A');
-    const hero = h('section', { class: 'homefeature zf' + HERO_VARIANT, 'aria-label': 'Learn to read with Zip and Frill' },
-      h('div', { class: 'zfpics' }, h('img', { class: 'homeart', src: 'img/home_zip_frill.webp', width: 1280, height: 720, alt: 'Zip and Frill sit on a tree root reading a book together. An orange bell hangs from the banyan behind them, and the island coast glows at sunset.' })),
-      h('div', { class: 'hfbody' },
-        h('div', { class: 'zfhead' }, h('h2', { class: 'zfline' }, 'Learn to read with Zip and Frill'), readAloudBtn()),
-        h('p', { class: 'zfsub' }, 'Ring every bell by learning its sounds.'),
-        h('a', { class: 'zfstart2', href: '#/placement', 'aria-label': 'Start here: find your first bell' },
-          h('span', { class: 'zfbell', 'aria-hidden': 'true' }, '\u{1F514}'),
-          h('span', { class: 'zfst' }, h('b', null, 'Start here'), h('small', null, 'Find your first bell')))));
+    const sideEntry = (href, name, note) => h('a', { class: 'sideentry', href: href, 'aria-label': name + (note ? '. ' + note : '') },
+      h('span', { class: 'sidetext' }, h('b', null, name), note ? h('small', null, note) : null),
+      h('span', { class: 'cardgo', 'aria-hidden': 'true' }, 'Open'));
+    const practice = h('nav', { class: 'sidenav', 'aria-label': 'Sections' },
+      sideEntry('#/home', 'Home', 'The unit list'),
+      sideEntry('#/trail', 'Island Trail', 'Start here to find your first bell'),
+      sideEntry('#/practice/skills', 'Targeted Skills', 'Practice one skill at a time'),
+      sideEntry('#/boxes', 'Sight Word Treasure Boxes', 'Heart words and sight words'),
+      sideEntry('#/reading-room', 'Reading Room', 'Stories and passages'));
+    const hero = h('p', { class: 'sr-only' }, 'Learn to read with Zip and Frill. Ring every bell by learning its sounds. Start here to find your first bell.');
+    const banner = h('header', { class: 'hbanner' }, h('h1', null, 'Island Readers'),
+      h('div', { class: 'grownwrap' }, h('span', { class: 'grownlab' }, 'Parent and Teacher Materials'), IR.ui.gearButton()));
     const cur = complete ? BUILT + 1 : BUILT;
     const youbar = h('button', { class: 'youbar', type: 'button', 'aria-label': 'You are here: Unit ' + cur + ', ' + SKILL[cur] + '. Dots show all 22 units. ' + nEarned + ' of 10 gems. Opens the gem box.', onclick: () => { Snd.stop(); location.hash = '#/gems'; } },
       h('span', { class: 'ybtxt' }, 'You are here: ', h('b', null, 'Unit ' + cur + ' \u00b7 ' + SKILL[cur])),
@@ -645,7 +624,8 @@
     return simplePage(skill.name, h('p', { class: 'calm' }, lead), host);
   }
   function skillHub() {
-    const skills = skillCatalog();
+    const ORDER = ['spelling', 'rhyme', 'pa', 'families', 'fluency'];
+    const skills = ORDER.map((id) => skillCatalog().filter((s) => s.id === id)[0]).filter(Boolean);
     const input = h('input', { class: 'skillsearch', type: 'search', placeholder: 'Search by name or type', 'aria-label': 'Search activities by name or type' });
     const results = h('div', { class: 'skillresults' });
     const tiles = h('div', { class: 'skillgrid' });
@@ -676,10 +656,37 @@
       });
     }
     input.addEventListener('input', paint);
-    return simplePage('Skill Practice', h('p', { class: 'calm' }, 'Choose a skill. Each one opens by unit, then by lesson.'), input, results, tiles);
+    return simplePage('Targeted Skills', h('p', { class: 'calm' }, 'Choose a skill. Each one opens by unit, then by lesson.'), input, results, tiles);
+  }
+  function islandTrailPage() {
+    return simplePage('Island Trail',
+      h('div', { class: 'trailhold' },
+        h('img', { class: 'homeart', src: 'img/home_zip_frill.webp', width: 1280, height: 720, alt: 'Zip and Frill sit on a tree root reading a book together. An orange bell hangs from the banyan behind them, and the island coast glows at sunset.' }),
+        h('p', { class: 'calm' }, 'The trail map is coming soon. It will show the path from the first bell to the last.')),
+      h('a', { class: 'cardgo traingo', href: '#/placement' }, 'Take the placement test'));
+  }
+  function treasureBoxes() {
+    const skill = skillCatalog().filter((s) => s.id === 'sight')[0];
+    if (!skill) return simplePage('Sight Word Treasure Boxes', h('p', { class: 'calm' }, 'The boxes are coming soon.'));
+    return skillList(Object.assign({}, skill, { name: 'Sight Word Treasure Boxes', blurb: 'Open a box to practice its heart words and sight words.' }));
+  }
+  function readingRoom() {
+    const stories = fluencyStories();
+    const cards = stories.map((s) => h('a', { class: 'gchest open fluencycard', href: s.href, 'aria-label': s.lesson + (s.title ? '. ' + s.title : '') },
+      h('span', { class: 'fl-lesson' }, s.lesson), s.title ? h('span', { class: 'fl-title' }, s.title) : null));
+    const passages = UNIT_NAMES.slice(1).map((name, i) => h('div', { class: 'spellunit locked', 'aria-label': 'Unit ' + (i + 1) + ' ' + name + '. Coming soon.' },
+      h('span', { class: 'su-n' }, 'Unit ' + (i + 1)), h('span', { class: 'su-name' }, name), h('span', { class: 'su-soon' }, 'Coming soon')));
+    return simplePage('Reading Room',
+      h('h2', { class: 'roomh' }, 'Fluency Stories'),
+      h('p', { class: 'calm' }, 'Read a story again and again. It gets smoother each time.'),
+      h('div', { class: 'chestlist fluencylist' }, ...cards),
+      h('h2', { class: 'roomh' }, 'Comprehension Passages'),
+      h('p', { class: 'calm' }, 'Passages are coming soon. They follow the same unit order.'),
+      h('div', { class: 'spellindex' }, ...passages));
   }
   function skillScreen(id) {
     if (!id) return skillHub();
+    if (id === 'sight') { location.replace('#/boxes'); return; }
     if (id === 'families') return simplePage('Word Families', h('p', { class: 'calm' }, 'Word Families is coming soon.'));
     const skill = skillCatalog().filter((s) => s.id === id)[0];
     if (!skill) { location.hash = '#/practice/skills'; return; }
@@ -734,8 +741,8 @@
         p('Word chains help readers notice how changing one sound changes a word and its spelling. Mnemonics provide memorable clues for recalling sounds, while colors help readers recognize and organize spelling patterns. Puzzles encourage them to apply what they know and work through words step by step. Rhyming stories provide repeated practice with each unit\u2019s sounds in a story that makes readers want to keep going.'),
         p('Visuals, short instructions and positive feedback keep practice manageable and help build confidence. These supports draw on approaches used with learners with dyslexia, ADHD and language-processing difficulties, but can benefit many different readers.')),
       sec('How to use it',
-        p('Island Readers is a free-to-try phonics app that teaches reading skills directly and in order. Readers join Zip, a gecko inventor, and Frill, a nudibranch, on an adventure across the islands. Each island has a bell, and readers ring it by learning that unit\u2019s sounds. It is made for older kids, so it looks like an adventure, not a baby book. English learners can use it too.'),
-        p('It is a free web app that can be added to the home screen. It runs on the phones, tablets and Chromebooks families and schools already have, with no app store and no cost to install.'),
+        p('Island Readers is a phonics app that teaches reading skills directly and in order. Readers join Zip, a gecko inventor, and Frill, a nudibranch, on an adventure across the islands. Each island has a bell, and readers ring it by learning that unit\u2019s sounds. It is made for older kids, so it looks like an adventure, not a baby book. English learners can use it too.'),
+        p('It is a web app that can be added to the home screen. It runs on the phones, tablets and Chromebooks families and schools already have, with no app store needed.'),
         ul('Plan about 20\u201330 minutes a session. Steps are short, and it is fine to take breaks.',
           'Each unit starts with a lesson: I do (Zip shows the skill), we do (you try it together), you do (you try it on your own).',
           'Next come practice activities, a story to read with only the sounds already taught, and heart words (tricky words to learn by heart).',
@@ -833,7 +840,11 @@
     else if (IR.u6Route && IR.u6Route(hash, app)) { /* Unit 6 Endings (js/u6.js) */ }
     else if ((m = /^#\/lesson\/(\d+)/.exec(hash))) lessonScreen(parseInt(m[1], 10) - 1);
     else if (/^#\/chest[1-4]/.test(hash)) IR.chest.render(hash, app);
-    else if (hash === '#/practice/spelling' || hash === '#/practice/fluency' || hash === '#/practice/sight') { location.replace(hash.replace('#/practice/', '#/practice/skills/')); return; }
+    else if (hash === '#/practice/sight' || hash === '#/practice/skills/sight') { location.replace('#/boxes'); return; }
+    else if (hash === '#/practice/spelling' || hash === '#/practice/fluency') { location.replace(hash.replace('#/practice/', '#/practice/skills/')); return; }
+    else if (hash === '#/trail' || hash === '#/trail/') { islandTrailPage(); }
+    else if (hash === '#/boxes' || hash === '#/boxes/') { treasureBoxes(); }
+    else if (hash === '#/reading-room' || hash === '#/reading-room/') { readingRoom(); }
     else if ((m = /^#\/practice\/skills(?:\/([a-z]+))?$/.exec(hash))) skillScreen(m[1]);
     else if ((m = /^#\/practice\/(\w+)/.exec(hash))) practiceScreen(m[1]);
     else if (hash.startsWith('#/gems')) gemScreen();
