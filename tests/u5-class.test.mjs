@@ -25,11 +25,13 @@ test('blend is ready from sounded tiles only, and each new word starts over', ()
   }
 });
 
-test('Unit 5 keeps 10 activities, check last, and replaces the bell game', () => {
+test('Unit 5 keeps check last, and adds the vowel games', () => {
   const ids = [...u5.matchAll(/id: '(\w+)', title: [^,]+, group: 'activities'/g)].map((m) => m[1]);
-  assert.equal(ids.length, 10);
+  assert.equal(ids.length, 12);
   assert.equal(ids[ids.length - 1], 'check');
   assert.equal(ids[1], 'bells');
+  assert.ok(ids.includes('sort'));
+  assert.ok(ids.includes('mage'));
   assert.match(u5, /title: 'Match the word'/);
   assert.equal(u5.includes('Read the word out loud. Then tap the bell with the same word.'), false);
   assert.match(u5, /o says \/u\//);

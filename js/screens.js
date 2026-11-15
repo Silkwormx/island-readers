@@ -119,6 +119,8 @@
     calm.addEventListener('change', () => { S.settings.calm = calm.checked; IR.save(); IR.applySettings(); });
     const open = h('input', { type: 'checkbox', id: 'opt-open' }); open.checked = !!S.settings.openAll;
     open.addEventListener('change', () => { S.settings.openAll = open.checked; IR.save(); });
+    const timerOff = h('input', { type: 'checkbox', id: 'opt-sort-timer' }); timerOff.checked = !!S.settings.sortTimerOff;
+    timerOff.addEventListener('change', () => { S.settings.sortTimerOff = timerOff.checked; IR.save(); });
     const reset = h('button', { class: 'btn small warn', type: 'button' }, 'Reset all progress');
     reset.addEventListener('click', () => {
       if (reset.dataset.sure) { IR.resetAll(); modalRoot.innerHTML = ''; location.hash = '#/home'; route(); toast('Progress cleared.'); }
@@ -136,6 +138,7 @@
       h('p', null, 'Check best score: ' + (sc.best == null ? 'not taken yet' : sc.best + ' of 10') + (sc.attempts ? ' (' + sc.attempts + ' tries)' : '') + '.'),
       h('label', { class: 'opt' }, calm, ' Calm motion (fish hold still, no wiggles)'),
       h('label', { class: 'opt' }, open, ' Open every lesson and the check (for testing)'),
+      h('label', { class: 'opt' }, timerOff, ' Turn off the sorting timer'),
       h('div', { class: 'row' }, hearNg, inst, reset),
       IR.chest && IR.chest.checklist ? IR.chest.checklist() : null,
       h('p', { class: 'small' }, 'The app cannot listen to a child read. Reading aloud stays with a grown-up. Check the isolated ng sound by ear before sharing.')));
