@@ -10,6 +10,8 @@
     feed: ['fluency'],
     sentence: ['fluency'],
     scramble: ['spelling'],
+    mage: ['spelling'],
+    sort: ['pa'],
     chain: ['spelling', 'pa'],
     ngnk: ['pa']
   };

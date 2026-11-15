@@ -1066,6 +1066,46 @@ body.calm .breathring i{animation:none;transform:scale(.8)}
 .timedread .tr-lab{font-weight:700}.timedread .tr-time{font-variant-numeric:tabular-nums}.timedread .small{width:100%;text-align:center;margin:0}
 .smin.opt{font-style:italic;color:var(--ink2)}
 
+/* Unit 5 short or long sort, and magic e sound boxes. Kept short so the bins, tiles, and Check fit on a phone. */
+.nk-sort .acttitle,.nk-mage .acttitle{font-size:1.2rem;margin:.05rem .6rem}
+.nk-sort .instr,.nk-mage .instr{padding-top:0;padding-bottom:0}
+.nk-sort .itext,.nk-mage .itext{font-size:1rem}
+.nk-sort .stage,.nk-mage .stage{padding-top:.15rem;padding-bottom:.2rem}
+.nk-sort .qcount,.nk-mage .qcount{padding:.05rem 1rem;font-size:1.05rem}
+.nk-sort .lesson-nav,.nk-mage .lesson-nav{padding-top:.2rem;padding-bottom:.45rem}
+.activity.sortrace,.activity.magegame{gap:.35rem;padding-top:0}
+.sortrace .speaker,.magegame .speaker{width:3.4rem;height:3.4rem;min-width:3.4rem}
+.sortrace .speaker .ico,.magegame .speaker .ico{width:1.7rem;height:1.7rem}
+.sorword{font-size:2.4rem;font-weight:700;background:#fff;border:4px solid var(--ink);border-radius:1.2rem;padding:.05rem 1rem;min-width:7rem;text-align:center;line-height:1.15}
+.sorword .vowel,.paircard .vowel{background:#FFE08A;border-radius:.3rem;padding:0 .08em}
+.sorword .magic,.paircard .magic{color:#9C7A00}
+.sorstreak,.sormeta,.magelab{margin:0;font-weight:700;text-align:center}
+.sortbar{width:100%;max-width:28rem;height:.7rem;background:var(--cream2);border:3px solid var(--line);border-radius:1rem;overflow:hidden}
+.sortbar i{display:block;height:100%;width:0;background:#F28C00}
+.sortbins,.pairrow{display:grid;grid-template-columns:1fr 1fr;gap:.45rem;width:100%}
+.sortbin{min-height:4.2rem;border-radius:1.2rem;border:4px solid var(--ink);background:#fff;box-shadow:0 4px 0 var(--ink);font-weight:700;padding:.25rem .4rem}
+.sortbin b{display:block;font-size:1.15rem}
+.sortbin small{display:block;color:var(--ink2);font-weight:700;font-size:.9rem}
+.sortbin.right,.paircard.right{background:#DDF4E6;border-color:var(--green);box-shadow:0 4px 0 var(--green)}
+.sortbin.tried{background:#EFE9DA;border-color:#B9AF96;box-shadow:none;color:#8b839e}
+.paircard{background:#fff;border:4px solid var(--ink);border-radius:1rem;padding:.15rem .2rem;text-align:center}
+.paircard b{display:block;font-size:1.6rem;line-height:1.15}
+.paircard small{font-weight:700;font-size:.85rem}
+.mageboxes{display:flex;gap:.35rem;justify-content:center;align-items:flex-end;flex-wrap:nowrap}
+.magebox{width:3.1rem;height:3.2rem;border:4px solid var(--ink);border-radius:.8rem;background:#fff;font-size:1.7rem;font-weight:700;box-shadow:0 3px 0 var(--ink)}
+.magebox.dotted{border-style:dotted;background:#FFFDF8}
+.magebox.aim{box-shadow:0 0 0 4px #F28C00}
+.magebox.wrong{background:#FFE3DC;border-color:#C2452A}
+.mageboxes.right .magebox{background:#DDF4E6;border-color:var(--green)}
+.magegame .spellchoices{display:flex;flex-wrap:wrap;justify-content:center;gap:.35rem;width:100%}
+.magegame .spelltile.pick{min-width:2.7rem;min-height:2.8rem;padding:.1rem .35rem;font-size:1.55rem}
+.magegame .btn.big{min-height:3.1rem;font-size:1.1rem;padding:.35rem 1.2rem}
+.magelab{display:flex;justify-content:space-between;width:100%;max-width:18rem;font-size:.9rem}
+.gamebadge{display:flex;align-items:center;gap:.6rem;background:#FFF3C2;border:3px solid #E4D6B4;border-radius:1rem;padding:.35rem .8rem;font-weight:700}
+.gamebadge .badgeart{width:2.6rem;height:2.6rem}
+.gamebadge .badgeart svg{width:100%;height:100%}
+body.calm .magebox.wrong{animation:none}
+
 /* ---------- Unit 3 orange bell (orange.js) ---------- */
 :root{--orange:#E8731C;--orange-d:#C95A10;--orange-l:#FFE9D6}
 .orangeunit .ob-cover{margin:.4rem .8rem 0;border-radius:1.2rem;overflow:hidden;background:#fff;border:3px solid var(--orange-l);box-shadow:var(--shadow)}
