@@ -2161,6 +2161,42 @@ body.calm .ob-glow{animation:none;opacity:.85}
 @media (max-width: 520px) {
   .choices > .choice::after, .wpool > .wtile::after, .fz-field > .fz-bubble::after { font-size: 1.2rem; min-width: 1.6rem; height: 1.6rem; margin-top: .35rem; }
 }
+/* Feed Zip fits on one screen: four chips, no page scroll, no progress dots. */
+.lessonscreen:has(.feedzip){height:100dvh;max-height:100dvh;overflow:hidden}
+.lessonscreen:has(.feedzip) .lesson-top{padding:.2rem 3rem .2rem .55rem;gap:.35rem;min-width:0}
+.lessonscreen:has(.feedzip) .pbar{flex:1 1 5rem;min-width:4.2rem;height:1rem}
+.lessonscreen:has(.feedzip) .homebtn{padding:.25rem .55rem;font-size:.95rem}
+body:has(.feedzip) #soundfix{bottom:4.4rem}
+.lessonscreen:has(.feedzip) .xbtn,.lessonscreen:has(.feedzip) .gear{width:2.5rem;height:2.5rem;min-width:2.5rem;flex-basis:2.5rem;padding:.35rem}
+.lessonscreen:has(.feedzip) .acttitle{margin:0;padding:0 .6rem;font-size:1.15rem;line-height:1.15;text-align:center}
+.lessonscreen:has(.feedzip) .instr{padding:.05rem .6rem;gap:.4rem}
+.lessonscreen:has(.feedzip) .instr .speaker{width:2.3rem;height:2.3rem;min-width:2.3rem}
+.lessonscreen:has(.feedzip) .instr .speaker .ico{width:1.2rem;height:1.2rem}
+.lessonscreen:has(.feedzip) .itext{font-size:1rem;line-height:1.2}
+.lessonscreen:has(.feedzip) .stage{flex:1 1 auto;min-height:0;overflow:hidden;padding:.1rem .45rem}
+.lessonscreen:has(.feedzip) .qcount{margin:0;text-align:center;font-size:.95rem;line-height:1.15}
+.lessonscreen:has(.feedzip) .lesson-nav{padding:.15rem .5rem .3rem;gap:.45rem}
+.lessonscreen:has(.feedzip) .lesson-nav .btn{min-height:2.45rem;min-width:6.2rem;padding:.25rem .6rem}
+.feedzip{height:100%;max-height:100%;min-height:0;display:grid;grid-template-rows:auto minmax(0,1fr) auto;gap:.2rem;justify-items:center;align-content:stretch}
+.feedzip .fz-top{flex-wrap:nowrap;gap:.45rem}
+.feedzip .fz-zip{width:clamp(2.4rem,7vh,3.6rem);height:clamp(2.4rem,7vh,3.6rem)}
+.feedzip .fz-bites{display:none}
+.feedzip .fz-tummy{font-size:1rem;gap:.35rem}
+.feedzip .fz-streak{font-size:.95rem}
+.feedzip .btn.fz-replay{background:#F28C00;border-color:#C95A10;box-shadow:0 3px 0 #C95A10;color:#fff;min-height:2.35rem;font-size:1.05rem;padding:.2rem .75rem}
+.feedzip .fz-field{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:minmax(0,1fr) minmax(0,1fr);gap:.4rem;width:min(100%,44rem);height:100%;min-height:0;padding:0}
+.feedzip .fz-bubble{min-width:0;min-height:0;width:100%;height:100%;padding:.2rem .35rem .15rem;border-width:3px;border-radius:1rem;gap:.05rem;box-shadow:0 3px 0 #2E7A2C}
+.feedzip .fz-snack.berry{box-shadow:0 3px 0 #9B2E55}
+.feedzip .fz-snack.bug{box-shadow:0 3px 0 #A56E08}
+.feedzip .fz-snack.nut{box-shadow:0 3px 0 #6E4524}
+.feedzip .fz-w{font-family:"Andika",sans-serif;font-size:clamp(22px,2.8vw,2.1rem);line-height:1.05;overflow-wrap:anywhere;text-align:center}
+.feedzip .fz-field > .fz-bubble::after{font-size:.8rem;min-width:1.15rem;height:1.15rem;margin-top:.05rem}
+.feedzip .status{min-height:1.15rem;font-size:.95rem;line-height:1.2}
+@media (max-width:700px){
+  .feedzip .fz-w{font-size:22px}
+  .feedzip .fz-top{gap:.3rem}
+  .lessonscreen:has(.feedzip) .lesson-nav .btn{min-width:0;flex:1 1 0}
+}
 
 /* Unit 5: come / some / done, match-the-picture, blend, and the letter chain. */
 .u5usay { display: flex; flex-direction: column; align-items: center; gap: .7rem; }
