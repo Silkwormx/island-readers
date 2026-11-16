@@ -298,7 +298,14 @@
       b.addEventListener('click', () => { if (u6) { Snd.stop(); location.hash = '#/u6'; } else if (u5) { openIsland('i5'); } else if (isl) openIsland(BUILT_ID); else { Snd.stop(); toast(st === 'done' ? 'Unit ' + n + ' is done. It is part of the full app.' : n < BUILT ? 'Unit ' + n + ' is coming soon in the full app!' : lit ? 'Unit ' + n + ' is unlocked! It is coming soon in the full app.' : 'Unit ' + n + ' is coming soon! Finish Unit ' + BUILT + ' first.'); } });
       return b;
     };
-    const grid = h('div', { class: 'ugrid tgrid', id: 'skymap' }, ...Array.from({ length: 22 }, (_, i) => unit(i + 1)));
+    const stageStyle = /[?&]stagestyle=top\b/.test(location.search) ? 'top' : 'side';
+    const grid = h('div', { class: 'stagegroups stagestyle-' + stageStyle, id: 'skymap' }, ...TRAIL_STAGES.map((s) => h('section', { class: 'stagepanel', style: '--stage:' + s.color },
+      h('h2', { class: 'stagehead' }, 'Stage ' + s.n + ' \u00b7 ' + s.skills),
+      h('div', { class: 'stagestrip', title: s.skills, style: 'background:' + s.color + ';color:' + s.ink },
+        h('div', { class: 'stagev' },
+          h('h2', { class: 'stagelab' }, 'Stage ' + s.n),
+          h('p', { class: 'stageskill' }, s.skills))),
+      h('div', { class: 'stagecards' }, h('div', { class: 'ugrid tgrid' }, ...stageUnitList(s.units).map(unit))))));
     const tab = (href, name, icoName) => h('a', { class: 'hometab', href: href, 'aria-label': name },
       h('span', { class: 'hometab-ico', 'aria-hidden': 'true' }, icon(icoName)),
       h('span', { class: 'hometab-name' }, name));
@@ -345,11 +352,12 @@
     const side = app.querySelector('.homeside'); const scr = app.querySelector('.screen.home');
     const pin = () => {
       if (!side || !scr || !side.isConnected) { window.removeEventListener('resize', pin); return; }
-      side.style.top = ''; side.style.maxHeight = ''; side.style.overflowY = '';
-      if (!matchMedia('(min-width:1100px)').matches) return;
-      const top = Math.round(side.getBoundingClientRect().top - scr.getBoundingClientRect().top + scr.scrollTop);
-      const bar = app.querySelector('.youbar'); const barH = bar ? bar.getBoundingClientRect().height + 48 : 28;
-      side.style.top = top + 'px'; side.style.maxHeight = Math.max(240, innerHeight - top - barH) + 'px'; side.style.overflowY = 'auto';
+      if (!matchMedia('(min-width:1100px)').matches) { side.style.top = ''; side.style.maxHeight = ''; side.style.overflowY = ''; return; }
+      const banner = scr.querySelector('.hbanner');
+      const bannerH = banner ? banner.offsetHeight : 0;
+      side.style.top = bannerH + 'px';
+      side.style.maxHeight = Math.max(280, innerHeight - bannerH - 8) + 'px';
+      side.style.overflowY = 'hidden';
     };
     requestAnimationFrame(pin); window.addEventListener('resize', pin);
   }
