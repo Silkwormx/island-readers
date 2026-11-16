@@ -26,7 +26,11 @@ test('Learn the Letters follows the UFLI group order and is not a unit', () => {
   assert.match(letters, /Review flash/);
   assert.match(letters, /Meet the letters/);
   assert.match(letters, /Read it!/);
-  assert.ok(letters.indexOf("id: 'flash'") < letters.indexOf("id: 'meet'") && letters.indexOf("id: 'meet'") < letters.indexOf("id: 'trace'") && letters.indexOf("id: 'trace'") < letters.indexOf("id: 'games'") && letters.indexOf("id: 'games'") < letters.indexOf("id: 'read'") && letters.indexOf("id: 'read'") < letters.indexOf("id: 'celebrate'"));
+  const steps = ["id: 'flash'", "id: 'ears'", "id: 'meet'", "id: 'trace'", "id: 'games'", "id: 'read'", "id: 'spell'", "id: 'celebrate'"];
+  for (let i = 1; i < steps.length; i++) assert.ok(letters.indexOf(steps[i - 1]) < letters.indexOf(steps[i]), steps[i]);
+  assert.match(letters, /Sound play/);
+  assert.match(letters, /Spell it/);
+  assert.match(letters, /Final art is still needed/);
 });
 
 test('reading words stay inside the letters taught so far', () => {
@@ -59,9 +63,10 @@ test('reading words stay inside the letters taught so far', () => {
     const shape = body.startsWith('qu') ? /^qu[aeiou][a-z]$/ : /^[aeiou][a-z]$|^[a-z][aeiou][a-z]$/;
     assert.match(body, shape, word);
   });
-  assert.match(letters, /Snake on the sand/);
-  assert.match(letters, /Slide your hand in an s/);
-  assert.match(letters, /llswoop/);
+  assert.match(letters, /Sea snake in the sand/);
+  assert.match(letters, /Slide your hand like the snake/);
+  assert.match(letters, /llcast/);
+  assert.match(letters, /hold hands/);
   assert.equal(/\bfree\b/i.test(letters), false);
 });
 

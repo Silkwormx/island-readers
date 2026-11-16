@@ -2572,7 +2572,8 @@ html.teach .u5step .itext{font-size:32px}
 .llgrouppage .llgames:has(.llplay:nth-child(5)){grid-template-columns:repeat(5,minmax(0,1fr))}
 .llplay{min-height:3.2rem}
 .llplay .u5name{font-size:1.02rem}
-.llsteps{list-style:none;margin:0 auto;padding:0;display:flex;flex-direction:column;gap:.4rem;width:min(100%,42rem)}
+.llsteps{list-style:none;margin:0 auto;padding:0;display:flex;flex-direction:column;gap:.32rem;width:min(100%,42rem)}
+.llgrouppage .llstepcard{min-height:2.65rem;padding:.18rem .65rem}
 .llstepcard .u5name,.llsteps .u5name{white-space:nowrap}
 .llstep .llgame.llmeet{display:grid;grid-template-columns:minmax(0,16rem) minmax(0,1fr);gap:.8rem;align-items:center;height:100%}
 .llmemo svg{width:min(34vh,16rem);height:auto;display:block;margin:0 auto}
@@ -2583,12 +2584,36 @@ html.teach .u5step .itext{font-size:32px}
 .llflash img{height:5rem;width:auto}
 .llflashcard{min-width:min(70vw,16rem);min-height:8rem;font-family:Andika,sans-serif;font-size:clamp(64px,12vh,120px);font-weight:700;background:#fff;border:4px solid var(--ink);border-radius:1.4rem;color:var(--ink);box-shadow:0 4px 0 rgba(43,37,64,.16)}
 .lltrace{align-items:center;justify-content:center;gap:.4rem}
-.lltraceart{touch-action:none}
-.lltraceart svg{height:min(36vh,240px);width:auto}
+.lltraceart{touch-action:none;display:flex;align-items:center;justify-content:center;gap:.6rem}
+.lltracewho svg{height:min(26vh,170px);width:auto}
+.lltraceform svg{height:min(22vh,140px);width:auto}
 .lltracenums{display:flex;gap:.5rem;justify-content:center}
 .lltracenum{width:4.2rem;height:4.2rem;border-radius:1rem;border:3px solid var(--ink);background:#fff;font-family:Andika,sans-serif;font-size:2rem;font-weight:700;color:var(--ink)}
 .lltracenum.on{background:#F28C00;color:#fff;border-color:#C95A10}
 .llread{align-items:center;justify-content:center;gap:.35rem}
+.llcast{display:flex;align-items:flex-end;justify-content:center;gap:1.2rem}
+.llcast.held{gap:.35rem}
+.llbuddy{display:flex;flex-direction:column;align-items:center;gap:.05rem;min-width:4.2rem;padding:.15rem .3rem .3rem;background:#fff;border:3px solid var(--ink);border-radius:1rem;color:var(--ink);font-family:Andika,sans-serif}
+.llread .llbuddy{transform:translateX(calc(var(--from) * 1px));transition:transform .45s ease}
+.llread .llbuddy.lit{transform:translateX(0);background:#FFE08A}
+.llbuddy.used{opacity:.35}
+.llbuddy.tried{outline:4px solid #C45A3A}
+.llbuddy .llface svg,.llface svg{width:3.4rem;height:auto;display:block}
+.llhands{display:block;width:min(16rem,70%);height:.45rem;margin:.25rem auto 0;border-radius:1rem;background:#F28C00;transform:scaleX(0);transform-origin:center;transition:transform .4s ease}
+.llhands.go{transform:scaleX(1)}
+.llslots{display:flex;gap:.4rem;justify-content:center;min-height:5.4rem}
+.llslot{width:4.8rem;min-height:5.2rem;border:3px dashed #C4A574;border-radius:1rem;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#fff}
+.llslot.filled{border-style:solid;border-color:var(--ink)}
+.llbank,.llblendpick{display:flex;flex-wrap:wrap;gap:.4rem;justify-content:center}
+.llwordpick{display:flex;align-items:center;gap:.15rem;min-height:4.2rem;padding:.25rem .45rem;background:#fff;border:3px solid var(--ink);border-radius:1rem;font-family:Andika,sans-serif}
+.llwordpick .llface svg{width:2.2rem}
+.llwordpick.lit{background:#FFE08A}
+.llchoice{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.05rem}
+.llchoice .llface svg{width:min(10vh,3.6rem)}
+.llchoice b{font-size:clamp(22px,4vh,36px);line-height:1}
+.llflashcard{display:flex;flex-direction:column;align-items:center;justify-content:center}
+.llflashcard .llface svg{width:4.2rem}
+.llwho{margin:0;font-weight:700}
 .lltiles{display:flex;gap:.45rem;justify-content:center}
 .lltile{min-width:4.6rem;height:5.2rem;padding:0 .45rem;display:inline-flex;align-items:center;justify-content:center;font-family:Andika,sans-serif;font-size:clamp(36px,7vh,60px);font-weight:700;line-height:1;background:#fff;border:4px solid var(--ink);border-radius:1rem;color:var(--ink)}
 .lltile.lit{background:#FFE08A}
@@ -2615,7 +2640,8 @@ html.teach .lltracenum{width:96px;height:96px;font-size:48px}
 .llprompt,.llword,.llask{margin:0;text-align:center;font-weight:700}
 .llword{font-size:clamp(1.4rem,4vh,2rem)}
 .llpic.big svg{width:min(16vh,140px);height:auto;display:block;margin:0 auto}
-html.teach .llchoice,html.teach .llshown,html.teach .llword{font-size:88px;line-height:1.05}
+html.teach .llchoice b,html.teach .llshown,html.teach .llword{font-size:64px;line-height:1.05}
+html.teach .llchoice .llface svg{width:4.2rem}
 html.teach .llchoice{min-height:96px;min-width:88px}
 html.teach .llcard .llpair{font-size:64px}
 html.teach .llist .u5name,html.teach .llplay .u5name{font-size:32px}

@@ -113,20 +113,22 @@
     { id: 'feed', title: 'Feed Zip' },
     { id: 'review', title: 'Letter review', min: 2 }
   ];
-  /* Same six steps in every group, in this order. */
+  /* Same steps in every group, in this order. */
   const LESSON = [
     { id: 'flash', title: 'Review flash' },
+    { id: 'ears', title: 'Sound play' },
     { id: 'meet', title: 'Meet the letters' },
     { id: 'trace', title: 'Trace' },
     { id: 'games', title: 'Games' },
     { id: 'read', title: 'Read it!' },
+    { id: 'spell', title: 'Spell it' },
     { id: 'celebrate', title: 'Celebrate' }
   ];
   const MEMORY = {
     a: { chant: 'Ant on an apple, /a/ /a/ /a/.', action: 'Open wide, like a bite.' },
-    m: { chant: 'Two mountains hum, /m/ /m/ /m/.', action: 'Lips together. Hum.' },
-    s: { chant: 'Snake on the sand, /s/ /s/ /s/.', action: 'Slide your hand in an s.' },
-    t: { chant: 'Tap the tent, /t/ /t/ /t/.', action: 'Tap two fingers.' },
+    m: { chant: 'Twin mountains hum, /m/ /m/ /m/.', action: 'Lips together. Hum.' },
+    s: { chant: 'Sea snake in the sand, /s/ /s/ /s/.', action: 'Slide your hand like the snake.' },
+    t: { chant: 'Palm tree tap, /t/ /t/ /t/.', action: 'Tap two fingers.' },
     p: { chant: 'Puff like a pig, /p/ /p/ /p/.', action: 'Puff your lips.' },
     f: { chant: 'Fan the fish, /f/ /f/ /f/.', action: 'Bite your lip and blow.' },
     i: { chant: 'Little insect, /i/ /i/ /i/.', action: 'Smile a little and say /i/.' },
@@ -180,6 +182,32 @@
     v: memo('<path d="M24 40 L80 170 L136 40" fill="none" stroke="#5B9BC4" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/><rect x="58" y="78" width="44" height="22" fill="#F6C445" stroke="#2B2540" stroke-width="3"/><circle cx="68" cy="112" r="6" fill="#2B2540"/><circle cx="96" cy="112" r="6" fill="#2B2540"/>'),
     z: memo('<path d="M28 40 H132 L28 160 H132" fill="none" stroke="#F28C00" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/><rect x="70" y="70" width="18" height="60" rx="3" fill="#C4A574" stroke="#2B2540" stroke-width="3"/>')
   };
+  /* Placeholder island characters. Final art is still needed for every letter. */
+  const WHO = {
+    a: 'Island ant', m: 'Twin mountains', s: 'Sea snake', t: 'Palm tree',
+    p: 'Puffer fish', f: 'Fan coral', i: 'Island sun', n: 'Fishing net',
+    o: 'Round ox', d: 'Island dog', c: 'Crab claw', u: 'Sea urchin',
+    g: 'Hill goat', b: 'Beach bus', e: 'Reef eel', k: 'Reef kite',
+    h: 'Hill house', r: 'Manta ray', l: 'Lighthouse', w: 'Shore waves',
+    j: 'Jellyfish', y: 'Young palm', x: 'Crossed oars', q: 'Queen conch',
+    v: 'Island valley', z: 'Zigzag lizard'
+  };
+  const ART_NEEDED = Object.keys(WHO);
+  const FACE_AT = {
+    a: [62, 100], m: [46, 58], t: [70, 78], p: [78, 70], f: [62, 78],
+    i: [70, 100], n: [62, 110], o: [70, 108], d: [62, 112], c: [70, 96],
+    u: [62, 90], g: [66, 74], b: [78, 112], e: [68, 100], k: [52, 90],
+    h: [70, 110], r: [62, 120], l: [70, 90], w: [68, 70], j: [86, 40],
+    y: [62, 70], x: [68, 96], q: [64, 82], v: [68, 86], z: [68, 96]
+  };
+  function eyes(x, y) {
+    return '<circle cx="' + x + '" cy="' + y + '" r="3.2" fill="#2B2540"/><circle cx="' + (x + 12) + '" cy="' + y + '" r="3.2" fill="#2B2540"/>';
+  }
+  Object.keys(FACE_AT).forEach((id) => {
+    const at = FACE_AT[id];
+    MNEMONIC[id] = MNEMONIC[id].replace('</svg>', eyes(at[0], at[1]) + '</svg>');
+  });
+  function character(id) { return MNEMONIC[id] || ''; }
   /* VC and CVC words only, plus quit (qu is the letter q). A line is a 2 or 3 word phrase. */
   const BANK = [
     { w: 'am', g: 1 },
@@ -433,7 +461,7 @@
           h('img', { src: 'img/zipA.webp', alt: '' }),
           h('img', { src: 'img/frill.webp', alt: '' }),
           h('p', null, 'Seven groups, before Unit 1. This is not a unit.'),
-          h('p', null, 'Same six steps every time.')),
+          h('p', null, 'Same steps every time.')),
         h('div', { class: 'u5teachrow' }, h('button', { class: 'btn teachgo', type: 'button', onclick: () => { if (IR.teach) IR.teach.toggle(true); } }, 'Teacher mode')),
         h('div', { class: 'u5prog' }, bar, h('span', { class: 'u5count' }, finished + ' of ' + items.length)),
         h('ol', { class: 'u5grid llgroups' }, ...cards))));
@@ -551,9 +579,11 @@
     else if (game.id === 'sound') runSound(ctx, lettersOf(group));
     else if (game.id === 'feed') runFeed(ctx, lettersOf(group));
     else if (game.id === 'flash') runFlash(ctx, group);
+    else if (game.id === 'ears') runEars(ctx, group);
     else if (game.id === 'meet') runMeet(ctx, group);
     else if (game.id === 'trace') runTrace(ctx, group);
     else if (game.id === 'read') runRead(ctx, group);
+    else if (game.id === 'spell') runSpell(ctx, group);
     else runReview(ctx, taughtThrough(group));
   }
 
@@ -588,7 +618,7 @@
           i++;
           if (ctx.scr.ok()) show();
         }
-      }, glyph(L.id, true) + L.id);
+      }, h('span', { class: 'llface', html: character(L.id) }), h('b', null, glyph(L.id, true) + L.id));
       ctx.stage.append(h('div', { class: 'activity llgame llflash' }, h('p', { class: 'llask' }, 'Say the sound.'), b));
       if (ctx.armReveal) ctx.armReveal(L.sound);
     }
@@ -610,6 +640,7 @@
         h('div', { class: 'llmemo', html: MNEMONIC[L.id] || '' }),
         h('div', { class: 'llmeettext' },
           h('p', { class: 'llpair' }, glyph(L.id, true) + L.id),
+          h('p', { class: 'llwho' }, WHO[L.id] || ''),
           h('p', { class: 'llchant' }, mem.chant),
           h('p', { class: 'llaction' }, 'Action: ' + mem.action),
           h('button', { class: 'btn primary', type: 'button', onclick: () => hear(L, 'sound') }, icon('speaker'), 'Hear the sound'))));
@@ -637,10 +668,12 @@
       ctx.progress(i / letters.length);
       if (ctx.count) ctx.count(i + 1, letters.length);
       ctx.stage.innerHTML = '';
-      const art = h('div', { class: 'lltraceart', html: formation(L) });
+      const art = h('div', { class: 'lltraceart' },
+        h('div', { class: 'lltracewho', html: character(L.id) }),
+        h('div', { class: 'lltraceform', html: formation(L) }));
       const nums = h('div', { class: 'lltracenums' });
       function paint() {
-        art.querySelectorAll('.llstroke').forEach((path, n) => {
+        art.querySelectorAll('.lltraceform .llstroke').forEach((path, n) => {
           path.setAttribute('stroke', n < stroke ? '#E8731C' : '#2B2540');
           path.setAttribute('stroke-width', n === stroke ? '12' : '7');
         });
@@ -687,7 +720,7 @@
     const items = wordsFor(group);
     let i = 0;
     let token = 0;
-    ctx.setInstr('Tap each sound. Then the word swoops together.');
+    ctx.setInstr('Tap each letter. They step in, hold hands, and say the word.');
     function show() {
       const my = ++token;
       if (i >= items.length) { ctx.quietDone(); return; }
@@ -697,10 +730,19 @@
       ctx.progress(i / items.length);
       if (ctx.count) ctx.count(i + 1, items.length);
       ctx.stage.innerHTML = '';
-      const swoop = h('i', { class: 'llswoop' });
+      const cast = h('div', { class: 'llcast' });
+      const hands = h('i', { class: 'llhands' });
       const line = h('p', { class: 'llline' }, '');
-      const tiles = parts.map((part, n) => {
-        const b = h('button', { class: 'lltile', type: 'button', 'data-g': part.g, 'aria-label': 'Sound ' + (n + 1) + ', ' + part.g }, part.g);
+      const spread = 90;
+      parts.forEach((part, n) => {
+        const from = Math.round((n - (parts.length - 1) / 2) * spread);
+        const b = h('button', {
+          class: 'llbuddy',
+          type: 'button',
+          style: '--from:' + from,
+          'data-g': part.g,
+          'aria-label': 'Sound ' + (n + 1) + ', ' + part.g
+        }, h('span', { class: 'llface', html: character(part.id) }), h('b', null, part.g));
         b.addEventListener('click', async () => {
           if (my !== token || b.classList.contains('lit')) return;
           if (n !== at) {
@@ -714,20 +756,18 @@
           at++;
           await hear(BY[part.id], 'sound');
           if (at < parts.length || my !== token || !ctx.scr.ok()) return;
-          swoop.classList.add('go');
+          cast.classList.add('held');
+          hands.classList.add('go');
           await Snd.play(A.sfx.ding);
           if (ctx.scr.ok() && my === token) await sayRead(item.w);
           if (item.line) line.textContent = item.line;
           ctx.setNextLabel(i < items.length - 1 ? 'Next word' : 'Done');
         });
-        return b;
+        cast.append(b);
       });
-      ctx.stage.append(h('div', { class: 'activity llgame llread' },
-        h('div', { class: 'lltiles' }, ...tiles),
-        swoop,
-        line));
+      ctx.stage.append(h('div', { class: 'activity llgame llread' }, cast, hands, line));
       ctx.setNextLabel('');
-      if (ctx.armReveal) ctx.armReveal(item.w, (stage) => [...stage.querySelectorAll('.lltile')]);
+      if (ctx.armReveal) ctx.armReveal(item.w, (stage) => [...stage.querySelectorAll('.llbuddy')]);
     }
     ctx.setNext(() => {
       if (i < items.length - 1) { i++; show(); return true; }
@@ -759,6 +799,187 @@
     Snd.play(A.sfx.done);
   }
 
+  function soundBit(L) {
+    return String(L.soundSay || L.id).split(',')[0];
+  }
+  async function sayBits(parts) {
+    for (let n = 0; n < parts.length; n++) {
+      await speak(soundBit(BY[parts[n].id]));
+      await sleep(260);
+    }
+  }
+
+  function runEars(ctx, group) {
+    const pool = taughtThrough(group);
+    const words = readable(group);
+    const kinds = ['first', 'blend', 'segment'];
+    const rounds = [];
+    for (let n = 0; n < 6; n++) rounds.push({ kind: kinds[n % 3], item: words[n % words.length] });
+    shuffle(rounds);
+    let i = 0;
+    let token = 0;
+    function show() {
+      const my = ++token;
+      if (i >= rounds.length) { ctx.quietDone(); return; }
+      const round = rounds[i];
+      const item = round.item;
+      const parts = graphemes(item.w);
+      ctx.progress(i / rounds.length);
+      if (ctx.count) ctx.count(i + 1, rounds.length);
+      ctx.stage.innerHTML = '';
+      const host = h('div', { class: 'activity llgame llear' });
+      ctx.stage.append(host);
+      if (round.kind === 'first') {
+        ctx.setInstr('Listen to the word. Tap the first sound.');
+        const first = BY[parts[0].id];
+        const opts = options(first, pool, Math.min(3, pool.length)).map((L) => ({
+          letter: L, yes: L.id === first.id, label: glyph(L.id, false)
+        }));
+        host.append(h('p', { class: 'llprompt' }, item.w), choiceGrid(opts, async (it, btn) => {
+          if (my !== token || btn.classList.contains('lit')) return;
+          if (!it.yes) {
+            ctx.miss();
+            btn.classList.add('tried');
+            await Snd.play(A.sfx.tryagain);
+            return;
+          }
+          btn.classList.add('lit');
+          await Snd.play(A.sfx.ding);
+          i++;
+          if (ctx.scr.ok() && my === token) show();
+        }));
+        sayRead(item.w);
+        if (ctx.armReveal) ctx.armReveal(first.id);
+        return;
+      }
+      if (round.kind === 'blend') {
+        ctx.setInstr('Listen to the sounds. Tap the word.');
+        const other = words.filter((row) => row.w !== item.w)[0] || item;
+        const picks = shuffle([item, other]);
+        const row = h('div', { class: 'llblendpick' });
+        picks.forEach((pick) => {
+          const yes = pick.w === item.w;
+          const b = h('button', {
+            class: 'llwordpick',
+            type: 'button',
+            'data-yes': yes ? '1' : '0',
+            'aria-label': pick.w
+          }, ...graphemes(pick.w).map((part) => h('span', { class: 'llface', html: character(part.id) })), h('b', null, pick.w));
+          b.addEventListener('click', async () => {
+            if (my !== token) return;
+            if (!yes) {
+              ctx.miss();
+              b.classList.add('tried');
+              await Snd.play(A.sfx.tryagain);
+              return;
+            }
+            b.classList.add('lit');
+            await Snd.play(A.sfx.ding);
+            i++;
+            if (ctx.scr.ok() && my === token) show();
+          });
+          row.append(b);
+        });
+        host.append(row);
+        sayBits(parts);
+        if (ctx.armReveal) ctx.armReveal(item.w, (stage) => [...stage.querySelectorAll('.llwordpick')].filter((el) => el.dataset.yes === '1'));
+        return;
+      }
+      ctx.setInstr('Listen. Then tap each sound.');
+      let at = 0;
+      const cast = h('div', { class: 'llcast' });
+      parts.forEach((part, n) => {
+        const b = h('button', { class: 'llbuddy', type: 'button', 'aria-label': part.g },
+          h('span', { class: 'llface', html: character(part.id) }), h('b', null, part.g));
+        b.addEventListener('click', async () => {
+          if (my !== token || b.classList.contains('lit')) return;
+          if (n !== at) {
+            ctx.miss();
+            await Snd.play(A.sfx.tryagain);
+            return;
+          }
+          b.classList.add('lit');
+          at++;
+          await speak(soundBit(BY[part.id]));
+          if (at < parts.length || my !== token) return;
+          await Snd.play(A.sfx.ding);
+          i++;
+          if (ctx.scr.ok() && my === token) show();
+        });
+        cast.append(b);
+      });
+      host.append(cast);
+      sayRead(item.w);
+      if (ctx.armReveal) ctx.armReveal(item.w);
+    }
+    ctx.setNext(() => { if (i < rounds.length - 1) { i++; show(); return true; } return false; });
+    show();
+  }
+
+  function runSpell(ctx, group) {
+    const items = wordsFor(group).slice(0, 5);
+    const bank = taughtThrough(group);
+    let i = 0;
+    let token = 0;
+    ctx.setInstr('Listen. Tap the letters to build the word.');
+    function show() {
+      const my = ++token;
+      if (i >= items.length) { ctx.quietDone(); return; }
+      const item = items[i];
+      const parts = graphemes(item.w);
+      let at = 0;
+      ctx.progress(i / items.length);
+      if (ctx.count) ctx.count(i + 1, items.length);
+      ctx.stage.innerHTML = '';
+      const slots = parts.map(() => h('span', { class: 'llslot' }));
+      const used = {};
+      parts.forEach((part) => { used[part.id] = (used[part.id] || 0) + 1; });
+      const bag = [];
+      parts.forEach((part) => bag.push(part));
+      shuffle(bank.filter((L) => !used[L.id])).slice(0, 2).forEach((L) => bag.push({ g: L.id, id: L.id }));
+      const tray = h('div', { class: 'llbank' });
+      shuffle(bag).forEach((part) => {
+        const b = h('button', { class: 'llbuddy', type: 'button', 'data-l': part.id, 'aria-label': part.g },
+          h('span', { class: 'llface', html: character(part.id) }), h('b', null, part.g));
+        b.addEventListener('click', async () => {
+          if (my !== token || b.classList.contains('used') || at >= parts.length) return;
+          if (part.id !== parts[at].id) {
+            ctx.miss();
+            b.classList.add('tried');
+            await Snd.play(A.sfx.tryagain);
+            b.classList.remove('tried');
+            return;
+          }
+          b.classList.add('used');
+          slots[at].classList.add('filled');
+          slots[at].append(h('span', { class: 'llface', html: character(part.id) }), h('b', null, parts[at].g));
+          at++;
+          await hear(BY[part.id], 'sound');
+          if (at < parts.length || my !== token || !ctx.scr.ok()) return;
+          await Snd.play(A.sfx.ding);
+          if (ctx.scr.ok() && my === token) await sayRead(item.w);
+          ctx.setNextLabel(i < items.length - 1 ? 'Next word' : 'Done');
+        });
+        tray.append(b);
+      });
+      ctx.stage.append(h('div', { class: 'activity llgame llspell' },
+        h('div', { class: 'llslots' }, ...slots),
+        tray));
+      ctx.setNextLabel('');
+      sayRead(item.w);
+      if (ctx.armReveal) ctx.armReveal(item.w, (stage) => {
+        const want = parts[Math.min(at, parts.length - 1)].id;
+        return [...stage.querySelectorAll('.llbank .llbuddy')].filter((el) => el.dataset.l === want && !el.classList.contains('used'));
+      });
+    }
+    ctx.setNext(() => {
+      if (i < items.length - 1) { i++; show(); return true; }
+      ctx.quietDone();
+      return true;
+    });
+    show();
+  }
+
   function choiceGrid(items, onPick) {
     return h('div', { class: 'llchoices' + (items.length < 3 ? ' few' : '') }, ...items.map((it) => {
       const b = h('button', {
@@ -767,7 +988,7 @@
         'data-l': it.letter.id,
         'data-yes': it.yes ? '1' : '0',
         'aria-label': it.label
-      }, it.label);
+      }, h('span', { class: 'llface', html: character(it.letter.id) }), h('b', null, it.label));
       b.addEventListener('click', () => onPick(it, b));
       return b;
     }));
@@ -875,7 +1096,16 @@
       bites: Math.max(4, pool.length),
       line: 'Listen. Feed Zip the letter you hear.',
       promptAudio: '',
-      say: (id) => hear(BY[id], 'sound')
+      say: (id) => hear(BY[id], 'sound'),
+      colorWord: (id) => {
+        const el = document.createElement('span');
+        el.className = 'llface';
+        el.innerHTML = character(id);
+        const name = document.createElement('b');
+        name.textContent = id;
+        el.append(name);
+        return el;
+      }
     });
   }
 
@@ -915,7 +1145,7 @@
     });
   }
 
-  IR.letters = { GROUPS: GROUPS, LETTERS: LETTERS };
+  IR.letters = { GROUPS: GROUPS, LETTERS: LETTERS, artNeeded: ART_NEEDED, who: WHO };
   IR.lettersRoute = function (hash, app) {
     const home = /^#\/letters\/?$/.exec(hash);
     if (home) { listPage(app); return true; }
@@ -926,7 +1156,7 @@
       groupPage(app, g);
       return true;
     }
-    const play = /^#\/letters\/(g[1-7])\/(flash|meet|trace|games|read|celebrate|find|match|sound|feed|review)$/.exec(hash);
+    const play = /^#\/letters\/(g[1-7])\/(flash|ears|meet|trace|games|read|spell|celebrate|find|match|sound|feed|review)$/.exec(hash);
     if (play) {
       const g = groupById(play[1]);
       if (!g) return false;
