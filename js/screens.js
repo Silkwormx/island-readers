@@ -1010,29 +1010,48 @@
     const host = h('div', { class: 'findhost' });
     const modes = [['unit', 'By Unit'], ['stage', 'By Stage'], ['sight', 'Sight Words'], ['fluency', 'Fluency Readers']];
     let mode = 'unit';
+    let openKey = '';
     function row(it) {
       if (!it.href) return h('p', { class: 'findsoon' }, it.title);
       return h('a', { class: 'hometab', href: it.href }, h('span', { class: 'hometab-name' }, it.title));
     }
-    function group(name, items) {
-      const body = items.length ? items.map(row) : [h('p', { class: 'findsoon' }, 'Coming soon')];
-      return h('section', { class: 'findgroup' }, h('h2', null, name), ...body);
+    function section(g) {
+      const open = openKey === g.name;
+      const b = h('button', {
+        class: 'hometab findhead',
+        type: 'button',
+        'aria-expanded': open ? 'true' : 'false',
+        onclick: () => { openKey = open ? '' : g.name; paint(); }
+      }, h('span', { class: 'hometab-name' }, g.name));
+      const kids = open
+        ? [h('div', { class: 'findkids' }, ...(g.items.length ? g.items.map(row) : [h('p', { class: 'findsoon' }, 'Coming soon')]))]
+        : [];
+      return h('section', { class: 'findgroup' }, b, ...kids);
     }
     function paint() {
       host.innerHTML = '';
       const q = input.value.trim().toLowerCase();
+      const groups = data[mode] || [];
       if (q) {
-        const hits = data.search.filter((it) => it.blob.indexOf(q) >= 0);
+        const hits = [];
+        groups.forEach((g) => {
+          const groupHit = g.name.toLowerCase().indexOf(q) >= 0;
+          g.items.forEach((it) => {
+            if (groupHit || (it.blob || it.title || '').toLowerCase().indexOf(q) >= 0) hits.push(it);
+          });
+          if (!g.items.length && groupHit) hits.push({ title: g.name, href: '' });
+        });
         if (!hits.length) host.append(h('p', { class: 'calm' }, 'No matches.'));
-        else host.append(h('section', { class: 'findgroup' }, h('h2', null, 'Search'), ...hits.map(row)));
+        else host.append(h('section', { class: 'findgroup' }, ...hits.map(row)));
         return;
       }
-      (data[mode] || []).forEach((g) => host.append(group(g.name, g.items)));
+      groups.forEach((g) => host.append(section(g)));
     }
     modes.forEach(([id, label]) => {
       const b = h('button', { class: 'findtab' + (id === mode ? ' on' : ''), type: 'button', role: 'tab', 'aria-selected': id === mode ? 'true' : 'false' }, label);
       b.addEventListener('click', () => {
         mode = id;
+        openKey = '';
         input.value = '';
         tabs.querySelectorAll('.findtab').forEach((el, i) => {
           const on = modes[i][0] === mode;
@@ -1043,12 +1062,12 @@
       });
       tabs.append(b);
     });
-    input.addEventListener('input', paint);
+    input.addEventListener('input', () => { openKey = ''; paint(); });
     paint();
     app.append(h('div', { class: 'screen home simplepage findpage' }, h('div', { class: 'mwrap' },
       h('div', { class: 'gtop' }, back),
       h('h1', null, 'Find It'),
-      input, tabs, host)));
+      h('div', { class: 'findstack' }, input, tabs), host)));
   }
   /* ---------- router ---------- */
   let lastRouted = '';

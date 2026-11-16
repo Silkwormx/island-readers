@@ -1416,10 +1416,17 @@ body.calm .ob-glow{animation:none;opacity:.85}
 .hometab .pico,.hometab .ico{color:#F28C00;flex:none}
 .hometab-name{font-size:1.05rem;line-height:1.25}
 .hometabs .hometab-name{text-align:center}
-.findtabs{display:flex;flex-flow:row wrap;gap:.45rem;margin:.6rem 0}
-.findtab{flex:1 1 9.5rem;min-height:3rem;border:3px solid var(--ink);border-radius:1rem;background:#fff;font:inherit;font-weight:700;padding:.45rem .8rem;text-align:center;cursor:pointer}
+.findstack{width:100%}
+.findstack .skillsearch{width:100%;box-sizing:border-box;margin:.2rem 0 .45rem}
+.findtabs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.45rem;margin:0;width:100%;align-items:stretch}
+.findtab{box-sizing:border-box;width:100%;min-width:0;height:100%;min-height:3.4rem;display:flex;align-items:center;justify-content:center;border:3px solid var(--ink);border-radius:1rem;background:#fff;font:inherit;font-weight:700;padding:.4rem .35rem;text-align:center;line-height:1.15;cursor:pointer;color:var(--ink)}
 .findtab.on{background:#F28C00;color:#fff;border-color:#C95A10}
-.findgroup{margin:.8rem 0 1.1rem}
+@media (max-width:699px){
+  .findtabs{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .findtab{min-height:3.6rem}
+}
+.findgroup{margin:.45rem 0}
+.findkids{display:flex;flex-direction:column;gap:.4rem;margin:.4rem 0 .15rem}
 .findgroup h2{font-size:1.25rem;margin:.2rem 0 .4rem}
 .findsoon{margin:.2rem 0 .4rem;font-weight:700;color:#6d6578}
 .trailpage .btn.primary.trailgo{margin:.2rem auto .8rem;display:flex;width:100%;max-width:36rem;background:#F28C00;border-color:#C95A10;box-shadow:0 5px 0 #C95A10;color:#fff;text-decoration:none}

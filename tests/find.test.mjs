@@ -18,7 +18,12 @@ test('Find It is a search box and four tabs', () => {
   assert.match(screens, /TRAIL_STAGES\.map/);
   assert.match(screens, /Stage ' \+ s\.n \+ ': ' \+ s\.units/);
   assert.match(screens, /for \(let n = 1; n <= 22; n\+\+\)/);
-  assert.match(sw, /ir-20261115h/);
+  assert.match(sw, /ir-20261115i/);
+  assert.match(screens, /openKey === g\.name/);
+  assert.match(screens, /data\[mode\]/);
+  const css = fs.readFileSync(new URL('../styles.css', import.meta.url), 'utf8');
+  assert.match(css, /grid-template-columns:repeat\(4,minmax\(0,1fr\)\)/);
+  assert.match(css, /grid-template-columns:repeat\(2,minmax\(0,1fr\)\)/);
 });
 
 test('all four sight word chests open and are not locked', () => {
