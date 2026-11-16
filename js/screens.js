@@ -346,12 +346,10 @@
     const side = app.querySelector('.homeside'); const scr = app.querySelector('.screen.home');
     const pin = () => {
       if (!side || !scr || !side.isConnected) { window.removeEventListener('resize', pin); return; }
-      if (!matchMedia('(min-width:1000px)').matches) { side.style.top = ''; side.style.maxHeight = ''; side.style.overflowY = ''; return; }
+      if (!matchMedia('(min-width:1000px)').matches) { side.style.removeProperty('--side-top'); return; }
       const banner = scr.querySelector('.hbanner');
       const bannerH = banner ? banner.offsetHeight : 0;
-      side.style.top = bannerH + 'px';
-      side.style.maxHeight = Math.max(280, innerHeight - bannerH - 8) + 'px';
-      side.style.overflowY = 'hidden';
+      side.style.setProperty('--side-top', bannerH + 'px');
     };
     requestAnimationFrame(pin); window.addEventListener('resize', pin);
   }
