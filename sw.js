@@ -13,6 +13,7 @@ const ASSETS = [
  "./img/u5_c_cake.webp",
  "./img/u5_c_cap.webp",
  "./img/refresh_bed.jpg",
+ "./img/refresh_pete.jpg",
  "./img/refresh_pig.jpg",
  "./img/refresh_mop.jpg",
  "./img/refresh_cup.jpg",

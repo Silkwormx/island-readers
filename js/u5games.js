@@ -335,7 +335,7 @@
     rule: 'Short vowels are quick. Long vowels say their name.',
     vowels: [
       { letter: 'a', short: { w: 'cap', img: 'img/u5_c_cap.webp' }, long: { w: 'cake', img: 'img/u5_c_cake.webp' } },
-      { letter: 'e', short: { w: 'bed', img: 'img/refresh_bed.jpg' }, long: { w: 'Pete', img: 'img/u5_c_pete.webp' } },
+      { letter: 'e', short: { w: 'bed', img: 'img/refresh_bed.jpg' }, long: { w: 'Pete', img: 'img/refresh_pete.jpg' } },
       { letter: 'i', short: { w: 'pig', img: 'img/refresh_pig.jpg' }, long: { w: 'kite', img: 'img/u5_c_kite.webp' } },
       { letter: 'o', short: { w: 'mop', img: 'img/refresh_mop.jpg' }, long: { w: 'rope', img: 'img/u5_c_rope.webp' } },
       { letter: 'u', short: { w: 'cup', img: 'img/refresh_cup.jpg' }, long: { w: 'cube', img: 'img/u5_c_cube.webp' } }
@@ -391,7 +391,6 @@
       });
       ctx.stage.append(h('div', { class: 'activity vrefresh', 'data-game': 'refresh', 'data-phase': 'teach' },
         h('p', { class: 'bigprompt' }, 'Vowel Refresher'),
-        h('p', { class: 'vrule' }, REFRESH.rule),
         ...rows,
         h('div', { class: 'efocusbox' },
           h('p', { class: 'efocuslab' }, 'Listen to e'),
