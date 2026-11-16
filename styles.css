@@ -1726,8 +1726,8 @@ body.calm .ob-glow{animation:none;opacity:.85}
 .pathstep.step-b{transform:translateX(.85rem)}
 .pathjoin{width:.55rem;height:1.35rem;margin:.15rem 0;border-radius:.2rem;background:linear-gradient(#f3e6c8,#d9c39a);box-shadow:0 0 0 6px rgba(232,214,176,.35)}
 .bellpath .tcard{width:min(100%,22rem)}
-.bellpath .tname{font-family:Andika,system-ui,sans-serif;font-size:1.6rem;line-height:1.2}
-.bellpath .tunit{font-family:Andika,system-ui,sans-serif;font-size:1rem;font-weight:700;color:#7a6650}
+.bellpath .tname{font-family:Andika,system-ui,sans-serif;font-size:1.55rem;line-height:1.25;color:#3b2a1a}
+.bellpath .tunit{font-family:Andika,system-ui,sans-serif;font-size:1.15rem;font-weight:700;color:#5a4632}
 .bellpath .tnext{font-family:Andika,system-ui,sans-serif;font-size:1.05rem;font-weight:700;color:#9a4e00}
 .herechip{position:absolute;left:.7rem;top:.7rem;padding:.2rem .65rem;border-radius:.7rem;background:#F28C00;color:#fff;font-family:Andika,system-ui,sans-serif;font-size:1rem;font-weight:700}
 .bellpath .tpic{position:relative}
@@ -1746,14 +1746,13 @@ body.calm .ob-glow{animation:none;opacity:.85}
 .trailthumb{flex:none;width:8.2rem;height:8.2rem;border-radius:1.15rem;overflow:hidden;border:3px solid #fff;box-shadow:0 8px 18px rgba(60,40,20,.18);background:#efe7d6}
 .trailthumb img{display:block;width:100%;height:100%;object-fit:cover}
 .trailcopy{display:flex;flex-direction:column;gap:.12rem;font-family:Andika,system-ui,sans-serif}
-.trailcopy b{font-size:1.25rem}
-.trailcopy small{font-size:.95rem;font-weight:700;color:#7a6650}
+.trailcopy b{font-size:1.3rem;line-height:1.25}
 .trailcopy em{font-style:normal;font-weight:700;color:#fff;background:#F28C00;border-radius:.55rem;padding:.05rem .45rem;align-self:flex-start}
 .trailbell.side-right .trailcopy em{align-self:flex-end}
 .trailbell.here{background:#fff;box-shadow:0 0 0 4px #F28C00}
 .trailmark{position:relative;z-index:1;align-self:center;display:inline-flex;align-items:center;gap:.4rem;padding:.25rem .8rem .25rem .3rem;border-radius:999px;background:#fff6df;border:2px solid #e6c98a;color:#7a5310;font-family:Andika,system-ui,sans-serif;font-weight:700}
 .trailmark img{width:1.7rem;height:1.7rem;object-fit:contain}
-.trailreview{align-self:center;flex-direction:column;text-align:center;width:min(100%,16rem);padding:.75rem .9rem;border:3px solid #e2c48a;border-radius:1.15rem;background:linear-gradient(180deg,#fffaf0,#f4e4c4);font-family:Andika,system-ui,sans-serif;box-shadow:0 6px 0 rgba(176,124,48,.14)}
+.trailreview{align-self:center;flex-direction:column;text-align:center;width:min(100%,22rem);padding:.75rem .9rem;border:3px solid #e2c48a;border-radius:1.15rem;background:linear-gradient(180deg,#fffaf0,#f4e4c4);font-family:Andika,system-ui,sans-serif;box-shadow:0 6px 0 rgba(176,124,48,.14)}
 .trailreview b,.trailreview span{display:block}
 .trailreview b{font-size:1.15rem}
 .trailfinale{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:.4rem;margin-top:.6rem;font-family:Andika,system-ui,sans-serif}
