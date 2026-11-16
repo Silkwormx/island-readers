@@ -873,6 +873,15 @@
     }).catch(() => { counter.textContent = 'Could not load slides'; });
     show();
   }
+  /* Same color names as the home bell cards (TILES). Hex values match the card swatches. */
+  const UNIT_BELL = [null, 'gong', 'red', 'coral', 'orange', 'yellow', 'green', 'lblue', 'dblue', 'purple', 'pink', 'silver', 'red', 'coral', 'orange', 'yellow', 'green', 'lblue', 'dblue', 'purple', 'pink', 'rainbow', 'gold'];
+  const BELL_HEX = { gong: '#CD7F32', red: '#d93a2b', coral: '#f2765a', orange: '#f08a1c', yellow: '#f2c21b', green: '#2fa84f', lblue: '#5fb4ec', dblue: '#1f3f8f', purple: '#8e3fc9', pink: '#e8609a', silver: '#c0c4cc', gold: '#d4a017' };
+  const BELL_SVG = '<svg viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" stroke="#5a4632" stroke-width=".55" d="M8 1.2a.85.85 0 0 1 .85.85v.3A4.5 4.5 0 0 1 13.1 6.8v2.2l1.15 1.8H1.75L2.9 9V6.8A4.5 4.5 0 0 1 7.15 2.35v-.3A.85.85 0 0 1 8 1.2z"/><circle cx="8" cy="13.15" r="1.15" fill="currentColor" stroke="#5a4632" stroke-width=".45"/></svg>';
+  const RAIN_SVG = '<svg viewBox="0 0 16 16" aria-hidden="true"><defs><linearGradient id="pinbell-rainbow" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#d93a2b"/><stop offset=".25" stop-color="#f2c21b"/><stop offset=".5" stop-color="#2fa84f"/><stop offset=".75" stop-color="#5fb4ec"/><stop offset="1" stop-color="#8e3fc9"/></linearGradient></defs><path fill="url(#pinbell-rainbow)" stroke="#5a4632" stroke-width=".55" d="M8 1.2a.85.85 0 0 1 .85.85v.3A4.5 4.5 0 0 1 13.1 6.8v2.2l1.15 1.8H1.75L2.9 9V6.8A4.5 4.5 0 0 1 7.15 2.35v-.3A.85.85 0 0 1 8 1.2z"/><circle cx="8" cy="13.15" r="1.15" fill="url(#pinbell-rainbow)" stroke="#5a4632" stroke-width=".45"/></svg>';
+  function pinBell(n) {
+    const key = UNIT_BELL[n];
+    return h('span', { class: 'pinbell', 'aria-hidden': 'true', style: key === 'rainbow' ? '' : 'color:' + BELL_HEX[key], html: key === 'rainbow' ? RAIN_SVG : BELL_SVG });
+  }
   /* Painted trail: img/trail/trail_map.webp is 720 by 1280.
      x and y are percentages from the top-left. Nudge a label by editing its numbers. */
   const TRAIL_MAP = {
@@ -927,7 +936,7 @@
       const style = 'left:' + mark.x + '%;top:' + mark.y + '%';
       if (mark.kind === 'finale') return h('span', { class: 'trailpin finale', style: style }, 'Golden Bell');
       if (mark.kind === 'review') return h('button', { class: 'trailpin review', type: 'button', style: style, tabindex: '-1', onclick: () => { Snd.stop(); toast('Review stop after Unit ' + mark.n + ' is coming soon.'); } }, 'Review');
-      return h('button', { class: 'trailpin' + (mark.n === here ? ' here' : ''), type: 'button', style: style, tabindex: '-1', onclick: () => openTrailBell(mark.n) }, 'Unit ' + mark.n);
+      return h('button', { class: 'trailpin' + (mark.n === here ? ' here' : ''), type: 'button', style: style, tabindex: '-1', onclick: () => openTrailBell(mark.n) }, pinBell(mark.n), 'Unit ' + mark.n);
     };
     const listItem = (mark) => {
       if (mark.kind === 'finale') return h('li', null, h('span', { class: 'trailend' }, 'Golden Bell'));
