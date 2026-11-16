@@ -1420,7 +1420,32 @@ body.calm .ob-glow{animation:none;opacity:.85}
 .findgroup{margin:.8rem 0 1.1rem}
 .findgroup h2{font-size:1.25rem;margin:.2rem 0 .4rem}
 .findsoon{margin:.2rem 0 .4rem;font-weight:700;color:#6d6578}
-.trailgo{margin:.4rem 0 1rem}
+.trailpage .btn.primary.trailgo{margin:.2rem auto .8rem;display:flex;width:100%;max-width:36rem;background:#F28C00;border-color:#C95A10;box-shadow:0 5px 0 #C95A10;color:#fff;text-decoration:none}
+.trailwrap{max-width:42rem}
+.trailmap{position:relative;width:100%;margin:0 auto}
+.trailbg{display:block;width:100%;height:auto;border-radius:1.1rem}
+.stagemark,.stagebox,.herepill{position:absolute}
+.stagemark{width:2.35rem;height:2.35rem;border-radius:50%;border:3px solid #fff;transform:translate(-50%,-50%);font-weight:700;font-size:1.05rem;box-shadow:0 3px 0 rgba(43,37,64,.28);z-index:2;padding:0}
+.stagemark.st-here{outline:4px solid #F28C00;outline-offset:3px}
+.stagemark.st-later{opacity:.92}
+.stagestar{position:absolute;right:-.35rem;bottom:-.35rem;width:1rem;height:1rem;border-radius:50%;background:#FFD646;color:#B06008;display:flex;align-items:center;justify-content:center}
+.stagestar .ico{width:.7rem;height:.7rem}
+.stagebox{width:32%;max-width:13rem;transform:translateY(-50%);background:#FFF8E7;border:3px solid #2B2540;border-radius:.7rem;padding:.16rem .35rem;text-align:left;box-shadow:0 3px 0 rgba(43,37,64,.16);z-index:1;line-height:1.15}
+.stagebox.pin-top{transform:none}
+.stagebox b,.stagebox span{display:block}
+.stagebox b{font-size:clamp(.68rem,2.1vw,.86rem)}
+.stagebox span{font-size:clamp(.64rem,1.9vw,.8rem);font-weight:700;color:#2B2540}
+.herepill{transform:translateY(-50%);background:#F28C00;color:#fff;font-weight:700;font-size:clamp(.62rem,1.8vw,.78rem);border-radius:1rem;padding:.15rem .45rem;white-space:nowrap;z-index:3;box-shadow:0 3px 0 #C95A10}
+@media (max-width:520px){
+  .stagemark{width:1.7rem;height:1.7rem;font-size:.85rem;border-width:2px}
+  .stagebox{width:44%;padding:.08rem .22rem}
+  .stagebox b,.stagebox span{font-size:.62rem}
+  .stagebox.s6{top:50%!important}
+  .stagebox.s8{top:63%!important}
+  .stagebox.s9{top:76%!important}
+  .stagebox.s10{top:86%!important}
+  .herepill{font-size:.62rem;padding:.1rem .35rem}
+}
 .trailunit{margin:0 0 1rem}
 .trailunit h2{font-size:1.2rem;margin:.2rem 0 .4rem}
 .homeside{display:flex;flex-direction:column;gap:1rem}
