@@ -298,7 +298,9 @@
       b.addEventListener('click', () => { if (u6) { Snd.stop(); location.hash = '#/u6'; } else if (u5) { openIsland('i5'); } else if (isl) openIsland(BUILT_ID); else { Snd.stop(); toast(st === 'done' ? 'Unit ' + n + ' is done. It is part of the full app.' : n < BUILT ? 'Unit ' + n + ' is coming soon in the full app!' : lit ? 'Unit ' + n + ' is unlocked! It is coming soon in the full app.' : 'Unit ' + n + ' is coming soon! Finish Unit ' + BUILT + ' first.'); } });
       return b;
     };
-    const grid = h('div', { class: 'ugrid tgrid', id: 'skymap' }, ...Array.from({ length: 22 }, (_, i) => unit(i + 1)));
+    const grid = h('div', { class: 'stagegroups', id: 'skymap' }, ...TRAIL_STAGES.map((s) => h('section', { class: 'stagepanel', style: '--stage:' + s.color },
+      h('h2', { class: 'stagehead' }, 'Stage ' + s.n + ' \u00b7 ' + s.skills),
+      h('div', { class: 'ugrid tgrid' }, ...stageUnitList(s.units).map(unit)))));
     const tab = (href, name, icoName) => h('a', { class: 'hometab', href: href, 'aria-label': name },
       h('span', { class: 'hometab-ico', 'aria-hidden': 'true' }, icon(icoName)),
       h('span', { class: 'hometab-name' }, name));

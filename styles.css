@@ -1701,6 +1701,9 @@ body.calm .ob-glow{animation:none;opacity:.85}
 .tmlink,.tmlink:visited{color:var(--ink,#26324D)}
 /* Nov 3 2026: 22-unit home tiles (approved mockup). Every tile and image identical size. */
 .gridhome .tgrid{grid-auto-rows:1fr!important;align-items:stretch!important}
+.stagegroups{display:flex;flex-direction:column;gap:1.15rem;min-width:0}
+.stagepanel{border-radius:1.35rem;padding:.7rem .7rem .9rem;background:color-mix(in srgb, var(--stage) 16%, #FFF8E7)}
+.stagehead{margin:0 .2rem .65rem;font-size:1.05rem;font-weight:700;line-height:1.3;color:#2B2540}
 .tcard{display:flex;flex-direction:column;width:100%;height:100%;padding:0;border:2px solid #E6D9B8;border-radius:18px;overflow:hidden;background:#fff;font:inherit;font-family:'Andika',system-ui,sans-serif;color:#3b2a1a;text-align:left;cursor:pointer;box-shadow:0 4px 12px rgba(60,40,20,.08)}
 .tcard.t-current{border-color:#F28C00;box-shadow:0 0 0 4px rgba(242,140,0,.25)}
 .tpic{display:block;width:100%;aspect-ratio:1/1;overflow:hidden;background:#EFE7D6}
