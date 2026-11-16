@@ -34,12 +34,12 @@
     return h('button', { class: 'back homebtn', type: 'button', 'aria-label': 'Home: the world map', onclick: () => { Snd.stop(); location.hash = '#/home'; } }, icon('home'), h('span', null, 'Home'));
   }
   function gearButton() {
-    const b = h('button', { class: 'gear', type: 'button', 'aria-label': 'Grown-ups: press and hold' }, icon('gear'));
+    const b = h('button', { class: 'gear', type: 'button', 'aria-label': 'Parent and Teacher Materials. Press and hold to open.' }, icon('gear'));
     let t = null;
     const start = () => { b.classList.add('holding'); t = setTimeout(() => { b.classList.remove('holding'); openGrownups(); }, 800); };
     const stop = () => { b.classList.remove('holding'); clearTimeout(t); };
     b.addEventListener('pointerdown', start); b.addEventListener('pointerup', stop); b.addEventListener('pointerleave', stop); b.addEventListener('pointercancel', stop);
-    b.addEventListener('click', () => toast('Grown-ups: press and hold this button.'));
+    b.addEventListener('click', () => toast('Press and hold for Parent and Teacher Materials.'));
     b.addEventListener('keydown', (e) => { if (e.key === 'Enter') openGrownups(); });
     return b;
   }
@@ -132,7 +132,7 @@
     hearNg.addEventListener('click', () => IR.playPhoneme('ng')); IR.hasPhoneme('ng').then((ok) => { if (ok) hearNg.hidden = false; });
     const sc = S.check;
     openModal(h('div', { class: 'grown' },
-      h('h2', null, 'Grown-up corner'),
+      h('h2', null, 'Parent and Teacher Materials'),
       h('a', { class: 'btn big primary tmbtn', href: '#/teachers', onclick: () => { modalRoot.innerHTML = ''; } }, 'Teacher materials'),
       h('p', null, 'This is an early version of Island Readers. Unit 4 (ng and nk) is open now, and more units are on the way. Progress is saved only on this device. Nothing is sent anywhere.'),
       h('p', null, 'Check best score: ' + (sc.best == null ? 'not taken yet' : sc.best + ' of 10') + (sc.attempts ? ' (' + sc.attempts + ' tries)' : '') + '.'),
@@ -227,6 +227,38 @@
   /* sample rules: Units 1-2 count as done; the amber gem is earned when Unit 3 is finished (ng + nk + review) */
   const gemsEarned = () => { const n = [true, true, islandDone('i3')]; return GEMS.map((_, i) => !!n[i]); };
   const gemNext = () => gemsEarned().indexOf(false);
+  /* Continue opens the placement test when nothing is saved yet, otherwise the first unfinished built lesson. */
+  function continueTarget() {
+    const bell = IR.placement && IR.placement.saved ? IR.placement.saved() : null;
+    const acts = (IR.S().progress && IR.S().progress.activities) || {};
+    const any = Object.keys(acts).some((k) => acts[k] && acts[k].completed);
+    const path = [
+      { unit: 4, lesson: '4.1', href: '#/island3', done: () => IR.isDone('check') },
+      { unit: 4, lesson: '4.2', href: '#/nk', done: () => IR.isDone('nk_check') },
+      { unit: 5, lesson: '5.1', href: '#/u51', done: () => IR.isDone('u51_check') },
+      { unit: 5, lesson: '5.2', href: '#/u53', done: () => IR.isDone('u53_check') },
+      { unit: 6, lesson: '6.1', href: '#/u6/u61', done: () => IR.isDone('u61_check') },
+      { unit: 6, lesson: '6.2', href: '#/u6/u62', done: () => IR.isDone('u62_check') },
+      { unit: 6, lesson: '6.3', href: '#/u6/u63', done: () => IR.isDone('u63_check') }
+    ];
+    if (!any && !bell) return { href: '#/placement', sub: 'Find your first bell' };
+    let startAt = 0;
+    if (!any && bell) {
+      const unitForBell = bell <= 3 ? 4 : bell === 4 ? 5 : 6;
+      const i = path.findIndex((p) => p.unit >= unitForBell);
+      if (i >= 0) startAt = i;
+    }
+    for (let i = startAt; i < path.length; i++) {
+      if (!path[i].done()) return { href: path[i].href, sub: 'Unit ' + path[i].unit + ' \u00b7 Lesson ' + path[i].lesson };
+    }
+    const last = path[path.length - 1];
+    return { href: last.href, sub: 'Unit ' + last.unit + ' \u00b7 Lesson ' + last.lesson };
+  }
+  function continueButton() {
+    const go = continueTarget();
+    return h('button', { class: 'zfstart2', type: 'button', 'aria-label': 'Continue. ' + go.sub, onclick: () => { Snd.stop(); location.hash = go.href; } },
+      h('span', { class: 'zfst' }, h('b', null, 'Continue'), h('small', null, go.sub)));
+  }
   function homeScreen() {
     const S = IR.S(); IR.newScreen();
     const complete = islandDone('i3'); const earned = gemsEarned(); const nEarned = earned.filter(Boolean).length; const nx = gemNext();
@@ -238,7 +270,7 @@
     const TILES = [null,
       ['Short Vowels & Floss', 'a e i o u \u00b7 ff ll ss', 4, ['gong']], ['Blends', 'bl \u00b7 st \u00b7 tr \u00b7 -nd \u00b7 -mp', 4, ['red']],
       ['Digraphs', 'sh \u00b7 ch \u00b7 th \u00b7 wh \u00b7 ck', 2, ['coral']], ['Glued Sounds', 'ng \u00b7 nk', 3, ['orange']],
-      ['Silent e', 'a_e \u00b7 i_e \u00b7 o_e \u00b7 u_e', 2, ['yellow']], ['Endings', '-s \u00b7 -es \u00b7 -ed \u00b7 -ing', 4, ['green']],
+      ['Silent e', 'a_e \u00b7 i_e \u00b7 o_e \u00b7 u_e', 2, ['yellow']], ['Endings', '-s \u00b7 -es \u00b7 -ed \u00b7 -ing', 3, ['green']],
       ['Syllables', 'closed \u00b7 open', 3, ['lblue']], ['Tricky Sounds', 'tch \u00b7 dge \u00b7 -ild \u00b7 -old', 3, ['dblue']],
       ['Bossy R', 'ar \u00b7 or \u00b7 er \u00b7 ir \u00b7 ur', 4, ['purple']], ['More Bossy R', 'air \u00b7 are \u00b7 ear', 2, ['pink']],
       ['Long A & E Teams', 'ai \u00b7 ay \u00b7 ee \u00b7 ea \u00b7 ey', 2, ['silver']], ['Long O & I Teams', 'oa \u00b7 ow \u00b7 oe \u00b7 ie \u00b7 igh', 3, ['red', 'red']],
@@ -267,11 +299,16 @@
       return b;
     };
     const grid = h('div', { class: 'ugrid tgrid', id: 'skymap' }, ...Array.from({ length: 22 }, (_, i) => unit(i + 1)));
-    const pbox = (key, title, ico) => h('a', { class: 'pbox', href: '#/practice/' + key, 'data-kind': 'practice', 'data-id': key }, h('span', { class: 'pico', 'aria-hidden': 'true' }, ico), h('span', null, title));
-    const practice = h('aside', { class: 'practice', 'aria-label': 'Practice' }, h('h2', null, 'Practice'),
-      pbox('skills', 'Skill Practice', '\u2726'));
-    /* Nov 6 2026: full-width home feature (approved banyan scene), then About + Practice beside the unit grid */
-    const banner = h('header', { class: 'hbanner' }, h('h1', null, 'Island Readers'), IR.ui.gearButton());
+    const tab = (href, name, ico) => h('a', { class: 'hometab', href: href, 'aria-label': name },
+      ico ? h('span', { class: 'pico', 'aria-hidden': 'true' }, ico) : null,
+      h('span', { class: 'hometab-name' }, name));
+    const tabs = h('nav', { class: 'hometabs', 'aria-label': 'More places' },
+      tab('#/trail', 'Trail Map and Placement Test'),
+      tab('#/practice/sight', 'Sight Word Practice'),
+      tab('#/find', 'Find It', icon('search')));
+    /* Nov 6 2026: full-width home feature (approved banyan scene), then About + the hero beside the unit grid */
+    const banner = h('header', { class: 'hbanner' }, h('h1', null, 'Island Readers'),
+      h('div', { class: 'grownwrap' }, h('span', { class: 'grownlab' }, 'Parent and Teacher Materials'), IR.ui.gearButton()));
     /* Read-aloud for the hero text: HOME_INTRO_AUDIO recording if set, else speechSynthesis. Tap again to stop. */
     function readAloudBtn() {
       const TEXT = 'Learn to read with Zip and Frill. Ring every bell by learning its sounds. Start here to find your first bell.';
@@ -298,14 +335,12 @@
       h('div', { class: 'hfbody' },
         h('div', { class: 'zfhead' }, h('h2', { class: 'zfline' }, 'Learn to read with Zip and Frill'), readAloudBtn()),
         h('p', { class: 'zfsub' }, 'Ring every bell by learning its sounds.'),
-        h('a', { class: 'zfstart2', href: '#/placement', 'aria-label': 'Start here: find your first bell' },
-          h('span', { class: 'zfbell', 'aria-hidden': 'true' }, '\u{1F514}'),
-          h('span', { class: 'zfst' }, h('b', null, 'Start here'), h('small', null, 'Find your first bell')))));
+        continueButton()));
     const cur = complete ? BUILT + 1 : BUILT;
     const youbar = h('button', { class: 'youbar', type: 'button', 'aria-label': 'You are here: Unit ' + cur + ', ' + SKILL[cur] + '. Dots show all 22 units. ' + nEarned + ' of 10 gems. Opens the gem box.', onclick: () => { Snd.stop(); location.hash = '#/gems'; } },
       h('span', { class: 'ybtxt' }, 'You are here: ', h('b', null, 'Unit ' + cur + ' \u00b7 ' + SKILL[cur])),
       h('span', { class: 'ybdots', 'aria-hidden': 'true' }, ...TILES.slice(1).map((t, i) => h('i', { class: 'tdot td-' + t[3][0] + (i + 1 === cur ? ' ybcur' : complete && i + 1 === BUILT ? ' ybdone' : '') }))));
-    app.append(h('div', { class: 'screen home mapscreen gridhome' }, h('div', { class: 'mwrap' }, banner, h('div', { class: 'homelay' }, h('div', { class: 'homeside' }, h('a', { class: 'btn big aboutbtn', href: '#/about' }, 'About Island Readers'), hero, practice), grid)), youbar));
+    app.append(h('div', { class: 'screen home mapscreen gridhome' }, h('div', { class: 'mwrap' }, banner, h('div', { class: 'homelay' }, h('div', { class: 'homeside' }, h('a', { class: 'btn big aboutbtn', href: '#/about' }, 'About Island Readers'), hero, tabs), grid)), youbar));
     /* Nov 3 2026: the whole left sidebar (About, Start here, Practice) stays in one spot while the tiles scroll (wide layouts only). */
     const side = app.querySelector('.homeside'); const scr = app.querySelector('.screen.home');
     const pin = () => {
@@ -313,7 +348,7 @@
       side.style.top = ''; side.style.maxHeight = ''; side.style.overflowY = '';
       if (!matchMedia('(min-width:1100px)').matches) return;
       const top = Math.round(side.getBoundingClientRect().top - scr.getBoundingClientRect().top + scr.scrollTop);
-      const bar = app.querySelector('.youbar'); const barH = bar ? bar.getBoundingClientRect().height + 24 : 16;
+      const bar = app.querySelector('.youbar'); const barH = bar ? bar.getBoundingClientRect().height + 48 : 28;
       side.style.top = top + 'px'; side.style.maxHeight = Math.max(240, innerHeight - top - barH) + 'px'; side.style.overflowY = 'auto';
     };
     requestAnimationFrame(pin); window.addEventListener('resize', pin);
@@ -737,14 +772,14 @@
         p('Word chains help readers notice how changing one sound changes a word and its spelling. Mnemonics provide memorable clues for recalling sounds, while colors help readers recognize and organize spelling patterns. Puzzles encourage them to apply what they know and work through words step by step. Rhyming stories provide repeated practice with each unit\u2019s sounds in a story that makes readers want to keep going.'),
         p('Visuals, short instructions and positive feedback keep practice manageable and help build confidence. These supports draw on approaches used with learners with dyslexia, ADHD and language-processing difficulties, but can benefit many different readers.')),
       sec('How to use it',
-        p('Island Readers is a free-to-try phonics app that teaches reading skills directly and in order. Readers join Zip, a gecko inventor, and Frill, a nudibranch, on an adventure across the islands. Each island has a bell, and readers ring it by learning that unit\u2019s sounds. It is made for older kids, so it looks like an adventure, not a baby book. English learners can use it too.'),
-        p('It is a free web app that can be added to the home screen. It runs on the phones, tablets and Chromebooks families and schools already have, with no app store and no cost to install.'),
+        p('Island Readers is a phonics app that teaches reading skills directly and in order. Readers join Zip, a gecko inventor, and Frill, a nudibranch, on an adventure across the islands. Each island has a bell, and readers ring it by learning that unit\u2019s sounds. It is made for older kids, so it looks like an adventure, not a baby book. English learners can use it too.'),
+        p('It is a web app that can be added to the home screen. It runs on the phones, tablets and Chromebooks families and schools already have, with no app store needed.'),
         ul('Plan about 20\u201330 minutes a session. Steps are short, and it is fine to take breaks.',
           'Each unit starts with a lesson: I do (Zip shows the skill), we do (you try it together), you do (you try it on your own).',
           'Next come practice activities, a story to read with only the sounds already taught, and heart words (tricky words to learn by heart).',
           ['At the end, Zip\u2019s Check asks 10 quick questions: ', h('b', null, '9\u201310'), ' move on, ', h('b', null, '7\u20138'), ' review first, ', h('b', null, '6 or below'), ' re-teach the lesson.'],
           'Stars and gems show progress. Grown-up tips appear under each activity.',
-          'Not sure where to start? Tap “Start here to find your first bell” on the home screen. A grown-up sits with the reader, who reads short groups of real and made-up words in the same order as the units. A group passes at 4 of 5, and the check stops at the first group that is hard, which shows the starting bell. It takes about 5 minutes. Only the starting bell is saved, on this device. Nothing is recorded or sent, and the microphone is not used.')),
+          'Not sure where to start? Tap Continue on the home screen. A grown-up sits with the reader, who reads short groups of real and made-up words in the same order as the units. A group passes at 4 of 5, and the check stops at the first group that is hard, which shows the starting bell. It takes about 5 minutes. Only the starting bell is saved, on this device. Nothing is recorded or sent, and the microphone is not used.')),
       sec('The research behind it',
         ul(['The National Reading Panel (2000) reviewed the research and found that systematic phonics instruction helps children learn to read. (', a('https://www.nichd.nih.gov/publications/pubs/nrp/smallbook', 'NICHD: National Reading Panel report'), ')'],
           ['The Simple View of Reading (Gough & Tunmer, 1986): reading comprehension depends on both decoding words and understanding language. Island Readers builds the decoding side. (', a('https://doi.org/10.1177/074193258600700104', 'Gough & Tunmer, 1986'), ')'],
@@ -821,6 +856,124 @@
     }).catch(() => { counter.textContent = 'Could not load slides'; });
     show();
   }
+  function islandTrailPage() {
+    const rows = [
+      { unit: 4, name: 'Glued Sounds', lessons: [{ n: '4.1', name: 'ng', href: '#/island3' }, { n: '4.2', name: 'nk', href: '#/nk' }] },
+      { unit: 5, name: 'Silent e', lessons: [{ n: '5.1', name: 'Silent e', href: '#/u51' }, { n: '5.2', name: 'Tricky silent e', href: '#/u53' }] },
+      { unit: 6, name: 'Endings', lessons: [{ n: '6.1', name: '-s and -es', href: '#/u6/u61' }, { n: '6.2', name: '-ed', href: '#/u6/u62' }, { n: '6.3', name: '-ing', href: '#/u6/u63' }] }
+    ];
+    const open = rows.map((u) => h('section', { class: 'trailunit' },
+      h('h2', null, 'Unit ' + u.unit + ' \u00b7 ' + u.name),
+      ...u.lessons.map((L) => h('a', { class: 'hometab', href: L.href }, h('span', { class: 'hometab-name' }, 'Lesson ' + L.n + ' \u00b7 ' + L.name)))));
+    return simplePage('Trail Map and Placement Test',
+      h('p', { class: 'calm' }, 'The trail follows the units in order. Take the placement test to find a starting bell.'),
+      h('a', { class: 'btn big primary trailgo', href: '#/placement' }, 'Take the placement test'),
+      ...open,
+      h('p', { class: 'calm' }, 'Units 1 to 3 and units 7 to 22 are coming soon.'));
+  }
+  function findCatalog() {
+    const skills = skillCatalog();
+    const bag = (id) => ((skills.filter((s) => s.id === id)[0] || {}).items || []).filter((it) => it.href);
+    const link = (title, href) => ({ title: title, href: href });
+    const from = (items) => items.map((it) => link('Unit ' + it.unit + ' \u00b7 Lesson ' + it.lesson + ' \u00b7 ' + it.name + (it.title ? ' \u00b7 ' + it.title : ''), it.href));
+    const lessons = [
+      link('Unit 4 \u00b7 Lesson 4.1 \u00b7 ng', '#/island3'),
+      link('Unit 4 \u00b7 Lesson 4.2 \u00b7 nk', '#/nk'),
+      link('Unit 5 \u00b7 Lesson 5.1 \u00b7 Silent e', '#/u51'),
+      link('Unit 5 \u00b7 Lesson 5.2 \u00b7 Tricky silent e', '#/u53'),
+      link('Unit 6 \u00b7 Lesson 6.1 \u00b7 -s and -es', '#/u6/u61'),
+      link('Unit 6 \u00b7 Lesson 6.2 \u00b7 -ed', '#/u6/u62'),
+      link('Unit 6 \u00b7 Lesson 6.3 \u00b7 -ing', '#/u6/u63')
+    ];
+    const comp = [];
+    if ((IR.nk && IR.nk.steps || []).some((s) => s.id === 'comp')) comp.push(link('Unit 4 \u00b7 Lesson 4.2 \u00b7 Story Check', '#/nk/comp'));
+    (IR.u5Lessons || []).forEach((L) => {
+      if ((L.steps || []).some((s) => s.id === 'comp')) comp.push(link('Unit 5 \u00b7 Lesson ' + L.n + ' \u00b7 Story Check', '#/' + L.key + '/comp'));
+    });
+    const mixed = bag('pa').concat(bag('spelling'), bag('rhyme'), bag('fluency'));
+    const unit5 = lessons.filter((L) => L.title.indexOf('Unit 5') === 0).concat(from(mixed.filter((it) => it.unit === 5)));
+    const unit6 = lessons.filter((L) => L.title.indexOf('Unit 6') === 0).concat(from(mixed.filter((it) => it.unit === 6)));
+    const stories = fluencyStories().map((s) => link(s.lesson + (s.title ? ' \u00b7 ' + s.title : ''), s.href));
+    const games = from(bag('pa').concat(bag('spelling'), bag('rhyme'), bag('fluency').filter((it) => it.type !== 'Fluency')));
+    return {
+      topic: [
+        { name: 'Short Vowels', items: [] },
+        { name: 'Blends', items: [] },
+        { name: 'Digraphs', items: [] },
+        { name: 'Magic e', items: unit5 },
+        { name: 'Endings', items: unit6 },
+        { name: 'Spelling', items: from(bag('spelling')) },
+        { name: 'Rhyme', items: from(bag('rhyme')) },
+        { name: 'Phonemic Awareness', items: from(bag('pa')) },
+        { name: 'Word Families', items: [] },
+        { name: 'Fluency', items: stories },
+        { name: 'Comprehension', items: comp }
+      ],
+      unit: lessons,
+      activity: [
+        { name: 'Lessons', items: lessons },
+        { name: 'Games', items: games },
+        { name: 'Stories', items: stories },
+        { name: 'Comprehension', items: comp },
+        { name: 'Worksheets', items: [] }
+      ]
+    };
+  }
+  function findScreen() {
+    IR.newScreen();
+    const data = findCatalog();
+    const back = h('button', { class: 'back homebtn', type: 'button', onclick: () => { location.hash = '#/home'; } }, icon('back'), h('span', null, 'Home'));
+    const input = h('input', { class: 'skillsearch', type: 'search', placeholder: 'Search', 'aria-label': 'Search lessons, games, and stories' });
+    const tabs = h('div', { class: 'findtabs', role: 'tablist' });
+    const host = h('div', { class: 'findhost' });
+    const modes = [['topic', 'By Topic / Skill'], ['unit', 'By Unit and Lesson'], ['activity', 'By Activity']];
+    let mode = 'topic';
+    function row(it) {
+      return h('a', { class: 'hometab', href: it.href }, h('span', { class: 'hometab-name' }, it.title));
+    }
+    function group(name, items) {
+      const body = items.length
+        ? items.map(row)
+        : [h('p', { class: 'findsoon' }, 'Coming soon')];
+      return h('section', { class: 'findgroup' }, h('h2', null, name), ...body);
+    }
+    function paint() {
+      host.innerHTML = '';
+      const q = input.value.trim().toLowerCase();
+      if (mode === 'unit') {
+        const hits = data.unit.filter((it) => !q || it.title.toLowerCase().indexOf(q) >= 0);
+        host.append(h('section', { class: 'findgroup' }, h('h2', null, 'Open lessons'), ...(hits.length ? hits.map(row) : [h('p', { class: 'findsoon' }, 'No lessons match.')])));
+        if (!q) host.append(h('p', { class: 'calm' }, 'Units 1 to 3 and units 7 to 22 are coming soon.'));
+        return;
+      }
+      const groups = data[mode];
+      groups.forEach((g) => {
+        const items = g.items.filter((it) => !q || (g.name + ' ' + it.title).toLowerCase().indexOf(q) >= 0);
+        if (q && !items.length && g.name.toLowerCase().indexOf(q) < 0) return;
+        host.append(group(g.name, q ? items : g.items));
+      });
+      if (!host.childElementCount) host.append(h('p', { class: 'calm' }, 'No matches.'));
+    }
+    modes.forEach(([id, label]) => {
+      const b = h('button', { class: 'findtab' + (id === mode ? ' on' : ''), type: 'button', role: 'tab', 'aria-selected': id === mode ? 'true' : 'false' }, label);
+      b.addEventListener('click', () => {
+        mode = id;
+        tabs.querySelectorAll('.findtab').forEach((el, i) => {
+          const on = modes[i][0] === mode;
+          el.classList.toggle('on', on);
+          el.setAttribute('aria-selected', on ? 'true' : 'false');
+        });
+        paint();
+      });
+      tabs.append(b);
+    });
+    input.addEventListener('input', paint);
+    paint();
+    app.append(h('div', { class: 'screen home simplepage findpage' }, h('div', { class: 'mwrap' },
+      h('div', { class: 'gtop' }, back),
+      h('h1', null, 'Find It'),
+      input, tabs, host)));
+  }
   /* ---------- router ---------- */
   let lastRouted = '';
   function route() {
@@ -841,6 +994,8 @@
     else if ((m = /^#\/practice\/(\w+)/.exec(hash))) practiceScreen(m[1]);
     else if (hash.startsWith('#/gems')) gemScreen();
     else if (hash.startsWith('#/about')) aboutScreen();
+    else if (hash.startsWith('#/trail')) islandTrailPage();
+    else if (hash.startsWith('#/find')) findScreen();
     else if ((m = /^#\/teachers\/slides\/(ng|nk)$/.exec(hash))) slidesViewer(m[1]);
     else if (hash.startsWith('#/teachers')) { if (IR._slideCleanup) { IR._slideCleanup(); IR._slideCleanup = null; } teachersScreen(); }
     else if (hash.startsWith('#/placement')) IR.placement.render(app, (n) => { const id = 'i' + n; if ((D.islands || {})[id]) { location.hash = '#/home'; setTimeout(() => openIsland(id), 0); } else { location.hash = '#/home'; setTimeout(() => toast('Unit ' + n + ' (' + ({1:'blends',2:'sh ch th',3:'ng nk',4:'silent e',5:'long words',6:'bossy r',7:'vowel teams',8:'oi ow aw',9:'word parts',10:'tch dge igh'})[n] + ') is coming soon in the full app. Try Unit 3 for now.'), 50); } });

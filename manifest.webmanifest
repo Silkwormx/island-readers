@@ -1,7 +1,7 @@
 {
-  "name": "Island Readers — Phonics for older struggling readers",
+  "name": "Island Readers: Building Reading Confidence Through Phonics",
   "short_name": "Island Readers",
-  "description": "Free phonics app for older kids who missed the reading basics, with extra support for readers who struggle with attention or dyslexia.",
+  "description": "A phonics app that helps older kids revisit the reading skills they need, with stories, puzzles and games that respect their age.",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
