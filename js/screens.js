@@ -295,7 +295,8 @@
         h('span', { class: 'tbody' },
           h('span', { class: 'tname' }, 'Unit ' + n),
           h('span', { class: 'tskill' }, t[0]),
-          h('span', { class: 'tsnd' }, ...t[1].split(' \u00b7 ').map((x, i, a) => h('span', null, x + (i < a.length - 1 ? ' \u00b7' : ''))))));
+          h('span', { class: 'tsnd' }, ...t[1].split(' \u00b7 ').map((x, i, a) => h('span', null, x + (i < a.length - 1 ? ' \u00b7' : '')))),
+          h('span', { class: 'tcount' }, t[2] + (t[2] === 1 ? ' lesson' : ' lessons'))));
       b.addEventListener('click', () => { if (u6) { Snd.stop(); location.hash = '#/u6'; } else if (u5) { openIsland('i5'); } else if (isl) openIsland(BUILT_ID); else { Snd.stop(); toast(st === 'done' ? 'Unit ' + n + ' is done. It is part of the full app.' : n < BUILT ? 'Unit ' + n + ' is coming soon in the full app!' : lit ? 'Unit ' + n + ' is unlocked! It is coming soon in the full app.' : 'Unit ' + n + ' is coming soon! Finish Unit ' + BUILT + ' first.'); } });
       return b;
     };
