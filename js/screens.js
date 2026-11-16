@@ -293,7 +293,8 @@
         h('span', { class: 'tpic' }, h('img', { src: 'img/units/tile' + String(n).padStart(2, '0') + '.webp', alt: '', width: 600, height: 600, loading: n > 8 ? 'lazy' : 'eager' }),
           st === 'here' ? h('span', { class: 'herechip' }, 'You are here') : null),
         h('span', { class: 'tbody' },
-          h('span', { class: 'tname' }, 'Unit ' + n + ' \u00b7 ' + t[0]),
+          h('span', { class: 'tname' }, 'Unit ' + n),
+          h('span', { class: 'tskill' }, t[0]),
           h('span', { class: 'tsnd' }, ...t[1].split(' \u00b7 ').map((x, i, a) => h('span', null, x + (i < a.length - 1 ? ' \u00b7' : '')))),
           h('span', { class: 'tmeta' }, t[2] + (t[2] === 1 ? ' lesson' : ' lessons') + ' \u00b7 ' + note),
           st === 'here' ? h('span', { class: 'tnext' }, 'Tap this bell') : null));
@@ -308,7 +309,8 @@
       const b = h('button', { class: 'tcard reviewstop', type: 'button', 'aria-label': 'Review stop after ' + skill + '. A rest for extra practice. Coming soon.' },
         h('span', { class: 'tbody' },
           h('span', { class: 'tname' }, 'Review stop'),
-          h('span', { class: 'tunit' }, 'A rest after Unit ' + n + ' \u00b7 ' + skill),
+          h('span', { class: 'tskill' }, 'After Unit ' + n),
+          h('span', { class: 'tunit' }, skill),
           h('span', { class: 'tsnd' }, 'Extra practice'),
           h('span', { class: 'tmeta' }, 'Coming soon')));
       b.addEventListener('click', () => { Snd.stop(); toast('Review stop after ' + skill + ' is coming soon.'); });
@@ -900,11 +902,11 @@
       const label = 'Unit ' + n + ', ' + name + (n === here ? '. You are here.' : '.') + ' Opens this bell.';
       return h('button', { class: 'trailbell side-' + side + (n === here ? ' here' : ''), type: 'button', 'aria-label': label, onclick: () => openTrailBell(n) },
         h('span', { class: 'trailthumb' }, h('img', { src: 'img/units/tile' + String(n).padStart(2, '0') + '.webp', alt: '' })),
-        h('span', { class: 'trailcopy' }, h('b', null, 'Unit ' + n + ' \u00b7 ' + name), n === here ? h('em', null, 'You are here') : null));
+        h('span', { class: 'trailcopy' }, h('b', null, 'Unit ' + n), h('span', { class: 'trailskill' }, name), n === here ? h('em', null, 'You are here') : null));
     };
     const mark = (n) => h('div', { class: 'trailmark', 'aria-label': 'Treasure. ' + n + ' bells.' }, h('img', { src: 'img/gem_10_gold.webp', alt: '' }), h('span', null, n + ' bells'));
     const review = (n) => h('button', { class: 'trailreview', type: 'button', 'aria-label': 'Review stop after ' + UNIT_NAMES[n] + '. A rest for extra practice. Coming soon.', onclick: () => { Snd.stop(); toast('Review stop after ' + UNIT_NAMES[n] + ' is coming soon.'); } },
-      h('b', null, 'Review stop'), h('span', null, 'A rest after Unit ' + n + ' \u00b7 ' + UNIT_NAMES[n]));
+      h('b', null, 'Review stop'), h('span', { class: 'trailskill' }, 'After Unit ' + n), h('span', { class: 'trailskill' }, UNIT_NAMES[n]));
     for (let n = 1; n <= 22; n++) {
       bits.push(bell(n));
       if (n % 4 === 0) bits.push(mark(n));
