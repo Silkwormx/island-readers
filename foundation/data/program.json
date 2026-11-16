@@ -266,7 +266,7 @@
       "sound": "/h/ as in hibiscus",
       "keyword": "hibiscus",
       "character": "Hana the hibiscus",
-      "concept": "A red hibiscus plant with a tall stem and one bent stem that arches down like the hump of an h.",
+      "concept": "A hibiscus plant with a red flower on top of a very tall straight stem. Lower down, one short stem arches over and down like the hump of an h. The tall stem rises high above the hump.",
       "chant": "Hana the hibiscus huffs: /h/ /h/ /h/!",
       "action": "Hold your hand in front of your mouth and feel the warm /h/ breath.",
       "formation": "Start at the top line and pull straight down. Go back up, hump over and down.",
@@ -289,14 +289,14 @@
       "letter": "l",
       "capital": "L",
       "group": "G5",
-      "sound": "/l/ as in lighthouse",
-      "keyword": "lighthouse",
-      "character": "Lani the lighthouse",
-      "concept": "A tall white island lighthouse standing straight and proud from top line to bottom line.",
-      "chant": "Lani the lighthouse lights the way: /lll/!",
-      "action": "Hold one arm straight up and sing /lll/ with your tongue behind your top teeth.",
-      "formation": "Start at the top line and pull straight down to the bottom line.",
-      "art": "img/letters/l_lani_lighthouse.jpg"
+      "sound": "/l/ as in lily",
+      "keyword": "lily",
+      "character": "Lili the lily",
+      "concept": "A tall, slim island lily, like the white lilies that bloom on Okinawa's islands in spring. Her straight green stem is the l, with long leaves hugging her sides and a white trumpet flower on top like a sun hat.",
+      "chant": "Lili the lily grows up tall: /lll/!",
+      "action": "Stand tall, stretch one arm straight up like a lily stem and sing /lll/ with your tongue behind your top teeth.",
+      "formation": "Start at the top line and pull straight down to the bottom line. Tall and straight like Lili.",
+      "art": "img/letters/l_lili_lily.jpg"
     },
     {
       "letter": "w",
@@ -2887,14 +2887,14 @@
             "scripts": [
               "Show the plain h with a faint outline of Hana behind it. Say: 'Can you still see Hana? This is h.' Then cover the picture: 'What does this letter say?' The child says /h/ from the letter alone.",
               "Show the plain r with a faint outline of Ruri behind it. Say: 'Can you still see Ruri? This is r.' Then cover the picture: 'What does this letter say?' The child says /r/ from the letter alone.",
-              "Show Lani beside the plain letter l. Say: 'Lani makes a l shape. This is l. l says /l/.' Child traces the letter l drawn over Lani, then traces the plain l.",
+              "Show Lili beside the plain letter l. Say: 'Lili makes a l shape. This is l. l says /l/.' Child traces the letter l drawn over Lili, then traces the plain l.",
               "Show Wawa beside the plain letter w. Say: 'Wawa makes a w shape. This is w. w says /w/.' Child traces the letter w drawn over Wawa, then traces the plain w."
             ],
             "cover_checks": [
               "Cover Hana: child says /h/ from the plain h.",
               "Cover Ruri: child says /r/ from the plain r."
             ],
-            "error_correction": "Cue with words or a gesture, never the picture: h: 'Think of Hana' + hand in front of mouth. r: 'Think of Ruri' + running fists. l: 'Think of Lani' + arm straight up. w: 'Think of Wawa' + wave hand. Then back to the plain letter.",
+            "error_correction": "Cue with words or a gesture, never the picture: h: 'Think of Hana' + hand in front of mouth. r: 'Think of Ruri' + running fists. l: 'Think of Lili' + arm straight up like a lily stem. w: 'Think of Wawa' + wave hand. Then back to the plain letter.",
             "words_and_sentences": "Plain text only. No character pictures on any word or sentence.",
             "mastery_check": ""
           },
@@ -2934,12 +2934,12 @@
             {
               "step": "Meet the letter: picture, chant, action",
               "minutes": 3,
-              "what_to_do": "Lani beside the plain l: 'Lani makes an l shape. This is l. l says /l/.' Chant, action. Wawa beside the plain w: 'Wawa makes a w shape. This is w. w says /w/.' Chant, action. Plain h over a faint Hana: 'Can you still see Hana? This is h.' Cover Hana: child says /h/ from the letter alone. Plain r over a faint Ruri: 'Can you still see Ruri? This is r.' Cover Ruri: child says /r/ from the letter alone."
+              "what_to_do": "Lili beside the plain l: 'Lili makes an l shape. This is l. l says /l/.' Chant, action. Wawa beside the plain w: 'Wawa makes a w shape. This is w. w says /w/.' Chant, action. Plain h over a faint Hana: 'Can you still see Hana? This is h.' Cover Hana: child says /h/ from the letter alone. Plain r over a faint Ruri: 'Can you still see Ruri? This is r.' Cover Ruri: child says /r/ from the letter alone."
             },
             {
               "step": "Trace and write",
               "minutes": 3,
-              "what_to_do": "Trace the letter drawn over the character (l, w), then trace the plain letter, then write it 3 times on lines saying the path aloud. l: Start at the top line and pull straight down to the bottom line. / w: Start at the middle line. Slant down, slant up, slant down, slant up."
+              "what_to_do": "Trace the letter drawn over the character (l, w), then trace the plain letter, then write it 3 times on lines saying the path aloud. l: Start at the top line and pull straight down to the bottom line. Tall and straight like Lili. / w: Start at the middle line. Slant down, slant up, slant down, slant up."
             },
             {
               "step": "Blend and read words",
@@ -3021,14 +3021,14 @@
             "scripts": [
               "Plain h only, in 2-3 fonts plus the capital H. Say: 'Same letter, different clothes. What does it say?'",
               "Plain r only, in 2-3 fonts plus the capital R. Say: 'Same letter, different clothes. What does it say?'",
-              "Show the plain l with a faint outline of Lani behind it. Say: 'Can you still see Lani? This is l.' Then cover the picture: 'What does this letter say?' The child says /l/ from the letter alone.",
+              "Show the plain l with a faint outline of Lili behind it. Say: 'Can you still see Lili? This is l.' Then cover the picture: 'What does this letter say?' The child says /l/ from the letter alone.",
               "Show the plain w with a faint outline of Wawa behind it. Say: 'Can you still see Wawa? This is w.' Then cover the picture: 'What does this letter say?' The child says /w/ from the letter alone."
             ],
             "cover_checks": [
-              "Cover Lani: child says /l/ from the plain l.",
+              "Cover Lili: child says /l/ from the plain l.",
               "Cover Wawa: child says /w/ from the plain w."
             ],
-            "error_correction": "Cue with words or a gesture, never the picture: h: 'Think of Hana' + hand in front of mouth. r: 'Think of Ruri' + running fists. l: 'Think of Lani' + arm straight up. w: 'Think of Wawa' + wave hand. Then back to the plain letter.",
+            "error_correction": "Cue with words or a gesture, never the picture: h: 'Think of Hana' + hand in front of mouth. r: 'Think of Ruri' + running fists. l: 'Think of Lili' + arm straight up like a lily stem. w: 'Think of Wawa' + wave hand. Then back to the plain letter.",
             "words_and_sentences": "Plain text only. No character pictures on any word or sentence.",
             "mastery_check": ""
           },
@@ -3054,7 +3054,7 @@
             {
               "step": "Meet the letter: picture, chant, action",
               "minutes": 3,
-              "what_to_do": "Plain l over a faint Lani: 'Can you still see Lani? This is l.' Cover Lani: child says /l/ from the letter alone. Plain w over a faint Wawa: 'Can you still see Wawa? This is w.' Cover Wawa: child says /w/ from the letter alone. Plain-only check for h, r: 2-3 fonts plus capitals. Heart words: his, has, of. Tap the regular sounds, put a heart over the tricky part."
+              "what_to_do": "Plain l over a faint Lili: 'Can you still see Lili? This is l.' Cover Lili: child says /l/ from the letter alone. Plain w over a faint Wawa: 'Can you still see Wawa? This is w.' Cover Wawa: child says /w/ from the letter alone. Plain-only check for h, r: 2-3 fonts plus capitals. Heart words: his, has, of. Tap the regular sounds, put a heart over the tricky part."
             },
             {
               "step": "Trace and write",
@@ -3130,7 +3130,7 @@
               "Plain w only, in 2-3 fonts plus the capital W. Say: 'Same letter, different clothes. What does it say?'"
             ],
             "cover_checks": [],
-            "error_correction": "Cue with words or a gesture, never the picture: h: 'Think of Hana' + hand in front of mouth. r: 'Think of Ruri' + running fists. l: 'Think of Lani' + arm straight up. w: 'Think of Wawa' + wave hand. Then back to the plain letter.",
+            "error_correction": "Cue with words or a gesture, never the picture: h: 'Think of Hana' + hand in front of mouth. r: 'Think of Ruri' + running fists. l: 'Think of Lili' + arm straight up like a lily stem. w: 'Think of Wawa' + wave hand. Then back to the plain letter.",
             "words_and_sentences": "Plain text only. No character pictures on any word or sentence.",
             "mastery_check": "Plain letters only (no pictures, no outlines)."
           },
@@ -6587,14 +6587,14 @@
         "scripts": [
           "Show the plain h with a faint outline of Hana behind it. Say: 'Can you still see Hana? This is h.' Then cover the picture: 'What does this letter say?' The child says /h/ from the letter alone.",
           "Show the plain r with a faint outline of Ruri behind it. Say: 'Can you still see Ruri? This is r.' Then cover the picture: 'What does this letter say?' The child says /r/ from the letter alone.",
-          "Show Lani beside the plain letter l. Say: 'Lani makes a l shape. This is l. l says /l/.' Child traces the letter l drawn over Lani, then traces the plain l.",
+          "Show Lili beside the plain letter l. Say: 'Lili makes a l shape. This is l. l says /l/.' Child traces the letter l drawn over Lili, then traces the plain l.",
           "Show Wawa beside the plain letter w. Say: 'Wawa makes a w shape. This is w. w says /w/.' Child traces the letter w drawn over Wawa, then traces the plain w."
         ],
         "cover_checks": [
           "Cover Hana: child says /h/ from the plain h.",
           "Cover Ruri: child says /r/ from the plain r."
         ],
-        "error_correction": "Cue with words or a gesture, never the picture: h: 'Think of Hana' + hand in front of mouth. r: 'Think of Ruri' + running fists. l: 'Think of Lani' + arm straight up. w: 'Think of Wawa' + wave hand. Then back to the plain letter.",
+        "error_correction": "Cue with words or a gesture, never the picture: h: 'Think of Hana' + hand in front of mouth. r: 'Think of Ruri' + running fists. l: 'Think of Lili' + arm straight up like a lily stem. w: 'Think of Wawa' + wave hand. Then back to the plain letter.",
         "words_and_sentences": "Plain text only. No character pictures on any word or sentence.",
         "mastery_check": ""
       }
@@ -6800,14 +6800,14 @@
         "scripts": [
           "Plain h only, in 2-3 fonts plus the capital H. Say: 'Same letter, different clothes. What does it say?'",
           "Plain r only, in 2-3 fonts plus the capital R. Say: 'Same letter, different clothes. What does it say?'",
-          "Show the plain l with a faint outline of Lani behind it. Say: 'Can you still see Lani? This is l.' Then cover the picture: 'What does this letter say?' The child says /l/ from the letter alone.",
+          "Show the plain l with a faint outline of Lili behind it. Say: 'Can you still see Lili? This is l.' Then cover the picture: 'What does this letter say?' The child says /l/ from the letter alone.",
           "Show the plain w with a faint outline of Wawa behind it. Say: 'Can you still see Wawa? This is w.' Then cover the picture: 'What does this letter say?' The child says /w/ from the letter alone."
         ],
         "cover_checks": [
-          "Cover Lani: child says /l/ from the plain l.",
+          "Cover Lili: child says /l/ from the plain l.",
           "Cover Wawa: child says /w/ from the plain w."
         ],
-        "error_correction": "Cue with words or a gesture, never the picture: h: 'Think of Hana' + hand in front of mouth. r: 'Think of Ruri' + running fists. l: 'Think of Lani' + arm straight up. w: 'Think of Wawa' + wave hand. Then back to the plain letter.",
+        "error_correction": "Cue with words or a gesture, never the picture: h: 'Think of Hana' + hand in front of mouth. r: 'Think of Ruri' + running fists. l: 'Think of Lili' + arm straight up like a lily stem. w: 'Think of Wawa' + wave hand. Then back to the plain letter.",
         "words_and_sentences": "Plain text only. No character pictures on any word or sentence.",
         "mastery_check": ""
       }
@@ -7014,7 +7014,7 @@
           "Plain w only, in 2-3 fonts plus the capital W. Say: 'Same letter, different clothes. What does it say?'"
         ],
         "cover_checks": [],
-        "error_correction": "Cue with words or a gesture, never the picture: h: 'Think of Hana' + hand in front of mouth. r: 'Think of Ruri' + running fists. l: 'Think of Lani' + arm straight up. w: 'Think of Wawa' + wave hand. Then back to the plain letter.",
+        "error_correction": "Cue with words or a gesture, never the picture: h: 'Think of Hana' + hand in front of mouth. r: 'Think of Ruri' + running fists. l: 'Think of Lili' + arm straight up like a lily stem. w: 'Think of Wawa' + wave hand. Then back to the plain letter.",
         "words_and_sentences": "Plain text only. No character pictures on any word or sentence.",
         "mastery_check": "Plain letters only (no pictures, no outlines)."
       }
