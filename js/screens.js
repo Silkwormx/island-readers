@@ -303,19 +303,28 @@
     };
     const reviewStop = (n) => {
       const skill = TILES[n][0];
-      const b = h('button', { class: 'tcard reviewstop', type: 'button', 'aria-label': 'Review stop after Unit ' + n + ', ' + skill + '. Coming soon.' },
-        h('span', { class: 'tbody' },
-          h('span', { class: 'tname' }, 'Review stop'),
-          h('span', { class: 'tskill' }, 'After Unit ' + n)));
+      const b = h('button', { class: 'reviewband', type: 'button', 'aria-label': 'Review stop after Unit ' + n + ', ' + skill + '. Coming soon.' },
+        h('span', { class: 'reviewband-ico', 'aria-hidden': 'true' }, icon('book')),
+        h('span', null, 'Review stop'),
+        h('span', { class: 'reviewband-sub' }, 'After Unit ' + n));
       b.addEventListener('click', () => { Snd.stop(); toast('Review stop after Unit ' + n + ' is coming soon.'); });
       return b;
     };
-    const stops = [];
+    const blocks = [];
+    let row = [];
+    let pendingReview = 0;
+    const flush = () => { if (row.length) { blocks.push(h('div', { class: 'bellgrid' }, ...row)); row = []; } };
     for (let n = 1; n <= 22; n++) {
-      stops.push(unit(n));
-      if (n === 5 || n === 12 || n === 20) stops.push(reviewStop(n));
+      row.push(unit(n));
+      if (n === 5 || n === 12 || n === 20) pendingReview = n;
+      if (row.length === 3) {
+        flush();
+        if (pendingReview) { blocks.push(reviewStop(pendingReview)); pendingReview = 0; }
+      }
     }
-    const grid = h('div', { class: 'bellpath', id: 'skymap' }, ...stops);
+    flush();
+    if (pendingReview) blocks.push(reviewStop(pendingReview));
+    const grid = h('div', { class: 'bellpath', id: 'skymap' }, ...blocks);
     const tab = (href, name, icoName) => h('a', { class: 'hometab', href: href, 'aria-label': name },
       h('span', { class: 'hometab-ico', 'aria-hidden': 'true' }, icon(icoName)),
       h('span', { class: 'hometab-name' }, name));
