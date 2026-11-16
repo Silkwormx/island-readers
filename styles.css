@@ -1416,8 +1416,8 @@ body.calm .ob-glow{animation:none;opacity:.85}
 .hometab .pico,.hometab .ico{color:#F28C00;flex:none}
 .hometab-name{font-size:1.05rem;line-height:1.25}
 .hometabs .hometab-name{text-align:center}
-.findtabs{display:flex;flex-direction:column;gap:.4rem;margin:.6rem 0}
-.findtab{min-height:3rem;border:3px solid var(--ink);border-radius:1rem;background:#fff;font-weight:700;padding:.4rem .8rem}
+.findtabs{display:flex;flex-flow:row wrap;gap:.45rem;margin:.6rem 0}
+.findtab{flex:1 1 9.5rem;min-height:3rem;border:3px solid var(--ink);border-radius:1rem;background:#fff;font:inherit;font-weight:700;padding:.45rem .8rem;text-align:center;cursor:pointer}
 .findtab.on{background:#F28C00;color:#fff;border-color:#C95A10}
 .findgroup{margin:.8rem 0 1.1rem}
 .findgroup h2{font-size:1.25rem;margin:.2rem 0 .4rem}
