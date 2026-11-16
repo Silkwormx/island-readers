@@ -301,30 +301,9 @@
       b.addEventListener('click', () => { if (u6) { Snd.stop(); location.hash = '#/u6'; } else if (u5) { openIsland('i5'); } else if (isl) openIsland(BUILT_ID); else { Snd.stop(); toast(st === 'done' ? 'Unit ' + n + ' is done. It is part of the full app.' : n < BUILT ? 'Unit ' + n + ' is coming soon in the full app!' : lit ? 'Unit ' + n + ' is unlocked! It is coming soon in the full app.' : 'Unit ' + n + ' is coming soon! Finish Unit ' + BUILT + ' first.'); } });
       return b;
     };
-    const reviewStop = (n) => {
-      const skill = TILES[n][0];
-      const b = h('button', { class: 'reviewband', type: 'button', 'aria-label': 'Review stop after Unit ' + n + ', ' + skill + '. Coming soon.' },
-        h('span', { class: 'reviewband-ico', 'aria-hidden': 'true' }, icon('book')),
-        h('span', null, 'Review stop'),
-        h('span', { class: 'reviewband-sub' }, 'After Unit ' + n));
-      b.addEventListener('click', () => { Snd.stop(); toast('Review stop after Unit ' + n + ' is coming soon.'); });
-      return b;
-    };
-    const blocks = [];
-    let row = [];
-    let pendingReview = 0;
-    const flush = () => { if (row.length) { blocks.push(h('div', { class: 'bellgrid' }, ...row)); row = []; } };
-    for (let n = 1; n <= 22; n++) {
-      row.push(unit(n));
-      if (n === 5 || n === 12 || n === 20) pendingReview = n;
-      if (row.length === 3) {
-        flush();
-        if (pendingReview) { blocks.push(reviewStop(pendingReview)); pendingReview = 0; }
-      }
-    }
-    flush();
-    if (pendingReview) blocks.push(reviewStop(pendingReview));
-    const grid = h('div', { class: 'bellpath', id: 'skymap' }, ...blocks);
+    const cards = [];
+    for (let n = 1; n <= 22; n++) cards.push(unit(n));
+    const grid = h('div', { class: 'bellpath', id: 'skymap' }, h('div', { class: 'bellgrid' }, ...cards));
     const tab = (href, name, icoName) => h('a', { class: 'hometab', href: href, 'aria-label': name },
       h('span', { class: 'hometab-ico', 'aria-hidden': 'true' }, icon(icoName)),
       h('span', { class: 'hometab-name' }, name));
