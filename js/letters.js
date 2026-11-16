@@ -113,6 +113,192 @@
     { id: 'feed', title: 'Feed Zip' },
     { id: 'review', title: 'Letter review', min: 2 }
   ];
+  /* Same six steps in every group, in this order. */
+  const LESSON = [
+    { id: 'flash', title: 'Review flash' },
+    { id: 'meet', title: 'Meet the letters' },
+    { id: 'trace', title: 'Trace' },
+    { id: 'games', title: 'Games' },
+    { id: 'read', title: 'Read it!' },
+    { id: 'celebrate', title: 'Celebrate' }
+  ];
+  const MEMORY = {
+    a: { chant: 'Ant on an apple, /a/ /a/ /a/.', action: 'Open wide, like a bite.' },
+    m: { chant: 'Two mountains hum, /m/ /m/ /m/.', action: 'Lips together. Hum.' },
+    s: { chant: 'Snake on the sand, /s/ /s/ /s/.', action: 'Slide your hand in an s.' },
+    t: { chant: 'Tap the tent, /t/ /t/ /t/.', action: 'Tap two fingers.' },
+    p: { chant: 'Puff like a pig, /p/ /p/ /p/.', action: 'Puff your lips.' },
+    f: { chant: 'Fan the fish, /f/ /f/ /f/.', action: 'Bite your lip and blow.' },
+    i: { chant: 'Little insect, /i/ /i/ /i/.', action: 'Smile a little and say /i/.' },
+    n: { chant: 'Nod at the nest, /n/ /n/ /n/.', action: 'Nod your head.' },
+    o: { chant: 'Round as an ox, /o/ /o/ /o/.', action: 'Make a round mouth.' },
+    d: { chant: 'Dog digs down, /d/ /d/ /d/.', action: 'Tap your tongue.' },
+    c: { chant: 'Cat curls up, /k/ /k/ /k/.', action: 'Open for /k/.' },
+    u: { chant: 'Hands up, /u/ /u/ /u/.', action: 'Lift your hands a little.' },
+    g: { chant: 'Goat gulps, /g/ /g/ /g/.', action: 'Gulp once.' },
+    b: { chant: 'Bounce the bus, /b/ /b/ /b/.', action: 'Press your lips, then pop.' },
+    e: { chant: 'Edge of the egg, /e/ /e/ /e/.', action: 'Smile and say /e/.' },
+    k: { chant: 'Kick the kite, /k/ /k/ /k/.', action: 'A small kick.' },
+    h: { chant: 'Huff on the hat, /h/ /h/ /h/.', action: 'Huff on your hand.' },
+    r: { chant: 'Rat runs, /r/ /r/ /r/.', action: 'Make a little engine.' },
+    l: { chant: 'Lift the lamp, /l/ /l/ /l/.', action: 'Lift your tongue.' },
+    w: { chant: 'Wave at the web, /w/ /w/ /w/.', action: 'Wave hello.' },
+    j: { chant: 'Jump for jam, /j/ /j/ /j/.', action: 'A tiny jump.' },
+    y: { chant: 'Yank the yarn, /y/ /y/ /y/.', action: 'Pull your hands apart.' },
+    x: { chant: 'Cross the box, /ks/ /ks/.', action: 'Cross your arms.' },
+    q: { chant: 'Quilt says /kw/ /kw/.', action: 'A circle, then a tail.' },
+    v: { chant: 'Van goes /v/ /v/ /v/.', action: 'Bite your lip and hum.' },
+    z: { chant: 'Zip zooms, /z/ /z/ /z/.', action: 'Zip a jacket.' }
+  };
+  /* The picture is the letter. s is a snake on sand. */
+  function memo(inner) { return '<svg viewBox="0 0 160 200" aria-hidden="true">' + inner + '</svg>'; }
+  const MNEMONIC = {
+    a: memo('<circle cx="70" cy="110" r="42" fill="#E25B4A" stroke="#2B2540" stroke-width="4"/><rect x="108" y="48" width="10" height="110" rx="4" fill="#6B3A22" stroke="#2B2540" stroke-width="3"/><ellipse cx="118" cy="78" rx="10" ry="6" fill="#8C4A32" stroke="#2B2540" stroke-width="3"/><path d="M112 74 L104 62 M124 74 L132 62" stroke="#2B2540" stroke-width="2"/>'),
+    m: memo('<path d="M18 160 L18 70 L50 28 L80 78 L112 28 L142 70 V160" fill="#7DAA6A" stroke="#2B2540" stroke-width="6" stroke-linejoin="round"/>'),
+    s: memo('<rect width="160" height="200" fill="#F3D7A1"/><path d="M118 36 C118 16 36 18 40 52 C44 86 124 78 116 114 C108 152 34 146 42 176" fill="none" stroke="#2F8F4E" stroke-width="18" stroke-linecap="round"/><circle cx="116" cy="34" r="10" fill="#2F8F4E" stroke="#2B2540" stroke-width="3"/><circle cx="120" cy="32" r="2" fill="#fff"/>'),
+    t: memo('<rect x="74" y="28" width="12" height="150" fill="#C4A574" stroke="#2B2540" stroke-width="3"/><rect x="28" y="70" width="104" height="12" fill="#E07A4A" stroke="#2B2540" stroke-width="3"/><path d="M40 82 L80 150 L120 82" fill="none" stroke="#C45A3A" stroke-width="4"/>'),
+    p: memo('<rect x="36" y="24" width="12" height="160" fill="#F4A7C4" stroke="#2B2540" stroke-width="3"/><ellipse cx="86" cy="78" rx="36" ry="32" fill="#F7C2D6" stroke="#2B2540" stroke-width="4"/><circle cx="78" cy="72" r="3" fill="#2B2540"/><ellipse cx="108" cy="86" rx="8" ry="6" fill="#F4A7C4" stroke="#2B2540" stroke-width="3"/>'),
+    f: memo('<path d="M120 36 C120 16 48 14 48 46 V170" fill="none" stroke="#3D7EA6" stroke-width="14" stroke-linecap="round"/><path d="M28 86 H92" stroke="#F6C445" stroke-width="12" stroke-linecap="round"/><path d="M100 40 q20 10 8 28" fill="#7EB6E0" stroke="#2B2540" stroke-width="3"/>'),
+    i: memo('<rect x="74" y="70" width="12" height="100" rx="4" fill="#3D4A66" stroke="#2B2540" stroke-width="3"/><circle cx="80" cy="40" r="14" fill="#E25B4A" stroke="#2B2540" stroke-width="3"/><path d="M68 36 L60 22 M92 36 L102 22" stroke="#2B2540" stroke-width="3"/>'),
+    n: memo('<path d="M28 160 V70 C28 36 132 36 132 78 V160" fill="none" stroke="#6B3A22" stroke-width="14" stroke-linecap="round"/><ellipse cx="70" cy="78" rx="16" ry="12" fill="#F4F0E6" stroke="#2B2540" stroke-width="3"/><ellipse cx="108" cy="78" rx="16" ry="12" fill="#F4F0E6" stroke="#2B2540" stroke-width="3"/>'),
+    o: memo('<circle cx="80" cy="110" r="52" fill="#C4A574" stroke="#2B2540" stroke-width="6"/><path d="M40 70 C28 30 58 36 62 64 M120 70 C132 30 102 36 98 64" fill="none" stroke="#2B2540" stroke-width="6"/><circle cx="64" cy="104" r="4" fill="#2B2540"/><circle cx="98" cy="104" r="4" fill="#2B2540"/>'),
+    d: memo('<rect x="112" y="24" width="12" height="150" fill="#C48A4A" stroke="#2B2540" stroke-width="3"/><ellipse cx="72" cy="118" rx="40" ry="32" fill="#E0A15A" stroke="#2B2540" stroke-width="4"/><circle cx="60" cy="110" r="3" fill="#2B2540"/><ellipse cx="40" cy="124" rx="10" ry="7" fill="#C48A4A" stroke="#2B2540" stroke-width="3"/>'),
+    c: memo('<path d="M124 58 C100 28 36 36 36 100 C36 164 104 172 128 140" fill="none" stroke="#E8A15A" stroke-width="18" stroke-linecap="round"/><path d="M48 70 L36 48 L62 62" fill="#E8A15A" stroke="#2B2540" stroke-width="3"/><circle cx="70" cy="96" r="3" fill="#2B2540"/>'),
+    u: memo('<path d="M36 40 V120 C36 160 124 160 124 120 V40" fill="none" stroke="#5B9BC4" stroke-width="14" stroke-linecap="round"/><path d="M124 40 V150" stroke="#2B2540" stroke-width="8" stroke-linecap="round"/><path d="M70 28 L88 8 L106 28" fill="#F28C00" stroke="#2B2540" stroke-width="3"/>'),
+    g: memo('<circle cx="78" cy="78" r="36" fill="#F4F0E6" stroke="#2B2540" stroke-width="6"/><path d="M108 70 V150 C108 176 48 176 44 150" fill="none" stroke="#2B2540" stroke-width="10" stroke-linecap="round"/><path d="M58 48 L48 20 M98 48 L110 18" stroke="#2B2540" stroke-width="4"/><circle cx="66" cy="74" r="3" fill="#2B2540"/>'),
+    b: memo('<rect x="32" y="20" width="12" height="156" fill="#F6C445" stroke="#2B2540" stroke-width="3"/><circle cx="86" cy="118" r="36" fill="#F6C445" stroke="#2B2540" stroke-width="6"/><rect x="48" y="96" width="28" height="16" fill="#9FD4F2" stroke="#2B2540" stroke-width="3"/><circle cx="70" cy="168" r="8" fill="#2B2540"/>'),
+    e: memo('<ellipse cx="80" cy="108" rx="40" ry="48" fill="#F4F0E6" stroke="#2B2540" stroke-width="6"/><path d="M46 108 H118" stroke="#E0A106" stroke-width="8" stroke-linecap="round"/>'),
+    k: memo('<rect x="36" y="24" width="10" height="150" fill="#E25B4A" stroke="#2B2540" stroke-width="3"/><path d="M120 40 L58 100 L124 168" fill="none" stroke="#E25B4A" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/><path d="M100 36 L130 20 L118 52" fill="#F6C445" stroke="#2B2540" stroke-width="3"/>'),
+    h: memo('<rect x="28" y="20" width="12" height="156" fill="#3D7EA6" stroke="#2B2540" stroke-width="3"/><path d="M40 96 C40 60 124 60 124 100 V176" fill="none" stroke="#3D7EA6" stroke-width="12" stroke-linecap="round"/><path d="M78 58 h36 v14 H78 z" fill="#E25B4A" stroke="#2B2540" stroke-width="3"/><path d="M84 58 V40 h24 v18" fill="#5B9BC4" stroke="#2B2540" stroke-width="3"/>'),
+    r: memo('<path d="M48 168 V70" stroke="#C4A8A0" stroke-width="16" stroke-linecap="round"/><path d="M48 96 C48 60 120 58 124 90" fill="none" stroke="#C4A8A0" stroke-width="14" stroke-linecap="round"/><circle cx="108" cy="78" r="8" fill="#C4A8A0" stroke="#2B2540" stroke-width="3"/><circle cx="112" cy="76" r="2" fill="#2B2540"/>'),
+    l: memo('<rect x="74" y="16" width="12" height="150" rx="4" fill="#F6C445" stroke="#2B2540" stroke-width="3"/><path d="M48 36 h52 l8 28 H40 z" fill="#F6C445" stroke="#2B2540" stroke-width="3"/><rect x="56" y="166" width="48" height="10" fill="#2B2540"/>'),
+    w: memo('<path d="M16 40 L40 168 L80 80 L120 168 L148 40" fill="none" stroke="#5B9BC4" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/><path d="M70 90 q10 16 20 0" fill="none" stroke="#2B2540" stroke-width="2"/>'),
+    j: memo('<circle cx="96" cy="36" r="12" fill="#C2406A" stroke="#2B2540" stroke-width="3"/><path d="M96 56 V140 C96 172 40 172 36 146" fill="none" stroke="#C2406A" stroke-width="14" stroke-linecap="round"/><rect x="70" y="78" width="28" height="36" rx="4" fill="#F6C445" stroke="#2B2540" stroke-width="3"/>'),
+    y: memo('<path d="M28 36 L80 110" stroke="#C2408A" stroke-width="14" stroke-linecap="round"/><path d="M132 36 L70 150" stroke="#C2408A" stroke-width="14" stroke-linecap="round"/><circle cx="48" cy="70" r="10" fill="#C2408A" stroke="#2B2540" stroke-width="3"/>'),
+    x: memo('<path d="M28 40 L132 168" stroke="#C4A574" stroke-width="14" stroke-linecap="round"/><path d="M132 40 L28 168" stroke="#C4A574" stroke-width="14" stroke-linecap="round"/><rect x="58" y="86" width="44" height="28" fill="#E7C48A" stroke="#2B2540" stroke-width="3"/>'),
+    q: memo('<circle cx="74" cy="86" r="40" fill="#7EB6E0" stroke="#2B2540" stroke-width="6"/><path d="M108 86 V160 L136 140" fill="none" stroke="#2B2540" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/><path d="M54 70 h40 M54 86 h40 M54 102 h40 M70 58 v56" stroke="#F4F0E6" stroke-width="3"/>'),
+    v: memo('<path d="M24 40 L80 170 L136 40" fill="none" stroke="#5B9BC4" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/><rect x="58" y="78" width="44" height="22" fill="#F6C445" stroke="#2B2540" stroke-width="3"/><circle cx="68" cy="112" r="6" fill="#2B2540"/><circle cx="96" cy="112" r="6" fill="#2B2540"/>'),
+    z: memo('<path d="M28 40 H132 L28 160 H132" fill="none" stroke="#F28C00" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/><rect x="70" y="70" width="18" height="60" rx="3" fill="#C4A574" stroke="#2B2540" stroke-width="3"/>')
+  };
+  /* VC and CVC words only, plus quit (qu is the letter q). A line is a 2 or 3 word phrase. */
+  const BANK = [
+    { w: 'am', g: 1 },
+    { w: 'at', g: 1, line: 'at a mat' },
+    { w: 'mat', g: 1, line: 'a mat' },
+    { w: 'sat', g: 1, line: 'Sam sat.' },
+    { w: 'Sam', g: 1, line: 'Sam sat.' },
+    { w: 'Tam', g: 1, line: 'Tam sat.' },
+    { w: 'in', g: 2, line: 'Sit in.' },
+    { w: 'it', g: 2 },
+    { w: 'an', g: 2, line: 'an ant' },
+    { w: 'pin', g: 2, line: 'a pin' },
+    { w: 'fin', g: 2, line: 'a fin' },
+    { w: 'tip', g: 2, line: 'a tip' },
+    { w: 'sip', g: 2, line: 'Sip, Sam.' },
+    { w: 'nap', g: 2, line: 'a nap' },
+    { w: 'fan', g: 2, line: 'a fan' },
+    { w: 'pan', g: 2, line: 'a pan' },
+    { w: 'tan', g: 2, line: 'a tan' },
+    { w: 'map', g: 2, line: 'a map' },
+    { w: 'fit', g: 2, line: 'Fit in.' },
+    { w: 'pit', g: 2, line: 'a pit' },
+    { w: 'sit', g: 2, line: 'Sit, Sam.' },
+    { w: 'man', g: 2, line: 'a man' },
+    { w: 'pat', g: 2, line: 'Pat sat.' },
+    { w: 'Tim', g: 2, line: 'Tim sat.' },
+    { w: 'on', g: 3, line: 'on a mat' },
+    { w: 'pot', g: 3, line: 'a pot' },
+    { w: 'top', g: 3, line: 'a top' },
+    { w: 'cot', g: 3, line: 'a cot' },
+    { w: 'dot', g: 3, line: 'a dot' },
+    { w: 'mom', g: 3, line: 'Mom sat.' },
+    { w: 'Tom', g: 3, line: 'Tom sat.' },
+    { w: 'cat', g: 3, line: 'a cat' },
+    { w: 'cap', g: 3, line: 'a cap' },
+    { w: 'can', g: 3, line: 'a can' },
+    { w: 'cup', g: 3, line: 'a cup' },
+    { w: 'cut', g: 3 },
+    { w: 'up', g: 3, line: 'up at' },
+    { w: 'mud', g: 3, line: 'mud pit' },
+    { w: 'pup', g: 3, line: 'a pup' },
+    { w: 'sun', g: 3, line: 'a sun' },
+    { w: 'dad', g: 3, line: 'Dad sat.' },
+    { w: 'did', g: 3 },
+    { w: 'sad', g: 3, line: 'Sam sat.' },
+    { w: 'Pam', g: 3, line: 'Pam sat.' },
+    { w: 'dog', g: 4, line: 'a dog' },
+    { w: 'bag', g: 4, line: 'a bag' },
+    { w: 'tag', g: 4, line: 'a tag' },
+    { w: 'got', g: 4 },
+    { w: 'gum', g: 4, line: 'a gum' },
+    { w: 'bat', g: 4, line: 'a bat' },
+    { w: 'bit', g: 4 },
+    { w: 'bus', g: 4, line: 'a bus' },
+    { w: 'bug', g: 4, line: 'a bug' },
+    { w: 'bed', g: 4, line: 'a bed' },
+    { w: 'pet', g: 4, line: 'a pet' },
+    { w: 'pen', g: 4, line: 'a pen' },
+    { w: 'ten', g: 4 },
+    { w: 'net', g: 4, line: 'a net' },
+    { w: 'men', g: 4 },
+    { w: 'met', g: 4 },
+    { w: 'kit', g: 4, line: 'a kit' },
+    { w: 'kid', g: 4, line: 'a kid' },
+    { w: 'Ben', g: 4, line: 'Ben sat.' },
+    { w: 'Ken', g: 4, line: 'Ken sat.' },
+    { w: 'hat', g: 5, line: 'a hat' },
+    { w: 'hit', g: 5 },
+    { w: 'hot', g: 5, line: 'a hot pot' },
+    { w: 'hen', g: 5, line: 'a hen' },
+    { w: 'hut', g: 5, line: 'a hut' },
+    { w: 'hid', g: 5 },
+    { w: 'rat', g: 5, line: 'a rat' },
+    { w: 'ran', g: 5, line: 'Sam ran.' },
+    { w: 'rip', g: 5 },
+    { w: 'red', g: 5, line: 'a red hat' },
+    { w: 'lap', g: 5, line: 'a lap' },
+    { w: 'let', g: 5 },
+    { w: 'lit', g: 5 },
+    { w: 'lot', g: 5 },
+    { w: 'log', g: 5, line: 'a log' },
+    { w: 'pal', g: 5, line: 'a pal' },
+    { w: 'lid', g: 5, line: 'a lid' },
+    { w: 'wet', g: 5, line: 'a wet hat' },
+    { w: 'win', g: 5 },
+    { w: 'web', g: 5, line: 'a web' },
+    { w: 'jam', g: 6, line: 'a jam' },
+    { w: 'jet', g: 6, line: 'a jet' },
+    { w: 'jog', g: 6 },
+    { w: 'jug', g: 6, line: 'a jug' },
+    { w: 'yam', g: 6, line: 'a yam' },
+    { w: 'yet', g: 6 },
+    { w: 'box', g: 6, line: 'a box' },
+    { w: 'fox', g: 6, line: 'a fox' },
+    { w: 'six', g: 6 },
+    { w: 'tax', g: 6 },
+    { w: 'wax', g: 6, line: 'a wax' },
+    { w: 'fix', g: 6 },
+    { w: 'mix', g: 6 },
+    { w: 'quit', g: 6, line: 'Sam quit.' },
+    { w: 'van', g: 7, line: 'a van' },
+    { w: 'vat', g: 7, line: 'a vat' },
+    { w: 'vet', g: 7, line: 'a vet' },
+    { w: 'zip', g: 7, line: 'Zip sat.' },
+    { w: 'Zip', g: 7, line: 'Zip sat.' },
+    { w: 'zap', g: 7 }
+  ];
+  const WORD_AUDIO = {
+    mat: 'audio/u51_w_mat.mp3', pin: 'audio/u51_w_pin.mp3', fin: 'audio/w_fin.mp3', fan: 'audio/u53_w_fan.mp3',
+    map: 'audio/w_map.mp3', sit: 'audio/w_sit.mp3', man: 'audio/w_man.mp3', on: 'audio/u6_w_on.mp3',
+    dot: 'audio/u53_w_dot.mp3', cat: 'audio/u6_w_cat.mp3', cap: 'audio/u51_rf_cap.mp3', can: 'audio/u6_w_can.mp3',
+    cup: 'audio/u51_w_cup.mp3', mud: 'audio/u51_w_mud.mp3', sun: 'audio/u53_w_sun.mp3', sad: 'audio/nk_w_sad.mp3',
+    bag: 'audio/w_bag.mp3', got: 'audio/w_got.mp3', gum: 'audio/u53_w_gum.mp3', bit: 'audio/u51_w_bit.mp3',
+    bus: 'audio/u6_w_bus.mp3', bug: 'audio/w_bug.mp3', bed: 'audio/u51_rf_bed.mp3', pet: 'audio/u51_rf_pet.mp3',
+    pen: 'audio/u51_rf_pen.mp3', men: 'audio/w_men.mp3', kit: 'audio/w_kit.mp3', hat: 'audio/u53_w_hat.mp3',
+    rip: 'audio/w_rip.mp3', red: 'audio/w_red.mp3', let: 'audio/w_let.mp3', log: 'audio/w_log.mp3',
+    win: 'audio/w_win.mp3', box: 'audio/u6_w_box.mp3', fox: 'audio/u6_w_fox.mp3', zip: 'audio/u6_w_zip.mp3',
+    zap: 'audio/nk_w_zap.mp3'
+  };
 
   function groupById(id) { return GROUPS.filter((g) => g.id === id)[0] || null; }
   function lettersOf(group) { return group.letters.map((id) => BY[id]); }
@@ -121,7 +307,56 @@
     GROUPS.forEach((g) => { if (g.n <= group.n) out.push(...lettersOf(g)); });
     return out;
   }
+  function earlierLetters(group) {
+    const out = [];
+    GROUPS.forEach((g) => { if (g.n < group.n) out.push(...lettersOf(g)); });
+    return out;
+  }
   function gamesFor(group) { return GAME_DEFS.filter((g) => !g.min || group.n >= g.min); }
+  function lettersIn(word) {
+    return String(word || '').toLowerCase().replace(/[^a-z]/g, '').split('');
+  }
+  function taughtSet(group) {
+    const set = {};
+    taughtThrough(group).forEach((L) => { set[L.id] = 1; });
+    return set;
+  }
+  function wordOk(group, word) {
+    const set = taughtSet(group);
+    const chars = lettersIn(word);
+    if (word.toLowerCase().indexOf('qu') === 0) {
+      return chars.every((ch) => set[ch]) && chars[0] === 'q' && chars[1] === 'u';
+    }
+    return chars.length > 0 && chars.every((ch) => set[ch]);
+  }
+  function readable(group) {
+    return BANK.filter((item) => item.g <= group.n && wordOk(group, item.w) && (!item.line || item.line.split(/\s+/).every((part) => wordOk(group, part.replace(/[^A-Za-z]/g, '')))));
+  }
+  function wordsFor(group) {
+    const all = readable(group);
+    const fresh = shuffle(all.filter((item) => item.g === group.n));
+    const old = shuffle(all.filter((item) => item.g < group.n));
+    return shuffle(fresh.slice(0, 6).concat(old.slice(0, 2)));
+  }
+  function graphemes(word) {
+    const out = [];
+    let i = 0;
+    if (word.toLowerCase().indexOf('qu') === 0) {
+      out.push({ g: word.slice(0, 2), id: 'q' });
+      i = 2;
+    }
+    for (; i < word.length; i++) out.push({ g: word[i], id: word[i].toLowerCase() });
+    return out;
+  }
+  function sayRead(word) {
+    const src = WORD_AUDIO[String(word).toLowerCase()];
+    if (src) return Snd.play(src).then((ok) => (ok ? true : speak(word)));
+    return speak(word);
+  }
+  function stepDone(group, id) {
+    if (id === 'games') return gamesFor(group).every((game) => IR.isDone(doneId(group, game.id)));
+    return IR.isDone(doneId(group, id));
+  }
   function doneId(group, game) { return 'll_' + group.id + '_' + game; }
   function glyph(id, upper) { return upper ? id.toUpperCase() : id; }
 
@@ -151,7 +386,7 @@
   function formation(L) {
     const marks = L.strokes.map((s, i) => {
       const n = String(i + 1);
-      const path = '<path d="' + s.d + '" fill="' + (s.dot ? '#2B2540' : 'none') + '" stroke="#2B2540" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"' + (s.dot ? '' : ' marker-end="url(#llarrow)"') + '/>';
+      const path = '<path class="llstroke" d="' + s.d + '" fill="' + (s.dot ? '#2B2540' : 'none') + '" stroke="#2B2540" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"' + (s.dot ? '' : ' marker-end="url(#llarrow)"') + '/>';
       return path + '<circle cx="' + s.nx + '" cy="' + s.ny + '" r="11" fill="#F28C00" stroke="#2B2540" stroke-width="2"/><text x="' + s.nx + '" y="' + (s.ny + 5) + '" text-anchor="middle" font-size="14" font-family="Andika,sans-serif" fill="#fff" font-weight="700">' + n + '</text>';
     }).join('');
     return '<svg viewBox="0 0 120 150" aria-hidden="true"><defs><marker id="llarrow" markerUnits="userSpaceOnUse" markerWidth="16" markerHeight="16" refX="14" refY="8" orient="auto"><path d="M0 1 L16 8 L0 15 z" fill="#E8731C"/></marker></defs><line x1="18" y1="78" x2="104" y2="78" stroke="#F3E6C4" stroke-width="2" stroke-dasharray="4 4"/><line x1="18" y1="116" x2="104" y2="116" stroke="#E4D6B4" stroke-width="3"/>' + marks + '</svg>';
@@ -175,9 +410,8 @@
   function listPage(app) {
     IR.newScreen();
     const items = GROUPS.map((g) => {
-      const games = gamesFor(g);
-      const done = games.filter((game) => IR.isDone(doneId(g, game.id))).length;
-      return { g: g, done: done, total: games.length };
+      const done = LESSON.filter((step) => stepDone(g, step.id)).length;
+      return { g: g, done: done, total: LESSON.length };
     });
     const finished = items.filter((it) => it.done === it.total).length;
     const bar = h('div', { class: 'gamebar', role: 'progressbar', 'aria-valuemin': 0, 'aria-valuemax': items.length, 'aria-valuenow': finished },
@@ -198,7 +432,8 @@
         h('div', { class: 'llintro' },
           h('img', { src: 'img/zipA.webp', alt: '' }),
           h('img', { src: 'img/frill.webp', alt: '' }),
-          h('p', null, 'Seven groups, before Unit 1. This is not a unit.')),
+          h('p', null, 'Seven groups, before Unit 1. This is not a unit.'),
+          h('p', null, 'Same six steps every time.')),
         h('div', { class: 'u5teachrow' }, h('button', { class: 'btn teachgo', type: 'button', onclick: () => { if (IR.teach) IR.teach.toggle(true); } }, 'Teacher mode')),
         h('div', { class: 'u5prog' }, bar, h('span', { class: 'u5count' }, finished + ' of ' + items.length)),
         h('ol', { class: 'u5grid llgroups' }, ...cards))));
@@ -207,56 +442,43 @@
 
   function groupPage(app, group) {
     IR.newScreen();
-    const letters = lettersOf(group);
-    let current = letters[0];
-    const form = h('div', { class: 'llform' });
-    const row = h('div', { class: 'llletters' });
-    function paintCards() {
-      row.innerHTML = '';
-      letters.forEach((L) => {
-        const b = h('button', {
-          class: 'llcard' + (L === current ? ' on' : ''),
-          type: 'button',
-          'aria-label': L.id.toUpperCase() + ' ' + L.id + '. ' + L.cue + '. Tap to hear the sound.',
-          onclick: () => { current = L; paintCards(); paintForm(); hear(L, 'sound'); }
-        },
-          h('b', { class: 'llpair' }, glyph(L.id, true) + L.id),
-          h('span', { class: 'llcue' }, L.cue));
-        row.append(b);
-      });
-    }
-    function paintForm() {
-      const L = current;
-      form.innerHTML = '';
-      form.append(
-        h('div', { class: 'llsvg', html: formation(L) }),
-        h('div', { class: 'llmeta' },
-          h('p', { class: 'llname' }, 'Name: ' + L.name),
-          h('p', { class: 'llsound' }, 'Sound: ' + L.sound + ' as in ' + L.word),
-          h('div', { class: 'llpic', html: PICS[L.word] || '' }),
-          h('p', { class: 'llhow' }, 'Start at the orange number. Follow the arrow.'),
-          h('div', { class: 'llhear' },
-            h('button', { class: 'btn primary', type: 'button', onclick: () => hear(L, 'sound') }, icon('speaker'), 'Hear the sound'),
-            h('button', { class: 'btn', type: 'button', onclick: () => hear(L, 'name') }, icon('speaker'), 'Hear the name'))));
-    }
-    const games = gamesFor(group);
-    const gameRow = h('div', { class: 'llgames' }, ...games.map((game) => {
-      const done = IR.isDone(doneId(group, game.id));
-      return h('button', {
-        class: 'u5card llplay' + (done ? ' done' : ''),
-        type: 'button',
-        'aria-label': game.title + (done ? '. Done.' : '.'),
-        onclick: () => { Snd.stop(); location.hash = '#/letters/' + group.id + '/' + game.id; }
-      }, h('span', { class: 'u5name' }, game.title), done ? h('span', { class: 'u5mark', 'aria-hidden': 'true' }, icon('check')) : null);
-    }));
-    paintCards();
-    paintForm();
+    const next = LESSON.filter((step) => !stepDone(group, step.id))[0];
+    const cards = LESSON.map((step, i) => h('li', null, h('button', {
+      class: 'u5card llstepcard' + (stepDone(group, step.id) ? ' done' : '') + (next && next.id === step.id ? ' on' : ''),
+      type: 'button',
+      'aria-label': (i + 1) + '. ' + step.title,
+      onclick: () => { Snd.stop(); location.hash = '#/letters/' + group.id + '/' + step.id; }
+    },
+      h('span', { class: 'u5ord' }, String(i + 1)),
+      h('span', { class: 'u5name' }, step.title),
+      stepDone(group, step.id) ? h('span', { class: 'u5mark', 'aria-hidden': 'true' }, icon('check')) : null)));
     app.append(h('div', { class: 'screen trailscreen unitpage u5menu llpage llgrouppage' },
       h('header', { class: 'uA-top' },
         h('button', { class: 'back homebtn', type: 'button', onclick: () => { Snd.stop(); location.hash = '#/letters'; } }, icon('back'), h('span', null, 'Letters')),
         h('h1', { class: 'uA-title' }, 'Group ' + group.n + ' · ' + group.letters.join(' ')),
         IR.ui.gearButton()),
-      h('main', { class: 'llmain' }, row, form, gameRow)));
+      h('main', { class: 'llmain' }, h('ol', { class: 'llsteps' }, ...cards))));
+    if (IR.teach) IR.teach.sync();
+  }
+
+  function gamesPage(app, group) {
+    IR.newScreen();
+    const games = gamesFor(group);
+    const cards = games.map((game) => {
+      const done = IR.isDone(doneId(group, game.id));
+      return h('li', null, h('button', {
+        class: 'u5card llplay' + (done ? ' done' : ''),
+        type: 'button',
+        'aria-label': game.title + (done ? '. Done.' : '.'),
+        onclick: () => { Snd.stop(); location.hash = '#/letters/' + group.id + '/' + game.id; }
+      }, h('span', { class: 'u5name' }, game.title), done ? h('span', { class: 'u5mark', 'aria-hidden': 'true' }, icon('check')) : null));
+    });
+    app.append(h('div', { class: 'screen trailscreen unitpage u5menu llpage' },
+      h('header', { class: 'uA-top' },
+        h('button', { class: 'back homebtn', type: 'button', onclick: () => { Snd.stop(); location.hash = '#/letters/' + group.id; } }, icon('back'), h('span', null, 'Group')),
+        h('h1', { class: 'uA-title' }, 'Games'),
+        IR.ui.gearButton()),
+      h('main', { class: 'llmain' }, h('ol', { class: 'llsteps llgames' }, ...cards))));
     if (IR.teach) IR.teach.sync();
   }
 
@@ -308,7 +530,14 @@
     };
     const nextBtn = h('button', { class: 'btn big next', type: 'button', 'aria-label': 'Next', onclick: () => ctx.goNext() }, 'Next', icon('next'));
     const nav = h('div', { class: 'lesson-nav' }, nextBtn);
-    IR.simpleNav(nav, nextBtn, () => { Snd.stop(); location.hash = base; }, 'Back to the group');
+    const navApi = IR.simpleNav(nav, nextBtn, () => { Snd.stop(); location.hash = base; }, 'Back to the group');
+    ctx.setNextLabel = (t) => navApi.label(t);
+    ctx.quietDone = () => {
+      IR.recordActivity(doneId(group, game.id), mistakes <= 1 ? 3 : mistakes <= 3 ? 2 : 1);
+      IR.touchStreak();
+      IR.save();
+      location.hash = base;
+    };
     const screen = h('div', { class: 'screen lessonscreen nkstep u5step llstep' },
       h('header', { class: 'lesson-top' }, bar, IR.ui.homeButton(), IR.ui.gearButton()),
       instrBox, stage, nav);
@@ -321,7 +550,213 @@
     else if (game.id === 'match') runMatch(ctx, lettersOf(group));
     else if (game.id === 'sound') runSound(ctx, lettersOf(group));
     else if (game.id === 'feed') runFeed(ctx, lettersOf(group));
+    else if (game.id === 'flash') runFlash(ctx, group);
+    else if (game.id === 'meet') runMeet(ctx, group);
+    else if (game.id === 'trace') runTrace(ctx, group);
+    else if (game.id === 'read') runRead(ctx, group);
     else runReview(ctx, taughtThrough(group));
+  }
+
+  function runFlash(ctx, group) {
+    const prior = shuffle(earlierLetters(group));
+    if (!prior.length) {
+      ctx.setInstr('This is the first group. No earlier letters yet.');
+      ctx.stage.append(h('div', { class: 'activity llgame llflash' },
+        h('img', { src: 'img/zipA.webp', alt: '' }),
+        h('img', { src: 'img/frill.webp', alt: '' }),
+        h('p', { class: 'llprompt' }, 'Today you meet ' + group.letters.join(', ') + '.')));
+      ctx.setNextLabel('Done');
+      ctx.setNext(() => { ctx.quietDone(); return true; });
+      return;
+    }
+    ctx.setInstr('Say the sound. Then tap the letter.');
+    let i = 0;
+    function show() {
+      if (i >= prior.length) { ctx.quietDone(); return; }
+      const L = prior[i];
+      ctx.progress(i / prior.length);
+      if (ctx.count) ctx.count(i + 1, prior.length);
+      ctx.stage.innerHTML = '';
+      const b = h('button', {
+        class: 'llflashcard',
+        type: 'button',
+        'aria-label': 'Say the sound for ' + L.id + '. Tap to hear it.',
+        onclick: async () => {
+          b.disabled = true;
+          await hear(L, 'sound');
+          await Snd.play(A.sfx.ding);
+          i++;
+          if (ctx.scr.ok()) show();
+        }
+      }, glyph(L.id, true) + L.id);
+      ctx.stage.append(h('div', { class: 'activity llgame llflash' }, h('p', { class: 'llask' }, 'Say the sound.'), b));
+      if (ctx.armReveal) ctx.armReveal(L.sound);
+    }
+    ctx.setNext(() => { if (i < prior.length) { i++; show(); return true; } return false; });
+    show();
+  }
+
+  function runMeet(ctx, group) {
+    const letters = lettersOf(group);
+    let i = 0;
+    ctx.setInstr('Look, chant, and do the action.');
+    function show() {
+      const L = letters[i];
+      const mem = MEMORY[L.id];
+      ctx.progress(i / letters.length);
+      if (ctx.count) ctx.count(i + 1, letters.length);
+      ctx.stage.innerHTML = '';
+      ctx.stage.append(h('div', { class: 'activity llgame llmeet' },
+        h('div', { class: 'llmemo', html: MNEMONIC[L.id] || '' }),
+        h('div', { class: 'llmeettext' },
+          h('p', { class: 'llpair' }, glyph(L.id, true) + L.id),
+          h('p', { class: 'llchant' }, mem.chant),
+          h('p', { class: 'llaction' }, 'Action: ' + mem.action),
+          h('button', { class: 'btn primary', type: 'button', onclick: () => hear(L, 'sound') }, icon('speaker'), 'Hear the sound'))));
+      ctx.setNextLabel(i < letters.length - 1 ? 'Next letter' : 'Done');
+      if (ctx.armReveal) ctx.armReveal(L.id);
+      hear(L, 'sound');
+    }
+    ctx.setNext(() => {
+      if (i < letters.length - 1) { i++; show(); return true; }
+      ctx.quietDone();
+      return true;
+    });
+    ctx.setBack(() => { if (i > 0) { i--; show(); return true; } return false; });
+    show();
+  }
+
+  function runTrace(ctx, group) {
+    const letters = lettersOf(group);
+    let i = 0;
+    ctx.setInstr('Trace with your finger, or tap the numbers.');
+    function show() {
+      const L = letters[i];
+      let stroke = 0;
+      let moved = 0;
+      ctx.progress(i / letters.length);
+      if (ctx.count) ctx.count(i + 1, letters.length);
+      ctx.stage.innerHTML = '';
+      const art = h('div', { class: 'lltraceart', html: formation(L) });
+      const nums = h('div', { class: 'lltracenums' });
+      function paint() {
+        art.querySelectorAll('.llstroke').forEach((path, n) => {
+          path.setAttribute('stroke', n < stroke ? '#E8731C' : '#2B2540');
+          path.setAttribute('stroke-width', n === stroke ? '12' : '7');
+        });
+        nums.querySelectorAll('button').forEach((b, n) => b.classList.toggle('on', n === stroke));
+      }
+      function advance() {
+        if (stroke >= L.strokes.length) return;
+        stroke++;
+        moved = 0;
+        paint();
+        if (stroke >= L.strokes.length) {
+          Snd.play(A.sfx.ding);
+          ctx.setNextLabel(i < letters.length - 1 ? 'Next letter' : 'Done');
+        }
+      }
+      L.strokes.forEach((s, n) => {
+        const b = h('button', {
+          class: 'lltracenum' + (n === 0 ? ' on' : ''),
+          type: 'button',
+          'aria-label': 'Stroke ' + (n + 1),
+          onclick: () => { if (n === stroke) advance(); }
+        }, String(n + 1));
+        nums.append(b);
+      });
+      art.addEventListener('pointerdown', () => { moved = 0; });
+      art.addEventListener('pointermove', (e) => {
+        if (e.buttons || e.pressure > 0) moved += Math.abs(e.movementX) + Math.abs(e.movementY);
+        if (moved > 36) advance();
+      });
+      ctx.stage.append(h('div', { class: 'activity llgame lltrace' }, art, nums));
+      ctx.setNextLabel('');
+      paint();
+      if (ctx.armReveal) ctx.armReveal(L.id);
+    }
+    ctx.setNext(() => {
+      if (i < letters.length - 1) { i++; show(); return true; }
+      ctx.quietDone();
+      return true;
+    });
+    show();
+  }
+
+  function runRead(ctx, group) {
+    const items = wordsFor(group);
+    let i = 0;
+    let token = 0;
+    ctx.setInstr('Tap each sound. Then the word swoops together.');
+    function show() {
+      const my = ++token;
+      if (i >= items.length) { ctx.quietDone(); return; }
+      const item = items[i];
+      const parts = graphemes(item.w);
+      let at = 0;
+      ctx.progress(i / items.length);
+      if (ctx.count) ctx.count(i + 1, items.length);
+      ctx.stage.innerHTML = '';
+      const swoop = h('i', { class: 'llswoop' });
+      const line = h('p', { class: 'llline' }, '');
+      const tiles = parts.map((part, n) => {
+        const b = h('button', { class: 'lltile', type: 'button', 'data-g': part.g, 'aria-label': 'Sound ' + (n + 1) + ', ' + part.g }, part.g);
+        b.addEventListener('click', async () => {
+          if (my !== token || b.classList.contains('lit')) return;
+          if (n !== at) {
+            ctx.miss();
+            b.classList.add('tried');
+            await Snd.play(A.sfx.tryagain);
+            b.classList.remove('tried');
+            return;
+          }
+          b.classList.add('lit');
+          at++;
+          await hear(BY[part.id], 'sound');
+          if (at < parts.length || my !== token || !ctx.scr.ok()) return;
+          swoop.classList.add('go');
+          await Snd.play(A.sfx.ding);
+          if (ctx.scr.ok() && my === token) await sayRead(item.w);
+          if (item.line) line.textContent = item.line;
+          ctx.setNextLabel(i < items.length - 1 ? 'Next word' : 'Done');
+        });
+        return b;
+      });
+      ctx.stage.append(h('div', { class: 'activity llgame llread' },
+        h('div', { class: 'lltiles' }, ...tiles),
+        swoop,
+        line));
+      ctx.setNextLabel('');
+      if (ctx.armReveal) ctx.armReveal(item.w, (stage) => [...stage.querySelectorAll('.lltile')]);
+    }
+    ctx.setNext(() => {
+      if (i < items.length - 1) { i++; show(); return true; }
+      ctx.quietDone();
+      return true;
+    });
+    show();
+  }
+
+  function celebrateScreen(app, group) {
+    IR.newScreen();
+    IR.recordActivity(doneId(group, 'celebrate'), 3);
+    IR.touchStreak();
+    IR.save();
+    const words = readable(group).filter((item) => item.g === group.n).slice(0, 4);
+    const screen = h('div', { class: 'screen lessonscreen nkstep u5step llstep' },
+      h('header', { class: 'lesson-top' }, IR.ui.homeButton(), IR.ui.gearButton()),
+      h('div', { class: 'stage' }, h('div', { class: 'activity llgame llcelebrate' },
+        IR.engage.faces(),
+        h('div', { class: 'badgeart', html: IR.ICON.badge }),
+        h('h1', null, 'You can read!'),
+        h('p', { class: 'llprompt' }, group.letters.join('  ')),
+        h('div', { class: 'llreadwords' }, ...words.map((item) => h('span', null, item.w))))));
+    const nav = h('div', { class: 'lesson-nav' });
+    screen.append(nav);
+    IR.simpleNav(nav, h('button', { class: 'btn big next', type: 'button' }), () => { location.hash = '#/letters/' + group.id; }, 'Back to the group');
+    app.append(screen);
+    if (IR.teach) IR.teach.sync();
+    Snd.play(A.sfx.done);
   }
 
   function choiceGrid(items, onPick) {
@@ -491,11 +926,15 @@
       groupPage(app, g);
       return true;
     }
-    const play = /^#\/letters\/(g[1-7])\/(find|match|sound|feed|review)$/.exec(hash);
+    const play = /^#\/letters\/(g[1-7])\/(flash|meet|trace|games|read|celebrate|find|match|sound|feed|review)$/.exec(hash);
     if (play) {
       const g = groupById(play[1]);
-      const game = gamesFor(g || { n: 0 }).filter((item) => item.id === play[2])[0];
-      if (!g || !game) return false;
+      if (!g) return false;
+      if (play[2] === 'games') { gamesPage(app, g); return true; }
+      if (play[2] === 'celebrate') { celebrateScreen(app, g); return true; }
+      const lesson = LESSON.filter((item) => item.id === play[2])[0];
+      const game = lesson || gamesFor(g).filter((item) => item.id === play[2])[0];
+      if (!game) return false;
       stepScreen(app, g, game);
       return true;
     }

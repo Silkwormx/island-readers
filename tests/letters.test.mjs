@@ -10,7 +10,7 @@ const teach = fs.readFileSync(new URL('../js/teach.js', import.meta.url), 'utf8'
 
 test('Learn the Letters follows the UFLI group order and is not a unit', () => {
   const order = ['a', 'm', 's', 't', 'p', 'f', 'i', 'n', 'o', 'd', 'c', 'u', 'g', 'b', 'e', 'k', 'h', 'r', 'l', 'w', 'j', 'y', 'x', 'q', 'v', 'z'];
-  const ids = [...letters.matchAll(/id: '([a-z])'/g)].map((m) => m[1]);
+  const ids = [...letters.matchAll(/id: '([a-z])', name:/g)].map((m) => m[1]);
   assert.deepEqual(ids, order);
   assert.match(letters, /letters: \['a', 'm', 's', 't'\]/);
   assert.match(letters, /letters: \['v', 'z'\]/);
@@ -23,6 +23,46 @@ test('Learn the Letters follows the UFLI group order and is not a unit', () => {
   assert.match(letters, /First sound/);
   assert.match(letters, /Feed Zip/);
   assert.match(letters, /Letter review/);
+  assert.match(letters, /Review flash/);
+  assert.match(letters, /Meet the letters/);
+  assert.match(letters, /Read it!/);
+  assert.ok(letters.indexOf("id: 'flash'") < letters.indexOf("id: 'meet'") && letters.indexOf("id: 'meet'") < letters.indexOf("id: 'trace'") && letters.indexOf("id: 'trace'") < letters.indexOf("id: 'games'") && letters.indexOf("id: 'games'") < letters.indexOf("id: 'read'") && letters.indexOf("id: 'read'") < letters.indexOf("id: 'celebrate'"));
+});
+
+test('reading words stay inside the letters taught so far', () => {
+  const groups = [
+    ['a', 'm', 's', 't'],
+    ['p', 'f', 'i', 'n'],
+    ['o', 'd', 'c', 'u'],
+    ['g', 'b', 'e', 'k'],
+    ['h', 'r', 'l', 'w'],
+    ['j', 'y', 'x', 'q'],
+    ['v', 'z']
+  ];
+  const bank = [...letters.matchAll(/\{ w: '([^']+)', g: (\d+)(?:, line: '([^']*)')? \}/g)];
+  assert.ok(bank.length > 20);
+  const g1 = bank.filter((row) => row[2] === '1').map((row) => row[1]);
+  assert.deepEqual(g1, ['am', 'at', 'mat', 'sat', 'Sam', 'Tam']);
+  assert.equal(g1.includes('mast'), false);
+  let seen = 0;
+  const set = new Set();
+  bank.forEach((row) => {
+    const word = row[1];
+    const g = Number(row[2]);
+    while (seen < g) { groups[seen].forEach((ch) => set.add(ch)); seen++; }
+    const chunks = [word].concat(row[3] ? row[3].split(/\s+/) : []);
+    chunks.forEach((part) => {
+      const chars = part.toLowerCase().replace(/[^a-z]/g, '').split('');
+      chars.forEach((ch) => assert.ok(set.has(ch), part + ' uses ' + ch + ' before group ' + g));
+    });
+    const body = word.toLowerCase();
+    const shape = body.startsWith('qu') ? /^qu[aeiou][a-z]$/ : /^[aeiou][a-z]$|^[a-z][aeiou][a-z]$/;
+    assert.match(body, shape, word);
+  });
+  assert.match(letters, /Snake on the sand/);
+  assert.match(letters, /Slide your hand in an s/);
+  assert.match(letters, /llswoop/);
+  assert.equal(/\bfree\b/i.test(letters), false);
 });
 
 test('picture words put the letter at the start, except x at the end', () => {
