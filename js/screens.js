@@ -241,7 +241,7 @@
       { unit: 6, lesson: '6.2', href: '#/u6/u62', done: () => IR.isDone('u62_check') },
       { unit: 6, lesson: '6.3', href: '#/u6/u63', done: () => IR.isDone('u63_check') }
     ];
-    if (!any && !bell) return { href: '#/placement', sub: 'Find your first bell' };
+    if (!any && !bell) return { href: '#/placement', sub: 'Pick up where you left off' };
     let startAt = 0;
     if (!any && bell) {
       const unitForBell = bell <= 3 ? 4 : bell === 4 ? 5 : 6;
@@ -299,13 +299,13 @@
       return b;
     };
     const grid = h('div', { class: 'ugrid tgrid', id: 'skymap' }, ...Array.from({ length: 22 }, (_, i) => unit(i + 1)));
-    const tab = (href, name, ico) => h('a', { class: 'hometab', href: href, 'aria-label': name },
-      ico ? h('span', { class: 'pico', 'aria-hidden': 'true' }, ico) : null,
+    const tab = (href, name, icoName) => h('a', { class: 'hometab', href: href, 'aria-label': name },
+      h('span', { class: 'hometab-ico', 'aria-hidden': 'true' }, icon(icoName)),
       h('span', { class: 'hometab-name' }, name));
     const tabs = h('nav', { class: 'hometabs', 'aria-label': 'More places' },
-      tab('#/trail', 'Trail Map and Placement Test'),
-      tab('#/practice/sight', 'Sight Word Practice'),
-      tab('#/find', 'Find It', icon('search')));
+      tab('#/trail', 'Trail Map and Placement Test', 'map'),
+      tab('#/practice/sight', 'Sight Word Practice', 'star'),
+      tab('#/find', 'Find It', 'search'));
     /* Nov 6 2026: full-width home feature (approved banyan scene), then About + the hero beside the unit grid */
     const banner = h('header', { class: 'hbanner' }, h('h1', null, 'Island Readers'),
       h('div', { class: 'grownwrap' }, h('span', { class: 'grownlab' }, 'Parent and Teacher Materials'), IR.ui.gearButton()));
@@ -599,8 +599,7 @@
   const UNIT_NAMES = [null, 'Short Vowels & Floss', 'Blends', 'Digraphs', 'Glued Sounds', 'Silent e', 'Endings', 'Syllables', 'Tricky Sounds', 'Bossy R', 'More Bossy R', 'Long A & E Teams', 'Long O & I Teams', 'The oo Sounds', 'The au Sounds', 'Sliding Vowels', 'Tricky Teams', 'Soft c and g', 'Silent Letters', 'Suffixes', 'Suffix Spelling Rules', 'Prefixes', 'Big Endings'];
   function skillCatalog() {
     const chests = [1, 2, 3, 4].map((n) => {
-      const w = WORLD.find((x) => x.id === 'chest' + n);
-      return { unit: n * 2 - 1, lesson: 'Units ' + (n * 2 - 1) + '\u2013' + (n * 2), name: 'Sight words ' + n, title: 'Sight words ' + n, href: w && w.href ? w.href : '' };
+      return { unit: n * 2 - 1, lesson: 'Units ' + (n * 2 - 1) + '\u2013' + (n * 2), name: 'Sight words ' + n, title: 'Sight words ' + n, href: '#/chest' + n };
     });
     return IR.collectSkills({
       stories: fluencyStories(),
@@ -632,7 +631,7 @@
       host.innerHTML = '';
       nums.forEach((n) => {
         const mine = skill.items.filter((it) => it.unit === n);
-        const open = sight ? mine.some((it) => it.href) : spellUnitOpen(n);
+        const open = sight ? true : spellUnitOpen(n);
         const expanded = open && opened === n;
         const uname = sight && mine[0] ? mine[0].lesson : UNIT_NAMES[n];
         const head = h('button', { class: 'spellunit' + (open ? ' open' : ' locked') + (expanded ? ' on' : ''), type: 'button', 'aria-expanded': open ? String(expanded) : 'false',
@@ -718,6 +717,7 @@
   }
   function skillScreen(id) {
     if (!id) return skillHub();
+    if (id === 'sight') return practiceScreen('sight');
     if (id === 'families') return simplePage('Word Families', h('p', { class: 'calm' }, 'Word Families is coming soon.'));
     const skill = skillCatalog().filter((s) => s.id === id)[0];
     if (!skill) { location.hash = '#/practice/skills'; return; }
@@ -726,12 +726,15 @@
   function practiceScreen(key) {
     if (key === 'sight') {
       const curUnit = islandDone('i3') ? 4 : 3; const curBox = Math.ceil(curUnit / 2);   /* same rule as the You-are-here bar */
-      const rows = [1, 2, 3, 4].map((n) => { const w = WORLD.find((x) => x.id === 'chest' + n); const ok = !!w.href;
+      const rows = [1, 2, 3, 4].map((n) => {
+        const href = '#/chest' + n;
         const mine = n === curBox;
-        const b = h('button', { class: 'gchest sbox ' + (ok ? 'open' : 'locked') + (mine ? ' mine' : ''), type: 'button', 'data-kind': 'chest', 'data-n': n, 'aria-label': 'Sight words ' + n + ', for Units ' + (2 * n - 1) + ' and ' + (2 * n) + (mine ? '. Practice this one.' : '') + (ok ? '. Word games.' : '. Coming soon.') },
-          h('b', null, String(n)), h('span', { class: 'sbt' }, h('span', null, 'Sight words ' + n), h('small', null, 'Units ' + (2 * n - 1) + '\u2013' + (2 * n) + (ok ? '' : ' \u00b7 Coming soon')), mine ? h('span', { class: 'mine-tag' }, 'Practice this one') : null));
-        b.addEventListener('click', () => { if (ok) location.hash = w.href; else { Snd.stop(); toast('This sight words box is coming soon!'); } }); return b; });
-      return simplePage('Sight Word Practice', h('div', { class: 'chestlist' }, ...rows), h('p', { class: 'calm small' }, 'Units 9\u201310: sight words come later.'));
+        const b = h('button', { class: 'gchest sbox open' + (mine ? ' mine' : ''), type: 'button', 'data-kind': 'chest', 'data-n': n, 'aria-label': 'Sight words ' + n + ', for Units ' + (2 * n - 1) + ' and ' + (2 * n) + '. Word games.' + (mine ? ' Practice this one.' : '') },
+          h('b', null, String(n)), h('span', { class: 'sbt' }, h('span', null, 'Sight words ' + n), h('small', null, 'Units ' + (2 * n - 1) + '\u2013' + (2 * n)), mine ? h('span', { class: 'mine-tag' }, 'Practice this one') : null));
+        b.addEventListener('click', () => { location.hash = href; });
+        return b;
+      });
+      return simplePage('Sight Word Practice', h('p', { class: 'calm' }, 'Tap a box. All four are open, and each one has its games.'), h('div', { class: 'chestlist' }, ...rows), h('p', { class: 'calm small' }, 'Units 9\u201310: sight words come later.'));
     }
     if (key === 'fluency') {
       const stories = fluencyStories();
@@ -740,7 +743,7 @@
       return simplePage('Fluency Stories', h('p', { class: 'calm' }, 'Read a story again and again. It gets smoother each time.'),
         h('div', { class: 'chestlist fluencylist' }, ...cards));
     }
-    if (key === 'spelling' || key === 'fluency' || key === 'sight') { location.replace('#/practice/skills/' + key); return; }
+    if (key === 'spelling' || key === 'fluency') { location.replace('#/practice/skills/' + key); return; }
     location.hash = '#/home';
   }
   /* ---------- About Island Readers (approved copy, Nov 6 2026) ---------- */
@@ -931,93 +934,125 @@
         h('img', { class: 'trailbg', src: 'img/trail_option1_bg.jpg', alt: 'A winding path from Zip at the top of the hill to a golden bell, with Frill beside the bell.' }),
         ...marks.flat()))));
   }
+  function stageUnitList(label) {
+    const m = /Units?\s+(\d+)(?:\s*-\s*(\d+))?/.exec(label || '');
+    if (!m) return [];
+    const a = +m[1]; const b = m[2] ? +m[2] : a;
+    const nums = [];
+    for (let n = a; n <= b; n++) nums.push(n);
+    return nums;
+  }
   function findCatalog() {
     const skills = skillCatalog();
     const bag = (id) => ((skills.filter((s) => s.id === id)[0] || {}).items || []).filter((it) => it.href);
-    const link = (title, href) => ({ title: title, href: href });
-    const from = (items) => items.map((it) => link('Unit ' + it.unit + ' \u00b7 Lesson ' + it.lesson + ' \u00b7 ' + it.name + (it.title ? ' \u00b7 ' + it.title : ''), it.href));
+    const kindName = { pa: 'Phonemic Awareness', spelling: 'Spelling', Spelling: 'Spelling', rhyme: 'Rhyme', fluency: 'Fluency', Fluency: 'Fluency', 'Sight words': 'Sight words' };
+    const link = (title, href, extra) => ({ title: title, href: href, blob: (title + ' ' + (extra || '')).toLowerCase() });
+    const act = (it) => Object.assign(link('Unit ' + it.unit + ' \u00b7 Lesson ' + it.lesson + ' \u00b7 ' + it.name + (it.title ? ' \u00b7 ' + it.title : ''), it.href, kindName[it.type] || it.type || ''), { unit: it.unit });
     const lessons = [
-      link('Unit 4 \u00b7 Lesson 4.1 \u00b7 ng', '#/island3'),
-      link('Unit 4 \u00b7 Lesson 4.2 \u00b7 nk', '#/nk'),
-      link('Unit 5 \u00b7 Lesson 5.1 \u00b7 Silent e', '#/u51'),
-      link('Unit 5 \u00b7 Lesson 5.2 \u00b7 Tricky silent e', '#/u53'),
-      link('Unit 6 \u00b7 Lesson 6.1 \u00b7 -s and -es', '#/u6/u61'),
-      link('Unit 6 \u00b7 Lesson 6.2 \u00b7 -ed', '#/u6/u62'),
-      link('Unit 6 \u00b7 Lesson 6.3 \u00b7 -ing', '#/u6/u63')
-    ];
+      { unit: 4, title: 'Unit 4 \u00b7 Lesson 4.1 \u00b7 ng', href: '#/island3' },
+      { unit: 4, title: 'Unit 4 \u00b7 Lesson 4.2 \u00b7 nk', href: '#/nk' },
+      { unit: 5, title: 'Unit 5 \u00b7 Lesson 5.1 \u00b7 Silent e', href: '#/u51' },
+      { unit: 5, title: 'Unit 5 \u00b7 Lesson 5.2 \u00b7 Tricky silent e', href: '#/u53' },
+      { unit: 6, title: 'Unit 6 \u00b7 Lesson 6.1 \u00b7 -s and -es', href: '#/u6/u61' },
+      { unit: 6, title: 'Unit 6 \u00b7 Lesson 6.2 \u00b7 -ed', href: '#/u6/u62' },
+      { unit: 6, title: 'Unit 6 \u00b7 Lesson 6.3 \u00b7 -ing', href: '#/u6/u63' }
+    ].map((L) => Object.assign(link(L.title, L.href, 'lesson'), { unit: L.unit }));
     const comp = [];
-    if ((IR.nk && IR.nk.steps || []).some((s) => s.id === 'comp')) comp.push(link('Unit 4 \u00b7 Lesson 4.2 \u00b7 Story Check', '#/nk/comp'));
+    if ((IR.nk && IR.nk.steps || []).some((s) => s.id === 'comp')) comp.push(link('Unit 4 \u00b7 Lesson 4.2 \u00b7 Story Check', '#/nk/comp', 'comprehension'));
     (IR.u5Lessons || []).forEach((L) => {
-      if ((L.steps || []).some((s) => s.id === 'comp')) comp.push(link('Unit 5 \u00b7 Lesson ' + L.n + ' \u00b7 Story Check', '#/' + L.key + '/comp'));
+      if ((L.steps || []).some((s) => s.id === 'comp')) comp.push(link('Unit 5 \u00b7 Lesson ' + L.n + ' \u00b7 Story Check', '#/' + L.key + '/comp', 'comprehension'));
     });
-    const mixed = bag('pa').concat(bag('spelling'), bag('rhyme'), bag('fluency'));
-    const unit5 = lessons.filter((L) => L.title.indexOf('Unit 5') === 0).concat(from(mixed.filter((it) => it.unit === 5)));
-    const unit6 = lessons.filter((L) => L.title.indexOf('Unit 6') === 0).concat(from(mixed.filter((it) => it.unit === 6)));
-    const stories = fluencyStories().map((s) => link(s.lesson + (s.title ? ' \u00b7 ' + s.title : ''), s.href));
-    const games = from(bag('pa').concat(bag('spelling'), bag('rhyme'), bag('fluency').filter((it) => it.type !== 'Fluency')));
-    return {
-      topic: [
-        { name: 'Short Vowels', items: [] },
-        { name: 'Blends', items: [] },
-        { name: 'Digraphs', items: [] },
-        { name: 'Magic e', items: unit5 },
-        { name: 'Endings', items: unit6 },
-        { name: 'Spelling', items: from(bag('spelling')) },
-        { name: 'Rhyme', items: from(bag('rhyme')) },
-        { name: 'Phonemic Awareness', items: from(bag('pa')) },
-        { name: 'Word Families', items: [] },
-        { name: 'Fluency', items: stories },
-        { name: 'Comprehension', items: comp }
-      ],
-      unit: lessons,
-      activity: [
-        { name: 'Lessons', items: lessons },
-        { name: 'Games', items: games },
-        { name: 'Stories', items: stories },
-        { name: 'Comprehension', items: comp },
-        { name: 'Worksheets', items: [] }
-      ]
-    };
+    const stories = fluencyStories().map((s) => link(s.lesson + (s.title ? ' \u00b7 ' + s.title : ''), s.href, 'fluency story reader'));
+    const byHref = new Map();
+    bag('pa').concat(bag('rhyme'), bag('spelling'), bag('fluency').filter((it) => it.type !== 'Fluency')).map(act).forEach((it) => {
+      const prev = byHref.get(it.href);
+      if (!prev) byHref.set(it.href, it);
+      else if (prev.blob.indexOf(it.blob) < 0) prev.blob += ' ' + it.blob;
+    });
+    const plays = [...byHref.values()];
+    const unit = [];
+    for (let n = 1; n <= 22; n++) unit.push({ name: 'Unit ' + n + ' \u00b7 ' + UNIT_NAMES[n], items: lessons.filter((L) => L.unit === n) });
+    const stage = TRAIL_STAGES.map((s) => {
+      const nums = stageUnitList(s.units);
+      return { name: 'Stage ' + s.n + ': ' + s.units + ' \u00b7 ' + s.skills, items: plays.filter((it) => nums.indexOf(it.unit) >= 0) };
+    });
+    const games = (IR.chest && IR.chest.GAMES) || [];
+    const sight = [1, 2, 3, 4].map((n) => {
+      const href = '#/chest' + n;
+      const range = 'Units ' + (n * 2 - 1) + '\u2013' + (n * 2);
+      const items = [link('Treasure chest ' + n, href, 'sight words heart words treasure ' + range)];
+      games.forEach((g) => items.push(link(g.title, href + '/' + g.id, 'sight words heart words treasure ' + range + ' ' + (g.blurb || ''))));
+      return { name: 'Sight words ' + n + ' \u00b7 ' + range, items: items };
+    });
+    const fluency = [
+      { name: 'Stories', items: stories },
+      { name: 'Comprehension', items: comp }
+    ];
+    const search = [link('Word Families is coming soon.', '', 'word families')];
+    const seen = new Set();
+    function addSearch(it) {
+      if (!it || !it.href || seen.has(it.href + '|' + it.title)) return;
+      seen.add(it.href + '|' + it.title);
+      search.push(it);
+    }
+    unit.forEach((g) => g.items.forEach(addSearch));
+    stage.forEach((g) => g.items.forEach(addSearch));
+    sight.forEach((g) => g.items.forEach(addSearch));
+    fluency.forEach((g) => g.items.forEach(addSearch));
+    return { unit: unit, stage: stage, sight: sight, fluency: fluency, search: search };
   }
   function findScreen() {
     IR.newScreen();
     const data = findCatalog();
     const back = h('button', { class: 'back homebtn', type: 'button', onclick: () => { location.hash = '#/home'; } }, icon('back'), h('span', null, 'Home'));
-    const input = h('input', { class: 'skillsearch', type: 'search', placeholder: 'Search', 'aria-label': 'Search lessons, games, and stories' });
+    const input = h('input', { class: 'skillsearch', type: 'search', placeholder: 'Search', 'aria-label': 'Search lessons, games, stories, and skills' });
     const tabs = h('div', { class: 'findtabs', role: 'tablist' });
     const host = h('div', { class: 'findhost' });
-    const modes = [['topic', 'By Topic / Skill'], ['unit', 'By Unit and Lesson'], ['activity', 'By Activity']];
-    let mode = 'topic';
+    const modes = [['unit', 'By Unit'], ['stage', 'By Stage'], ['sight', 'Sight Words'], ['fluency', 'Fluency Readers']];
+    let mode = 'unit';
+    let openKey = '';
     function row(it) {
+      if (!it.href) return h('p', { class: 'findsoon' }, it.title);
       return h('a', { class: 'hometab', href: it.href }, h('span', { class: 'hometab-name' }, it.title));
     }
-    function group(name, items) {
-      const body = items.length
-        ? items.map(row)
-        : [h('p', { class: 'findsoon' }, 'Coming soon')];
-      return h('section', { class: 'findgroup' }, h('h2', null, name), ...body);
+    function section(g) {
+      const open = openKey === g.name;
+      const b = h('button', {
+        class: 'hometab findhead',
+        type: 'button',
+        'aria-expanded': open ? 'true' : 'false',
+        onclick: () => { openKey = open ? '' : g.name; paint(); }
+      }, h('span', { class: 'hometab-name' }, g.name));
+      const kids = open
+        ? [h('div', { class: 'findkids' }, ...(g.items.length ? g.items.map(row) : [h('p', { class: 'findsoon' }, 'Coming soon')]))]
+        : [];
+      return h('section', { class: 'findgroup' }, b, ...kids);
     }
     function paint() {
       host.innerHTML = '';
       const q = input.value.trim().toLowerCase();
-      if (mode === 'unit') {
-        const hits = data.unit.filter((it) => !q || it.title.toLowerCase().indexOf(q) >= 0);
-        host.append(h('section', { class: 'findgroup' }, h('h2', null, 'Open lessons'), ...(hits.length ? hits.map(row) : [h('p', { class: 'findsoon' }, 'No lessons match.')])));
-        if (!q) host.append(h('p', { class: 'calm' }, 'Units 1 to 3 and units 7 to 22 are coming soon.'));
+      const groups = data[mode] || [];
+      if (q) {
+        const hits = [];
+        groups.forEach((g) => {
+          const groupHit = g.name.toLowerCase().indexOf(q) >= 0;
+          g.items.forEach((it) => {
+            if (groupHit || (it.blob || it.title || '').toLowerCase().indexOf(q) >= 0) hits.push(it);
+          });
+          if (!g.items.length && groupHit) hits.push({ title: g.name, href: '' });
+        });
+        if (!hits.length) host.append(h('p', { class: 'calm' }, 'No matches.'));
+        else host.append(h('section', { class: 'findgroup' }, ...hits.map(row)));
         return;
       }
-      const groups = data[mode];
-      groups.forEach((g) => {
-        const items = g.items.filter((it) => !q || (g.name + ' ' + it.title).toLowerCase().indexOf(q) >= 0);
-        if (q && !items.length && g.name.toLowerCase().indexOf(q) < 0) return;
-        host.append(group(g.name, q ? items : g.items));
-      });
-      if (!host.childElementCount) host.append(h('p', { class: 'calm' }, 'No matches.'));
+      groups.forEach((g) => host.append(section(g)));
     }
     modes.forEach(([id, label]) => {
       const b = h('button', { class: 'findtab' + (id === mode ? ' on' : ''), type: 'button', role: 'tab', 'aria-selected': id === mode ? 'true' : 'false' }, label);
       b.addEventListener('click', () => {
         mode = id;
+        openKey = '';
+        input.value = '';
         tabs.querySelectorAll('.findtab').forEach((el, i) => {
           const on = modes[i][0] === mode;
           el.classList.toggle('on', on);
@@ -1027,12 +1062,12 @@
       });
       tabs.append(b);
     });
-    input.addEventListener('input', paint);
+    input.addEventListener('input', () => { openKey = ''; paint(); });
     paint();
     app.append(h('div', { class: 'screen home simplepage findpage' }, h('div', { class: 'mwrap' },
       h('div', { class: 'gtop' }, back),
       h('h1', null, 'Find It'),
-      input, tabs, host)));
+      h('div', { class: 'findstack' }, input, tabs), host)));
   }
   /* ---------- router ---------- */
   let lastRouted = '';
@@ -1049,7 +1084,7 @@
     else if (IR.u6Route && IR.u6Route(hash, app)) { /* Unit 6 Endings (js/u6.js) */ }
     else if ((m = /^#\/lesson\/(\d+)/.exec(hash))) lessonScreen(parseInt(m[1], 10) - 1);
     else if (/^#\/chest[1-4]/.test(hash)) IR.chest.render(hash, app);
-    else if (hash === '#/practice/spelling' || hash === '#/practice/fluency' || hash === '#/practice/sight') { location.replace(hash.replace('#/practice/', '#/practice/skills/')); return; }
+    else if (hash === '#/practice/spelling' || hash === '#/practice/fluency') { location.replace(hash.replace('#/practice/', '#/practice/skills/')); return; }
     else if ((m = /^#\/practice\/skills(?:\/([a-z]+))?$/.exec(hash))) skillScreen(m[1]);
     else if ((m = /^#\/practice\/(\w+)/.exec(hash))) practiceScreen(m[1]);
     else if (hash.startsWith('#/gems')) gemScreen();

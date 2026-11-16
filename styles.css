@@ -1410,14 +1410,25 @@ body.calm .ob-glow{animation:none;opacity:.85}
 .gridhome .homefeature .homeart{width:100%;height:auto;max-height:9rem;object-fit:cover;object-position:center 40%}
 @media (min-width:1100px){.gridhome .homefeature .homeart{max-height:6.4rem}}
 @media (max-width:699px){.gridhome .homefeature .homeart{max-height:6.2rem}.gridhome .homeside{padding-bottom:5.5rem}}
-.hometabs{display:flex;flex-direction:column;gap:.55rem;width:100%}
+.hometabs{display:flex;flex-direction:column;gap:.6rem;width:100%;margin-top:24px}
 .hometab{display:flex;align-items:center;gap:.55rem;width:100%;min-height:3.4rem;padding:.65rem .8rem;border:4px solid var(--ink);border-radius:1.15rem;background:#FFFDF8;color:var(--ink);text-decoration:none;font-weight:700;box-shadow:0 4px 0 rgba(43,37,64,.16);text-align:left}
+.hometabs .hometab{box-sizing:border-box;justify-content:center;text-align:center;width:100%;height:4.6rem;min-height:4.6rem;padding:.4rem .85rem;gap:.5rem;border:3px solid #C9841A;border-radius:1.15rem;background:linear-gradient(180deg,#FFE7B8,#F6C56A);color:#3A2400;box-shadow:0 4px 0 #C9841A;font-size:1.05rem}
 .hometab .pico,.hometab .ico{color:#F28C00;flex:none}
 .hometab-name{font-size:1.05rem;line-height:1.25}
-.findtabs{display:flex;flex-direction:column;gap:.4rem;margin:.6rem 0}
-.findtab{min-height:3rem;border:3px solid var(--ink);border-radius:1rem;background:#fff;font-weight:700;padding:.4rem .8rem}
+.hometabs .hometab-name{font-size:1.05rem;line-height:1.2;text-align:center}
+.hometabs .hometab-ico{display:inline-flex;align-items:center;justify-content:center;width:1.45rem;height:1.45rem;flex:none;color:#C45C2A}
+.hometabs .hometab-ico .ico{width:1.45rem;height:1.45rem;display:block}
+.findstack{width:100%}
+.findstack .skillsearch{width:100%;box-sizing:border-box;margin:.2rem 0 .45rem}
+.findtabs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.45rem;margin:0;width:100%;align-items:stretch}
+.findtab{box-sizing:border-box;width:100%;min-width:0;height:100%;min-height:3.4rem;display:flex;align-items:center;justify-content:center;border:3px solid var(--ink);border-radius:1rem;background:#fff;font:inherit;font-weight:700;padding:.4rem .35rem;text-align:center;line-height:1.15;cursor:pointer;color:var(--ink)}
 .findtab.on{background:#F28C00;color:#fff;border-color:#C95A10}
-.findgroup{margin:.8rem 0 1.1rem}
+@media (max-width:699px){
+  .findtabs{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .findtab{min-height:3.6rem}
+}
+.findgroup{margin:.45rem 0}
+.findkids{display:flex;flex-direction:column;gap:.4rem;margin:.4rem 0 .15rem}
 .findgroup h2{font-size:1.25rem;margin:.2rem 0 .4rem}
 .findsoon{margin:.2rem 0 .4rem;font-weight:700;color:#6d6578}
 .trailpage .btn.primary.trailgo{margin:.2rem auto .8rem;display:flex;width:100%;max-width:36rem;background:#F28C00;border-color:#C95A10;box-shadow:0 5px 0 #C95A10;color:#fff;text-decoration:none}
@@ -1580,11 +1591,11 @@ body.calm .ob-glow{animation:none;opacity:.85}
 .zfspk{flex:none;width:2.75rem;height:2.75rem;border-radius:50%;border:2px solid var(--teal-d);background:var(--teal);color:#fff;display:inline-flex;align-items:center;justify-content:center;padding:0;box-shadow:0 3px 0 var(--teal-d);cursor:pointer}
 .zfspk .ico{width:1.4rem;height:1.4rem}.zfspk.playing{background:var(--teal-d)}
 .zfspk:focus-visible,.zfstart2:focus-visible{outline:4px solid #1b6fd8;outline-offset:3px}
-.zfstart2{order:4;width:100%;display:flex;align-items:center;justify-content:center;gap:.8rem;padding:.9rem 1.2rem;min-height:4.6rem;border-radius:1.3rem;text-decoration:none;color:#3A2400;background:linear-gradient(180deg,#FFC94D,#F5A623);border:2px solid #D98E00;box-shadow:0 5px 0 #C27A00,0 10px 22px rgba(217,142,0,.25);font-family:inherit;animation:zfglow 1.8s ease-out .4s 1 both}
-.zfstart2:active{transform:translateY(3px);box-shadow:0 2px 0 #C27A00}
+.zfstart2{order:4;width:100%;display:flex;align-items:center;justify-content:center;gap:.8rem;padding:.9rem 1.2rem;min-height:4.6rem;border-radius:1.3rem;text-decoration:none;color:#fff;background:#0E7C7C;border:2px solid #085E5C;box-shadow:0 5px 0 #085E5C;font-family:inherit;animation:zfglow 1.8s ease-out .4s 1 both}
+.zfstart2:active{transform:translateY(3px);box-shadow:0 2px 0 #085E5C}
 .zfstart2 .zfbell{font-size:1.9rem;line-height:1}
-.zfst{display:flex;flex-direction:column;align-items:flex-start;line-height:1.2}.zfst b{font-size:1.4rem}.zfst small{font-size:1rem;font-weight:400;opacity:.9}
-@keyframes zfglow{0%{box-shadow:0 5px 0 #C27A00,0 0 0 0 rgba(255,201,77,.0)}40%{box-shadow:0 5px 0 #C27A00,0 0 0 12px rgba(255,201,77,.55)}100%{box-shadow:0 5px 0 #C27A00,0 10px 22px rgba(217,142,0,.25)}}
+.zfst{display:flex;flex-direction:column;align-items:center;text-align:center;line-height:1.2}.zfst b{font-size:1.4rem}.zfst small{font-size:1rem;font-weight:400;opacity:1;color:#fff}
+@keyframes zfglow{0%{box-shadow:0 5px 0 #085E5C,0 0 0 0 rgba(14,124,124,0)}40%{box-shadow:0 5px 0 #085E5C,0 0 0 12px rgba(31,166,166,.4)}100%{box-shadow:0 5px 0 #085E5C}}
 @media (prefers-reduced-motion:reduce){.zfstart2{animation:none}}
 .aboutbtn{background:transparent!important;border:2px solid var(--line)!important;box-shadow:none!important;font-size:1rem!important;min-height:3rem!important;font-weight:700;color:var(--ink2)!important}
 /* Nov 10 2026: Zip and Frill portraits back in the left-column card. Files are the existing v4 B art. */

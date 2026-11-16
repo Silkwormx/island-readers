@@ -39,6 +39,23 @@ test('skills gather existing activities and search by name or type', () => {
   assert.equal(IR.searchSkills(skills, 'zip')[0].skill, 'Fluency');
 });
 
+test('sight word chests stay unlocked even when a link is missing', () => {
+  const IR = load();
+  const skills = IR.collectSkills({
+    chests: [
+      { unit: 1, lesson: 'Units 1–2', name: 'Sight words 1', title: 'Sight words 1', href: '#/chest1' },
+      { unit: 3, lesson: 'Units 3–4', name: 'Sight words 2', title: 'Sight words 2', href: '' },
+      { unit: 5, lesson: 'Units 5–6', name: 'Sight words 3', title: 'Sight words 3' }
+    ]
+  });
+  const sight = skills.find((s) => s.id === 'sight').items;
+  assert.equal(sight.length, 3);
+  assert.ok(sight.every((it) => it.locked === false));
+  assert.equal(sight[0].href, '#/chest1');
+  const found = IR.searchSkills(skills, 'sight words');
+  assert.equal(found.length, 3);
+});
+
 test('old practice links redirect into Skill Practice', () => {
   const screens = fs.readFileSync(new URL('../js/screens.js', import.meta.url), 'utf8');
   assert.match(screens, /#\/practice\/spelling/);
