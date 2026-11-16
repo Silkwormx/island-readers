@@ -300,13 +300,19 @@
       b.addEventListener('click', () => { if (u6) { Snd.stop(); location.hash = '#/u6'; } else if (u5) { openIsland('i5'); } else if (isl) openIsland(BUILT_ID); else { Snd.stop(); toast(st === 'done' ? 'Unit ' + n + ' is done. It is part of the full app.' : n < BUILT ? 'Unit ' + n + ' is coming soon in the full app!' : lit ? 'Unit ' + n + ' is unlocked! It is coming soon in the full app.' : 'Unit ' + n + ' is coming soon! Finish Unit ' + BUILT + ' first.'); } });
       return b;
     };
+    const cover = h('img', { src: 'foundation/img/foundations_cover.jpg', alt: '' });
+    const pic = h('span', { class: 'tpic' }, cover);
+    cover.addEventListener('error', () => {
+      pic.className = 'tpic tfaces';
+      pic.replaceChildren(...['a_asa_apple_snail.jpg', 'm_manny_mangrove.jpg', 's_sami_sea_snake.jpg', 't_tama_sea_turtle.jpg'].map((file) => h('img', { src: 'foundation/img/letters/' + file, alt: '' })));
+    });
     const foundations = h('button', {
       class: 'tcard',
       type: 'button',
       'data-id': 'foundations',
       'aria-label': 'Foundations. Learn the letters. Opens Foundation Skills.'
     },
-      h('span', { class: 'tpic tfaces' }, ...['a_asa_apple_snail.jpg', 'm_manny_mangrove.jpg', 's_sami_sea_snake.jpg', 't_tama_sea_turtle.jpg'].map((file) => h('img', { src: 'foundation/img/letters/' + file, alt: '' }))),
+      pic,
       h('span', { class: 'tbody' },
         h('span', { class: 'thead' }, h('b', { class: 'tnum' }, 'Foundations')),
         h('span', { class: 'tname' }, 'Learn the letters'),

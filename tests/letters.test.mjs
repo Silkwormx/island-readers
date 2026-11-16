@@ -105,6 +105,7 @@ test('home opens Foundation Skills from the first bell, not a sidebar tab', () =
   assert.equal(home.includes("tab('#/foundation'"), false);
   assert.ok(home.indexOf("tab('#/trail'") < home.indexOf("tab('#/find'"));
   assert.ok(home.indexOf("'Foundations'") < home.indexOf('for (let n = 1; n <= 22; n++)'));
+  assert.match(home, /foundation\/img\/foundations_cover\.jpg/);
   assert.match(home, /Learn the letters/);
   assert.match(home, /location\.hash = '#\/foundation'/);
   assert.match(home, /class: 'tcard'/);
@@ -113,7 +114,7 @@ test('home opens Foundation Skills from the first bell, not a sidebar tab', () =
   assert.match(html, /js\/foundation\/letters\.js/);
   assert.match(html, /foundation\/foundation\.css/);
   assert.match(sw, /js\/foundation\/letters\.js/);
-  assert.match(sw, /ir-20261116z/);
+  assert.match(sw, /ir-20261116za/);
   assert.match(teach, /#\/foundation/);
   assert.match(letters, /Foundation Skills/);
   assert.match(letters, /#\/foundation\/letters/);
