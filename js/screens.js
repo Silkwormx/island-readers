@@ -345,11 +345,16 @@
     const side = app.querySelector('.homeside'); const scr = app.querySelector('.screen.home');
     const pin = () => {
       if (!side || !scr || !side.isConnected) { window.removeEventListener('resize', pin); return; }
+      if (!matchMedia('(min-width:1100px)').matches) { side.style.top = ''; side.style.maxHeight = ''; side.style.overflowY = ''; return; }
+      const saved = scr.scrollTop;
+      scr.scrollTop = 0;
       side.style.top = ''; side.style.maxHeight = ''; side.style.overflowY = '';
-      if (!matchMedia('(min-width:1100px)').matches) return;
-      const top = Math.round(side.getBoundingClientRect().top - scr.getBoundingClientRect().top + scr.scrollTop);
-      const bar = app.querySelector('.youbar'); const barH = bar ? bar.getBoundingClientRect().height + 48 : 28;
-      side.style.top = top + 'px'; side.style.maxHeight = Math.max(240, innerHeight - top - barH) + 'px'; side.style.overflowY = 'auto';
+      let top = 0, n = side;
+      while (n && n !== scr) { top += n.offsetTop; n = n.offsetParent; }
+      side.style.top = top + 'px';
+      side.style.maxHeight = Math.max(320, innerHeight - top - 12) + 'px';
+      side.style.overflowY = 'hidden';
+      scr.scrollTop = saved;
     };
     requestAnimationFrame(pin); window.addEventListener('resize', pin);
   }

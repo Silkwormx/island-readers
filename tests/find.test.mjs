@@ -18,7 +18,7 @@ test('Find It is a search box and four tabs', () => {
   assert.match(screens, /TRAIL_STAGES\.map/);
   assert.match(screens, /Stage ' \+ s\.n \+ ': ' \+ s\.units/);
   assert.match(screens, /for \(let n = 1; n <= 22; n\+\+\)/);
-  assert.match(sw, /ir-20261115m/);
+  assert.match(sw, /ir-20261115n/);
   assert.match(screens, /openKey === g\.name/);
   assert.match(screens, /data\[mode\]/);
   const css = fs.readFileSync(new URL('../styles.css', import.meta.url), 'utf8');
