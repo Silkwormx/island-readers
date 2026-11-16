@@ -1,7 +1,7 @@
 /* Island Readers sample service worker.
    Code (HTML/JS/CSS/data) is network-first so a new version always wins; the cache is only an offline fallback.
    Media (images/audio/video) is cache-first. Install never fails because of one file. */
-const CACHE = 'ir-20261115c';
+const CACHE = 'ir-20261115e';
 const ASSETS = [
  "./",
  "./index.html",
@@ -12,6 +12,10 @@ const ASSETS = [
  "./img/u5_c_bone.webp",
  "./img/u5_c_cake.webp",
  "./img/u5_c_cap.webp",
+ "./img/refresh_bed.jpg",
+ "./img/refresh_pig.jpg",
+ "./img/refresh_mop.jpg",
+ "./img/refresh_cup.jpg",
  "./img/u5_c_cube.webp",
  "./img/u5_c_dove.webp",
  "./img/u5_c_five.webp",
@@ -72,6 +76,22 @@ const ASSETS = [
  "./audio/u53_p_feed.mp3",
  "./audio/u51_p_feed.mp3",
  "./audio/u51_p_sort.mp3",
+ "./audio/u51_p_refresh.mp3",
+ "./audio/u51_p_refresh_e.mp3",
+ "./audio/u51_rf_cap.mp3",
+ "./audio/u51_rf_bed.mp3",
+ "./audio/u51_rf_pet.mp3",
+ "./audio/u51_rf_pen.mp3",
+ "./audio/u51_rf_pig.mp3",
+ "./audio/u51_rf_mop.mp3",
+ "./audio/u51_rf_cup.mp3",
+ "./audio/u51_rf_cake.mp3",
+ "./audio/u51_rf_Pete.mp3",
+ "./audio/u51_rf_kite.mp3",
+ "./audio/u51_rf_rope.mp3",
+ "./audio/u51_rf_cube.mp3",
+ "./audio/u51_rf_he.mp3",
+ "./audio/u51_rf_me.mp3",
  "./audio/u51_p_mage.mp3",
  "./audio/u53_p_sort.mp3",
  "./audio/u53_p_mage.mp3",
