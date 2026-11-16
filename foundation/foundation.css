@@ -140,6 +140,60 @@ html.teach .llchoice .llface svg{width:4.2rem}
 html.teach .llchoice{min-height:96px;min-width:88px}
 html.teach .llcard .llpair{font-size:64px}
 html.teach .llist .u5name,html.teach .llplay .u5name{font-size:32px}
+.fs-hub{display:flex;flex-direction:column;gap:.35rem;min-height:0;overflow:hidden}
+.fs-lead{margin:0;text-align:center}
+.fs-page .btn.primary.fs-continue{align-self:center;min-width:min(16rem,80%);background:#F28C00;border-color:#C95A10;box-shadow:0 5px 0 #C95A10;color:#fff}
+.fs-group{overflow:hidden}
+.fs-lesson .llnav{width:100%}
+.fs-lesson .llnav .btn{background:#F28C00;border-color:#C95A10;box-shadow:0 5px 0 #C95A10;color:#fff}
+.fs-h{margin:0;font-size:1.05rem}
+.fs-path{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:.35rem;min-height:0}
+.fs-group{display:flex;flex-direction:column;align-items:center;gap:.15rem;min-height:0;padding:.3rem .2rem;background:#fff;border:3px solid var(--ink);border-radius:.9rem;font-family:Andika,sans-serif;color:var(--ink);cursor:pointer}
+.fs-group.next{border-color:#F28C00;background:#FFF3D6}
+.fs-group.locked{opacity:.55}
+.fs-next{min-height:1rem;font-size:.72rem;font-weight:700;color:#C95A10}
+.fs-faces{display:flex;gap:.1rem;justify-content:center;min-height:2.2rem}
+.fs-face{height:2.2rem;width:auto;object-fit:contain}
+.fs-face svg{height:2.2rem;width:auto}
+.fs-plain{font-weight:700;font-size:clamp(.95rem,1.6vw,1.2rem);letter-spacing:.04em}
+.fs-count{font-weight:700;font-size:.85rem}
+.fs-bank,.fs-grown{display:flex;align-items:center;gap:.45rem;flex-wrap:wrap;background:#fff;border:3px solid var(--ink);border-radius:.9rem;padding:.25rem .55rem}
+.fs-words{margin:0;font-weight:700;line-height:1.2}
+.fs-words.big{font-size:clamp(1.2rem,3vh,1.8rem);text-align:center}
+.fs-grown a,.fs-grown button{font-family:Andika,sans-serif;font-weight:700;background:transparent;border:0;color:var(--ink);text-decoration:underline;padding:.1rem .2rem;cursor:pointer}
+.fs-lessons{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:.4rem;align-content:start}
+.fs-lesson{width:100%;display:flex;flex-direction:column;align-items:flex-start;gap:.1rem;text-align:left;padding:.45rem .7rem;background:#fff;border:3px solid var(--ink);border-radius:.9rem;font-family:Andika,sans-serif;color:var(--ink);cursor:pointer}
+.fs-lesson.done{background:#FFF3D6}
+.fs-day{font-weight:700;font-size:1.15rem}
+.fs-line{font-weight:700}
+.fs-lesson .fs-line{font-size:.95rem}
+.fs-strip{display:flex;gap:.25rem;justify-content:center;flex-wrap:wrap;padding:.15rem .4rem 0}
+.fs-step{min-height:2rem;padding:.1rem .45rem;border-radius:.7rem;border:3px solid var(--ink);background:#fff;font-family:Andika,sans-serif;font-weight:700;font-size:.85rem;color:var(--ink)}
+.fs-step.on{background:#F28C00;color:#fff;border-color:#C95A10}
+.fs-step.past{background:#FFF3D6}
+.fs-stagewrap{display:flex;align-items:center;justify-content:center;min-height:0}
+.fs-stage{width:100%;display:flex;flex-direction:column;align-items:center;gap:.4rem}
+.fs-meet{display:flex;gap:.6rem;justify-content:center;flex-wrap:wrap}
+.fs-meetone{display:flex;flex-direction:column;align-items:center;gap:.2rem}
+.llrow{display:flex;gap:.4rem;justify-content:center;flex-wrap:wrap}
+.lltap{min-width:3.4rem;min-height:3.4rem;padding:.2rem .55rem;border-radius:.9rem;border:3px solid var(--ink);background:#fff;font-family:Andika,sans-serif;font-weight:700;font-size:clamp(1.4rem,4vh,2rem);color:var(--ink)}
+.lltap.lit{background:#FFE08A}
+.lltap.off{opacity:.45}
+.lltap img{height:2.6rem;width:auto}
+.llnav{display:flex;justify-content:center;padding:.2rem .6rem .45rem}
+.llbuddies{display:flex;gap:.4rem}
+.llbuddies img{height:3.2rem;width:auto}
+.fs-lessonpage,.fs-lesson{overflow:hidden}
+@media (max-width:900px){
+  .fs-path{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .fs-face{height:1.7rem}
+}
+@media (max-width:700px){
+  .fs-page{overflow:auto}
+  .fs-hub{overflow:auto}
+  .fs-path{grid-template-columns:1fr 1fr}
+  .fs-face{height:2.4rem}
+}
 @media (max-width:700px){
   .llletters,.llgames,.llgrouppage .llgames:has(.llplay:nth-child(5)){grid-template-columns:1fr 1fr}
   .llform{grid-template-columns:7.2rem minmax(0,1fr);padding:.25rem .4rem}

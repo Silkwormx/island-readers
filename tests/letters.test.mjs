@@ -40,7 +40,12 @@ test('Learn the Letters follows the UFLI group order and is not a unit', () => {
   assert.match(letters, /Mastery check/);
   assert.match(letters, /cueFor/);
   assert.match(letters, /llfont-a/);
-  assert.match(letters, /'Day ' \+ n/);
+  assert.match(letters, /Your letter path/);
+  assert.match(letters, /Start Group 1/);
+  assert.match(letters, /Group check/);
+  assert.match(letters, /function lessonsOf/);
+  assert.match(letters, /Warm-up/);
+  assert.match(letters, /Blend and read/);
   assert.match(letters, /Final art is still needed/);
 });
 
@@ -98,8 +103,8 @@ test('home adds one Foundation Skills tab and leaves the bell grid alone', () =>
   const homeEnd = screens.indexOf('function gemScreen()');
   const home = screens.slice(homeStart, homeEnd);
   assert.match(home, /tab\('#\/foundation', 'Foundation Skills', 'book'\)/);
-  assert.ok(home.indexOf("tab('#/trail'") < home.indexOf("tab('#/foundation'"));
-  assert.ok(home.indexOf("tab('#/find'") < home.indexOf("tab('#/foundation'"));
+  assert.ok(home.indexOf("tab('#/foundation'") < home.indexOf("tab('#/trail'"));
+  assert.ok(home.indexOf("tab('#/trail'") < home.indexOf("tab('#/find'"));
   assert.equal(home.includes('lettersentry'), false);
   assert.equal(home.includes('Before Unit 1'), false);
   assert.match(home, /h\('div', \{ class: 'bellpath', id: 'skymap' \}, h\('div', \{ class: 'bellgrid' \}, \.\.\.cards\)\)/);
@@ -107,7 +112,7 @@ test('home adds one Foundation Skills tab and leaves the bell grid alone', () =>
   assert.match(html, /js\/foundation\/letters\.js/);
   assert.match(html, /foundation\/foundation\.css/);
   assert.match(sw, /js\/foundation\/letters\.js/);
-  assert.match(sw, /ir-20261116x/);
+  assert.match(sw, /ir-20261116y/);
   assert.match(teach, /#\/foundation/);
   assert.match(letters, /Foundation Skills/);
   assert.match(letters, /#\/foundation\/letters/);

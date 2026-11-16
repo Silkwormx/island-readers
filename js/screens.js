@@ -307,10 +307,10 @@
       h('span', { class: 'hometab-ico', 'aria-hidden': 'true' }, icon(icoName)),
       h('span', { class: 'hometab-name' }, name));
     const tabs = h('nav', { class: 'hometabs', 'aria-label': 'More places' },
+      tab('#/foundation', 'Foundation Skills', 'book'),
       tab('#/trail', 'Trail Map and Placement Test', 'map'),
       tab('#/practice/sight', 'Sight Word Practice', 'star'),
-      tab('#/find', 'Find It', 'search'),
-      tab('#/foundation', 'Foundation Skills', 'book'));
+      tab('#/find', 'Find It', 'search'));
     /* Nov 6 2026: full-width home feature (approved banyan scene), then About + the hero beside the unit grid */
     const banner = h('header', { class: 'hbanner' }, h('h1', null, 'Island Readers'),
       h('div', { class: 'grownwrap' }, h('span', { class: 'grownlab' }, 'Parent and Teacher Materials'), IR.ui.gearButton()));
