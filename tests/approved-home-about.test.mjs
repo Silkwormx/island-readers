@@ -61,7 +61,7 @@ test('home shows Zip and Frill again and keeps the left-column layout', () => {
   assert.ok(home.includes('Ring every bell by learning its sounds.'));
   assert.equal(home.includes('Learn each sound to fix the bells.'), false);
   assert.ok(home.includes('Learn to read with Zip and Frill. Ring every bell by learning its sounds. Start here to find your first bell.'));
-  assert.ok(home.includes('hero, tabs), grid'));
+  assert.ok(home.includes("hero, tabs), h('div', { class: 'bellslot' }, grid)"));
   assert.ok(screens.includes("'Continue'"));
   assert.ok(screens.includes("sub: 'Pick up where you left off'"));
   assert.equal(screens.includes('Find your first bell'), false);
@@ -69,14 +69,15 @@ test('home shows Zip and Frill again and keeps the left-column layout', () => {
   assert.ok(screens.includes('Find It'));
   assert.ok(screens.includes('Parent and Teacher Materials'));
   assert.ok(screens.includes('Take the Placement Test'));
-  assert.ok(screens.includes('img/trail_option1_bg.jpg'));
-  assert.ok(screens.includes('Short vowels, floss, blends'));
-  assert.ok(screens.includes('Word parts and patterns'));
+  assert.ok(screens.includes('img/units/tile'));
+  assert.ok(screens.includes('img/trail/trail_map.webp'));
+  assert.ok(screens.includes('Golden Bell'));
+  assert.equal(screens.includes('youbar'), false);
   assert.ok(screens.includes("['Endings', '-s \\u00b7 -es \\u00b7 -ed \\u00b7 -ing', 3,"));
   assert.equal(home.includes('banner, hero,'), false);
   const sw = fs.readFileSync(new URL('../sw.js', import.meta.url), 'utf8');
   assert.equal(sw.includes('home_banyan_c.jpg'), false);
-  assert.ok(sw.includes('ir-20261115r'));
+  assert.ok(sw.includes('ir-20261116q'));
   assert.ok(sw.includes('home_zip_frill.webp'));
 });
 

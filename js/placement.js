@@ -6,6 +6,18 @@
   const IR = window.IR; const { h, icon, Snd } = IR;
   const KEY = 'ir_start_bell';
   const SKILL = { 1: 'blends', 2: 'sh ch th', 3: 'ng nk', 4: 'silent e', 5: 'long words', 6: 'bossy r', 7: 'vowel teams', 8: 'oi ow aw', 9: 'word parts', 10: 'tch dge igh' };
+  const BELL = {
+    1: { unit: 2, name: 'Blends' },
+    2: { unit: 3, name: 'Digraphs' },
+    3: { unit: 4, name: 'Glued Sounds' },
+    4: { unit: 5, name: 'Silent e' },
+    5: { unit: 7, name: 'Syllables' },
+    6: { unit: 9, name: 'Bossy R' },
+    7: { unit: 11, name: 'Long A & E Teams' },
+    8: { unit: 15, name: 'Sliding Vowels' },
+    9: { unit: 19, name: 'Suffixes' },
+    10: { unit: 8, name: 'Tricky Sounds' }
+  };
   /* [word, madeUp?] Each group uses only its pattern plus earlier ones. */
   const GROUPS = [
     { n: 0, name: 'short vowels', words: [['map'], ['sit'], ['hug'], ['jop', 1], ['ved', 1]] },
@@ -85,17 +97,19 @@
       let summary = '';
       if (passed) {
         const known = passed.map((x) => x.name);
-        summary = cvc ? 'Short vowel words need more practice first. Start with short-vowel review, then Unit 1 blends.'
-          : all ? 'Read every group. Start at Unit 10 tch dge igh to review, or pick any bell.'
-          : (known.length ? 'Knows ' + list(known) + '. ' : '') + 'Start at ' + SKILL[start] + '.';
+        const startBell = all ? { unit: 22, name: 'Big Endings' } : (BELL[start] || { unit: start, name: SKILL[start] });
+        summary = cvc ? 'Short vowel words need more practice first. Start with short-vowel review, then the Blends bell.'
+          : all ? 'Read every group. Start at Big Endings to review, or pick any bell.'
+          : (known.length ? 'Knows ' + list(known) + '. ' : '') + 'Start at ' + startBell.name + '.';
       }
       const bells = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((n) => {
+        const bell = BELL[n];
         const st = n < start ? 'rung' : n === start ? 'start' : 'later';
-        return h('div', { class: 'plc-bell pb-' + st, 'aria-label': 'Unit ' + n + ', ' + SKILL[n] + (st === 'rung' ? ', rung' : st === 'start' ? ', start here' : '') },
-          h('span', { class: 'gpic' }, h('img', { src: 'img/units/unit' + String(n).padStart(2, '0') + '.webp', alt: '' }), h('span', { class: 'gunit' }, 'Unit ' + n),
+        return h('div', { class: 'plc-bell pb-' + st, 'aria-label': bell.name + ', Unit ' + bell.unit + (st === 'rung' ? ', rung' : st === 'start' ? ', start here' : '') },
+          h('span', { class: 'gpic' }, h('img', { src: 'img/units/tile' + String(bell.unit).padStart(2, '0') + '.webp', alt: '' }), h('span', { class: 'gunit' }, 'Unit ' + bell.unit),
             st === 'start' ? h('span', { class: 'plc-here' }, h('img', { src: 'img/zipA.webp', alt: '' }), h('img', { src: 'img/frill.webp', alt: '' }), h('b', null, 'Start here!')) : null,
             st === 'rung' ? h('span', { class: 'plc-rung' }, '\u2713 rung') : null),
-          h('span', { class: 'plc-bname' }, SKILL[n]));
+          h('span', { class: 'plc-bname' }, bell.name));
       });
       show(h('h1', null, cvc ? 'Let\u2019s warm up first' : 'Your first bell'),
         summary ? h('p', { class: 'plc-summary' }, h('b', null, 'For the grown-up: '), summary) : null,
@@ -107,5 +121,5 @@
     }
     intro();
   }
-  IR.placement = { render, GROUPS, saved };
+  IR.placement = { render, GROUPS, saved, BELL };
 })();

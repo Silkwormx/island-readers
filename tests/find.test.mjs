@@ -8,22 +8,19 @@ const sw = fs.readFileSync(new URL('../sw.js', import.meta.url), 'utf8');
 
 test('Find It is a search box and four tabs', () => {
   assert.match(screens, /\['unit', 'By Unit'\]/);
-  assert.match(screens, /\['stage', 'By Stage'\]/);
+  assert.match(screens, /\['skill', 'By Skill'\]/);
+  assert.equal(screens.includes('By Stage'), false);
   assert.match(screens, /\['sight', 'Sight Words'\]/);
   assert.match(screens, /\['fluency', 'Fluency Readers'\]/);
   assert.equal(screens.includes('By Topic / Skill'), false);
   assert.equal(screens.includes('By Unit and Lesson'), false);
   assert.equal(screens.includes("'By Activity'"), false);
   assert.match(screens, /Phonemic Awareness/);
-  assert.match(screens, /TRAIL_STAGES\.map/);
-  assert.match(screens, /Stage ' \+ s\.n \+ ': ' \+ s\.units/);
   assert.match(screens, /for \(let n = 1; n <= 22; n\+\+\)/);
-  assert.match(screens, /stagestyle=top/);
-  assert.match(screens, /stagestyle-' \+ stageStyle/);
-  assert.match(screens, /'Stage ' \+ s\.n/);
-  assert.match(screens, /class: 'stageskill'/);
-  assert.match(screens, /stageUnitList\(s\.units\)/);
-  assert.match(sw, /ir-20261115r/);
+  assert.equal(screens.includes('Review stop'), false);
+  assert.match(screens, /class: 'bellpath'/);
+  assert.equal(screens.includes('TRAIL_STAGES'), false);
+  assert.match(sw, /ir-20261116q/);
   assert.match(screens, /openKey === g\.name/);
   assert.match(screens, /data\[mode\]/);
   const css = fs.readFileSync(new URL('../styles.css', import.meta.url), 'utf8');

@@ -46,7 +46,7 @@ test('fluency page lists the stories that exist and drops the coming-soon line',
   const nk = read('data_nk.js');
   assert.equal(screens.includes('More stories are coming soon.'), false);
   assert.match(screens, /function fluencyStories/);
-  assert.match(screens, /Unit ' \+ unit \+ ' \\u00b7 Lesson ' \+ lesson/);
+  assert.match(screens, /Unit ' \+ unit \+ ' \\u00b7 Lesson ' \+ IR\.kidLesson\(lesson\)/);
   assert.match(screens, /class: 'fl-title'/);
   assert.match(screens, /#\/u6\/' \+ L\.key \+ '\/read/);
   assert.match(screens, /#\/nk\/read/);

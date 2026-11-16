@@ -1406,10 +1406,15 @@ body.calm .ob-glow{animation:none;opacity:.85}
   .hbanner h1{font-size:1.45rem;text-align:left}
   .hbanner h1::after{margin-left:0}
   .grownlab{font-size:.64rem}
+  .gridhome .mwrap > .hbanner{display:flex;align-items:flex-start;justify-content:space-between;gap:.55rem;min-height:0;padding:.65rem .7rem .4rem;margin:0}
+  .gridhome .mwrap > .hbanner h1{flex:1;min-width:0;font-size:1.28rem;line-height:1.15;padding-top:0;white-space:normal;text-align:left}
+  .gridhome .mwrap > .hbanner h1::after{margin:.22rem 0 0}
+  .gridhome .mwrap > .hbanner .grownwrap{position:static;transform:none;max-width:6.2rem;flex:none;align-self:flex-start}
+  .gridhome .grownlab{font-size:.62rem;line-height:1.15}
 }
 .gridhome .homefeature .homeart{width:100%;height:auto;max-height:9rem;object-fit:cover;object-position:center 40%}
 @media (min-width:1100px){.gridhome .homefeature .homeart{max-height:6.4rem}}
-@media (max-width:699px){.gridhome .homefeature .homeart{max-height:6.2rem}.gridhome .homeside{padding-bottom:5.5rem}}
+@media (max-width:699px){.gridhome .homefeature .homeart{max-height:6.2rem}.gridhome .homeside{padding-bottom:1rem}}
 .hometabs{display:flex;flex-direction:column;gap:.6rem;width:100%;margin-top:24px}
 .hometab{display:flex;align-items:center;gap:.55rem;width:100%;min-height:3.4rem;padding:.65rem .8rem;border:4px solid var(--ink);border-radius:1.15rem;background:#FFFDF8;color:var(--ink);text-decoration:none;font-weight:700;box-shadow:0 4px 0 rgba(43,37,64,.16);text-align:left}
 .hometabs .hometab{box-sizing:border-box;justify-content:center;text-align:center;width:100%;height:4.6rem;min-height:4.6rem;padding:.4rem .85rem;gap:.5rem;border:3px solid #C9841A;border-radius:1.15rem;background:linear-gradient(180deg,#FFE7B8,#F6C56A);color:#3A2400;box-shadow:0 4px 0 #C9841A;font-size:1.05rem}
@@ -1485,7 +1490,7 @@ body.calm .ob-glow{animation:none;opacity:.85}
   .homeside{max-height:calc(100vh - 6rem)}
   .homelay{padding-bottom:5rem}
 }
-@media (min-width:1100px){.gridhome .mwrap{padding-bottom:0!important}.homelay{padding-bottom:calc(7rem + env(safe-area-inset-bottom))}}
+@media (min-width:1100px){.gridhome .mwrap{padding-bottom:0!important}.homelay{padding-bottom:1.5rem}}
 @media (max-width:759px){
   .hbanner{padding:.3rem 3.4rem 0}.hbanner h1{font-size:1.9rem;white-space:nowrap}
   .zfpics img{height:4.4rem}.zfline{font-size:1.1rem}
@@ -1598,6 +1603,9 @@ body.calm .ob-glow{animation:none;opacity:.85}
 @keyframes zfglow{0%{box-shadow:0 5px 0 #085E5C,0 0 0 0 rgba(14,124,124,0)}40%{box-shadow:0 5px 0 #085E5C,0 0 0 12px rgba(31,166,166,.4)}100%{box-shadow:0 5px 0 #085E5C}}
 @media (prefers-reduced-motion:reduce){.zfstart2{animation:none}}
 .aboutbtn{background:transparent!important;border:2px solid var(--line)!important;box-shadow:none!important;font-size:1rem!important;min-height:3rem!important;font-weight:700;color:var(--ink2)!important}
+.gridhome .homeside > .aboutbtn{display:inline-flex;align-items:center;justify-content:center;gap:.4rem;background:#E4F6F6!important;border:2px solid #9FCFCF!important;color:#085E5C!important;box-shadow:none!important}
+.gridhome .homeside > .aboutbtn .ico{width:1.15rem;height:1.15rem;color:#0E7C7C;flex:none}
+@media (min-width:1000px){.gridhome .homeside > .aboutbtn{margin-bottom:10px}}
 /* Nov 10 2026: Zip and Frill portraits back in the left-column card. Files are the existing v4 B art. */
 .homefeature{display:flex;flex-direction:column;align-items:stretch;gap:.55rem;margin:0;background:#FFFDF8;border-radius:1.6rem;box-shadow:0 6px 18px rgba(60,40,20,.1);padding:.55rem .55rem .75rem}
 .homefeature.zfB .zfpics{order:2}
@@ -1609,6 +1617,9 @@ body.calm .ob-glow{animation:none;opacity:.85}
 .homefeature .zfline{margin:0;font-size:1.22rem;line-height:1.25;color:var(--ink)}
 .homefeature .zfsub{margin:0;font-size:1rem;line-height:1.35;color:var(--ink2)}
 .homefeature .zfstart2{width:100%;max-width:none;margin-top:.2rem}
+.gridhome .zfstart2{animation:none;box-shadow:0 4px 0 #085E5C}
+.gridhome .homefeature .zfhead{flex-wrap:nowrap}
+.gridhome .homefeature .zfline{flex:1;min-width:0}
 @media (min-width:1100px){
   .gridhome .hbanner{padding-top:.15rem;padding-bottom:0}
   .gridhome .homelay{margin-top:.35rem}
@@ -1668,8 +1679,8 @@ body.calm .ob-glow{animation:none;opacity:.85}
   .gridhome .homefeature .zfspk{width:clamp(2rem,4.2vh,2.6rem);height:clamp(2rem,4.2vh,2.6rem)}
   .gridhome .homefeature .zfstart2{min-height:clamp(2.5rem,6.2vh,3.6rem);padding:.2rem .7rem}
   .homeside .hometabs{margin-top:clamp(16px,2.2vh,24px);gap:clamp(.32rem,.9vh,.6rem)}
-  .homeside .hometabs .hometab{height:clamp(2.85rem,6.8vh,4.6rem);min-height:clamp(2.85rem,6.8vh,4.6rem);font-size:clamp(.88rem,1.9vh,1.05rem);padding:.15rem .55rem}
-  .homeside .hometabs .hometab-name{font-size:clamp(.88rem,1.9vh,1.05rem)}
+  .homeside .hometabs .hometab{height:clamp(2.4rem,5.6vh,3.4rem);min-height:clamp(2.4rem,5.6vh,3.4rem);font-size:clamp(.78rem,1.5vh,.95rem);padding:.1rem .4rem}
+  .homeside .hometabs .hometab-name{font-size:clamp(.78rem,1.5vh,.95rem);white-space:nowrap;line-height:1.1}
   .homeside .hometabs .hometab-ico,.homeside .hometabs .hometab-ico .ico{width:clamp(1.15rem,2.6vh,1.45rem);height:clamp(1.15rem,2.6vh,1.45rem)}
 }
 @media (min-width:1100px){
@@ -1720,10 +1731,114 @@ body.calm .ob-glow{animation:none;opacity:.85}
   .stageskill{font-size:.95rem;overflow:visible}
   .stagecards{padding:.7rem}
 }
+.bellslot{container-type:inline-size;container-name:bells;min-width:0}
+.gridhome #skymap.bellpath{max-width:none;margin:0}
+.bellpath{display:flex;flex-direction:column;gap:.7rem;width:100%;min-width:0;padding:.2rem 0 1.5rem}
+.bellgrid{display:grid;grid-template-columns:1fr;gap:.7rem;align-items:stretch;width:100%}
+.bellpath .tcard{width:100%;height:100%}
+.herechip{position:absolute;left:.7rem;top:.7rem;padding:.2rem .65rem;border-radius:.7rem;background:#F28C00;color:#fff;font-family:Andika,system-ui,sans-serif;font-size:1rem;font-weight:700}
+.bellpath .tpic{position:relative;aspect-ratio:1/1;background:transparent}
+.bellpath .tpic img{width:100%;height:100%;object-fit:contain;object-position:center}
+.bellpath .tbody{display:flex;flex-direction:column;gap:.28rem;min-height:0;overflow:hidden}
+.bellpath .tnum{font-size:1.28rem;line-height:1.55}
+.bellpath .thead{flex:none;overflow:visible}
+.bellpath .tname{display:block;flex:none;height:calc(1rem * 1.3 * 2);font-size:1rem;line-height:1.3;white-space:normal;overflow:hidden}
+.bellpath .tsnd{display:block;flex:none;height:calc(.78rem * 1.35 * 2);font-size:.78rem;line-height:1.35;letter-spacing:.01em;word-spacing:.02em;white-space:normal;overflow:hidden;color:#7a6650}
+.bellpath .tcount{display:block;flex:none;margin:0;font-size:.78rem;line-height:1.5;font-weight:400;color:#7a6650;white-space:nowrap}
+@media (max-width:759px){
+  .bellpath .tnum{font-size:1.35rem;line-height:1.55}
+  .bellpath .tname{height:calc(1.05rem * 1.3 * 2);font-size:1.05rem}
+  .bellpath .tsnd{height:calc(.9rem * 1.35 * 2);font-size:.9rem}
+  .bellpath .tcount{font-size:.9rem}
+}
+@container bells (min-width:520px){.bellgrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@container bells (min-width:700px){.bellgrid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (min-width:1000px){.gridhome .bellgrid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (min-width:1000px) and (max-width:1099px){
+  .gridhome .mwrap > .hbanner{position:sticky;top:0;z-index:24;background:#FFF6E3;padding-top:.15rem;padding-bottom:.2rem}
+  .gridhome .homelay{display:grid!important;grid-template-columns:18.5rem minmax(0,1fr)!important;align-items:start;gap:.55rem;margin-top:0}
+  .gridhome .homeside{position:sticky;align-self:start;gap:.3rem;max-height:none;overflow:visible}
+  .gridhome .homeside > .aboutbtn{min-height:2.15rem!important;padding:.1rem .45rem!important;font-size:.88rem!important}
+  .gridhome .homefeature{gap:.18rem;padding:.28rem .3rem .35rem}
+  .gridhome .homefeature .homeart,.gridhome .homefeature .zfpics img.homeart{max-height:3.6rem;object-fit:contain}
+  .gridhome .homefeature .zfhead{gap:.28rem}
+  .gridhome .homefeature .zfline{font-size:.78rem;line-height:1.15;white-space:nowrap}
+  .gridhome .homefeature .zfspk{width:2.05rem;height:2.05rem}
+  .gridhome .homefeature .zfspk .ico{width:1.05rem;height:1.05rem}
+  .gridhome .homefeature .zfsub{font-size:.72rem;line-height:1.2}
+  .gridhome .homefeature .zfstart2{min-height:2.05rem;padding:.08rem .4rem;box-shadow:0 3px 0 #085E5C}
+  .gridhome .homefeature .zfst b{font-size:.95rem}
+  .gridhome .homefeature .zfst small{font-size:.72rem}
+  .gridhome .homeside .hometabs{margin-top:.4rem;gap:.22rem}
+  .gridhome .homeside .hometabs .hometab{height:1.95rem;min-height:1.95rem;font-size:.64rem;padding:.04rem .28rem;gap:.28rem;box-shadow:0 3px 0 #C9841A}
+  .gridhome .homeside .hometabs .hometab-name{font-size:.64rem;white-space:nowrap;line-height:1}
+  .gridhome .homeside .hometabs .hometab-ico,.gridhome .homeside .hometabs .hometab-ico .ico{width:.9rem;height:.9rem}
+}
+@media (max-height:760px){
+  .gridhome .mwrap{padding-top:0}
+  .gridhome .homelay{margin-top:0}
+  .gridhome .hbanner{padding-top:.1rem;padding-bottom:.1rem}
+  .gridhome .hbanner h1{font-size:1.45rem}
+  .gridhome .mwrap > .hbanner{padding-top:.2rem;padding-bottom:.05rem}
+  .gridhome .hbanner h1{font-size:1.28rem}
+  .gridhome .hbanner h1::after{margin-top:.08rem;height:.22rem}
+}
+@media (min-width:1000px) and (max-height:760px){
+  .gridhome .mwrap > .hbanner{min-height:2.7rem;padding-top:.35rem;padding-bottom:.28rem}
+  .gridhome .hbanner .grownwrap{top:.2rem;bottom:.15rem;transform:none;align-items:center;height:auto}
+  .gridhome .hbanner .gear{width:2.15rem;height:2.15rem;padding:.32rem}
+  .gridhome .grownlab{font-size:.6rem;line-height:1.1}
+  .gridhome .homefeature .homeart,.gridhome .homefeature .zfpics img.homeart{max-height:clamp(2.8rem,10vh,4.2rem)}
+  .gridhome .homefeature .zfstart2{min-height:2.2rem}
+  .homeside .hometabs{margin-top:.4rem}
+  .homeside .hometabs .hometab{height:2.05rem;min-height:2.05rem}
+}
+@media (min-width:1680px){.gridhome .mwrap{max-width:112rem}}
+.trailpage .mwrap{max-width:42rem}
+.trailstage{position:relative;width:100%;max-width:680px;margin:0 auto 1.6rem;container-type:inline-size}
+.trailmap{position:relative;width:100%;background:linear-gradient(180deg,#d7e7ee 0%,#f4efe4 42%,#efe2cc 100%);border-radius:1.2rem;overflow:hidden}
+.trailmap-art{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;display:block}
+.trailpins{position:absolute;inset:0}
+.trailpinwrap{position:absolute;transform:translate(-50%,-50%);z-index:2}
+.trailpinwrap:hover,.trailpinwrap:focus-within,.trailpinwrap.tipopen{z-index:6}
+.trailpin{position:relative;display:inline-flex;align-items:center;justify-content:center;box-sizing:border-box;width:36px;height:36px;min-width:36px;min-height:36px;margin:0;padding:0;border:3px solid #fff;border-radius:50%;background:#fff;color:#3b2a1a;font-family:Andika,system-ui,sans-serif;font-weight:700;line-height:1;cursor:pointer;box-shadow:0 2px 6px rgba(60,40,20,.22)}
+.trailpin::before{content:'';position:absolute;left:50%;top:50%;width:48px;height:48px;transform:translate(-50%,-50%);border-radius:50%}
+.pinnum{font-size:16px;line-height:1}
+.pinnum2{font-size:13px}
+.trailpin.rainbow{background:conic-gradient(#d93a2b,#f2c21b,#2fa84f,#5fb4ec,#8e3fc9,#d93a2b);color:#fff}
+.trailpin.finale{width:40px;height:40px;min-width:40px;min-height:40px;background:#d4a017;color:#3b2a1a}
+.pinstar,.pinstar .ico{width:20px;height:20px}
+.pindone{position:absolute;right:-3px;bottom:-3px;display:inline-flex;width:14px;height:14px;border-radius:50%;background:#fff;color:#1f7a3a;box-shadow:0 1px 3px rgba(60,40,20,.25)}
+.pindone .ico{width:14px;height:14px}
+.heretag{position:absolute;left:calc(100% + 6px);top:50%;transform:translateY(-50%);padding:2px 7px;border-radius:.55rem;background:#F28C00;color:#fff;font-family:Andika,system-ui,sans-serif;font-size:12px;font-weight:700;line-height:1.2;white-space:nowrap;pointer-events:none;box-shadow:0 2px 6px rgba(60,40,20,.2)}
+.trailpin.here{box-shadow:0 0 0 3px #fff,0 0 0 6px #F28C00,0 0 14px 3px rgba(242,140,0,.8)}
+.trailtip{display:none;position:absolute;z-index:7;left:50%;bottom:calc(100% + 8px);transform:translateX(-50%);width:max-content;max-width:13.5rem;padding:.5rem .65rem .55rem;border:2px solid #E6D9B8;border-radius:.85rem;background:#FFFDF8;box-shadow:0 8px 18px rgba(60,40,20,.16);font-family:Andika,system-ui,sans-serif;color:#3b2a1a;text-align:left;white-space:normal}
+.trailtip.below{bottom:auto;top:calc(100% + 8px)}
+.trailpinwrap:hover .trailtip,.trailpinwrap:focus-within .trailtip,.trailpinwrap.tipopen .trailtip{display:block}
+.trailtip b{display:block;font-size:1.05rem;line-height:1.2}
+.trailtip .tipskill{display:block;font-weight:700;font-size:.98rem;line-height:1.25}
+.trailtip .tipsounds,.trailtip .tipmeta{display:block;font-size:.9rem;line-height:1.3;color:#5a4632}
+.tipgo{display:none;width:100%;margin-top:.4rem;min-height:40px;border-radius:.7rem;border:2px solid #C95A10;background:#F28C00;color:#fff;font-family:Andika,system-ui,sans-serif;font-size:1rem;font-weight:700;cursor:pointer}
+.trailpinwrap.tipopen .tipgo{display:block}
+.pinbell{display:inline-flex;width:12px;height:12px;flex:none}
+.pinbell svg{display:block;width:100%;height:100%}
+@container (max-width:520px){
+  .trailpin{width:32px;height:32px;min-width:32px;min-height:32px}
+  .trailpin::before{width:44px;height:44px}
+  .pinnum{font-size:14px}
+  .pinnum2{font-size:11px}
+  .trailpin.finale{width:34px;height:34px;min-width:34px;min-height:34px}
+  .pindone,.pindone .ico{width:12px;height:12px}
+  .heretag{font-size:11px}
+}
+.traillist{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:.55rem}
+.traillist button{display:flex;align-items:center;gap:.55rem;width:100%;min-height:44px;box-sizing:border-box;padding:.7rem .9rem;border:2px solid #E6D9B8;border-radius:1rem;background:#fff;font:inherit;font-family:Andika,system-ui,sans-serif;font-size:1.15rem;font-weight:700;text-align:left;color:#3b2a1a;cursor:pointer}
+.traillist button.here{border-color:#F28C00;box-shadow:0 0 0 3px rgba(242,140,0,.25)}
+.traillist .trailend{display:block;padding:.7rem .9rem;font-family:Andika,system-ui,sans-serif;font-size:1.15rem;font-weight:700;color:#7a5310}
 .tcard{display:flex;flex-direction:column;width:100%;height:100%;padding:0;border:2px solid #E6D9B8;border-radius:18px;overflow:hidden;background:#fff;font:inherit;font-family:'Andika',system-ui,sans-serif;color:#3b2a1a;text-align:left;cursor:pointer;box-shadow:0 4px 12px rgba(60,40,20,.08)}
 .tcard.t-current{border-color:#F28C00;box-shadow:0 0 0 4px rgba(242,140,0,.25)}
 .tpic{display:block;width:100%;aspect-ratio:1/1;overflow:hidden;background:#EFE7D6}
-.tpic img{display:block;width:100%;height:100%;object-fit:cover}
+.tpic img{display:block;width:100%;height:100%;object-fit:contain}
 .tbody{display:flex;flex-direction:column;gap:.35rem;padding:.8rem .9rem 1rem;min-height:9.6rem;box-sizing:border-box;flex:1}
 .thead{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap}
 .tdots{display:inline-flex;gap:.25rem}
@@ -2154,3 +2269,31 @@ button.tapcard:focus-visible{outline:4px solid #1F6FEB;outline-offset:3px}
 .skillsearch{display:block;width:100%;box-sizing:border-box;min-height:3.2rem;margin:.4rem 0 .2rem;padding:.45rem .9rem;border:3px solid var(--ink);border-radius:1rem;background:#fff;font-family:Andika,sans-serif;font-size:1.25rem;color:var(--ink)}
 .skillresults{display:flex;flex-direction:column;gap:.55rem;margin-top:.7rem}
 .skilllesson{margin:.35rem 0 0;font-family:Andika,sans-serif;font-size:1.15rem;font-weight:700}
+/* Sidebar: the Zip and Frill picture fills the card, and the column uses the open space. */
+@media (max-width:999px){
+  .gridhome .homefeature{padding:0 0 .95rem;overflow:hidden;gap:.7rem}
+  .gridhome .homefeature .zfpics{display:block;width:100%;margin:0;padding:0;background:transparent;border-radius:0}
+  .gridhome .homefeature .homeart,.gridhome .homefeature .zfpics img.homeart{display:block;width:100%!important;max-width:100%!important;height:auto!important;max-height:none!important;aspect-ratio:16/9;object-fit:contain!important;object-position:center!important}
+  .gridhome .homefeature .hfbody{padding:.15rem .9rem 0;gap:.55rem}
+}
+@media (min-width:1000px){
+  .gridhome .homeside{position:sticky!important;top:var(--side-top,46px)!important;align-self:start;box-sizing:border-box;display:flex!important;flex-direction:column;justify-content:space-between;gap:16px;height:calc(100dvh - var(--side-top,46px) - 10px);max-height:calc(100dvh - var(--side-top,46px) - 10px)!important;overflow:hidden!important;padding-bottom:2px}
+  .gridhome .homeside > .aboutbtn{flex:none;margin-bottom:0!important;min-height:2.55rem!important;padding:.2rem .7rem!important;font-size:.95rem!important}
+  .gridhome .homeside .homefeature{flex:0 1 auto;min-height:0;display:flex;flex-direction:column;justify-content:flex-start;gap:.6rem;margin:0;padding:0 0 .7rem;overflow:hidden}
+  .gridhome .homeside .homefeature .zfpics{flex:0 0 auto;display:block;width:100%;margin:0;padding:0;background:transparent;border-radius:1.45rem 1.45rem 0 0;overflow:hidden}
+  .gridhome .homeside .homefeature .homeart,.gridhome .homeside .homefeature .zfpics img.homeart{display:block;width:100%!important;max-width:100%!important;height:auto!important;max-height:none!important;aspect-ratio:16/9;object-fit:contain!important;object-position:center!important;border-radius:0}
+  .gridhome .homeside .homefeature .hfbody{flex:none;padding:0 .75rem;gap:.5rem}
+  .gridhome .homeside .homefeature .zfline{font-size:clamp(.82rem,1.7vh,1.05rem);line-height:1.15;white-space:nowrap}
+  .gridhome .homeside .homefeature .zfsub{font-size:clamp(.78rem,1.5vh,.95rem);line-height:1.25}
+  .gridhome .homeside .homefeature .zfstart2{min-height:2.7rem;padding:.28rem .6rem;box-shadow:0 4px 0 #085E5C}
+  .gridhome .homeside .hometabs{flex:none;width:100%;margin-top:0;gap:16px}
+  .gridhome .homeside .hometabs .hometab{box-sizing:border-box;height:60px;min-height:60px;max-height:60px;padding:0 .65rem;gap:.45rem;font-size:.92rem}
+  .gridhome .homeside .hometabs .hometab-name{font-size:.92rem;white-space:nowrap;line-height:1.1}
+  .gridhome .homeside .hometabs .hometab-ico,.gridhome .homeside .hometabs .hometab-ico .ico{width:28px;height:28px}
+}
+@media (min-width:1000px) and (max-height:680px){
+  .gridhome .homeside{gap:14px}
+  .gridhome .homeside .homefeature{gap:.4rem;padding-bottom:.35rem}
+  .gridhome .homeside .homefeature .zfstart2{min-height:2.35rem;padding:.14rem .5rem}
+  .gridhome .homeside .hometabs{gap:14px}
+}
