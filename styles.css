@@ -1720,49 +1720,26 @@ body.calm .ob-glow{animation:none;opacity:.85}
   .stageskill{font-size:.95rem;overflow:visible}
   .stagecards{padding:.7rem}
 }
-.bellpath{display:flex;flex-direction:column;align-items:center;gap:0;min-width:0;padding:.4rem 0 1.5rem}
-.pathstep{display:flex;justify-content:center;width:100%}
-.pathstep.step-a{transform:translateX(-.85rem)}
-.pathstep.step-b{transform:translateX(.85rem)}
-.pathjoin{width:.55rem;height:1.35rem;margin:.15rem 0;border-radius:.2rem;background:linear-gradient(#f3e6c8,#d9c39a);box-shadow:0 0 0 6px rgba(232,214,176,.35)}
+.bellpath{display:flex;flex-direction:column;align-items:center;gap:1.5rem;min-width:0;padding:.5rem 0 2rem}
 .bellpath .tcard{width:min(100%,22rem)}
 .bellpath .tname{font-family:Andika,system-ui,sans-serif;font-size:1.75rem;line-height:1.15;color:#3b2a1a}
 .bellpath .tskill{font-family:Andika,system-ui,sans-serif;font-size:1.25rem;font-weight:700;line-height:1.25;color:#3b2a1a}
-.bellpath .tunit{font-family:Andika,system-ui,sans-serif;font-size:1.15rem;font-weight:700;color:#5a4632}
 .bellpath .tnext{font-family:Andika,system-ui,sans-serif;font-size:1.05rem;font-weight:700;color:#9a4e00}
 .herechip{position:absolute;left:.7rem;top:.7rem;padding:.2rem .65rem;border-radius:.7rem;background:#F28C00;color:#fff;font-family:Andika,system-ui,sans-serif;font-size:1rem;font-weight:700}
 .bellpath .tpic{position:relative}
-.bellpath .reviewstop{background:linear-gradient(180deg,#fffaf0,#f4e4c4);border:3px solid #e2c48a;box-shadow:0 8px 0 rgba(176,124,48,.16)}
-.bellbadge{display:inline-flex;align-items:center;gap:.45rem;padding:.3rem .85rem .3rem .35rem;border-radius:999px;background:#fff6df;border:2px solid #e6c98a;color:#7a5310;font-family:Andika,system-ui,sans-serif;font-weight:700;font-size:1.05rem}
-.bellbadge img{width:1.8rem;height:1.8rem;object-fit:contain}
-.belltrail{position:relative;display:flex;flex-direction:column;gap:.35rem;padding:1.2rem .7rem 2rem;border-radius:1.3rem;background:
-  radial-gradient(ellipse at 20% 10%,rgba(255,255,255,.7),transparent 42%),
-  radial-gradient(ellipse at 80% 30%,rgba(186,214,224,.45),transparent 46%),
-  linear-gradient(180deg,#d7e7ee 0%,#f4efe4 38%,#efe2cc 100%);
-  box-shadow:inset 0 0 0 3px rgba(255,255,255,.65)}
-.belltrail::before{content:'';position:absolute;left:50%;top:1.2rem;bottom:6.5rem;width:.45rem;transform:translateX(-50%);border-radius:.3rem;background:linear-gradient(#f6ead0,#e4cfab);opacity:.9}
-.trailbell,.trailreview{position:relative;z-index:1;display:flex;align-items:center;gap:.75rem;width:min(100%,28rem);margin:0 auto;padding:.35rem;border:0;border-radius:1.2rem;background:rgba(255,250,240,.72);font:inherit;text-align:left;cursor:pointer;color:#2B2540}
-.trailbell.side-right{flex-direction:row-reverse;text-align:right;margin-left:auto;margin-right:8%}
-.trailbell.side-left{margin-right:auto;margin-left:8%}
-.trailthumb{flex:none;width:8.2rem;height:8.2rem;border-radius:1.15rem;overflow:hidden;border:3px solid #fff;box-shadow:0 8px 18px rgba(60,40,20,.18);background:#efe7d6}
+.bellpath .reviewstop .tbody{gap:.15rem;padding:.85rem 1rem}
+.belltrail{display:flex;flex-direction:column;align-items:center;gap:1.15rem;padding:.4rem 0 2rem}
+.trailbell,.trailreview{display:flex;align-items:center;gap:.9rem;width:min(100%,28rem);margin:0;padding:.45rem;border:2px solid #E6D9B8;border-radius:18px;background:#fff;font:inherit;text-align:left;cursor:pointer;color:#2B2540;box-shadow:0 4px 12px rgba(60,40,20,.08)}
+.trailthumb{flex:none;width:6.5rem;height:6.5rem;border-radius:1rem;overflow:hidden;background:#efe7d6}
 .trailthumb img{display:block;width:100%;height:100%;object-fit:cover}
-.trailcopy{display:flex;flex-direction:column;gap:.12rem;font-family:Andika,system-ui,sans-serif}
+.trailcopy{display:flex;flex-direction:column;gap:.15rem;font-family:Andika,system-ui,sans-serif}
 .trailcopy b{font-size:1.5rem;line-height:1.15}
 .trailskill{font-family:Andika,system-ui,sans-serif;font-size:1.15rem;font-weight:700;line-height:1.25;color:#3b2a1a}
-.trailcopy em{font-style:normal;font-weight:700;color:#fff;background:#F28C00;border-radius:.55rem;padding:.05rem .45rem;align-self:flex-start}
-.trailbell.side-right .trailcopy em{align-self:flex-end}
-.trailbell.here{background:#fff;box-shadow:0 0 0 4px #F28C00}
-.trailmark{position:relative;z-index:1;align-self:center;display:inline-flex;align-items:center;gap:.4rem;padding:.25rem .8rem .25rem .3rem;border-radius:999px;background:#fff6df;border:2px solid #e6c98a;color:#7a5310;font-family:Andika,system-ui,sans-serif;font-weight:700}
-.trailmark img{width:1.7rem;height:1.7rem;object-fit:contain}
-.trailreview{align-self:center;flex-direction:column;text-align:center;width:min(100%,22rem);padding:.75rem .9rem;border:3px solid #e2c48a;border-radius:1.15rem;background:linear-gradient(180deg,#fffaf0,#f4e4c4);font-family:Andika,system-ui,sans-serif;box-shadow:0 6px 0 rgba(176,124,48,.14)}
+.trailcopy em{font-style:normal;font-weight:700;color:#9a4e00}
+.trailbell.here{border-color:#F28C00;box-shadow:0 0 0 4px rgba(242,140,0,.25)}
+.trailreview{padding:.85rem 1rem}
 .trailreview b,.trailreview span{display:block}
-.trailreview b{font-size:1.15rem}
-.trailfinale{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:.4rem;margin-top:.6rem;font-family:Andika,system-ui,sans-serif}
-.trailfinale img{width:min(100%,16rem);height:9rem;object-fit:cover;border-radius:1.2rem;border:3px solid #fff;box-shadow:0 8px 18px rgba(60,40,20,.18)}
-@media (max-width:700px){
-  .pathstep.step-a,.pathstep.step-b{transform:none}
-  .trailbell.side-left,.trailbell.side-right{margin-left:auto;margin-right:auto}
-}
+.trailreview b{font-family:Andika,system-ui,sans-serif;font-size:1.35rem}
 .tcard{display:flex;flex-direction:column;width:100%;height:100%;padding:0;border:2px solid #E6D9B8;border-radius:18px;overflow:hidden;background:#fff;font:inherit;font-family:'Andika',system-ui,sans-serif;color:#3b2a1a;text-align:left;cursor:pointer;box-shadow:0 4px 12px rgba(60,40,20,.08)}
 .tcard.t-current{border-color:#F28C00;box-shadow:0 0 0 4px rgba(242,140,0,.25)}
 .tpic{display:block;width:100%;aspect-ratio:1/1;overflow:hidden;background:#EFE7D6}
