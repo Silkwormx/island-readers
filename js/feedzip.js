@@ -33,14 +33,16 @@
     const say = opts.say || ((w) => IR.sayWord && IR.sayWord(w));
     const colorWord = opts.colorWord || ((w) => document.createTextNode(w));
     const stage = ctx.stage;
+    const bites = Math.max(1, opts.bites || BITES);
+    const line = opts.line || LINE;
     const targets = [];
-    for (let i = 0; i < BITES; i++) targets.push(pool[i % Math.max(1, pool.length)]);
+    for (let i = 0; i < bites; i++) targets.push(pool[i % Math.max(1, pool.length)]);
     shuffle(targets);
     let r = 0;
     let row = 0;
     let token = 0;
-    ctx.setInstr(LINE, opts.promptKey || null);
-    const rule = opts.promptAudio || 'audio/p_feed_rule.mp3';
+    ctx.setInstr(line, opts.promptKey || null);
+    const rule = opts.promptAudio == null ? 'audio/p_feed_rule.mp3' : opts.promptAudio;
 
     function others(w) {
       const rest = shuffle(pool.filter((x) => x !== w));
@@ -56,17 +58,17 @@
 
     function tummy() {
       const bits = [];
-      for (let i = 0; i < BITES; i++) bits.push(h('i', { class: i < r ? 'full' : '' }));
-      return h('div', { class: 'fz-tummy', 'aria-label': r + ' of ' + BITES + ' bites' }, h('span', null, "Zip's tummy"), h('span', { class: 'fz-bites' }, ...bits), h('b', null, r + ' / ' + BITES));
+      for (let i = 0; i < bites; i++) bits.push(h('i', { class: i < r ? 'full' : '' }));
+      return h('div', { class: 'fz-tummy', 'aria-label': r + ' of ' + bites + ' bites' }, h('span', null, "Zip's tummy"), h('span', { class: 'fz-bites' }, ...bits), h('b', null, r + ' / ' + bites));
     }
 
     function round() {
       if (!pool.length) { ctx.finish(); return; }
-      if (r >= BITES) { ctx.progress(1); ctx.finish(); return; }
+      if (r >= bites) { ctx.progress(1); ctx.finish(); return; }
       const my = ++token;
       const w = targets[r];
-      ctx.progress(r / BITES);
-      if (ctx.count) ctx.count(r + 1, BITES);
+      ctx.progress(r / bites);
+      if (ctx.count) ctx.count(r + 1, bites);
       stage.innerHTML = '';
       let locked = false;
       const status = h('p', { class: 'status', 'aria-live': 'polite' }, '\u00a0');
@@ -114,14 +116,14 @@
           const dots = document.querySelectorAll('.fz-bites i');
           if (dots[r]) dots[r].classList.add('full');
           const count = document.querySelector('.fz-tummy b');
-          if (count) count.textContent = (r + 1) + ' / ' + BITES;
+          if (count) count.textContent = (r + 1) + ' / ' + bites;
           $$fade();
           const pop = h('img', { class: 'fz-treat' + (treat.yuck ? ' yuck' : ''), src: treat.src, alt: treat.yuck ? 'A silly snack Zip does not like' : 'A treat for Zip' });
           zip.append(pop);
           await Snd.play(treat.yuck ? 'audio/sfx_yuck.mp3' : nextYum());
           if (!ctx.scr.ok() || my !== token) return;
           r++;
-          ctx.progress(r / BITES);
+          ctx.progress(r / bites);
           await sleep(700);
           if (ctx.scr.ok() && my === token) round();
         } else {
@@ -140,7 +142,7 @@
     }
 
     ctx.setBack(() => { if (r > 0) { token++; r--; if (row > 0) row--; round(); return true; } return false; });
-    ctx.setNext(() => { if (r < BITES - 1) { token++; r++; round(); return true; } return false; });
+    ctx.setNext(() => { if (r < bites - 1) { token++; r++; round(); return true; } return false; });
     round();
   };
 })();

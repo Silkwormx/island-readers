@@ -302,11 +302,16 @@
     };
     const cards = [];
     for (let n = 1; n <= 22; n++) cards.push(unit(n));
-    const grid = h('div', { class: 'bellpath', id: 'skymap' }, h('div', { class: 'bellgrid' }, ...cards));
+    const lettersCard = h('a', { class: 'lettersentry', href: '#/letters', 'aria-label': 'Learn the Letters. The alphabet, before Unit 1.' },
+      h('span', { class: 'le-kicker' }, 'Before Unit 1'),
+      h('b', null, 'Learn the Letters'),
+      h('span', null, 'a m s t, then the rest of the alphabet'));
+    const grid = h('div', { class: 'bellpath', id: 'skymap' }, lettersCard, h('div', { class: 'bellgrid' }, ...cards));
     const tab = (href, name, icoName) => h('a', { class: 'hometab', href: href, 'aria-label': name },
       h('span', { class: 'hometab-ico', 'aria-hidden': 'true' }, icon(icoName)),
       h('span', { class: 'hometab-name' }, name));
     const tabs = h('nav', { class: 'hometabs', 'aria-label': 'More places' },
+      tab('#/letters', 'Learn the Letters', 'book'),
       tab('#/trail', 'Trail Map and Placement Test', 'map'),
       tab('#/practice/sight', 'Sight Word Practice', 'star'),
       tab('#/find', 'Find It', 'search'));
@@ -1155,6 +1160,7 @@
     app.innerHTML = ''; window.scrollTo(0, 0);
     let m;
     if (IR.spellRoute && IR.spellRoute(hash, app)) { /* spelling for every lesson */ }
+    else if (IR.lettersRoute && IR.lettersRoute(hash, app)) { /* Learn the Letters, before Unit 1 */ }
     else if (IR.nkRoute && IR.nkRoute(hash, app)) { /* nk unit + Island Review (js/nk.js) */ }
     else if (IR.u5Route && IR.u5Route(hash, app)) { /* Unit 5 Silent e (js/u5.js) */ }
     else if (IR.u6Route && IR.u6Route(hash, app)) { /* Unit 6 Endings (js/u6.js) */ }

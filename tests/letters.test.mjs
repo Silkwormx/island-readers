@@ -1,0 +1,50 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+
+const letters = fs.readFileSync(new URL('../js/letters.js', import.meta.url), 'utf8');
+const screens = fs.readFileSync(new URL('../js/screens.js', import.meta.url), 'utf8');
+const html = fs.readFileSync(new URL('../index.html', import.meta.url), 'utf8');
+const sw = fs.readFileSync(new URL('../sw.js', import.meta.url), 'utf8');
+const teach = fs.readFileSync(new URL('../js/teach.js', import.meta.url), 'utf8');
+
+test('Learn the Letters follows the UFLI group order and is not a unit', () => {
+  const order = ['a', 'm', 's', 't', 'p', 'f', 'i', 'n', 'o', 'd', 'c', 'u', 'g', 'b', 'e', 'k', 'h', 'r', 'l', 'w', 'j', 'y', 'x', 'q', 'v', 'z'];
+  const ids = [...letters.matchAll(/id: '([a-z])'/g)].map((m) => m[1]);
+  assert.deepEqual(ids, order);
+  assert.match(letters, /letters: \['a', 'm', 's', 't'\]/);
+  assert.match(letters, /letters: \['v', 'z'\]/);
+  assert.match(letters, /This is not a unit/);
+  assert.equal(/\bfree\b/i.test(letters), false);
+  assert.match(letters, /img\/frill\.webp/);
+  assert.equal(letters.includes('frillC'), false);
+  assert.match(letters, /Find the letter/);
+  assert.match(letters, /Match upper and lower/);
+  assert.match(letters, /First sound/);
+  assert.match(letters, /Feed Zip/);
+  assert.match(letters, /Letter review/);
+});
+
+test('picture words put the letter at the start, except x at the end', () => {
+  const rows = [...letters.matchAll(/id: '([a-z])'[\s\S]*?word: '([a-z]+)'[\s\S]*?where: '(start|end)'/g)];
+  assert.equal(rows.length, 26);
+  rows.forEach((row) => {
+    const id = row[1];
+    const word = row[2];
+    const where = row[3];
+    if (where === 'end') assert.equal(word.endsWith(id), true, word);
+    else assert.equal(word.startsWith(id), true, word);
+  });
+});
+
+test('home offers Learn the Letters before the bells', () => {
+  assert.match(screens, /href: '#\/letters'/);
+  assert.match(screens, /Learn the Letters/);
+  assert.match(screens, /Before Unit 1/);
+  assert.ok(screens.indexOf("tab('#/letters'") < screens.indexOf("tab('#/trail'"));
+  assert.match(screens, /lettersRoute/);
+  assert.match(html, /js\/letters\.js/);
+  assert.match(sw, /js\/letters\.js/);
+  assert.match(sw, /ir-20261116x/);
+  assert.match(teach, /#\/letters/);
+});

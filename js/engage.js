@@ -134,7 +134,7 @@
         h('p', { class: 'streakend' }, 'In a row: ' + best),
         stars ? h('p', { class: 'starline' }, stars + (stars === 1 ? ' star' : ' stars')) : null,
         h('div', { class: 'row endrow' },
-          h('button', { class: 'menulink', type: 'button', onclick: o.onBack }, 'Back to lesson menu'),
+          h('button', { class: 'menulink', type: 'button', onclick: o.onBack }, o.backLabel || 'Back to lesson menu'),
           h('button', { class: 'btn big primary', type: 'button', onclick: o.onNext }, o.nextLabel || 'Continue', icon('next')))));
     }
   };

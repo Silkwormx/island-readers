@@ -80,7 +80,7 @@
      The speaker button can still replay the instruction on its own. */
   /* One small "Back to lesson menu" link, and one orange Next only when a lesson asks for it.
      Round-skip Back and Next stay off the screen. Correct answers still move on by themselves. */
-  IR.simpleNav = function (nav, nextBtn, goMenu) {
+  IR.simpleNav = function (nav, nextBtn, goMenu, menuLabel) {
     const back = nav.querySelector(':scope > .btn.back');
     if (back) back.remove();
     nextBtn.hidden = true;
@@ -89,7 +89,7 @@
       class: 'menulink',
       type: 'button',
       onclick: function () { if (typeof goMenu === 'function') goMenu(); }
-    }, 'Back to lesson menu');
+    }, menuLabel || 'Back to lesson menu');
     nav.insertBefore(link, nav.firstChild);
     nav.classList.add('simple');
     return {
