@@ -801,6 +801,13 @@
     const UNITS = [{ name: 'Unit 4 \u00b7 Glued Sounds', sounds: [
       { s: 'ng', lesson: 'Lesson 4.1', days: 3, daily: 'teachers/ng/Lesson3.1_ng_Daily_Practice_Sheets.pdf', pack: 'teachers/ng/Lesson3.1_ng_Teacher_Pack.pdf', deck: 'teachers/ng/Lesson3.1_ng_Slide_Presentation.pptx', view: '#/teachers/slides/ng' },
       { s: 'nk', lesson: 'Lesson 4.2', days: 3, daily: 'teachers/nk/Lesson3.2_nk_Daily_Practice_Sheets.pdf', pack: 'teachers/nk/Lesson3.2_nk_Teacher_Pack.pdf', deck: 'teachers/nk/Lesson3.2_nk_Slide_Presentation.pptx', view: '#/teachers/slides/nk' }] }];
+    const CHECKS = [
+      ['Lesson 5.1 Teacher-Led Checks', 'materials/unit5/Lesson5.1_Teacher_Led_Checks.pdf'],
+      ['Lesson 5.2 Teacher-Led Checks', 'materials/unit5/Lesson5.2_Teacher_Led_Checks.pdf'],
+      ['Unit 5 All Checks (teacher scripts and answer keys)', 'materials/unit5/Unit5_Teacher_Led_Checks_Combined.pdf'],
+      ['Unit 5 Student Sheets', 'materials/unit5/Unit5_Teacher_Led_Student_Sheets.pdf']
+    ];
+    const checkBtn = (label, href) => h('a', { class: 'btn big tmlink tmcheck', href: href, target: '_blank', rel: 'noopener' }, label);
     const card = (x) => h('div', { class: 'tmcard' }, h('h3', null, h('span', { class: 'tmsound' }, x.s), ' ' + x.lesson),
       h('a', { class: 'btn big tmlink primary', href: x.view }, 'Open on smartboard'),
       h('p', { class: 'tmnote' }, 'Full-screen slide show in the browser. No download needed.'),
@@ -814,7 +821,9 @@
       h('div', { class: 'abtop' }, homeButton()),
       h('h1', null, 'Teacher materials'),
       h('p', { class: 'tmlead' }, 'For teaching in class. Students practice on their own in the app.'),
-      ...UNITS.map((u) => h('section', { class: 'tmunit' }, h('h2', null, u.name), h('div', { class: 'tmgrid' }, ...u.sounds.map(card)))))));
+      ...UNITS.map((u) => h('section', { class: 'tmunit' }, h('h2', null, u.name), h('div', { class: 'tmgrid' }, ...u.sounds.map(card)))),
+      h('section', { class: 'tmunit', id: 'unit5-checks' }, h('h2', null, 'Unit 5 \u00b7 Silent e'),
+        h('div', { class: 'tmchecks' }, h('h3', null, 'Teacher-Led Checks'), ...CHECKS.map(([label, href]) => checkBtn(label, href)))))));
   }
   /* In-app week-deck slideshow for smartboard (ng / nk). Keeps PPTX download on the teachers page. */
   function slidesViewer(sound) {
