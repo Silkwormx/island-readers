@@ -2456,6 +2456,70 @@ button.tapcard:focus-visible{outline:4px solid #1F6FEB;outline-offset:3px}
 .streakend,.starline{margin:0;font-weight:700;font-size:1.2rem}
 .calmend .endrow{align-items:center}
 .u5step .fz-streak,.u5step .sorstreak{display:none}
+/* Smart board: large words, big taps, teacher controls. Scoped to Unit 5. */
+.teachtoggle{position:static;z-index:8;font-family:Andika,sans-serif;font-size:16px;font-weight:700;padding:6px 12px;border-radius:999px;border:3px solid #C95A10;background:#fff;color:#2B2540;flex:none}
+.teachtoggle.on{background:#F28C00;color:#fff}
+.u5teachrow{display:flex;justify-content:flex-start}
+.teachgo{background:#F28C00;border-color:#C95A10;color:#fff;box-shadow:0 3px 0 #C95A10}
+.teachbar{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:12px;padding:8px 16px 12px;background:#FFF8E7;border-top:3px solid #E4D6B4}
+.teachbar[hidden]{display:none!important}
+.teachbar .btn{min-height:64px;font-size:28px;padding:8px 18px}
+.teampip{min-height:64px;min-width:120px;border-radius:16px;border:3px solid #2B2540;background:#fff;font-family:Andika,sans-serif;font-size:28px;font-weight:700;padding:6px 14px}
+.teampip.zip{box-shadow:0 3px 0 #1F8A4C}
+.teampip.frill{box-shadow:0 3px 0 #C2408A}
+.teachclear{background:none;border:0;color:#5b5473;font-family:Andika,sans-serif;font-weight:700;font-size:20px;text-decoration:underline;min-height:44px}
+.teachans{margin:0;font-weight:700;font-size:32px;flex:1 1 100%;text-align:center}
+.teachshow{outline:8px solid #F28C00;outline-offset:3px;background:#FFF3D0}
+.tile.picked{outline:6px solid #F28C00;background:#FFE9C2}
+html.teach .u5step .choice,
+html.teach .u5step .fz-w,
+html.teach .u5step .tile,
+html.teach .u5step .wtile,
+html.teach .u5step .chainfrom,
+html.teach .u5step .sorword,
+html.teach .u5step .spelltile,
+html.teach .u5step .magebox,
+html.teach .u5step .vcard b,
+html.teach .u5step .echip,
+html.teach .u5step .heartchip,
+html.teach .u5step .sentence,
+html.teach .u5step .bigprompt,
+html.teach .u5step .blendout,
+html.teach .u5step .u5word{font-size:64px;line-height:1.05}
+html.teach .u5step .choice,
+html.teach .u5step .tile,
+html.teach .u5step .wtile,
+html.teach .u5step .sortbin,
+html.teach .u5step .fz-bubble,
+html.teach .u5step .heartchip,
+html.teach .u5step .slot,
+html.teach .u5step .magebox,
+html.teach .u5step .vcard{min-height:96px;min-width:88px}
+html.teach .u5step .choices,
+html.teach .u5step .fz-field,
+html.teach .u5step .bank,
+html.teach .u5step .chainopts,
+html.teach .u5step .sortbins,
+html.teach .u5step .wpool,
+html.teach .u5step .spellchoices{gap:24px}
+html.teach .u5menu .u5name{font-size:36px}
+html.teach .u5menu .u5card{min-height:64px;padding:6px 14px}
+html.teach .u5menu .u5main{gap:8px;padding-top:6px}
+html.teach .nk-refresh .bigprompt{display:none}
+html.teach .nk-refresh .echip{font-size:28px;min-height:48px}
+html.teach .nk-refresh .efocusbox{padding:4px 8px;gap:4px}
+html.teach .nk-refresh .vcard b{font-size:48px;line-height:1}
+html.teach .nk-refresh .vcard small{font-size:16px}
+html.teach .nk-refresh .vrefresh{gap:4px}
+html.teach .nk-refresh .btn.big{min-height:52px;padding:4px 16px}
+html.teach .u5step .lesson-top,html.teach .u5menu .uA-top{padding-right:5.2rem}
+html.teach .u5step .sentact .tile.word{font-size:64px;min-height:96px;min-width:88px}
+html.teach .nk-refresh .vcard{display:grid;grid-template-columns:2.4rem minmax(0,1fr);grid-template-rows:auto auto;align-items:center;min-height:0;padding:2px 10px;column-gap:8px}
+html.teach .nk-refresh .vcard img{grid-row:1 / span 2;width:2rem;height:2rem}
+html.teach .nk-refresh .vrefresh{gap:8px}
+html.teach .u5menu .u5card{min-height:84px}
+html.teach .u5step .lesson-top{padding-top:4px;padding-bottom:4px}
+html.teach .u5step .itext{font-size:32px}
 @media (max-width:700px){
   .u5grid{grid-template-columns:1fr}
   .u5step .streakline{font-size:.85rem}

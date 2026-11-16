@@ -52,7 +52,7 @@
               got.add(r); const nx = got.size >= rounds.length ? -1 : nextOpen(); if (nx < 0) { ctx.progress(1); ctx.finish(); } else { r = nx; round(); } }
             else { misses++; ctx.miss(); b.classList.add('tried'); status.textContent = 'Not that one. Listen again.'; await tryAgain(W(R.word)); if (misses >= 2) $$('.choice', grid).forEach((o) => { if (o.dataset.w === R.word) o.classList.add('hint'); }); }
           }); grid.append(b); });
-        stage.append(h('div', { class: 'activity' }, spk, grid, status)); say(R.word);
+        stage.append(h('div', { class: 'activity' }, spk, grid, status)); if (ctx.armReveal) ctx.armReveal(R.word); say(R.word);
       }
       round();
     }
@@ -102,6 +102,7 @@
           h('img', { class: 'matchpic', src: pics[word], alt: '' }),
           h('p', { class: 'bigprompt' }, 'Which word matches the picture?'),
           grid, status));
+        if (ctx.armReveal) ctx.armReveal(word);
       }
       ctx.setBack(() => { if (r > 0) { Snd.stop(); r--; round(); return true; } return false; });
       ctx.setNext(() => { if (r < rounds.length - 1) { Snd.stop(); r++; round(); return true; } return false; });
@@ -116,7 +117,7 @@
         const R = rounds[r]; ctx.progress(r / rounds.length); if (ctx.count) ctx.count(r + 1, rounds.length); stage.innerHTML = ''; let misses = 0;
         const spk = speakerBtn(() => say(R.word), 'Hear the word'); spk.classList.add('huge');
         const slotsEl = h('div', { class: 'slots' }); const bankEl = h('div', { class: 'bank' });
-        const status = h('p', { class: 'status', 'aria-live': 'polite' }, 'Tap or drag tiles into the boxes.');
+        const status = h('p', { class: 'status', 'aria-live': 'polite' }, document.body.classList.contains('teach') ? 'Tap a tile, then tap a box.' : 'Tap or drag tiles into the boxes.');
         const mk = (id, text, kind) => ({ id, text, cls: kind, style: kind === 'chunk' ? 'color:' + CH[text] + ';border-color:' + CH[text] : '' });
         const tiles = shuffle([mk('o1', R.onset, 'onset'), mk('o2', R.altOnset, 'onset'), mk('c1', R.chunk, 'chunk'), mk('c2', R.altChunk, 'chunk')]);
         IR.TileBoard({ tiles, nSlots: 2, slotsEl, bankEl, onFull: async (texts, b) => {
@@ -124,8 +125,11 @@
           if (texts.join('') === R.word) { status.textContent = 'Yes! ' + R.word; slotsEl.classList.add('right'); await ding(R.word); if (!ctx.scr.ok()) return; await sleep(500); if (!ctx.scr.ok()) return; r++; if (r < rounds.length) round(); else { ctx.progress(1); ctx.finish(); } }
           else { misses++; ctx.miss(); status.textContent = 'Almost! Listen again and try again.'; slotsEl.classList.add('almost'); await tryAgain(W(R.word)); if (!ctx.scr.ok()) return; slotsEl.classList.remove('almost'); b.slots.fill(null); if (misses >= 2) b.hint = 'o1'; b.locked = false; b.render(); }
         } });
-        stage.append(h('div', { class: 'activity' }, spk, slotsEl, bankEl, status)); say(R.word);
+        stage.append(h('div', { class: 'activity' }, spk, slotsEl, bankEl, status));
+        if (ctx.armReveal) ctx.armReveal(R.word, (root) => [...root.querySelectorAll('.tile')].filter((t) => t.dataset.id === 'o1' || t.dataset.id === 'c1'));
+        say(R.word);
       }
+      ctx.setNext(() => { if (r < rounds.length - 1) { Snd.stop(); r++; round(); return true; } return false; });
       round();
     }
   
@@ -152,7 +156,7 @@
       let parts, mix, got;
       const undo = h('button', { class: 'btn', type: 'button', onclick: () => { if (got.length) { got.pop(); draw(); } } }, 'Undo');
       stage.append(h('div', { class: 'activity wordplay' }, h('div', { class: 'row center' }, hearB), slots, pool, h('div', { class: 'row center' }, undo), status));
-      function start() { parts = split(order[r]); do { mix = shuffle(parts.map((t, i) => ({ t, i }))); } while (mix.length > 1 && mix.every((m, k) => m.t === parts[k])); got = []; status.textContent = '\u00a0'; draw(); ctx.progress(r / order.length); if (ctx.count) ctx.count(r + 1, order.length); }
+      function start() { parts = split(order[r]); do { mix = shuffle(parts.map((t, i) => ({ t, i }))); } while (mix.length > 1 && mix.every((m, k) => m.t === parts[k])); got = []; status.textContent = '\u00a0'; draw(); ctx.progress(r / order.length); if (ctx.count) ctx.count(r + 1, order.length); if (ctx.armReveal) ctx.armReveal(order[r]); }
       function draw() {
         slots.innerHTML = ''; parts.forEach((p, k) => slots.append(h('span', { class: 'wslot' + (p === 'nk' ? ' ngslot' : '') }, got[k] ? got[k].t : '')));
         pool.innerHTML = ''; mix.forEach((m) => { const used = got.includes(m); const b = tile(m.t, used ? ' used' : ''); b.disabled = used; b.addEventListener('click', () => put(m, b)); pool.append(b); });
@@ -165,6 +169,7 @@
           if (r >= order.length) { ctx.progress(1); status.textContent = 'All the words are spelled!'; await sleep(400); if (ctx.scr.ok()) ctx.finish(); return; }
           await sleep(300); start(); say(order[r]); }
       }
+      ctx.setNext(() => { if (r < order.length - 1) { Snd.stop(); r++; start(); say(order[r]); return true; } return false; });
       start(); Snd.seq(['audio/' + KEY + '_p_scramble.mp3', W(order[0])], 300);
     }
   
@@ -175,7 +180,7 @@
         const R = rounds[r]; ctx.progress(r / rounds.length); if (ctx.count) ctx.count(r + 1, rounds.length); stage.innerHTML = ''; let misses = 0; const audio = 'audio/' + KEY + '_b_' + R.n + '.mp3';
         const spk = speakerBtn(() => Snd.play(audio), 'Hear the sentence');
         const slotsEl = h('div', { class: 'slots sent' }); const bankEl = h('div', { class: 'bank' });
-        const status = h('p', { class: 'status', 'aria-live': 'polite' }, 'Tap or drag the words into the boxes.');
+        const status = h('p', { class: 'status', 'aria-live': 'polite' }, document.body.classList.contains('teach') ? 'Tap a word, then tap a box.' : 'Tap or drag the words into the boxes.');
         const tiles = shuffle(R.words.map((w, i) => ({ id: 'w' + i, text: w, cls: 'word' })));
         const bridge = h('div', { class: 'bridgebar' }, ...R.words.map(() => h('i')));
         IR.TileBoard({ tiles, nSlots: R.words.length, slotsEl, bankEl, onTap: (text) => say(String(text).replace(/[^a-z]/gi, '')),
@@ -186,8 +191,10 @@
             else { misses++; ctx.miss(); status.textContent = 'Almost! Listen again and try again.'; slotsEl.classList.add('almost'); await tryAgain(audio); if (!ctx.scr.ok()) return; slotsEl.classList.remove('almost'); b.slots.fill(null); if (misses >= 2) b.hint = tiles.find((t) => t.text === R.words[0]).id; b.locked = false; b.render(); }
           } });
         stage.append(h('div', { class: 'activity sentact' }, h('div', { class: 'pic' }, h('img', { src: R.img, alt: 'A picture from the story' })), h('div', { class: 'row center' }, spk), slotsEl, bridge, bankEl, status));
+        if (ctx.armReveal) ctx.armReveal(R.text);
         if (r === 0) IR.sayItem(ctx, 'audio/' + KEY + '_p_sent.mp3', audio); else Snd.play(audio);
       }
+      ctx.setNext(() => { if (r < rounds.length - 1) { Snd.stop(); r++; round(); return true; } return false; });
       round();
     }
   
@@ -282,6 +289,7 @@
           h('span', { class: 'uA-time' }, h('span', { class: 't-long' }, 'About ' + totalMin + ' min total'), h('span', { class: 't-short' }, totalMin + ' min')), IR.ui.gearButton()),
         IR.unitIntro ? IR.unitIntro('i5') : null,
         menu));
+      if (IR.teach) IR.teach.sync();
     }
   
     /* ---------- step shell (same top bar / instructions / Back-Next as the ng lessons) ---------- */
@@ -320,6 +328,7 @@
       app.append(screen);
       if (S0.group === 'activities') IR.attachGameRules(ctx, screen, S0.title);
       if (IR.engage) IR.engage.mount(ctx, screen);
+      if (IR.teach) { IR.teach.mount(ctx, screen); IR.teach.sync(); }
       ctx.progress(0); S0.run(ctx);
     }
     function unitSheetBtn(cur) {
@@ -417,7 +426,7 @@
           else { misses++; ctx.miss(); el.classList.add('tried'); status.textContent = 'Not that one. Listen again.'; await IR.tryAgain(AU.w(R.word)); if (misses >= 2) buttons.forEach((b) => { if (b.ok) b.el.classList.add('hint'); }); }
         }));
         const spk = speakerBtn(() => say(R.word), 'Hear the word'); spk.classList.add('huge');
-        st.append(h('div', { class: 'activity' }, spk, body, status)); say(R.word); };
+        st.append(h('div', { class: 'activity' }, spk, body, status)); if (ctx.armReveal) ctx.armReveal(R.word); say(R.word); };
       ctx.setBack(() => { if (r > 0) { r--; round(); return true; } return false; });
       ctx.setNext(() => { if (r < rounds.length - 1) { r++; round(); return true; } return false; });
       round();
@@ -478,7 +487,7 @@
         const nb = btn('primary story-nextpage' + (mode !== 'reading' ? ' glow' : ''), null, nextLbl, nextFn); nb.append(icon('next'));
         if (last && mode !== 'reading' && allHeard()) { /* ok */ } else if (last && mode === 'reading') nb.disabled = true;
         ctl.append(mid, nb); }
-      function setPage(i) { p = i; picEl.src = pages[p].img; wordsInto(sentEl, pages[p]); ctx.progress(heard.size / pages.length); }
+      function setPage(i) { p = i; picEl.src = pages[p].img; wordsInto(sentEl, pages[p]); ctx.progress(heard.size / pages.length); if (ctx.armReveal) ctx.armReveal(pages[p].text); }
       function playPage() { const pg = pages[p]; const ws = $$('.w', sentEl); const my = ++token; mode = 'reading'; Snd.hideFallback(); renderCtl();
         return Snd.play(pg.audio, { onTime: hl(pg, ws) }).then((ok) => { ws.forEach((e) => e.classList.remove('hl', 'read')); if (my !== token || !ctx.scr.ok()) return;
           if (ok) { heard.add(p); mode = 'done'; } else { mode = 'blocked'; Snd.hideFallback(); } setPage(p); renderCtl(); }); }
@@ -521,6 +530,7 @@
               hint.append(h('img', { class: 'hintthumb', src: pg.img, alt: 'Story page ' + it.page }), h('div', null, h('p', { class: 'hinttxt' }, opts.hintText(it, q)), h('p', { class: 'hintpage' }, 'Page ' + it.page + ': ' + pg.text)));
               Snd.seq([IR.A.sfx.tryagain, opts.hintAudio(q)], 150); } }); return b; }));
         st.append(h('div', { class: 'activity comp' }, h('p', { class: 'small' }, 'Question ' + (q + 1) + ' of ' + items.length), h('div', { class: 'compq' }, speakerBtn(() => Snd.play(opts.qAudio(q)), 'Hear the question'), h('p', { class: 'bigprompt' }, it.q)), grid, hint));
+        if (ctx.armReveal) ctx.armReveal(it.answer);
         Snd.play(opts.qAudio(q)); };
       ctx.setBack(() => { if (q > 0) { q--; step(); return true; } return false; });
       ctx.setNext(() => { if (q < items.length - 1) { q++; step(); return true; } return false; });
@@ -550,6 +560,7 @@
               await sleep(500); await Snd.seq([IR.A.sfx.ding, opts.yay(who), opts.full(i)], 150); if (!ctx.scr.ok()) return; await sleep(400); if (!ctx.scr.ok()) return; i++; if (i < lines.length) step(); else finale(); }
             else { b.classList.add('tried'); ctx.miss(); await sleep(300); Snd.seq([IR.A.sfx.tryagain, opts.line(i)], 150); } }); return b; }));
         st.append(h('div', { class: 'activity rhyme' }, h('p', { class: 'bigprompt' }, 'Rhyme Time'), poemBox(), h('div', { class: 'compq' }, speakerBtn(() => Snd.play(opts.line(i)), 'Hear the line again'), h('span', { class: 'small' }, 'Tap the word that rhymes.')), grid, react));
+        if (ctx.armReveal) ctx.armReveal(L.answer);
         Snd.play(opts.line(i)); };
       const finale = () => { ctx.progress(0.95); st.innerHTML = ''; i = lines.length; ctx.setNextLabel(''); const box = poemBox();
         const playAll = async () => { Snd.stop(); const id = Snd.id; const ps = $$('.pline', box); await Snd.play(opts.end, { keep: true });
@@ -586,7 +597,8 @@
           Snd.seq([AU.p('end'), AU.w(it.word)], 200); }
         else { body.append(h('p', { class: 'bigprompt' }, N.whichQ), speakerBtn(() => Snd.play(AU.p('which')), 'Hear the question'),
             h('div', { class: 'choices' }, ...shuffle(it.choices).map((w) => { const b = h('button', { class: 'choice', type: 'button', 'data-w': w }, w); b.addEventListener('click', () => ans(w === it.answer, b)); return b; }))); Snd.play(AU.p('which')); }
-        body.append(status); st.append(body); };
+        body.append(status); st.append(body);
+        if (ctx.armReveal) ctx.armReveal(it.word || it.answer || ''); };
       let inQ = false;
       ctx.setNext(() => { if (!inQ) { inQ = true; step(); return true; } tok++; if (q < items.length - 1) { q++; step(); return true; } if (items.every((_, k) => recs[k] !== undefined)) { finish(); return true; } return false; });
       ctx.setBack(() => { if (!inQ) return false; tok++; if (q > 0) { q--; step(); } else { inQ = false; intro(); } return true; });

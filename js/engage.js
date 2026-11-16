@@ -174,6 +174,7 @@
           h('span', { class: 'u5name' }, r.title), h('span', { class: 'u5min' }, r.note || ''));
     }
     return h('main', { class: 'u5main' },
+      h('div', { class: 'u5teachrow' }, h('button', { class: 'btn teachgo', type: 'button', onclick: function () { if (IR.teach) IR.teach.toggle(true); } }, 'Teacher mode')),
       h('div', { class: 'u5prog' }, bar, h('span', { class: 'u5count' }, done + ' of ' + items.length)),
       h('ol', { class: 'u5grid' }, ...items.map(card)),
       extra,

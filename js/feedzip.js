@@ -87,6 +87,7 @@
       stage.append(h('div', { class: 'activity feedzip' },
         h('div', { class: 'fz-top' }, zip, h('div', { class: 'fz-side' }, tummy(), replay, streak)),
         field, status));
+      if (ctx.armReveal) ctx.armReveal(w);
       const myBite = my;
       (async () => {
         if (!ctx._saidInstr) ctx._saidInstr = Object.create(null);

@@ -118,6 +118,7 @@
         h('div', { class: 'chainslots' }, ...slotEls),
         pool,
         status));
+      if (ctx.armReveal) ctx.armReveal(need, (root) => root.querySelector('[data-t="' + String(need).replace(/"/g, '') + '"]'));
       ctx.setBack(() => { if (r > 1) { r--; round(); return true; } modelStep(); return true; });
       ctx.setNext(() => { if (r < words.length - 1) { r++; round(); return true; } return false; });
       const clip = changeSrc(from, to);

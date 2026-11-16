@@ -173,6 +173,7 @@
       if (timer) act.append(timer);
       act.append(fix, bins, status);
       ctx.stage.append(act);
+      if (ctx.armReveal) ctx.armReveal(info.magic ? 'Long vowel' : 'Short vowel', (root) => root.querySelector('[data-bin="' + (info.magic ? 'long' : 'short') + '"]'));
       say(w);
       if (useTimer) {
         const loop = () => {
@@ -318,6 +319,7 @@
       act.append(spk, h('p', { class: 'magelab' }, 'Sound boxes', h('span', null, 'magic e')), boxes, bank, check, status);
       ctx.stage.append(act);
       draw(null);
+      if (ctx.armReveal) ctx.armReveal(info.show);
       say(info.show);
     }
 
@@ -462,6 +464,7 @@
       const spk = IR.speakerBtn(() => say(item.w), 'Hear the word');
       act.append(h('p', { class: 'spellcount' }, (i + 1) + ' of ' + REFRESH.practice.length), starRow, spk, h('p', { class: 'vrule' }, 'Short or Long?'), h('div', { class: 'sortbins' }, arm('Short', false), arm('Long', true)), fix, status);
       ctx.stage.append(act);
+      if (ctx.armReveal) ctx.armReveal(item.long ? 'Long' : 'Short', (root) => root.querySelector('[data-bin="' + (item.long ? 'long' : 'short') + '"]'));
       say(item.w);
     }
 

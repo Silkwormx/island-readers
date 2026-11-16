@@ -11,9 +11,11 @@
       clear() { this.slots.fill(null); render(); },
       render: () => render()
     };
+    let picked = null;
+    const teach = () => document.body.classList.contains('teach');
     opts.tiles.forEach((t, i) => { if (t.n == null) t.n = i + 1; });
     function tileEl(t) {
-      const el = h('button', { type: 'button', class: 'tile ' + (t.cls || ''), 'data-id': t.id, 'data-n': String(t.n), style: t.style || '' }, t.text);
+      const el = h('button', { type: 'button', class: 'tile ' + (t.cls || '') + (picked === t.id ? ' picked' : ''), 'data-id': t.id, 'data-n': String(t.n), style: t.style || '' }, t.text);
       if (board.hint === t.id) el.classList.add('hint');
       attach(el, t.id);
       return el;
@@ -23,6 +25,12 @@
       board.slots.forEach((id, i) => {
         const slot = h('div', { class: 'slot' + (id != null ? ' filled' : ''), 'data-i': i });
         if (id != null) slot.append(tileEl(board.tiles.find((t) => t.id === id)));
+        slot.addEventListener('click', () => {
+          if (!teach() || picked == null || board.locked) return;
+          const id = picked;
+          picked = null;
+          dropOn(id, i);
+        });
         opts.slotsEl.append(slot);
       });
       board.tiles.filter((t) => !board.slots.includes(t.id)).forEach((t) => opts.bankEl.append(tileEl(t)));
@@ -30,6 +38,13 @@
     }
     function tap(id) {
       if (board.locked) return;
+      if (teach()) {
+        const si = board.slots.indexOf(id);
+        if (si >= 0) { board.slots[si] = null; picked = null; render(); return; }
+        picked = picked === id ? null : id;
+        render();
+        return;
+      }
       const si = board.slots.indexOf(id);
       const tile = board.tiles.find((t) => t.id === id);
       if (si >= 0) board.slots[si] = null;
