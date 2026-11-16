@@ -1,15 +1,6 @@
-/* Foundation Skills. Scoped to this section so the home page stays as it is.
-   On a short laptop the fourth tab would cover Continue, so the picture gives up a little height. */
-@media (min-width:1000px) and (max-height:760px) {
-  .gridhome .homeside:has(a[href="#/foundation"]) .homefeature .homeart,
-  .gridhome .homeside:has(a[href="#/foundation"]) .zfpics img.homeart {
-    max-height: 6.4rem !important;
-    height: auto !important;
-    aspect-ratio: auto !important;
-    object-fit: contain !important;
-    object-position: center !important;
-  }
-}
+/* Foundation Skills. The home card uses the same bell style; only the picture row is local. */
+.bellpath .tpic.tfaces{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));align-items:center;justify-items:center;gap:.15rem;padding:.7rem;box-sizing:border-box;background:#FFF6E3}
+.bellpath .tpic.tfaces img{width:100%;height:auto;max-height:72%;object-fit:contain}
 .lldays{display:flex;gap:.35rem;justify-content:center;flex-wrap:wrap}
 .llday{min-height:2.4rem;padding:.15rem .7rem;border-radius:.8rem;border:3px solid var(--ink);background:#fff;font-family:Andika,sans-serif;font-weight:700}
 .llday.on{background:#F28C00;color:#fff;border-color:#C95A10}

@@ -98,21 +98,22 @@ test('picture words put the letter at the start, except x at the end', () => {
   });
 });
 
-test('home adds one Foundation Skills tab and leaves the bell grid alone', () => {
+test('home opens Foundation Skills from the first bell, not a sidebar tab', () => {
   const homeStart = screens.indexOf('function homeScreen()');
   const homeEnd = screens.indexOf('function gemScreen()');
   const home = screens.slice(homeStart, homeEnd);
-  assert.match(home, /tab\('#\/foundation', 'Foundation Skills', 'book'\)/);
-  assert.ok(home.indexOf("tab('#/foundation'") < home.indexOf("tab('#/trail'"));
+  assert.equal(home.includes("tab('#/foundation'"), false);
   assert.ok(home.indexOf("tab('#/trail'") < home.indexOf("tab('#/find'"));
+  assert.ok(home.indexOf("'Foundations'") < home.indexOf('for (let n = 1; n <= 22; n++)'));
+  assert.match(home, /Learn the letters/);
+  assert.match(home, /location\.hash = '#\/foundation'/);
+  assert.match(home, /class: 'tcard'/);
   assert.equal(home.includes('lettersentry'), false);
-  assert.equal(home.includes('Before Unit 1'), false);
-  assert.match(home, /h\('div', \{ class: 'bellpath', id: 'skymap' \}, h\('div', \{ class: 'bellgrid' \}, \.\.\.cards\)\)/);
   assert.match(screens, /foundationRoute/);
   assert.match(html, /js\/foundation\/letters\.js/);
   assert.match(html, /foundation\/foundation\.css/);
   assert.match(sw, /js\/foundation\/letters\.js/);
-  assert.match(sw, /ir-20261116y/);
+  assert.match(sw, /ir-20261116z/);
   assert.match(teach, /#\/foundation/);
   assert.match(letters, /Foundation Skills/);
   assert.match(letters, /#\/foundation\/letters/);

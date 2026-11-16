@@ -300,14 +300,26 @@
       b.addEventListener('click', () => { if (u6) { Snd.stop(); location.hash = '#/u6'; } else if (u5) { openIsland('i5'); } else if (isl) openIsland(BUILT_ID); else { Snd.stop(); toast(st === 'done' ? 'Unit ' + n + ' is done. It is part of the full app.' : n < BUILT ? 'Unit ' + n + ' is coming soon in the full app!' : lit ? 'Unit ' + n + ' is unlocked! It is coming soon in the full app.' : 'Unit ' + n + ' is coming soon! Finish Unit ' + BUILT + ' first.'); } });
       return b;
     };
-    const cards = [];
+    const foundations = h('button', {
+      class: 'tcard',
+      type: 'button',
+      'data-id': 'foundations',
+      'aria-label': 'Foundations. Learn the letters. Opens Foundation Skills.'
+    },
+      h('span', { class: 'tpic tfaces' }, ...['a_asa_apple_snail.jpg', 'm_manny_mangrove.jpg', 's_sami_sea_snake.jpg', 't_tama_sea_turtle.jpg'].map((file) => h('img', { src: 'foundation/img/letters/' + file, alt: '' }))),
+      h('span', { class: 'tbody' },
+        h('span', { class: 'thead' }, h('b', { class: 'tnum' }, 'Foundations')),
+        h('span', { class: 'tname' }, 'Learn the letters'),
+        h('span', { class: 'tsnd' }, '\u00a0'),
+        h('span', { class: 'tcount' }, '\u00a0')));
+    foundations.addEventListener('click', () => { Snd.stop(); location.hash = '#/foundation'; });
+    const cards = [foundations];
     for (let n = 1; n <= 22; n++) cards.push(unit(n));
     const grid = h('div', { class: 'bellpath', id: 'skymap' }, h('div', { class: 'bellgrid' }, ...cards));
     const tab = (href, name, icoName) => h('a', { class: 'hometab', href: href, 'aria-label': name },
       h('span', { class: 'hometab-ico', 'aria-hidden': 'true' }, icon(icoName)),
       h('span', { class: 'hometab-name' }, name));
     const tabs = h('nav', { class: 'hometabs', 'aria-label': 'More places' },
-      tab('#/foundation', 'Foundation Skills', 'book'),
       tab('#/trail', 'Trail Map and Placement Test', 'map'),
       tab('#/practice/sight', 'Sight Word Practice', 'star'),
       tab('#/find', 'Find It', 'search'));
