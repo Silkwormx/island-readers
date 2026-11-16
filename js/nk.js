@@ -117,7 +117,7 @@
       setBack(fn) { backH = fn; }, setNext(fn) { nextH = fn; },
       goBack() { Snd.stop(); if (backH && backH()) return; location.hash = idx > 0 ? '#/nk/' + STEPS[idx - 1].id : '#/nk'; },
       goNext() { Snd.stop(); if (nextH && nextH()) return; location.hash = idx < STEPS.length - 1 ? '#/nk/' + STEPS[idx + 1].id : '#/nk'; },
-      setNextLabel(t) { nextBtn.firstChild.textContent = t; }, showNav(on) { nav.style.display = on === false ? 'none' : ''; },
+      setNextLabel(t) { navApi.label(t); }, showNav(on) { nav.classList.toggle('nonext', on === false); if (on === false) nextBtn.hidden = true; },
       finish(starsOverride) {
         const stars = starsOverride || ((S0.id === 'meet' || S0.id === 'listen') ? 3 : mistakes <= 1 ? 3 : mistakes <= 3 ? 2 : 1);
         markLight(S0.id); IR.recordActivity(S0.rec || pid(S0), stars); IR.touchStreak(); IR.save(); ctx.progress(1);
@@ -130,7 +130,8 @@
       }
     };
     const nextBtn = h('button', { class: 'btn big next', type: 'button', 'aria-label': 'Next', onclick: () => ctx.goNext() }, 'Next', icon('next'));
-    const nav = h('div', { class: 'lesson-nav' }, h('button', { class: 'btn big back', type: 'button', 'aria-label': 'Back', onclick: () => ctx.goBack() }, icon('back'), 'Back'), nextBtn);
+    const nav = h('div', { class: 'lesson-nav' }, nextBtn);
+    const navApi = IR.simpleNav(nav, nextBtn, () => { Snd.stop(); location.hash = '#/nk'; });
     const x = h('button', { class: 'xbtn', type: 'button', 'aria-label': 'Back to the unit', onclick: () => { location.hash = '#/nk'; } }, icon('close'));
     const screen = h('div', { class: 'screen lessonscreen nkstep nk-' + S0.id + (S0.group === 'lesson' ? ' is-lesson' : ''), style: '--c:' + S0.color }, h('header', { class: 'lesson-top' }, x, bar, IR.ui.homeButton(), unitSheetBtn(S0.id), IR.ui.gearButton()), instrBox, stage, nav);
     app.append(screen);
@@ -199,7 +200,7 @@
   }
   /* 3. We do: tap each letter, then blend */
   function runWedo(ctx) {
-    ctx.setInstr('We do: tap each letter and say its sound. Then tap Blend it.', 'wedo2'); ctx.setNextLabel('Next'); const st = ctx.stage; let i = 0; const W = N.wedo;
+    ctx.setInstr('We do: tap each letter and say its sound. Then tap Blend it.', 'wedo2'); ctx.setNextLabel(''); const st = ctx.stage; let i = 0; const W = N.wedo;
     const show = () => { const w = W[i]; ctx.progress(i / W.length); st.innerHTML = ''; const row = tilesFor(w); const out = h('p', { class: 'blendout' }, '\u00a0');
       const blend = h('button', { class: 'btn big primary', type: 'button', disabled: true }, icon('speaker'), 'Blend it');
       $$('.btile', row).forEach((t) => {
@@ -267,11 +268,10 @@
   function runListen(ctx) { ctx.showNav(false); if (!ctx._heartDone) { ctx._heartDone = true; ctx.setNext(() => { Snd.stop(); runListen(ctx); return true; }); runHeart(ctx, () => runListen(ctx)); return; } ctx.stage.innerHTML = ''; ctx.setInstr('Listen to the story and follow along.', 'listen'); const st = ctx.stage;
     const pages = N.story; let p = 0, token = 0, mode = 'reading', finished = false; const heard = new Set();
     const picEl = h('img', { class: 'panel', alt: '' }); const sentEl = h('p', { class: 'sentence', 'aria-live': 'polite' });
-    const dots = h('div', { class: 'pagedots' }, ...pages.map(() => h('i'))); const label = h('p', { class: 'small story-say' }); const ctl = h('div', { class: 'row center story-ctl' });
+    const label = h('p', { class: 'small story-say' }); const ctl = h('div', { class: 'row center story-ctl' });
     const allHeard = () => heard.size >= pages.length; const firstUnheard = () => pages.findIndex((_, k) => !heard.has(k));
     const btn = (cls, ico, text, fn) => { const b = h('button', { class: 'btn big ' + cls, type: 'button' }, ico ? icon(ico) : null, text); b.addEventListener('click', fn); return b; };
     function renderCtl() { ctl.innerHTML = ''; const last = p === pages.length - 1;
-      const prev = btn('story-prev', 'back', 'Previous page', () => { if (p > 0) goPage(p - 1); }); if (p === 0) prev.disabled = true;
       let mid, nextLbl = 'Next page', nextFn = () => { if (p < pages.length - 1) goPage(p + 1); };
       if (mode === 'reading') {
         label.textContent = 'Page ' + (p + 1) + ' of ' + pages.length + '. Listening\u2026';
@@ -288,8 +288,8 @@
       }
       const nb = btn('primary story-nextpage' + (mode !== 'reading' ? ' glow' : ''), null, nextLbl, nextFn); nb.append(icon('next'));
       if (last && mode !== 'reading' && allHeard()) { /* ok */ } else if (last && mode === 'reading') nb.disabled = true;
-      ctl.append(prev, mid, nb); }
-    function setPage(i) { p = i; picEl.src = pages[p].img; wordsInto(sentEl, pages[p]); $$('i', dots).forEach((d, k) => { d.classList.toggle('cur', k === p); d.classList.toggle('seen', heard.has(k)); }); ctx.progress(heard.size / pages.length); }
+      ctl.append(mid, nb); }
+    function setPage(i) { p = i; picEl.src = pages[p].img; wordsInto(sentEl, pages[p]); ctx.progress(heard.size / pages.length); }
     function playPage() { const pg = pages[p]; const ws = $$('.w', sentEl); const my = ++token; mode = 'reading'; Snd.hideFallback(); renderCtl();
       return Snd.play(pg.audio, { onTime: hl(pg, ws) }).then((ok) => { ws.forEach((e) => e.classList.remove('hl', 'read')); if (my !== token || !ctx.scr.ok()) return;
         if (ok) { heard.add(p); mode = 'done'; } else { mode = 'blocked'; Snd.hideFallback(); } setPage(p); renderCtl(); }); }
@@ -298,7 +298,7 @@
     const goPage = (i) => { halt(); setPage(i); playPage(); };
     ctx.setBack(() => { if (p > 0) { goPage(p - 1); return true; } return false; });
     ctx.setNext(() => { if (p < pages.length - 1) { goPage(p + 1); return true; } if (allHeard()) { finishNow(); return true; } return false; });
-    st.append(h('div', { class: 'activity story listenmode' }, h('div', { class: 'panelwrap' }, picEl), h('div', { class: 'sentrow' }, sentEl), dots, label, ctl));
+    st.append(h('div', { class: 'activity story listenmode' }, h('div', { class: 'panelwrap' }, picEl), h('div', { class: 'sentrow' }, sentEl), label, ctl));
     setPage(0); playPage();
     IR._nkStory = { heardAll: () => { pages.forEach((_, k) => heard.add(k)); mode = 'done'; setPage(pages.length - 1); renderCtl(); } };
   }
@@ -306,19 +306,18 @@
   function runRead(ctx) {
     ctx.setInstr('Tap a speaker to hear a sentence. Then you read it!', 'read'); ctx.showNav(false);
     const pages = N.story; let p = 0, reached = 0; const heard = new Set(); const S = IR.S(); S.reads = S.reads || {};
-    const picEl = h('img', { class: 'panel', alt: '' }); const sentEl = h('p', { class: 'sentence' }); const dots = h('div', { class: 'pagedots' }, ...pages.map(() => h('i')));
+    const picEl = h('img', { class: 'panel', alt: '' }); const sentEl = h('p', { class: 'sentence' });
     const spk = speakerBtn(() => play(), 'Hear this sentence'); spk.classList.add('huge');
-    const prev = h('button', { class: 'btn small back', type: 'button' }, icon('back'), 'Back'); const next = h('button', { class: 'btn small primary next', type: 'button' }, 'Next', icon('next'));
-    const reads = h('div', { class: 'reads' }); const readBtn = h('button', { class: 'btn small good', type: 'button' }, icon('check'), 'I read it to a grown-up');
+    const next = h('button', { class: 'btn small primary next', type: 'button' }, 'Next', icon('next'));
+    const reads = h('p', { class: 'readcount' }); const readBtn = h('button', { class: 'btn small primary', type: 'button' }, icon('check'), 'I read it to a grown-up');
     const readIt = () => heard.size >= pages.length || (S.reads.nk || 0) > 0;
-    const renderReads = () => { const n = S.reads.nk || 0; reads.innerHTML = ''; reads.append(h('span', null, 'Read it 3 times: '), ...[0, 1, 2].map((k) => h('i', { class: 'rd' + (k < n ? ' on' : '') }))); };
+    const renderReads = () => { reads.textContent = 'Read ' + (S.reads.nk || 0) + ' of 3'; };
     const setLbl = () => { next.firstChild.textContent = p === pages.length - 1 ? (readIt() ? 'Finish' : 'Next') : 'Next'; };
     readBtn.addEventListener('click', () => { S.reads.nk = Math.min(3, (S.reads.nk || 0) + 1); IR.save(); renderReads(); setLbl(); });
-    function setPage(i) { p = i; reached = Math.max(reached, p); picEl.src = pages[p].img; wordsInto(sentEl, pages[p]); $$('i', dots).forEach((d, k) => { d.classList.toggle('cur', k === p); d.classList.toggle('seen', k <= reached); }); setLbl(); ctx.progress(reached / (pages.length - 1)); }
+    function setPage(i) { p = i; reached = Math.max(reached, p); picEl.src = pages[p].img; wordsInto(sentEl, pages[p]); setLbl(); ctx.progress(reached / (pages.length - 1)); }
     function play() { const pg = pages[p]; const ws = $$('.w', sentEl); return Snd.play(pg.audio, { onTime: hl(pg, ws) }).then((ok) => { ws.forEach((e) => e.classList.remove('hl', 'read')); if (ok) { heard.add(p); setLbl(); } }); }
-    prev.addEventListener('click', () => { if (p > 0) { setPage(p - 1); play(); } else ctx.goBack(); });
     next.addEventListener('click', () => { if (p < pages.length - 1) { setPage(p + 1); play(); } else { Snd.stop(); if (readIt()) ctx.finish(); else location.hash = '#/nk/comp'; } });
-    ctx.stage.append(h('div', { class: 'activity story' }, h('div', { class: 'panelwrap' }, picEl), h('div', { class: 'sentrow' }, spk, sentEl), dots, h('div', { class: 'row' }, prev, next), h('div', { class: 'row' }, readBtn, reads)));
+    ctx.stage.append(h('div', { class: 'activity story readit' }, h('div', { class: 'panelwrap' }, picEl), h('div', { class: 'sentrow' }, spk, sentEl), h('div', { class: 'row' }, next), h('div', { class: 'row' }, readBtn, reads)));
     renderReads(); setPage(0); Snd.play(AU.p('read'));
   }
   /* 9. Story Check (reusable comprehension type): question read aloud, 3 picture+word answers, gentle hint with the story page, no penalties */
@@ -363,7 +362,7 @@
           else { b.classList.add('tried'); ctx.miss(); await sleep(300); Snd.seq([IR.A.sfx.tryagain, opts.line(i)], 150); } }); return b; }));
       st.append(h('div', { class: 'activity rhyme' }, h('p', { class: 'bigprompt' }, 'Rhyme Time'), poemBox(), h('div', { class: 'compq' }, speakerBtn(() => Snd.play(opts.line(i)), 'Hear the line again'), h('span', { class: 'small' }, 'Tap the word that rhymes.')), grid, react));
       Snd.play(opts.line(i)); };
-    const finale = () => { ctx.progress(0.95); st.innerHTML = ''; i = lines.length; ctx.setNextLabel('Finish'); const box = poemBox();
+    const finale = () => { ctx.progress(0.95); st.innerHTML = ''; i = lines.length; ctx.setNextLabel(''); const box = poemBox();
       const playAll = async () => { Snd.stop(); const id = Snd.id; const ps = $$('.pline', box); await Snd.play(opts.end, { keep: true });
         for (let k = 0; k < ps.length; k++) { if (Snd.id !== id) return; ps.forEach((x) => x.classList.remove('hlline')); ps[k].classList.add('hlline'); await Snd.play(opts.pline && lines[0].lead ? opts.pline(k) : opts.full(k), { keep: true }); await sleep(300); }
         ps.forEach((x) => x.classList.remove('hlline')); };

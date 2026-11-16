@@ -114,7 +114,7 @@
       const stage = ctx.stage; ctx.setInstr('', null);
       /* part A: heart-word peek (tap to hear, nothing to answer) */
       function heartPeek() {
-        ctx.progress(0); stage.innerHTML = ''; ctx.showNav(true); ctx.setNextLabel('Next'); ctx.setBack(null); ctx.setNext(() => { Snd.stop(); storyListen(); return true; });
+        ctx.progress(0); stage.innerHTML = ''; ctx.showNav(false); ctx.setNextLabel(''); ctx.setBack(null); ctx.setNext(() => { Snd.stop(); storyListen(); return true; });
         ctx.setInstr('Tap each heart word and each new word to hear it.', 'p_listen1');
         const seen = new Set();
         const go = h('button', { class: 'btn big primary', type: 'button' }, 'Listen to the story', icon('next'));
@@ -145,7 +145,6 @@
         const pages = D.story; let p = 0; let token = 0; let finished = false; let mode = 'reading'; ctx.showNav(false);
         const picEl = h('img', { class: 'panel', alt: '' });
         const sentEl = h('p', { class: 'sentence', 'aria-live': 'polite' });
-        const dots = h('div', { class: 'pagedots' }, ...pages.map(() => h('i')));
         const label = h('p', { class: 'small story-say', 'aria-live': 'polite' });
         const ctl = h('div', { class: 'row center story-ctl' });
         const heard = new Set();     /* pages listened to the END; only a full listen of every page can finish the lesson */
@@ -155,19 +154,16 @@
         function renderCtl() {
           ctl.innerHTML = '';
           const last = p === pages.length - 1;
-          const prev = btn('big story-prev', 'back', 'Previous page', () => { if (p > 0) goPage(p - 1); }); if (p === 0) prev.disabled = true;
           let mid, nextTxt = 'Next page', nextFn = () => { if (p < pages.length - 1) goPage(p + 1); };
           if (mode === 'reading') { label.textContent = 'Page ' + (p + 1) + ' of ' + pages.length + '. Listening\u2026'; mid = btn('big story-stop', 'pause', 'Pause', () => { halt(); mode = 'stopped'; renderCtl(); }); nextFn = () => { halt(); if (p < pages.length - 1) goPage(p + 1); }; }
           else if (mode === 'blocked') { label.textContent = 'Page ' + (p + 1) + ' of ' + pages.length; mid = btn('big primary story-tap', 'speaker', 'Tap to hear', () => playPage()); }
           else { label.textContent = 'Page ' + (p + 1) + ' of ' + pages.length + '.'; mid = btn('big story-again', 'replay', 'Read again', () => playPage()); const u = firstUnheard(); if (last) { if (allHeard()) { nextTxt = 'Finish'; nextFn = () => finishNow(); } else { nextTxt = 'Hear page ' + (u + 1); nextFn = () => goPage(u); } } }
           const nb = btn('big primary story-nextpage' + (mode !== 'reading' ? ' glow' : ''), null, nextTxt, nextFn); nb.append(icon('next'));
-          ctl.append(prev, mid, nb);
+          ctl.append(mid, nb);
         }
         function setPage(i) {
           p = i; const pg = pages[p]; picEl.src = pg.img; sentEl.innerHTML = '';
           pg.words.forEach((w, k) => sentEl.append(h('span', { class: 'w', 'data-k': k }, w), ' '));
-          $$('i', dots).forEach((d, k) => { d.classList.toggle('cur', k === p); d.classList.toggle('seen', heard.has(k)); });
-          ctx.setNextLabel(p === pages.length - 1 && allHeard() ? 'Finish' : 'Next');
           ctx.progress(0.4 + 0.6 * heard.size / pages.length);
         }
         function playPage() {           /* reads ONE page. It never moves on by itself. Called from a tap, so audio is allowed. */
@@ -187,7 +183,7 @@
         ctx.setBack(() => { if (p > 0) { goPage(p - 1); return true; } token++; Snd.stop(); heartPeek(); return true; });      /* Back = previous page, then the heart words */
         ctx.setNext(() => { if (p < pages.length - 1) { goPage(p + 1); return true; } if (allHeard()) { finishNow(); return true; } return false; });
         stage.append(h('div', { class: 'activity story listenmode' },
-          h('div', { class: 'panelwrap' }, picEl), h('div', { class: 'sentrow' }, sentEl), dots, label, ctl));
+          h('div', { class: 'panelwrap' }, picEl), h('div', { class: 'sentrow' }, sentEl), label, ctl));
         setPage(0); playPage();
       }
       heartPeek();

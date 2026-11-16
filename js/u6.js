@@ -319,7 +319,7 @@
       st.innerHTML = '';
       ctx.setInstr('Tap each new or heart word to hear it before the story.', 'heart');
       ctx.progress(0);
-      ctx.setNextLabel('Listen to the story');
+      ctx.setNextLabel('');
       const row = h('div', { class: 'hearts' }, ...words.map((it) => h('button', {
         class: 'heartchip' + (it.irregular ? '' : ' newchip'), type: 'button', onclick: (e) => {
           e.currentTarget.classList.add('seen'); seen.add(it.w); ctx.progress(seen.size / words.length);
@@ -336,7 +336,7 @@
     function showPages() {
       p = 0; st.innerHTML = '';
       ctx.setInstr('Read the story. One page at a time.', 'listen');
-      ctx.setNextLabel('Next');
+      ctx.setNextLabel('');
       const pic = h('img', { class: 'panel', alt: '' });
       const sent = h('p', { class: 'sentence' });
       const label = h('p', { class: 'small' });
@@ -348,9 +348,8 @@
         ctx.progress(p / pages.length);
         Snd.play(pageAudio());
       }
-      const prev = h('button', { class: 'btn big', type: 'button', onclick: () => { if (p > 0) { p--; show(); } else if (words.length) showHeart(); } }, icon('back'), 'Previous page');
       const next = h('button', { class: 'btn big primary', type: 'button', onclick: () => { if (p < pages.length - 1) { p++; show(); } else ctx.finish(); } }, 'Next page', icon('next'));
-      st.append(h('div', { class: 'activity story' }, h('div', { class: 'panelwrap' }, pic), h('div', { class: 'sentrow' }, replay, sent), label, h('div', { class: 'row center' }, prev, next)));
+      st.append(h('div', { class: 'activity story' }, h('div', { class: 'panelwrap' }, pic), h('div', { class: 'sentrow' }, replay, sent), label, h('div', { class: 'row center' }, next)));
       ctx.setBack(() => { if (p > 0) { p--; show(); return true; } if (words.length) { showHeart(); return true; } return false; });
       ctx.setNext(() => { if (p < pages.length - 1) { p++; show(); return true; } ctx.finish(); return true; });
       show();
@@ -531,15 +530,15 @@
       progress(f) { fill.style.width = Math.round(((idx + Math.max(0, Math.min(1, f))) / STEPS.length) * 100) + '%'; },
       setInstr(text, p) { instrBox.innerHTML = ''; if (!text) { instrBox.style.display = 'none'; return; } instrBox.style.display = ''; instrBox.append(speakerBtn(() => { if (p) Snd.play(P(p)); }, 'Hear the directions'), h('span', { class: 'itext' }, text)); },
       setBack(fn) { backH = fn; }, setNext(fn) { nextH = fn; },
-      setNextLabel(t) { if (nextBtn.firstChild) nextBtn.firstChild.textContent = t; },
+      setNextLabel(t) { navApi.label(t); },
+      showNav(on) { nav.classList.toggle('nonext', on === false); if (on === false) nextBtn.hidden = true; },
       goBack() { Snd.stop(); if (backH && backH()) return; location.hash = idx > 0 ? base + '/' + STEPS[idx - 1].id : base; },
       goNext() { Snd.stop(); if (nextH && nextH()) return; location.hash = idx < STEPS.length - 1 ? base + '/' + STEPS[idx + 1].id : base; },
       finish() { mark(L.key, S0.id); IR.recordActivity(L.key + '_' + S0.id, mistakes <= 1 ? 3 : mistakes <= 3 ? 2 : 1); IR.save(); location.hash = base; }
     };
     const nextBtn = h('button', { class: 'btn big next', type: 'button', onclick: () => ctx.goNext() }, 'Next', icon('next'));
-    const nav = h('div', { class: 'lesson-nav' },
-      h('button', { class: 'btn big back', type: 'button', onclick: () => ctx.goBack() }, icon('back'), 'Back'),
-      nextBtn);
+    const nav = h('div', { class: 'lesson-nav' }, nextBtn);
+    const navApi = IR.simpleNav(nav, nextBtn, () => { Snd.stop(); location.hash = base; });
     const x = h('button', { class: 'xbtn', type: 'button', 'aria-label': 'Back to the lesson', onclick: () => { location.hash = base; } }, icon('close'));
     const screen = h('div', { class: 'screen lessonscreen u6step' + (S0.group === 'lesson' ? ' is-lesson' : ''), style: '--c:' + S0.color }, h('header', { class: 'lesson-top' }, x, bar, IR.ui.homeButton(), IR.ui.gearButton()), instrBox, stage, nav);
     app.append(screen);

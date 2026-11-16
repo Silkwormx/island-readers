@@ -509,13 +509,13 @@
       /* Next: a lesson may register setNext(fn) (fn returns true if it stepped forward inside the lesson). Otherwise Next SKIPS AHEAD to the next mini lesson (or Zip's Check) and never marks this one complete. */
       setNext(fn) { nextHandler = fn; },
       goNext() { Snd.stop(); if (nextHandler && nextHandler()) return; location.hash = idx === LESSONS.length - 1 ? '#/check' : '#/lesson/' + (idx + 2); },
-      setNextLabel(txt) { nextLabel.firstChild.textContent = txt; },
-      showNav(on) { nav.style.display = on === false ? 'none' : ''; }
+      setNextLabel(txt) { navApi.label(txt); },
+      showNav(on) { nav.classList.toggle('nonext', on === false); if (on === false) nextBtn0.hidden = true; }
     };
     let backHandler = null; let nextHandler = null;
-    const backBtn0 = h('button', { class: 'btn big back', type: 'button', 'aria-label': idx > 0 ? 'Back to the previous lesson' : 'Back to the trail', onclick: () => ctx.goBack() }, icon('back'), 'Back');
     const nextBtn0 = h('button', { class: 'btn big next', type: 'button', 'aria-label': idx === LESSONS.length - 1 ? 'Next: Zip\u2019s Check' : 'Next lesson', onclick: () => ctx.goNext() }, 'Next', icon('next'));
-    const nextLabel = nextBtn0; const nav = h('div', { class: 'lesson-nav' }, backBtn0, nextBtn0);
+    const nav = h('div', { class: 'lesson-nav' }, nextBtn0);
+    const navApi = IR.simpleNav(nav, nextBtn0, () => { Snd.stop(); location.hash = '#/island3'; });
     function complete() {
       const stars = (L.id === 'listen' || L.id === 'intro') ? 3 : mistakes <= 1 ? 3 : mistakes <= 3 ? 2 : 1;
       const prev = S.lessons[L.id] || {};
@@ -549,8 +549,9 @@
     ctx.goBack = () => { Snd.stop(); if (backHandler && backHandler()) return; location.hash = '#/island3'; };
     let nextHandler = null; ctx.setNext = (fn) => { nextHandler = fn; };
     ctx.goNext = () => { Snd.stop(); if (nextHandler && nextHandler()) return; location.hash = '#/island3'; };
-    const nav = h('div', { class: 'lesson-nav' }, h('button', { class: 'btn big back', type: 'button', 'aria-label': 'Back', onclick: () => ctx.goBack() }, icon('back'), 'Back'),
-      h('button', { class: 'btn big next', type: 'button', 'aria-label': 'Next question', onclick: () => ctx.goNext() }, 'Next', icon('next')));
+    const checkNext = h('button', { class: 'btn big next', type: 'button', 'aria-label': 'Next question', onclick: () => ctx.goNext() }, 'Next', icon('next'));
+    const nav = h('div', { class: 'lesson-nav' }, checkNext);
+    IR.simpleNav(nav, checkNext, () => { Snd.stop(); location.hash = '#/island3'; });
     const screen = h('div', { class: 'screen lessonscreen checkscreen', style: '--c:#2b2540' }, h('header', { class: 'lesson-top' }, x, bar, homeButton(), unitButton('check'), gearButton()), instrBox, stage, nav);
     app.append(screen);
     IR.attachGameRules(ctx, screen, 'Zip\u2019s Check');
@@ -1189,7 +1190,7 @@
     { n: 6, id: 'u6', href: '#/u6', test: (hs) => /^#\/u6(\/|$)/.test(hs) || /^#\/spell\/u6(\/|$)/.test(hs) }];
   function addUnitBack() {
     const hs = location.hash || ''; const u = IR.UNIT_ROUTES.find((r) => r.test(hs));
-    if (!u || app.querySelector('.unitback')) return;
+    if (!u || app.querySelector('.unitback') || app.querySelector('.lessonscreen')) return;
     const home = app.querySelector('.homebtn'); if (!home) return;
     const b = h('button', { class: 'back homebtn unitback', type: 'button', 'aria-label': 'Back to Unit ' + u.n + ': pick another lesson', onclick: () => { Snd.stop(); if (u.href) location.hash = u.href; else { location.hash = '#/home'; setTimeout(() => openIsland(u.id), 0); } } }, icon('back'), h('span', null, 'Back to Unit ' + u.n));
     home.style.marginRight = '0'; home.after(b);

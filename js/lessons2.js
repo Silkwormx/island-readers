@@ -72,17 +72,12 @@
       const pages = D.story; let p = 0; let reached = 0; const stage = ctx.stage; let auto = false; const S = IR.S(); const heard = new Set(); ctx.showNav(false);   /* this lesson has its own Back / Next row */
       const picEl = h('img', { class: 'panel', alt: '' });
       const sentEl = h('p', { class: 'sentence', 'aria-live': 'polite' });
-      const dots = h('div', { class: 'pagedots' }, ...pages.map(() => h('i')));
       const spk = speakerBtn(() => playPage(false), 'Hear this sentence'); spk.classList.add('huge');
-      const prev = h('button', { class: 'btn small back', type: 'button' }, icon('back'), 'Back');
       const next = h('button', { class: 'btn small primary next', type: 'button' }, 'Next', icon('next'));
       const allBtn = h('button', { class: 'btn small', type: 'button' }, icon('play'), 'Play the whole story');
       const reads = h('div', { class: 'reads' });
       const readBtn = h('button', { class: 'btn small good', type: 'button' }, icon('check'), 'I read it aloud');
-      function renderReads() {
-        const n = S.reads.story || 0; reads.innerHTML = '';
-        reads.append(h('span', null, 'Read it 3 times: '), ...[0, 1, 2].map((k) => h('i', { class: 'rd' + (k < n ? ' on' : '') })));
-      }
+      function renderReads() { reads.textContent = 'Read ' + (S.reads.story || 0) + ' of 3'; }
       readBtn.addEventListener('click', () => { S.reads.story = Math.min(3, (S.reads.story || 0) + 1); IR.save(); renderReads(); setNextLabel(); });
       const readIt = () => heard.size >= pages.length || (S.reads.story || 0) > 0;     /* Finish (and the star) only after every sentence was heard to the end, or the child tapped 'I read it' */
       function setNextLabel() { next.firstChild.textContent = p === pages.length - 1 ? (readIt() ? 'Finish' : 'Next') : 'Next'; }
@@ -90,7 +85,6 @@
         p = i; reached = Math.max(reached, p); const pg = pages[p];
         picEl.src = pg.img; sentEl.innerHTML = '';
         pg.words.forEach((w, k) => sentEl.append(h('span', { class: 'w', 'data-k': k }, w), ' '));
-        $$('i', dots).forEach((d, k) => { d.classList.toggle('cur', k === p); d.classList.toggle('seen', k <= reached); });
         setNextLabel();
         ctx.progress(reached / (pages.length - 1));
       }
@@ -101,7 +95,6 @@
           pg.t.forEach((tt, k) => { const el = ws[k]; if (!el) return; el.classList.toggle('hl', t >= tt[0] - 0.04 && t < (pg.t[k + 1] ? pg.t[k + 1][0] - 0.04 : 99)); el.classList.toggle('read', t >= tt[1]); });
         } }).then((ok) => { ws.forEach((e) => e.classList.remove('hl', 'read')); if (ok && pg.n != null) { heard.add(pg.n); setNextLabel(); } return ok; });
       }
-      prev.addEventListener('click', () => { auto = false; if (p > 0) { setPage(p - 1); playPage(false); } else ctx.goBack(); });   /* first page: Back = previous lesson */
       next.addEventListener('click', async () => {
         auto = false;
         if (p < pages.length - 1) { setPage(p + 1); playPage(false); }
@@ -112,9 +105,9 @@
         for (let i = 0; i < pages.length && auto && ctx.scr.ok(); i++) { setPage(i); await playPage(true); await sleep(350); }
         auto = false;
       });
-      stage.append(h('div', { class: 'activity story' },
-        h('div', { class: 'panelwrap' }, picEl), h('div', { class: 'sentrow' }, spk, sentEl), dots,
-        h('div', { class: 'row' }, prev, allBtn, next), h('div', { class: 'row' }, readBtn, reads)));
+      stage.append(h('div', { class: 'activity story readit' },
+        h('div', { class: 'panelwrap' }, picEl), h('div', { class: 'sentrow' }, spk, sentEl),
+        h('div', { class: 'row' }, allBtn, next), h('div', { class: 'row' }, readBtn, reads)));
       renderReads(); setPage(0);
       Snd.seq([A.prompt('p_story')], 100).then(() => {});
     }

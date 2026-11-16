@@ -78,6 +78,29 @@
 
   /* Instruction audio plays once per activity. Later questions play only the item.
      The speaker button can still replay the instruction on its own. */
+  /* One small "Back to lesson menu" link, and one orange Next only when a lesson asks for it.
+     Round-skip Back and Next stay off the screen. Correct answers still move on by themselves. */
+  IR.simpleNav = function (nav, nextBtn, goMenu) {
+    const back = nav.querySelector(':scope > .btn.back');
+    if (back) back.remove();
+    nextBtn.hidden = true;
+    nextBtn.classList.add('primary');
+    const link = h('button', {
+      class: 'menulink',
+      type: 'button',
+      onclick: function () { if (typeof goMenu === 'function') goMenu(); }
+    }, 'Back to lesson menu');
+    nav.insertBefore(link, nav.firstChild);
+    nav.classList.add('simple');
+    return {
+      label: function (t) {
+        const show = !!(t && String(t).trim());
+        nextBtn.hidden = !show;
+        if (show && nextBtn.firstChild) nextBtn.firstChild.textContent = t;
+      }
+    };
+  };
+
   IR.sayItem = function (ctx, instr, item) {
     const said = ctx._saidInstr || (ctx._saidInstr = Object.create(null));
     if (instr && !said[instr]) {

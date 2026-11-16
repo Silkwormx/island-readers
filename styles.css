@@ -1935,7 +1935,7 @@ body.calm .ob-glow{animation:none;opacity:.85}
 .lessonscreen:has(.listenmode) .stage{flex:1 1 auto;min-height:0;overflow:hidden}
 .lessonscreen:has(.listenmode) .activity.story.listenmode{
   height:100%;max-height:100%;overflow:hidden;display:grid;
-  grid-template-rows:minmax(0,1fr) auto auto auto auto;gap:.35rem;padding:.2rem .4rem .4rem}
+  grid-template-rows:minmax(0,1fr) auto auto auto;gap:.35rem;padding:.2rem .4rem .4rem}
 .lessonscreen:has(.listenmode) .panelwrap{min-height:0;height:100%;display:flex;align-items:center;justify-content:center}
 .lessonscreen:has(.listenmode) .panelwrap .panel,
 .lessonscreen:has(.listenmode) img.panel{
@@ -1943,14 +1943,14 @@ body.calm .ob-glow{animation:none;opacity:.85}
   object-fit:contain;border-radius:1rem}
 .lessonscreen:has(.listenmode) .sentrow{flex:0 0 auto}
 .lessonscreen:has(.listenmode) .sentrow{min-width:0;width:100%}
-.lessonscreen:has(.listenmode) .sentence{font-size:clamp(1.15rem,2.6vw,1.55rem);line-height:1.35;margin:.15rem 0;max-width:100%;min-width:0;overflow-wrap:anywhere}
+.lessonscreen:has(.listenmode) .sentence{font-size:clamp(22px,2.6vw,1.7rem);line-height:1.3;margin:.15rem 0;max-width:100%;min-width:0;overflow-wrap:anywhere}
 .lessonscreen:has(.listenmode) .story-ctl{
   display:flex!important;flex-wrap:nowrap;justify-content:center;align-items:center;gap:.55rem;margin:.15rem 0 0}
 .lessonscreen:has(.listenmode) .story-ctl .btn{flex:1 1 0;min-width:0;min-height:3.4rem;font-size:1.05rem;padding:.45rem .7rem;white-space:nowrap}
 @media (max-width:480px){
   .lessonscreen:has(.listenmode) .story-ctl{gap:.35rem;flex-wrap:wrap!important;flex-direction:column;align-items:stretch}
   .lessonscreen:has(.listenmode) .story-ctl .btn{flex:0 0 auto;width:100%;font-size:.95rem;padding:.35rem .7rem;min-height:2.7rem;white-space:nowrap}
-  .lessonscreen:has(.listenmode) .sentence{font-size:1.05rem;max-width:100%}
+  .lessonscreen:has(.listenmode) .sentence{font-size:22px;max-width:100%}
 }
 .unitpage .lesson-nav{display:none!important}
 
@@ -1978,7 +1978,8 @@ body.calm .ob-glow{animation:none;opacity:.85}
     grid-auto-rows:auto!important;column-gap:1.2rem!important;row-gap:.9rem!important}
 }
 
-.lessonscreen:has(.hearts) .lesson-nav,.lessonscreen:has(.listenmode) .lesson-nav{display:none!important}
+.lessonscreen:has(.hearts) .lesson-nav .btn,.lessonscreen:has(.listenmode) .lesson-nav .btn{display:none!important}
+.lessonscreen:has(.hearts) .lesson-nav,.lessonscreen:has(.listenmode) .lesson-nav{display:flex!important}
 
 /* Teacher smartboard slideshow viewer */
 .slidescreen{position:fixed;inset:0;z-index:40;background:#111;color:#fff;display:flex;flex-direction:column;outline:none}
@@ -2332,4 +2333,97 @@ button.tapcard:focus-visible{outline:4px solid #1F6FEB;outline-offset:3px}
   .gridhome .homeside .homefeature{gap:.4rem;padding-bottom:.35rem}
   .gridhome .homeside .homefeature .zfstart2{min-height:2.35rem;padding:.14rem .5rem}
   .gridhome .homeside .hometabs{gap:14px}
+}
+
+/* One screen for lesson games. One small menu link, and one orange Next only when a lesson asks for it. */
+.nkstep,.u6step{height:100%;max-height:100dvh;overflow:hidden;background:var(--cream)!important}
+.nkstep.is-lesson,.u6step.is-lesson{background:var(--cream)!important}
+.nkstep .xbtn,.u6step .xbtn{display:none}
+.nkstep .lesson-top,.u6step .lesson-top{padding:.2rem 4.6rem .2rem .55rem;gap:.3rem;flex-wrap:nowrap}
+.nkstep .pbar,.u6step .pbar{height:.75rem}
+.nkstep .pbar em,.u6step .pbar em,.pagedots{display:none}
+.nkstep .acttitle,.u6step .acttitle{margin:0;padding:0 .45rem;font-size:1.15rem;line-height:1.15}
+.nkstep .instr,.u6step .instr{padding:.05rem .55rem;gap:.35rem}
+.nkstep .instr .speaker,.u6step .instr .speaker{width:2.2rem;height:2.2rem;min-width:2.2rem}
+.nkstep .instr .speaker .ico,.u6step .instr .speaker .ico{width:1.15rem;height:1.15rem}
+.nkstep .itext,.u6step .itext{font-size:1.05rem;line-height:1.2}
+.nkstep .qcount,.u6step .qcount{margin:0;padding:.05rem .4rem;font-size:1rem;line-height:1.15}
+.nkstep .stage,.u6step .stage{flex:1 1 auto;min-height:0;overflow:hidden;padding:.1rem .5rem .05rem;align-items:stretch}
+.nkstep .activity,.u6step .activity{max-height:100%;min-height:0;gap:.3rem;padding-top:0}
+.lesson-nav.simple{justify-content:space-between;align-items:center;gap:.4rem;padding:.1rem .6rem .3rem;flex-wrap:nowrap}
+.menulink{appearance:none;background:none;border:0;box-shadow:none;color:#5b5473;font-family:Andika,sans-serif;font-weight:700;font-size:1rem;text-decoration:underline;min-height:2rem;padding:.1rem .15rem;cursor:pointer;flex:1 1 auto;min-width:0;text-align:left}
+.lesson-nav.simple .btn.next{margin-left:auto;flex:0 0 auto;min-height:2.5rem;min-width:6.5rem;padding:.25rem .8rem;background:#F28C00;border-color:#C95A10;box-shadow:0 3px 0 #C95A10;color:#fff}
+.lesson-nav.simple .btn.next[hidden],.lesson-nav.nonext .btn.next{display:none!important}
+.nkstep .activity .btn,.u6step .activity .btn,.nkstep .speaker,.u6step .speaker{background:#F28C00;border-color:#C95A10;color:#fff;box-shadow:0 3px 0 #C95A10}
+.nkstep .speaker.huge,.u6step .speaker.huge{width:3.2rem;height:3.2rem;min-width:3.2rem}
+.nkstep .speaker.huge .ico,.u6step .speaker.huge .ico{width:1.6rem;height:1.6rem}
+.nkstep .bigprompt,.u6step .bigprompt{margin:0;font-size:1.2rem;line-height:1.2}
+.nkstep .status,.u6step .status{min-height:1.15rem;font-size:1rem;line-height:1.2}
+.nkstep .choice,.u6step .choice{min-height:0;height:100%;font-size:clamp(22px,4.2vh,2.3rem);padding:.15rem .35rem}
+.nkstep .choices,.u6step .choices{flex:1 1 auto;min-height:0;gap:.35rem;align-content:stretch;grid-template-rows:repeat(2,minmax(0,1fr))}
+.nkstep .choices.two,.nkstep .choices.three,.nkstep .choices.pics3,.u6step .choices.two,.u6step .choices.three,.u6step .choices.pics3{grid-template-rows:minmax(0,1fr)}
+.nkstep .activity:has(.choices),.u6step .activity:has(.choices){height:100%;justify-content:flex-start}
+.nkstep .nkpic{max-height:16vh;width:auto;max-width:100%;aspect-ratio:1;object-fit:contain}
+.nkstep .picchoice{min-height:0;padding:.2rem}
+.nkstep .matchpic{max-height:20vh;width:auto}
+.nkstep .matchgame{max-height:100%;overflow:hidden;gap:.3rem}
+.nkstep .activity.sentact{height:100%;display:grid;grid-template-rows:minmax(0,1fr) auto auto auto auto auto;gap:.25rem;overflow:hidden;justify-items:center}
+.nkstep .sentact .pic{max-height:100%;min-height:0}
+.nkstep .sentact .pic img{max-height:100%;width:auto;max-width:100%;object-fit:contain}
+.nkstep .sentact .slots.sent .slot{min-width:4.2rem;height:2.8rem}
+.nkstep .sentact .bank{min-height:0;gap:.35rem}
+.nkstep .sentact .tile.word{font-size:22px;min-height:2.5rem;min-width:3rem;padding:.1rem .45rem}
+.nkstep .sentact .bridgebar i{height:.45rem}
+.nkstep .wordplay{gap:.3rem;padding:.05rem 0 0;max-height:100%}
+.nkstep .wordplay .wtile,.nkstep .wordplay .wslot{height:3.2rem;min-height:0;font-size:clamp(22px,1.7rem,2rem)}
+.nkstep .wordplay .btn{min-height:2.4rem}
+.nkstep .hearts,.u6step .hearts{display:grid;grid-template-columns:repeat(auto-fill,minmax(7.6rem,1fr));gap:.3rem;margin:0;width:min(100%,42rem)}
+.nkstep .heartchip,.u6step .heartchip{font-size:22px;min-height:2.4rem;padding:.1rem .4rem;justify-content:center;width:100%}
+.nkstep .heartnote,.u6step .heartnote{min-height:0;margin:0;font-size:1rem}
+.nkstep .nkmeet{max-height:100%;overflow:hidden;gap:.3rem}
+.nkstep .nkmeet .panelwrap.small .panel{max-height:16vh}
+.nkstep .chip{font-size:22px;min-height:2.3rem}
+.nkstep .btile{height:4.2rem;min-width:3.6rem;font-size:clamp(22px,2.4rem,3rem)}
+.nkstep .blendout{font-size:clamp(22px,2.2rem,3rem);min-height:2.4rem}
+.nk-refresh .vrefresh[data-phase="teach"]{height:auto;max-height:100%;display:flex;flex-direction:column;gap:.22rem;overflow:hidden;justify-content:flex-start}
+.nk-refresh .vrow{min-height:0}
+.nk-refresh .vcard{min-height:0;height:auto;padding:.12rem .2rem;box-shadow:0 2px 0 var(--ink);overflow:visible}
+.nk-refresh .vcard img{width:2rem;height:2rem}
+.nk-refresh .vcard b,.nk-refresh .echip{font-size:22px;line-height:1.1}
+.nk-refresh .vcard small{font-size:.8rem;line-height:1}
+@media (max-height:760px){
+  .nk-refresh .vrefresh[data-phase="teach"]{gap:.12rem}
+  .nk-refresh .vcard{display:grid;grid-template-columns:1.7rem minmax(0,1fr);grid-template-rows:auto auto;column-gap:.25rem;align-items:center;padding:.08rem .3rem;min-height:0}
+  .nk-refresh .vcard img{grid-row:1 / span 2;width:1.6rem;height:1.6rem}
+  .nk-refresh .vcard small{font-size:.72rem}
+  .nk-refresh .vlet{font-size:1.05rem}
+  .nk-refresh .efocusbox{padding:.1rem .3rem;gap:.08rem}
+  .nk-refresh .efocusbox .speaker{width:2rem;height:2rem;min-width:2rem}
+  .nk-refresh .echip{min-height:1.7rem;font-size:22px;padding:.02rem .35rem}
+  .nk-refresh .btn.big{min-height:2.2rem;padding:.15rem .8rem}
+  .nk-refresh .bigprompt{font-size:1.05rem}
+}
+.nk-refresh .vlet{font-size:1.2rem}
+.nk-refresh .efocusbox{padding:.15rem .3rem;gap:.12rem}
+.nk-refresh .echip{min-height:1.9rem;padding:.05rem .4rem}
+.nk-refresh .btn.big{min-height:2.4rem}
+.nkstep .activity.rhyme .rreact{min-height:0}
+.nkstep .activity.rhyme .rchar{height:3rem}
+.nkstep .activity.readit,.u6step .activity.story{max-height:100%;overflow:hidden}
+.nkstep .readit .panel,.u6step .story .panel{max-height:22vh;object-fit:contain}
+.nkstep .readcount{margin:0;font-weight:700;font-size:1.05rem}
+.nkstep .comphint .hintthumb{width:4.5rem}
+.nkstep .sortbin b{font-size:22px}
+.chainact .chainfrom{font-size:clamp(22px,5vh,2.6rem)}
+@media (max-width:700px){
+  .nkstep .hearts,.u6step .hearts{grid-template-columns:1fr 1fr}
+  .nkstep .lesson-top,.u6step .lesson-top{flex-wrap:nowrap}
+  .lesson-nav.simple .btn.next{min-width:0}
+  .nkstep .nkmeet{gap:.2rem}
+  .nkstep .nkmeet .bubble p{font-size:1.05rem;line-height:1.25;margin:0}
+  .nkstep .nkmeet .panelwrap.small .panel{max-height:11vh}
+  .nkstep .u5word{font-size:1.7rem}
+  .nkstep .u5cue,.nkstep .nkmeet .cap{font-size:1rem;margin:0}
+  .nkstep .chips{gap:.25rem;margin:0}
+  .nkstep .meetrow{margin-top:.2rem;gap:.4rem}
 }
