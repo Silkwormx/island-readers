@@ -869,35 +869,41 @@
   }
   /* Stage numbers follow the approved option 1 path (image fractions from make_trail_map_options.py). */
   const TRAIL_STAGES = [
-    { n: 1, x: 50.0, y: 32.2, side: 'R', units: 'Units 1-2', skills: 'Short vowels, floss, blends', color: '#C45C2A', ink: '#fff' },
-    { n: 2, x: 54.0, y: 38.5, side: 'L', units: 'Unit 3', skills: 'Digraphs', color: '#E25B6A', ink: '#fff' },
-    { n: 3, x: 49.0, y: 45.0, side: 'R', units: 'Unit 4', skills: 'Glued sounds', color: '#F08A22', ink: '#2B2540', open: 'i3' },
-    { n: 4, x: 48.8, y: 51.5, side: 'L', units: 'Unit 5', skills: 'Silent e', color: '#D6A810', ink: '#2B2540', open: 'i5' },
-    { n: 5, x: 49.2, y: 57.5, side: 'R', units: 'Unit 6', skills: 'Endings', color: '#2E9E5B', ink: '#fff', href: '#/u6' },
-    { n: 6, x: 50.5, y: 62.5, side: 'L', bx: 2, by: 54, units: 'Units 7-8', skills: 'Syllables and tricky sounds', color: '#3A7ECA', ink: '#fff' },
-    { n: 7, x: 58.0, y: 66.5, side: 'R', bx: 64, by: 60, units: 'Units 9-10', skills: 'Bossy R', color: '#7B4EC2', ink: '#fff' },
-    { n: 8, x: 51.5, y: 71.5, side: 'L', bx: 2, by: 67, units: 'Units 11-12', skills: 'Vowel teams', color: '#1A9A96', ink: '#fff' },
-    { n: 9, x: 39.5, y: 75.8, side: 'L', bx: 2, by: 78, units: 'Units 13-16', skills: 'Other vowel sounds', color: '#C43E7E', ink: '#fff' },
-    { n: 10, x: 36.0, y: 84.8, side: 'L', bx: 2, by: 83, units: 'Units 17-22', skills: 'Word parts and patterns', color: '#C99614', ink: '#2B2540' }
+    { n: 1, x: 50.0, y: 32.2, side: 'R', units: 'Units 1-2', skills: 'Short vowels and blends', color: '#C45C2A', ink: '#fff' },
+    { n: 2, x: 54.0, y: 38.5, side: 'L', units: 'Units 3-4', skills: 'Digraphs and glued sounds', color: '#E25B6A', ink: '#fff', open: 'i3' },
+    { n: 3, x: 49.0, y: 45.0, side: 'R', units: 'Units 5-6', skills: 'Silent e and endings', color: '#F08A22', ink: '#2B2540', open: 'i5', href: '#/u6' },
+    { n: 4, x: 48.8, y: 51.5, side: 'L', units: 'Units 7-8', skills: 'Syllables and tricky sounds', color: '#D6A810', ink: '#2B2540' },
+    { n: 5, x: 49.2, y: 57.5, side: 'R', units: 'Units 9-10', skills: 'Bossy R', color: '#2E9E5B', ink: '#fff' },
+    { n: 6, x: 50.5, y: 62.5, side: 'L', bx: 2, by: 54, units: 'Units 11-12', skills: 'Vowel teams', color: '#3A7ECA', ink: '#fff' },
+    { n: 7, x: 58.0, y: 66.5, side: 'R', bx: 64, by: 60, units: 'Units 13-14', skills: 'oo and au sounds', color: '#7B4EC2', ink: '#fff' },
+    { n: 8, x: 51.5, y: 71.5, side: 'L', bx: 2, by: 67, units: 'Units 15-16', skills: 'Sliding vowels and tricky teams', color: '#1A9A96', ink: '#fff' },
+    { n: 9, x: 39.5, y: 75.8, side: 'L', bx: 2, by: 76, units: 'Units 17-19', skills: 'Soft c and g, silent letters, suffixes', color: '#C43E7E', ink: '#fff' },
+    { n: 10, x: 36.0, y: 84.8, side: 'L', bx: 2, by: 87, units: 'Units 20-22', skills: 'Suffix rules, prefixes, big endings', color: '#C99614', ink: '#2B2540' }
   ];
   function trailStage() {
     const bell = IR.placement && IR.placement.saved ? IR.placement.saved() : null;
     const acts = (IR.S().progress && IR.S().progress.activities) || {};
     const any = Object.keys(acts).some((k) => acts[k] && acts[k].completed);
     const steps = [
-      { stage: 3, done: () => IR.isDone('check') && IR.isDone('nk_check') },
-      { stage: 4, done: () => IR.isDone('u51_check') && IR.isDone('u53_check') },
-      { stage: 5, done: () => IR.isDone('u61_check') && IR.isDone('u62_check') && IR.isDone('u63_check') }
+      { stage: 2, done: () => IR.isDone('check') && IR.isDone('nk_check') },
+      { stage: 3, done: () => IR.isDone('u51_check') && IR.isDone('u53_check') },
+      { stage: 3, done: () => IR.isDone('u61_check') && IR.isDone('u62_check') && IR.isDone('u63_check') }
     ];
     if (any || (IR.islandDone && IR.islandDone('i3'))) {
       const cur = steps.find((s) => !s.done());
-      return cur ? cur.stage : 5;
+      return cur ? cur.stage : 3;
     }
-    if (bell) return ({ 1: 1, 2: 2, 3: 3, 4: 4, 5: 6, 6: 7, 7: 8, 8: 9, 9: 10, 10: 6 })[bell] || 3;
-    return 3;
+    if (bell) return (IR.placement.STAGE_OF || {})[bell] || 2;
+    return 2;
   }
   function openTrailStage(s) {
     Snd.stop();
+    if (s.open && s.href) {
+      const u5done = IR.isDone('u51_check') && IR.isDone('u53_check');
+      if (u5done) { location.hash = s.href; return; }
+      openIsland(s.open);
+      return;
+    }
     if (s.open) { openIsland(s.open); return; }
     if (s.href) { location.hash = s.href; return; }
     toast(s.units + ' is coming soon.');
@@ -1101,7 +1107,16 @@
     else if (hash.startsWith('#/find')) findScreen();
     else if ((m = /^#\/teachers\/slides\/(ng|nk)$/.exec(hash))) slidesViewer(m[1]);
     else if (hash.startsWith('#/teachers')) { if (IR._slideCleanup) { IR._slideCleanup(); IR._slideCleanup = null; } teachersScreen(); }
-    else if (hash.startsWith('#/placement')) IR.placement.render(app, (n) => { const id = 'i' + n; if ((D.islands || {})[id]) { location.hash = '#/home'; setTimeout(() => openIsland(id), 0); } else { location.hash = '#/home'; setTimeout(() => toast('Unit ' + n + ' (' + ({1:'blends',2:'sh ch th',3:'ng nk',4:'silent e',5:'long words',6:'bossy r',7:'vowel teams',8:'oi ow aw',9:'word parts',10:'tch dge igh'})[n] + ') is coming soon in the full app. Try Unit 3 for now.'), 50); } });
+    else if (hash.startsWith('#/placement')) IR.placement.render(app, (stage) => {
+      const name = (IR.placement.STAGE_SKILL || {})[stage] || '';
+      if (stage === 2) { location.hash = '#/home'; setTimeout(() => openIsland('i3'), 0); return; }
+      if (stage === 3) {
+        if (IR.isDone('u51_check') && IR.isDone('u53_check')) { location.hash = '#/u6'; return; }
+        location.hash = '#/home'; setTimeout(() => openIsland('i5'), 0); return;
+      }
+      location.hash = '#/home';
+      setTimeout(() => toast('Stage ' + stage + ' (' + name + ') is coming soon in the full app. Try Unit 4 for now.'), 50);
+    });
     else if (hash.startsWith('#/island3')) trailScreen();
     else if (hash.startsWith('#/check')) checkScreen();
     else if (hash.startsWith('#/result')) { IR.newScreen(); app.append(h('div', { class: 'screen resultscreen' })); IR.renderResult($('.resultscreen')); $('.resultscreen').prepend(h('div', { class: 'unitbar' }, homeButton(), unitButton('check'))); }

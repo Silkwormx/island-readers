@@ -70,14 +70,31 @@ test('home shows Zip and Frill again and keeps the left-column layout', () => {
   assert.ok(screens.includes('Parent and Teacher Materials'));
   assert.ok(screens.includes('Take the Placement Test'));
   assert.ok(screens.includes('img/trail_option1_bg.jpg'));
-  assert.ok(screens.includes('Short vowels, floss, blends'));
-  assert.ok(screens.includes('Word parts and patterns'));
+  assert.ok(screens.includes('Short vowels and blends'));
+  assert.ok(screens.includes('Digraphs and glued sounds'));
+  assert.ok(screens.includes('Silent e and endings'));
+  assert.ok(screens.includes("units: 'Units 3-4'"));
+  assert.ok(screens.includes("units: 'Units 5-6'"));
+  assert.ok(screens.includes("units: 'Units 17-19'"));
+  assert.ok(screens.includes("units: 'Units 20-22'"));
+  assert.ok(screens.includes("open: 'i3'"));
+  assert.ok(screens.includes("open: 'i5', href: '#/u6'"));
+  assert.ok(screens.includes('{ stage: 2, done: () => IR.isDone(\'check\') && IR.isDone(\'nk_check\') }'));
+  assert.ok(screens.includes('Suffix rules, prefixes, big endings'));
+  assert.equal(screens.includes('Word parts and patterns'), false);
+  assert.equal(screens.includes('Short vowels, floss, blends'), false);
   assert.ok(screens.includes("['Endings', '-s \\u00b7 -es \\u00b7 -ed \\u00b7 -ing', 3,"));
   assert.equal(home.includes('banner, hero,'), false);
   const sw = fs.readFileSync(new URL('../sw.js', import.meta.url), 'utf8');
   assert.equal(sw.includes('home_banyan_c.jpg'), false);
-  assert.ok(sw.includes('ir-20261115r'));
+  assert.ok(sw.includes('ir-20261115s'));
   assert.ok(sw.includes('home_zip_frill.webp'));
+  const placement = fs.readFileSync(new URL('../js/placement.js', import.meta.url), 'utf8');
+  assert.ok(placement.includes('right >= 4'));
+  assert.ok(placement.includes('STAGE_OF = { 1: 1, 2: 2, 3: 2, 4: 3, 5: 4, 6: 5, 7: 6, 8: 7, 9: 9, 10: 4 }'));
+  assert.ok(placement.includes('Short vowels and blends'));
+  assert.ok(placement.includes('Suffix rules, prefixes, big endings'));
+  assert.ok(placement.includes("localStorage.setItem(KEY, String(start))"));
 });
 
 test('approved image file is the installed jpeg', () => {

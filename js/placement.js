@@ -5,7 +5,22 @@
   'use strict';
   const IR = window.IR; const { h, icon, Snd } = IR;
   const KEY = 'ir_start_bell';
+  /* Probe names stay on the words. Stage names match the rebalanced Trail Map. Scoring still uses the probe number. */
   const SKILL = { 1: 'blends', 2: 'sh ch th', 3: 'ng nk', 4: 'silent e', 5: 'long words', 6: 'bossy r', 7: 'vowel teams', 8: 'oi ow aw', 9: 'word parts', 10: 'tch dge igh' };
+  const STAGE_OF = { 1: 1, 2: 2, 3: 2, 4: 3, 5: 4, 6: 5, 7: 6, 8: 7, 9: 9, 10: 4 };
+  const STAGE_SKILL = {
+    1: 'Short vowels and blends',
+    2: 'Digraphs and glued sounds',
+    3: 'Silent e and endings',
+    4: 'Syllables and tricky sounds',
+    5: 'Bossy R',
+    6: 'Vowel teams',
+    7: 'oo and au sounds',
+    8: 'Sliding vowels and tricky teams',
+    9: 'Soft c and g, silent letters, suffixes',
+    10: 'Suffix rules, prefixes, big endings'
+  };
+  const STAGE_UNIT = { 1: 1, 2: 3, 3: 5, 4: 7, 5: 9, 6: 11, 7: 13, 8: 15, 9: 17, 10: 20 };
   /* [word, madeUp?] Each group uses only its pattern plus earlier ones. */
   const GROUPS = [
     { n: 0, name: 'short vowels', words: [['map'], ['sit'], ['hug'], ['jop', 1], ['ved', 1]] },
@@ -55,7 +70,7 @@
           h('p', { class: 'plc-small' }, 'Some words are made up, to check sounding out, not memory. The check stops on its own when a group gets tricky. Only the starting bell is saved, on this device. Nothing is recorded or sent.')),
         h('div', { class: 'plc-card plc-kid' }, h('div', { class: 'zfpics' }, h('img', { src: 'img/zipA.webp', alt: 'Zip' }), h('img', { src: 'img/frill.webp', alt: 'Frill' })), h('p', { class: 'plc-kidline' }, KID_LINE), speakBtn(KID_LINE, 'audio/place_kid.mp3')),
         h('div', { class: 'plc-actions' }, h('button', { class: 'btn big primary plc-go', type: 'button', onclick: () => run() }, h('span', { 'aria-hidden': 'true' }, '\u{1F514}'), h('span', null, 'Start the sound check')),
-          prev ? h('button', { class: 'btn big', type: 'button', onclick: () => result(prev, null) }, 'See last result: Unit ' + prev) : null));
+          prev ? h('button', { class: 'btn big', type: 'button', onclick: () => result(prev, null) }, 'See last result: Stage ' + (STAGE_OF[prev] || prev)) : null));
     }
 
     function run() {
@@ -82,30 +97,34 @@
 
     function result(start, passed, all, cvc) {
       try { localStorage.setItem(KEY, String(start)); } catch (e) { /* storage blocked */ }
+      const stage = all ? 10 : (STAGE_OF[start] || start);
       let summary = '';
       if (passed) {
         const known = passed.map((x) => x.name);
-        summary = cvc ? 'Short vowel words need more practice first. Start with short-vowel review, then Unit 1 blends.'
-          : all ? 'Read every group. Start at Unit 10 tch dge igh to review, or pick any bell.'
-          : (known.length ? 'Knows ' + list(known) + '. ' : '') + 'Start at ' + SKILL[start] + '.';
+        summary = cvc ? 'Short vowel words need more practice first. Start with short-vowel review, then Stage 1, short vowels and blends.'
+          : all ? 'Read every group. Start at Stage 10, suffix rules, prefixes, big endings, to review, or pick any bell.'
+          : (known.length ? 'Knows ' + list(known) + '. ' : '') + 'Start at Stage ' + stage + ', ' + STAGE_SKILL[stage] + '.';
       }
+      const passedNums = new Set((passed || []).map((x) => x.n));
       const bells = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((n) => {
-        const st = n < start ? 'rung' : n === start ? 'start' : 'later';
-        return h('div', { class: 'plc-bell pb-' + st, 'aria-label': 'Unit ' + n + ', ' + SKILL[n] + (st === 'rung' ? ', rung' : st === 'start' ? ', start here' : '') },
-          h('span', { class: 'gpic' }, h('img', { src: 'img/units/unit' + String(n).padStart(2, '0') + '.webp', alt: '' }), h('span', { class: 'gunit' }, 'Unit ' + n),
+        const covered = passed && Object.keys(STAGE_OF).some((p) => STAGE_OF[p] === n && passedNums.has(+p));
+        const st = n === stage ? 'start' : (n < stage || covered) ? 'rung' : 'later';
+        const unit = STAGE_UNIT[n];
+        return h('div', { class: 'plc-bell pb-' + st, 'aria-label': 'Stage ' + n + ', ' + STAGE_SKILL[n] + (st === 'rung' ? ', rung' : st === 'start' ? ', start here' : '') },
+          h('span', { class: 'gpic' }, h('img', { src: 'img/units/tile' + String(unit).padStart(2, '0') + '.webp', alt: '' }), h('span', { class: 'gunit' }, 'Stage ' + n),
             st === 'start' ? h('span', { class: 'plc-here' }, h('img', { src: 'img/zipA.webp', alt: '' }), h('img', { src: 'img/frill.webp', alt: '' }), h('b', null, 'Start here!')) : null,
             st === 'rung' ? h('span', { class: 'plc-rung' }, '\u2713 rung') : null),
-          h('span', { class: 'plc-bname' }, SKILL[n]));
+          h('span', { class: 'plc-bname' }, STAGE_SKILL[n]));
       });
       show(h('h1', null, cvc ? 'Let\u2019s warm up first' : 'Your first bell'),
         summary ? h('p', { class: 'plc-summary' }, h('b', null, 'For the grown-up: '), summary) : null,
         cvc ? h('p', { class: 'plc-small' }, 'Island Readers starts with blends, so it expects short vowel words like map and hug to be easy. A short-vowel review is not built into the app yet. Practise reading short words together, then start Unit 1 and retake this check.') : null,
         h('div', { class: 'plc-map' }, ...bells),
         h('div', { class: 'plc-actions' },
-          h('button', { class: 'btn big primary', type: 'button', onclick: () => { stopSpeech(); openUnit(start); } }, h('span', { 'aria-hidden': 'true' }, '\u{1F514}'), h('span', null, cvc ? 'Go to Unit 1' : 'Go to this bell')),
+          h('button', { class: 'btn big primary', type: 'button', onclick: () => { stopSpeech(); openUnit(cvc ? 1 : stage); } }, h('span', { 'aria-hidden': 'true' }, '\u{1F514}'), h('span', null, cvc ? 'Go to Unit 1' : 'Go to this bell')),
           h('button', { class: 'btn big', type: 'button', onclick: () => run() }, 'Retake the check')));
     }
     intro();
   }
-  IR.placement = { render, GROUPS, saved };
+  IR.placement = { render, GROUPS, saved, STAGE_OF, STAGE_SKILL };
 })();
