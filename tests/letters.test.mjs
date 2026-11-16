@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 
-const letters = fs.readFileSync(new URL('../js/letters.js', import.meta.url), 'utf8');
+const letters = fs.readFileSync(new URL('../js/foundation/letters.js', import.meta.url), 'utf8');
 const screens = fs.readFileSync(new URL('../js/screens.js', import.meta.url), 'utf8');
 const html = fs.readFileSync(new URL('../index.html', import.meta.url), 'utf8');
 const sw = fs.readFileSync(new URL('../sw.js', import.meta.url), 'utf8');
@@ -86,14 +86,22 @@ test('picture words put the letter at the start, except x at the end', () => {
   });
 });
 
-test('home offers Learn the Letters before the bells', () => {
-  assert.match(screens, /href: '#\/letters'/);
-  assert.match(screens, /Learn the Letters/);
-  assert.match(screens, /Before Unit 1/);
-  assert.ok(screens.indexOf("tab('#/letters'") < screens.indexOf("tab('#/trail'"));
-  assert.match(screens, /lettersRoute/);
-  assert.match(html, /js\/letters\.js/);
-  assert.match(sw, /js\/letters\.js/);
+test('home adds one Foundation Skills tab and leaves the bell grid alone', () => {
+  const homeStart = screens.indexOf('function homeScreen()');
+  const homeEnd = screens.indexOf('function gemScreen()');
+  const home = screens.slice(homeStart, homeEnd);
+  assert.match(home, /tab\('#\/foundation', 'Foundation Skills', 'book'\)/);
+  assert.ok(home.indexOf("tab('#/trail'") < home.indexOf("tab('#/foundation'"));
+  assert.ok(home.indexOf("tab('#/find'") < home.indexOf("tab('#/foundation'"));
+  assert.equal(home.includes('lettersentry'), false);
+  assert.equal(home.includes('Before Unit 1'), false);
+  assert.match(home, /h\('div', \{ class: 'bellpath', id: 'skymap' \}, h\('div', \{ class: 'bellgrid' \}, \.\.\.cards\)\)/);
+  assert.match(screens, /foundationRoute/);
+  assert.match(html, /js\/foundation\/letters\.js/);
+  assert.match(html, /foundation\/foundation\.css/);
+  assert.match(sw, /js\/foundation\/letters\.js/);
   assert.match(sw, /ir-20261116x/);
-  assert.match(teach, /#\/letters/);
+  assert.match(teach, /#\/foundation/);
+  assert.match(letters, /Foundation Skills/);
+  assert.match(letters, /#\/foundation\/letters/);
 });

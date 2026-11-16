@@ -500,14 +500,16 @@
       class: 'u5card llgroup' + (it.done === it.total ? ' done' : ''),
       type: 'button',
       'aria-label': 'Group ' + it.g.n + ', ' + it.g.letters.join(' ') + '.',
-      onclick: () => { Snd.stop(); location.hash = '#/letters/' + it.g.id; }
+      onclick: () => { Snd.stop(); location.hash = '#/foundation/letters/' + it.g.id; }
     },
       h('span', { class: 'u5ord' }, String(it.g.n)),
       h('span', { class: 'u5name' }, it.g.letters.join(' \u00b7 ')),
       h('span', { class: 'u5min' }, it.done + ' of ' + it.total),
       it.done === it.total ? h('span', { class: 'u5mark', 'aria-hidden': 'true' }, icon('check')) : null)));
     app.append(h('div', { class: 'screen trailscreen unitpage u5menu llpage lllist' },
-      h('header', { class: 'uA-top' }, IR.ui.homeButton(), h('h1', { class: 'uA-title' }, 'Learn the Letters'), IR.ui.gearButton()),
+      h('header', { class: 'uA-top' }, IR.ui.homeButton(),
+        h('button', { class: 'back homebtn', type: 'button', onclick: () => { Snd.stop(); location.hash = '#/foundation'; } }, icon('back'), h('span', null, 'Foundation')),
+        h('h1', { class: 'uA-title' }, 'Learn the Letters'), IR.ui.gearButton()),
       h('main', { class: 'u5main' },
         h('div', { class: 'llintro' },
           h('img', { src: 'img/zipA.webp', alt: '' }),
@@ -527,14 +529,14 @@
       class: 'u5card llstepcard' + (stepDone(group, step.id) ? ' done' : '') + (next && next.id === step.id ? ' on' : ''),
       type: 'button',
       'aria-label': (i + 1) + '. ' + step.title,
-      onclick: () => { Snd.stop(); location.hash = '#/letters/' + group.id + '/' + step.id; }
+      onclick: () => { Snd.stop(); location.hash = '#/foundation/letters/' + group.id + '/' + step.id; }
     },
       h('span', { class: 'u5ord' }, String(i + 1)),
       h('span', { class: 'u5name' }, step.title),
       stepDone(group, step.id) ? h('span', { class: 'u5mark', 'aria-hidden': 'true' }, icon('check')) : null)));
     app.append(h('div', { class: 'screen trailscreen unitpage u5menu llpage llgrouppage' },
       h('header', { class: 'uA-top' },
-        h('button', { class: 'back homebtn', type: 'button', onclick: () => { Snd.stop(); location.hash = '#/letters'; } }, icon('back'), h('span', null, 'Letters')),
+        h('button', { class: 'back homebtn', type: 'button', onclick: () => { Snd.stop(); location.hash = '#/foundation/letters'; } }, icon('back'), h('span', null, 'Letters')),
         h('h1', { class: 'uA-title' }, 'Group ' + group.n + ' · ' + group.letters.join(' ')),
         IR.ui.gearButton()),
       h('main', { class: 'llmain' }, h('ol', { class: 'llsteps' }, ...cards))));
@@ -550,12 +552,12 @@
         class: 'u5card llplay' + (done ? ' done' : ''),
         type: 'button',
         'aria-label': game.title + (done ? '. Done.' : '.'),
-        onclick: () => { Snd.stop(); location.hash = '#/letters/' + group.id + '/' + game.id; }
+        onclick: () => { Snd.stop(); location.hash = '#/foundation/letters/' + group.id + '/' + game.id; }
       }, h('span', { class: 'u5name' }, game.title), done ? h('span', { class: 'u5mark', 'aria-hidden': 'true' }, icon('check')) : null));
     });
     app.append(h('div', { class: 'screen trailscreen unitpage u5menu llpage' },
       h('header', { class: 'uA-top' },
-        h('button', { class: 'back homebtn', type: 'button', onclick: () => { Snd.stop(); location.hash = '#/letters/' + group.id; } }, icon('back'), h('span', null, 'Group')),
+        h('button', { class: 'back homebtn', type: 'button', onclick: () => { Snd.stop(); location.hash = '#/foundation/letters/' + group.id; } }, icon('back'), h('span', null, 'Group')),
         h('h1', { class: 'uA-title' }, 'Games'),
         IR.ui.gearButton()),
       h('main', { class: 'llmain' }, h('ol', { class: 'llsteps llgames' }, ...cards))));
@@ -569,7 +571,7 @@
     const bar = h('div', { class: 'pbar', role: 'progressbar', 'aria-valuemin': 0, 'aria-valuemax': 100, 'aria-valuenow': 0 }, fill);
     const instrBox = h('div', { class: 'instr' });
     const stage = h('div', { class: 'stage' });
-    const base = '#/letters/' + group.id;
+    const base = '#/foundation/letters/' + group.id;
     let backH = null;
     let nextH = null;
     const ctx = {
@@ -854,7 +856,7 @@
         h('div', { class: 'llreadwords' }, ...words.map((word) => h('span', { class: fresh[word.toLowerCase()] ? 'fresh' : '' }, word))))));
     const nav = h('div', { class: 'lesson-nav' });
     screen.append(nav);
-    IR.simpleNav(nav, h('button', { class: 'btn big next', type: 'button' }), () => { location.hash = '#/letters/' + group.id; }, 'Back to the group');
+    IR.simpleNav(nav, h('button', { class: 'btn big next', type: 'button' }), () => { location.hash = '#/foundation/letters/' + group.id; }, 'Back to the group');
     app.append(screen);
     if (IR.teach) IR.teach.sync();
     Snd.play(A.sfx.done);
@@ -1206,18 +1208,33 @@
     });
   }
 
+  function foundationPage(app) {
+    IR.newScreen();
+    app.append(h('div', { class: 'screen trailscreen unitpage u5menu llpage fs-page' },
+      h('header', { class: 'uA-top' }, IR.ui.homeButton(), h('h1', { class: 'uA-title' }, 'Foundation Skills'), IR.ui.gearButton()),
+      h('main', { class: 'llmain' },
+        h('p', { class: 'fs-lead' }, 'This section sits beside the bells.'),
+        h('ol', { class: 'llsteps' }, h('li', null, h('button', {
+          class: 'u5card fs-card',
+          type: 'button',
+          'aria-label': 'Learn the Letters. Opens the alphabet groups.',
+          onclick: () => { Snd.stop(); location.hash = '#/foundation/letters'; }
+        }, h('span', { class: 'u5ord' }, '1'), h('span', { class: 'u5name' }, 'Learn the Letters'), h('span', { class: 'u5min' }, 'a m s t, then the rest')))))));
+    if (IR.teach) IR.teach.sync();
+  }
+
   IR.letters = { GROUPS: GROUPS, LETTERS: LETTERS, artNeeded: ART_NEEDED, who: WHO };
   IR.lettersRoute = function (hash, app) {
-    const home = /^#\/letters\/?$/.exec(hash);
+    const home = /^#\/foundation\/letters\/?$/.exec(hash);
     if (home) { listPage(app); return true; }
-    const group = /^#\/letters\/(g[1-7])\/?$/.exec(hash);
+    const group = /^#\/foundation\/letters\/(g[1-7])\/?$/.exec(hash);
     if (group) {
       const g = groupById(group[1]);
       if (!g) return false;
       groupPage(app, g);
       return true;
     }
-    const play = /^#\/letters\/(g[1-7])\/(flash|ears|meet|trace|games|read|spell|celebrate|find|match|sound|feed|review)$/.exec(hash);
+    const play = /^#\/foundation\/letters\/(g[1-7])\/(flash|ears|meet|trace|games|read|spell|celebrate|find|match|sound|feed|review)$/.exec(hash);
     if (play) {
       const g = groupById(play[1]);
       if (!g) return false;
@@ -1230,5 +1247,9 @@
       return true;
     }
     return false;
+  };
+  IR.foundationRoute = function (hash, app) {
+    if (hash === '#/foundation' || hash === '#/foundation/') { foundationPage(app); return true; }
+    return IR.lettersRoute(hash, app);
   };
 })();

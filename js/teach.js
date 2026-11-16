@@ -54,7 +54,7 @@
   }
   function here() {
     const hash = location.hash || '';
-    return hash.indexOf('#/u5') === 0 || hash.indexOf('#/review5') === 0 || hash.indexOf('#/letters') === 0;
+    return hash.indexOf('#/u5') === 0 || hash.indexOf('#/review5') === 0 || hash.indexOf('#/foundation') === 0;
   }
   function ensureToggle() {
     let b = document.querySelector('.teachtoggle');
