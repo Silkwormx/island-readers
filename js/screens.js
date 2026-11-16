@@ -283,10 +283,11 @@
     const BUILT = 4, BUILT_ID = 'i3';
     const unit = (n) => {
       const t = TILES[n]; const isl = n === BUILT && !!(D.islands || {})[BUILT_ID];
+      const u1 = n === 1 && !!IR.u1Route;
       const u5 = n === 5 && !!IR.u5Route;   /* Nov 3 2026 local: Unit 5 Silent e is open (js/u5.js: same lesson flow as Unit 4; picker data islands.i5) */
       const u6 = n === 6 && !!IR.u6Route;   /* Unit 6 Endings (-s, -es, -ed, -ing), same lesson flow as Unit 4 */
-      const open = u5 || u6;
-      const st = n < BUILT ? 'locked' : n === BUILT ? (complete ? 'done' : 'here') : open ? 'open' : 'locked'; const lit = n === BUILT + 1 && complete;
+      const open = u1 || u5 || u6;
+      const st = u1 ? 'open' : n < BUILT ? 'locked' : n === BUILT ? (complete ? 'done' : 'here') : open ? 'open' : 'locked'; const lit = n === BUILT + 1 && complete;
       const note = open ? 'Open' : st === 'here' ? 'You are here' : n === BUILT ? 'Finished' : st === 'done' ? 'Done' : lit ? 'Unlocked' : 'Coming soon';
       const label = 'Unit ' + n + ': ' + t[0] + ', ' + t[1].replace(/\u00b7/g, ',') + ', ' + t[2] + (t[2] === 1 ? ' lesson. ' : ' lessons. ') + note + (n === BUILT || open ? '. Opens Unit ' + n + '.' : '.');
       const b = h('button', { class: 'tcard t-' + st + (st === 'here' ? ' t-current' : ''), type: 'button', 'data-id': 'u' + n, 'data-kind': 'island', 'data-n': n, 'aria-label': label },
@@ -297,7 +298,7 @@
           h('span', { class: 'tname' }, t[0]),
           h('span', { class: 'tsnd' }, t[1]),
           h('span', { class: 'tcount' }, t[2] + (t[2] === 1 ? ' lesson' : ' lessons'))));
-      b.addEventListener('click', () => { if (u6) { Snd.stop(); location.hash = '#/u6'; } else if (u5) { openIsland('i5'); } else if (isl) openIsland(BUILT_ID); else { Snd.stop(); toast(st === 'done' ? 'Unit ' + n + ' is done. It is part of the full app.' : n < BUILT ? 'Unit ' + n + ' is coming soon in the full app!' : lit ? 'Unit ' + n + ' is unlocked! It is coming soon in the full app.' : 'Unit ' + n + ' is coming soon! Finish Unit ' + BUILT + ' first.'); } });
+      b.addEventListener('click', () => { if (u1) { Snd.stop(); location.hash = '#/u1'; } else if (u6) { Snd.stop(); location.hash = '#/u6'; } else if (u5) { openIsland('i5'); } else if (isl) openIsland(BUILT_ID); else { Snd.stop(); toast(st === 'done' ? 'Unit ' + n + ' is done. It is part of the full app.' : n < BUILT ? 'Unit ' + n + ' is coming soon in the full app!' : lit ? 'Unit ' + n + ' is unlocked! It is coming soon in the full app.' : 'Unit ' + n + ' is coming soon! Finish Unit ' + BUILT + ' first.'); } });
       return b;
     };
     const cards = [];
@@ -594,7 +595,7 @@
   }
   /* Same open/locked rule as the home map: Units 4, 5, and 6 are open. Earlier and later units are still coming soon. */
   function spellUnitOpen(n) {
-    return n === 4 || (n === 5 && !!IR.u5Route) || (n === 6 && !!IR.u6Route);
+    return n === 1 && !!IR.u1Route || n === 4 || (n === 5 && !!IR.u5Route) || (n === 6 && !!IR.u6Route);
   }
   const UNIT_NAMES = [null, 'Short Vowels & Floss', 'Blends', 'Digraphs', 'Glued Sounds', 'Silent e', 'Endings', 'Syllables', 'Tricky Sounds', 'Bossy R', 'More Bossy R', 'Long A & E Teams', 'Long O & I Teams', 'The oo Sounds', 'The au Sounds', 'Sliding Vowels', 'Tricky Teams', 'Soft c and g', 'Silent Letters', 'Suffixes', 'Suffix Spelling Rules', 'Prefixes', 'Big Endings'];
   function skillCatalog() {
@@ -937,7 +938,7 @@
   function unitStatus(n, place) {
     if (place.finished[n]) return 'Done';
     if (n === place.here) return 'You are here';
-    if (n === 4 || (n === 5 && IR.u5Route) || (n === 6 && IR.u6Route)) return 'Open';
+    if (n === 1 && IR.u1Route || n === 4 || (n === 5 && IR.u5Route) || (n === 6 && IR.u6Route)) return 'Open';
     return 'Coming soon';
   }
   function openTrailBell(n) {
@@ -945,6 +946,7 @@
     const u5 = n === 5 && !!IR.u5Route;
     const u6 = n === 6 && !!IR.u6Route;
     const isl = n === 4 && !!(D.islands || {}).i3;
+    if (n === 1 && IR.u1Route) { Snd.stop(); location.hash = '#/u1'; return; }
     if (u6) { Snd.stop(); location.hash = '#/u6'; return; }
     if (u5) { openIsland('i5'); return; }
     if (isl) { openIsland('i3'); return; }
@@ -1156,6 +1158,7 @@
     let m;
     if (IR.spellRoute && IR.spellRoute(hash, app)) { /* spelling for every lesson */ }
     else if (IR.nkRoute && IR.nkRoute(hash, app)) { /* nk unit + Island Review (js/nk.js) */ }
+    else if (IR.u1Route && IR.u1Route(hash, app)) { /* Unit 1 Short Vowels and Floss */ }
     else if (IR.u5Route && IR.u5Route(hash, app)) { /* Unit 5 Silent e (js/u5.js) */ }
     else if (IR.u6Route && IR.u6Route(hash, app)) { /* Unit 6 Endings (js/u6.js) */ }
     else if ((m = /^#\/lesson\/(\d+)/.exec(hash))) lessonScreen(parseInt(m[1], 10) - 1);
@@ -1171,6 +1174,7 @@
     else if (hash.startsWith('#/teachers')) { if (IR._slideCleanup) { IR._slideCleanup(); IR._slideCleanup = null; } teachersScreen(); }
     else if (hash.startsWith('#/placement')) IR.placement.render(app, (n) => {
       const bell = (IR.placement.BELL || {})[n] || { unit: n, name: 'this bell' };
+      if (bell.unit === 1 && IR.u1Route) { location.hash = '#/u1'; return; }
       if (bell.unit === 4) { location.hash = '#/home'; setTimeout(() => openIsland('i3'), 0); return; }
       if (bell.unit === 5) { location.hash = '#/home'; setTimeout(() => openIsland('i5'), 0); return; }
       if (bell.unit === 6) { location.hash = '#/u6'; return; }
@@ -1185,6 +1189,7 @@
   /* Nov 4 2026: "Back to Unit N" on every lesson / activity / game page of a unit. Opens that unit's lesson picker.
      Shared template: a new unit only needs one row here (route test + picker id + unit number). */
   IR.UNIT_ROUTES = IR.UNIT_ROUTES || [
+    { n: 1, id: 'u1', href: '#/u1', test: (hs) => /^#\/u1/.test(hs) },
     { n: 4, id: 'i3', test: (hs) => /^#\/(nk|island3|lesson\/|review3|check|result)/.test(hs) || /^#\/spell\/(ng|nk)(\/|$)/.test(hs) },
     { n: 5, id: 'i5', test: (hs) => /^#\/(u5\d|review5)/.test(hs) || /^#\/spell\/u5(\/|$)/.test(hs) },
     { n: 6, id: 'u6', href: '#/u6', test: (hs) => /^#\/u6(\/|$)/.test(hs) || /^#\/spell\/u6(\/|$)/.test(hs) }];

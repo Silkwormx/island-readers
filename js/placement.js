@@ -113,7 +113,7 @@
       });
       show(h('h1', null, cvc ? 'Let\u2019s warm up first' : 'Your first bell'),
         summary ? h('p', { class: 'plc-summary' }, h('b', null, 'For the grown-up: '), summary) : null,
-        cvc ? h('p', { class: 'plc-small' }, 'Island Readers starts with blends, so it expects short vowel words like map and hug to be easy. A short-vowel review is not built into the app yet. Practise reading short words together, then start Unit 1 and retake this check.') : null,
+        cvc ? h('p', { class: 'plc-small' }, 'Short vowel words like map and hug need more practice first. Unit 1, Short Vowels and Floss, is the place to start. Then retake this check.') : null,
         h('div', { class: 'plc-map' }, ...bells),
         h('div', { class: 'plc-actions' },
           h('button', { class: 'btn big primary', type: 'button', onclick: () => { stopSpeech(); openUnit(start); } }, h('span', { 'aria-hidden': 'true' }, '\u{1F514}'), h('span', null, cvc ? 'Go to Unit 1' : 'Go to this bell')),

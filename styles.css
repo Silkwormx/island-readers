@@ -2537,3 +2537,7 @@ html.teach .u5step .itext{font-size:32px}
   .nkstep .chips{gap:.25rem;margin:0}
   .nkstep .meetrow{margin-top:.2rem;gap:.4rem}
 }
+.u1pic{display:flex;justify-content:center}
+.u1pic svg{width:7rem;height:auto}
+.u1blurb{max-width:58rem;margin:.35rem auto 0;padding:0 1rem;font-weight:700;text-align:center}
+html.teach .u1step .u1pic svg{width:8rem}
