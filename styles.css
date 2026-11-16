@@ -1733,8 +1733,8 @@ body.calm .ob-glow{animation:none;opacity:.85}
 .bellpath .reviewstop .tbody{gap:.12rem;padding:.7rem .85rem}
 .bellpath .reviewstop .tname{font-size:1.2rem}
 .bellpath .reviewstop .tskill{font-size:1.05rem}
-@container bells (min-width:560px){.bellpath{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@container bells (min-width:980px){.bellpath{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@container bells (min-width:520px){.bellpath{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@container bells (min-width:740px){.bellpath{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media (min-width:1680px){.gridhome .mwrap{max-width:112rem}}
 .trailpage .mwrap{max-width:42rem}
 .trailstage{position:relative;width:100%;max-width:680px;margin:0 auto 1.6rem;container-type:inline-size}
