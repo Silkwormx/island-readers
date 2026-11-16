@@ -293,10 +293,10 @@
         h('span', { class: 'tpic' }, h('img', { src: 'img/units/tile' + String(n).padStart(2, '0') + '.webp', alt: '', width: 600, height: 600, loading: n > 8 ? 'lazy' : 'eager' }),
           st === 'here' ? h('span', { class: 'herechip' }, 'You are here') : null),
         h('span', { class: 'tbody' },
-          h('span', { class: 'tname' }, 'Unit ' + n),
-          h('span', { class: 'tskill' }, t[0]),
+          h('span', { class: 'thead' }, h('span', { class: 'tdots', 'aria-hidden': 'true' }, ...t[3].map((c) => h('i', { class: 'tdot td-' + c }))), h('b', { class: 'tnum' }, 'Unit ' + n)),
+          h('span', { class: 'tname' }, t[0]),
           h('span', { class: 'tsnd' }, ...t[1].split(' \u00b7 ').map((x, i, a) => h('span', null, x + (i < a.length - 1 ? ' \u00b7' : '')))),
-          h('span', { class: 'tcount' }, t[2] + (t[2] === 1 ? ' lesson' : ' lessons'))));
+          h('span', { class: 'tmeta' }, t[2] + (t[2] === 1 ? ' lesson' : ' lessons'))));
       b.addEventListener('click', () => { if (u6) { Snd.stop(); location.hash = '#/u6'; } else if (u5) { openIsland('i5'); } else if (isl) openIsland(BUILT_ID); else { Snd.stop(); toast(st === 'done' ? 'Unit ' + n + ' is done. It is part of the full app.' : n < BUILT ? 'Unit ' + n + ' is coming soon in the full app!' : lit ? 'Unit ' + n + ' is unlocked! It is coming soon in the full app.' : 'Unit ' + n + ' is coming soon! Finish Unit ' + BUILT + ' first.'); } });
       return b;
     };
