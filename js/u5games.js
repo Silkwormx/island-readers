@@ -96,9 +96,8 @@
     if (ctx.setGameTitle) ctx.setGameTitle('Short or Long Sorting Race');
     const say = (w) => Snd.play('audio/' + key + '_w_' + w + '.mp3');
     const words = shuffle(roundWords());
-    const useTimer = timerOn(IR.S().settings);
+    const useTimer = false;
     const limit = document.body.classList.contains('calm') ? 18000 : 12000;
-    const saved = playBag().sortBest[key] || null;
     let i = 0, streak = 0, bestStreak = 0, elapsed = 0, frame = 0, playing = false;
     const stopFrame = () => { if (frame) cancelAnimationFrame(frame); frame = 0; };
 
@@ -192,7 +191,7 @@
 
     ctx.setBack(() => { if (playing && i > 0) { stopFrame(); i--; round(); return true; } return false; });
     ctx.setNext(() => { if (playing && i < words.length - 1) { stopFrame(); i++; round(); return true; } return false; });
-    const bestLine = useTimer ? ('Your best time: ' + (saved ? seconds(saved) : 'not yet')) : 'The timer is off. Take your time.';
+    const bestLine = 'Take your time.';
     ctx.stage.append(h('div', { class: 'activity sortrace', 'data-game': 'sort', 'data-phase': 'start' },
       h('p', { class: 'bigprompt' }, 'Short or Long Sorting Race'),
       h('p', null, 'A word appears. Listen, then tap Short vowel or Long vowel. Ten words.'),

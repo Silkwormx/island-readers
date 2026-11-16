@@ -2415,6 +2415,52 @@ button.tapcard:focus-visible{outline:4px solid #1F6FEB;outline-offset:3px}
 .nkstep .comphint .hintthumb{width:4.5rem}
 .nkstep .sortbin b{font-size:22px}
 .chainact .chainfrom{font-size:clamp(22px,5vh,2.6rem)}
+/* Unit 5 lesson menu: one card style, a bar, no dots. */
+.u5menu{background:var(--cream);overflow:auto}
+.u5menu .u5main{max-width:58rem;margin:0 auto;padding:.35rem 1rem 1.6rem;display:flex;flex-direction:column;gap:.7rem}
+.u5menu .zfintro{max-width:58rem;margin:.35rem auto 0;padding:0 1rem;display:flex;align-items:center;gap:.55rem}
+.u5menu .zfintro img{height:2.5rem;width:auto}
+.u5menu .zfintro span{font-size:1.15rem;font-weight:700}
+.u5prog{display:flex;align-items:center;gap:.7rem}
+.gamebar{flex:1;height:.8rem;background:#EADFC3;border-radius:1rem;overflow:hidden;border:3px solid #E0D2AE}
+.gamebar i{display:block;height:100%;width:0;background:#F28C00}
+.u5count{font-weight:700;font-size:1.05rem;white-space:nowrap}
+.u5grid{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:.5rem}
+.u5extra h2{margin:.2rem 0;font-size:1.15rem}
+.u5card{width:100%;min-height:3.5rem;display:flex;align-items:center;gap:.65rem;text-align:left;background:#fff;border:3px solid var(--ink);border-radius:1.1rem;padding:.4rem .7rem;box-shadow:0 3px 0 rgba(43,37,64,.12);font-family:Andika,sans-serif;color:var(--ink)}
+.u5card.on{border-left-width:8px;border-left-color:#F28C00}
+.u5card.done{background:#F3FBF6}
+.u5ord{font-weight:700;font-size:1.15rem;width:1.5rem;flex:none}
+.u5name{flex:1;font-weight:700;font-size:1.15rem;line-height:1.2}
+.u5min{color:var(--ink2);font-size:1rem;flex:none}
+.u5mark{color:#1E8F4A;flex:none}
+.u5mark .ico{width:1.4rem;height:1.4rem}
+.u5review{width:100%;margin-top:.2rem}
+.u5review.locked{opacity:.72}
+.u5step .pbar{flex:1 1 4rem;min-width:2.5rem}
+.u5step .streakline{font-weight:700;font-size:1rem;white-space:nowrap;flex:none}
+.u5step .sfxmute{width:2.2rem;height:2.2rem;min-width:2.2rem;border-radius:50%;border:3px solid #C95A10;background:#F28C00;color:#fff;padding:.3rem;flex:none}
+.u5step .sfxmute.off{background:#fff;color:var(--ink2);border-color:var(--line)}
+.u5step .sfxmute .ico{width:1.15rem;height:1.15rem}
+.reactpop{position:fixed;left:.7rem;bottom:3rem;z-index:40;display:flex;align-items:center;gap:.4rem;background:#fff;border:3px solid var(--ink);border-radius:1.2rem;padding:.2rem .7rem .2rem .25rem;box-shadow:0 3px 0 rgba(43,37,64,.12)}
+.reactpop[hidden]{display:none}
+.reactpop img{width:3rem;height:3rem;object-fit:contain}
+.reactpop b{font-size:1.25rem}
+.reactpop.yes b{color:#14643A}
+.reactpop.again b{color:#8C5A12}
+.complete.calmend{background:#FFF8E7}
+.calmend .badgefaces,.resultscreen .badgefaces{display:flex;align-items:flex-end;justify-content:center;gap:.4rem}
+.calmend .badgefaces img,.resultscreen .badgefaces img{height:5.5rem;width:auto}
+.calmend .badgeart,.resultscreen .badgeart{width:4.2rem;height:4.2rem}
+.calmend .badgeart svg,.resultscreen .badgeart svg{width:100%;height:100%}
+.streakend,.starline{margin:0;font-weight:700;font-size:1.2rem}
+.calmend .endrow{align-items:center}
+.u5step .fz-streak,.u5step .sorstreak{display:none}
+@media (max-width:700px){
+  .u5grid{grid-template-columns:1fr}
+  .u5step .streakline{font-size:.85rem}
+  .calmend .badgefaces img{height:4.2rem}
+}
 @media (max-width:700px){
   .nkstep .hearts,.u6step .hearts{grid-template-columns:1fr 1fr}
   .nkstep .lesson-top,.u6step .lesson-top{flex-wrap:nowrap}
