@@ -7,7 +7,7 @@
   const KEY = 'ir_start_bell';
   /* Probe names stay on the words. Stage names match the rebalanced Trail Map. Scoring still uses the probe number. */
   const SKILL = { 1: 'blends', 2: 'sh ch th', 3: 'ng nk', 4: 'silent e', 5: 'long words', 6: 'bossy r', 7: 'vowel teams', 8: 'oi ow aw', 9: 'word parts', 10: 'tch dge igh' };
-  const STAGE_OF = { 1: 1, 2: 2, 3: 2, 4: 3, 5: 4, 6: 5, 7: 6, 8: 7, 9: 9, 10: 4 };
+  const STAGE_OF = { 1: 1, 2: 2, 3: 2, 4: 3, 5: 4, 6: 5, 7: 6, 8: 7, 9: 10, 10: 4 };
   const STAGE_SKILL = {
     1: 'Short vowels and blends',
     2: 'Digraphs and glued sounds',
@@ -17,10 +17,12 @@
     6: 'Vowel teams',
     7: 'oo and au sounds',
     8: 'Sliding vowels and tricky teams',
-    9: 'Soft c and g, silent letters, suffixes',
-    10: 'Suffix rules, prefixes, big endings'
+    9: 'Soft c and g, silent letters',
+    10: 'Suffixes and suffix rules',
+    11: 'Prefixes and big endings'
   };
-  const STAGE_UNIT = { 1: 1, 2: 3, 3: 5, 4: 7, 5: 9, 6: 11, 7: 13, 8: 15, 9: 17, 10: 20 };
+  const STAGE_UNIT = { 1: 1, 2: 3, 3: 5, 4: 7, 5: 9, 6: 11, 7: 13, 8: 15, 9: 17, 10: 19, 11: 21 };
+  const STAGE_COUNT = 11;
   /* [word, madeUp?] Each group uses only its pattern plus earlier ones. */
   const GROUPS = [
     { n: 0, name: 'short vowels', words: [['map'], ['sit'], ['hug'], ['jop', 1], ['ved', 1]] },
@@ -97,16 +99,16 @@
 
     function result(start, passed, all, cvc) {
       try { localStorage.setItem(KEY, String(start)); } catch (e) { /* storage blocked */ }
-      const stage = all ? 10 : (STAGE_OF[start] || start);
+      const stage = all ? STAGE_COUNT : (STAGE_OF[start] || start);
       let summary = '';
       if (passed) {
         const known = passed.map((x) => x.name);
         summary = cvc ? 'Short vowel words need more practice first. Start with short-vowel review, then Stage 1, short vowels and blends.'
-          : all ? 'Read every group. Start at Stage 10, suffix rules, prefixes, big endings, to review, or pick any bell.'
+          : all ? 'Read every group. Start at Stage 11, prefixes and big endings, to review, or pick any bell.'
           : (known.length ? 'Knows ' + list(known) + '. ' : '') + 'Start at Stage ' + stage + ', ' + STAGE_SKILL[stage] + '.';
       }
       const passedNums = new Set((passed || []).map((x) => x.n));
-      const bells = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((n) => {
+      const bells = Array.from({ length: STAGE_COUNT }, (_, i) => i + 1).map((n) => {
         const covered = passed && Object.keys(STAGE_OF).some((p) => STAGE_OF[p] === n && passedNums.has(+p));
         const st = n === stage ? 'start' : (n < stage || covered) ? 'rung' : 'later';
         const unit = STAGE_UNIT[n];

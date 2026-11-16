@@ -1452,9 +1452,10 @@ body.calm .ob-glow{animation:none;opacity:.85}
   .stagebox{width:44%;padding:.08rem .22rem}
   .stagebox b,.stagebox span{font-size:.62rem}
   .stagebox.s6{top:50%!important}
-  .stagebox.s8{top:63%!important}
-  .stagebox.s9{top:76%!important}
-  .stagebox.s10{top:86%!important}
+  .stagebox.s8{top:62%!important}
+  .stagebox.s9{top:70%!important}
+  .stagebox.s10{top:74%!important}
+  .stagebox.s11{top:82%!important}
   .herepill{font-size:.62rem;padding:.1rem .35rem}
 }
 .trailunit{margin:0 0 1rem}
@@ -1563,7 +1564,7 @@ body.calm .ob-glow{animation:none;opacity:.85}
 .plc-made{text-align:center;min-height:1.5em}
 .plc-marks{display:flex;gap:1rem;justify-content:center;margin:1rem 0 6rem}.plc-marks .btn{flex:1 1 0;max-width:16rem;min-height:5rem;font-size:1.3rem;display:inline-flex;align-items:center;justify-content:center;gap:.5rem}.plc-marks .btn span[aria-hidden]{font-size:1.8rem}
 .plc-summary{font-size:1.15rem;background:#FFF2D6;border-radius:1rem;padding:.8rem 1rem;line-height:1.5}
-.plc-map{display:grid;grid-template-columns:repeat(5,1fr);gap:.8rem}
+.plc-map{display:grid;grid-template-columns:repeat(4,1fr);gap:.8rem}
 @media (max-width:759px){.plc-map{grid-template-columns:repeat(2,1fr)}}
 .plc-bell{background:#fff;border-radius:1.2rem;padding:.5rem;box-shadow:0 4px 12px rgba(60,40,20,.1);text-align:center}
 .plc-bell .gpic{position:relative;display:block;aspect-ratio:1/1;border-radius:.9rem;overflow:hidden}.plc-bell .gpic>img{width:100%;height:100%;object-fit:cover;display:block}

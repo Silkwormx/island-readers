@@ -23,7 +23,7 @@ test('Find It is a search box and four tabs', () => {
   assert.match(screens, /'Stage ' \+ s\.n/);
   assert.match(screens, /class: 'stageskill'/);
   assert.match(screens, /stageUnitList\(s\.units\)/);
-  assert.match(sw, /ir-20261115s/);
+  assert.match(sw, /ir-20261115t/);
   assert.match(screens, /openKey === g\.name/);
   assert.match(screens, /data\[mode\]/);
   const css = fs.readFileSync(new URL('../styles.css', import.meta.url), 'utf8');

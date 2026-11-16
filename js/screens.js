@@ -876,9 +876,10 @@
     { n: 5, x: 49.2, y: 57.5, side: 'R', units: 'Units 9-10', skills: 'Bossy R', color: '#2E9E5B', ink: '#fff' },
     { n: 6, x: 50.5, y: 62.5, side: 'L', bx: 2, by: 54, units: 'Units 11-12', skills: 'Vowel teams', color: '#3A7ECA', ink: '#fff' },
     { n: 7, x: 58.0, y: 66.5, side: 'R', bx: 64, by: 60, units: 'Units 13-14', skills: 'oo and au sounds', color: '#7B4EC2', ink: '#fff' },
-    { n: 8, x: 51.5, y: 71.5, side: 'L', bx: 2, by: 67, units: 'Units 15-16', skills: 'Sliding vowels and tricky teams', color: '#1A9A96', ink: '#fff' },
-    { n: 9, x: 39.5, y: 75.8, side: 'L', bx: 2, by: 76, units: 'Units 17-19', skills: 'Soft c and g, silent letters, suffixes', color: '#C43E7E', ink: '#fff' },
-    { n: 10, x: 36.0, y: 84.8, side: 'L', bx: 2, by: 87, units: 'Units 20-22', skills: 'Suffix rules, prefixes, big endings', color: '#C99614', ink: '#2B2540' }
+    { n: 8, x: 51.5, y: 71.5, side: 'L', bx: 2, by: 64, units: 'Units 15-16', skills: 'Sliding vowels and tricky teams', color: '#1A9A96', ink: '#fff' },
+    { n: 9, x: 39.5, y: 75.2, side: 'L', bx: 2, by: 73, units: 'Units 17-18', skills: 'Soft c and g, silent letters', color: '#C43E7E', ink: '#fff' },
+    { n: 10, x: 40.5, y: 79.8, side: 'R', bx: 56, by: 76, units: 'Units 19-20', skills: 'Suffixes and suffix rules', color: '#C99614', ink: '#2B2540' },
+    { n: 11, x: 44.5, y: 83.6, side: 'L', bx: 2, by: 81.5, units: 'Units 21-22', skills: 'Prefixes and big endings', color: '#2E4A86', ink: '#fff' }
   ];
   function trailStage() {
     const bell = IR.placement && IR.placement.saved ? IR.placement.saved() : null;
