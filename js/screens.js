@@ -353,7 +353,7 @@
         h('div', { class: 'zfhead' }, h('h2', { class: 'zfline' }, 'Learn to read with Zip and Frill'), readAloudBtn()),
         h('p', { class: 'zfsub' }, 'Ring every bell by learning its sounds.'),
         continueButton()));
-    app.append(h('div', { class: 'screen home mapscreen gridhome' }, h('div', { class: 'mwrap' }, banner, h('div', { class: 'homelay' }, h('div', { class: 'homeside' }, h('a', { class: 'btn big aboutbtn', href: '#/about' }, 'About Island Readers'), hero, tabs), grid))));
+    app.append(h('div', { class: 'screen home mapscreen gridhome' }, h('div', { class: 'mwrap' }, banner, h('div', { class: 'homelay' }, h('div', { class: 'homeside' }, h('a', { class: 'btn big aboutbtn', href: '#/about' }, 'About Island Readers'), hero, tabs), h('div', { class: 'bellslot' }, grid)))));
     /* Nov 3 2026: the whole left sidebar (About, Start here, Practice) stays in one spot while the tiles scroll (wide layouts only). */
     const side = app.querySelector('.homeside'); const scr = app.querySelector('.screen.home');
     const pin = () => {
@@ -873,7 +873,41 @@
     }).catch(() => { counter.textContent = 'Could not load slides'; });
     show();
   }
-  /* Trail map is composed from the existing bell-card paintings. No new background art. */
+  /* Painted trail. The picture belongs at img/trail/trail_map.webp, portrait 1200 by 2400.
+     x and y are percentages from the top-left of that picture. Nudge a label by editing its numbers. */
+  const TRAIL_MAP = {
+    src: 'img/trail/trail_map.webp',
+    width: 1200,
+    height: 2400,
+    marks: [
+      { kind: 'unit', n: 1, x: 34, y: 4 },
+      { kind: 'unit', n: 2, x: 66, y: 8 },
+      { kind: 'unit', n: 3, x: 30, y: 11 },
+      { kind: 'unit', n: 4, x: 70, y: 15 },
+      { kind: 'unit', n: 5, x: 38, y: 19 },
+      { kind: 'review', n: 5, x: 62, y: 22 },
+      { kind: 'unit', n: 6, x: 32, y: 26 },
+      { kind: 'unit', n: 7, x: 68, y: 30 },
+      { kind: 'unit', n: 8, x: 28, y: 33 },
+      { kind: 'unit', n: 9, x: 72, y: 37 },
+      { kind: 'unit', n: 10, x: 36, y: 41 },
+      { kind: 'unit', n: 11, x: 64, y: 44 },
+      { kind: 'unit', n: 12, x: 34, y: 48 },
+      { kind: 'review', n: 12, x: 60, y: 52 },
+      { kind: 'unit', n: 13, x: 30, y: 55 },
+      { kind: 'unit', n: 14, x: 70, y: 59 },
+      { kind: 'unit', n: 15, x: 36, y: 63 },
+      { kind: 'unit', n: 16, x: 66, y: 66 },
+      { kind: 'unit', n: 17, x: 32, y: 70 },
+      { kind: 'unit', n: 18, x: 68, y: 74 },
+      { kind: 'unit', n: 19, x: 40, y: 77 },
+      { kind: 'unit', n: 20, x: 62, y: 81 },
+      { kind: 'review', n: 20, x: 34, y: 85 },
+      { kind: 'unit', n: 21, x: 66, y: 88 },
+      { kind: 'unit', n: 22, x: 38, y: 92 },
+      { kind: 'finale', x: 50, y: 96 }
+    ]
+  };
   function openTrailBell(n) {
     Snd.stop();
     if (n === 4) { openIsland('i3'); return; }
@@ -886,25 +920,29 @@
     const here = (IR.islandDone && IR.islandDone('i3')) ? 5 : 4;
     const back = h('button', { class: 'back homebtn', type: 'button', onclick: () => { location.hash = '#/home'; } }, icon('back'), h('span', null, 'Home'));
     const test = h('a', { class: 'btn big primary trailgo', href: '#/placement' }, 'Take the Placement Test');
-    const bits = [];
-    const bell = (n) => {
-      const name = UNIT_NAMES[n];
-      const label = 'Unit ' + n + ', ' + name + (n === here ? '. You are here.' : '.') + ' Opens this bell.';
-      return h('button', { class: 'trailbell' + (n === here ? ' here' : ''), type: 'button', 'aria-label': label, onclick: () => openTrailBell(n) },
-        h('span', { class: 'trailthumb' }, h('img', { src: 'img/units/tile' + String(n).padStart(2, '0') + '.webp', alt: '' })),
-        h('span', { class: 'trailcopy' }, h('b', null, 'Unit ' + n), h('span', { class: 'trailskill' }, name), n === here ? h('em', null, 'You are here') : null));
+    const art = h('img', { class: 'trailmap-art', src: TRAIL_MAP.src, alt: '', width: TRAIL_MAP.width, height: TRAIL_MAP.height });
+    const frame = h('div', { class: 'trailmap', style: 'aspect-ratio:' + TRAIL_MAP.width + ' / ' + TRAIL_MAP.height }, art);
+    art.addEventListener('error', () => { frame.classList.add('is-missing'); art.remove(); });
+    const pin = (mark) => {
+      const style = 'left:' + mark.x + '%;top:' + mark.y + '%';
+      if (mark.kind === 'finale') return h('span', { class: 'trailpin finale', style: style }, 'Golden bell');
+      if (mark.kind === 'review') return h('button', { class: 'trailpin review', type: 'button', style: style, tabindex: '-1', onclick: () => { Snd.stop(); toast('Review stop after Unit ' + mark.n + ' is coming soon.'); } }, 'Review');
+      return h('button', { class: 'trailpin' + (mark.n === here ? ' here' : ''), type: 'button', style: style, tabindex: '-1', onclick: () => openTrailBell(mark.n) }, 'Unit ' + mark.n);
     };
-    const review = (n) => h('button', { class: 'trailreview', type: 'button', 'aria-label': 'Review stop after Unit ' + n + ', ' + UNIT_NAMES[n] + '. Coming soon.', onclick: () => { Snd.stop(); toast('Review stop after Unit ' + n + ' is coming soon.'); } },
-      h('b', null, 'Review stop'), h('span', { class: 'trailskill' }, 'After Unit ' + n));
-    for (let n = 1; n <= 22; n++) {
-      bits.push(bell(n));
-      if (n === 5 || n === 12 || n === 20) bits.push(review(n));
-    }
+    const listItem = (mark) => {
+      if (mark.kind === 'finale') return h('li', null, h('span', { class: 'trailend' }, 'Golden bell'));
+      if (mark.kind === 'review') return h('li', null, h('button', { type: 'button', onclick: () => { Snd.stop(); toast('Review stop after Unit ' + mark.n + ' is coming soon.'); } }, 'Review stop after Unit ' + mark.n));
+      const name = UNIT_NAMES[mark.n];
+      const label = 'Unit ' + mark.n + '. ' + name + (mark.n === here ? '. You are here.' : '');
+      return h('li', null, h('button', { type: 'button', class: mark.n === here ? 'here' : '', 'aria-label': label, onclick: () => openTrailBell(mark.n) }, h('b', null, 'Unit ' + mark.n), h('span', null, name)));
+    };
     app.append(h('div', { class: 'screen home simplepage trailpage' }, h('div', { class: 'mwrap trailwrap' },
       h('div', { class: 'gtop' }, back),
       h('h1', null, 'Trail Map'),
       test,
-      h('div', { class: 'belltrail' }, ...bits))));
+      h('div', { class: 'trailstage' }, frame, h('div', { class: 'trailpins', 'aria-hidden': 'true' }, ...TRAIL_MAP.marks.map(pin))),
+      h('h2', null, 'Every bell'),
+      h('ol', { class: 'traillist' }, ...TRAIL_MAP.marks.map(listItem)))));
   }
   function findCatalog() {
     const skills = skillCatalog();
