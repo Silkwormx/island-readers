@@ -1739,17 +1739,17 @@ body.calm .ob-glow{animation:none;opacity:.85}
 .herechip{position:absolute;left:.7rem;top:.7rem;padding:.2rem .65rem;border-radius:.7rem;background:#F28C00;color:#fff;font-family:Andika,system-ui,sans-serif;font-size:1rem;font-weight:700}
 .bellpath .tpic{position:relative;aspect-ratio:1/1;background:transparent}
 .bellpath .tpic img{width:100%;height:100%;object-fit:contain;object-position:center}
-.bellpath .tbody{display:flex;flex-direction:column;gap:.35rem;min-height:0;overflow:hidden}
-.bellpath .thead{height:calc(1.45rem * 1.2);overflow:hidden}
-.bellpath .tname{display:block;height:calc(1.05rem * 1.3);line-height:calc(1.05rem * 1.3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.bellpath .tfoot{display:flex;align-items:baseline;gap:.4rem;height:calc(.85rem * 1.35);min-width:0;margin-top:auto;overflow:hidden;font-size:.85rem;line-height:1.35;font-weight:400;color:#7a6650}
-.bellpath .tfoot .tsnd{flex:1 1 auto;min-width:0;display:block;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;font-size:inherit;line-height:inherit;letter-spacing:.02em;word-spacing:.04em;color:inherit}
-.bellpath .tcount{flex:none;white-space:nowrap}
-.bellpath .tcount::before{content:'\2022';margin-right:.4rem}
+.bellpath .tbody{display:flex;flex-direction:column;gap:.28rem;min-height:0;overflow:hidden}
+.bellpath .tnum{font-size:1.28rem;line-height:1.55}
+.bellpath .thead{flex:none;overflow:visible}
+.bellpath .tname{display:block;flex:none;height:calc(1rem * 1.3 * 2);font-size:1rem;line-height:1.3;white-space:normal;overflow:hidden}
+.bellpath .tsnd{display:block;flex:none;height:calc(.78rem * 1.35 * 2);font-size:.78rem;line-height:1.35;letter-spacing:.01em;word-spacing:.02em;white-space:normal;overflow:hidden;color:#7a6650}
+.bellpath .tcount{display:block;flex:none;margin:0;font-size:.78rem;line-height:1.5;font-weight:400;color:#7a6650;white-space:nowrap}
 @media (max-width:759px){
-  .bellpath .thead{height:calc(1.2rem * 1.2)}
-  .bellpath .tname{height:calc(.98rem * 1.3);line-height:calc(.98rem * 1.3)}
-  .bellpath .tfoot{height:calc(.8rem * 1.35);font-size:.8rem}
+  .bellpath .tnum{font-size:1.35rem;line-height:1.55}
+  .bellpath .tname{height:calc(1.05rem * 1.3 * 2);font-size:1.05rem}
+  .bellpath .tsnd{height:calc(.9rem * 1.35 * 2);font-size:.9rem}
+  .bellpath .tcount{font-size:.9rem}
 }
 @container bells (min-width:520px){.bellgrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @container bells (min-width:700px){.bellgrid{grid-template-columns:repeat(3,minmax(0,1fr))}}

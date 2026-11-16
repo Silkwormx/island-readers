@@ -294,10 +294,9 @@
           st === 'here' ? h('span', { class: 'herechip' }, 'You are here') : null),
         h('span', { class: 'tbody' },
           h('span', { class: 'thead' }, h('span', { class: 'tdots', 'aria-hidden': 'true' }, ...t[3].map((c) => h('i', { class: 'tdot td-' + c }))), h('b', { class: 'tnum' }, 'Unit ' + n)),
-          h('span', { class: 'tname', title: t[0] }, t[0]),
-          h('span', { class: 'tfoot' },
-            h('span', { class: 'tsnd', title: t[1] }, t[1]),
-            h('span', { class: 'tcount' }, t[2] + (t[2] === 1 ? ' lesson' : ' lessons')))));
+          h('span', { class: 'tname' }, t[0]),
+          h('span', { class: 'tsnd' }, t[1]),
+          h('span', { class: 'tcount' }, t[2] + (t[2] === 1 ? ' lesson' : ' lessons'))));
       b.addEventListener('click', () => { if (u6) { Snd.stop(); location.hash = '#/u6'; } else if (u5) { openIsland('i5'); } else if (isl) openIsland(BUILT_ID); else { Snd.stop(); toast(st === 'done' ? 'Unit ' + n + ' is done. It is part of the full app.' : n < BUILT ? 'Unit ' + n + ' is coming soon in the full app!' : lit ? 'Unit ' + n + ' is unlocked! It is coming soon in the full app.' : 'Unit ' + n + ' is coming soon! Finish Unit ' + BUILT + ' first.'); } });
       return b;
     };
