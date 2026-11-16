@@ -1702,8 +1702,20 @@ body.calm .ob-glow{animation:none;opacity:.85}
 /* Nov 3 2026: 22-unit home tiles (approved mockup). Every tile and image identical size. */
 .gridhome .tgrid{grid-auto-rows:1fr!important;align-items:stretch!important}
 .stagegroups{display:flex;flex-direction:column;gap:1.15rem;min-width:0}
-.stagepanel{border-radius:1.35rem;padding:.7rem .7rem .9rem;background:color-mix(in srgb, var(--stage) 16%, #FFF8E7)}
-.stagehead{margin:0 .2rem .65rem;font-size:1.05rem;font-weight:700;line-height:1.3;color:#2B2540}
+.stagepanel{display:flex;align-items:stretch;border-radius:1.35rem;overflow:hidden;background:color-mix(in srgb, var(--stage) 16%, #FFF8E7)}
+.stagestrip{flex:0 0 4.4rem;align-self:stretch;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.stagev{writing-mode:vertical-rl;transform:rotate(180deg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.5rem;max-height:100%;font-family:Andika,system-ui,sans-serif;text-align:center}
+.stagelab{margin:0;font-family:Andika,system-ui,sans-serif;font-size:1.85rem;font-weight:700;line-height:1;letter-spacing:.03em;white-space:nowrap}
+.stageskill{margin:0;font-family:Andika,system-ui,sans-serif;font-size:.9rem;font-weight:700;line-height:1.2;overflow:hidden}
+.stagecards{flex:1;min-width:0;padding:.7rem .75rem .85rem .6rem}
+@media (max-width:759px){
+  .stagepanel{flex-direction:column}
+  .stagestrip{flex:none;width:100%;min-height:3.1rem}
+  .stagev{writing-mode:horizontal-tb;transform:none;flex-direction:row;flex-wrap:wrap;justify-content:flex-start;gap:.35rem .7rem;padding:.45rem .85rem;max-height:none}
+  .stagelab{font-size:1.35rem}
+  .stageskill{font-size:.95rem;overflow:visible}
+  .stagecards{padding:.7rem}
+}
 .tcard{display:flex;flex-direction:column;width:100%;height:100%;padding:0;border:2px solid #E6D9B8;border-radius:18px;overflow:hidden;background:#fff;font:inherit;font-family:'Andika',system-ui,sans-serif;color:#3b2a1a;text-align:left;cursor:pointer;box-shadow:0 4px 12px rgba(60,40,20,.08)}
 .tcard.t-current{border-color:#F28C00;box-shadow:0 0 0 4px rgba(242,140,0,.25)}
 .tpic{display:block;width:100%;aspect-ratio:1/1;overflow:hidden;background:#EFE7D6}

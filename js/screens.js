@@ -299,8 +299,11 @@
       return b;
     };
     const grid = h('div', { class: 'stagegroups', id: 'skymap' }, ...TRAIL_STAGES.map((s) => h('section', { class: 'stagepanel', style: '--stage:' + s.color },
-      h('h2', { class: 'stagehead' }, 'Stage ' + s.n + ' \u00b7 ' + s.skills),
-      h('div', { class: 'ugrid tgrid' }, ...stageUnitList(s.units).map(unit)))));
+      h('div', { class: 'stagestrip', title: s.skills, style: 'background:' + s.color + ';color:' + s.ink },
+        h('div', { class: 'stagev' },
+          h('h2', { class: 'stagelab' }, 'Stage ' + s.n),
+          h('p', { class: 'stageskill' }, s.skills))),
+      h('div', { class: 'stagecards' }, h('div', { class: 'ugrid tgrid' }, ...stageUnitList(s.units).map(unit))))));
     const tab = (href, name, icoName) => h('a', { class: 'hometab', href: href, 'aria-label': name },
       h('span', { class: 'hometab-ico', 'aria-hidden': 'true' }, icon(icoName)),
       h('span', { class: 'hometab-name' }, name));
