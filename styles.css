@@ -1742,6 +1742,40 @@ body.calm .ob-glow{animation:none;opacity:.85}
 @media (min-width:1100px){.gridhome .ugrid.tgrid{grid-template-columns:repeat(3,minmax(0,1fr))!important}}
 @media (min-width:1600px){.gridhome .ugrid.tgrid{grid-template-columns:repeat(4,minmax(0,1fr))!important}}
 @media (max-width:759px){.tbody{padding:.65rem .65rem .8rem}.tnum{font-size:1.2rem}.tname{font-size:.98rem}.tsnd{font-size:.9rem}.tmeta{font-size:.8rem}.tdot{width:.9rem;height:.9rem}}
+/* Compact bells (?bellsize=compact): shorter pictures and tighter text. Default size is unchanged. */
+.gridhome.bellsize-compact .stagegroups{gap:.45rem}
+.gridhome.bellsize-compact .stagepanel{border-radius:.95rem}
+.gridhome.bellsize-compact .stagestrip{flex-basis:2.8rem}
+.gridhome.bellsize-compact .stagelab{font-size:1.2rem}
+.gridhome.bellsize-compact .stageskill{font-size:.78rem}
+.gridhome.bellsize-compact .stagecards{padding:.28rem .35rem .35rem .28rem}
+.gridhome.bellsize-compact .tcard{border-radius:12px}
+.gridhome.bellsize-compact .tpic{aspect-ratio:2.3/1;max-height:5.4rem}
+.gridhome.bellsize-compact .tbody{gap:.08rem;padding:.28rem .45rem .32rem}
+.gridhome.bellsize-compact .tnum{font-size:1.12rem}
+.gridhome.bellsize-compact .tname{font-size:.98rem;line-height:1.15}
+.gridhome.bellsize-compact .tsnd{font-size:.86rem;line-height:1.15}
+.gridhome.bellsize-compact .tmeta{font-size:.76rem}
+.gridhome.bellsize-compact .tdot{width:.72rem;height:.72rem}
+.gridhome.bellsize-compact .ugrid.tgrid{gap:.4rem!important}
+@media (min-width:1024px){
+  .gridhome.bellsize-compact .ugrid.tgrid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+}
+@media (min-width:1024px) and (max-width:1099px){
+  .gridhome.bellsize-compact .homelay{display:grid;grid-template-columns:18.5rem minmax(0,1fr);align-items:start;gap:.8rem;margin-top:0}
+  .gridhome.bellsize-compact .homeside{position:sticky;top:0;align-self:start;gap:clamp(.28rem,1vh,.7rem);max-height:calc(100dvh - 4.6rem);overflow:hidden;box-sizing:border-box}
+  .gridhome.bellsize-compact .homeside .aboutbtn{min-height:2rem;padding:.08rem .6rem;font-size:.95rem}
+  .gridhome.bellsize-compact .homefeature{gap:clamp(.12rem,.4vh,.35rem);padding:clamp(.2rem,.5vh,.4rem)}
+  .gridhome.bellsize-compact .homefeature .homeart{max-height:clamp(2.5rem,11vh,5.5rem);object-fit:contain}
+  .gridhome.bellsize-compact .homefeature .zfline{font-size:clamp(.9rem,2vh,1.1rem)}
+  .gridhome.bellsize-compact .homefeature .zfsub{font-size:clamp(.78rem,1.6vh,.95rem)}
+  .gridhome.bellsize-compact .homefeature .zfstart2{min-height:2.3rem;padding:.08rem .5rem;font-size:.95rem}
+  .gridhome.bellsize-compact .homeside .hometabs{margin-top:clamp(12px,1.8vh,20px);gap:clamp(.28rem,.8vh,.5rem)}
+  .gridhome.bellsize-compact .homeside .hometabs .hometab{height:clamp(2.2rem,5.4vh,3.6rem);min-height:clamp(2.2rem,5.4vh,3.6rem);font-size:clamp(.84rem,1.7vh,1rem);padding:.1rem .4rem}
+  .gridhome.bellsize-compact .mwrap > .hbanner{position:sticky;top:0;z-index:24;background:#FFF6E3;margin:0 -1.1rem;padding:.35rem 1.1rem .4rem}
+  .gridhome.bellsize-compact .youbar{left:calc((100vw - min(84rem,100vw)) / 2 + 1.1rem + 18.5rem + .8rem);right:calc((100vw - min(84rem,100vw)) / 2 + 1.1rem);width:auto;max-width:none;transform:none}
+  .gridhome.bellsize-compact .mwrap{padding-bottom:0}
+}
 /* Nov 3 2026: true bronze for Unit 1 (gong); 22-dot unit bar */
 .td-gong{background:#CD7F32!important;border:2px solid #8C5520!important}
 .youbar{flex-wrap:wrap;max-width:46rem}

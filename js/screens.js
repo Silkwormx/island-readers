@@ -299,7 +299,8 @@
       return b;
     };
     const stageStyle = /[?&]stagestyle=top\b/.test(location.search) ? 'top' : 'side';
-    const grid = h('div', { class: 'stagegroups stagestyle-' + stageStyle, id: 'skymap' }, ...TRAIL_STAGES.map((s) => h('section', { class: 'stagepanel', style: '--stage:' + s.color },
+    const bellSize = /[?&]bellsize=compact\b/.test(location.search) ? 'compact' : 'full';
+    const grid = h('div', { class: 'stagegroups stagestyle-' + stageStyle + ' bellsize-' + bellSize, id: 'skymap' }, ...TRAIL_STAGES.map((s) => h('section', { class: 'stagepanel', style: '--stage:' + s.color },
       h('h2', { class: 'stagehead' }, 'Stage ' + s.n + ' \u00b7 ' + s.skills),
       h('div', { class: 'stagestrip', title: s.skills, style: 'background:' + s.color + ';color:' + s.ink },
         h('div', { class: 'stagev' },
@@ -347,12 +348,13 @@
     const youbar = h('button', { class: 'youbar', type: 'button', 'aria-label': 'You are here: Unit ' + cur + ', ' + SKILL[cur] + '. Dots show all 22 units. ' + nEarned + ' of 10 gems. Opens the gem box.', onclick: () => { Snd.stop(); location.hash = '#/gems'; } },
       h('span', { class: 'ybtxt' }, 'You are here: ', h('b', null, 'Unit ' + cur + ' \u00b7 ' + SKILL[cur])),
       h('span', { class: 'ybdots', 'aria-hidden': 'true' }, ...TILES.slice(1).map((t, i) => h('i', { class: 'tdot td-' + t[3][0] + (i + 1 === cur ? ' ybcur' : complete && i + 1 === BUILT ? ' ybdone' : '') }))));
-    app.append(h('div', { class: 'screen home mapscreen gridhome' }, h('div', { class: 'mwrap' }, banner, h('div', { class: 'homelay' }, h('div', { class: 'homeside' }, h('a', { class: 'btn big aboutbtn', href: '#/about' }, 'About Island Readers'), hero, tabs), grid)), youbar));
+    app.append(h('div', { class: 'screen home mapscreen gridhome' + (bellSize === 'compact' ? ' bellsize-compact' : '') }, h('div', { class: 'mwrap' }, banner, h('div', { class: 'homelay' }, h('div', { class: 'homeside' }, h('a', { class: 'btn big aboutbtn', href: '#/about' }, 'About Island Readers'), hero, tabs), grid)), youbar));
     /* Nov 3 2026: the whole left sidebar (About, Start here, Practice) stays in one spot while the tiles scroll (wide layouts only). */
     const side = app.querySelector('.homeside'); const scr = app.querySelector('.screen.home');
     const pin = () => {
       if (!side || !scr || !side.isConnected) { window.removeEventListener('resize', pin); return; }
-      if (!matchMedia('(min-width:1100px)').matches) { side.style.top = ''; side.style.maxHeight = ''; side.style.overflowY = ''; return; }
+      const wide = matchMedia('(min-width:1100px)').matches || (bellSize === 'compact' && matchMedia('(min-width:1024px)').matches);
+      if (!wide) { side.style.top = ''; side.style.maxHeight = ''; side.style.overflowY = ''; return; }
       const banner = scr.querySelector('.hbanner');
       const bannerH = banner ? banner.offsetHeight : 0;
       side.style.top = bannerH + 'px';

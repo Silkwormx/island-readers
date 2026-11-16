@@ -18,12 +18,14 @@ test('Find It is a search box and four tabs', () => {
   assert.match(screens, /TRAIL_STAGES\.map/);
   assert.match(screens, /Stage ' \+ s\.n \+ ': ' \+ s\.units/);
   assert.match(screens, /for \(let n = 1; n <= 22; n\+\+\)/);
+  assert.match(screens, /bellsize=compact/);
+  assert.match(screens, /bellsize-compact/);
   assert.match(screens, /stagestyle=top/);
   assert.match(screens, /stagestyle-' \+ stageStyle/);
   assert.match(screens, /'Stage ' \+ s\.n/);
   assert.match(screens, /class: 'stageskill'/);
   assert.match(screens, /stageUnitList\(s\.units\)/);
-  assert.match(sw, /ir-20261115t/);
+  assert.match(sw, /ir-20261115u/);
   assert.match(screens, /openKey === g\.name/);
   assert.match(screens, /data\[mode\]/);
   const css = fs.readFileSync(new URL('../styles.css', import.meta.url), 'utf8');
