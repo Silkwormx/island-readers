@@ -120,9 +120,9 @@
     { id: 'meet', title: 'Meet the letters' },
     { id: 'trace', title: 'Trace' },
     { id: 'games', title: 'Games' },
-    { id: 'read', title: 'Read it!' },
     { id: 'spell', title: 'Spell it' },
-    { id: 'celebrate', title: 'Celebrate' }
+    { id: 'read', title: 'Read it!' },
+    { id: 'celebrate', title: 'Look what I can read!' }
   ];
   const MEMORY = {
     a: { chant: 'Ant on an apple, /a/ /a/ /a/.', action: 'Open wide, like a bite.' },
@@ -360,7 +360,59 @@
   function readable(group) {
     return BANK.filter((item) => item.g <= group.n && wordOk(group, item.w) && (!item.line || item.line.split(/\s+/).every((part) => wordOk(group, part.replace(/[^A-Za-z]/g, '')))));
   }
+  /* Placeholder lists until /workspace/reading-program/learn_letters/program.json arrives.
+     That file may be { lessons: [ { id: "g1", read: ["am", "at", "Sam", "sat"] } ] }. */
+  const PLACEHOLDER_READ = {
+    g1: ['am', 'at', 'Sam', 'sat'],
+    g2: ['pin', 'fin', 'map', 'sit'],
+    g3: ['cat', 'sun', 'cup', 'mom'],
+    g4: ['dog', 'bed', 'bus', 'kit'],
+    g5: ['hat', 'ran', 'red', 'web'],
+    g6: ['jam', 'box', 'fox', 'quit'],
+    g7: ['van', 'zip', 'Zip', 'zap']
+  };
+  const READ_KEY = 'ir_letters_read';
+  let program = null;
+  function bankItem(word) {
+    return BANK.filter((item) => item.w === word)[0] || { w: word, g: 1 };
+  }
+  function lessonRead(group) {
+    const lessons = program && program.lessons;
+    let names = null;
+    if (Array.isArray(lessons)) {
+      const row = lessons.filter((item) => item && item.id === group.id)[0];
+      if (row && row.read && row.read.length) names = row.read;
+    } else if (lessons && lessons[group.id] && lessons[group.id].read && lessons[group.id].read.length) {
+      names = lessons[group.id].read;
+    }
+    if (!names) names = PLACEHOLDER_READ[group.id] || [];
+    return names.filter((word) => wordOk(group, word)).map(bankItem);
+  }
+  function readBank() {
+    try {
+      const list = JSON.parse(localStorage.getItem(READ_KEY) || '[]');
+      return Array.isArray(list) ? list.filter((word) => typeof word === 'string' && word) : [];
+    } catch (e) { return []; }
+  }
+  function rememberWord(word) {
+    const list = readBank();
+    if (list.some((item) => item.toLowerCase() === String(word).toLowerCase())) return list;
+    list.push(word);
+    try { localStorage.setItem(READ_KEY, JSON.stringify(list)); } catch (e) { /* keep the list in memory for this page */ }
+    return list;
+  }
+  function loadProgram() {
+    const urls = ['/workspace/reading-program/learn_letters/program.json', 'reading-program/learn_letters/program.json'];
+    urls.forEach((url) => {
+      fetch(url).then((res) => (res && res.ok ? res.json() : null)).then((data) => {
+        if (data && data.lessons) program = data;
+      }).catch(() => { /* placeholder lists stay in use */ });
+    });
+  }
+  loadProgram();
   function wordsFor(group) {
+    const planned = lessonRead(group);
+    if (planned.length) return planned;
     const all = readable(group);
     const fresh = shuffle(all.filter((item) => item.g === group.n));
     const old = shuffle(all.filter((item) => item.g < group.n));
@@ -566,6 +618,12 @@
       IR.save();
       location.hash = base;
     };
+    ctx.finishRead = () => {
+      IR.recordActivity(doneId(group, 'read'), mistakes <= 1 ? 3 : mistakes <= 3 ? 2 : 1);
+      IR.touchStreak();
+      IR.save();
+      location.hash = base + '/celebrate';
+    };
     const screen = h('div', { class: 'screen lessonscreen nkstep u5step llstep' },
       h('header', { class: 'lesson-top' }, bar, IR.ui.homeButton(), IR.ui.gearButton()),
       instrBox, stage, nav);
@@ -723,7 +781,7 @@
     ctx.setInstr('Tap each letter. They step in, hold hands, and say the word.');
     function show() {
       const my = ++token;
-      if (i >= items.length) { ctx.quietDone(); return; }
+      if (i >= items.length) { ctx.finishRead(); return; }
       const item = items[i];
       const parts = graphemes(item.w);
       let at = 0;
@@ -759,9 +817,10 @@
           cast.classList.add('held');
           hands.classList.add('go');
           await Snd.play(A.sfx.ding);
+          rememberWord(item.w);
           if (ctx.scr.ok() && my === token) await sayRead(item.w);
-          if (item.line) line.textContent = item.line;
-          ctx.setNextLabel(i < items.length - 1 ? 'Next word' : 'Done');
+          line.textContent = item.line || item.w;
+          ctx.setNextLabel(i < items.length - 1 ? 'Next word' : 'Look what I can read!');
         });
         cast.append(b);
       });
@@ -771,7 +830,7 @@
     }
     ctx.setNext(() => {
       if (i < items.length - 1) { i++; show(); return true; }
-      ctx.quietDone();
+      ctx.finishRead();
       return true;
     });
     show();
@@ -782,15 +841,17 @@
     IR.recordActivity(doneId(group, 'celebrate'), 3);
     IR.touchStreak();
     IR.save();
-    const words = readable(group).filter((item) => item.g === group.n).slice(0, 4);
+    const words = readBank();
+    const fresh = {};
+    lessonRead(group).forEach((item) => { fresh[item.w.toLowerCase()] = 1; });
     const screen = h('div', { class: 'screen lessonscreen nkstep u5step llstep' },
       h('header', { class: 'lesson-top' }, IR.ui.homeButton(), IR.ui.gearButton()),
       h('div', { class: 'stage' }, h('div', { class: 'activity llgame llcelebrate' },
         IR.engage.faces(),
         h('div', { class: 'badgeart', html: IR.ICON.badge }),
-        h('h1', null, 'You can read!'),
-        h('p', { class: 'llprompt' }, group.letters.join('  ')),
-        h('div', { class: 'llreadwords' }, ...words.map((item) => h('span', null, item.w))))));
+        h('h1', null, 'Look what I can read!'),
+        h('p', { class: 'llprompt' }, words.length ? words.length + (words.length === 1 ? ' word' : ' words') : 'Read a word and it stays here.'),
+        h('div', { class: 'llreadwords' }, ...words.map((word) => h('span', { class: fresh[word.toLowerCase()] ? 'fresh' : '' }, word))))));
     const nav = h('div', { class: 'lesson-nav' });
     screen.append(nav);
     IR.simpleNav(nav, h('button', { class: 'btn big next', type: 'button' }), () => { location.hash = '#/letters/' + group.id; }, 'Back to the group');

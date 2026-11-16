@@ -2628,6 +2628,8 @@ html.teach .u5step .itext{font-size:32px}
 .llcelebrate .badgefaces img{height:4.6rem;width:auto}
 .llreadwords{display:flex;flex-wrap:wrap;gap:.4rem;justify-content:center}
 .llreadwords span{font-size:clamp(1.4rem,3vh,2rem);font-weight:700;background:#fff;border:3px solid var(--ink);border-radius:.8rem;padding:.15rem .6rem}
+.llreadwords span.fresh{background:#FFE7B8;border-color:#F28C00}
+.llgrouppage .llstepcard .u5name{white-space:normal}
 html.teach .lltile,html.teach .llflashcard{font-size:88px;min-height:96px;min-width:88px}
 html.teach .lltracenum{width:96px;height:96px;font-size:48px}
 .llstep .llgame{height:100%;min-height:0;display:flex;flex-direction:column;gap:.3rem;align-items:stretch}
