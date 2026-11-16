@@ -1803,7 +1803,6 @@ body.calm .ob-glow{animation:none;opacity:.85}
 .pinnum{font-size:16px;line-height:1}
 .pinnum2{font-size:13px}
 .trailpin.rainbow{background:conic-gradient(#d93a2b,#f2c21b,#2fa84f,#5fb4ec,#8e3fc9,#d93a2b);color:#fff}
-.trailpin.review{width:28px;height:28px;min-width:28px;min-height:28px;background:#e6c48a;color:#3b2a1a;font-size:13px}
 .trailpin.finale{width:40px;height:40px;min-width:40px;min-height:40px;background:#d4a017;color:#3b2a1a}
 .pinstar,.pinstar .ico{width:20px;height:20px}
 .pindone{position:absolute;right:-3px;bottom:-3px;display:inline-flex;width:14px;height:14px;border-radius:50%;background:#fff;color:#1f7a3a;box-shadow:0 1px 3px rgba(60,40,20,.25)}
@@ -1825,7 +1824,6 @@ body.calm .ob-glow{animation:none;opacity:.85}
   .trailpin::before{width:44px;height:44px}
   .pinnum{font-size:14px}
   .pinnum2{font-size:11px}
-  .trailpin.review{width:26px;height:26px;min-width:26px;min-height:26px}
   .trailpin.finale{width:34px;height:34px;min-width:34px;min-height:34px}
   .pindone,.pindone .ico{width:12px;height:12px}
   .heretag{font-size:11px}

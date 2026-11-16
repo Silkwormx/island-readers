@@ -887,7 +887,6 @@
       { kind: 'unit', n: 3, x: 60, y: 13.5 },
       { kind: 'unit', n: 4, x: 70, y: 15 },
       { kind: 'unit', n: 5, x: 80, y: 18 },
-      { kind: 'review', n: 5, x: 88, y: 21.5 },
       { kind: 'unit', n: 6, x: 74, y: 23 },
       { kind: 'unit', n: 7, x: 62, y: 24.5 },
       { kind: 'unit', n: 8, x: 50, y: 25.5 },
@@ -897,14 +896,12 @@
       { kind: 'unit', n: 12, x: 50, y: 37.5 },
       { kind: 'unit', n: 13, x: 64, y: 41 },
       { kind: 'unit', n: 14, x: 76, y: 43 },
-      { kind: 'review', n: 12, x: 86, y: 45.5 },
       { kind: 'unit', n: 15, x: 66, y: 48.5 },
       { kind: 'unit', n: 16, x: 52, y: 51.5 },
       { kind: 'unit', n: 17, x: 38, y: 55.5 },
       { kind: 'unit', n: 18, x: 30, y: 59.5 },
       { kind: 'unit', n: 19, x: 48, y: 63.5 },
       { kind: 'unit', n: 20, x: 66, y: 66.5 },
-      { kind: 'review', n: 20, x: 82, y: 71.5 },
       { kind: 'unit', n: 21, x: 70, y: 72 },
       { kind: 'unit', n: 22, x: 56, y: 74 },
       { kind: 'finale', x: 66, y: 91 }
@@ -980,14 +977,7 @@
       let bits = [h('span', { class: 'pinstar', 'aria-hidden': 'true' }, icon('star'))];
       let label = 'Golden Bell. The end of the path. Coming soon.';
       let pinStyle = '';
-      if (mark.kind === 'review') {
-        title = 'Review stop';
-        lines = [h('span', { class: 'tipskill' }, 'After Unit ' + mark.n + ' \u00b7 ' + UNIT_NAMES[mark.n]), h('span', { class: 'tipmeta' }, 'Extra practice. Coming soon.')];
-        open = () => { Snd.stop(); toast('Review stop after Unit ' + mark.n + ' is coming soon.'); };
-        pinClass = 'trailpin review';
-        bits = ['R'];
-        label = 'Review stop after Unit ' + mark.n + '. Coming soon.';
-      } else if (mark.kind === 'unit') {
+      if (mark.kind === 'unit') {
         const meta = UNIT_META[mark.n];
         const status = unitStatus(mark.n, place);
         const hex = UNIT_BELL[mark.n] === 'rainbow' ? '' : BELL_HEX[UNIT_BELL[mark.n]];
@@ -1014,7 +1004,6 @@
     };
     const listItem = (mark) => {
       if (mark.kind === 'finale') return h('li', null, h('button', { type: 'button', onclick: () => { Snd.stop(); toast('Golden Bell is coming soon.'); } }, 'Golden Bell'));
-      if (mark.kind === 'review') return h('li', null, h('button', { type: 'button', onclick: () => { Snd.stop(); toast('Review stop after Unit ' + mark.n + ' is coming soon.'); } }, 'Review stop after Unit ' + mark.n));
       const name = UNIT_NAMES[mark.n];
       const status = unitStatus(mark.n, place);
       const label = 'Unit ' + mark.n + '. ' + name + '. ' + status + '.';

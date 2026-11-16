@@ -17,10 +17,10 @@ test('Find It is a search box and four tabs', () => {
   assert.equal(screens.includes("'By Activity'"), false);
   assert.match(screens, /Phonemic Awareness/);
   assert.match(screens, /for \(let n = 1; n <= 22; n\+\+\)/);
-  assert.match(screens, /Review stop/);
+  assert.equal(screens.includes('Review stop'), false);
   assert.match(screens, /class: 'bellpath'/);
   assert.equal(screens.includes('TRAIL_STAGES'), false);
-  assert.match(sw, /ir-20261116i/);
+  assert.match(sw, /ir-20261116j/);
   assert.match(screens, /openKey === g\.name/);
   assert.match(screens, /data\[mode\]/);
   const css = fs.readFileSync(new URL('../styles.css', import.meta.url), 'utf8');
