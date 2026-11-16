@@ -299,13 +299,13 @@
       return b;
     };
     const grid = h('div', { class: 'ugrid tgrid', id: 'skymap' }, ...Array.from({ length: 22 }, (_, i) => unit(i + 1)));
-    const tab = (href, name, ico) => h('a', { class: 'hometab', href: href, 'aria-label': name },
-      ico ? h('span', { class: 'pico', 'aria-hidden': 'true' }, ico) : null,
+    const tab = (href, name, icoName) => h('a', { class: 'hometab', href: href, 'aria-label': name },
+      h('span', { class: 'hometab-ico', 'aria-hidden': 'true' }, icon(icoName)),
       h('span', { class: 'hometab-name' }, name));
     const tabs = h('nav', { class: 'hometabs', 'aria-label': 'More places' },
-      tab('#/trail', 'Trail Map and Placement Test'),
-      tab('#/practice/sight', 'Sight Word Practice'),
-      tab('#/find', 'Find It', icon('search')));
+      tab('#/trail', 'Trail Map and Placement Test', 'map'),
+      tab('#/practice/sight', 'Sight Word Practice', 'star'),
+      tab('#/find', 'Find It', 'search'));
     /* Nov 6 2026: full-width home feature (approved banyan scene), then About + the hero beside the unit grid */
     const banner = h('header', { class: 'hbanner' }, h('h1', null, 'Island Readers'),
       h('div', { class: 'grownwrap' }, h('span', { class: 'grownlab' }, 'Parent and Teacher Materials'), IR.ui.gearButton()));
