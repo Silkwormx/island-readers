@@ -402,7 +402,7 @@
     return list;
   }
   function loadProgram() {
-    const urls = ['/workspace/reading-program/learn_letters/program.json', 'reading-program/learn_letters/program.json'];
+    const urls = ['foundation/data/program.json', '/workspace/reading-program/learn_letters/program.json', 'reading-program/learn_letters/program.json'];
     urls.forEach((url) => {
       fetch(url).then((res) => (res && res.ok ? res.json() : null)).then((data) => {
         if (data && data.lessons) program = data;
@@ -410,6 +410,85 @@
     });
   }
   loadProgram();
+  const DAY_KEY = 'ir_ll_day';
+  const PRINT_FONTS = ['llfont-a', 'llfont-b', 'llfont-c'];
+  function dayOf(group) {
+    try {
+      const all = JSON.parse(sessionStorage.getItem(DAY_KEY) || '{}');
+      const n = Number(all[group.id]);
+      if (n >= 1 && n <= 4) return n;
+    } catch (e) { /* day 1 */ }
+    return 1;
+  }
+  function setDay(group, n) {
+    let all = {};
+    try { all = JSON.parse(sessionStorage.getItem(DAY_KEY) || '{}'); } catch (e) { all = {}; }
+    all[group.id] = n;
+    try { sessionStorage.setItem(DAY_KEY, JSON.stringify(all)); } catch (e2) { /* this page still uses n */ }
+  }
+  function dayFromLabel(label) {
+    const m = /Day\s+(\d+)/i.exec(label || '');
+    return m ? Number(m[1]) : 1;
+  }
+  function fadeStep(group, letterId) {
+    const day = dayOf(group);
+    const list = program && program.lessons;
+    if (Array.isArray(list)) {
+      const rows = list.filter((item) => item.group === 'G' + group.n && dayFromLabel(item.label) === day);
+      for (let i = 0; i < rows.length; i++) {
+        const row = rows[i].fade && rows[i].fade.letters && rows[i].fade.letters[letterId];
+        const step = row && row.start_step;
+        if (step === 'picture' || step === 'outline' || step === 'plain') return step;
+      }
+    }
+    if (day <= 1) return 'picture';
+    if (day === 2) return 'outline';
+    return 'plain';
+  }
+  function artUrl(id) {
+    const list = program && program.letters;
+    const row = list && list.filter((item) => item.letter === id)[0];
+    if (!row || !row.art) return '';
+    return 'foundation/' + String(row.art).replace(/^\.?\//, '');
+  }
+  function letterCard(L) {
+    const step = fadeStep({ id: 'g' + (L.group || 1), n: L.group || 1 }, L.id);
+    return letterCardStep(L, step);
+  }
+  function letterCardStep(L, step) {
+    const plain = h('b', { class: 'llplain' }, L.id);
+    const src = artUrl(L.id);
+    if (step === 'plain' || !src) return h('span', { class: 'llfade plain' }, plain);
+    const img = h('img', { src: src, alt: '' });
+    if (step === 'outline') return h('span', { class: 'llfade outline' }, img, plain);
+    return h('span', { class: 'llfade picture' }, img, plain);
+  }
+  function printLook(text, n) {
+    const raw = String(text);
+    const shown = n % 3 === 2 ? raw.charAt(0).toUpperCase() + raw.slice(1) : raw;
+    return { className: PRINT_FONTS[n % PRINT_FONTS.length], text: shown };
+  }
+  function hintButton(ids) {
+    const pop = h('span', { class: 'llhintpop', hidden: true });
+    let timer = 0;
+    const b = h('button', { class: 'llhint', type: 'button' }, 'Hint');
+    b.addEventListener('click', () => {
+      pop.innerHTML = '';
+      (ids || []).forEach((id) => {
+        const src = artUrl(id);
+        if (!src) return;
+        pop.append(h('img', { src: src, alt: '' }));
+      });
+      if (!pop.childElementCount) return;
+      pop.hidden = false;
+      pop.classList.remove('fade');
+      clearTimeout(timer);
+      requestAnimationFrame(() => pop.classList.add('show'));
+      timer = setTimeout(() => pop.classList.add('fade'), 700);
+      setTimeout(() => { pop.hidden = true; pop.classList.remove('show', 'fade'); }, 1400);
+    });
+    return h('span', { class: 'llhintwrap' }, b, pop);
+  }
   function wordsFor(group) {
     const planned = lessonRead(group);
     if (planned.length) return planned;
@@ -539,7 +618,15 @@
         h('button', { class: 'back homebtn', type: 'button', onclick: () => { Snd.stop(); location.hash = '#/foundation/letters'; } }, icon('back'), h('span', null, 'Letters')),
         h('h1', { class: 'uA-title' }, 'Group ' + group.n + ' · ' + group.letters.join(' ')),
         IR.ui.gearButton()),
-      h('main', { class: 'llmain' }, h('ol', { class: 'llsteps' }, ...cards))));
+      h('main', { class: 'llmain' },
+        h('div', { class: 'lldays', role: 'group', 'aria-label': 'Day' }, ...[1, 2, 3, 4].map((n) => h('button', {
+          class: 'llday' + (dayOf(group) === n ? ' on' : ''),
+          type: 'button',
+          'aria-pressed': dayOf(group) === n ? 'true' : 'false',
+          onclick: () => { setDay(group, n); groupPage(app, group); }
+        }, 'Day ' + n))),
+        h('p', { class: 'lldaynote' }, dayOf(group) === 1 ? 'Full character, with the plain letter beside it.' : dayOf(group) === 2 ? 'A faint character behind the plain letter.' : 'Plain letter only.'),
+        h('ol', { class: 'llsteps' }, ...cards))));
     if (IR.teach) IR.teach.sync();
   }
 
@@ -678,7 +765,7 @@
           i++;
           if (ctx.scr.ok()) show();
         }
-      }, h('span', { class: 'llface', html: character(L.id) }), h('b', null, glyph(L.id, true) + L.id));
+      }, letterCardStep(L, fadeStep(group, L.id)));
       ctx.stage.append(h('div', { class: 'activity llgame llflash' }, h('p', { class: 'llask' }, 'Say the sound.'), b));
       if (ctx.armReveal) ctx.armReveal(L.sound);
     }
@@ -693,20 +780,24 @@
     function show() {
       const L = letters[i];
       const mem = MEMORY[L.id];
+      const info = program && program.letters && program.letters.filter((row) => row.letter === L.id)[0];
       ctx.progress(i / letters.length);
       if (ctx.count) ctx.count(i + 1, letters.length);
       ctx.stage.innerHTML = '';
       ctx.stage.append(h('div', { class: 'activity llgame llmeet' },
-        h('div', { class: 'llmemo', html: MNEMONIC[L.id] || '' }),
+        letterCardStep(L, fadeStep(group, L.id)),
         h('div', { class: 'llmeettext' },
-          h('p', { class: 'llpair' }, glyph(L.id, true) + L.id),
-          h('p', { class: 'llwho' }, WHO[L.id] || ''),
-          h('p', { class: 'llchant' }, mem.chant),
-          h('p', { class: 'llaction' }, 'Action: ' + mem.action),
+          h('p', { class: 'llwho' }, (info && info.character) || WHO[L.id] || ''),
+          h('p', { class: 'llchant' }, (info && info.chant) || mem.chant),
+          h('p', { class: 'llaction' }, 'Action: ' + ((info && info.action) || mem.action)),
           h('button', { class: 'btn primary', type: 'button', onclick: () => hear(L, 'sound') }, icon('speaker'), 'Hear the sound'))));
       ctx.setNextLabel(i < letters.length - 1 ? 'Next letter' : 'Done');
       if (ctx.armReveal) ctx.armReveal(L.id);
       hear(L, 'sound');
+      if (!program && !show.retried) {
+        show.retried = true;
+        setTimeout(() => { if (ctx.scr.ok()) show(); }, 400);
+      }
     }
     ctx.setNext(() => {
       if (i < letters.length - 1) { i++; show(); return true; }
@@ -802,7 +893,7 @@
           style: '--from:' + from,
           'data-g': part.g,
           'aria-label': 'Sound ' + (n + 1) + ', ' + part.g
-        }, h('span', { class: 'llface', html: character(part.id) }), h('b', null, part.g));
+        }, h('b', { class: 'llprint ' + printLook(part.g, n + i).className }, printLook(part.g, n + i).text));
         b.addEventListener('click', async () => {
           if (my !== token || b.classList.contains('lit')) return;
           if (n !== at) {
@@ -826,7 +917,7 @@
         });
         cast.append(b);
       });
-      ctx.stage.append(h('div', { class: 'activity llgame llread' }, cast, hands, line));
+      ctx.stage.append(h('div', { class: 'activity llgame llread' }, cast, hands, line, hintButton(parts.map((part) => part.id))));
       ctx.setNextLabel('');
       if (ctx.armReveal) ctx.armReveal(item.w, (stage) => [...stage.querySelectorAll('.llbuddy')]);
     }
@@ -898,7 +989,7 @@
         const opts = options(first, pool, Math.min(3, pool.length)).map((L) => ({
           letter: L, yes: L.id === first.id, label: glyph(L.id, false)
         }));
-        host.append(h('p', { class: 'llprompt' }, item.w), choiceGrid(opts, async (it, btn) => {
+        host.append(h('p', { class: 'llprompt llprint ' + printLook(item.w, i).className }, printLook(item.w, i).text), choiceGrid(opts, async (it, btn) => {
           if (my !== token || btn.classList.contains('lit')) return;
           if (!it.yes) {
             ctx.miss();
@@ -927,7 +1018,7 @@
             type: 'button',
             'data-yes': yes ? '1' : '0',
             'aria-label': pick.w
-          }, ...graphemes(pick.w).map((part) => h('span', { class: 'llface', html: character(part.id) })), h('b', null, pick.w));
+          }, h('b', { class: 'llprint ' + printLook(pick.w, picks.indexOf(pick)).className }, printLook(pick.w, picks.indexOf(pick)).text));
           b.addEventListener('click', async () => {
             if (my !== token) return;
             if (!yes) {
@@ -943,7 +1034,7 @@
           });
           row.append(b);
         });
-        host.append(row);
+        host.append(row, hintButton(parts.map((part) => part.id)));
         sayBits(parts);
         if (ctx.armReveal) ctx.armReveal(item.w, (stage) => [...stage.querySelectorAll('.llwordpick')].filter((el) => el.dataset.yes === '1'));
         return;
@@ -952,8 +1043,9 @@
       let at = 0;
       const cast = h('div', { class: 'llcast' });
       parts.forEach((part, n) => {
+        const look = printLook(part.g, n);
         const b = h('button', { class: 'llbuddy', type: 'button', 'aria-label': part.g },
-          h('span', { class: 'llface', html: character(part.id) }), h('b', null, part.g));
+          h('b', { class: 'llprint ' + look.className }, look.text));
         b.addEventListener('click', async () => {
           if (my !== token || b.classList.contains('lit')) return;
           if (n !== at) {
@@ -971,7 +1063,7 @@
         });
         cast.append(b);
       });
-      host.append(cast);
+      host.append(cast, hintButton(parts.map((part) => part.id)));
       sayRead(item.w);
       if (ctx.armReveal) ctx.armReveal(item.w);
     }
@@ -1002,8 +1094,9 @@
       shuffle(bank.filter((L) => !used[L.id])).slice(0, 2).forEach((L) => bag.push({ g: L.id, id: L.id }));
       const tray = h('div', { class: 'llbank' });
       shuffle(bag).forEach((part) => {
+        const look = printLook(part.g, bag.indexOf(part));
         const b = h('button', { class: 'llbuddy', type: 'button', 'data-l': part.id, 'aria-label': part.g },
-          h('span', { class: 'llface', html: character(part.id) }), h('b', null, part.g));
+          h('b', { class: 'llprint ' + look.className }, look.text));
         b.addEventListener('click', async () => {
           if (my !== token || b.classList.contains('used') || at >= parts.length) return;
           if (part.id !== parts[at].id) {
@@ -1015,7 +1108,7 @@
           }
           b.classList.add('used');
           slots[at].classList.add('filled');
-          slots[at].append(h('span', { class: 'llface', html: character(part.id) }), h('b', null, parts[at].g));
+          slots[at].append(h('b', { class: 'llprint ' + printLook(parts[at].g, at).className }, parts[at].g));
           at++;
           await hear(BY[part.id], 'sound');
           if (at < parts.length || my !== token || !ctx.scr.ok()) return;
@@ -1027,7 +1120,8 @@
       });
       ctx.stage.append(h('div', { class: 'activity llgame llspell' },
         h('div', { class: 'llslots' }, ...slots),
-        tray));
+        tray,
+        hintButton(parts.map((part) => part.id))));
       ctx.setNextLabel('');
       sayRead(item.w);
       if (ctx.armReveal) ctx.armReveal(item.w, (stage) => {
@@ -1051,7 +1145,7 @@
         'data-l': it.letter.id,
         'data-yes': it.yes ? '1' : '0',
         'aria-label': it.label
-      }, h('span', { class: 'llface', html: character(it.letter.id) }), h('b', null, it.label));
+      }, h('b', { class: 'llprint ' + printLook(it.label, items.indexOf(it)).className }, printLook(it.label, items.indexOf(it)).text));
       b.addEventListener('click', () => onPick(it, b));
       return b;
     }));
@@ -1091,6 +1185,7 @@
         await sleep(420);
         if (ctx.scr.ok() && my === token) show();
       });
+      if (round.letter) host.append(hintButton([round.letter.id]));
       host.append(status);
     }
     ctx.setNext(() => { if (i < rounds.length - 1) { i++; show(); return true; } return false; });
@@ -1162,11 +1257,9 @@
       say: (id) => hear(BY[id], 'sound'),
       colorWord: (id) => {
         const el = document.createElement('span');
-        el.className = 'llface';
-        el.innerHTML = character(id);
-        const name = document.createElement('b');
-        name.textContent = id;
-        el.append(name);
+        const look = printLook(id, id.charCodeAt(0));
+        el.className = 'llprint ' + look.className;
+        el.textContent = look.text;
         return el;
       }
     });

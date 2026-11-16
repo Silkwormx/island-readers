@@ -34,6 +34,10 @@ test('Learn the Letters follows the UFLI group order and is not a unit', () => {
   assert.match(letters, /g1: \['am', 'at', 'Sam', 'sat'\]/);
   assert.match(letters, /ir_letters_read/);
   assert.match(letters, /program\.json/);
+  assert.match(letters, /fadeStep/);
+  assert.match(letters, /function hintButton/);
+  assert.match(letters, /llfont-a/);
+  assert.match(letters, /'Day ' \+ n/);
   assert.match(letters, /Final art is still needed/);
 });
 
