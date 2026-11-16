@@ -26,7 +26,7 @@ test('Learn the Letters follows the UFLI group order and is not a unit', () => {
   assert.match(letters, /Review flash/);
   assert.match(letters, /Meet the letters/);
   assert.match(letters, /Read it!/);
-  const steps = ["id: 'flash'", "id: 'ears'", "id: 'meet'", "id: 'trace'", "id: 'games'", "id: 'spell'", "id: 'read'", "id: 'celebrate'"];
+  const steps = ["id: 'flash'", "id: 'ears'", "id: 'meet'", "id: 'say'", "id: 'trace'", "id: 'games'", "id: 'spell'", "id: 'read'", "id: 'check'", "id: 'celebrate'"];
   for (let i = 1; i < steps.length; i++) assert.ok(letters.indexOf(steps[i - 1]) < letters.indexOf(steps[i]), steps[i]);
   assert.match(letters, /Sound play/);
   assert.match(letters, /Spell it/);
@@ -36,6 +36,9 @@ test('Learn the Letters follows the UFLI group order and is not a unit', () => {
   assert.match(letters, /program\.json/);
   assert.match(letters, /fadeStep/);
   assert.match(letters, /function hintButton/);
+  assert.match(letters, /Say it from the letter/);
+  assert.match(letters, /Mastery check/);
+  assert.match(letters, /cueFor/);
   assert.match(letters, /llfont-a/);
   assert.match(letters, /'Day ' \+ n/);
   assert.match(letters, /Final art is still needed/);

@@ -118,10 +118,12 @@
     { id: 'flash', title: 'Review flash' },
     { id: 'ears', title: 'Sound play' },
     { id: 'meet', title: 'Meet the letters' },
+    { id: 'say', title: 'Say it from the letter', day: 2 },
     { id: 'trace', title: 'Trace' },
     { id: 'games', title: 'Games' },
     { id: 'spell', title: 'Spell it' },
     { id: 'read', title: 'Read it!' },
+    { id: 'check', title: 'Mastery check', day: 3 },
     { id: 'celebrate', title: 'Look what I can read!' }
   ];
   const MEMORY = {
@@ -455,8 +457,9 @@
     const step = fadeStep({ id: 'g' + (L.group || 1), n: L.group || 1 }, L.id);
     return letterCardStep(L, step);
   }
-  function letterCardStep(L, step) {
-    const plain = h('b', { class: 'llplain' }, L.id);
+  function letterCardStep(L, step, n) {
+    const look = printLook(L.id, n || 0);
+    const plain = h('b', { class: 'llplain' + (step === 'plain' ? ' ' + look.className : '') }, step === 'plain' ? look.text : L.id);
     const src = artUrl(L.id);
     if (step === 'plain' || !src) return h('span', { class: 'llfade plain' }, plain);
     const img = h('img', { src: src, alt: '' });
@@ -468,24 +471,37 @@
     const shown = n % 3 === 2 ? raw.charAt(0).toUpperCase() + raw.slice(1) : raw;
     return { className: PRINT_FONTS[n % PRINT_FONTS.length], text: shown };
   }
+  function letterInfo(id) {
+    return program && program.letters && program.letters.filter((row) => row.letter === id)[0];
+  }
+  function cueFor(id) {
+    const info = letterInfo(id);
+    if (info && info.cue) return info.cue;
+    const mem = MEMORY[id];
+    return mem ? mem.action : '';
+  }
+  function stepsFor(group) {
+    const day = dayOf(group);
+    return LESSON.filter((step) => {
+      if (step.id === 'say') return day === 2;
+      if (step.id === 'check') return day >= 3;
+      return true;
+    });
+  }
   function hintButton(ids) {
     const pop = h('span', { class: 'llhintpop', hidden: true });
     let timer = 0;
     const b = h('button', { class: 'llhint', type: 'button' }, 'Hint');
     b.addEventListener('click', () => {
+      const lines = (ids || []).map(cueFor).filter(Boolean);
+      if (!lines.length) return;
       pop.innerHTML = '';
-      (ids || []).forEach((id) => {
-        const src = artUrl(id);
-        if (!src) return;
-        pop.append(h('img', { src: src, alt: '' }));
-      });
-      if (!pop.childElementCount) return;
+      lines.forEach((line) => pop.append(h('p', null, String(line).replace(/'/g, '').replace(/\s*\+\s*/g, '. ').replace(/\s+/g, ' ').trim())));
       pop.hidden = false;
       pop.classList.remove('fade');
       clearTimeout(timer);
-      requestAnimationFrame(() => pop.classList.add('show'));
-      timer = setTimeout(() => pop.classList.add('fade'), 700);
-      setTimeout(() => { pop.hidden = true; pop.classList.remove('show', 'fade'); }, 1400);
+      timer = setTimeout(() => pop.classList.add('fade'), 900);
+      setTimeout(() => { pop.hidden = true; pop.classList.remove('fade'); }, 1700);
     });
     return h('span', { class: 'llhintwrap' }, b, pop);
   }
@@ -569,8 +585,9 @@
   function listPage(app) {
     IR.newScreen();
     const items = GROUPS.map((g) => {
-      const done = LESSON.filter((step) => stepDone(g, step.id)).length;
-      return { g: g, done: done, total: LESSON.length };
+      const steps = stepsFor(g);
+      const done = steps.filter((step) => stepDone(g, step.id)).length;
+      return { g: g, done: done, total: steps.length };
     });
     const finished = items.filter((it) => it.done === it.total).length;
     const bar = h('div', { class: 'gamebar', role: 'progressbar', 'aria-valuemin': 0, 'aria-valuemax': items.length, 'aria-valuenow': finished },
@@ -603,8 +620,9 @@
 
   function groupPage(app, group) {
     IR.newScreen();
-    const next = LESSON.filter((step) => !stepDone(group, step.id))[0];
-    const cards = LESSON.map((step, i) => h('li', null, h('button', {
+    const steps = stepsFor(group);
+    const next = steps.filter((step) => !stepDone(group, step.id))[0];
+    const cards = steps.map((step, i) => h('li', null, h('button', {
       class: 'u5card llstepcard' + (stepDone(group, step.id) ? ' done' : '') + (next && next.id === step.id ? ' on' : ''),
       type: 'button',
       'aria-label': (i + 1) + '. ' + step.title,
@@ -623,9 +641,9 @@
           class: 'llday' + (dayOf(group) === n ? ' on' : ''),
           type: 'button',
           'aria-pressed': dayOf(group) === n ? 'true' : 'false',
-          onclick: () => { setDay(group, n); groupPage(app, group); }
+          onclick: () => { setDay(group, n); app.innerHTML = ''; groupPage(app, group); }
         }, 'Day ' + n))),
-        h('p', { class: 'lldaynote' }, dayOf(group) === 1 ? 'Full character, with the plain letter beside it.' : dayOf(group) === 2 ? 'A faint character behind the plain letter.' : 'Plain letter only.'),
+        h('p', { class: 'lldaynote' }, dayOf(group) === 1 ? 'Character beside the plain letter. Trace draws the letter over the character.' : dayOf(group) === 2 ? 'A faint character behind the letter, then say it from the letter.' : 'Plain letters only. No pictures in the words.'),
         h('ol', { class: 'llsteps' }, ...cards))));
     if (IR.teach) IR.teach.sync();
   }
@@ -728,7 +746,9 @@
     else if (game.id === 'flash') runFlash(ctx, group);
     else if (game.id === 'ears') runEars(ctx, group);
     else if (game.id === 'meet') runMeet(ctx, group);
+    else if (game.id === 'say') runSay(ctx, group);
     else if (game.id === 'trace') runTrace(ctx, group);
+    else if (game.id === 'check') runCheck(ctx, group);
     else if (game.id === 'read') runRead(ctx, group);
     else if (game.id === 'spell') runSpell(ctx, group);
     else runReview(ctx, taughtThrough(group));
@@ -785,7 +805,7 @@
       if (ctx.count) ctx.count(i + 1, letters.length);
       ctx.stage.innerHTML = '';
       ctx.stage.append(h('div', { class: 'activity llgame llmeet' },
-        letterCardStep(L, fadeStep(group, L.id)),
+        letterCardStep(L, fadeStep(group, L.id), i),
         h('div', { class: 'llmeettext' },
           h('p', { class: 'llwho' }, (info && info.character) || WHO[L.id] || ''),
           h('p', { class: 'llchant' }, (info && info.chant) || mem.chant),
@@ -811,7 +831,7 @@
   function runTrace(ctx, group) {
     const letters = lettersOf(group);
     let i = 0;
-    ctx.setInstr('Trace with your finger, or tap the numbers.');
+    ctx.setInstr(dayOf(group) === 1 ? 'Draw the letter over the character. Or tap the numbers.' : 'Trace the plain letter, or tap the numbers.');
     function show() {
       const L = letters[i];
       let stroke = 0;
@@ -819,8 +839,9 @@
       ctx.progress(i / letters.length);
       if (ctx.count) ctx.count(i + 1, letters.length);
       ctx.stage.innerHTML = '';
-      const art = h('div', { class: 'lltraceart' },
-        h('div', { class: 'lltracewho', html: character(L.id) }),
+      const over = fadeStep(group, L.id) === 'picture' && artUrl(L.id);
+      const art = h('div', { class: 'lltraceart' + (over ? ' over' : '') },
+        over ? h('img', { class: 'lltracephoto', src: artUrl(L.id), alt: '' }) : null,
         h('div', { class: 'lltraceform', html: formation(L) }));
       const nums = h('div', { class: 'lltracenums' });
       function paint() {
@@ -865,6 +886,37 @@
       return true;
     });
     show();
+  }
+
+  function runSay(ctx, group) {
+    const letters = lettersOf(group);
+    let i = 0;
+    ctx.setInstr('Say it from the letter. No picture.');
+    function show() {
+      const L = letters[i];
+      const look = printLook(L.id, i + 1);
+      ctx.progress(i / letters.length);
+      if (ctx.count) ctx.count(i + 1, letters.length);
+      ctx.stage.innerHTML = '';
+      ctx.stage.append(h('div', { class: 'activity llgame llsay' },
+        h('p', { class: 'llsayprompt' }, 'Say it from the letter.'),
+        h('b', { class: 'llplain ' + look.className }, look.text),
+        h('button', { class: 'btn primary', type: 'button', onclick: () => hear(L, 'sound') }, icon('speaker'), 'Hear the sound')));
+      ctx.setNextLabel(i < letters.length - 1 ? 'Next letter' : 'Done');
+      if (ctx.armReveal) ctx.armReveal(L.id);
+    }
+    ctx.setNext(() => {
+      if (i < letters.length - 1) { i++; show(); return true; }
+      ctx.quietDone();
+      return true;
+    });
+    ctx.setBack(() => { if (i > 0) { i--; show(); return true; } return false; });
+    show();
+  }
+
+  function runCheck(ctx, group) {
+    if (ctx.setGameTitle) ctx.setGameTitle('Mastery check');
+    runFind(ctx, lettersOf(group), 'Mastery check. Plain letters only.');
   }
 
   function runRead(ctx, group) {
@@ -1193,8 +1245,8 @@
     show();
   }
 
-  function runFind(ctx, pool) {
-    ctx.setInstr('Hear the sound. Tap that letter.');
+  function runFind(ctx, pool, instr) {
+    ctx.setInstr(instr || 'Hear the sound. Tap that letter.');
     const rounds = take(pool, Math.max(6, pool.length)).map((L) => ({
       letter: L,
       reveal: L.id,
@@ -1327,7 +1379,7 @@
       groupPage(app, g);
       return true;
     }
-    const play = /^#\/foundation\/letters\/(g[1-7])\/(flash|ears|meet|trace|games|read|spell|celebrate|find|match|sound|feed|review)$/.exec(hash);
+    const play = /^#\/foundation\/letters\/(g[1-7])\/(flash|ears|meet|say|trace|games|read|spell|check|celebrate|find|match|sound|feed|review)$/.exec(hash);
     if (play) {
       const g = groupById(play[1]);
       if (!g) return false;
