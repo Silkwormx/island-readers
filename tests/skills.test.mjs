@@ -43,7 +43,7 @@ test('old practice links redirect into Skill Practice', () => {
   const screens = fs.readFileSync(new URL('../js/screens.js', import.meta.url), 'utf8');
   assert.match(screens, /#\/practice\/spelling/);
   assert.match(screens, /#\/practice\/skills/);
-  assert.match(screens, /pbox\('skills', 'Skill Practice'/);
+  assert.match(screens, /simplePage\('Skill Practice'/);
   assert.doesNotMatch(screens, /pbox\('fluency'/);
   assert.doesNotMatch(screens, /pbox\('spelling'/);
 });
