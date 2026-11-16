@@ -918,11 +918,17 @@
     ]
   };
   function openTrailBell(n) {
+    const complete = islandDone('i3');
+    const u5 = n === 5 && !!IR.u5Route;
+    const u6 = n === 6 && !!IR.u6Route;
+    const isl = n === 4 && !!(D.islands || {}).i3;
+    if (u6) { Snd.stop(); location.hash = '#/u6'; return; }
+    if (u5) { openIsland('i5'); return; }
+    if (isl) { openIsland('i3'); return; }
     Snd.stop();
-    if (n === 4) { openIsland('i3'); return; }
-    if (n === 5) { openIsland('i5'); return; }
-    if (n === 6) { location.hash = '#/u6'; return; }
-    toast(UNIT_NAMES[n] + ' is coming soon.');
+    const done = n === 4 && complete;
+    const lit = n === 5 && complete;
+    toast(done ? 'Unit ' + n + ' is done. It is part of the full app.' : n < 4 ? 'Unit ' + n + ' is coming soon in the full app!' : lit ? 'Unit ' + n + ' is unlocked! It is coming soon in the full app.' : 'Unit ' + n + ' is coming soon! Finish Unit 4 first.');
   }
   function islandTrailPage() {
     IR.newScreen();
@@ -934,12 +940,12 @@
     art.addEventListener('error', () => { frame.classList.add('is-missing'); art.remove(); });
     const pin = (mark) => {
       const style = 'left:' + mark.x + '%;top:' + mark.y + '%';
-      if (mark.kind === 'finale') return h('span', { class: 'trailpin finale', style: style }, 'Golden Bell');
-      if (mark.kind === 'review') return h('button', { class: 'trailpin review', type: 'button', style: style, tabindex: '-1', onclick: () => { Snd.stop(); toast('Review stop after Unit ' + mark.n + ' is coming soon.'); } }, 'Review');
-      return h('button', { class: 'trailpin' + (mark.n === here ? ' here' : ''), type: 'button', style: style, tabindex: '-1', onclick: () => openTrailBell(mark.n) }, pinBell(mark.n), 'Unit ' + mark.n);
+      if (mark.kind === 'finale') return h('button', { class: 'trailpin finale', type: 'button', style: style, onclick: () => { Snd.stop(); toast('Golden Bell is coming soon.'); } }, 'Golden Bell');
+      if (mark.kind === 'review') return h('button', { class: 'trailpin review', type: 'button', style: style, onclick: () => { Snd.stop(); toast('Review stop after Unit ' + mark.n + ' is coming soon.'); } }, 'Review');
+      return h('button', { class: 'trailpin' + (mark.n === here ? ' here' : ''), type: 'button', style: style, onclick: () => openTrailBell(mark.n) }, pinBell(mark.n), 'Unit ' + mark.n);
     };
     const listItem = (mark) => {
-      if (mark.kind === 'finale') return h('li', null, h('span', { class: 'trailend' }, 'Golden Bell'));
+      if (mark.kind === 'finale') return h('li', null, h('button', { type: 'button', onclick: () => { Snd.stop(); toast('Golden Bell is coming soon.'); } }, 'Golden Bell'));
       if (mark.kind === 'review') return h('li', null, h('button', { type: 'button', onclick: () => { Snd.stop(); toast('Review stop after Unit ' + mark.n + ' is coming soon.'); } }, 'Review stop after Unit ' + mark.n));
       const name = UNIT_NAMES[mark.n];
       const label = 'Unit ' + mark.n + '. ' + name + (mark.n === here ? '. You are here.' : '');
@@ -949,7 +955,7 @@
       h('div', { class: 'gtop' }, back),
       h('h1', null, 'Trail Map'),
       test,
-      h('div', { class: 'trailstage' }, frame, h('div', { class: 'trailpins', 'aria-hidden': 'true' }, ...TRAIL_MAP.marks.map(pin))),
+      h('div', { class: 'trailstage' }, frame, h('div', { class: 'trailpins' }, ...TRAIL_MAP.marks.map(pin))),
       h('h2', null, 'Every bell'),
       h('ol', { class: 'traillist' }, ...TRAIL_MAP.marks.map(listItem)))));
   }
