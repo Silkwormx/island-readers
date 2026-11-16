@@ -1777,7 +1777,6 @@ body.calm .ob-glow{animation:none;opacity:.85}
   .bellpath .tname{font-size:1.02rem;line-height:1.05}
   .bellpath .tskill{font-size:.8rem;line-height:1.1}
   .bellpath .tsnd{display:flex;font-size:.68rem;line-height:1.15;color:#7a6650}
-  .bellpath .tmeta,.bellpath .tnext{display:none}
   .gridhome .mwrap > .hbanner{padding-top:.2rem;padding-bottom:.05rem}
   .gridhome .hbanner h1{font-size:1.28rem}
   .gridhome .hbanner h1::after{margin-top:.08rem;height:.22rem}
