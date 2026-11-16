@@ -1741,7 +1741,7 @@ body.calm .ob-glow{animation:none;opacity:.85}
 .trailmap{position:relative;width:100%;background:linear-gradient(180deg,#d7e7ee 0%,#f4efe4 42%,#efe2cc 100%);border-radius:1.2rem;overflow:hidden}
 .trailmap-art{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;display:block}
 .trailpins{position:absolute;inset:0}
-.trailpin{position:absolute;transform:translate(-50%,-50%);margin:0;padding:.15rem .45rem;border:2px solid #fff;border-radius:.7rem;background:rgba(255,253,248,.92);color:#3b2a1a;font-family:Andika,system-ui,sans-serif;font-size:.95rem;font-weight:700;line-height:1.2;cursor:pointer;box-shadow:0 2px 8px rgba(60,40,20,.16);white-space:nowrap}
+.trailpin{position:absolute;transform:translate(-50%,-50%);margin:0;padding:2px 7px;border:2px solid #fff;border-radius:.65rem;background:rgba(255,253,248,.94);color:#3b2a1a;font-family:Andika,system-ui,sans-serif;font-size:15px;font-weight:700;line-height:1.15;cursor:pointer;box-shadow:0 2px 8px rgba(60,40,20,.16);white-space:nowrap}
 .trailpin.here{background:#F28C00;border-color:#F28C00;color:#fff}
 .trailpin.review{background:rgba(255,248,232,.94);font-size:.85rem}
 .trailpin.finale{cursor:default;background:#fff6df;border-color:#e6c98a}
