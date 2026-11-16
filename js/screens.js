@@ -917,6 +917,41 @@
       { kind: 'finale', x: 74, y: 92 }
     ]
   };
+  const UNIT_META = [null,
+    ['a e i o u \u00b7 ff ll ss', 4], ['bl \u00b7 st \u00b7 tr \u00b7 -nd \u00b7 -mp', 4], ['sh \u00b7 ch \u00b7 th \u00b7 wh \u00b7 ck', 2], ['ng \u00b7 nk', 3],
+    ['a_e \u00b7 i_e \u00b7 o_e \u00b7 u_e', 2], ['-s \u00b7 -es \u00b7 -ed \u00b7 -ing', 3], ['closed \u00b7 open', 3], ['tch \u00b7 dge \u00b7 -ild \u00b7 -old', 3],
+    ['ar \u00b7 or \u00b7 er \u00b7 ir \u00b7 ur', 4], ['air \u00b7 are \u00b7 ear', 2], ['ai \u00b7 ay \u00b7 ee \u00b7 ea \u00b7 ey', 2], ['oa \u00b7 ow \u00b7 oe \u00b7 ie \u00b7 igh', 3],
+    ['oo \u00b7 ew \u00b7 ui \u00b7 ue', 4], ['au \u00b7 aw \u00b7 augh \u00b7 ea', 2], ['oi \u00b7 oy \u00b7 ou \u00b7 ow', 3], ['ei \u00b7 eigh \u00b7 ew \u00b7 ough', 3],
+    ['soft c \u00b7 soft g', 1], ['kn \u00b7 wr \u00b7 mb \u00b7 gn \u00b7 gh', 2], ['-er \u00b7 -est \u00b7 -ly \u00b7 -ful', 6], ['double \u00b7 drop e \u00b7 y to i', 4],
+    ['un- \u00b7 pre- \u00b7 re- \u00b7 dis-', 5], ['-tion \u00b7 -ture \u00b7 -ment', 6]];
+  function trailPlace() {
+    const finished = {
+      4: islandDone('i3'),
+      5: !!(IR.isDone('u51_check') && IR.isDone('u53_check') && IR.isDone('u5_review')),
+      6: !!(IR.isDone('u61_check') && IR.isDone('u62_check') && IR.isDone('u63_check'))
+    };
+    let here = 4;
+    if (finished[4] && !finished[5]) here = 5;
+    else if (finished[4] && finished[5] && !finished[6]) here = 6;
+    else if (finished[4] && finished[5] && finished[6]) here = 7;
+    const acts = (IR.S().progress && IR.S().progress.activities) || {};
+    const any = Object.keys(acts).some((k) => acts[k] && acts[k].completed);
+    if (!any && IR.placement && IR.placement.saved) {
+      const start = IR.placement.saved();
+      if (start === 10) here = 22;
+      else {
+        const bell = IR.placement.BELL && IR.placement.BELL[start];
+        if (bell && bell.unit) here = bell.unit;
+      }
+    }
+    return { finished: finished, here: here };
+  }
+  function unitStatus(n, place) {
+    if (place.finished[n]) return 'Done';
+    if (n === place.here) return 'You are here';
+    if (n === 4 || (n === 5 && IR.u5Route) || (n === 6 && IR.u6Route)) return 'Open';
+    return 'Coming soon';
+  }
   function openTrailBell(n) {
     const complete = islandDone('i3');
     const u5 = n === 5 && !!IR.u5Route;
@@ -932,25 +967,61 @@
   }
   function islandTrailPage() {
     IR.newScreen();
-    const here = (IR.islandDone && IR.islandDone('i3')) ? 5 : 4;
+    const place = trailPlace();
+    const here = place.here;
+    let pointer = 'mouse';
     const back = h('button', { class: 'back homebtn', type: 'button', onclick: () => { location.hash = '#/home'; } }, icon('back'), h('span', null, 'Home'));
     const test = h('a', { class: 'btn big primary trailgo', href: '#/placement' }, 'Take the Placement Test');
     const art = h('img', { class: 'trailmap-art', src: TRAIL_MAP.src, alt: '', width: TRAIL_MAP.width, height: TRAIL_MAP.height });
     const frame = h('div', { class: 'trailmap', style: 'aspect-ratio:' + TRAIL_MAP.width + ' / ' + TRAIL_MAP.height }, art);
     art.addEventListener('error', () => { frame.classList.add('is-missing'); art.remove(); });
+    const closeTips = () => { document.querySelectorAll('.trailpinwrap.tipopen').forEach((el) => el.classList.remove('tipopen')); };
+    const touchNow = () => pointer === 'touch' || (window.matchMedia && matchMedia('(hover: none) and (pointer: coarse)').matches);
     const pin = (mark) => {
       const style = 'left:' + mark.x + '%;top:' + mark.y + '%';
-      if (mark.kind === 'finale') return h('button', { class: 'trailpin finale', type: 'button', style: style, onclick: () => { Snd.stop(); toast('Golden Bell is coming soon.'); } }, 'Golden Bell');
-      if (mark.kind === 'review') return h('button', { class: 'trailpin review', type: 'button', style: style, onclick: () => { Snd.stop(); toast('Review stop after Unit ' + mark.n + ' is coming soon.'); } }, 'Review');
-      return h('button', { class: 'trailpin' + (mark.n === here ? ' here' : ''), type: 'button', style: style, onclick: () => openTrailBell(mark.n) }, pinBell(mark.n), 'Unit ' + mark.n);
+      const tipId = 'trailtip-' + (mark.kind === 'unit' ? mark.n : mark.kind + (mark.n || ''));
+      let title = 'Golden Bell';
+      let lines = [h('span', { class: 'tipmeta' }, 'The end of the path. Coming soon.')];
+      let open = () => { Snd.stop(); toast('Golden Bell is coming soon.'); };
+      let pinClass = 'trailpin finale';
+      let bits = ['Golden Bell'];
+      if (mark.kind === 'review') {
+        title = 'Review stop';
+        lines = [h('span', { class: 'tipskill' }, 'After Unit ' + mark.n + ' \u00b7 ' + UNIT_NAMES[mark.n]), h('span', { class: 'tipmeta' }, 'Extra practice. Coming soon.')];
+        open = () => { Snd.stop(); toast('Review stop after Unit ' + mark.n + ' is coming soon.'); };
+        pinClass = 'trailpin review';
+        bits = ['Review'];
+      } else if (mark.kind === 'unit') {
+        const meta = UNIT_META[mark.n];
+        const status = unitStatus(mark.n, place);
+        title = 'Unit ' + mark.n;
+        lines = [h('span', { class: 'tipskill' }, UNIT_NAMES[mark.n]), h('span', { class: 'tipsounds' }, meta[0]), h('span', { class: 'tipmeta' }, meta[1] + (meta[1] === 1 ? ' lesson' : ' lessons') + ' \u00b7 ' + status)];
+        open = () => openTrailBell(mark.n);
+        pinClass = 'trailpin' + (mark.n === here ? ' here' : '') + (place.finished[mark.n] ? ' done' : '');
+        bits = [pinBell(mark.n), 'Unit ' + mark.n, place.finished[mark.n] ? h('span', { class: 'pindone', 'aria-hidden': 'true' }, icon('check')) : null];
+      }
+      const go = h('button', { class: 'tipgo', type: 'button' }, 'Open');
+      const tip = h('div', { class: 'trailtip' + (mark.y < 16 ? ' below' : ''), id: tipId, role: 'tooltip' }, h('b', null, title), ...lines, go);
+      const btn = h('button', { class: pinClass, type: 'button', 'aria-describedby': tipId }, ...bits);
+      go.addEventListener('click', (e) => { e.stopPropagation(); open(); });
+      btn.addEventListener('click', () => {
+        if (touchNow() && !wrap.classList.contains('tipopen')) { closeTips(); wrap.classList.add('tipopen'); return; }
+        open();
+      });
+      const wrap = h('div', { class: 'trailpinwrap', style: style }, btn, tip);
+      return wrap;
     };
     const listItem = (mark) => {
       if (mark.kind === 'finale') return h('li', null, h('button', { type: 'button', onclick: () => { Snd.stop(); toast('Golden Bell is coming soon.'); } }, 'Golden Bell'));
       if (mark.kind === 'review') return h('li', null, h('button', { type: 'button', onclick: () => { Snd.stop(); toast('Review stop after Unit ' + mark.n + ' is coming soon.'); } }, 'Review stop after Unit ' + mark.n));
       const name = UNIT_NAMES[mark.n];
-      const label = 'Unit ' + mark.n + '. ' + name + (mark.n === here ? '. You are here.' : '');
-      return h('li', null, h('button', { type: 'button', class: mark.n === here ? 'here' : '', 'aria-label': label, onclick: () => openTrailBell(mark.n) }, h('b', null, 'Unit ' + mark.n), h('span', null, name)));
+      const status = unitStatus(mark.n, place);
+      const label = 'Unit ' + mark.n + '. ' + name + '. ' + status + '.';
+      return h('li', null, h('button', { type: 'button', class: mark.n === here ? 'here' : '', 'aria-label': label, onclick: () => openTrailBell(mark.n) }, h('b', null, 'Unit ' + mark.n), h('span', null, name), place.finished[mark.n] ? h('span', { class: 'pindone', 'aria-hidden': 'true' }, icon('check')) : null));
     };
+    if (IR._trailPointer) document.removeEventListener('pointerdown', IR._trailPointer, true);
+    IR._trailPointer = (e) => { pointer = e.pointerType || 'mouse'; if (!e.target.closest('.trailpinwrap')) closeTips(); };
+    document.addEventListener('pointerdown', IR._trailPointer, true);
     app.append(h('div', { class: 'screen home simplepage trailpage' }, h('div', { class: 'mwrap trailwrap' },
       h('div', { class: 'gtop' }, back),
       h('h1', null, 'Trail Map'),
