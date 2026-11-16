@@ -75,6 +75,32 @@ test('the games are inside both Unit 5 lessons and filed under their skills', ()
   assert.equal(JSON.stringify(spelling.map((it) => it.title)), JSON.stringify(['Magic e Boxes', 'Magic e Boxes']));
 });
 
+test('vowel refresher starts lesson 5.1 and stays with taught words', () => {
+  const g = games.REFRESH;
+  assert.equal(g.rule, 'Short vowels are quick. Long vowels say their name.');
+  assert.deepEqual(g.vowels.map((v) => v.letter), ['a', 'e', 'i', 'o', 'u']);
+  assert.deepEqual(g.eShort, ['bed', 'pet', 'pen']);
+  assert.deepEqual(g.eLong, ['he', 'me', 'Pete']);
+  assert.equal(g.practice.length, 8);
+  const eItems = g.practice.filter((p) => /e/i.test(p.w));
+  assert.ok(eItems.length >= 6);
+  g.practice.forEach((p) => {
+    assert.equal(p.pair.length, 2);
+    assert.ok(p.pair.indexOf(p.w) >= 0);
+  });
+  const src = fs.readFileSync(new URL('../js/u5games.js', import.meta.url), 'utf8');
+  assert.equal(/\bfree\b/i.test(g.rule + g.practice.map((p) => p.w).join(' ')), false);
+  assert.equal(/\bfree\b/i.test(src), false);
+  const u5 = fs.readFileSync(new URL('../js/u5.js', import.meta.url), 'utf8');
+  assert.match(u5, /KEY === 'u51' \? \[\{ id: 'refresh', title: 'Vowel Refresher'/);
+  const IR = loadSkills();
+  const skills = IR.collectSkills({
+    u5: [{ key: 'u51', n: '5.1', name: 'Silent e', steps: [{ id: 'refresh', title: 'Vowel Refresher' }] }]
+  });
+  const pa = skills.find((s) => s.id === 'pa').items;
+  assert.equal(JSON.stringify(pa.map((it) => it.href)), JSON.stringify(['#/u51/refresh']));
+});
+
 test('prompt recordings exist for both lessons', () => {
   for (const name of ['u51_p_sort.mp3', 'u53_p_sort.mp3', 'u51_p_mage.mp3', 'u53_p_mage.mp3']) {
     const buf = fs.readFileSync(new URL('../audio/' + name, import.meta.url));

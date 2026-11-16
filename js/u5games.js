@@ -331,7 +331,155 @@
     if (IR.sayItem) IR.sayItem(ctx, 'audio/' + key + '_p_mage.mp3');
   }
 
-  const api = { PAIRS: PAIRS, roundWords: roundWords, plan: plan, firstWrong: firstWrong, distractor: distractor, timerOn: timerOn, sort: sort, spell: spell };
+  const REFRESH = {
+    rule: 'Short vowels are quick. Long vowels say their name.',
+    vowels: [
+      { letter: 'a', short: { w: 'cap', img: 'img/u5_c_cap.webp' }, long: { w: 'cake', img: 'img/u5_c_cake.webp' } },
+      { letter: 'e', short: { w: 'bed', img: 'img/refresh_bed.jpg' }, long: { w: 'Pete', img: 'img/refresh_pete.jpg' } },
+      { letter: 'i', short: { w: 'pig', img: 'img/refresh_pig.jpg' }, long: { w: 'kite', img: 'img/u5_c_kite.webp' } },
+      { letter: 'o', short: { w: 'mop', img: 'img/refresh_mop.jpg' }, long: { w: 'rope', img: 'img/u5_c_rope.webp' } },
+      { letter: 'u', short: { w: 'cup', img: 'img/refresh_cup.jpg' }, long: { w: 'cube', img: 'img/u5_c_cube.webp' } }
+    ],
+    eShort: ['bed', 'pet', 'pen'],
+    eLong: ['he', 'me', 'Pete'],
+    practice: [
+      { w: 'bed', long: false, pair: ['bed', 'he'] },
+      { w: 'pet', long: false, pair: ['pet', 'Pete'] },
+      { w: 'pen', long: false, pair: ['pen', 'Pete'] },
+      { w: 'he', long: true, pair: ['bed', 'he'] },
+      { w: 'me', long: true, pair: ['pet', 'me'] },
+      { w: 'Pete', long: true, pair: ['pet', 'Pete'] },
+      { w: 'cap', long: false, pair: ['cap', 'cake'] },
+      { w: 'cake', long: true, pair: ['cap', 'cake'] }
+    ]
+  };
+  const rfSrc = (w) => 'audio/u51_rf_' + w + '.mp3';
+
+  function refresh(ctx) {
+    const IR = root.IR;
+    const { h, icon, Snd, A } = IR;
+    ctx.setInstr(REFRESH.rule, 'refresh');
+    if (ctx.setGameTitle) ctx.setGameTitle('Vowel Refresher');
+    let i = 0, earned = 0, playing = false;
+    const say = (w) => Snd.play(rfSrc(w));
+
+    function card(side, item) {
+      return h('button', { class: 'vcard', type: 'button', 'data-side': side, 'aria-label': (side === 'short' ? 'Short. ' : 'Long. ') + item.w + '. Hear it.' },
+        h('img', { src: item.img, alt: '' }),
+        h('small', null, side === 'short' ? 'Short' : 'Long'),
+        h('b', null, item.w));
+    }
+
+    function teach() {
+      playing = false;
+      ctx.stage.innerHTML = '';
+      if (ctx.count) ctx.count(0, 0);
+      const rows = REFRESH.vowels.map((v) => h('div', { class: 'vrow' + (v.letter === 'e' ? ' efocus' : '') },
+        h('span', { class: 'vlet' }, v.letter),
+        card('short', v.short),
+        card('long', v.long)));
+      rows.forEach((row) => {
+        row.querySelectorAll('.vcard').forEach((b) => {
+          const w = b.querySelector('b').textContent;
+          b.addEventListener('click', () => say(w));
+        });
+      });
+      const chips = (list, side) => list.map((w) => {
+        const b = h('button', { class: 'echip', type: 'button', 'data-side': side, 'aria-label': (side === 'short' ? 'Short e. ' : 'Long e. ') + w + '. Hear it.' }, w);
+        b.addEventListener('click', () => say(w));
+        return b;
+      });
+      ctx.stage.append(h('div', { class: 'activity vrefresh', 'data-game': 'refresh', 'data-phase': 'teach' },
+        h('p', { class: 'bigprompt' }, 'Vowel Refresher'),
+        ...rows,
+        h('div', { class: 'efocusbox' },
+          h('p', { class: 'efocuslab' }, 'Listen to e'),
+          speakerBtnHear(),
+          h('div', { class: 'erow' }, h('span', null, 'Quick'), ...chips(REFRESH.eShort, 'short')),
+          h('div', { class: 'erow' }, h('span', null, 'Name'), ...chips(REFRESH.eLong, 'long'))),
+        h('button', { class: 'btn big primary', type: 'button', onclick: () => round() }, 'Practice', icon('next'))));
+      if (IR.sayItem) IR.sayItem(ctx, 'audio/u51_p_refresh.mp3');
+    }
+
+    function speakerBtnHear() {
+      return IR.speakerBtn(() => Snd.play('audio/u51_p_refresh_e.mp3'), 'Hear the e words');
+    }
+
+    function finish() {
+      const note = 'Stars: ' + earned + ' of ' + REFRESH.practice.length + '.';
+      ctx.finish();
+      decorate(h, 'Vowel refresher', note);
+    }
+
+    function round() {
+      playing = true;
+      if (i >= REFRESH.practice.length) return finish();
+      const item = REFRESH.practice[i];
+      ctx.progress(i / REFRESH.practice.length);
+      if (ctx.count) ctx.count(i + 1, REFRESH.practice.length);
+      ctx.stage.innerHTML = '';
+      let locked = false, clean = true;
+      const status = h('p', { class: 'status', 'aria-live': 'polite' }, 'Tap Short or Long.');
+      const starRow = h('div', { class: 'rfstars', 'aria-label': earned + ' stars' }, ...Array.from({ length: earned }, () => icon('star')));
+      const fix = h('div', { class: 'pairfix' });
+      const act = h('div', { class: 'activity vrefresh', 'data-game': 'refresh', 'data-phase': 'play', 'data-word': item.w });
+      function arm(name, isLong) {
+        const b = h('button', { class: 'sortbin', type: 'button', 'data-bin': isLong ? 'long' : 'short', 'aria-label': name },
+          h('b', null, name));
+        b.addEventListener('click', async () => {
+          if (locked || b.classList.contains('yes') || b.classList.contains('no')) return;
+          if (isLong === item.long) {
+            locked = true;
+            if (clean) { earned++; starRow.append(icon('star')); starRow.setAttribute('aria-label', earned + ' stars'); }
+            b.classList.add('yes');
+            b.querySelector('b').textContent = 'Yes';
+            status.textContent = 'Yes';
+            status.className = 'status rfy';
+            await Snd.seq([A.sfx.ding, rfSrc(item.w)], 80);
+            if (!ctx.scr.ok()) return;
+            await IR.sleep(350);
+            if (!ctx.scr.ok()) return;
+            i++; round();
+          } else {
+            clean = false;
+            ctx.miss();
+            b.classList.add('no');
+            b.querySelector('b').textContent = 'No';
+            act.dataset.phase = 'error';
+            status.textContent = 'No. Listen to both.';
+            status.className = 'status rfn';
+            fix.innerHTML = '';
+            item.pair.forEach((w) => {
+              const ok = (REFRESH.practice.filter((p) => p.w === w)[0] || item).long === item.long && w === item.w;
+              const heard = w === item.w;
+              fix.append(h('button', { class: 'paircard' + (heard ? ' yes' : ''), type: 'button', 'aria-label': w + (heard ? '. This is the word.' : '.'), onclick: () => say(w) },
+                h('b', null, w), h('small', null, heard ? 'Yes' : (item.long ? 'Short' : 'Long'))));
+            });
+            Snd.seq(item.pair.map(rfSrc), 160);
+          }
+        });
+        return b;
+      }
+      const spk = IR.speakerBtn(() => say(item.w), 'Hear the word');
+      act.append(h('p', { class: 'spellcount' }, (i + 1) + ' of ' + REFRESH.practice.length), starRow, spk, h('p', { class: 'vrule' }, 'Short or Long?'), h('div', { class: 'sortbins' }, arm('Short', false), arm('Long', true)), fix, status);
+      ctx.stage.append(act);
+      say(item.w);
+    }
+
+    ctx.setBack(() => {
+      if (playing && i > 0) { i--; round(); return true; }
+      if (playing) { teach(); return true; }
+      return false;
+    });
+    ctx.setNext(() => {
+      if (!playing) { round(); return true; }
+      if (i < REFRESH.practice.length - 1) { i++; round(); return true; }
+      return false;
+    });
+    teach();
+  }
+
+  const api = { PAIRS: PAIRS, roundWords: roundWords, plan: plan, firstWrong: firstWrong, distractor: distractor, timerOn: timerOn, REFRESH: REFRESH, sort: sort, spell: spell, refresh: refresh };
   root.IR = root.IR || {};
   root.IR.u5Games = api;
   if (typeof module !== 'undefined' && module.exports) module.exports = api;

@@ -12,6 +12,7 @@
     scramble: ['spelling'],
     mage: ['spelling'],
     sort: ['pa'],
+    refresh: ['pa'],
     chain: ['spelling', 'pa'],
     ngnk: ['pa']
   };

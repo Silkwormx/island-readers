@@ -221,7 +221,7 @@
   
     /* ---------- the unit: steps in the approved order ---------- */
     const ACT = ACTS;
-    const STEPS = [
+    const STEPS = [].concat(KEY === 'u51' ? [{ id: 'refresh', title: 'Vowel Refresher', group: 'lesson', run: (ctx) => IR.u5Games.refresh(ctx), color: '#E8731C' }] : [], [
       { id: 'meet', title: 'Meet ' + N.name, group: 'lesson', run: runMeet, color: '#1FA6A6' },
       { id: 'listen', title: 'Story Time', group: 'story', run: runListen, color: '#8E5BD6' },
       { id: 'hear', title: 'Hear and Pick', group: 'activities', run: ACT.hear, color: '#7E57C2' },
@@ -238,10 +238,10 @@
       { id: 'check', title: 'Zip\u2019s Check', group: 'activities', run: runCheck, color: '#2b2540' },
       { id: 'comp', title: 'Story Check', group: 'extra', run: runComp, color: '#D98E00' },
       { id: 'rhyme', title: 'Rhyme Time', group: 'extra', run: runRhyme, color: '#C2408A' }
-    ].filter((s) => !(s.id === 'rhyme' && !(N.rhyme || []).length));
+    ]).filter((s) => !(s.id === 'rhyme' && !(N.rhyme || []).length));
     (IR.u5Lessons = IR.u5Lessons || []).push({ key: KEY, n: NUM, name: N.name, unit: 5, steps: STEPS });
     /* one-line tips for grown-ups, in the same style as the ng unit */
-    const TIPS = { hear: 'Let your child listen first, then point.', bells: 'Ask the class to call out the number of the matching word.', build: 'Say the word slowly together.', chain: 'The glowing letter is the one that changes. Call out a number.', scramble: 'Say the word slowly, then find each part.', sort: 'Listen for the vowel. Short vowel or long vowel.', mage: 'One box for each sound. The dotted box is only for magic e.', feed: 'Ask your child to read the word out loud, then feed Zip.', sentence: 'Read the sentence together at the end.', read: 'Reading it 3 times builds fluency.', ngnk: 'Say the word slowly. Listen to the end.', check: 'Let your child work alone. Just cheer.', comp: 'Optional extra. Look back at the story page together.', rhyme: 'Optional extra. Read the poem together for fun.' };
+    const TIPS = { refresh: 'Listen to short and long. Then tap the one you hear.', hear: 'Let your child listen first, then point.', bells: 'Ask the class to call out the number of the matching word.', build: 'Say the word slowly together.', chain: 'The glowing letter is the one that changes. Call out a number.', scramble: 'Say the word slowly, then find each part.', sort: 'Listen for the vowel. Short vowel or long vowel.', mage: 'One box for each sound. The dotted box is only for magic e.', feed: 'Ask your child to read the word out loud, then feed Zip.', sentence: 'Read the sentence together at the end.', read: 'Reading it 3 times builds fluency.', ngnk: 'Say the word slowly. Listen to the end.', check: 'Let your child work alone. Just cheer.', comp: 'Optional extra. Look back at the story page together.', rhyme: 'Optional extra. Read the poem together for fun.' };
     
     const pid = (s) => KEY + '_' + s.id;
     function sections() {
@@ -652,7 +652,7 @@
   IR.u5Route = (hash, app) => { if (hash === '#/u52' || hash.indexOf('#/u52/') === 0) { location.replace(hash.replace('#/u52', '#/u51')); return true; }   /* old 5.2 (a_e...) is now part of 5.1 */
     for (const k in U5ROUTE) { if (U5ROUTE[k](hash, app)) return true; } return false; };
   const D = window.IR_DATA; if (D) { D.islands = D.islands || {}; D.islands.i5 = { units: [
-    { id: 'u51', unitNo: 5, name: 'Silent e', href: '#/u51', img: ['zip'], ready: true, stars: 14 },
+    { id: 'u51', unitNo: 5, name: 'Silent e', href: '#/u51', img: ['zip'], ready: true, stars: 15 },
     { id: 'u53', unitNo: 5, name: 'Tricky silent e', href: '#/u53', img: ['frill'], ready: true, stars: 14 }],
     review: { id: 'u5review', name: 'Review', href: '#/review5', desc: 'Mixed review: silent e', img: ['zip', 'frill'], ready: true, stars: 1, minutes: 6 } }; }
 })();
