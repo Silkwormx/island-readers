@@ -280,7 +280,6 @@
       ['Suffixes', '-er \u00b7 -est \u00b7 -ly \u00b7 -ful', 6, ['purple', 'purple']], ['Suffix Spelling Rules', 'double \u00b7 drop e \u00b7 y to i', 4, ['pink', 'pink']],
       ['Prefixes', 'un- \u00b7 pre- \u00b7 re- \u00b7 dis-', 5, ['rainbow']], ['Big Endings', '-tion \u00b7 -ture \u00b7 -ment', 6, ['gold']]];
     const BUILT = 4, BUILT_ID = 'i3';
-    const SKILL = {}; TILES.forEach((t, n) => { if (t) SKILL[n] = t[0]; });
     const unit = (n) => {
       const t = TILES[n]; const isl = n === BUILT && !!(D.islands || {})[BUILT_ID];
       const u5 = n === 5 && !!IR.u5Route;   /* Nov 3 2026 local: Unit 5 Silent e is open (js/u5.js: same lesson flow as Unit 4; picker data islands.i5) */
@@ -299,8 +298,7 @@
       return b;
     };
     const stageStyle = /[?&]stagestyle=top\b/.test(location.search) ? 'top' : 'side';
-    const bellSize = /[?&]bellsize=compact\b/.test(location.search) ? 'compact' : 'full';
-    const grid = h('div', { class: 'stagegroups stagestyle-' + stageStyle + ' bellsize-' + bellSize, id: 'skymap' }, ...TRAIL_STAGES.map((s) => h('section', { class: 'stagepanel', style: '--stage:' + s.color },
+    const grid = h('div', { class: 'stagegroups stagestyle-' + stageStyle, id: 'skymap' }, ...TRAIL_STAGES.map((s) => h('section', { class: 'stagepanel', style: '--stage:' + s.color },
       h('h2', { class: 'stagehead' }, 'Stage ' + s.n + ' \u00b7 ' + s.skills),
       h('div', { class: 'stagestrip', title: s.skills, style: 'background:' + s.color + ';color:' + s.ink },
         h('div', { class: 'stagev' },
@@ -344,17 +342,12 @@
         h('div', { class: 'zfhead' }, h('h2', { class: 'zfline' }, 'Learn to read with Zip and Frill'), readAloudBtn()),
         h('p', { class: 'zfsub' }, 'Ring every bell by learning its sounds.'),
         continueButton()));
-    const cur = complete ? BUILT + 1 : BUILT;
-    const youbar = h('button', { class: 'youbar', type: 'button', 'aria-label': 'You are here: Unit ' + cur + ', ' + SKILL[cur] + '. Dots show all 22 units. ' + nEarned + ' of 10 gems. Opens the gem box.', onclick: () => { Snd.stop(); location.hash = '#/gems'; } },
-      h('span', { class: 'ybtxt' }, 'You are here: ', h('b', null, 'Unit ' + cur + ' \u00b7 ' + SKILL[cur])),
-      h('span', { class: 'ybdots', 'aria-hidden': 'true' }, ...TILES.slice(1).map((t, i) => h('i', { class: 'tdot td-' + t[3][0] + (i + 1 === cur ? ' ybcur' : complete && i + 1 === BUILT ? ' ybdone' : '') }))));
-    app.append(h('div', { class: 'screen home mapscreen gridhome' + (bellSize === 'compact' ? ' bellsize-compact' : '') }, h('div', { class: 'mwrap' }, banner, h('div', { class: 'homelay' }, h('div', { class: 'homeside' }, h('a', { class: 'btn big aboutbtn', href: '#/about' }, 'About Island Readers'), hero, tabs), grid)), youbar));
+    app.append(h('div', { class: 'screen home mapscreen gridhome' }, h('div', { class: 'mwrap' }, banner, h('div', { class: 'homelay' }, h('div', { class: 'homeside' }, h('a', { class: 'btn big aboutbtn', href: '#/about' }, 'About Island Readers'), hero, tabs), grid))));
     /* Nov 3 2026: the whole left sidebar (About, Start here, Practice) stays in one spot while the tiles scroll (wide layouts only). */
     const side = app.querySelector('.homeside'); const scr = app.querySelector('.screen.home');
     const pin = () => {
       if (!side || !scr || !side.isConnected) { window.removeEventListener('resize', pin); return; }
-      const wide = matchMedia('(min-width:1100px)').matches || (bellSize === 'compact' && matchMedia('(min-width:1024px)').matches);
-      if (!wide) { side.style.top = ''; side.style.maxHeight = ''; side.style.overflowY = ''; return; }
+      if (!matchMedia('(min-width:1100px)').matches) { side.style.top = ''; side.style.maxHeight = ''; side.style.overflowY = ''; return; }
       const banner = scr.querySelector('.hbanner');
       const bannerH = banner ? banner.offsetHeight : 0;
       side.style.top = bannerH + 'px';
@@ -874,14 +867,14 @@
     { n: 1, x: 50.0, y: 32.2, side: 'R', units: 'Units 1-2', skills: 'Short vowels and blends', color: '#C45C2A', ink: '#fff' },
     { n: 2, x: 54.0, y: 38.5, side: 'L', units: 'Units 3-4', skills: 'Digraphs and glued sounds', color: '#E25B6A', ink: '#fff', open: 'i3' },
     { n: 3, x: 49.0, y: 45.0, side: 'R', units: 'Units 5-6', skills: 'Silent e and endings', color: '#F08A22', ink: '#2B2540', open: 'i5', href: '#/u6' },
-    { n: 4, x: 48.8, y: 51.5, side: 'L', units: 'Units 7-8', skills: 'Syllables and tricky sounds', color: '#D6A810', ink: '#2B2540' },
-    { n: 5, x: 49.2, y: 57.5, side: 'R', units: 'Units 9-10', skills: 'Bossy R', color: '#2E9E5B', ink: '#fff' },
-    { n: 6, x: 50.5, y: 62.5, side: 'L', bx: 2, by: 54, units: 'Units 11-12', skills: 'Vowel teams', color: '#3A7ECA', ink: '#fff' },
-    { n: 7, x: 58.0, y: 66.5, side: 'R', bx: 64, by: 60, units: 'Units 13-14', skills: 'oo and au sounds', color: '#7B4EC2', ink: '#fff' },
-    { n: 8, x: 51.5, y: 71.5, side: 'L', bx: 2, by: 64, units: 'Units 15-16', skills: 'Sliding vowels and tricky teams', color: '#1A9A96', ink: '#fff' },
-    { n: 9, x: 39.5, y: 75.2, side: 'L', bx: 2, by: 73, units: 'Units 17-18', skills: 'Soft c and g, silent letters', color: '#C43E7E', ink: '#fff' },
-    { n: 10, x: 40.5, y: 79.8, side: 'R', bx: 56, by: 76, units: 'Units 19-20', skills: 'Suffixes and suffix rules', color: '#C99614', ink: '#2B2540' },
-    { n: 11, x: 44.5, y: 83.6, side: 'L', bx: 2, by: 81.5, units: 'Units 21-22', skills: 'Prefixes and big endings', color: '#2E4A86', ink: '#fff' }
+    { n: 4, x: 48.8, y: 51.5, side: 'L', bx: 2, by: 45.5, units: 'Units 7-8', skills: 'Syllables and tricky sounds', color: '#D6A810', ink: '#2B2540' },
+    { n: 5, x: 49.2, y: 57.5, side: 'R', bx: 62, by: 52, units: 'Units 9-10', skills: 'Bossy R', color: '#2E9E5B', ink: '#fff' },
+    { n: 6, x: 50.5, y: 62.5, side: 'L', bx: 2, by: 56.5, units: 'Units 11-12', skills: 'Vowel teams', color: '#3A7ECA', ink: '#fff' },
+    { n: 7, x: 58.0, y: 66.5, side: 'R', bx: 62, by: 64, units: 'Units 13-14', skills: 'oo and au sounds', color: '#7B4EC2', ink: '#fff' },
+    { n: 8, x: 48.0, y: 71.0, side: 'L', bx: 2, by: 68.5, units: 'Units 15-16', skills: 'Sliding vowels and tricky teams', color: '#1A9A96', ink: '#fff' },
+    { n: 9, x: 42.0, y: 76.5, side: 'R', bx: 62, by: 75, units: 'Units 17-18', skills: 'Soft c and g, silent letters', color: '#C43E7E', ink: '#fff' },
+    { n: 10, x: 46.0, y: 81.5, side: 'L', bx: 2, by: 80, units: 'Units 19-20', skills: 'Suffixes and suffix rules', color: '#C99614', ink: '#2B2540' },
+    { n: 11, x: 47.0, y: 87.2, side: 'R', bx: 62, by: 86.5, units: 'Units 21-22', skills: 'Prefixes and big endings', color: '#2E4A86', ink: '#fff' }
   ];
   function trailStage() {
     const bell = IR.placement && IR.placement.saved ? IR.placement.saved() : null;
