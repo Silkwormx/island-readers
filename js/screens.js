@@ -856,20 +856,80 @@
     }).catch(() => { counter.textContent = 'Could not load slides'; });
     show();
   }
-  function islandTrailPage() {
-    const rows = [
-      { unit: 4, name: 'Glued Sounds', lessons: [{ n: '4.1', name: 'ng', href: '#/island3' }, { n: '4.2', name: 'nk', href: '#/nk' }] },
-      { unit: 5, name: 'Silent e', lessons: [{ n: '5.1', name: 'Silent e', href: '#/u51' }, { n: '5.2', name: 'Tricky silent e', href: '#/u53' }] },
-      { unit: 6, name: 'Endings', lessons: [{ n: '6.1', name: '-s and -es', href: '#/u6/u61' }, { n: '6.2', name: '-ed', href: '#/u6/u62' }, { n: '6.3', name: '-ing', href: '#/u6/u63' }] }
+  /* Stage numbers follow the approved option 1 path (image fractions from make_trail_map_options.py). */
+  const TRAIL_STAGES = [
+    { n: 1, x: 50.0, y: 32.2, side: 'R', units: 'Units 1-2', skills: 'Short vowels, floss, blends', color: '#C45C2A', ink: '#fff' },
+    { n: 2, x: 54.0, y: 38.5, side: 'L', units: 'Unit 3', skills: 'Digraphs', color: '#E25B6A', ink: '#fff' },
+    { n: 3, x: 49.0, y: 45.0, side: 'R', units: 'Unit 4', skills: 'Glued sounds', color: '#F08A22', ink: '#2B2540', open: 'i3' },
+    { n: 4, x: 48.8, y: 51.5, side: 'L', units: 'Unit 5', skills: 'Silent e', color: '#D6A810', ink: '#2B2540', open: 'i5' },
+    { n: 5, x: 49.2, y: 57.5, side: 'R', units: 'Unit 6', skills: 'Endings', color: '#2E9E5B', ink: '#fff', href: '#/u6' },
+    { n: 6, x: 50.5, y: 62.5, side: 'L', bx: 2, by: 54, units: 'Units 7-8', skills: 'Syllables and tricky sounds', color: '#3A7ECA', ink: '#fff' },
+    { n: 7, x: 58.0, y: 66.5, side: 'R', bx: 64, by: 60, units: 'Units 9-10', skills: 'Bossy R', color: '#7B4EC2', ink: '#fff' },
+    { n: 8, x: 51.5, y: 71.5, side: 'L', bx: 2, by: 67, units: 'Units 11-12', skills: 'Vowel teams', color: '#1A9A96', ink: '#fff' },
+    { n: 9, x: 39.5, y: 75.8, side: 'L', bx: 2, by: 78, units: 'Units 13-16', skills: 'Other vowel sounds', color: '#C43E7E', ink: '#fff' },
+    { n: 10, x: 36.0, y: 84.8, side: 'L', bx: 2, by: 83, units: 'Units 17-22', skills: 'Word parts and patterns', color: '#C99614', ink: '#2B2540' }
+  ];
+  function trailStage() {
+    const bell = IR.placement && IR.placement.saved ? IR.placement.saved() : null;
+    const acts = (IR.S().progress && IR.S().progress.activities) || {};
+    const any = Object.keys(acts).some((k) => acts[k] && acts[k].completed);
+    const steps = [
+      { stage: 3, done: () => IR.isDone('check') && IR.isDone('nk_check') },
+      { stage: 4, done: () => IR.isDone('u51_check') && IR.isDone('u53_check') },
+      { stage: 5, done: () => IR.isDone('u61_check') && IR.isDone('u62_check') && IR.isDone('u63_check') }
     ];
-    const open = rows.map((u) => h('section', { class: 'trailunit' },
-      h('h2', null, 'Unit ' + u.unit + ' \u00b7 ' + u.name),
-      ...u.lessons.map((L) => h('a', { class: 'hometab', href: L.href }, h('span', { class: 'hometab-name' }, 'Lesson ' + L.n + ' \u00b7 ' + L.name)))));
-    return simplePage('Trail Map and Placement Test',
-      h('p', { class: 'calm' }, 'The trail follows the units in order. Take the placement test to find a starting bell.'),
-      h('a', { class: 'btn big primary trailgo', href: '#/placement' }, 'Take the placement test'),
-      ...open,
-      h('p', { class: 'calm' }, 'Units 1 to 3 and units 7 to 22 are coming soon.'));
+    if (any || (IR.islandDone && IR.islandDone('i3'))) {
+      const cur = steps.find((s) => !s.done());
+      return cur ? cur.stage : 5;
+    }
+    if (bell) return ({ 1: 1, 2: 2, 3: 3, 4: 4, 5: 6, 6: 7, 7: 8, 8: 9, 9: 10, 10: 6 })[bell] || 3;
+    return 3;
+  }
+  function openTrailStage(s) {
+    Snd.stop();
+    if (s.open) { openIsland(s.open); return; }
+    if (s.href) { location.hash = s.href; return; }
+    toast(s.units + ' is coming soon.');
+  }
+  function islandTrailPage() {
+    IR.newScreen();
+    const here = trailStage();
+    const back = h('button', { class: 'back homebtn', type: 'button', onclick: () => { location.hash = '#/home'; } }, icon('back'), h('span', null, 'Home'));
+    const test = h('a', { class: 'btn big primary trailgo', href: '#/placement' }, 'Take the Placement Test');
+    const marks = TRAIL_STAGES.map((s) => {
+      const state = s.n < here ? 'done' : s.n === here ? 'here' : 'later';
+      const label = 'Stage ' + s.n + ', ' + s.units + ', ' + s.skills + (state === 'here' ? '. You are here.' : state === 'done' ? '. Done.' : '.') + ' Opens ' + s.units + '.';
+      const go = () => openTrailStage(s);
+      const mark = h('button', {
+        class: 'stagemark st-' + state,
+        type: 'button',
+        style: 'left:' + s.x + '%;top:' + s.y + '%;background:' + s.color + ';color:' + s.ink,
+        'aria-label': label,
+        onclick: go
+      }, String(s.n), state === 'done' ? h('span', { class: 'stagestar', 'aria-hidden': 'true' }, icon('star')) : null);
+      const boxLeft = s.bx != null ? s.bx : (s.side === 'R' ? Math.min(s.x + 6, 64) : Math.max(1, s.x - 40));
+      const boxTop = s.by != null ? s.by : s.y;
+      const box = h('button', {
+        class: 'stagebox side-' + s.side + (s.by != null ? ' pin-top' : '') + ' s' + s.n,
+        type: 'button',
+        style: 'left:' + boxLeft + '%;top:' + boxTop + '%;border-color:' + s.color,
+        'aria-label': label,
+        onclick: go
+      }, h('b', { style: 'color:' + s.color }, 'Stage ' + s.n + ': ' + s.units), h('span', null, s.skills));
+      const bits = [mark, box];
+      if (state === 'here') {
+        const pillLeft = s.side === 'R' ? Math.max(2, s.x - 22) : Math.min(78, s.x + 8);
+        bits.push(h('span', { class: 'herepill', style: 'left:' + pillLeft + '%;top:' + s.y + '%' }, 'You are here'));
+      }
+      return bits;
+    });
+    app.append(h('div', { class: 'screen home simplepage trailpage' }, h('div', { class: 'mwrap trailwrap' },
+      h('div', { class: 'gtop' }, back),
+      h('h1', null, 'Trail Map'),
+      test,
+      h('div', { class: 'trailmap' },
+        h('img', { class: 'trailbg', src: 'img/trail_option1_bg.jpg', alt: 'A winding path from Zip at the top of the hill to a golden bell, with Frill beside the bell.' }),
+        ...marks.flat()))));
   }
   function findCatalog() {
     const skills = skillCatalog();
