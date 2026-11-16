@@ -290,34 +290,38 @@
       const note = open ? 'Open' : st === 'here' ? 'You are here' : n === BUILT ? 'Finished' : st === 'done' ? 'Done' : lit ? 'Unlocked' : 'Coming soon';
       const label = 'Unit ' + n + ': ' + t[0] + ', ' + t[1].replace(/\u00b7/g, ',') + ', ' + t[2] + (t[2] === 1 ? ' lesson. ' : ' lessons. ') + note + (n === BUILT || open ? '. Opens Unit ' + n + '.' : '.');
       const b = h('button', { class: 'tcard t-' + st + (st === 'here' ? ' t-current' : ''), type: 'button', 'data-id': 'u' + n, 'data-kind': 'island', 'data-n': n, 'aria-label': label },
-        h('span', { class: 'tpic' }, h('img', { src: 'img/units/tile' + String(n).padStart(2, '0') + '.webp', alt: '', width: 600, height: 600, loading: n > 8 ? 'lazy' : 'eager' })),
+        h('span', { class: 'tpic' }, h('img', { src: 'img/units/tile' + String(n).padStart(2, '0') + '.webp', alt: '', width: 600, height: 600, loading: n > 8 ? 'lazy' : 'eager' }),
+          st === 'here' ? h('span', { class: 'herechip' }, 'You are here') : null),
         h('span', { class: 'tbody' },
           h('span', { class: 'tname' }, t[0]),
           h('span', { class: 'tunit' }, 'Unit ' + n),
           h('span', { class: 'tsnd' }, ...t[1].split(' \u00b7 ').map((x, i, a) => h('span', null, x + (i < a.length - 1 ? ' \u00b7' : '')))),
-          h('span', { class: 'tmeta' }, t[2] + (t[2] === 1 ? ' lesson' : ' lessons') + ' \u00b7 ' + note)));
+          h('span', { class: 'tmeta' }, t[2] + (t[2] === 1 ? ' lesson' : ' lessons') + ' \u00b7 ' + note),
+          st === 'here' ? h('span', { class: 'tnext' }, 'Tap this bell') : null));
       b.addEventListener('click', () => { if (u6) { Snd.stop(); location.hash = '#/u6'; } else if (u5) { openIsland('i5'); } else if (isl) openIsland(BUILT_ID); else { Snd.stop(); toast(st === 'done' ? 'Unit ' + n + ' is done. It is part of the full app.' : n < BUILT ? 'Unit ' + n + ' is coming soon in the full app!' : lit ? 'Unit ' + n + ' is unlocked! It is coming soon in the full app.' : 'Unit ' + n + ' is coming soon! Finish Unit ' + BUILT + ' first.'); } });
       return b;
     };
-    const badge = (n) => h('div', { class: 'bellbadge', 'aria-label': n + ' bells' },
-      h('span', { class: 'bellbadge-mark', 'aria-hidden': 'true' }, icon('star')),
+    const badge = (n) => h('div', { class: 'bellbadge', 'aria-label': 'Treasure. ' + n + ' bells.' },
+      h('img', { src: 'img/gem_10_gold.webp', alt: '' }),
       h('b', null, n + ' bells'));
     const reviewStop = (n) => {
       const skill = TILES[n][0];
-      const b = h('button', { class: 'tcard reviewstop', type: 'button', 'aria-label': 'Review stop after ' + skill + '. Extra practice. Coming soon.' },
+      const b = h('button', { class: 'tcard reviewstop', type: 'button', 'aria-label': 'Review stop after ' + skill + '. A rest for extra practice. Coming soon.' },
         h('span', { class: 'tbody' },
           h('span', { class: 'tname' }, 'Review stop'),
-          h('span', { class: 'tunit' }, 'After ' + skill),
+          h('span', { class: 'tunit' }, 'A rest after ' + skill),
           h('span', { class: 'tsnd' }, 'Extra practice'),
           h('span', { class: 'tmeta' }, 'Coming soon')));
       b.addEventListener('click', () => { Snd.stop(); toast('Review stop after ' + skill + ' is coming soon.'); });
       return b;
     };
+    const join = () => h('div', { class: 'pathjoin', 'aria-hidden': 'true' });
     const stops = [];
     for (let n = 1; n <= 22; n++) {
-      stops.push(unit(n));
-      if (n % 4 === 0) stops.push(badge(n));
-      if (n === 5 || n === 12 || n === 20) stops.push(reviewStop(n));
+      if (stops.length) stops.push(join());
+      stops.push(h('div', { class: 'pathstep ' + (n % 2 ? 'step-a' : 'step-b') }, unit(n)));
+      if (n % 4 === 0) { stops.push(join()); stops.push(badge(n)); }
+      if (n === 5 || n === 12 || n === 20) { stops.push(join()); stops.push(reviewStop(n)); }
     }
     const grid = h('div', { class: 'bellpath', id: 'skymap' }, ...stops);
     const tab = (href, name, icoName) => h('a', { class: 'hometab', href: href, 'aria-label': name },
@@ -899,16 +903,16 @@
         h('span', { class: 'trailthumb' }, h('img', { src: 'img/units/tile' + String(n).padStart(2, '0') + '.webp', alt: '' })),
         h('span', { class: 'trailcopy' }, h('b', null, name), h('small', null, 'Unit ' + n), n === here ? h('em', null, 'You are here') : null));
     };
-    const mark = (n) => h('div', { class: 'trailmark', 'aria-label': n + ' bells' }, icon('star'), h('span', null, n + ' bells'));
-    const review = (n) => h('button', { class: 'trailreview', type: 'button', 'aria-label': 'Review stop after ' + UNIT_NAMES[n] + '. Coming soon.', onclick: () => { Snd.stop(); toast('Review stop after ' + UNIT_NAMES[n] + ' is coming soon.'); } },
-      h('b', null, 'Review stop'), h('span', null, 'After ' + UNIT_NAMES[n]));
+    const mark = (n) => h('div', { class: 'trailmark', 'aria-label': 'Treasure. ' + n + ' bells.' }, h('img', { src: 'img/gem_10_gold.webp', alt: '' }), h('span', null, n + ' bells'));
+    const review = (n) => h('button', { class: 'trailreview', type: 'button', 'aria-label': 'Review stop after ' + UNIT_NAMES[n] + '. A rest for extra practice. Coming soon.', onclick: () => { Snd.stop(); toast('Review stop after ' + UNIT_NAMES[n] + ' is coming soon.'); } },
+      h('b', null, 'Review stop'), h('span', null, 'A rest after ' + UNIT_NAMES[n]));
     for (let n = 1; n <= 22; n++) {
       bits.push(bell(n));
       if (n % 4 === 0) bits.push(mark(n));
       if (n === 5 || n === 12 || n === 20) bits.push(review(n));
     }
     bits.push(h('div', { class: 'trailfinale', 'aria-label': 'Golden bell. The end of the path.' },
-      h('img', { src: 'img/bell_lit.png', alt: '' }),
+      h('img', { src: 'img/units/tile22.webp', alt: '' }),
       h('b', null, 'Golden bell')));
     app.append(h('div', { class: 'screen home simplepage trailpage' }, h('div', { class: 'mwrap trailwrap' },
       h('div', { class: 'gtop' }, back),
