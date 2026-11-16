@@ -882,6 +882,11 @@
     const key = UNIT_BELL[n];
     return h('span', { class: 'pinbell', 'aria-hidden': 'true', style: key === 'rainbow' ? '' : 'color:' + BELL_HEX[key], html: key === 'rainbow' ? RAIN_SVG : BELL_SVG });
   }
+  function bellInk(hex) {
+    const n = parseInt(hex.slice(1), 16);
+    const y = (((n >> 16) & 255) * 299 + ((n >> 8) & 255) * 587 + (n & 255) * 114) / 1000;
+    return y > 160 ? '#3b2a1a' : '#fff';
+  }
   /* Painted trail: img/trail/trail_map.webp is 720 by 1280.
      x and y are percentages from the top-left. Nudge a label by editing its numbers. */
   const TRAIL_MAP = {
@@ -889,32 +894,32 @@
     width: 720,
     height: 1280,
     marks: [
-      { kind: 'unit', n: 1, x: 18, y: 10 },
-      { kind: 'unit', n: 2, x: 50, y: 4 },
-      { kind: 'unit', n: 3, x: 54, y: 9 },
-      { kind: 'unit', n: 4, x: 72, y: 11 },
-      { kind: 'unit', n: 5, x: 62, y: 18 },
-      { kind: 'review', n: 5, x: 88, y: 23 },
-      { kind: 'unit', n: 6, x: 93, y: 17 },
-      { kind: 'unit', n: 7, x: 36, y: 20 },
-      { kind: 'unit', n: 8, x: 62, y: 23 },
-      { kind: 'unit', n: 9, x: 12, y: 28 },
-      { kind: 'unit', n: 10, x: 34, y: 25 },
-      { kind: 'unit', n: 11, x: 26, y: 36 },
-      { kind: 'unit', n: 12, x: 50, y: 33 },
-      { kind: 'review', n: 12, x: 90, y: 45 },
-      { kind: 'unit', n: 13, x: 62, y: 40 },
-      { kind: 'unit', n: 14, x: 86, y: 37 },
-      { kind: 'unit', n: 15, x: 42, y: 48 },
-      { kind: 'unit', n: 16, x: 66, y: 46 },
-      { kind: 'unit', n: 17, x: 10, y: 55 },
-      { kind: 'unit', n: 18, x: 36, y: 52 },
-      { kind: 'unit', n: 19, x: 66, y: 63 },
-      { kind: 'unit', n: 20, x: 90, y: 62 },
-      { kind: 'review', n: 20, x: 78, y: 72 },
-      { kind: 'unit', n: 21, x: 46, y: 68 },
-      { kind: 'unit', n: 22, x: 42, y: 77 },
-      { kind: 'finale', x: 74, y: 92 }
+      { kind: 'unit', n: 1, x: 40, y: 13 },
+      { kind: 'unit', n: 2, x: 50, y: 12.5 },
+      { kind: 'unit', n: 3, x: 60, y: 13.5 },
+      { kind: 'unit', n: 4, x: 70, y: 15 },
+      { kind: 'unit', n: 5, x: 80, y: 18 },
+      { kind: 'review', n: 5, x: 88, y: 21.5 },
+      { kind: 'unit', n: 6, x: 74, y: 23 },
+      { kind: 'unit', n: 7, x: 62, y: 24.5 },
+      { kind: 'unit', n: 8, x: 50, y: 25.5 },
+      { kind: 'unit', n: 9, x: 36, y: 28.5 },
+      { kind: 'unit', n: 10, x: 24, y: 31.5 },
+      { kind: 'unit', n: 11, x: 36, y: 35 },
+      { kind: 'unit', n: 12, x: 50, y: 37.5 },
+      { kind: 'unit', n: 13, x: 64, y: 41 },
+      { kind: 'unit', n: 14, x: 76, y: 43 },
+      { kind: 'review', n: 12, x: 86, y: 45.5 },
+      { kind: 'unit', n: 15, x: 66, y: 48.5 },
+      { kind: 'unit', n: 16, x: 52, y: 51.5 },
+      { kind: 'unit', n: 17, x: 38, y: 55.5 },
+      { kind: 'unit', n: 18, x: 30, y: 59.5 },
+      { kind: 'unit', n: 19, x: 48, y: 63.5 },
+      { kind: 'unit', n: 20, x: 66, y: 66.5 },
+      { kind: 'review', n: 20, x: 82, y: 71.5 },
+      { kind: 'unit', n: 21, x: 70, y: 72 },
+      { kind: 'unit', n: 22, x: 56, y: 74 },
+      { kind: 'finale', x: 66, y: 91 }
     ]
   };
   const UNIT_META = [null,
@@ -984,31 +989,39 @@
       let lines = [h('span', { class: 'tipmeta' }, 'The end of the path. Coming soon.')];
       let open = () => { Snd.stop(); toast('Golden Bell is coming soon.'); };
       let pinClass = 'trailpin finale';
-      let bits = ['Golden Bell'];
+      let bits = [h('span', { class: 'pinstar', 'aria-hidden': 'true' }, icon('star'))];
+      let label = 'Golden Bell. The end of the path. Coming soon.';
+      let pinStyle = '';
       if (mark.kind === 'review') {
         title = 'Review stop';
         lines = [h('span', { class: 'tipskill' }, 'After Unit ' + mark.n + ' \u00b7 ' + UNIT_NAMES[mark.n]), h('span', { class: 'tipmeta' }, 'Extra practice. Coming soon.')];
         open = () => { Snd.stop(); toast('Review stop after Unit ' + mark.n + ' is coming soon.'); };
         pinClass = 'trailpin review';
-        bits = ['Review'];
+        bits = ['R'];
+        label = 'Review stop after Unit ' + mark.n + '. Coming soon.';
       } else if (mark.kind === 'unit') {
         const meta = UNIT_META[mark.n];
         const status = unitStatus(mark.n, place);
+        const hex = UNIT_BELL[mark.n] === 'rainbow' ? '' : BELL_HEX[UNIT_BELL[mark.n]];
         title = 'Unit ' + mark.n;
         lines = [h('span', { class: 'tipskill' }, UNIT_NAMES[mark.n]), h('span', { class: 'tipsounds' }, meta[0]), h('span', { class: 'tipmeta' }, meta[1] + (meta[1] === 1 ? ' lesson' : ' lessons') + ' \u00b7 ' + status)];
         open = () => openTrailBell(mark.n);
-        pinClass = 'trailpin' + (mark.n === here ? ' here' : '') + (place.finished[mark.n] ? ' done' : '');
-        bits = [pinBell(mark.n), 'Unit ' + mark.n, place.finished[mark.n] ? h('span', { class: 'pindone', 'aria-hidden': 'true' }, icon('check')) : null];
+        pinClass = 'trailpin' + (mark.n === here ? ' here' : '') + (place.finished[mark.n] ? ' done' : '') + (UNIT_BELL[mark.n] === 'rainbow' ? ' rainbow' : '');
+        bits = [h('span', { class: 'pinnum' + (mark.n > 9 ? ' pinnum2' : '') }, String(mark.n)), place.finished[mark.n] ? h('span', { class: 'pindone', 'aria-hidden': 'true' }, icon('check')) : null];
+        label = 'Unit ' + mark.n + '. ' + UNIT_NAMES[mark.n] + '. ' + status + '.';
+        if (hex) pinStyle = 'background:' + hex + ';color:' + bellInk(hex);
       }
       const go = h('button', { class: 'tipgo', type: 'button' }, 'Open');
-      const tip = h('div', { class: 'trailtip' + (mark.y < 16 ? ' below' : ''), id: tipId, role: 'tooltip' }, h('b', null, title), ...lines, go);
-      const btn = h('button', { class: pinClass, type: 'button', 'aria-describedby': tipId }, ...bits);
+      const tip = h('div', { class: 'trailtip' + (mark.y < 18 ? ' below' : ''), id: tipId, role: 'tooltip' }, h('b', null, title), ...lines, go);
+      const btn = h('button', { class: pinClass, type: 'button', style: pinStyle, 'aria-label': label, 'aria-describedby': tipId }, ...bits);
       go.addEventListener('click', (e) => { e.stopPropagation(); open(); });
       btn.addEventListener('click', () => {
         if (touchNow() && !wrap.classList.contains('tipopen')) { closeTips(); wrap.classList.add('tipopen'); return; }
         open();
       });
-      const wrap = h('div', { class: 'trailpinwrap', style: style }, btn, tip);
+      const isHere = mark.kind === 'unit' && mark.n === here;
+      const hereTag = isHere ? h('span', { class: 'heretag', 'aria-hidden': 'true' }, 'You are here') : null;
+      const wrap = h('div', { class: 'trailpinwrap' + (isHere ? ' here' : ''), style: style }, btn, tip, hereTag);
       return wrap;
     };
     const listItem = (mark) => {
