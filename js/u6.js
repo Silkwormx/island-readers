@@ -494,7 +494,7 @@
     const right = h('section', { class: 'uA-right' }, h('h2', { class: 'uA-h' }, 'Activities'), h('ol', { class: 'stoplist uA-acts' }, ...items.filter((r) => r.group === 'activities').map(row)),
       h('p', { class: 'small' }, GROWN));
     app.append(h('div', { class: 'screen trailscreen unitpage unitA' },
-      h('header', { class: 'uA-top' }, IR.ui.homeButton(), h('h1', { class: 'uA-title' }, h('small', null, 'Unit 6 \u00b7 Lesson ' + L.n + ' \u00b7 '), L.name),
+      h('header', { class: 'uA-top' }, IR.ui.homeButton(), h('h1', { class: 'uA-title' }, h('small', null, 'Unit 6 \u00b7 Lesson ' + IR.kidLesson(L.n) + ' \u00b7 '), L.name),
         h('button', { class: 'btn', type: 'button', onclick: () => { location.hash = '#/u6'; } }, 'All lessons'), IR.ui.gearButton()),
       h('main', { class: 'uA-main' }, left, right)));
   }
@@ -504,7 +504,7 @@
     const cards = PACK.lessons.flatMap((L) => {
       const flags = stepsFor(L).filter((s) => s.group === 'activities').map((s) => !!(lights(L.key)[s.id] || IR.isDone(L.key + '_' + s.id)));
       const lesson = IR.pairCard({
-        lesson: true, kicker: 'Lesson ' + L.n, title: L.name, href: '#/u6/' + L.key,
+        lesson: true, kicker: 'Lesson ' + IR.kidLesson(L.n), title: L.name, href: '#/u6/' + L.key,
         img: IR.lessonArt, alt: IR.lessonArtAlt, flags: flags
       });
       const story = IR.pairCard({
@@ -516,7 +516,7 @@
     app.append(h('div', { class: 'screen trailscreen unitpage unitA' },
       h('header', { class: 'uA-top' }, IR.ui.homeButton(), h('h1', { class: 'uA-title' }, h('small', null, 'Unit 6 \u00b7 '), 'Endings'), IR.ui.gearButton()),
       h('main', { class: 'uA-main' }, h('ul', { class: 'uA-left' }, ...cards),
-        h('section', { class: 'uA-right' }, h('h2', { class: 'uA-h' }, 'Three lessons'), h('p', null, '6.1 is -s and -es. 6.2 is -ed. 6.3 is -ing. Each lesson has ten activities. Zip\u2019s Check is last.'), h('p', { class: 'small' }, GROWN)))));
+        h('section', { class: 'uA-right' }, h('h2', { class: 'uA-h' }, 'Three lessons'), h('p', null, 'Lesson 1 is -s and -es. Lesson 2 is -ed. Lesson 3 is -ing. Each lesson has ten activities. Zip\u2019s Check is last.'), h('p', { class: 'small' }, GROWN)))));
   }
 
   function stepScreen(app, L, idx) {

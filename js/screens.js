@@ -177,12 +177,13 @@
     const stars = (u) => h('div', { class: 'dots', 'aria-hidden': 'true' }, ...Array.from({ length: u.total }, (_, k) => h('span', { class: 'sstar' + (k < u.done ? ' on' : '') }, icon('star'))));
     const cards = info.list.map((u) => {
       const title = u.kind === 'review' ? 'Review' : u.name;
-      const kind = u.kind === 'review' ? 'Unit ' + w.n + ' Review' : 'Lesson ' + w.n + '.' + (info.list.indexOf(u) + 1);   /* naming standard: Unit 3 = Island 3; ng = Lesson 3.1, nk = Lesson 3.2 */
+      const step = info.list.filter((x) => x.kind !== 'review').indexOf(u) + 1;
+      const kind = u.kind === 'review' ? 'Unit ' + w.n + ' Review' : 'Lesson ' + step;
       const body = h('div', { class: 'ubody' }, h('div', { class: 'uk' }, kind), h('h2', null, title),
         h('div', { class: 'umin' }, u.min ? 'About ' + u.min + ' min' : ''), u.desc ? h('div', { class: 'rvd' }, u.desc) : null, stars(u),
         u.state === 'open' ? h('div', { class: 'uprog' }, u.done + ' of ' + u.total + ' stars' + (u.soft ? ' \u00b7 ' + u.soft : '')) : h('div', { class: 'uprog lockmsg' }, icon('lock'), u.lockMsg));
       const card = h('button', { class: 'tapcard ucard ' + (u.state === 'open' ? 'open' : 'locked') + (u.kind === 'review' ? ' rv' : ''), type: 'button', 'data-unit': u.id, 'data-state': u.state,
-        'aria-label': (u.kind === 'review' ? 'Unit ' + w.n + ' Review' : 'Lesson ' + w.n + '.' + (info.list.indexOf(u) + 1) + ': ' + u.name) + '. ' + (u.state === 'open' ? u.done + ' of ' + u.total + ' stars. Open.' : 'Locked. ' + u.lockMsg + '.'),
+        'aria-label': (u.kind === 'review' ? 'Unit ' + w.n + ' Review' : 'Lesson ' + step + ': ' + u.name) + '. ' + (u.state === 'open' ? u.done + ' of ' + u.total + ' stars. Open.' : 'Locked. ' + u.lockMsg + '.'),
         onclick: () => { Snd.stop(); if (u.state === 'open') { modalRoot.innerHTML = ''; location.hash = u.href; } else toast(u.lockMsg + '.'); } }, imgs(u), body);
       if (u.state === 'open') body.append(h('span', { class: 'obtn' }, 'Open lesson'));
       return card;
@@ -249,10 +250,10 @@
       if (i >= 0) startAt = i;
     }
     for (let i = startAt; i < path.length; i++) {
-      if (!path[i].done()) return { href: path[i].href, sub: 'Unit ' + path[i].unit + ' \u00b7 Lesson ' + path[i].lesson };
+      if (!path[i].done()) return { href: path[i].href, sub: 'Unit ' + path[i].unit + ' \u00b7 Lesson ' + IR.kidLesson(path[i].lesson) };
     }
     const last = path[path.length - 1];
-    return { href: last.href, sub: 'Unit ' + last.unit + ' \u00b7 Lesson ' + last.lesson };
+    return { href: last.href, sub: 'Unit ' + last.unit + ' \u00b7 Lesson ' + IR.kidLesson(last.lesson) };
   }
   function continueButton() {
     const go = continueTarget();
@@ -280,7 +281,6 @@
       ['Suffixes', '-er \u00b7 -est \u00b7 -ly \u00b7 -ful', 6, ['purple', 'purple']], ['Suffix Spelling Rules', 'double \u00b7 drop e \u00b7 y to i', 4, ['pink', 'pink']],
       ['Prefixes', 'un- \u00b7 pre- \u00b7 re- \u00b7 dis-', 5, ['rainbow']], ['Big Endings', '-tion \u00b7 -ture \u00b7 -ment', 6, ['gold']]];
     const BUILT = 4, BUILT_ID = 'i3';
-    const SKILL = {}; TILES.forEach((t, n) => { if (t) SKILL[n] = t[0]; });
     const unit = (n) => {
       const t = TILES[n]; const isl = n === BUILT && !!(D.islands || {})[BUILT_ID];
       const u5 = n === 5 && !!IR.u5Route;   /* Nov 3 2026 local: Unit 5 Silent e is open (js/u5.js: same lesson flow as Unit 4; picker data islands.i5) */
@@ -292,20 +292,34 @@
       const b = h('button', { class: 'tcard t-' + st + (st === 'here' ? ' t-current' : ''), type: 'button', 'data-id': 'u' + n, 'data-kind': 'island', 'data-n': n, 'aria-label': label },
         h('span', { class: 'tpic' }, h('img', { src: 'img/units/tile' + String(n).padStart(2, '0') + '.webp', alt: '', width: 600, height: 600, loading: n > 8 ? 'lazy' : 'eager' })),
         h('span', { class: 'tbody' },
-          h('span', { class: 'thead' }, h('span', { class: 'tdots', 'aria-hidden': 'true' }, ...t[3].map((c) => h('i', { class: 'tdot td-' + c }))), h('b', { class: 'tnum' }, 'Unit ' + n)),
-          h('span', { class: 'tname' }, t[0]), h('span', { class: 'tsnd' }, ...t[1].split(' \u00b7 ').map((x, i, a) => h('span', null, x + (i < a.length - 1 ? ' \u00b7' : '')))),
+          h('span', { class: 'tname' }, t[0]),
+          h('span', { class: 'tunit' }, 'Unit ' + n),
+          h('span', { class: 'tsnd' }, ...t[1].split(' \u00b7 ').map((x, i, a) => h('span', null, x + (i < a.length - 1 ? ' \u00b7' : '')))),
           h('span', { class: 'tmeta' }, t[2] + (t[2] === 1 ? ' lesson' : ' lessons') + ' \u00b7 ' + note)));
       b.addEventListener('click', () => { if (u6) { Snd.stop(); location.hash = '#/u6'; } else if (u5) { openIsland('i5'); } else if (isl) openIsland(BUILT_ID); else { Snd.stop(); toast(st === 'done' ? 'Unit ' + n + ' is done. It is part of the full app.' : n < BUILT ? 'Unit ' + n + ' is coming soon in the full app!' : lit ? 'Unit ' + n + ' is unlocked! It is coming soon in the full app.' : 'Unit ' + n + ' is coming soon! Finish Unit ' + BUILT + ' first.'); } });
       return b;
     };
-    const stageStyle = /[?&]stagestyle=top\b/.test(location.search) ? 'top' : 'side';
-    const grid = h('div', { class: 'stagegroups stagestyle-' + stageStyle, id: 'skymap' }, ...TRAIL_STAGES.map((s) => h('section', { class: 'stagepanel', style: '--stage:' + s.color },
-      h('h2', { class: 'stagehead' }, 'Stage ' + s.n + ' \u00b7 ' + s.skills),
-      h('div', { class: 'stagestrip', title: s.skills, style: 'background:' + s.color + ';color:' + s.ink },
-        h('div', { class: 'stagev' },
-          h('h2', { class: 'stagelab' }, 'Stage ' + s.n),
-          h('p', { class: 'stageskill' }, s.skills))),
-      h('div', { class: 'stagecards' }, h('div', { class: 'ugrid tgrid' }, ...stageUnitList(s.units).map(unit))))));
+    const badge = (n) => h('div', { class: 'bellbadge', 'aria-label': n + ' bells' },
+      h('span', { class: 'bellbadge-mark', 'aria-hidden': 'true' }, icon('star')),
+      h('b', null, n + ' bells'));
+    const reviewStop = (n) => {
+      const skill = TILES[n][0];
+      const b = h('button', { class: 'tcard reviewstop', type: 'button', 'aria-label': 'Review stop after ' + skill + '. Extra practice. Coming soon.' },
+        h('span', { class: 'tbody' },
+          h('span', { class: 'tname' }, 'Review stop'),
+          h('span', { class: 'tunit' }, 'After ' + skill),
+          h('span', { class: 'tsnd' }, 'Extra practice'),
+          h('span', { class: 'tmeta' }, 'Coming soon')));
+      b.addEventListener('click', () => { Snd.stop(); toast('Review stop after ' + skill + ' is coming soon.'); });
+      return b;
+    };
+    const stops = [];
+    for (let n = 1; n <= 22; n++) {
+      stops.push(unit(n));
+      if (n % 4 === 0) stops.push(badge(n));
+      if (n === 5 || n === 12 || n === 20) stops.push(reviewStop(n));
+    }
+    const grid = h('div', { class: 'bellpath', id: 'skymap' }, ...stops);
     const tab = (href, name, icoName) => h('a', { class: 'hometab', href: href, 'aria-label': name },
       h('span', { class: 'hometab-ico', 'aria-hidden': 'true' }, icon(icoName)),
       h('span', { class: 'hometab-name' }, name));
@@ -343,11 +357,7 @@
         h('div', { class: 'zfhead' }, h('h2', { class: 'zfline' }, 'Learn to read with Zip and Frill'), readAloudBtn()),
         h('p', { class: 'zfsub' }, 'Ring every bell by learning its sounds.'),
         continueButton()));
-    const cur = complete ? BUILT + 1 : BUILT;
-    const youbar = h('button', { class: 'youbar', type: 'button', 'aria-label': 'You are here: Unit ' + cur + ', ' + SKILL[cur] + '. Dots show all 22 units. ' + nEarned + ' of 10 gems. Opens the gem box.', onclick: () => { Snd.stop(); location.hash = '#/gems'; } },
-      h('span', { class: 'ybtxt' }, 'You are here: ', h('b', null, 'Unit ' + cur + ' \u00b7 ' + SKILL[cur])),
-      h('span', { class: 'ybdots', 'aria-hidden': 'true' }, ...TILES.slice(1).map((t, i) => h('i', { class: 'tdot td-' + t[3][0] + (i + 1 === cur ? ' ybcur' : complete && i + 1 === BUILT ? ' ybdone' : '') }))));
-    app.append(h('div', { class: 'screen home mapscreen gridhome' }, h('div', { class: 'mwrap' }, banner, h('div', { class: 'homelay' }, h('div', { class: 'homeside' }, h('a', { class: 'btn big aboutbtn', href: '#/about' }, 'About Island Readers'), hero, tabs), grid)), youbar));
+    app.append(h('div', { class: 'screen home mapscreen gridhome' }, h('div', { class: 'mwrap' }, banner, h('div', { class: 'homelay' }, h('div', { class: 'homeside' }, h('a', { class: 'btn big aboutbtn', href: '#/about' }, 'About Island Readers'), hero, tabs), grid))));
     /* Nov 3 2026: the whole left sidebar (About, Start here, Practice) stays in one spot while the tiles scroll (wide layouts only). */
     const side = app.querySelector('.homeside'); const scr = app.querySelector('.screen.home');
     const pin = () => {
@@ -485,7 +495,7 @@
       h('span', { class: 'i4txt' }, h('small', null, complete ? 'Unit 4 is unlocked!' : 'Unit 4 unlocks when all stars are done')),
       h('span', { class: 'i4count' }, doneN + ' of ' + total));
     app.append(h('div', { class: 'screen trailscreen unitpage unitA orangeunit' },
-      h('header', { class: 'uA-top' }, homeButton(), h('h1', { class: 'uA-title' }, h('small', null, 'Unit 4 \u00b7 Lesson 4.1 \u00b7 '), 'ng'),
+      h('header', { class: 'uA-top' }, homeButton(), h('h1', { class: 'uA-title' }, h('small', null, 'Unit 4 \u00b7 Lesson 1 \u00b7 '), 'ng'),
         h('button', { class: 'cartoonpill', type: 'button', 'aria-label': 'Welcome cartoon, optional. Opens a video.', onclick: () => IR.openCartoon() }, icon('play'), h('span', { class: 'cp-long' }, 'Welcome Cartoon (optional)'), h('span', { class: 'cp-short' }, 'Cartoon')),
         h('span', { class: 'uA-time', 'aria-label': 'About ' + totalMin + ' minutes in total' }, h('span', { class: 't-long' }, 'About ' + totalMin + ' min total'), h('span', { class: 't-short' }, totalMin + ' min')), gearButton()),
       unitIntro('i3'),
@@ -584,7 +594,7 @@
   function fluencyStories() {
     const out = [];
     const lessonName = (name) => { const s = String(name || ''); if (s === 'ng' || s === 'nk' || s.charAt(0) === '-') return s; return /^[a-z]/.test(s) ? s.charAt(0).toUpperCase() + s.slice(1) : s; };
-    const add = (unit, lesson, name, title, href) => out.push({ href, unit: +unit, lessonN: lesson, name: lessonName(name), lesson: 'Unit ' + unit + ' \u00b7 Lesson ' + lesson + ' \u00b7 ' + lessonName(name), title: title || '' });
+    const add = (unit, lesson, name, title, href) => out.push({ href, unit: +unit, lessonN: lesson, name: lessonName(name), lesson: 'Unit ' + unit + ' \u00b7 Lesson ' + IR.kidLesson(lesson) + ' \u00b7 ' + lessonName(name), title: title || '' });
     if (Array.isArray(D.story) && D.story.length) {
       const i = LESSONS.findIndex((l) => l.id === 'story');
       if (i >= 0) add('4', '4.1', 'ng', D.storyTitle, '#/lesson/' + (i + 1));
@@ -867,108 +877,64 @@
     }).catch(() => { counter.textContent = 'Could not load slides'; });
     show();
   }
-  /* Stage numbers follow the approved option 1 path (image fractions from make_trail_map_options.py). */
-  const TRAIL_STAGES = [
-    { n: 1, x: 50.0, y: 32.2, side: 'R', units: 'Units 1-2', skills: 'Short vowels, floss, blends', color: '#C45C2A', ink: '#fff' },
-    { n: 2, x: 54.0, y: 38.5, side: 'L', units: 'Unit 3', skills: 'Digraphs', color: '#E25B6A', ink: '#fff' },
-    { n: 3, x: 49.0, y: 45.0, side: 'R', units: 'Unit 4', skills: 'Glued sounds', color: '#F08A22', ink: '#2B2540', open: 'i3' },
-    { n: 4, x: 48.8, y: 51.5, side: 'L', units: 'Unit 5', skills: 'Silent e', color: '#D6A810', ink: '#2B2540', open: 'i5' },
-    { n: 5, x: 49.2, y: 57.5, side: 'R', units: 'Unit 6', skills: 'Endings', color: '#2E9E5B', ink: '#fff', href: '#/u6' },
-    { n: 6, x: 50.5, y: 62.5, side: 'L', bx: 2, by: 54, units: 'Units 7-8', skills: 'Syllables and tricky sounds', color: '#3A7ECA', ink: '#fff' },
-    { n: 7, x: 58.0, y: 66.5, side: 'R', bx: 64, by: 60, units: 'Units 9-10', skills: 'Bossy R', color: '#7B4EC2', ink: '#fff' },
-    { n: 8, x: 51.5, y: 71.5, side: 'L', bx: 2, by: 67, units: 'Units 11-12', skills: 'Vowel teams', color: '#1A9A96', ink: '#fff' },
-    { n: 9, x: 39.5, y: 75.8, side: 'L', bx: 2, by: 78, units: 'Units 13-16', skills: 'Other vowel sounds', color: '#C43E7E', ink: '#fff' },
-    { n: 10, x: 36.0, y: 84.8, side: 'L', bx: 2, by: 83, units: 'Units 17-22', skills: 'Word parts and patterns', color: '#C99614', ink: '#2B2540' }
-  ];
-  function trailStage() {
-    const bell = IR.placement && IR.placement.saved ? IR.placement.saved() : null;
-    const acts = (IR.S().progress && IR.S().progress.activities) || {};
-    const any = Object.keys(acts).some((k) => acts[k] && acts[k].completed);
-    const steps = [
-      { stage: 3, done: () => IR.isDone('check') && IR.isDone('nk_check') },
-      { stage: 4, done: () => IR.isDone('u51_check') && IR.isDone('u53_check') },
-      { stage: 5, done: () => IR.isDone('u61_check') && IR.isDone('u62_check') && IR.isDone('u63_check') }
-    ];
-    if (any || (IR.islandDone && IR.islandDone('i3'))) {
-      const cur = steps.find((s) => !s.done());
-      return cur ? cur.stage : 5;
-    }
-    if (bell) return ({ 1: 1, 2: 2, 3: 3, 4: 4, 5: 6, 6: 7, 7: 8, 8: 9, 9: 10, 10: 6 })[bell] || 3;
-    return 3;
-  }
-  function openTrailStage(s) {
+  /* Trail map is composed from the existing bell-card paintings. No new background art. */
+  function openTrailBell(n) {
     Snd.stop();
-    if (s.open) { openIsland(s.open); return; }
-    if (s.href) { location.hash = s.href; return; }
-    toast(s.units + ' is coming soon.');
+    if (n === 4) { openIsland('i3'); return; }
+    if (n === 5) { openIsland('i5'); return; }
+    if (n === 6) { location.hash = '#/u6'; return; }
+    toast(UNIT_NAMES[n] + ' is coming soon.');
   }
   function islandTrailPage() {
     IR.newScreen();
-    const here = trailStage();
+    const here = (IR.islandDone && IR.islandDone('i3')) ? 5 : 4;
     const back = h('button', { class: 'back homebtn', type: 'button', onclick: () => { location.hash = '#/home'; } }, icon('back'), h('span', null, 'Home'));
     const test = h('a', { class: 'btn big primary trailgo', href: '#/placement' }, 'Take the Placement Test');
-    const marks = TRAIL_STAGES.map((s) => {
-      const state = s.n < here ? 'done' : s.n === here ? 'here' : 'later';
-      const label = 'Stage ' + s.n + ', ' + s.units + ', ' + s.skills + (state === 'here' ? '. You are here.' : state === 'done' ? '. Done.' : '.') + ' Opens ' + s.units + '.';
-      const go = () => openTrailStage(s);
-      const mark = h('button', {
-        class: 'stagemark st-' + state,
-        type: 'button',
-        style: 'left:' + s.x + '%;top:' + s.y + '%;background:' + s.color + ';color:' + s.ink,
-        'aria-label': label,
-        onclick: go
-      }, String(s.n), state === 'done' ? h('span', { class: 'stagestar', 'aria-hidden': 'true' }, icon('star')) : null);
-      const boxLeft = s.bx != null ? s.bx : (s.side === 'R' ? Math.min(s.x + 6, 64) : Math.max(1, s.x - 40));
-      const boxTop = s.by != null ? s.by : s.y;
-      const box = h('button', {
-        class: 'stagebox side-' + s.side + (s.by != null ? ' pin-top' : '') + ' s' + s.n,
-        type: 'button',
-        style: 'left:' + boxLeft + '%;top:' + boxTop + '%;border-color:' + s.color,
-        'aria-label': label,
-        onclick: go
-      }, h('b', { style: 'color:' + s.color }, 'Stage ' + s.n + ': ' + s.units), h('span', null, s.skills));
-      const bits = [mark, box];
-      if (state === 'here') {
-        const pillLeft = s.side === 'R' ? Math.max(2, s.x - 22) : Math.min(78, s.x + 8);
-        bits.push(h('span', { class: 'herepill', style: 'left:' + pillLeft + '%;top:' + s.y + '%' }, 'You are here'));
-      }
-      return bits;
-    });
+    const bits = [];
+    const bell = (n) => {
+      const side = n % 2 ? 'right' : 'left';
+      const name = UNIT_NAMES[n];
+      const label = name + ', Unit ' + n + (n === here ? '. You are here.' : '.') + ' Opens this bell.';
+      return h('button', { class: 'trailbell side-' + side + (n === here ? ' here' : ''), type: 'button', 'aria-label': label, onclick: () => openTrailBell(n) },
+        h('span', { class: 'trailthumb' }, h('img', { src: 'img/units/tile' + String(n).padStart(2, '0') + '.webp', alt: '' })),
+        h('span', { class: 'trailcopy' }, h('b', null, name), h('small', null, 'Unit ' + n), n === here ? h('em', null, 'You are here') : null));
+    };
+    const mark = (n) => h('div', { class: 'trailmark', 'aria-label': n + ' bells' }, icon('star'), h('span', null, n + ' bells'));
+    const review = (n) => h('button', { class: 'trailreview', type: 'button', 'aria-label': 'Review stop after ' + UNIT_NAMES[n] + '. Coming soon.', onclick: () => { Snd.stop(); toast('Review stop after ' + UNIT_NAMES[n] + ' is coming soon.'); } },
+      h('b', null, 'Review stop'), h('span', null, 'After ' + UNIT_NAMES[n]));
+    for (let n = 1; n <= 22; n++) {
+      bits.push(bell(n));
+      if (n % 4 === 0) bits.push(mark(n));
+      if (n === 5 || n === 12 || n === 20) bits.push(review(n));
+    }
+    bits.push(h('div', { class: 'trailfinale', 'aria-label': 'Golden bell. The end of the path.' },
+      h('img', { src: 'img/bell_lit.png', alt: '' }),
+      h('b', null, 'Golden bell')));
     app.append(h('div', { class: 'screen home simplepage trailpage' }, h('div', { class: 'mwrap trailwrap' },
       h('div', { class: 'gtop' }, back),
       h('h1', null, 'Trail Map'),
       test,
-      h('div', { class: 'trailmap' },
-        h('img', { class: 'trailbg', src: 'img/trail_option1_bg.jpg', alt: 'A winding path from Zip at the top of the hill to a golden bell, with Frill beside the bell.' }),
-        ...marks.flat()))));
-  }
-  function stageUnitList(label) {
-    const m = /Units?\s+(\d+)(?:\s*-\s*(\d+))?/.exec(label || '');
-    if (!m) return [];
-    const a = +m[1]; const b = m[2] ? +m[2] : a;
-    const nums = [];
-    for (let n = a; n <= b; n++) nums.push(n);
-    return nums;
+      h('div', { class: 'belltrail' }, ...bits))));
   }
   function findCatalog() {
     const skills = skillCatalog();
     const bag = (id) => ((skills.filter((s) => s.id === id)[0] || {}).items || []).filter((it) => it.href);
     const kindName = { pa: 'Phonemic Awareness', spelling: 'Spelling', Spelling: 'Spelling', rhyme: 'Rhyme', fluency: 'Fluency', Fluency: 'Fluency', 'Sight words': 'Sight words' };
     const link = (title, href, extra) => ({ title: title, href: href, blob: (title + ' ' + (extra || '')).toLowerCase() });
-    const act = (it) => Object.assign(link('Unit ' + it.unit + ' \u00b7 Lesson ' + it.lesson + ' \u00b7 ' + it.name + (it.title ? ' \u00b7 ' + it.title : ''), it.href, kindName[it.type] || it.type || ''), { unit: it.unit });
+    const act = (it) => Object.assign(link('Unit ' + it.unit + ' \u00b7 Lesson ' + IR.kidLesson(it.lesson) + ' \u00b7 ' + it.name + (it.title ? ' \u00b7 ' + it.title : ''), it.href, kindName[it.type] || it.type || ''), { unit: it.unit, skill: kindName[it.type] || it.type || '' });
     const lessons = [
-      { unit: 4, title: 'Unit 4 \u00b7 Lesson 4.1 \u00b7 ng', href: '#/island3' },
-      { unit: 4, title: 'Unit 4 \u00b7 Lesson 4.2 \u00b7 nk', href: '#/nk' },
-      { unit: 5, title: 'Unit 5 \u00b7 Lesson 5.1 \u00b7 Silent e', href: '#/u51' },
-      { unit: 5, title: 'Unit 5 \u00b7 Lesson 5.2 \u00b7 Tricky silent e', href: '#/u53' },
-      { unit: 6, title: 'Unit 6 \u00b7 Lesson 6.1 \u00b7 -s and -es', href: '#/u6/u61' },
-      { unit: 6, title: 'Unit 6 \u00b7 Lesson 6.2 \u00b7 -ed', href: '#/u6/u62' },
-      { unit: 6, title: 'Unit 6 \u00b7 Lesson 6.3 \u00b7 -ing', href: '#/u6/u63' }
+      { unit: 4, title: 'Unit 4 \u00b7 Lesson 1 \u00b7 ng', href: '#/island3' },
+      { unit: 4, title: 'Unit 4 \u00b7 Lesson 2 \u00b7 nk', href: '#/nk' },
+      { unit: 5, title: 'Unit 5 \u00b7 Lesson 1 \u00b7 Silent e', href: '#/u51' },
+      { unit: 5, title: 'Unit 5 \u00b7 Lesson 2 \u00b7 Tricky silent e', href: '#/u53' },
+      { unit: 6, title: 'Unit 6 \u00b7 Lesson 1 \u00b7 -s and -es', href: '#/u6/u61' },
+      { unit: 6, title: 'Unit 6 \u00b7 Lesson 2 \u00b7 -ed', href: '#/u6/u62' },
+      { unit: 6, title: 'Unit 6 \u00b7 Lesson 3 \u00b7 -ing', href: '#/u6/u63' }
     ].map((L) => Object.assign(link(L.title, L.href, 'lesson'), { unit: L.unit }));
     const comp = [];
-    if ((IR.nk && IR.nk.steps || []).some((s) => s.id === 'comp')) comp.push(link('Unit 4 \u00b7 Lesson 4.2 \u00b7 Story Check', '#/nk/comp', 'comprehension'));
+    if ((IR.nk && IR.nk.steps || []).some((s) => s.id === 'comp')) comp.push(link('Unit 4 \u00b7 Lesson 2 \u00b7 Story Check', '#/nk/comp', 'comprehension'));
     (IR.u5Lessons || []).forEach((L) => {
-      if ((L.steps || []).some((s) => s.id === 'comp')) comp.push(link('Unit 5 \u00b7 Lesson ' + L.n + ' \u00b7 Story Check', '#/' + L.key + '/comp', 'comprehension'));
+      if ((L.steps || []).some((s) => s.id === 'comp')) comp.push(link('Unit 5 \u00b7 Lesson ' + IR.kidLesson(L.n) + ' \u00b7 Story Check', '#/' + L.key + '/comp', 'comprehension'));
     });
     const stories = fluencyStories().map((s) => link(s.lesson + (s.title ? ' \u00b7 ' + s.title : ''), s.href, 'fluency story reader'));
     const byHref = new Map();
@@ -980,10 +946,10 @@
     const plays = [...byHref.values()];
     const unit = [];
     for (let n = 1; n <= 22; n++) unit.push({ name: 'Unit ' + n + ' \u00b7 ' + UNIT_NAMES[n], items: lessons.filter((L) => L.unit === n) });
-    const stage = TRAIL_STAGES.map((s) => {
-      const nums = stageUnitList(s.units);
-      return { name: 'Stage ' + s.n + ': ' + s.units + ' \u00b7 ' + s.skills, items: plays.filter((it) => nums.indexOf(it.unit) >= 0) };
-    });
+    const skill = skillCatalog().filter((s) => s.id !== 'sight').map((s) => ({
+      name: s.id === 'pa' ? 'Phonemic Awareness' : s.name,
+      items: (s.items || []).filter((it) => it.href).map((it) => link(it.name + (it.title ? ' \u00b7 ' + it.title : ''), it.href, s.name + ' ' + (it.lesson || '')))
+    }));
     const games = (IR.chest && IR.chest.GAMES) || [];
     const sight = [1, 2, 3, 4].map((n) => {
       const href = '#/chest' + n;
@@ -1004,10 +970,10 @@
       search.push(it);
     }
     unit.forEach((g) => g.items.forEach(addSearch));
-    stage.forEach((g) => g.items.forEach(addSearch));
+    skill.forEach((g) => g.items.forEach(addSearch));
     sight.forEach((g) => g.items.forEach(addSearch));
     fluency.forEach((g) => g.items.forEach(addSearch));
-    return { unit: unit, stage: stage, sight: sight, fluency: fluency, search: search };
+    return { unit: unit, skill: skill, sight: sight, fluency: fluency, search: search };
   }
   function findScreen() {
     IR.newScreen();
@@ -1016,7 +982,7 @@
     const input = h('input', { class: 'skillsearch', type: 'search', placeholder: 'Search', 'aria-label': 'Search lessons, games, stories, and skills' });
     const tabs = h('div', { class: 'findtabs', role: 'tablist' });
     const host = h('div', { class: 'findhost' });
-    const modes = [['unit', 'By Unit'], ['stage', 'By Stage'], ['sight', 'Sight Words'], ['fluency', 'Fluency Readers']];
+    const modes = [['unit', 'By Unit'], ['skill', 'By Skill'], ['sight', 'Sight Words'], ['fluency', 'Fluency Readers']];
     let mode = 'unit';
     let openKey = '';
     function row(it) {
@@ -1101,7 +1067,14 @@
     else if (hash.startsWith('#/find')) findScreen();
     else if ((m = /^#\/teachers\/slides\/(ng|nk)$/.exec(hash))) slidesViewer(m[1]);
     else if (hash.startsWith('#/teachers')) { if (IR._slideCleanup) { IR._slideCleanup(); IR._slideCleanup = null; } teachersScreen(); }
-    else if (hash.startsWith('#/placement')) IR.placement.render(app, (n) => { const id = 'i' + n; if ((D.islands || {})[id]) { location.hash = '#/home'; setTimeout(() => openIsland(id), 0); } else { location.hash = '#/home'; setTimeout(() => toast('Unit ' + n + ' (' + ({1:'blends',2:'sh ch th',3:'ng nk',4:'silent e',5:'long words',6:'bossy r',7:'vowel teams',8:'oi ow aw',9:'word parts',10:'tch dge igh'})[n] + ') is coming soon in the full app. Try Unit 3 for now.'), 50); } });
+    else if (hash.startsWith('#/placement')) IR.placement.render(app, (n) => {
+      const bell = (IR.placement.BELL || {})[n] || { unit: n, name: 'this bell' };
+      if (bell.unit === 4) { location.hash = '#/home'; setTimeout(() => openIsland('i3'), 0); return; }
+      if (bell.unit === 5) { location.hash = '#/home'; setTimeout(() => openIsland('i5'), 0); return; }
+      if (bell.unit === 6) { location.hash = '#/u6'; return; }
+      location.hash = '#/home';
+      setTimeout(() => toast(bell.name + ' is coming soon in the full app. Try Glued Sounds for now.'), 50);
+    });
     else if (hash.startsWith('#/island3')) trailScreen();
     else if (hash.startsWith('#/check')) checkScreen();
     else if (hash.startsWith('#/result')) { IR.newScreen(); app.append(h('div', { class: 'screen resultscreen' })); IR.renderResult($('.resultscreen')); $('.resultscreen').prepend(h('div', { class: 'unitbar' }, homeButton(), unitButton('check'))); }

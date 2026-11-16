@@ -97,7 +97,7 @@
       }));
     });
     app.append(h('div', { class: 'screen trailscreen unitpage unitA spellmenu' },
-      h('header', { class: 'uA-top' }, x, IR.ui.homeButton(), h('h1', { class: 'uA-title' }, h('small', null, 'Unit ' + L.unit + ' · Lesson ' + L.n + ' · '), 'Spelling'), IR.ui.gearButton()),
+      h('header', { class: 'uA-top' }, x, IR.ui.homeButton(), h('h1', { class: 'uA-title' }, h('small', null, 'Unit ' + L.unit + ' · Lesson ' + IR.kidLesson(L.n) + ' · '), 'Spelling'), IR.ui.gearButton()),
       h('p', { class: 'spelllead' }, 'Five spelling steps. Each one opens after the one before it.'),
       h('ul', { class: 'spellsteps' }, ...cards)));
   }

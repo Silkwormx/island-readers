@@ -25,6 +25,10 @@
   const $ = (s, r) => (r || document).querySelector(s);
   const $$ = (s, r) => Array.from((r || document).querySelectorAll(s));
   const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+  function kidLesson(code) {
+    const m = /\.(\d+)\s*$/.exec(String(code || ''));
+    return m ? String(+m[1]) : String(code || '');
+  }
   function shuffle(a) {
     a = a.slice();
     for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; }
@@ -268,6 +272,6 @@
     return b;
   }
 
-  window.IR = { celebration, ding, tryAgain, D, S: () => S, save, resetAll, load, h, $, $$, sleep, shuffle, pick, colorWord, icon, ICON, CHUNK_COLORS,
+  window.IR = { celebration, ding, tryAgain, D, S: () => S, save, resetAll, load, h, $, $$, sleep, shuffle, pick, colorWord, icon, ICON, CHUNK_COLORS, kidLesson,
     touchStreak, streakInfo, recordActivity, isDone, activityStars, progressRecord, totalStars, applySettings, Snd, A, sayWord, newScreen, speakerBtn, hasPhoneme, playPhoneme };
 })();
