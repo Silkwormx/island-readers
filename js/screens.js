@@ -241,7 +241,7 @@
       { unit: 6, lesson: '6.2', href: '#/u6/u62', done: () => IR.isDone('u62_check') },
       { unit: 6, lesson: '6.3', href: '#/u6/u63', done: () => IR.isDone('u63_check') }
     ];
-    if (!any && !bell) return { href: '#/placement', sub: 'where I left off' };
+    if (!any && !bell) return { href: '#/placement', sub: 'Pick up where you left off' };
     let startAt = 0;
     if (!any && bell) {
       const unitForBell = bell <= 3 ? 4 : bell === 4 ? 5 : 6;
