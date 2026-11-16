@@ -1649,6 +1649,15 @@ body.calm .ob-glow{animation:none;opacity:.85}
     max-width:none;
     transform:none;
   }
+  .gridhome .mwrap > .hbanner{
+    position:sticky;
+    top:0;
+    z-index:24;
+    background:#FFF6E3;
+    margin:0 -1.1rem;
+    padding:.45rem calc(1.1rem + 11rem) .55rem;
+  }
+  .gridhome .homelay{margin-top:0}
   .homeside{gap:clamp(.28rem,1vh,.7rem)}
   .homeside .aboutbtn{min-height:clamp(2rem,4.4vh,2.8rem)!important;padding:.12rem .7rem!important;font-size:clamp(.88rem,1.9vh,1.05rem)!important}
   .gridhome .homefeature{gap:clamp(.18rem,.55vh,.4rem);padding:clamp(.28rem,.7vh,.5rem) clamp(.3rem,.8vh,.5rem)}
