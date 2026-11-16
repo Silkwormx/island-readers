@@ -358,7 +358,7 @@
     const side = app.querySelector('.homeside'); const scr = app.querySelector('.screen.home');
     const pin = () => {
       if (!side || !scr || !side.isConnected) { window.removeEventListener('resize', pin); return; }
-      if (!matchMedia('(min-width:1100px)').matches) { side.style.top = ''; side.style.maxHeight = ''; side.style.overflowY = ''; return; }
+      if (!matchMedia('(min-width:1000px)').matches) { side.style.top = ''; side.style.maxHeight = ''; side.style.overflowY = ''; return; }
       const banner = scr.querySelector('.hbanner');
       const bannerH = banner ? banner.offsetHeight : 0;
       side.style.top = bannerH + 'px';
