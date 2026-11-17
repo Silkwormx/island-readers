@@ -633,8 +633,20 @@
     IR.newScreen();
     const lessons = lessonsOf(group);
     const teach = teamTeacher(group) || {};
+    const overview = h('div', { class: 'fs-overview stepbefore', style: 'grid-template-columns:repeat(' + Math.min(group.letters.length, 4) + ',minmax(0,1fr))' },
+      ...group.letters.map((id) => h('div', { class: 'fs-over' }, letterIntro(id))));
+    const lessonItems = [{ title: 'One letter at a time', go: () => startLetters(group) }];
+    lessons.forEach((lesson) => {
+      lessonItems.push({
+        title: lesson.label || ('Lesson ' + lesson.lesson_number),
+        note: lessonLine(lesson),
+        go: () => { Snd.stop(); location.hash = lessonHash(group, lesson, flowFor(lesson)[0].id); }
+      });
+    });
+    if (lessons.some((lesson) => lesson.mastery_check)) {
+      lessonItems.push({ title: 'Team check', note: 'Plain letters only. Show what you know.', href: '#/foundation/letters/' + group.id + '/check' });
+    }
     const games = gamesFor(group).map((game) => ({ title: game.title, href: '#/foundation/letters/' + group.id + '/' + game.id }));
-    if (lessons.some((lesson) => lesson.mastery_check)) games.push({ title: 'Team check', href: '#/foundation/letters/' + group.id + '/check' });
     app.append(h('div', { class: 'screen trailscreen unitpage u5menu llpage fs-group stepage' },
       h('header', { class: 'uA-top' },
         IR.ui.homeButton(),
@@ -642,7 +654,10 @@
         h('h1', { class: 'uA-title' }, 'Meet the Team'),
         IR.ui.gearButton()),
       IR.modeBar({
-        lesson: [{ title: 'One letter at a time', go: () => startLetters(group) }],
+        before: h('div', { class: 'stepbefore' },
+          h('p', { class: 'llask' }, 'Team ' + group.n + ', ' + group.letters.join(', ') + '. Tap the name, then the sound three times.'),
+          overview),
+        lesson: lessonItems,
         games: games,
         slides: teach.slides,
         files: teach.files

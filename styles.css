@@ -41,23 +41,32 @@ p{margin:.4em 0}
 .modetab .ico svg path[stroke]{stroke:currentColor!important}
 .llpage .modebar-tabs{flex:none}
 .llpage .modepane{display:flex;flex-direction:column;flex:1;min-height:0}
-.stepnote{max-width:40rem;margin:1.15rem auto .2rem;padding:0 1.2rem;text-align:center;font-size:1.35rem;font-weight:700;line-height:1.35;color:#2B2540}
-.stepcards{display:flex;flex-direction:column;gap:1.35rem;width:min(100%,40rem);margin:1.15rem auto 2.6rem;padding:0 1.2rem}
-.stepcard{display:flex;flex-direction:column;align-items:stretch;gap:.85rem;width:100%;margin:0;padding:1.25rem 1.25rem 1.15rem;border:3px solid #E4D6B4;border-radius:1.4rem;background:#fff;box-shadow:0 4px 0 rgba(43,37,64,.08);color:#2B2540;font-family:Andika,sans-serif;font-weight:700;text-align:left;text-decoration:none;cursor:pointer}
-section.stepcard{cursor:default}
+.stepnote{max-width:46rem;margin:1.15rem auto .2rem;padding:0 1.2rem;text-align:center;font-size:1.35rem;font-weight:700;line-height:1.35;color:#2B2540}
+.stepflow{display:flex;flex-direction:column;gap:1.6rem;width:min(100%,68rem);margin:1.15rem auto 2.6rem;padding:0 1.2rem}
+.stepblock{display:flex;flex-direction:column;gap:.85rem}
 .stephead{display:flex;align-items:center;gap:.85rem}
-.stepnum{display:flex;align-items:center;justify-content:center;width:3rem;height:3rem;flex:none;border-radius:1rem;background:#F28C00;color:#fff;font-size:1.6rem;line-height:1}
-.steplab{font-size:1.7rem;line-height:1.1}
-.stepsub,.stepsoon{margin:0;font-size:1.2rem;line-height:1.3;color:#5b5473}
-.steprow{display:flex;align-items:center;width:100%;min-height:3.4rem;padding:.65rem .95rem;border:3px solid #E4D6B4;border-radius:1rem;background:#FFFDF8;color:#2B2540;font:inherit;font-weight:700;font-size:1.15rem;text-align:left;text-decoration:none;cursor:pointer}
-.stepcard:focus-visible,.steprow:focus-visible{outline:3px solid #F28C00;outline-offset:3px}
-.steprow:hover,.steprow:focus-visible,button.stepcard:hover,a.stepcard:hover{background:#FFF3DE}
+.stepnum,.gamenum{display:flex;align-items:center;justify-content:center;width:3rem;height:3rem;flex:none;border-radius:1rem;background:#F28C00;color:#fff;font-size:1.6rem;line-height:1;font-weight:700}
+.steplab{font-size:1.7rem;line-height:1.1;font-weight:700}
+.stepsoon{margin:0;font-size:1.2rem;line-height:1.3;color:#5b5473;font-weight:700}
+.lessonrow{display:flex;flex-direction:column;gap:.75rem}
+.stepcard,.gamecard{display:flex;align-items:center;gap:.85rem;width:100%;margin:0;padding:1rem 1.1rem;border:3px solid #E4D6B4;border-radius:1.2rem;background:#fff;box-shadow:0 4px 0 rgba(43,37,64,.08);color:#2B2540;font-family:Andika,sans-serif;font-weight:700;text-align:left;text-decoration:none;cursor:pointer}
+.gametxt{display:flex;flex-direction:column;gap:.2rem;min-width:0}
+.gametxt b{font-size:1.2rem;line-height:1.25}
+.gamenote,.gamemin{font-size:.95rem;font-weight:700;line-height:1.3;color:#5b5473}
+.gamegrid{display:grid;grid-template-columns:1fr 1fr;gap:.9rem;list-style:none;margin:0;padding:0}
+.gamegrid li{margin:0;min-width:0}
+.gamenum{width:2.5rem;height:2.5rem;font-size:1.25rem}
+.stepbefore{width:min(100%,68rem);margin:.8rem auto 0;padding:0 1.2rem}
+.stepbefore .fs-overview{width:100%}
+.stepcard:focus-visible,.gamecard:focus-visible{outline:3px solid #F28C00;outline-offset:3px}
+.stepcard:hover,.gamecard:hover{background:#FFF3DE}
 .stepage{max-width:100%}
 .stepage .uA-top{flex-wrap:wrap;width:100%;max-width:100%;box-sizing:border-box}
 .stepage.llpage{height:auto;min-height:100dvh;max-height:none;overflow:auto}
 .stepage.fs-group{overflow:visible;cursor:default;height:auto;background:var(--cream);border:0;border-radius:0;box-shadow:none;padding:0;align-items:stretch}
 @media (max-width:760px){.stepage .uA-title{display:block;flex:1 0 100%;font-size:1.35rem}.stepage .uA-title small{display:block}}
-@media (max-width:600px){.stepnote{font-size:1.12rem}.steplab{font-size:1.4rem}.stepnum{width:2.6rem;height:2.6rem;font-size:1.35rem}.stepcards{gap:1rem;padding:0 .8rem 2rem}}
+@media (max-width:700px){.gamegrid{grid-template-columns:1fr}}
+@media (max-width:600px){.stepnote{font-size:1.12rem}.steplab{font-size:1.4rem}.stepnum{width:2.6rem;height:2.6rem;font-size:1.35rem}.stepflow{gap:1.1rem;padding:0 .8rem 2rem}}
 @media (max-width:600px){.modetab{font-size:.95rem;min-height:3.4rem;padding:.35rem .4rem}}
 .btn.good{background:#DDF4E6;border-color:var(--green);box-shadow:0 5px 0 var(--green)}
 .btn.warm{background:#FFE9C7;border-color:#C98400;box-shadow:0 5px 0 #C98400}

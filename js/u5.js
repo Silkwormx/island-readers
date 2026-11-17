@@ -276,7 +276,7 @@
       const prev = IR['_u5Was_' + KEY] || '';
       if (!new RegExp('^#/' + KEY + '(/|$)').test(prev) && prev !== '#/review5') resetLights();
       IR.newScreen(); const all = sections();
-      const pick = (group) => all.filter((r) => r.group === group).map((r) => ({ title: r.title, href: r.href }));
+      const pick = (group) => all.filter((r) => r.group === group).map((r) => ({ title: r.title, href: r.href, note: TIPS[r.id], min: r.min }));
       app.append(h('div', { class: 'screen trailscreen unitpage unitA u5menu stepage' },
         h('header', { class: 'uA-top' }, IR.ui.homeButton(), h('h1', { class: 'uA-title' }, h('small', null, 'Unit 5 Lesson ' + IR.kidLesson(NUM)), N.name), IR.ui.gearButton()),
         IR.modeBar({

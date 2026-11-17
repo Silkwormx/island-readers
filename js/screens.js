@@ -514,20 +514,25 @@
       else if (item.href) location.hash = item.href;
     };
   }
-  function stepRow(item) {
-    if (item.href && item.href.charAt(0) !== '#') return h('a', { class: 'steprow', href: item.href, target: '_blank', rel: 'noopener' }, item.title);
-    return h('button', { class: 'steprow', type: 'button', onclick: goItem(item) }, item.title);
+  function itemCard(item, num) {
+    const body = [
+      num ? h('span', { class: 'gamenum' }, String(num)) : null,
+      h('span', { class: 'gametxt' }, h('b', null, item.title), item.note ? h('span', { class: 'gamenote' }, item.note) : null, item.min ? h('span', { class: 'gamemin' }, item.min + ' min') : null)
+    ];
+    const cls = num ? 'gamecard' : 'stepcard';
+    if (item.href && item.href.charAt(0) !== '#') return h('a', { class: cls, href: item.href, target: '_blank', rel: 'noopener' }, ...body);
+    return h('button', { class: cls, type: 'button', onclick: goItem(item) }, ...body);
   }
-  function stepCard(n, label, items) {
-    const head = h('div', { class: 'stephead' }, h('span', { class: 'stepnum' }, String(n)), h('span', { class: 'steplab' }, label));
-    if (!items || !items.length) return h('section', { class: 'stepcard' }, head, h('p', { class: 'stepsoon' }, 'Coming soon'));
-    if (items.length === 1) {
-      const item = items[0];
-      const sub = item.title && item.title !== label ? h('span', { class: 'stepsub' }, item.title) : null;
-      if (item.href && item.href.charAt(0) !== '#') return h('a', { class: 'stepcard', href: item.href, target: '_blank', rel: 'noopener' }, head, sub);
-      return h('button', { class: 'stepcard', type: 'button', onclick: goItem(item) }, head, sub);
-    }
-    return h('section', { class: 'stepcard' }, head, ...items.map(stepRow));
+  function stepHead(n, label) {
+    return h('div', { class: 'stephead' }, h('span', { class: 'stepnum' }, String(n)), h('span', { class: 'steplab' }, label));
+  }
+  function stepSection(n, label, items, numbered) {
+    const cards = !items || !items.length
+      ? h('p', { class: 'stepsoon' }, 'Coming soon')
+      : numbered
+        ? h('ol', { class: 'gamegrid' }, ...items.map((item, i) => h('li', null, itemCard(item, i + 1))))
+        : h('div', { class: 'lessonrow' }, ...items.map((item) => itemCard(item)));
+    return h('section', { class: 'stepblock' }, stepHead(n, label), cards);
   }
   function modeBar(plan) {
     plan = plan || {};
@@ -543,15 +548,16 @@
     }, board, h('span', { class: 'modetab-lab' }, 'Teacher-Led', has ? null : h('small', null, 'coming soon')));
     const lessonPane = h('div', { class: 'modepane' },
       h('p', { class: 'stepnote' }, 'Kids watch the lesson, then play the games.'),
-      h('div', { class: 'stepcards' },
-        plan.choose ? null : stepCard(1, 'Lesson', plan.lesson || []),
-        plan.choose ? null : stepCard(2, 'Games', plan.games || []),
-        ...(plan.choose || []).map((item, i) => stepCard(i + 1, item.title, [item]))));
+      plan.before || null,
+      h('div', { class: 'stepflow' },
+        plan.choose ? null : stepSection(1, 'Lesson', plan.lesson || []),
+        plan.choose ? null : stepSection(2, 'Games', plan.games || [], true),
+        ...(plan.choose || []).map((item, i) => stepSection(i + 1, item.title, [item]))));
     const teachPane = h('div', { class: 'modepane', hidden: '' },
       h('p', { class: 'stepnote' }, 'Teach from the slideshow, then use the printables.'),
-      h('div', { class: 'stepcards' },
-        stepCard(1, 'Slideshow', has ? [{ title: 'Slideshow', href: plan.slides }] : []),
-        stepCard(2, 'Printables', plan.files || [])));
+      h('div', { class: 'stepflow' },
+        stepSection(1, 'Slideshow', has ? [{ title: 'Open the slideshow', href: plan.slides }] : []),
+        stepSection(2, 'Printables', plan.files || [])));
     function show(teach) {
       lessonPane.hidden = teach;
       teachPane.hidden = !teach;
@@ -571,7 +577,7 @@
     const LK = 'ir_sess_ng'; const prevH = IR._ngHashWas || '';
     if (!/^#\/(island3|lesson\/|check)/.test(prevH)) try { sessionStorage.removeItem(LK); } catch (e) {}
     IR._ngHashWas = location.hash || '#/island3';
-    const pick = (group) => secs.filter((r) => r.group === group).map((r) => ({ title: r.title, href: r.href }));
+    const pick = (group) => secs.filter((r) => r.group === group).map((r) => ({ title: r.title, href: r.href, note: TIPS[r.id], min: r.min }));
     app.append(h('div', { class: 'screen trailscreen unitpage unitA orangeunit stepage' },
       h('header', { class: 'uA-top' }, homeButton(), h('h1', { class: 'uA-title' }, h('small', null, 'Unit 4 Lesson 1'), 'ng'), gearButton()),
       modeBar({

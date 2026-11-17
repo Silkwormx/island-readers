@@ -473,8 +473,8 @@
       h('header', { class: 'uA-top' }, IR.ui.homeButton(), h('h1', { class: 'uA-title' }, h('small', null, 'Unit 6 Lesson ' + IR.kidLesson(L.n)), L.name),
         h('button', { class: 'btn', type: 'button', onclick: () => { location.hash = '#/u6'; } }, 'All lessons'), IR.ui.gearButton()),
       IR.modeBar({
-        lesson: items.filter((r) => r.group === 'lesson').map((r) => ({ title: r.title, href: r.href })).concat([story]),
-        games: items.filter((r) => r.group === 'activities').map((r) => ({ title: r.title, href: r.href }))
+        lesson: items.filter((r) => r.group === 'lesson').map((r) => ({ title: r.title, href: r.href, min: r.min })).concat([story]),
+        games: items.filter((r) => r.group === 'activities').map((r) => ({ title: r.title, href: r.href, note: TIPS[r.id], min: r.min }))
       })));
   }
 
@@ -483,7 +483,10 @@
     app.append(h('div', { class: 'screen trailscreen unitpage unitA stepage' },
       h('header', { class: 'uA-top' }, IR.ui.homeButton(), h('h1', { class: 'uA-title' }, h('small', null, 'Unit 6'), 'Endings'), IR.ui.gearButton()),
       IR.modeBar({
-        choose: PACK.lessons.map((L) => ({ title: 'Lesson ' + IR.kidLesson(L.n) + ' ' + L.name, href: '#/u6/' + L.key }))
+        choose: PACK.lessons.flatMap((L) => [
+          { title: 'Lesson ' + IR.kidLesson(L.n) + ' ' + L.name, href: '#/u6/' + L.key },
+          { title: L.storyTitle, href: '#/u6/' + L.key + '/read' }
+        ])
       })));
   }
 
