@@ -340,6 +340,7 @@
       ico: 'map',
       fill(body) {
         const place = trailPlace();
+        body.append(h('button', { class: 'drop-link', type: 'button', onclick: () => { Snd.stop(); location.hash = '#/trail'; } }, 'Open the Trail Map'));
         body.append(h('button', { class: 'drop-link', type: 'button', onclick: () => { Snd.stop(); location.hash = '#/placement'; } }, 'Take the Placement Test'));
         for (let n = 1; n <= 22; n++) {
           const status = unitStatus(n, place);
@@ -360,7 +361,7 @@
       }
     });
     const tabs = h('nav', { class: 'hometabs', 'aria-label': 'More places' },
-      trailDrop, sightDrop, tab('#/find', 'Find It', 'search'));
+      trailDrop, sightDrop, tab('#/trail', 'Trail Map', 'map'), tab('#/find', 'Find It', 'search'));
     /* Nov 6 2026: full-width home feature (approved banyan scene), then About + the hero beside the unit grid */
     const banner = h('header', { class: 'hbanner' }, h('h1', null, 'Island Readers'),
       h('div', { class: 'grownwrap' }, h('span', { class: 'grownlab' }, 'Parent and Teacher Materials'), IR.ui.gearButton()));
