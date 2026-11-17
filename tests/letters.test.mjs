@@ -44,6 +44,9 @@ test('Learn the Letters follows the UFLI group order and is not a unit', () => {
   assert.match(letters, /join\(', '\)/);
   assert.match(letters, /Why this order\?/);
   assert.match(letters, /Meet the Team/);
+  assert.match(letters, /My name is: /);
+  assert.match(letters, /My sound is /);
+  assert.match(letters, /function letterIntro/);
   assert.match(letters, /One letter at a time/);
   assert.match(letters, /function paintIdo/);
   assert.match(letters, /function paintWedo/);

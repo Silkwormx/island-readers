@@ -158,11 +158,19 @@ html.teach .llist .u5name,html.teach .llplay .u5name{font-size:32px}
 .fs-slideview{height:100dvh;max-height:100dvh;display:flex;flex-direction:column;background:var(--cream);overflow:hidden}
 .fs-slideview:fullscreen{background:#111}
 .fs-pdf{flex:1;width:100%;min-height:0;border:0;background:#fff}
-.fs-overview{display:grid;gap:.4rem;width:100%}
-.fs-over{display:flex;flex-direction:column;align-items:center;gap:.15rem;padding:.25rem;background:#fff;border:3px solid var(--ink);border-radius:1rem;font-family:Andika,sans-serif;font-weight:700;color:var(--ink);cursor:pointer}
-.fs-over .llfade img{height:min(22vh,150px)}
-.fs-over .llplain{font-size:clamp(40px,6vh,72px)}
-.fs-overline{font-size:.85rem;text-align:center;line-height:1.2}
+.fs-overview{display:grid;gap:.45rem;width:100%}
+.fs-over{display:flex;justify-content:center;padding:.2rem;background:#fff;border:3px solid var(--ink);border-radius:1rem}
+.fs-intro{display:flex;flex-direction:column;align-items:center;gap:.3rem;width:100%}
+.fs-intro .llfade img{height:min(16vh,110px)}
+.fs-intro .llplain{font-size:clamp(36px,5vh,64px)}
+.fs-nametag{display:flex;align-items:stretch;min-height:2.6rem;padding:0;background:#fff;border:3px solid #E07A5F;border-radius:.7rem;box-shadow:3px 3px 0 rgba(224,122,95,.35);font-family:Andika,sans-serif;font-weight:700;color:var(--ink);cursor:pointer;overflow:hidden}
+.fs-nameband{width:.85rem;background:#E07A5F;flex:none}
+.fs-nametext{padding:.25rem .55rem;display:flex;align-items:center}
+.fs-soundbubble{background:#E4F6F6;border:3px solid #0E7C7C;border-radius:1.1rem;padding:.3rem .55rem .4rem;color:#085E5C}
+.fs-soundbubble p{margin:0;font-weight:700;text-align:center}
+.fs-taps{display:flex;justify-content:center;gap:.35rem;margin-top:.25rem}
+.fs-tapc{width:2.3rem;height:2.3rem;border-radius:50%;border:3px solid #0E7C7C;background:#fff;color:#085E5C;font-family:Andika,sans-serif;font-weight:700;font-size:1rem;cursor:pointer}
+.fs-tapc.lit{background:#0E7C7C;color:#fff}
 .fs-group .llmain{overflow:auto;align-items:center;gap:.4rem}
 .fs-group .fs-slidebtn{align-self:center}
 .fs-lessons{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:.4rem;align-content:start;width:100%}
