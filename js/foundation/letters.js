@@ -621,10 +621,30 @@
     if (IR.teach) IR.teach.sync();
   }
 
+  function startLetters(group) {
+    const lessons = lessonsOf(group);
+    const map = doneMap();
+    const next = lessons.filter((lesson) => !map[String(lesson.lesson_number)])[0] || lessons[0];
+    if (!next) return;
+    Snd.stop();
+    location.hash = lessonHash(group, next, flowFor(next)[0].id);
+  }
   function groupPage(app, group) {
     IR.newScreen();
     const lessons = lessonsOf(group);
     const map = doneMap();
+    const overview = h('div', { class: 'fs-overview', style: 'grid-template-columns:repeat(' + Math.min(group.letters.length, 4) + ',minmax(0,1fr))' },
+      ...group.letters.map((id) => {
+        const letter = BY[id];
+        return h('button', {
+          class: 'fs-over',
+          type: 'button',
+          'aria-label': nameSoundLine(id) + ' Tap to hear.',
+          onclick: () => speakNameSound(id)
+        },
+          letter ? letterCardStep(letter, 'picture') : h('b', { class: 'llplain' }, id),
+          h('span', { class: 'fs-overline' }, nameSoundLine(id)));
+      }));
     const cards = lessons.map((lesson) => h('li', null, h('button', {
       class: 'fs-lesson' + (map[String(lesson.lesson_number)] ? ' done' : ''),
       type: 'button',
@@ -646,7 +666,12 @@
         h('button', { class: 'back homebtn', type: 'button', onclick: () => { Snd.stop(); location.hash = '#/foundation'; } }, icon('back'), h('span', null, 'Foundation')),
         h('h1', { class: 'uA-title' }, 'Group ' + group.n + ', ' + group.letters.join(', ')),
         IR.ui.gearButton()),
-      h('main', { class: 'llmain' }, slideBlock(group), h('ol', { class: 'fs-lessons' }, ...cards))));
+      h('main', { class: 'llmain' },
+        h('p', { class: 'llask' }, 'These letters go together. Tap one to hear its name and sound.'),
+        overview,
+        h('button', { class: 'btn big primary fs-slidebtn', type: 'button', onclick: () => startLetters(group) }, 'One letter at a time'),
+        slideBlock(group),
+        h('ol', { class: 'fs-lessons' }, ...cards))));
     if (IR.teach) IR.teach.sync();
   }
 
