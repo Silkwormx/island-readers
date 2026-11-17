@@ -1618,6 +1618,7 @@
     return 'plain';
   }
   function groupOpen(group) {
+    if (IR.DEMO_UNLOCK_ALL) return true;
     const list = (program && program.groups) || [];
     const i = list.findIndex((g) => String(g.id).toLowerCase() === group.id);
     if (i <= 0) return true;

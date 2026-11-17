@@ -274,5 +274,6 @@
   }
 
   window.IR = { celebration, ding, tryAgain, D, S: () => S, save, resetAll, load, h, $, $$, sleep, shuffle, pick, colorWord, icon, ICON, CHUNK_COLORS, kidLesson,
-    touchStreak, streakInfo, recordActivity, isDone, activityStars, progressRecord, totalStars, applySettings, Snd, A, sayWord, newScreen, speakerBtn, hasPhoneme, playPhoneme };
+    touchStreak, streakInfo, recordActivity, isDone, activityStars, progressRecord, totalStars, applySettings, Snd, A, sayWord, newScreen, speakerBtn, hasPhoneme, playPhoneme,
+    DEMO_UNLOCK_ALL: true };
 })();

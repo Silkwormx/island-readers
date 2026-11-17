@@ -179,7 +179,7 @@
     /* Nov 3 2026: 22-unit plan. Glued Sounds is Unit 4 (data id stays 'i3', route #/island3). */
     const w = Object.assign({}, w0, id === 'i5' ? { n: 5, title: 'Silent e' } : { n: id === 'i3' ? 4 : w0.n });
     Snd.stop();
-    const imgs = (u) => h('div', { class: 'uimg' }, ...u.img.map((n) => h('img', { src: 'img/' + ({ zip: 'zipA', frill: 'frillC' }[n] || n) + '.webp', alt: '' })), u.state === 'open' ? null : h('span', { class: 'lk' }, icon('lock')));
+    const imgs = (u) => h('div', { class: 'uimg' }, ...u.img.map((n) => h('img', { src: 'img/' + ({ zip: 'zipA', frill: 'frillC' }[n] || n) + '.webp', alt: '' })), u.state === 'open' ? null : h('span', { class: 'herechip soonchip' }, 'Coming soon'));
     const stars = (u) => h('div', { class: 'dots', 'aria-hidden': 'true' }, ...Array.from({ length: u.total }, (_, k) => h('span', { class: 'sstar' + (k < u.done ? ' on' : '') }, icon('star'))));
     const cards = info.list.map((u) => {
       const title = u.kind === 'review' ? 'Review' : u.name;
@@ -187,17 +187,17 @@
       const kind = u.kind === 'review' ? 'Unit ' + w.n + ' Review' : 'Lesson ' + step;
       const body = h('div', { class: 'ubody' }, h('div', { class: 'uk' }, kind), h('h2', null, title),
         h('div', { class: 'umin' }, u.min ? 'About ' + u.min + ' min' : ''), u.desc ? h('div', { class: 'rvd' }, u.desc) : null, stars(u),
-        u.state === 'open' ? h('div', { class: 'uprog' }, u.done + ' of ' + u.total + ' stars' + (u.soft ? ' \u00b7 ' + u.soft : '')) : h('div', { class: 'uprog lockmsg' }, icon('lock'), u.lockMsg));
-      const card = h('button', { class: 'tapcard ucard ' + (u.state === 'open' ? 'open' : 'locked') + (u.kind === 'review' ? ' rv' : ''), type: 'button', 'data-unit': u.id, 'data-state': u.state,
-        'aria-label': (u.kind === 'review' ? 'Unit ' + w.n + ' Review' : 'Lesson ' + step + ': ' + u.name) + '. ' + (u.state === 'open' ? u.done + ' of ' + u.total + ' stars. Open.' : 'Locked. ' + u.lockMsg + '.'),
-        onclick: () => { Snd.stop(); if (u.state === 'open') { modalRoot.innerHTML = ''; location.hash = u.href; } else toast(u.lockMsg + '.'); } }, imgs(u), body);
+        u.state === 'open' ? h('div', { class: 'uprog' }, u.done + ' of ' + u.total + ' stars' + (u.soft ? ' \u00b7 ' + u.soft : '')) : h('div', { class: 'uprog' }, 'Coming soon'));
+      const card = h('button', { class: 'tapcard ucard ' + (u.state === 'open' ? 'open' : 'soon') + (u.kind === 'review' ? ' rv' : ''), type: 'button', 'data-unit': u.id, 'data-state': u.state,
+        'aria-label': (u.kind === 'review' ? 'Unit ' + w.n + ' Review' : 'Lesson ' + step + ': ' + u.name) + '. ' + (u.state === 'open' ? u.done + ' of ' + u.total + ' stars. Open.' : 'Coming soon.'),
+        onclick: () => { Snd.stop(); if (u.state === 'open') { modalRoot.innerHTML = ''; location.hash = u.href; } else toast('Coming soon.'); } }, imgs(u), body);
       if (u.state === 'open') body.append(h('span', { class: 'obtn' }, 'Open lesson'));
       return card;
     });
     const nextIs0 = WORLD[WORLD.indexOf(w0) + 1]; const nextIs = nextIs0 && nextIs0.kind === 'island' ? { kind: 'island', n: w.n + 1 } : nextIs0;
     /* Unit 5 Silent e is already open locally/live; do not say it still unlocks after Unit 4 Review. */
     const nextOpen = nextIs && ((nextIs.n === 5 && !!IR.u5Route) || info.done);
-    const note = nextIs && nextIs.kind === 'island' ? h('div', { class: 'pnote' }, icon(nextOpen ? 'star' : 'lock'), nextOpen ? 'Unit ' + nextIs.n + ' is unlocked!' : 'Unit ' + nextIs.n + ' unlocks when the Unit ' + w.n + ' Review is done') : null;
+    const note = nextIs && nextIs.kind === 'island' ? h('div', { class: 'pnote' }, nextOpen ? icon('star') : null, nextOpen ? 'Unit ' + nextIs.n + ' is open.' : 'Unit ' + nextIs.n + ' is coming soon.') : null;
     const close = () => { modalRoot.innerHTML = ''; document.removeEventListener('keydown', onKey); const b = $('[data-id="' + id + '"]'); if (b) b.focus({ preventScroll: true }); };
     const onKey = (e) => { if (e.key === 'Escape') close(); };
     document.addEventListener('keydown', onKey);
@@ -291,19 +291,19 @@
       const t = TILES[n]; const isl = n === BUILT && !!(D.islands || {})[BUILT_ID];
       const u5 = n === 5 && !!IR.u5Route;   /* Nov 3 2026 local: Unit 5 Silent e is open (js/u5.js: same lesson flow as Unit 4; picker data islands.i5) */
       const u6 = n === 6 && !!IR.u6Route;   /* Unit 6 Endings (-s, -es, -ed, -ing), same lesson flow as Unit 4 */
-      const open = u5 || u6;
-      const st = n < BUILT ? 'locked' : n === BUILT ? (complete ? 'done' : 'here') : open ? 'open' : 'locked'; const lit = n === BUILT + 1 && complete;
-      const note = open ? 'Open' : st === 'here' ? 'You are here' : n === BUILT ? 'Finished' : st === 'done' ? 'Done' : lit ? 'Unlocked' : 'Coming soon';
-      const label = 'Unit ' + n + ': ' + t[0] + ', ' + t[1].replace(/\u00b7/g, ',') + ', ' + t[2] + (t[2] === 1 ? ' lesson. ' : ' lessons. ') + note + (n === BUILT || open ? '. Opens Unit ' + n + '.' : '.');
+      const built = isl || u5 || u6;
+      const st = !built ? 'soon' : n === BUILT && complete ? 'done' : n === BUILT ? 'here' : 'open';
+      const note = st === 'here' ? 'You are here' : st === 'done' ? 'Done' : st === 'open' ? 'Open' : 'Coming soon';
+      const label = 'Unit ' + n + ': ' + t[0] + ', ' + t[1].replace(/\u00b7/g, ',') + ', ' + t[2] + (t[2] === 1 ? ' lesson. ' : ' lessons. ') + note + (built ? '. Opens Unit ' + n + '.' : '.');
       const b = h('button', { class: 'tcard t-' + st + (st === 'here' ? ' t-current' : ''), type: 'button', 'data-id': 'u' + n, 'data-kind': 'island', 'data-n': n, 'aria-label': label },
         h('span', { class: 'tpic' }, h('img', { src: 'img/units/tile' + String(n).padStart(2, '0') + '.webp', alt: '', width: 600, height: 600, loading: n > 8 ? 'lazy' : 'eager' }),
-          st === 'here' ? h('span', { class: 'herechip' }, 'You are here') : null),
+          st === 'here' ? h('span', { class: 'herechip' }, 'You are here') : st === 'soon' ? h('span', { class: 'herechip soonchip' }, 'Coming soon') : null),
         h('span', { class: 'tbody' },
           h('span', { class: 'thead' }, h('span', { class: 'tdots', 'aria-hidden': 'true' }, ...t[3].map((c) => h('i', { class: 'tdot td-' + c }))), h('b', { class: 'tnum' }, 'Unit ' + n)),
           h('span', { class: 'tname' }, t[0]),
           h('span', { class: 'tsnd' }, t[1]),
           h('span', { class: 'tcount' }, t[2] + (t[2] === 1 ? ' lesson' : ' lessons'))));
-      b.addEventListener('click', () => { if (u6) { Snd.stop(); location.hash = '#/u6'; } else if (u5) { openIsland('i5'); } else if (isl) openIsland(BUILT_ID); else { Snd.stop(); toast(st === 'done' ? 'Unit ' + n + ' is done. It is part of the full app.' : n < BUILT ? 'Unit ' + n + ' is coming soon in the full app!' : lit ? 'Unit ' + n + ' is unlocked! It is coming soon in the full app.' : 'Unit ' + n + ' is coming soon! Finish Unit ' + BUILT + ' first.'); } });
+      b.addEventListener('click', () => { if (u6) { Snd.stop(); location.hash = '#/u6'; } else if (u5) { openIsland('i5'); } else if (isl) openIsland(BUILT_ID); else { Snd.stop(); toast('Unit ' + n + ' is coming soon.'); } });
       return b;
     };
     const cover = h('img', { src: 'foundation/img/foundations_cover.jpg', alt: '' });
@@ -746,7 +746,7 @@
       h('span', null, label), h('span', { class: 'su-spell' }, go));
   }
   function skillList(skill) {
-    const lockMsg = (n) => n < 4 ? 'Unit ' + n + ' is coming soon in the full app!' : 'Unit ' + n + ' is coming soon! Finish Unit 4 first.';
+    const lockMsg = (n) => n < 4 ? 'Unit ' + n + ' is coming soon in the full app!' : 'Unit ' + n + ' is coming soon.';
     const sight = skill.id === 'sight';
     const nums = sight ? [...new Set(skill.items.map((it) => it.unit))] : Array.from({ length: 22 }, (_, i) => i + 1);
     let opened = nums.filter((n) => (sight ? skill.items.some((it) => it.unit === n && it.href) : spellUnitOpen(n)) && skill.items.some((it) => it.unit === n))[0] || 0;
@@ -758,11 +758,11 @@
         const open = sight ? true : spellUnitOpen(n);
         const expanded = open && opened === n;
         const uname = sight && mine[0] ? mine[0].lesson : UNIT_NAMES[n];
-        const head = h('button', { class: 'spellunit' + (open ? ' open' : ' locked') + (expanded ? ' on' : ''), type: 'button', 'aria-expanded': open ? String(expanded) : 'false',
-          'aria-label': 'Unit ' + n + ', ' + uname + (open ? (expanded ? '. Hide lessons.' : '. Show lessons.') : '. Locked.') },
+        const head = h('button', { class: 'spellunit' + (open ? ' open' : ' soon') + (expanded ? ' on' : ''), type: 'button', 'aria-expanded': open ? String(expanded) : 'false',
+          'aria-label': 'Unit ' + n + ', ' + uname + (open ? (expanded ? '. Hide lessons.' : '. Show lessons.') : '. Coming soon.') },
           h('span', { class: 'su-n' }, sight ? '' : 'Unit ' + n),
           h('span', { class: 'su-name' }, sight ? uname : uname),
-          open ? h('span', { class: 'su-go', 'aria-hidden': 'true' }, expanded ? 'Hide' : 'Lessons') : h('span', { class: 'su-lock', 'aria-hidden': 'true' }, icon('lock')));
+          open ? h('span', { class: 'su-go', 'aria-hidden': 'true' }, expanded ? 'Hide' : 'Lessons') : h('span', { class: 'su-soon' }, 'Coming soon'));
         if (sight) head.querySelector('.su-n').remove();
         head.addEventListener('click', () => {
           if (!open) { Snd.stop(); toast(lockMsg(n)); return; }
@@ -1103,7 +1103,6 @@
     return 'Coming soon';
   }
   function openTrailBell(n) {
-    const complete = islandDone('i3');
     const u5 = n === 5 && !!IR.u5Route;
     const u6 = n === 6 && !!IR.u6Route;
     const isl = n === 4 && !!(D.islands || {}).i3;
@@ -1111,9 +1110,7 @@
     if (u5) { openIsland('i5'); return; }
     if (isl) { openIsland('i3'); return; }
     Snd.stop();
-    const done = n === 4 && complete;
-    const lit = n === 5 && complete;
-    toast(done ? 'Unit ' + n + ' is done. It is part of the full app.' : n < 4 ? 'Unit ' + n + ' is coming soon in the full app!' : lit ? 'Unit ' + n + ' is unlocked! It is coming soon in the full app.' : 'Unit ' + n + ' is coming soon! Finish Unit 4 first.');
+    toast('Unit ' + n + ' is coming soon.');
   }
   function islandTrailPage() {
     IR.newScreen();
@@ -1141,11 +1138,11 @@
         const status = unitStatus(mark.n, place);
         const hex = UNIT_BELL[mark.n] === 'rainbow' ? '' : BELL_HEX[UNIT_BELL[mark.n]];
         title = 'Unit ' + mark.n;
-        const locked = status === 'Coming soon';
-        lines = [h('span', { class: 'tipskill' }, UNIT_NAMES[mark.n]), h('span', { class: 'tipsounds' }, meta[0]), h('span', { class: 'tipmeta' }, meta[1] + (meta[1] === 1 ? ' lesson' : ' lessons') + ' \u00b7 ' + status), locked ? h('span', { class: 'lockpill' }, 'Locked') : null];
+        const soon = status === 'Coming soon';
+        lines = [h('span', { class: 'tipskill' }, UNIT_NAMES[mark.n]), h('span', { class: 'tipsounds' }, meta[0]), h('span', { class: 'tipmeta' }, meta[1] + (meta[1] === 1 ? ' lesson' : ' lessons') + ' \u00b7 ' + status), soon ? h('span', { class: 'lockpill' }, 'Coming soon') : null];
         open = () => openTrailBell(mark.n);
-        pinClass = 'trailpin' + (mark.n === here ? ' here' : '') + (place.finished[mark.n] ? ' done' : '') + (locked ? ' is-locked' : '') + (UNIT_BELL[mark.n] === 'rainbow' ? ' rainbow' : '');
-        bits = [h('span', { class: 'pinnum' + (mark.n > 9 ? ' pinnum2' : '') }, String(mark.n)), place.finished[mark.n] ? h('span', { class: 'pindone', 'aria-hidden': 'true' }, icon('check')) : null, locked ? h('span', { class: 'pindone pinlock', 'aria-hidden': 'true' }, icon('lock')) : null];
+        pinClass = 'trailpin' + (mark.n === here ? ' here' : '') + (place.finished[mark.n] ? ' done' : '') + (soon ? ' is-soon' : '') + (UNIT_BELL[mark.n] === 'rainbow' ? ' rainbow' : '');
+        bits = [h('span', { class: 'pinnum' + (mark.n > 9 ? ' pinnum2' : '') }, String(mark.n)), place.finished[mark.n] ? h('span', { class: 'pindone', 'aria-hidden': 'true' }, icon('check')) : null];
         label = 'Unit ' + mark.n + '. ' + UNIT_NAMES[mark.n] + '. ' + status + '.';
         if (hex) pinStyle = 'background:' + hex + ';color:' + bellInk(hex);
       }
@@ -1159,7 +1156,7 @@
       });
       const isHere = mark.kind === 'unit' && mark.n === here;
       const hereTag = isHere ? h('span', { class: 'heretag' + (mark.y < 22 ? ' below' : ''), 'aria-hidden': 'true' }, 'You are here') : null;
-      const mapPill = mark.kind === 'unit' && unitStatus(mark.n, place) === 'Coming soon' ? h('span', { class: 'lockpill maplock' }, 'Locked') : null;
+      const mapPill = mark.kind === 'unit' && unitStatus(mark.n, place) === 'Coming soon' ? h('span', { class: 'lockpill maplock' }, 'Coming soon') : null;
       const wrap = h('div', { class: 'trailpinwrap' + (isHere ? ' here' : ''), style: style }, btn, tip, hereTag, mapPill);
       return wrap;
     };
@@ -1214,11 +1211,11 @@
         const status = unitStatus(mark.n, place);
         const hex = UNIT_BELL[mark.n] === 'rainbow' ? '' : BELL_HEX[UNIT_BELL[mark.n]];
         title = 'Unit ' + mark.n;
-        const locked = status === 'Coming soon';
-        lines = [h('span', { class: 'tipskill' }, UNIT_NAMES[mark.n]), h('span', { class: 'tipsounds' }, meta[0]), h('span', { class: 'tipmeta' }, meta[1] + (meta[1] === 1 ? ' lesson' : ' lessons') + ' \u00b7 ' + status), locked ? h('span', { class: 'lockpill' }, 'Locked') : null];
+        const soon = status === 'Coming soon';
+        lines = [h('span', { class: 'tipskill' }, UNIT_NAMES[mark.n]), h('span', { class: 'tipsounds' }, meta[0]), h('span', { class: 'tipmeta' }, meta[1] + (meta[1] === 1 ? ' lesson' : ' lessons') + ' \u00b7 ' + status), soon ? h('span', { class: 'lockpill' }, 'Coming soon') : null];
         open = () => { close(); openTrailBell(mark.n); };
-        pinClass = 'trailpin' + (mark.n === here ? ' here' : '') + (place.finished[mark.n] ? ' done' : '') + (locked ? ' is-locked' : '') + (UNIT_BELL[mark.n] === 'rainbow' ? ' rainbow' : '');
-        bits = [h('span', { class: 'pinnum' + (mark.n > 9 ? ' pinnum2' : '') }, String(mark.n)), place.finished[mark.n] ? h('span', { class: 'pindone', 'aria-hidden': 'true' }, icon('check')) : null, locked ? h('span', { class: 'pindone pinlock', 'aria-hidden': 'true' }, icon('lock')) : null];
+        pinClass = 'trailpin' + (mark.n === here ? ' here' : '') + (place.finished[mark.n] ? ' done' : '') + (soon ? ' is-soon' : '') + (UNIT_BELL[mark.n] === 'rainbow' ? ' rainbow' : '');
+        bits = [h('span', { class: 'pinnum' + (mark.n > 9 ? ' pinnum2' : '') }, String(mark.n)), place.finished[mark.n] ? h('span', { class: 'pindone', 'aria-hidden': 'true' }, icon('check')) : null];
         label = 'Unit ' + mark.n + '. ' + UNIT_NAMES[mark.n] + '. ' + status + '.';
         if (hex) pinStyle = 'background:' + hex + ';color:' + bellInk(hex);
       }
@@ -1227,7 +1224,7 @@
       const btn = h('button', { class: pinClass, type: 'button', style: pinStyle, 'aria-label': label, 'aria-describedby': tipId }, ...bits);
       const isHere = mark.kind === 'unit' && mark.n === here;
       const hereTag = isHere ? h('span', { class: 'heretag' + (mark.y < 22 ? ' below' : ''), 'aria-hidden': 'true' }, 'You are here') : null;
-      const mapPill = mark.kind === 'unit' && unitStatus(mark.n, place) === 'Coming soon' ? h('span', { class: 'lockpill maplock' }, 'Locked') : null;
+      const mapPill = mark.kind === 'unit' && unitStatus(mark.n, place) === 'Coming soon' ? h('span', { class: 'lockpill maplock' }, 'Coming soon') : null;
       const wrap = h('div', { class: 'trailpinwrap' + (isHere ? ' here' : ''), style: style }, btn, tip, hereTag, mapPill);
       go.addEventListener('click', (e) => { e.stopPropagation(); open(); });
       btn.addEventListener('click', () => {
