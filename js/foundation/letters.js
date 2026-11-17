@@ -666,15 +666,32 @@
         : [];
     return { slides: slides, slideLabel: (label || 'Team') + ' slideshow', files: files };
   }
+  const DAY1_SHORT = { pop: 'Pop', feed: 'Feed', catch: 'Catch', hunt: 'Hunt', build: 'Build', ears: 'Ears', flash: 'Flash', match: 'Match', sound: 'Sounds', sort: 'Sort' };
+  function dayFocus(lesson) {
+    const letters = (lesson.new_letters || []).filter(Boolean);
+    if (letters.length) return letters.join(', ');
+    const words = (lesson.new_words || lesson.review_words || []).slice(0, 3);
+    if (words.length) return words.join(' ');
+    return 'Review';
+  }
   function dayGames(group, lesson) {
     if (group.id === 'g1' && lesson && lesson.lesson_number === 1 && IR.day1Flow && IR.day1Flow.GAMES) {
       return IR.day1Flow.GAMES.map((game) => ({
-        title: game.title,
+        title: DAY1_SHORT[game.id] || game.title,
+        label: game.title,
         img: game.icon,
         href: '#/foundation/sample/' + game.id
       }));
     }
     return [];
+  }
+  function dayLinks(group, lesson, isCheck) {
+    const teach = dayTeacher(group, lesson, isCheck);
+    const links = [];
+    if (teach.slides) links.push({ title: 'Slideshow', href: teach.slides });
+    (teach.files || []).forEach((file) => links.push({ title: 'Quick Sounds', href: file.href }));
+    links.push({ title: 'Smart board', go: () => { if (IR.teach) IR.teach.toggle(); } });
+    return links;
   }
   function groupPage(app, group, slug) {
     IR.newScreen();
@@ -683,36 +700,33 @@
     const lesson = isCheck ? null : (lessons.filter((row) => daySlug(row) === slug)[0] || (!slug ? lessons[0] : null));
     if (!isCheck && !lesson) { foundationPage(app); return; }
     const current = isCheck ? 'check' : daySlug(lesson);
-    const teach = dayTeacher(group, lesson, isCheck);
     const day1 = group.id === 'g1' && lesson && lesson.lesson_number === 1;
     const lessonCard = isCheck
-      ? { title: 'Team check', note: 'Plain letters only. Show what you know.', href: '#/foundation/letters/' + group.id + '/check' }
+      ? { title: 'Start', href: '#/foundation/letters/' + group.id + '/check' }
       : day1
-        ? { title: 'Meet a and m', note: 'A short lesson.', href: '#/foundation/sample/team' }
-        : { title: lesson.label || 'Lesson', note: lessonLine(lesson), href: lessonHash(group, lesson, flowFor(lesson)[0].id) };
-    const games = isCheck ? [] : dayGames(group, lesson);
-    const words = !isCheck && lesson && (lesson.new_words || []).slice(0, 4).join(', ');
+        ? { title: 'a, m', href: '#/foundation/sample/team' }
+        : { title: dayFocus(lesson), href: lessonHash(group, lesson, flowFor(lesson)[0].id) };
+    const words = !isCheck && ((lesson.new_words || []).slice(0, 3).join(' '));
     const read = isCheck ? null : day1
-      ? { title: 'Look what I can read', note: 'am', img: 'foundation/img/scenes/am.jpg', alt: 'The word am', big: true, href: '#/foundation/sample/done' }
-      : { title: 'Look what I can read', note: words || lessonLine(lesson), big: true, href: lessonHash(group, lesson, 'read') };
-    app.append(h('div', { class: 'screen trailscreen unitpage u5menu llpage fs-group stepage' },
+      ? { title: 'am', img: 'foundation/img/scenes/am.jpg', alt: 'am', big: true, href: '#/foundation/sample/done' }
+      : { title: words || 'Read', big: true, href: lessonHash(group, lesson, 'read') };
+    app.append(h('div', { class: 'screen trailscreen unitpage llpage fs-group stepage' },
       h('header', { class: 'uA-top' },
         IR.ui.homeButton(),
         h('button', { class: 'back homebtn unitback', type: 'button', onclick: () => { Snd.stop(); location.hash = '#/foundation'; } }, icon('back'), h('span', null, 'Foundations')),
-        h('h1', { class: 'uA-title' }, h('small', null, 'Meet the Team'), 'Team ' + group.n),
-        IR.teacherBox(teach),
+        h('h1', { class: 'uA-title' }, 'Team ' + group.n),
+        IR.teacherBox({ label: 'Teacher', links: dayLinks(group, lesson, isCheck) }),
         IR.ui.gearButton()),
       dayTabs(group, current),
       IR.modeBar({
-        note: isCheck ? 'Show what you know.' : lessonLine(lesson),
+        note: false,
+        lessonLabel: isCheck ? 'Check' : 'Lesson',
         lesson: [lessonCard],
-        games: games,
+        hideGames: isCheck,
+        games: isCheck ? [] : dayGames(group, lesson),
         gamesSoon: 'Games coming soon',
         story: read,
-        storyLabel: 'Read It',
-        slides: teach.slides,
-        slideLabel: teach.slideLabel,
-        files: teach.files
+        storyLabel: 'Read It'
       })));
     if (IR.teach) IR.teach.sync();
   }

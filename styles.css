@@ -59,18 +59,31 @@ p{margin:.4em 0}
 .gameico{display:flex;align-items:center;justify-content:center;width:2.6rem;height:2.6rem;flex:none;color:#C95A10}
 .gameico .ico{width:1.45rem;height:1.45rem}
 .gameico img{width:2.6rem;height:2.6rem;object-fit:cover;border-radius:.55rem}
-.fs-group .stepnote{white-space:normal}
-.daytabs{display:flex;flex-wrap:wrap;gap:.45rem;width:min(100%,68rem);margin:.85rem auto 0;padding:0 1.2rem}
-.daytab{min-height:3.1rem;padding:.35rem .9rem;border:3px solid #E4D6B4;border-radius:1rem;background:#fff;color:#2B2540;font-family:Andika,sans-serif;font-size:1.15rem;font-weight:700;cursor:pointer}
-.daytab.on{background:#0E7C7C;border-color:#0E7C7C;color:#fff}
+.fs-group .stepflow{gap:2.6rem;width:min(100%,46rem);margin:1.8rem auto 3.2rem}
+.fs-group .stepblock{gap:1.05rem}
+.fs-group .gamegrid{gap:1.05rem}
+.fs-group .gamecard{padding:.95rem 1rem}
+.daytabs{display:flex;flex-wrap:wrap;gap:.2rem .15rem;width:min(100%,46rem);margin:1.35rem auto 0;padding:0 1.2rem}
+.daytab{min-height:2.75rem;padding:.2rem .7rem;border:0;border-radius:.6rem;background:transparent;color:#6d655c;font-family:Andika,sans-serif;font-size:1.15rem;font-weight:700;cursor:pointer}
+.daytab.on{background:transparent;color:#0E7C7C;box-shadow:inset 0 -3px 0 #0E7C7C;border-radius:0}
+.teachpop.teachquiet{display:flex;flex-direction:column;gap:.4rem;width:12.5rem;padding:.7rem}
 @media (max-width:700px){
-  .daytab{min-height:2.7rem;padding:.3rem .7rem;font-size:1rem}
+  .daytab{min-height:2.6rem;padding:.2rem .55rem;font-size:1.05rem}
   .fs-group .uA-top{gap:.35rem;row-gap:.35rem}
-  .fs-group .teachbox{max-width:9.5rem}
-  .fs-group .teachpop{width:min(11.5rem,calc(100vw - 1.2rem))}
+  .fs-group .teachcorner{order:0;flex:none;width:auto;margin-left:auto}
+  .fs-group .teachpop{width:min(12rem,calc(100vw - 1.2rem))}
+}
+@media (max-width:760px){
+  .fs-group.stepage .uA-title{flex:0 1 auto;font-size:1.25rem}
+  .fs-group.stepage .uA-title small{display:none}
 }
 @media (min-width:1000px){
   .stepage .modebar{padding-right:16rem;box-sizing:border-box}
+  .fs-group .modebar{padding-right:0}
+  .fs-group .gamegrid{gap:1.05rem}
+  .fs-group .gamecard{padding:.9rem 1rem;gap:.7rem;box-shadow:0 3px 0 rgba(43,37,64,.06)}
+  .fs-group .gamenum{width:2rem;height:2rem;font-size:1rem;border-radius:.6rem}
+  .fs-group .gametxt b{font-size:1.08rem}
   .gamegrid{grid-template-columns:repeat(3,minmax(0,1fr));gap:.55rem}
   .gamecard{padding:.45rem .6rem;gap:.4rem;box-shadow:0 2px 0 rgba(43,37,64,.08)}
   .gamenum{width:1.7rem;height:1.7rem;font-size:.95rem;border-radius:.55rem}

@@ -522,8 +522,9 @@
       h('span', { class: 'gametxt' }, h('b', null, item.title), item.note ? h('span', { class: 'gamenote' }, item.note) : null, item.min ? h('span', { class: 'gamemin' }, item.min + ' min') : null)
     ];
     const cls = item.big ? 'storycard' : (num ? 'gamecard' : 'stepcard');
-    if (item.href && item.href.charAt(0) !== '#') return h('a', { class: cls, href: item.href, target: '_blank', rel: 'noopener' }, ...body);
-    return h('button', { class: cls, type: 'button', onclick: goItem(item) }, ...body);
+    const label = item.label || item.title;
+    if (item.href && item.href.charAt(0) !== '#') return h('a', { class: cls, href: item.href, target: '_blank', rel: 'noopener', 'aria-label': label }, ...body);
+    return h('button', { class: cls, type: 'button', 'aria-label': label, onclick: goItem(item) }, ...body);
   }
   function stepHead(n, label) {
     return h('div', { class: 'stephead' }, h('span', { class: 'stepnum' }, String(n)), h('span', { class: 'steplab' }, label));
@@ -536,15 +537,21 @@
         : h('div', { class: 'lessonrow' }, ...items.map((item) => itemCard(item)));
     return h('section', { class: 'stepblock' }, stepHead(n, label), cards);
   }
+  function teacherLink(link) {
+    if (link.href && link.href.charAt(0) !== '#') return h('a', { class: 'teachlink', href: link.href, target: '_blank', rel: 'noopener' }, link.title);
+    return h('button', { class: 'teachlink', type: 'button', onclick: () => { Snd.stop(); if (link.go) link.go(); else if (link.href) location.hash = link.href; } }, link.title);
+  }
   function teacherBox(plan) {
     plan = plan || {};
     const files = plan.files || [];
-    const panel = h('div', { class: 'teachpop', hidden: '' },
-      h('p', { class: 'teachstep' }, h('span', null, '1'), 'Slideshow'),
-      plan.slides ? h('button', { class: 'teachlink', type: 'button', onclick: () => { Snd.stop(); location.hash = plan.slides; } }, plan.slideLabel || 'Open the slideshow') : h('p', { class: 'teachsoon' }, 'Coming soon'),
-      h('p', { class: 'teachstep' }, h('span', null, '2'), 'Printables'),
-      files.length ? h('div', null, ...files.map((file) => h('a', { class: 'teachlink', href: file.href, target: '_blank', rel: 'noopener' }, file.title))) : h('p', { class: 'teachsoon' }, 'Coming soon'));
-    const btn = h('button', { class: 'teachbox', type: 'button', 'aria-expanded': 'false' }, 'Teacher Materials');
+    const panel = plan.links
+      ? h('div', { class: 'teachpop teachquiet', hidden: '' }, ...plan.links.map(teacherLink))
+      : h('div', { class: 'teachpop', hidden: '' },
+        h('p', { class: 'teachstep' }, h('span', null, '1'), 'Slideshow'),
+        plan.slides ? h('button', { class: 'teachlink', type: 'button', onclick: () => { Snd.stop(); location.hash = plan.slides; } }, plan.slideLabel || 'Open the slideshow') : h('p', { class: 'teachsoon' }, 'Coming soon'),
+        h('p', { class: 'teachstep' }, h('span', null, '2'), 'Printables'),
+        files.length ? h('div', null, ...files.map((file) => h('a', { class: 'teachlink', href: file.href, target: '_blank', rel: 'noopener' }, file.title))) : h('p', { class: 'teachsoon' }, 'Coming soon'));
+    const btn = h('button', { class: 'teachbox', type: 'button', 'aria-expanded': 'false', 'aria-label': 'Teacher Materials' }, plan.label || 'Teacher Materials');
     const wrap = h('div', { class: 'teachcorner' }, btn, panel);
     function onDoc(e) { if (!wrap.contains(e.target)) setOpen(false); }
     function onKey(e) { if (e.key === 'Escape') setOpen(false); }
@@ -566,11 +573,11 @@
   function modeBar(plan) {
     plan = plan || {};
     return h('div', { class: 'modebar' },
-      h('p', { class: 'stepnote' }, plan.note || 'Watch the lesson, then play.'),
+      plan.note === false ? null : h('p', { class: 'stepnote' }, plan.note || 'Watch the lesson, then play.'),
       plan.before || null,
       h('div', { class: 'stepflow' },
         plan.choose ? null : stepSection(1, plan.lessonLabel || 'Lesson', plan.lesson || [], false, plan.lessonSoon),
-        plan.choose ? null : stepSection(2, 'Games', plan.games || [], true, plan.gamesSoon),
+        plan.choose || plan.hideGames ? null : stepSection(2, 'Games', plan.games || [], true, plan.gamesSoon),
         plan.choose || (!plan.story && !plan.storySoon) ? null : stepSection(3, plan.storyLabel || 'Story', plan.story ? [plan.story] : [], false, plan.storySoon),
         ...(plan.choose || []).map((item, i) => stepSection(i + 1, item.title, [item]))));
   }
