@@ -628,7 +628,7 @@
     const cards = lessons.map((lesson) => h('li', null, h('button', {
       class: 'fs-lesson' + (map[String(lesson.lesson_number)] ? ' done' : ''),
       type: 'button',
-      onclick: () => { Snd.stop(); location.hash = lessonHash(group, lesson, 'warm'); }
+      onclick: () => { Snd.stop(); location.hash = lessonHash(group, lesson, flowFor(lesson)[0].id); }
     },
       h('span', { class: 'fs-day' }, lesson.label || ('Lesson ' + lesson.lesson_number)),
       h('span', { class: 'fs-line' }, lessonLine(lesson)))));
@@ -1365,11 +1365,27 @@
         h('p', null, 'Sounds children use every day come early. Rare letters, q and x and z, come last.'),
         h('p', null, 'The order follows a research-based science of reading sequence.')));
   }
+  function planFor(lesson) {
+    if (!window.IRLetterScope || !program || !program.lessons) return null;
+    return IRLetterScope.lessonPlan(program, lesson);
+  }
   function flowFor(lesson) {
-    if (lesson.new_letters && lesson.new_letters.length) {
-      return [{ id: 'ido', title: 'I do' }, { id: 'wedo', title: 'We do' }].concat(FLOW);
+    const plan = planFor(lesson);
+    if (!plan) {
+      if (lesson.new_letters && lesson.new_letters.length) {
+        return [{ id: 'ido', title: 'I do' }, { id: 'wedo', title: 'We do' }].concat(FLOW);
+      }
+      return FLOW;
     }
-    return FLOW;
+    const steps = [];
+    plan.phases.forEach((phase) => {
+      steps.push({ id: 'ido-' + phase.letter, title: 'I do ' + phase.letter, phase: phase, kind: 'ido' });
+      steps.push({ id: 'wedo-' + phase.letter, title: 'We do ' + phase.letter, phase: phase, kind: 'wedo' });
+      steps.push({ id: 'use-' + phase.letter, title: 'Practice ' + phase.letter, phase: phase, kind: 'use' });
+    });
+    const close = plan.close;
+    FLOW.forEach((step) => steps.push({ id: step.id, title: step.title, phase: close, kind: step.id }));
+    return steps;
   }
   function grownTip(lesson) {
     const tips = [];
@@ -1483,7 +1499,7 @@
     const stop = nextStop();
     if (!stop || !stop.group) return;
     if (stop.check) location.hash = '#/foundation/letters/' + stop.group.id + '/check';
-    else if (stop.lesson) location.hash = lessonHash(stop.group, stop.lesson, 'warm');
+    else if (stop.lesson) location.hash = lessonHash(stop.group, stop.lesson, flowFor(stop.lesson)[0].id);
   }
   function faceRow(group) {
     return h('span', { class: 'fs-faces' }, ...group.letters.map((id) => {
@@ -1538,26 +1554,38 @@
     if (IR.teach) IR.teach.sync();
   }
 
-  function paintStep(stage, group, lesson, stepId) {
+  function paintStep(stage, group, lesson, step) {
+    const stepId = step && step.kind ? step.kind : step;
+    const phase = step && step.phase;
     stage.innerHTML = '';
-    if (stepId === 'ido') return paintIdo(stage, lesson);
-    if (stepId === 'wedo') return paintWedo(stage, lesson);
-    if (stepId === 'warm') return paintWarm(stage, lesson);
-    if (stepId === 'review') return paintReview(stage, lesson, group);
-    if (stepId === 'meet') return paintMeet(stage, lesson);
-    if (stepId === 'read') return paintRead(stage, lesson);
-    if (stepId === 'write') return paintWrite(stage, lesson, group);
+    if (stepId === 'ido') return paintIdo(stage, lesson, phase);
+    if (stepId === 'wedo') return paintWedo(stage, lesson, phase);
+    if (stepId === 'use') return paintUse(stage, lesson, phase);
+    if (stepId === 'warm') return paintWarm(stage, lesson, phase);
+    if (stepId === 'review') return paintReview(stage, lesson, group, phase);
+    if (stepId === 'meet') return paintMeet(stage, lesson, phase);
+    if (stepId === 'read') return paintRead(stage, lesson, phase);
+    if (stepId === 'write') return paintWrite(stage, lesson, group, phase);
     paintBank(stage, lesson);
   }
-  function paintWarm(stage, lesson) {
+  function allowedWords(lesson, phase) {
+    if (phase && phase.words) return phase.words;
+    const plan = planFor(lesson);
+    return (plan && plan.close && plan.close.words) || [];
+  }
+  function paintWarm(stage, lesson, phase) {
+    const words = allowedWords(lesson, phase);
+    if (!words.length) {
+      stage.append(h('p', { class: 'llask' }, 'Words come after the letters they need.'));
+      return;
+    }
     const ears = lesson.ears_warmup || {};
-    const words = ears.words || lesson.review_words || lesson.new_words || ['am'];
     let i = 0;
     const ask = h('p', { class: 'llask' }, ears.goal || 'Tap each sound.');
     const host = h('div', { class: 'fs-stagein' });
     function show() {
       host.innerHTML = '';
-      const word = String(words[Math.min(i, words.length - 1)] || 'am');
+      const word = String(words[Math.min(i, words.length - 1)]);
       const parts = word.toLowerCase().replace(/[^a-z]/g, '').split('');
       let at = 0;
       host.append(
@@ -1581,8 +1609,8 @@
     stage.append(ask, host);
     show();
   }
-  function paintReview(stage, lesson, group) {
-    const ids = (lesson.flash_sequence && lesson.flash_sequence.length ? lesson.flash_sequence : taughtThrough(group).map((letter) => letter.id)).slice(0, 8);
+  function paintReview(stage, lesson, group, phase) {
+    const ids = (phase && phase.flash && phase.flash.length ? phase.flash : taughtThrough(group).map((letter) => letter.id)).slice(0, 8);
     stage.append(
       h('p', { class: 'llask' }, 'Tap each letter and say its sound.'),
       h('div', { class: 'llrow' }, ...ids.map((id) => {
@@ -1595,8 +1623,9 @@
         }, letterCardStep(letter, lookStep(lesson, id)));
       })));
   }
-  function paintMeet(stage, lesson) {
-    const ids = lesson.new_letters && lesson.new_letters.length ? lesson.new_letters : [];
+  function paintMeet(stage, lesson, phase) {
+    const known = phase && phase.letters;
+    const ids = (lesson.new_letters || []).filter((id) => !known || known.indexOf(id) >= 0);
     if (!ids.length) {
       stage.append(h('p', { class: 'llask' }, 'These letters are already friends. Say each sound on the next step.'));
       return;
@@ -1607,8 +1636,8 @@
       return h('div', { class: 'fs-meetone' }, letterCardStep(letter, lookStep(lesson, id)), hintButton([id]));
     })));
   }
-  function paintRead(stage, lesson) {
-    const words = (lesson.new_words && lesson.new_words.length ? lesson.new_words : lesson.review_words || []).slice(0, 6);
+  function paintRead(stage, lesson, phase) {
+    const words = allowedWords(lesson, phase).slice(0, 6);
     stage.append(
       h('p', { class: 'llask' }, 'Tap a word. Say each sound, then the word.'),
       h('div', { class: 'llrow' }, ...words.map((word) => h('button', {
@@ -1625,9 +1654,10 @@
         }
       }, word))));
   }
-  function paintWrite(stage, lesson, group) {
+  function paintWrite(stage, lesson, group, phase) {
     const day = Number(lesson.fade && lesson.fade.day) || dayFromLabel(lesson.label);
-    const ids = lesson.new_letters && lesson.new_letters.length ? lesson.new_letters : taughtThrough(group).slice(0, 2).map((letter) => letter.id);
+    const known = (phase && phase.letters) || [];
+    const ids = (lesson.new_letters && lesson.new_letters.length ? lesson.new_letters : known).filter((id) => !known.length || known.indexOf(id) >= 0);
     if (day <= 2 && ids.length) {
       stage.append(h('p', { class: 'llask' }, day === 1 ? 'Trace the letter over the character.' : 'Write the letter.'), h('div', { class: 'fs-meet' }, ...ids.slice(0, 2).map((id) => {
         const letter = BY[id];
@@ -1636,7 +1666,11 @@
       })));
       return;
     }
-    const word = (lesson.new_words && lesson.new_words[0]) || (lesson.review_words && lesson.review_words[0]) || 'am';
+    const word = allowedWords(lesson, phase).filter((item) => letterIdsSafe(item).length > 1)[0] || '';
+    if (!word) {
+      stage.append(h('p', { class: 'llask' }, 'Write a letter you know.'));
+      return;
+    }
     const built = h('p', { class: 'llshown llprint' }, '');
     const letters = String(word).toLowerCase().replace(/[^a-z]/g, '').split('');
     let at = 0;
@@ -1658,9 +1692,29 @@
         }
       }, ch))));
   }
-  function paintIdo(stage, lesson) {
-    const ids = lesson.new_letters || [];
-    const word = (lesson.new_words && lesson.new_words[0]) || '';
+  function letterIdsSafe(word) {
+    return window.IRLetterScope ? IRLetterScope.letterIds(word) : String(word || '').toLowerCase().replace(/[^a-z]/g, '').split('');
+  }
+  function paintUse(stage, lesson, phase) {
+    const words = allowedWords(lesson, phase).slice(0, 4);
+    const ids = (phase && phase.flash) || [];
+    stage.append(
+      h('p', { class: 'llask' }, 'Practice with the letters you know.'),
+      h('div', { class: 'llrow' }, ...ids.map((id) => {
+        const letter = BY[id];
+        if (!letter) return null;
+        return h('button', { class: 'lltap', type: 'button', onclick: () => hear(letter, 'sound') }, letterCardStep(letter, 'plain'));
+      })));
+    if (words.length) stage.append(h('div', { class: 'llrow' }, ...words.map((word) => h('button', {
+      class: 'lltap llprint',
+      type: 'button',
+      onclick: () => modelBlend(word)
+    }, word))));
+  }
+  function paintIdo(stage, lesson, phase) {
+    const id = phase && phase.letter;
+    const ids = id ? [id] : (lesson.new_letters || []);
+    const word = allowedWords(lesson, phase).filter((item) => !id || letterIdsSafe(item).indexOf(id) >= 0)[0] || '';
     stage.append(
       h('div', { class: 'llbuddies' }, h('img', { src: 'img/frill.webp', alt: 'Frill' })),
       h('p', { class: 'llask' }, 'Watch. Frill shows the letter, the sound, and the word.'),
@@ -1672,13 +1726,13 @@
           h('p', { class: 'fs-chant' }, row.action || ''),
           h('p', { class: 'fs-chant' }, row.chant || ''));
       })),
-      word ? h('button', { class: 'lltap', type: 'button', onclick: () => modelBlend(word) }, 'Hear ' + word) : null,
       grownTip(lesson));
+    if (word) stage.append(h('button', { class: 'lltap', type: 'button', onclick: () => modelBlend(word) }, 'Hear ' + word));
   }
-  function paintWedo(stage, lesson) {
-    const id = (lesson.new_letters || [])[0];
+  function paintWedo(stage, lesson, phase) {
+    const id = (phase && phase.letter) || (lesson.new_letters || [])[0];
     const letter = BY[id];
-    const word = (lesson.new_words && lesson.new_words[0]) || id || 'am';
+    const word = allowedWords(lesson, phase).filter((item) => !id || letterIdsSafe(item).indexOf(id) >= 0)[0] || id;
     const parts = graphemes(String(word));
     let at = 0;
     const line = h('p', { class: 'llshown llprint' }, '');
@@ -1697,7 +1751,7 @@
           line.textContent += part.g;
           const bit = BY[part.id];
           if (bit) hear(bit, 'sound');
-          if (at >= parts.length) { speak(word); rememberWord(word); }
+          if (at >= parts.length && letterIdsSafe(word).length > 1) { speak(word); rememberWord(word); }
         }
       }, part.g))),
       grownTip(lesson));
@@ -1728,7 +1782,7 @@
       }, item.title);
     }));
     if (step.id === 'bank') paintBank(stage, lesson);
-    else paintStep(stage, group, lesson, step.id);
+    else paintStep(stage, group, lesson, step);
     app.append(h('div', { class: 'screen trailscreen unitpage llpage fs-lesson' },
       h('header', { class: 'uA-top' },
         h('button', { class: 'back homebtn', type: 'button', onclick: () => { Snd.stop(); location.hash = '#/foundation/letters/' + group.id; } }, icon('back'), h('span', null, 'Lessons')),
@@ -1754,7 +1808,12 @@
   function checkScreen(app, group) {
     const lessons = lessonsOf(group);
     const source = lessons.filter((lesson) => lesson.mastery_check).slice(-1)[0];
-    const items = (source && source.mastery_check && source.mastery_check.items) || [];
+    const close = source && planFor(source) && planFor(source).close;
+    const items = ((source && source.mastery_check && source.mastery_check.items) || []).filter((item) => {
+      if (!close || !window.IRLetterScope) return true;
+      if (item.type === 'word') return IRLetterScope.wordOk(program, item.item, close.letters, close.hearts);
+      return close.letters.indexOf(item.item) >= 0;
+    });
     let i = 0;
     let right = 0;
     let picked = false;
@@ -1846,13 +1905,13 @@
   IR.lettersRoute = function (hash, app) {
     if (hash === '#/foundation/slides/g1' || hash === '#/foundation/slides/g1/') { slidesScreen(app); return true; }
     if (/^#\/foundation\/letters\/?$/.test(hash)) { foundationPage(app); return true; }
-    const lesson = /^#\/foundation\/letters\/(g[1-7])\/l\/(\d+)(?:\/(ido|wedo|warm|review|meet|read|write|bank))?\/?$/.exec(hash);
+    const lesson = /^#\/foundation\/letters\/(g[1-7])\/l\/(\d+)(?:\/([a-z0-9-]+))?\/?$/.exec(hash);
     if (lesson) {
       const g = groupById(lesson[1]);
       const row = lessonsOf(g || { id: lesson[1] }).filter((item) => item.lesson_number === Number(lesson[2]))[0];
       if (!g || !row) return false;
       if (!groupOpen(g) && !(IR.teach && IR.teach.on && IR.teach.on())) { foundationPage(app); return true; }
-      lessonScreen(app, g, row, lesson[3] || 'warm');
+      lessonScreen(app, g, row, lesson[3] || '');
       return true;
     }
     const group = /^#\/foundation\/letters\/(g[1-7])\/?$/.exec(hash);

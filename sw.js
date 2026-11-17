@@ -8,6 +8,7 @@ const ASSETS = [
  "./js/wordplay.js",
  "./js/u5.js",
  "./js/u5games.js",
+ "./js/foundation/scope.js",
  "./js/foundation/letters.js",
  "./foundation/foundation.css",
  "./data_u5.js",
