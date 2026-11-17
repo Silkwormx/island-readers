@@ -1713,14 +1713,14 @@
     v: 'foundation/img/letters/v_vida_vine.jpg', z: 'foundation/img/letters/z_zuzu_zigzag_cloud.jpg'
   };
   const KID_STEPS = [
-    { id: 'hear', say: 'Tap the sound.', label: 'Hear' },
-    { id: 'find', say: 'Tap the letter.', label: 'Find' },
-    { id: 'play', say: 'Pick a game.', label: 'Play' },
-    { id: 'blend', say: 'Tap the letters.', label: 'Blend' },
-    { id: 'trace', say: 'Trace the letter.', label: 'Trace' },
-    { id: 'read', say: 'Tap a word.', label: 'Read' },
-    { id: 'check', say: 'Tap the letter.', label: 'Check' },
-    { id: 'done', say: 'You did it.', label: 'Done' }
+    { id: 'hear', say: 'Tap the sound.', label: 'Hear', who: 'Frill' },
+    { id: 'find', say: 'Tap the letter.', label: 'Find', who: 'Frill' },
+    { id: 'play', say: 'Pick a game.', label: 'Play', who: 'Frill' },
+    { id: 'blend', say: 'Tap the letters.', label: 'Blend', who: 'Frill' },
+    { id: 'trace', say: 'Trace the letter.', label: 'Trace', who: 'Frill' },
+    { id: 'read', say: 'Tap a word.', label: 'Read', who: 'Frill' },
+    { id: 'check', say: 'Tap the letter.', label: 'Check', who: 'Frill' },
+    { id: 'done', say: 'You did it.', label: 'Done', who: 'Zip' }
   ];
   function letterArt(id) { return artUrl(id) || ART_FILE[id] || ''; }
   function pureSound(L) {
@@ -1729,6 +1729,17 @@
     return String(L.soundSay || L.id).split(',')[0].trim();
   }
   function hearPure(L) { return speak(pureSound(L)); }
+  function narrate(who, text) {
+    const src = who === 'Zip' ? 'img/zipA.webp' : 'img/frill.webp';
+    const line = h('button', {
+      class: 'llnarr',
+      type: 'button',
+      'aria-label': who + ' says: ' + text,
+      onclick: () => speak(text)
+    }, h('img', { src: src, alt: who }), h('span', null, text));
+    speak(text);
+    return line;
+  }
   function letterKey(group, id) { return group.id + '-' + id; }
   function letterDoneMap() { return readStore(LESSON_KEY); }
   function letterDone(group, id) { return !!letterDoneMap()[letterKey(group, id)]; }
@@ -1889,7 +1900,7 @@
         ? h('img', { class: 'llkidart sm', src: round.art, alt: '' })
         : h('button', { class: 'llkidsound', type: 'button', 'aria-label': 'Hear the sound', onclick: () => hearPure(BY[round.answer]) }, icon('speaker'));
       stage.append(prompt, kidChoices(picks, round.answer, () => { i += 1; setTimeout(show, 280); }));
-      setTimeout(() => { if (stage.querySelector('.llkidchoice')) hearPure(BY[round.answer]); }, 650);
+      setTimeout(() => { if (stage.querySelector('.llkidchoice')) hearPure(BY[round.answer]); }, 1600);
     }
     show();
   }
@@ -2076,7 +2087,7 @@
           i += 1;
           setTimeout(show, 280);
         }));
-      if (!round.word) setTimeout(() => { if (host.querySelector('.llkidchoice')) hearPure(BY[id]); }, 650);
+      if (!round.word) setTimeout(() => { if (host.querySelector('.llkidchoice')) hearPure(BY[id]); }, 1600);
     }
     show();
   }
@@ -2085,8 +2096,7 @@
     const src = letterArt(id);
     stage.append(
       h('span', { class: 'llshell big on', html: shellSvg(true) }),
-      src ? h('img', { class: 'llkidart', src: src, alt: '' }) : null,
-      h('p', { class: 'llkiddone' }, 'Done'));
+      src ? h('img', { class: 'llkidart', src: src, alt: '' }) : null);
   }
   function kidLesson(app, group, id, stepId) {
     IR.newScreen();
@@ -2120,9 +2130,9 @@
         h('p', { class: 'llkidprog' }, 'Step ' + (index + 1) + ' of ' + KID_STEPS.length)),
       h('div', { class: 'llkidbar', role: 'progressbar', 'aria-valuemin': 1, 'aria-valuemax': KID_STEPS.length, 'aria-valuenow': index + 1 },
         h('i', { style: 'width:' + Math.round((index + 1) / KID_STEPS.length * 100) + '%' })),
+      narrate(step.who || 'Frill', step.say),
       stage,
       h('div', { class: 'llkidnav' }, next)));
-    speak(step.say);
     if (step.id === 'done') ready();
   }
   function groupPage(app, group) {

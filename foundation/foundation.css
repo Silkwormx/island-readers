@@ -404,7 +404,9 @@ html.teach .llist .u5name,html.teach .llplay .u5name{font-size:32px}
 .llkid .uA-top{width:100%}
 .llbar{width:100%;box-sizing:border-box;flex-wrap:nowrap}
 .llbar .uA-title{flex:1;text-align:center;white-space:nowrap}
-.llkidprog{margin:0;flex:none;white-space:nowrap;font-weight:700;color:#C45C00}
+.llnarr{display:inline-flex;align-items:center;justify-content:center;gap:.55rem;max-width:calc(100% - 1.4rem);margin:.35rem auto 0;padding:.15rem .35rem;border:0;background:transparent;font-family:Andika,sans-serif;font-weight:700;font-size:1.25rem;line-height:1.2;color:#2B2540;text-align:left;cursor:pointer}
+.llnarr img{width:3rem;height:3rem;object-fit:contain;flex:none;border-radius:50%;background:#FFF6E3}
+.ll-lessonplay .instr{justify-content:center}
 .llkidnext{min-width:8.5rem;justify-content:center;text-align:center;background:#fff;color:#B04A00;border:3px solid #F28C00;box-shadow:0 4px 0 #F28C00}
 .llkidnext.ready{background:#F28C00;color:#fff;box-shadow:0 0 0 4px rgba(242,140,0,.28),0 4px 0 #C45C00}
 @media (max-width:700px){

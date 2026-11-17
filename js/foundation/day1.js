@@ -116,7 +116,16 @@
       setInstr(text) {
         instr.innerHTML = '';
         if (!text) return;
-        if (PACK && PACK.lesson) { say(text); return; }
+        if (PACK && PACK.lesson) {
+          instr.append(h('button', {
+            class: 'llnarr',
+            type: 'button',
+            'aria-label': 'Frill says: ' + text,
+            onclick: () => say(text)
+          }, h('img', { src: FRILL, alt: 'Frill' }), h('span', null, text)));
+          say(text);
+          return;
+        }
         instr.append(speakerBtn(() => say(text), 'Hear the directions'), h('span', { class: 'itext' }, text));
         say(text);
       },
