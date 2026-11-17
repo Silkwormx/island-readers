@@ -117,7 +117,7 @@
   const LESSON = [
     { id: 'flash', title: 'Review flash' },
     { id: 'ears', title: 'Sound play' },
-    { id: 'meet', title: 'Meet the letters' },
+    { id: 'meet', title: 'Review the letters' },
     { id: 'say', title: 'Say it from the letter', day: 2 },
     { id: 'trace', title: 'Trace' },
     { id: 'games', title: 'Games' },
@@ -1359,7 +1359,8 @@
     return h('details', { class: 'fs-about' },
       h('summary', null, 'Why this letter order'),
       h('div', { class: 'fs-aboutbody' },
-        h('p', null, 'We teach the lowercase letter and its sound first. Capitals come lightly, a little later.'),
+        h('p', null, 'This is a letter review. It firms up each letter name and its sound before reading.'),
+        h('p', null, 'We review lowercase letters and their sounds first. Capitals come lightly, a little later.'),
         h('p', null, 'The first set is a m s t. Those letters make real words right away: am, at, Sam, and sat.'),
         h('p', null, 'Letters that look alike, like b and d and p, are spread apart so they are easier to tell apart.'),
         h('p', null, 'Sounds children use every day come early. Rare letters, q and x and z, come last.'),
@@ -1381,6 +1382,7 @@
     plan.phases.forEach((phase) => {
       steps.push({ id: 'ido-' + phase.letter, title: 'I do ' + phase.letter, phase: phase, kind: 'ido' });
       steps.push({ id: 'wedo-' + phase.letter, title: 'We do ' + phase.letter, phase: phase, kind: 'wedo' });
+      steps.push({ id: 'check-' + phase.letter, title: 'Name and sound', phase: phase, kind: 'checkname' });
       steps.push({ id: 'use-' + phase.letter, title: 'Practice ' + phase.letter, phase: phase, kind: 'use' });
     });
     const close = plan.close;
@@ -1412,7 +1414,7 @@
   const FLOW = [
     { id: 'warm', title: 'Warm-up' },
     { id: 'review', title: 'Review' },
-    { id: 'meet', title: 'Meet the letters' },
+    { id: 'meet', title: 'Review the letters' },
     { id: 'read', title: 'Blend and read' },
     { id: 'write', title: 'Write' },
     { id: 'bank', title: 'Look what I can read!' }
@@ -1530,14 +1532,14 @@
         h('span', { class: 'tpic fs-setpic', style: 'grid-template-columns:repeat(' + group.letters.length + ',minmax(0,1fr))' }, ...faces),
         h('span', { class: 'tbody' },
           h('b', { class: 'tnum' }, group.letters.join(' ')),
-          h('span', { class: 'tname' }, isNext ? 'Next up' : (open ? 'Open this set' : 'After the last check')),
+          h('span', { class: 'tname' }, isNext ? 'Next up' : (open ? 'Review this set' : 'After the last check')),
           h('span', { class: 'tsnd' }, done + ' of ' + lessons.length)));
     });
     const words = readBank();
     app.append(h('div', { class: 'screen trailscreen unitpage llpage fs-page' },
       h('header', { class: 'uA-top' }, IR.ui.homeButton(), h('h1', { class: 'uA-title' }, 'Foundation Skills'), IR.ui.gearButton()),
       h('main', { class: 'llmain fs-hub' },
-        h('p', { class: 'fs-lead' }, 'Learn the letters and read real words from day one.'),
+        h('p', { class: 'fs-lead' }, 'Review the letters and read real words from day one.'),
         h('button', { class: 'btn big primary fs-continue', type: 'button', onclick: openNext }, started ? 'Continue' : 'Start Group 1'),
         aboutOrder(),
         h('h2', { class: 'fs-h' }, 'Your letter path'),
@@ -1560,6 +1562,7 @@
     stage.innerHTML = '';
     if (stepId === 'ido') return paintIdo(stage, lesson, phase);
     if (stepId === 'wedo') return paintWedo(stage, lesson, phase);
+    if (stepId === 'checkname') return paintNameCheck(stage, phase);
     if (stepId === 'use') return paintUse(stage, lesson, phase);
     if (stepId === 'warm') return paintWarm(stage, lesson, phase);
     if (stepId === 'review') return paintReview(stage, lesson, group, phase);
@@ -1630,7 +1633,7 @@
       stage.append(h('p', { class: 'llask' }, 'These letters are already friends. Say each sound on the next step.'));
       return;
     }
-    stage.append(h('p', { class: 'llask' }, 'Meet the letters.'), h('div', { class: 'fs-meet' }, ...ids.map((id) => {
+    stage.append(h('p', { class: 'llask' }, 'Review the letters.'), h('div', { class: 'fs-meet' }, ...ids.map((id) => {
       const letter = BY[id];
       if (!letter) return null;
       return h('div', { class: 'fs-meetone' }, letterCardStep(letter, lookStep(lesson, id)), hintButton([id]));
@@ -1711,50 +1714,69 @@
       onclick: () => modelBlend(word)
     }, word))));
   }
+  function nameSoundLine(id) {
+    const letter = BY[id];
+    const sound = letter ? letter.sound : '';
+    return 'This is ' + id + '. It says ' + sound + '.';
+  }
+  function speakNameSound(id) {
+    const letter = BY[id];
+    if (!letter) return;
+    const bit = String(letter.soundSay || '').split(',')[0].trim();
+    speak('This is ' + letter.nameSay + '. It says ' + bit + '.');
+  }
+  function nameThenSound(id) {
+    const letter = BY[id];
+    let at = 0;
+    return h('div', { class: 'llrow' },
+      h('button', {
+        class: 'lltap',
+        type: 'button',
+        onclick: (e) => {
+          if (at !== 0) return;
+          at = 1;
+          e.currentTarget.classList.add('lit');
+          if (letter) hear(letter, 'name');
+        }
+      }, 'Name'),
+      h('button', {
+        class: 'lltap',
+        type: 'button',
+        onclick: (e) => {
+          if (at !== 1) return;
+          at = 2;
+          e.currentTarget.classList.add('lit');
+          if (letter) hear(letter, 'sound');
+        }
+      }, 'Sound'));
+  }
   function paintIdo(stage, lesson, phase) {
-    const id = phase && phase.letter;
-    const ids = id ? [id] : (lesson.new_letters || []);
-    const word = allowedWords(lesson, phase).filter((item) => !id || letterIdsSafe(item).indexOf(id) >= 0)[0] || '';
+    const id = (phase && phase.letter) || (lesson.new_letters || [])[0];
+    const letter = BY[id];
     stage.append(
       h('div', { class: 'llbuddies' }, h('img', { src: 'img/frill.webp', alt: 'Frill' })),
-      h('p', { class: 'llask' }, 'Watch. Frill shows the letter, the sound, and the word.'),
-      h('div', { class: 'fs-meet' }, ...ids.map((id) => {
-        const letter = BY[id];
-        const row = letterInfo(id) || {};
-        return h('div', { class: 'fs-ido' },
-          letter ? letterCardStep(letter, 'picture') : null,
-          h('p', { class: 'fs-chant' }, row.action || ''),
-          h('p', { class: 'fs-chant' }, row.chant || ''));
-      })),
+      h('p', { class: 'llask' }, nameSoundLine(id)),
+      letter ? letterCardStep(letter, 'picture') : null,
+      h('button', { class: 'lltap', type: 'button', onclick: () => speakNameSound(id) }, 'Hear it'),
       grownTip(lesson));
-    if (word) stage.append(h('button', { class: 'lltap', type: 'button', onclick: () => modelBlend(word) }, 'Hear ' + word));
   }
   function paintWedo(stage, lesson, phase) {
     const id = (phase && phase.letter) || (lesson.new_letters || [])[0];
     const letter = BY[id];
-    const word = allowedWords(lesson, phase).filter((item) => !id || letterIdsSafe(item).indexOf(id) >= 0)[0] || id;
-    const parts = graphemes(String(word));
-    let at = 0;
-    const line = h('p', { class: 'llshown llprint' }, '');
     stage.append(
       h('div', { class: 'llbuddies' }, h('img', { src: 'img/zipA.webp', alt: 'Zip' }), h('img', { src: 'img/frill.webp', alt: 'Frill' })),
-      h('p', { class: 'llask' }, 'Say it with us. Tap each sound.'),
-      letter ? h('button', { class: 'lltap', type: 'button', onclick: () => hear(letter, 'sound') }, id) : null,
-      line,
-      h('div', { class: 'llrow' }, ...parts.map((part, n) => h('button', {
-        class: 'lltap',
-        type: 'button',
-        onclick: (e) => {
-          if (n !== at) return;
-          at += 1;
-          e.currentTarget.classList.add('lit');
-          line.textContent += part.g;
-          const bit = BY[part.id];
-          if (bit) hear(bit, 'sound');
-          if (at >= parts.length && letterIdsSafe(word).length > 1) { speak(word); rememberWord(word); }
-        }
-      }, part.g))),
+      h('p', { class: 'llask' }, 'Say the name, then the sound.'),
+      letter ? h('p', { class: 'llshown' }, id) : null,
+      nameThenSound(id),
       grownTip(lesson));
+  }
+  function paintNameCheck(stage, phase) {
+    const id = phase && phase.letter;
+    const letter = BY[id];
+    stage.append(
+      h('p', { class: 'llask' }, 'Your turn. Name, then sound.'),
+      letter ? letterCardStep(letter, 'plain') : h('p', { class: 'llshown' }, id || ''),
+      nameThenSound(id));
   }
   function paintBank(stage, lesson) {
     const words = readBank();
