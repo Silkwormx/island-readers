@@ -1485,14 +1485,19 @@
         onclick: () => { Snd.stop(); location.hash = part.href; }
       }, part.label));
     });
-    const trail = h('button', {
-      class: 'back homebtn appnav-trail',
-      type: 'button',
-      onclick: () => { Snd.stop(); openTrailMapPopup(); }
-    }, icon('map'), h('span', null, 'Trail Map'));
+    const hsh = (location.hash || '#/home').split('?')[0];
+    const onHome = hsh === '#/home' || hsh === '#/' || hsh === '';
+    const controls = [];
+    if (!onHome) {
+      controls.push(h('button', {
+        class: 'back homebtn appnav-back',
+        type: 'button',
+        'aria-label': 'Back',
+        onclick: () => { Snd.stop(); location.hash = upHref(); }
+      }, icon('back'), h('span', null, 'Back')));
+    }
     document.body.insertBefore(h('div', { class: 'appnav' },
-      homeButton(),
-      trail,
+      ...controls,
       h('nav', { class: 'crumb', 'aria-label': 'You are here' }, ...bits)), document.body.firstChild);
   }
   document.addEventListener('click', (e) => {

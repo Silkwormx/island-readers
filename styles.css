@@ -23,7 +23,7 @@ p{margin:.4em 0}
 .appnav .crumb button{margin:0;padding:0;border:0;background:transparent;color:#0E7C7C;font:inherit;font-weight:700;cursor:pointer}
 .appnav .crumb .now{color:#2B2540}
 .appnav .crumbsep{color:#8A8175}
-.uA-top>.homebtn[aria-label^="Home"],.lesson-top>.homebtn[aria-label^="Home"],.gtop>.homebtn[aria-label^="Home"]{display:none}
+.uA-top>.homebtn,.lesson-top>.homebtn,.gtop>.homebtn,.lesson-top>.xbtn,.unitback{display:none}
 @media (max-width:700px){.appnav{gap:.25rem;padding:0 .4rem}.appnav .homebtn{padding:.1rem .4rem}.appnav .crumb{font-size:.82rem}}
 .row{display:flex;gap:.8rem;flex-wrap:wrap;align-items:center;justify-content:center;margin:.6rem 0}
 .row.center{justify-content:center}
