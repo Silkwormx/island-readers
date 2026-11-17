@@ -33,6 +33,12 @@
   function homeButton() {
     return h('button', { class: 'back homebtn', type: 'button', 'aria-label': 'Home: the world map', onclick: () => { Snd.stop(); location.hash = '#/home'; } }, icon('home'), h('span', null, 'Home'));
   }
+  function backButton(up) {
+    return h('button', { class: 'back homebtn pageback', type: 'button', 'aria-label': 'Back', onclick: () => { Snd.stop(); if (typeof up === 'function') up(); else location.hash = up; } }, icon('back'), h('span', null, 'Back'));
+  }
+  function pageNav(up) {
+    return h('div', { class: 'pagenav' }, backButton(up), homeButton());
+  }
   function gearButton() {
     const b = h('button', { class: 'gear', type: 'button', 'aria-label': 'Parent and Teacher Materials. Press and hold to open.' }, icon('gear'));
     let t = null;
@@ -304,7 +310,7 @@
     const pic = h('span', { class: 'tpic' }, cover);
     cover.addEventListener('error', () => {
       pic.className = 'tpic tfaces';
-      pic.replaceChildren(...['a_asa_apple_snail.jpg', 'm_manny_mangrove.jpg', 's_sami_sea_snake.jpg', 't_tama_sea_turtle.jpg'].map((file) => h('img', { src: 'foundation/img/letters/' + file, alt: '' })));
+      pic.replaceChildren(...['a_apple.jpg', 'm_manny_mangrove.jpg', 's_sami_sea_snake.jpg', 't_tama_sea_turtle.jpg'].map((file) => h('img', { src: 'foundation/img/letters/' + file, alt: '' })));
     });
     const foundations = h('button', {
       class: 'tcard',
@@ -334,20 +340,12 @@
       extraClass: 'about-drop',
       fill(body) { aboutNodes().forEach((node) => body.append(node)); }
     });
-    const trailDrop = IR.sideDrop({
-      group: 'home',
-      label: 'Trail Map and Placement Test',
-      ico: 'map',
-      fill(body) {
-        const place = trailPlace();
-        body.append(h('button', { class: 'drop-link', type: 'button', onclick: () => { Snd.stop(); location.hash = '#/placement'; } }, 'Take the Placement Test'));
-        for (let n = 1; n <= 22; n++) {
-          const status = unitStatus(n, place);
-          body.append(h('button', { class: 'drop-link', type: 'button', onclick: () => openTrailBell(n) }, 'Unit ' + n + '. ' + UNIT_NAMES[n] + '. ' + status));
-        }
-        body.append(h('p', { class: 'drop-soon' }, 'Golden Bell coming soon'));
-      }
-    });
+    const trailBtn = h('button', {
+      class: 'hometab trailtab',
+      type: 'button',
+      'aria-label': 'Trail Map and Placement Test',
+      onclick: () => openTrailMap()
+    }, h('span', { class: 'hometab-ico', 'aria-hidden': 'true' }, icon('map')), h('span', { class: 'hometab-name' }, 'Trail Map and Placement Test'));
     const sightDrop = IR.sideDrop({
       group: 'home',
       label: 'Sight Word Practice',
@@ -360,7 +358,7 @@
       }
     });
     const tabs = h('nav', { class: 'hometabs', 'aria-label': 'More places' },
-      trailDrop, sightDrop, tab('#/find', 'Find It', 'search'));
+      trailBtn, sightDrop, tab('#/find', 'Find It', 'search'));
     /* Nov 6 2026: full-width home feature (approved banyan scene), then About + the hero beside the unit grid */
     const banner = h('header', { class: 'hbanner' }, h('h1', null, 'Island Readers'),
       h('div', { class: 'grownwrap' }, h('span', { class: 'grownlab' }, 'Parent and Teacher Materials'), IR.ui.gearButton()));
@@ -429,11 +427,10 @@
   }
   function gemScreen() {
     IR.newScreen(); const earned = gemsEarned(); const nEarned = earned.filter(Boolean).length; const nx = gemNext();
-    const back = h('button', { class: 'back homebtn', type: 'button', onclick: () => { location.hash = '#/home'; } }, icon('back'), h('span', null, 'Map'));
     const cells = GEMS.map((g, i) => h('div', { class: 'gcell' + (earned[i] ? ' got' : i === nx ? ' next' : '') },
       h('div', { class: 'gimg' }, h('img', { src: gemSrc(i), alt: earned[i] ? g[1] + ' gem' : '' })),
       h('b', { style: earned[i] || i === nx ? 'color:' + g[2] : '' }, g[1]), h('small', null, 'Unit ' + (i + 1) + (i === nx ? ' \u00b7 next' : ''))));
-    app.append(h('div', { class: 'screen gemscreen' }, h('div', { class: 'mwrap' }, h('div', { class: 'gtop' }, back),
+    app.append(h('div', { class: 'screen gemscreen' }, h('div', { class: 'mwrap' }, h('div', { class: 'gtop' }, pageNav('#/home')),
       h('h1', null, 'Gem box'), h('p', null, nEarned + ' of 10 gems. Pass a Unit Review to earn its gem.'), h('div', { class: 'ggrid' }, ...cells))));
   }
 
@@ -517,31 +514,38 @@
   function itemCard(item, num) {
     const body = [
       num ? h('span', { class: 'gamenum' }, String(num)) : null,
-      num ? h('span', { class: 'gameico', 'aria-hidden': 'true' }, icon('play')) : null,
-      item.img ? h('img', { class: 'storypic', src: item.img, alt: item.alt || '' }) : null,
-      h('span', { class: 'gametxt' }, h('b', null, item.title), item.note ? h('span', { class: 'gamenote' }, item.note) : null, item.min ? h('span', { class: 'gamemin' }, item.min + ' min') : null)
+      num && !item.img && !(item.imgs && item.imgs.length) ? h('span', { class: 'gameico', 'aria-hidden': 'true' }, icon('play')) : null,
+      item.imgs && item.imgs.length
+        ? h('span', { class: 'gamepair' }, ...item.imgs.map((src) => h('img', { class: num ? 'gamepic' : 'storypic', src: src, alt: '' })))
+        : (item.img ? h('img', { class: num ? 'gamepic' : 'storypic', src: item.img, alt: item.alt || '' }) : null),
+      h('span', { class: 'gametxt' }, h('b', null, item.title), item.note ? h('span', { class: 'gamenote' }, item.note) : null, item.min ? h('span', { class: 'gamemin' }, item.min + ' min') : null),
+      item.done ? h('span', { class: 'gamedone', 'aria-hidden': 'true' }, icon('check')) : null
     ];
-    const cls = item.big ? 'storycard' : (num ? 'gamecard' : 'stepcard');
+    const cls = (item.big ? 'storycard' : (num ? 'gamecard' : 'stepcard')) + (item.done ? ' done' : '');
     if (item.href && item.href.charAt(0) !== '#') return h('a', { class: cls, href: item.href, target: '_blank', rel: 'noopener' }, ...body);
     return h('button', { class: cls, type: 'button', onclick: goItem(item) }, ...body);
   }
   function stepHead(n, label) {
     return h('div', { class: 'stephead' }, h('span', { class: 'stepnum' }, String(n)), h('span', { class: 'steplab' }, label));
   }
-  function stepSection(n, label, items, numbered) {
+  function stepSection(n, label, items, numbered, extra) {
     const cards = !items || !items.length
       ? h('p', { class: 'stepsoon' }, 'Coming soon')
       : numbered
-        ? h('ol', { class: 'gamegrid' }, ...items.map((item, i) => h('li', null, itemCard(item, i + 1))))
+        ? h('ol', { class: 'gamegrid' + (extra || '') }, ...items.map((item, i) => h('li', null, itemCard(item, i + 1))))
         : h('div', { class: 'lessonrow' }, ...items.map((item) => itemCard(item)));
     return h('section', { class: 'stepblock' }, stepHead(n, label), cards);
   }
   function teacherBox(plan) {
     plan = plan || {};
     const files = plan.files || [];
+    const days = plan.days || [];
+    const slides = days.length
+      ? days.map((day) => h('button', { class: 'teachlink', type: 'button', onclick: () => { Snd.stop(); location.hash = day.href; } }, day.label))
+      : [plan.slides ? h('button', { class: 'teachlink', type: 'button', onclick: () => { Snd.stop(); location.hash = plan.slides; } }, 'Open the slideshow') : h('p', { class: 'teachsoon' }, 'Coming soon')];
     const panel = h('div', { class: 'teachpop', hidden: '' },
       h('p', { class: 'teachstep' }, h('span', null, '1'), 'Slideshow'),
-      plan.slides ? h('button', { class: 'teachlink', type: 'button', onclick: () => { Snd.stop(); location.hash = plan.slides; } }, 'Open the slideshow') : h('p', { class: 'teachsoon' }, 'Coming soon'),
+      ...slides,
       h('p', { class: 'teachstep' }, h('span', null, '2'), 'Printables'),
       files.length ? h('div', null, ...files.map((file) => h('a', { class: 'teachlink', href: file.href, target: '_blank', rel: 'noopener' }, file.title))) : h('p', { class: 'teachsoon' }, 'Coming soon'));
     const btn = h('button', { class: 'teachbox', type: 'button', 'aria-expanded': 'false' }, 'Teacher Materials');
@@ -565,13 +569,14 @@
   IR.teacherBox = teacherBox;
   function modeBar(plan) {
     plan = plan || {};
+    const labels = plan.labels || ['Lesson', 'Games', 'Story'];
     return h('div', { class: 'modebar' },
-      h('p', { class: 'stepnote' }, 'Watch the lesson, then play.'),
+      plan.note === false ? null : h('p', { class: 'stepnote' }, plan.note || 'Watch the lesson, then play.'),
       plan.before || null,
       h('div', { class: 'stepflow' },
-        plan.choose ? null : stepSection(1, 'Lesson', plan.lesson || []),
-        plan.choose ? null : stepSection(2, 'Games', plan.games || [], true),
-        plan.choose || !plan.story ? null : stepSection(3, 'Story', [plan.story]),
+        plan.choose ? null : stepSection(1, labels[0], plan.lesson || []),
+        plan.choose ? null : stepSection(2, labels[1], plan.games || [], true, plan.gameClass || ''),
+        plan.choose || !plan.story ? null : stepSection(3, labels[2], [plan.story]),
         ...(plan.choose || []).map((item, i) => stepSection(i + 1, item.title, [item]))));
   }
   IR.modeBar = modeBar;
@@ -585,13 +590,13 @@
     const story = pick('story')[0];
     if (story) { story.title = D.storyTitle || story.title; story.note = 'Story Time'; story.img = IR.storyCovers['4.1']; story.alt = D.storyTitle || ''; story.big = true; }
     app.append(h('div', { class: 'screen trailscreen unitpage unitA orangeunit stepage' },
-      h('header', { class: 'uA-top' }, homeButton(), h('h1', { class: 'uA-title' }, h('small', null, 'Unit 4 Lesson 1'), 'ng'), teacherBox({
+      h('header', { class: 'uA-top' }, pageNav('#/home'), h('h1', { class: 'uA-title' }, h('small', null, 'Unit 4 Lesson 1'), 'ng'), teacherBox({
         slides: '#/teachers/slides/ng',
         files: [
           { title: 'Daily practice sheets', href: 'teachers/ng/Lesson3.1_ng_Daily_Practice_Sheets.pdf' },
           { title: 'Teacher pack', href: 'teachers/ng/Lesson3.1_ng_Teacher_Pack.pdf' }
         ]
-      }), gearButton()),
+      })),
       modeBar({
         lesson: pick('lesson'),
         games: pick('activities'),
@@ -613,8 +618,7 @@
       ...LESSONS.map((_, k) => h('em', { style: `left:${(k + 1) / totalSteps * 100}%` })));
     const instrText = h('span', { class: 'itext' }); const instrBox = h('div', { class: 'instr' });
     const stage = h('div', { class: 'stage' });
-    const starTop = homeButton();
-    const x = h('button', { class: 'xbtn', type: 'button', 'aria-label': 'Back to the trail', onclick: () => { location.hash = '#/island3'; } }, icon('close'));
+    const starTop = null;
     function setBar() { const v = Math.round(((idx + prog) / totalSteps) * 100); fill.style.width = v + '%'; bar.setAttribute('aria-valuenow', v); }
     const ctx = {
       scr, stage, miss() { mistakes++; },
@@ -645,7 +649,7 @@
       IR.touchStreak(); IR.save();
       const last = idx === LESSONS.length - 1;
       const nextBtn = h('button', { class: 'btn big primary', type: 'button', onclick: () => { location.hash = last ? '#/check' : '#/lesson/' + (idx + 2); } }, last ? 'On to Zip\u2019s Check' : 'Next lesson', icon('next'));
-      const backBtn = h('button', { class: 'btn big back', type: 'button', onclick: () => { location.hash = '#/island3'; } }, icon('back'), 'Back to the trail');
+      const backBtn = h('button', { class: 'btn big back', type: 'button', onclick: () => { location.hash = '#/island3'; } }, icon('back'), 'Back');
       ctx.progress(1);
       const ov = h('div', { class: 'complete' }, h('div', { class: 'cbox' },
         IR.celebration(false),
@@ -654,7 +658,7 @@
         h('div', { class: 'row' }, backBtn, nextBtn)));
       app.append(ov); Snd.play(A.sfx.done);
     }
-    const screen = h('div', { class: 'screen lessonscreen' + (L.id === 'intro' ? ' is-lesson' : ''), style: '--c:' + L.color }, h('header', { class: 'lesson-top' }, x, bar, starTop, unitButton(L.id), gearButton()), instrBox, stage, nav);
+    const screen = h('div', { class: 'screen lessonscreen' + (L.id === 'intro' ? ' is-lesson' : ''), style: '--c:' + L.color }, h('header', { class: 'lesson-top' }, pageNav('#/island3'), bar), instrBox, stage, nav);
     app.append(screen);
     if (L.id !== 'intro' && L.id !== 'listen' && L.id !== 'read') IR.attachGameRules(ctx, screen, L.title);
     setBar(); L.run(ctx);
@@ -663,7 +667,7 @@
   function checkScreen() {
     const scr = IR.newScreen(); const stage = h('div', { class: 'stage' });
     const fill = h('i'); const bar = h('div', { class: 'pbar' }, fill); const instrBox = h('div', { class: 'instr' });
-    const x = h('button', { class: 'xbtn', type: 'button', 'aria-label': 'Back to the trail', onclick: () => { location.hash = '#/island3'; } }, icon('close'));
+    const x = null;
     const ctx = { scr, stage, miss() {}, progress(f) { fill.style.width = Math.round(((LESSONS.length + f) / (LESSONS.length + 1)) * 100) + '%'; }, setInstr(text, pid) { instrBox.innerHTML = ''; instrBox.style.display = text ? '' : 'none'; if (text) instrBox.append(IR.speakerBtn(() => Snd.play(A.prompt(pid)), 'Hear'), h('span', { class: 'itext' }, text)); }, finish() {} };
     let backHandler = null;
     ctx.setBack = (fn) => { backHandler = fn; };
@@ -673,7 +677,7 @@
     const checkNext = h('button', { class: 'btn big next', type: 'button', 'aria-label': 'Next question', onclick: () => ctx.goNext() }, 'Next', icon('next'));
     const nav = h('div', { class: 'lesson-nav' }, checkNext);
     IR.simpleNav(nav, checkNext, () => { Snd.stop(); location.hash = '#/island3'; });
-    const screen = h('div', { class: 'screen lessonscreen checkscreen', style: '--c:#2b2540' }, h('header', { class: 'lesson-top' }, x, bar, homeButton(), unitButton('check'), gearButton()), instrBox, stage, nav);
+    const screen = h('div', { class: 'screen lessonscreen checkscreen', style: '--c:#2b2540' }, h('header', { class: 'lesson-top' }, pageNav('#/island3'), bar), instrBox, stage, nav);
     app.append(screen);
     IR.attachGameRules(ctx, screen, 'Zip\u2019s Check');
     ctx.progress(0); IR.runCheck(ctx);
@@ -686,12 +690,11 @@
       L[sid] = 1; if (id.indexOf('nk_') === 0) L[id.slice(3)] = 1; sessionStorage.setItem(key, JSON.stringify(L)); } catch (e) {}
     return _rec0.apply(this, arguments);
   };
-  IR.ui = { chips, gearButton, homeButton, toast, modalRoot, app };
+  IR.ui = { chips, gearButton, homeButton, backButton, pageNav, toast, modalRoot, app };
   /* ---------- Practice pages (Nov 1 2026) ---------- */
   function simplePage(title, ...kids) {
     IR.newScreen();
-    const back = h('button', { class: 'back homebtn', type: 'button', onclick: () => { location.hash = '#/home'; } }, icon('back'), h('span', null, 'Home'));
-    app.append(h('div', { class: 'screen home simplepage' }, h('div', { class: 'mwrap' }, h('div', { class: 'gtop' }, back), h('h1', null, title), ...kids)));
+    app.append(h('div', { class: 'screen home simplepage' }, h('div', { class: 'mwrap' }, h('div', { class: 'gtop' }, pageNav('#/home')), h('h1', null, title), ...kids)));
   }
   /* Same lesson line as the unit pages: "Unit 4 · Lesson 4.1 · ng". The small line is storyTitle from that lesson's data. */
   function fluencyStories() {
@@ -913,12 +916,10 @@
   }
   function aboutScreen() {
     IR.newScreen();
-    const home2 = h('button', { class: 'btn big primary abhome', type: 'button', onclick: () => { location.hash = '#/home'; } }, icon('home'), h('span', null, 'Back to Home'));
     app.append(h('div', { class: 'screen aboutscreen' }, h('div', { class: 'abwrap' },
-      h('div', { class: 'abtop' }, homeButton()),
+      h('div', { class: 'abtop' }, pageNav('#/home')),
       h('h1', null, 'About Island Readers'),
-      ...aboutNodes(),
-      h('div', { class: 'abbottom' }, home2))));
+      ...aboutNodes())));
   }
   /* ---------- Teacher materials (grown-up corner): by unit, then sound ---------- */
   function teachersScreen() {
@@ -962,7 +963,7 @@
       ] }
     ];
     app.append(h('div', { class: 'screen tmscreen' }, h('div', { class: 'tmwrap' },
-      h('div', { class: 'abtop' }, homeButton()),
+      h('div', { class: 'abtop' }, pageNav('#/home')),
       h('h1', null, 'Teacher materials'),
       h('p', { class: 'tmlead' }, 'For teaching in class. Students practice on their own in the app.'),
       ...UNITS.map((u) => h('section', { class: 'tmunit' }, h('h2', null, u.name), h('div', { class: 'tmgrid' }, ...u.sounds.map(lessonCard)))))));
@@ -977,9 +978,9 @@
     const prev = h('button', { class: 'slide-nav slide-prev', type: 'button', 'aria-label': 'Previous slide' }, '\u25C0');
     const next = h('button', { class: 'slide-nav slide-next', type: 'button', 'aria-label': 'Next slide' }, '\u25B6');
     const top = h('div', { class: 'slide-top' },
-      h('a', { class: 'btn small ghost slide-back', href: '#/teachers' }, icon('back'), 'Teacher materials'),
+      pageNav('#/teachers'),
       h('h1', { class: 'slide-title' }, sound + ' week slides'),
-      counter, gearButton());
+      counter);
     stage.append(prev, img, next);
     root.append(top, stage);
     app.append(root);
@@ -1109,7 +1110,6 @@
     const place = trailPlace();
     const here = place.here;
     let pointer = 'mouse';
-    const back = h('button', { class: 'back homebtn', type: 'button', onclick: () => { location.hash = '#/home'; } }, icon('back'), h('span', null, 'Home'));
     const test = h('a', { class: 'btn big primary trailgo', href: '#/placement' }, 'Take the Placement Test');
     const art = h('img', { class: 'trailmap-art', src: TRAIL_MAP.src, alt: '', width: TRAIL_MAP.width, height: TRAIL_MAP.height });
     const frame = h('div', { class: 'trailmap', style: 'aspect-ratio:' + TRAIL_MAP.width + ' / ' + TRAIL_MAP.height }, art);
@@ -1131,10 +1131,11 @@
         const status = unitStatus(mark.n, place);
         const hex = UNIT_BELL[mark.n] === 'rainbow' ? '' : BELL_HEX[UNIT_BELL[mark.n]];
         title = 'Unit ' + mark.n;
-        lines = [h('span', { class: 'tipskill' }, UNIT_NAMES[mark.n]), h('span', { class: 'tipsounds' }, meta[0]), h('span', { class: 'tipmeta' }, meta[1] + (meta[1] === 1 ? ' lesson' : ' lessons') + ' \u00b7 ' + status)];
+        const locked = status === 'Coming soon';
+        lines = [h('span', { class: 'tipskill' }, UNIT_NAMES[mark.n]), h('span', { class: 'tipsounds' }, meta[0]), h('span', { class: 'tipmeta' }, meta[1] + (meta[1] === 1 ? ' lesson' : ' lessons') + ' \u00b7 ' + status), locked ? h('span', { class: 'lockpill' }, 'Locked') : null];
         open = () => openTrailBell(mark.n);
-        pinClass = 'trailpin' + (mark.n === here ? ' here' : '') + (place.finished[mark.n] ? ' done' : '') + (UNIT_BELL[mark.n] === 'rainbow' ? ' rainbow' : '');
-        bits = [h('span', { class: 'pinnum' + (mark.n > 9 ? ' pinnum2' : '') }, String(mark.n)), place.finished[mark.n] ? h('span', { class: 'pindone', 'aria-hidden': 'true' }, icon('check')) : null];
+        pinClass = 'trailpin' + (mark.n === here ? ' here' : '') + (place.finished[mark.n] ? ' done' : '') + (locked ? ' is-locked' : '') + (UNIT_BELL[mark.n] === 'rainbow' ? ' rainbow' : '');
+        bits = [h('span', { class: 'pinnum' + (mark.n > 9 ? ' pinnum2' : '') }, String(mark.n)), place.finished[mark.n] ? h('span', { class: 'pindone', 'aria-hidden': 'true' }, icon('check')) : null, locked ? h('span', { class: 'pindone pinlock', 'aria-hidden': 'true' }, icon('lock')) : null];
         label = 'Unit ' + mark.n + '. ' + UNIT_NAMES[mark.n] + '. ' + status + '.';
         if (hex) pinStyle = 'background:' + hex + ';color:' + bellInk(hex);
       }
@@ -1147,8 +1148,9 @@
         open();
       });
       const isHere = mark.kind === 'unit' && mark.n === here;
-      const hereTag = isHere ? h('span', { class: 'heretag', 'aria-hidden': 'true' }, 'You are here') : null;
-      const wrap = h('div', { class: 'trailpinwrap' + (isHere ? ' here' : ''), style: style }, btn, tip, hereTag);
+      const hereTag = isHere ? h('span', { class: 'heretag' + (mark.y < 22 ? ' below' : ''), 'aria-hidden': 'true' }, 'You are here') : null;
+      const mapPill = mark.kind === 'unit' && unitStatus(mark.n, place) === 'Coming soon' ? h('span', { class: 'lockpill maplock' }, 'Locked') : null;
+      const wrap = h('div', { class: 'trailpinwrap' + (isHere ? ' here' : ''), style: style }, btn, tip, hereTag, mapPill);
       return wrap;
     };
     const listItem = (mark) => {
@@ -1162,12 +1164,82 @@
     IR._trailPointer = (e) => { pointer = e.pointerType || 'mouse'; if (!e.target.closest('.trailpinwrap')) closeTips(); };
     document.addEventListener('pointerdown', IR._trailPointer, true);
     app.append(h('div', { class: 'screen home simplepage trailpage' }, h('div', { class: 'mwrap trailwrap' },
-      h('div', { class: 'gtop' }, back),
+      h('div', { class: 'gtop' }, pageNav('#/home')),
       h('h1', null, 'Trail Map'),
       test,
       h('div', { class: 'trailstage' }, frame, h('div', { class: 'trailpins' }, ...TRAIL_MAP.marks.map(pin))),
       h('h2', null, 'Every bell'),
       h('ol', { class: 'traillist' }, ...TRAIL_MAP.marks.map(listItem)))));
+  }
+  function openTrailMap() {
+    const place = trailPlace();
+    const close = () => {
+      modalRoot.innerHTML = '';
+      document.removeEventListener('keydown', onKey);
+    };
+    const onKey = (e) => { if (e.key === 'Escape') close(); };
+    document.addEventListener('keydown', onKey);
+    const x = h('button', { class: 'trail-x', type: 'button', 'aria-label': 'Close' }, icon('close'));
+    x.addEventListener('click', close);
+    const test = h('a', { class: 'btn big primary trailgo', href: '#/placement', onclick: () => close() }, 'Take the Placement Test');
+    const art = h('img', { class: 'trailmap-art', src: TRAIL_MAP.src, alt: '', width: TRAIL_MAP.width, height: TRAIL_MAP.height });
+    const frame = h('div', { class: 'trailmap', style: 'aspect-ratio:' + TRAIL_MAP.width + ' / ' + TRAIL_MAP.height }, art);
+    art.addEventListener('error', () => { frame.classList.add('is-missing'); art.remove(); });
+    const closeTips = () => { document.querySelectorAll('.trailpinwrap.tipopen').forEach((el) => el.classList.remove('tipopen')); };
+    let pointer = 'mouse';
+    const here = place.here;
+    const touchNow = () => pointer === 'touch' || (window.matchMedia && matchMedia('(hover: none) and (pointer: coarse)').matches);
+    const pin = (mark) => {
+      const style = 'left:' + mark.x + '%;top:' + mark.y + '%';
+      const tipId = 'trailtip-pop-' + (mark.kind === 'unit' ? mark.n : mark.kind + (mark.n || ''));
+      let title = 'Golden Bell';
+      let lines = [h('span', { class: 'tipmeta' }, 'The end of the path. Coming soon.')];
+      let open = () => { Snd.stop(); close(); toast('Golden Bell is coming soon.'); };
+      let pinClass = 'trailpin finale';
+      let bits = [h('span', { class: 'pinstar', 'aria-hidden': 'true' }, icon('star'))];
+      let label = 'Golden Bell. The end of the path. Coming soon.';
+      let pinStyle = '';
+      if (mark.kind === 'unit') {
+        const meta = UNIT_META[mark.n];
+        const status = unitStatus(mark.n, place);
+        const hex = UNIT_BELL[mark.n] === 'rainbow' ? '' : BELL_HEX[UNIT_BELL[mark.n]];
+        title = 'Unit ' + mark.n;
+        const locked = status === 'Coming soon';
+        lines = [h('span', { class: 'tipskill' }, UNIT_NAMES[mark.n]), h('span', { class: 'tipsounds' }, meta[0]), h('span', { class: 'tipmeta' }, meta[1] + (meta[1] === 1 ? ' lesson' : ' lessons') + ' \u00b7 ' + status), locked ? h('span', { class: 'lockpill' }, 'Locked') : null];
+        open = () => { close(); openTrailBell(mark.n); };
+        pinClass = 'trailpin' + (mark.n === here ? ' here' : '') + (place.finished[mark.n] ? ' done' : '') + (locked ? ' is-locked' : '') + (UNIT_BELL[mark.n] === 'rainbow' ? ' rainbow' : '');
+        bits = [h('span', { class: 'pinnum' + (mark.n > 9 ? ' pinnum2' : '') }, String(mark.n)), place.finished[mark.n] ? h('span', { class: 'pindone', 'aria-hidden': 'true' }, icon('check')) : null, locked ? h('span', { class: 'pindone pinlock', 'aria-hidden': 'true' }, icon('lock')) : null];
+        label = 'Unit ' + mark.n + '. ' + UNIT_NAMES[mark.n] + '. ' + status + '.';
+        if (hex) pinStyle = 'background:' + hex + ';color:' + bellInk(hex);
+      }
+      const go = h('button', { class: 'tipgo', type: 'button' }, 'Open');
+      const tip = h('div', { class: 'trailtip' + (mark.y < 18 ? ' below' : ''), id: tipId, role: 'tooltip' }, h('b', null, title), ...lines, go);
+      const btn = h('button', { class: pinClass, type: 'button', style: pinStyle, 'aria-label': label, 'aria-describedby': tipId }, ...bits);
+      const isHere = mark.kind === 'unit' && mark.n === here;
+      const hereTag = isHere ? h('span', { class: 'heretag' + (mark.y < 22 ? ' below' : ''), 'aria-hidden': 'true' }, 'You are here') : null;
+      const mapPill = mark.kind === 'unit' && unitStatus(mark.n, place) === 'Coming soon' ? h('span', { class: 'lockpill maplock' }, 'Locked') : null;
+      const wrap = h('div', { class: 'trailpinwrap' + (isHere ? ' here' : ''), style: style }, btn, tip, hereTag, mapPill);
+      go.addEventListener('click', (e) => { e.stopPropagation(); open(); });
+      btn.addEventListener('click', () => {
+        if (touchNow() && !wrap.classList.contains('tipopen')) { closeTips(); wrap.classList.add('tipopen'); return; }
+        open();
+      });
+      return wrap;
+    };
+    if (IR._trailPointer) document.removeEventListener('pointerdown', IR._trailPointer, true);
+    IR._trailPointer = (e) => { pointer = e.pointerType || 'mouse'; if (!e.target.closest('.trailpinwrap')) closeTips(); };
+    document.addEventListener('pointerdown', IR._trailPointer, true);
+    const pins = TRAIL_MAP.marks.map(pin);
+    const box = h('div', { class: 'modal trailpop', role: 'dialog', 'aria-modal': 'true', 'aria-label': 'Trail Map' },
+      x,
+      h('h2', null, 'Trail Map'),
+      test,
+      h('div', { class: 'trailstage' }, frame, h('div', { class: 'trailpins' }, ...pins)));
+    const scrim = h('div', { class: 'scrim' }, box);
+    scrim.addEventListener('click', (e) => { if (e.target === scrim) close(); });
+    modalRoot.innerHTML = '';
+    modalRoot.append(scrim);
+    x.focus();
   }
   function findCatalog() {
     const skills = skillCatalog();
@@ -1231,7 +1303,6 @@
   function findScreen() {
     IR.newScreen();
     const data = findCatalog();
-    const back = h('button', { class: 'back homebtn', type: 'button', onclick: () => { location.hash = '#/home'; } }, icon('back'), h('span', null, 'Home'));
     const input = h('input', { class: 'skillsearch', type: 'search', placeholder: 'Search', 'aria-label': 'Search lessons, games, stories, and skills' });
     const tabs = h('div', { class: 'findtabs', role: 'tablist' });
     const host = h('div', { class: 'findhost' });
@@ -1292,7 +1363,7 @@
     input.addEventListener('input', () => { openKey = ''; paint(); });
     paint();
     app.append(h('div', { class: 'screen home simplepage findpage' }, h('div', { class: 'mwrap' },
-      h('div', { class: 'gtop' }, back),
+      h('div', { class: 'gtop' }, pageNav('#/home')),
       h('h1', null, 'Find It'),
       h('div', { class: 'findstack' }, input, tabs), host)));
   }
@@ -1331,7 +1402,7 @@
     });
     else if (hash.startsWith('#/island3')) trailScreen();
     else if (hash.startsWith('#/check')) checkScreen();
-    else if (hash.startsWith('#/result')) { IR.newScreen(); app.append(h('div', { class: 'screen resultscreen' })); IR.renderResult($('.resultscreen')); $('.resultscreen').prepend(h('div', { class: 'unitbar' }, homeButton(), unitButton('check'))); }
+    else if (hash.startsWith('#/result')) { IR.newScreen(); app.append(h('div', { class: 'screen resultscreen' })); IR.renderResult($('.resultscreen')); $('.resultscreen').prepend(h('div', { class: 'unitbar' }, pageNav('#/island3'))); }
     else homeScreen();
   }
   /* Nov 4 2026: "Back to Unit N" on every lesson / activity / game page of a unit. Opens that unit's lesson picker.
@@ -1341,11 +1412,7 @@
     { n: 5, id: 'i5', test: (hs) => /^#\/(u5\d|review5)/.test(hs) || /^#\/spell\/u5(\/|$)/.test(hs) },
     { n: 6, id: 'u6', href: '#/u6', test: (hs) => /^#\/u6(\/|$)/.test(hs) || /^#\/spell\/u6(\/|$)/.test(hs) }];
   function addUnitBack() {
-    const hs = location.hash || ''; const u = IR.UNIT_ROUTES.find((r) => r.test(hs));
-    if (!u || app.querySelector('.unitback') || app.querySelector('.lessonscreen')) return;
-    const home = app.querySelector('.homebtn'); if (!home) return;
-    const b = h('button', { class: 'back homebtn unitback', type: 'button', 'aria-label': 'Back to Unit ' + u.n + ': pick another lesson', onclick: () => { Snd.stop(); if (u.href) location.hash = u.href; else { location.hash = '#/home'; setTimeout(() => openIsland(u.id), 0); } } }, icon('back'), h('span', null, 'Back to Unit ' + u.n));
-    home.style.marginRight = '0'; home.after(b);
+    /* Back in the page nav already goes one level up. A second "Back to Unit" button is not added. */
   }
   IR.addUnitBack = addUnitBack;
   const route0 = route; route = function () { route0(); addUnitBack(); setTimeout(addUnitBack, 60); };

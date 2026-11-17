@@ -176,14 +176,14 @@
    "letter": "a",
    "group": "G1",
    "sound": "/a/ as in apple",
-   "keyword": "apple snail",
-   "character": "Asa the apple snail",
-   "concept": "A round green-and-gold apple snail. Her curled shell is the round part of the a and her tall neck is the straight stick on the right.",
-   "chant": "Asa the apple snail opens wide: /a/ /a/ /a/!",
-   "action": "Open your mouth wide in surprise and pop one hand up from a fist, like Asa peeking out of her shell.",
+   "keyword": "apple",
+   "character": "Addie the Apple",
+   "concept": "A red apple shaped like a lowercase a.",
+   "chant": "Addie the Apple says /a/ /a/ /a/!",
+   "action": "Open your mouth wide, like a bite of apple.",
    "formation": "Start just under the middle line. Curve back and around like a circle and close it. Go back up and pull straight down.",
-   "art": "img/letters/a_asa_apple_snail.jpg",
-   "cue": "'Think of Asa' + open wide, peek-out hand",
+   "art": "img/letters/a_apple.jpg",
+   "cue": "'Think of Addie' + open wide",
    "capital": "A"
   },
   {
@@ -329,14 +329,14 @@
   {
    "letter": "u",
    "group": "G3",
-   "sound": "/u/ as in up",
+   "sound": "/u/ as in umbrella",
    "keyword": "umbrella",
-   "character": "Uppy the leaf umbrella",
-   "concept": "A big kuba palm leaf curled up like a cup to catch rain, with a little stem on the right like the tail of a u.",
+   "character": "Uppy the umbrella",
+   "concept": "A blue umbrella. The curve is the cup of the u and the handle sits on the right.",
    "chant": "Uppy flips up: /u/ /u/ /u/!",
    "action": "Point both thumbs up and push them up for each /u/.",
    "formation": "Start at the middle line, pull down and curve around and up to the middle line. Pull straight down.",
-   "art": "img/letters/u_uppy_leaf_umbrella.jpg",
+   "art": "img/letters/u_umbrella.jpg",
    "cue": "'Think of Uppy' + thumbs up",
    "capital": "U"
   },
@@ -917,7 +917,7 @@
  "lessons": [
   {
    "group": "G1",
-   "label": "Day 1a",
+   "label": "Day 1",
    "lesson_number": 1,
    "win": "Read your first real word: am!",
    "new_letters": [
@@ -998,10 +998,10 @@
     },
     "scripts": {
      "a": {
-      "picture": "Asa beside the plain a: 'Asa makes an a shape. This is a. a says /a/.' Trace a over Asa, then trace the plain a.",
-      "outline": "Plain a over a faint Asa: 'Can you still see Asa? This is a.' Cover Asa: child says /a/ from the letter alone.",
+      "picture": "Addie beside the plain a: 'Addie makes an a shape. This is a. a says /a/.' Trace a over Addie, then trace the plain a.",
+      "outline": "Plain a over a faint Addie: 'Can you still see Addie? This is a.' Cover Addie: child says /a/ from the letter alone.",
       "plain": "Plain lowercase a only, in 2-3 fonts. 'Same letter, different clothes. What does it say?'",
-      "cue": "'Think of Asa' + open wide, peek-out hand"
+      "cue": "'Think of Addie' + open wide, peek-out hand"
      },
      "m": {
       "picture": "Manny beside the plain m: 'Manny makes an m shape. This is m. m says /m/.' Trace m over Manny, then trace the plain m.",
@@ -1032,13 +1032,13 @@
      "id": "flash",
      "step": "Review flash",
      "minutes": 2,
-     "what_to_do": "First lesson: no review yet. Show Asa and Manny and say: Today you will read a real word!"
+     "what_to_do": "First lesson: no review yet. Show Addie and Manny and say: Today you will read a real word!"
     },
     {
      "id": "meet",
      "step": "Meet the letter",
      "minutes": 3,
-     "what_to_do": "Asa beside the plain a: 'Asa makes an a shape. This is a. a says /a/.' Trace a over Asa, then trace the plain a. Chant and action. Manny beside the plain m: 'Manny makes an m shape. This is m. m says /m/.' Trace m over Manny, then trace the plain m. Chant and action."
+     "what_to_do": "Addie beside the plain a: 'Addie makes an a shape. This is a. a says /a/.' Trace a over Addie, then trace the plain a. Chant and action. Manny beside the plain m: 'Manny makes an m shape. This is m. m says /m/.' Trace m over Manny, then trace the plain m. Chant and action."
     },
     {
      "id": "trace",
@@ -1080,7 +1080,7 @@
   },
   {
    "group": "G1",
-   "label": "Day 1b",
+   "label": "Day 2",
    "lesson_number": 2,
    "win": "Read 3 more words and your first sentence.",
    "new_letters": [
@@ -1192,10 +1192,10 @@
     },
     "scripts": {
      "a": {
-      "picture": "Asa beside the plain a: 'Asa makes an a shape. This is a. a says /a/.' Trace a over Asa, then trace the plain a.",
-      "outline": "Plain a over a faint Asa: 'Can you still see Asa? This is a.' Cover Asa: child says /a/ from the letter alone.",
+      "picture": "Addie beside the plain a: 'Addie makes an a shape. This is a. a says /a/.' Trace a over Addie, then trace the plain a.",
+      "outline": "Plain a over a faint Addie: 'Can you still see Addie? This is a.' Cover Addie: child says /a/ from the letter alone.",
       "plain": "Plain lowercase a only, in 2-3 fonts. 'Same letter, different clothes. What does it say?'",
-      "cue": "'Think of Asa' + open wide, peek-out hand"
+      "cue": "'Think of Addie' + open wide, peek-out hand"
      },
      "m": {
       "picture": "Manny beside the plain m: 'Manny makes an m shape. This is m. m says /m/.' Trace m over Manny, then trace the plain m.",
@@ -1289,7 +1289,7 @@
   },
   {
    "group": "G1",
-   "label": "Day 2",
+   "label": "Day 3",
    "lesson_number": 3,
    "win": "",
    "new_letters": [],
@@ -1426,10 +1426,10 @@
     },
     "scripts": {
      "a": {
-      "picture": "Asa beside the plain a: 'Asa makes an a shape. This is a. a says /a/.' Trace a over Asa, then trace the plain a.",
-      "outline": "Plain a over a faint Asa: 'Can you still see Asa? This is a.' Cover Asa: child says /a/ from the letter alone.",
+      "picture": "Addie beside the plain a: 'Addie makes an a shape. This is a. a says /a/.' Trace a over Addie, then trace the plain a.",
+      "outline": "Plain a over a faint Addie: 'Can you still see Addie? This is a.' Cover Addie: child says /a/ from the letter alone.",
       "plain": "Plain lowercase a only, in 2-3 fonts. 'Same letter, different clothes. What does it say?'",
-      "cue": "'Think of Asa' + open wide, peek-out hand"
+      "cue": "'Think of Addie' + open wide, peek-out hand"
      },
      "m": {
       "picture": "Manny beside the plain m: 'Manny makes an m shape. This is m. m says /m/.' Trace m over Manny, then trace the plain m.",
@@ -1526,7 +1526,7 @@
   },
   {
    "group": "G1",
-   "label": "Day 3",
+   "label": "Day 4",
    "lesson_number": 4,
    "win": "",
    "new_letters": [],
@@ -1656,10 +1656,10 @@
     },
     "scripts": {
      "a": {
-      "picture": "Asa beside the plain a: 'Asa makes an a shape. This is a. a says /a/.' Trace a over Asa, then trace the plain a.",
-      "outline": "Plain a over a faint Asa: 'Can you still see Asa? This is a.' Cover Asa: child says /a/ from the letter alone.",
+      "picture": "Addie beside the plain a: 'Addie makes an a shape. This is a. a says /a/.' Trace a over Addie, then trace the plain a.",
+      "outline": "Plain a over a faint Addie: 'Can you still see Addie? This is a.' Cover Addie: child says /a/ from the letter alone.",
       "plain": "Plain lowercase a only, in 2-3 fonts. 'Same letter, different clothes. What does it say?'",
-      "cue": "'Think of Asa' + open wide, peek-out hand"
+      "cue": "'Think of Addie' + open wide, peek-out hand"
      },
      "m": {
       "picture": "Manny beside the plain m: 'Manny makes an m shape. This is m. m says /m/.' Trace m over Manny, then trace the plain m.",
@@ -1758,7 +1758,7 @@
   },
   {
    "group": "G1",
-   "label": "Day 4",
+   "label": "Day 5",
    "lesson_number": 5,
    "win": "",
    "new_letters": [],
@@ -1874,10 +1874,10 @@
     },
     "scripts": {
      "a": {
-      "picture": "Asa beside the plain a: 'Asa makes an a shape. This is a. a says /a/.' Trace a over Asa, then trace the plain a.",
-      "outline": "Plain a over a faint Asa: 'Can you still see Asa? This is a.' Cover Asa: child says /a/ from the letter alone.",
+      "picture": "Addie beside the plain a: 'Addie makes an a shape. This is a. a says /a/.' Trace a over Addie, then trace the plain a.",
+      "outline": "Plain a over a faint Addie: 'Can you still see Addie? This is a.' Cover Addie: child says /a/ from the letter alone.",
       "plain": "Plain lowercase a only, in 2-3 fonts. 'Same letter, different clothes. What does it say?'",
-      "cue": "'Think of Asa' + open wide, peek-out hand"
+      "cue": "'Think of Addie' + open wide, peek-out hand"
      },
      "m": {
       "picture": "Manny beside the plain m: 'Manny makes an m shape. This is m. m says /m/.' Trace m over Manny, then trace the plain m.",

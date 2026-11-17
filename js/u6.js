@@ -453,7 +453,7 @@
     else wrap.append(h('img', { class: 'char zip big', src: 'img/zipA.webp', alt: 'Zip' }), h('h1', null, 'Re-teach'), h('p', { class: 'lead' }, 'You got ' + score + ' out of 10. A grown-up can teach this ending again, then try the check again.'));
     wrap.append(h('div', { class: 'row' }, score >= 9 ? home : again, back));
     if (score >= 7) wrap.prepend(IR.celebration(score >= 9));
-    app.append(h('div', { class: 'screen resultscreen' }, h('div', { class: 'unitbar' }, IR.ui.homeButton()), wrap));
+    app.append(h('div', { class: 'screen resultscreen' }, h('div', { class: 'unitbar' }, IR.ui.pageNav('#/u6')), wrap));
     Snd.play(score >= 9 ? A.sfx.gong : A.sfx.done);
   }
 
@@ -470,8 +470,7 @@
     items.filter((r) => r.group === 'activities').forEach((r, k) => { r.act = k + 1; });
     const story = { title: L.storyTitle, href: '#/u6/' + L.key + '/read', min: 6, img: IR.storyCovers[L.n], alt: L.storyTitle, big: true };
     app.append(h('div', { class: 'screen trailscreen unitpage unitA stepage' },
-      h('header', { class: 'uA-top' }, IR.ui.homeButton(), h('h1', { class: 'uA-title' }, h('small', null, 'Unit 6 Lesson ' + IR.kidLesson(L.n)), L.name),
-        h('button', { class: 'btn', type: 'button', onclick: () => { location.hash = '#/u6'; } }, 'All lessons'), IR.teacherBox({}), IR.ui.gearButton()),
+      h('header', { class: 'uA-top' }, IR.ui.pageNav('#/u6'), h('h1', { class: 'uA-title' }, h('small', null, 'Unit 6 Lesson ' + IR.kidLesson(L.n)), L.name), IR.teacherBox({})),
       IR.modeBar({
         lesson: items.filter((r) => r.group === 'lesson').map((r) => ({ title: r.title, href: r.href, min: r.min })),
         games: items.filter((r) => r.group === 'activities').map((r) => ({ title: r.title, href: r.href, note: TIPS[r.id], min: r.min })),
@@ -482,7 +481,7 @@
   function picker(app) {
     IR.newScreen();
     app.append(h('div', { class: 'screen trailscreen unitpage unitA stepage' },
-      h('header', { class: 'uA-top' }, IR.ui.homeButton(), h('h1', { class: 'uA-title' }, h('small', null, 'Unit 6'), 'Endings'), IR.teacherBox({}), IR.ui.gearButton()),
+      h('header', { class: 'uA-top' }, IR.ui.pageNav('#/home'), h('h1', { class: 'uA-title' }, h('small', null, 'Unit 6'), 'Endings'), IR.teacherBox({})),
       IR.modeBar({
         choose: PACK.lessons.flatMap((L) => [
           { title: 'Lesson ' + IR.kidLesson(L.n) + ' ' + L.name, href: '#/u6/' + L.key },
@@ -512,8 +511,7 @@
     const nextBtn = h('button', { class: 'btn big next', type: 'button', onclick: () => ctx.goNext() }, 'Next', icon('next'));
     const nav = h('div', { class: 'lesson-nav' }, nextBtn);
     const navApi = IR.simpleNav(nav, nextBtn, () => { Snd.stop(); location.hash = base; });
-    const x = h('button', { class: 'xbtn', type: 'button', 'aria-label': 'Back to the lesson', onclick: () => { location.hash = base; } }, icon('close'));
-    const screen = h('div', { class: 'screen lessonscreen u6step' + (S0.group === 'lesson' ? ' is-lesson' : ''), style: '--c:' + S0.color }, h('header', { class: 'lesson-top' }, x, bar, IR.ui.homeButton(), IR.ui.gearButton()), instrBox, stage, nav);
+    const screen = h('div', { class: 'screen lessonscreen u6step' + (S0.group === 'lesson' ? ' is-lesson' : ''), style: '--c:' + S0.color }, h('header', { class: 'lesson-top' }, IR.ui.pageNav(base), bar), instrBox, stage, nav);
     app.append(screen);
     if (S0.group === 'activities') IR.attachGameRules(ctx, screen, S0.title);
     S0.run(ctx);

@@ -66,13 +66,12 @@
 
   /* shared screen frame: X (back to chest), title, Back/Next footer */
   function frame(app, { title, backHref, nextHref, backLabel, nextLabel, body, cls }) {
-    const x = h('button', { class: 'xbtn', type: 'button', 'aria-label': 'Back to the chest', onclick: () => { location.hash = P; } }, icon('close'));
     const nav = h('div', { class: 'lesson-nav' },
       h('button', { class: 'btn big back', type: 'button', 'aria-label': backLabel || 'Back', onclick: () => { Snd.stop(); location.hash = backHref; } }, icon('back'), 'Back'),
       h('button', { class: 'btn big next', type: 'button', 'aria-label': nextLabel || 'Next', onclick: () => { Snd.stop(); location.hash = nextHref; } }, 'Next', icon('next')));
     const countEl = h('p', { class: 'qcount', 'aria-live': 'polite' }, '');
     const screen = h('div', { class: 'screen lessonscreen chestscreen ' + (cls || ''), style: '--c:#A9693B' },
-      h('header', { class: 'lesson-top' }, x, h('h2', { class: 'acttitle chest-title' }, h('span', { class: 'chestmini', html: IR.chestSVG(N) }), title), IR.ui.homeButton()), h('div', { class: 'stage' }, body), countEl, nav);
+      h('header', { class: 'lesson-top' }, IR.ui.pageNav(P), h('h2', { class: 'acttitle chest-title' }, h('span', { class: 'chestmini', html: IR.chestSVG(N) }), title)), h('div', { class: 'stage' }, body), countEl, nav);
     app.append(screen);
     screen._qcount = countEl;
   }
@@ -119,16 +118,14 @@
       h('span', { class: 'snum', 'aria-hidden': 'true' }, String(i + 1)), h('span', { class: 'sico', 'aria-hidden': 'true' }, icon('play')),
       h('span', { class: 'stxt' }, h('b', null, g.title), h('small', null, g.blurb)), h('span', { class: 'sside' }, h('span', { class: 'slabel' }, 'Play')))));
     const chips = h('div', { class: 'wordchips', 'aria-label': 'The ' + WORDS.length + ' words' }, ...WORDS.map((w) => { const b = wordCard(w, 'mini'); b.addEventListener('click', () => IR.sayWord(w)); return b; }));
-    const x = IR.ui.homeButton();
     app.append(h('div', { class: 'screen trailscreen unitpage chestmenu' },
-      h('header', { class: 'top2' }, x, IR.ui.gearButton()),
+      h('header', { class: 'top2' }, IR.ui.pageNav('#/home')),
       h('div', { class: 'unitwrap' },
         h('section', { class: 'unithero' }, h('div', { class: 'chestbig', html: IR.chestSVG(N) }), h('div', { class: 'ut-title' }, h('span', { class: 'ut-isle' }, 'Level ' + N + ' treasure'), h('h1', null, 'Treasure chest ' + N)),
           h('p', { class: 'small' }, WORDS.length + ' words. Play the games as often as you like. They never hold anything up.')),
         h('section', { class: 'ugrp activities' }, h('h2', { class: 'ugrp-t' }, icon('play'), 'Games', h('small', null, 'Play as often as you like')), h('ol', { class: 'stoplist' }, ...cards)),
         h('section', { class: 'ugrp' }, h('h2', { class: 'ugrp-t' }, 'The words', h('small', null, 'A star means a heart word you learned. Tap a word to hear it.')), chips)),
       h('div', { class: 'lesson-nav trail-nav' },
-        h('button', { class: 'btn big back', type: 'button', 'aria-label': 'Back to the world map', onclick: () => { location.hash = '#/home'; } }, icon('back'), 'Back'),
         h('button', { class: 'btn big next', type: 'button', 'aria-label': 'Next: Flip and Match', onclick: () => { location.hash = P + '/flip'; } }, 'Next', icon('next')))));
   }
 

@@ -42,7 +42,7 @@
 
   /* Stroke numbers sit at the start. The arrow is the end of the stroke. */
   const LETTERS = [
-    { id: 'a', name: 'a', nameSay: 'ay', sound: '/a/', soundSay: 'ah, ant', word: 'ant', cue: 'a as in ant', where: 'start',
+    { id: 'a', name: 'a', nameSay: 'ay', sound: '/a/', soundSay: 'ah, apple', word: 'ant', cue: 'a as in apple', where: 'start',
       strokes: [{ d: 'M68 78 C68 48 28 46 28 76 C28 106 70 108 70 78', nx: 96, ny: 70 }, { d: 'M70 58 L70 112', nx: 96, ny: 44 }] },
     { id: 'm', name: 'm', nameSay: 'em', sound: '/m/', soundSay: 'mmm, map', word: 'map', audio: 'audio/w_map.mp3', cue: 'm as in map', where: 'start',
       strokes: [{ d: 'M24 112 L24 52', nx: 12, ny: 40 }, { d: 'M24 70 C24 48 52 48 52 74 L52 112', nx: 36, ny: 40 }, { d: 'M52 70 C52 48 82 48 82 74 L82 112', nx: 70, ny: 40 }] },
@@ -64,7 +64,7 @@
       strokes: [{ d: 'M78 28 L78 116', nx: 92, ny: 22 }, { d: 'M78 70 C78 46 26 46 26 76 C26 106 78 108 78 78', nx: 58, ny: 40 }] },
     { id: 'c', name: 'c', nameSay: 'see', sound: '/k/', soundSay: 'k, cat', word: 'cat', audio: 'audio/u6_w_cat.mp3', cue: 'c as in cat', where: 'start',
       strokes: [{ d: 'M82 54 C64 34 26 40 26 76 C26 112 66 120 84 100', nx: 92, ny: 42 }] },
-    { id: 'u', name: 'u', nameSay: 'you', sound: '/u/', soundSay: 'uh, up', word: 'up', cue: 'u as in up', where: 'start',
+    { id: 'u', name: 'u', nameSay: 'you', sound: '/u/', soundSay: 'uh, umbrella', word: 'up', cue: 'u as in umbrella', where: 'start',
       strokes: [{ d: 'M30 48 L30 90 C30 114 78 114 78 90', nx: 14, ny: 38 }, { d: 'M78 48 L78 112', nx: 92, ny: 40 }] },
     { id: 'g', name: 'g', nameSay: 'jee', sound: '/g/', soundSay: 'g, goat', word: 'goat', cue: 'g as in goat', where: 'start',
       strokes: [{ d: 'M72 78 C72 50 26 48 26 76 C26 104 72 106 72 78', nx: 84, ny: 58 }, { d: 'M72 62 L72 124 C72 140 36 140 32 122', nx: 90, ny: 50 }] },
@@ -127,7 +127,7 @@
     { id: 'celebrate', title: 'Look what I can read!' }
   ];
   const MEMORY = {
-    a: { chant: 'Ant on an apple, /a/ /a/ /a/.', action: 'Open wide, like a bite.' },
+    a: { chant: 'Addie the Apple, /a/ /a/ /a/.', action: 'Open wide, like a bite of apple.' },
     m: { chant: 'Twin mountains hum, /m/ /m/ /m/.', action: 'Lips together. Hum.' },
     s: { chant: 'Sea snake in the sand, /s/ /s/ /s/.', action: 'Slide your hand like the snake.' },
     t: { chant: 'Palm tree tap, /t/ /t/ /t/.', action: 'Tap two fingers.' },
@@ -138,7 +138,7 @@
     o: { chant: 'Round as an ox, /o/ /o/ /o/.', action: 'Make a round mouth.' },
     d: { chant: 'Dog digs down, /d/ /d/ /d/.', action: 'Tap your tongue.' },
     c: { chant: 'Cat curls up, /k/ /k/ /k/.', action: 'Open for /k/.' },
-    u: { chant: 'Hands up, /u/ /u/ /u/.', action: 'Lift your hands a little.' },
+    u: { chant: 'Uppy the umbrella, /u/ /u/ /u/.', action: 'Lift the umbrella a little.' },
     g: { chant: 'Goat gulps, /g/ /g/ /g/.', action: 'Gulp once.' },
     b: { chant: 'Bounce the bus, /b/ /b/ /b/.', action: 'Press your lips, then pop.' },
     e: { chant: 'Edge of the egg, /e/ /e/ /e/.', action: 'Smile and say /e/.' },
@@ -186,9 +186,9 @@
   };
   /* Placeholder island characters. Final art is still needed for every letter. */
   const WHO = {
-    a: 'Island ant', m: 'Twin mountains', s: 'Sea snake', t: 'Palm tree',
+    a: 'Addie the Apple', m: 'Twin mountains', s: 'Sea snake', t: 'Palm tree',
     p: 'Puffer fish', f: 'Fan coral', i: 'Island sun', n: 'Fishing net',
-    o: 'Round ox', d: 'Island dog', c: 'Crab claw', u: 'Sea urchin',
+    o: 'Round ox', d: 'Island dog', c: 'Crab claw', u: 'Uppy the umbrella',
     g: 'Hill goat', b: 'Beach bus', e: 'Reef eel', k: 'Reef kite',
     h: 'Hill house', r: 'Manta ray', l: 'Lighthouse', w: 'Shore waves',
     j: 'Jellyfish', y: 'Young palm', x: 'Crossed oars', q: 'Queen conch',
@@ -606,9 +606,8 @@
       h('span', { class: 'u5min' }, it.done + ' of ' + it.total),
       it.done === it.total ? h('span', { class: 'u5mark', 'aria-hidden': 'true' }, icon('check')) : null)));
     app.append(h('div', { class: 'screen trailscreen unitpage u5menu llpage lllist' },
-      h('header', { class: 'uA-top' }, IR.ui.homeButton(),
-        h('button', { class: 'back homebtn', type: 'button', onclick: () => { Snd.stop(); location.hash = '#/foundation'; } }, icon('back'), h('span', null, 'Foundation')),
-        h('h1', { class: 'uA-title' }, 'Learn the Letters'), IR.ui.gearButton()),
+      h('header', { class: 'uA-top' }, IR.ui.pageNav('#/foundation'),
+        h('h1', { class: 'uA-title' }, 'Learn the Letters')),
       h('main', { class: 'u5main' },
         h('div', { class: 'llintro' },
           h('img', { src: 'img/zipA.webp', alt: '' }),
@@ -630,44 +629,148 @@
     if (group.id === 'g1' && next.lesson_number === 1) { location.hash = '#/foundation/sample'; return; }
     location.hash = lessonHash(group, next, flowFor(next)[0].id);
   }
+  const MOUTH = '<svg viewBox="0 0 88 64" aria-hidden="true"><ellipse cx="44" cy="34" rx="36" ry="22" fill="#FFE4D6" stroke="#E39A86" stroke-width="3"/><path d="M16 30 Q44 58 72 30 Q44 44 16 30Z" fill="#E23B4A" stroke="#8E1D2C" stroke-width="4" stroke-linejoin="round"/><path d="M24 33 Q44 50 64 33 Q44 41 24 33Z" fill="#4A1020"/><ellipse cx="44" cy="40" rx="11" ry="6" fill="#F08A98"/></svg>';
+  const GAME_ART = {
+    find: 'foundation/img/games/hunt.jpg',
+    match: 'foundation/img/games/flash.jpg',
+    sound: 'foundation/img/games/sound.jpg',
+    feed: 'img/zipA.webp',
+    review: 'foundation/img/games/match.jpg'
+  };
+  function teamOnePack() {
+    const art = {
+      a: 'foundation/img/letters/a_apple.jpg',
+      m: 'foundation/img/letters/m_manny_mangrove.jpg',
+      s: 'foundation/img/letters/s_sami_sea_snake.jpg',
+      t: 'foundation/img/letters/t_tama_sea_turtle.jpg'
+    };
+    return {
+      ids: ['a', 'm', 's', 't'],
+      say: { a: 'ah', m: 'mmm', s: 'sss', t: 't' },
+      art: art,
+      pics: {
+        a: ['foundation/img/objects/ant.jpg', 'foundation/img/objects/apple.jpg'],
+        m: ['foundation/img/scenes/mat.jpg', 'foundation/img/objects/mango.jpg', 'img/refresh_mop.jpg'],
+        s: ['foundation/img/scenes/sat.jpg', art.s],
+        t: ['foundation/img/scenes/tam.jpg', art.t]
+      },
+      words: [
+        { text: 'am', src: 'foundation/img/scenes/am.jpg', parts: ['a', 'm'], decoy: 'foundation/img/objects/apple.jpg' },
+        { text: 'at', src: art.a, parts: ['a', 't'], decoy: 'foundation/img/objects/mango.jpg' },
+        { text: 'mat', src: 'foundation/img/scenes/mat.jpg', parts: ['m', 'a', 't'], decoy: art.s },
+        { text: 'sat', src: 'foundation/img/scenes/sat.jpg', parts: ['s', 'a', 't'], decoy: art.m },
+        { text: 'Sam', src: art.s, parts: ['s', 'a', 'm'], decoy: 'foundation/img/objects/apple.jpg' },
+        { text: 'Tam', src: 'foundation/img/scenes/tam.jpg', parts: ['t', 'a', 'm'], decoy: art.a }
+      ],
+      onDone(id) {
+        IR.recordActivity('ll_g1_d1_' + id, 3);
+        IR.touchStreak();
+        IR.save();
+      }
+    };
+  }
+  function teamGames(group) {
+    const older = gamesFor(group).map((game) => ({
+      title: game.title,
+      img: GAME_ART[game.id] || '',
+      alt: game.title,
+      done: IR.isDone(doneId(group, game.id)),
+      href: '#/foundation/letters/' + group.id + '/' + game.id
+    }));
+    if (group.id !== 'g1' || !IR.day1Flow) return older;
+    const ten = IR.day1Flow.GAMES.map((game) => ({
+      title: game.title,
+      img: game.faces ? '' : game.icon,
+      imgs: game.faces || null,
+      alt: game.title,
+      done: IR.isDone('ll_g1_d1_' + game.id),
+      go: () => { Snd.stop(); location.hash = '#/foundation/letters/g1/play/' + game.id; }
+    }));
+    return ten.concat(older);
+  }
+  function introScreen(app, group) {
+    IR.newScreen();
+    const letters = lettersOf(group);
+    let i = 0;
+    const stage = h('div', { class: 'fs-stage' });
+    const next = h('button', { class: 'btn big next', type: 'button' }, 'Next');
+    function show() {
+      const L = letters[i];
+      const src = artUrl(L.id);
+      stage.innerHTML = '';
+      stage.append(h('div', { class: 'fs-kidintro' },
+        src ? h('img', { class: 'fs-kidart', src: src, alt: '' }) : letterCardStep(L, 'picture'),
+        h('button', {
+          class: 'fs-nametag',
+          type: 'button',
+          'aria-label': 'My name is: ' + L.id,
+          onclick: () => hear(L, 'name')
+        }, h('span', { class: 'fs-nametext' }, 'My name is: ' + L.id)),
+        h('div', { class: 'll1mouth' },
+          h('span', { class: 'll1mouthico', html: MOUTH }),
+          h('p', null, 'My sound is ' + L.sound))));
+      next.textContent = i >= letters.length - 1 ? 'Done' : 'Next';
+      const hello = i === 0 ? speak('Meet each letter.') : Promise.resolve(true);
+      hello.then(() => hear(L, 'sound'));
+    }
+    next.addEventListener('click', () => {
+      Snd.stop();
+      try { speechSynthesis.cancel(); } catch (e) { /* quiet */ }
+      if (i >= letters.length - 1) { location.hash = '#/foundation/letters/' + group.id; return; }
+      i += 1;
+      show();
+    });
+    app.append(h('div', { class: 'screen trailscreen unitpage llpage fs-lesson' },
+      h('header', { class: 'uA-top' },
+        IR.ui.pageNav('#/foundation/letters/' + group.id),
+        h('h1', { class: 'uA-title' }, 'Introduction')),
+      h('main', { class: 'llmain fs-stagewrap' }, stage),
+      h('div', { class: 'llnav' }, next)));
+    show();
+  }
+  function letterChip(id) {
+    const L = BY[id];
+    const src = artUrl(id);
+    return h('div', { class: 'fs-chip' },
+      src ? h('img', { class: 'fs-kidart', src: src, alt: '' }) : letterCardStep(L, 'picture'),
+      h('button', {
+        class: 'fs-nametag',
+        type: 'button',
+        'aria-label': 'My name is: ' + id,
+        onclick: () => hear(L, 'name')
+      }, h('span', { class: 'fs-nametext' }, 'My name is: ' + id)),
+      h('div', { class: 'll1mouth' },
+        h('span', { class: 'll1mouthico', html: MOUTH }),
+        h('p', null, 'My sound is ' + (L ? L.sound : ''))));
+  }
   function groupPage(app, group) {
     IR.newScreen();
-    const lessons = lessonsOf(group);
     const teach = teamTeacher(group) || {};
-    const overview = h('div', { class: 'fs-overview stepbefore', style: 'grid-template-columns:repeat(' + Math.min(group.letters.length, 4) + ',minmax(0,1fr))' },
-      ...group.letters.map((id) => h('div', { class: 'fs-over' }, letterIntro(id))));
-    const lessonItems = [{ title: 'One letter at a time', go: () => startLetters(group) }];
-    lessons.forEach((lesson) => {
-      lessonItems.push({
-        title: lesson.label || ('Lesson ' + lesson.lesson_number),
-        note: lessonLine(lesson),
-        go: () => {
-          Snd.stop();
-          if (group.id === 'g1' && lesson.lesson_number === 1) { location.hash = '#/foundation/sample'; return; }
-          location.hash = lessonHash(group, lesson, flowFor(lesson)[0].id);
-        }
-      });
-    });
-    if (lessons.some((lesson) => lesson.mastery_check)) {
-      lessonItems.push({ title: 'Team check', note: 'Plain letters only. Show what you know.', href: '#/foundation/letters/' + group.id + '/check' });
-    }
-    const games = gamesFor(group).map((game) => ({ title: game.title, href: '#/foundation/letters/' + group.id + '/' + game.id }));
+    const base = '#/foundation/letters/' + group.id;
+    const letters = lettersOf(group);
     app.append(h('div', { class: 'screen trailscreen unitpage u5menu llpage fs-group stepage' },
       h('header', { class: 'uA-top' },
-        IR.ui.homeButton(),
-        h('button', { class: 'back homebtn', type: 'button', onclick: () => { Snd.stop(); location.hash = '#/foundation'; } }, icon('back'), h('span', null, 'Foundation')),
-        h('h1', { class: 'uA-title' }, 'Meet the Team'),
-        IR.teacherBox({ slides: teach.slides, files: teach.files }),
-        IR.ui.gearButton()),
+        IR.ui.pageNav('#/foundation'),
+        h('h1', { class: 'uA-title' }, h('small', null, 'Team ' + group.n), 'Meet the Team'),
+        IR.teacherBox({ slides: teach.slides, files: teach.files, days: teach.days })),
       IR.modeBar({
-        before: h('div', { class: 'stepbefore' },
-          h('p', { class: 'llask' }, 'Team ' + group.n + ', ' + group.letters.join(', ') + '. Tap the name, then the sound three times.'),
-          overview),
-        lesson: lessonItems,
-        games: games,
-        slides: teach.slides,
-        files: teach.files
+        note: false,
+        labels: ['Introduction', 'Games', 'Read It'],
+        gameClass: ' pics',
+        before: h('div', { class: 'fs-meetrow' }, ...group.letters.map(letterChip)),
+        lesson: [{ title: 'Meet the letters', go: () => { Snd.stop(); location.hash = base + '/intro'; } }],
+        games: teamGames(group),
+        story: {
+          title: 'Read It',
+          big: true,
+          img: group.id === 'g1' ? 'foundation/img/scenes/am.jpg' : '',
+          alt: 'Read it',
+          go: () => { Snd.stop(); location.hash = base + '/read'; }
+        }
       })));
+    if (letters[0]) {
+      speak('Meet each letter.').then(() => hear(letters[0], 'sound'));
+    }
     if (IR.teach) IR.teach.sync();
   }
 
@@ -685,9 +788,8 @@
     });
     app.append(h('div', { class: 'screen trailscreen unitpage u5menu llpage' },
       h('header', { class: 'uA-top' },
-        h('button', { class: 'back homebtn', type: 'button', onclick: () => { Snd.stop(); location.hash = '#/foundation/letters/' + group.id; } }, icon('back'), h('span', null, 'Team')),
-        h('h1', { class: 'uA-title' }, 'Games'),
-        IR.ui.gearButton()),
+        IR.ui.pageNav('#/foundation/letters/' + group.id),
+        h('h1', { class: 'uA-title' }, 'Games')),
       h('main', { class: 'llmain' }, h('ol', { class: 'llsteps llgames' }, ...cards))));
     if (IR.teach) IR.teach.sync();
   }
@@ -755,7 +857,7 @@
       location.hash = base + '/celebrate';
     };
     const screen = h('div', { class: 'screen lessonscreen nkstep u5step llstep' },
-      h('header', { class: 'lesson-top' }, bar, IR.ui.homeButton(), IR.ui.gearButton()),
+      h('header', { class: 'lesson-top' }, IR.ui.pageNav(base), bar),
       instrBox, stage, nav);
     app.append(screen);
     IR.attachGameRules(ctx, screen, game.title);
@@ -1013,7 +1115,7 @@
     const fresh = {};
     lessonRead(group).forEach((item) => { fresh[item.w.toLowerCase()] = 1; });
     const screen = h('div', { class: 'screen lessonscreen nkstep u5step llstep' },
-      h('header', { class: 'lesson-top' }, IR.ui.homeButton(), IR.ui.gearButton()),
+      h('header', { class: 'lesson-top' }, IR.ui.pageNav('#/foundation/letters/' + group.id)),
       h('div', { class: 'stage' }, h('div', { class: 'activity llgame llcelebrate' },
         IR.engage.faces(),
         h('div', { class: 'badgeart', html: IR.ICON.badge }),
@@ -1517,9 +1619,7 @@
   function letterContinue() {
     const stop = nextStop();
     const team = 'Team ' + ((stop && stop.group && stop.group.n) || 1);
-    let href = '#/foundation/letters/g1';
-    if (stop && stop.check) href = '#/foundation/letters/' + stop.group.id + '/check';
-    else if (stop && stop.lesson) href = lessonHash(stop.group, stop.lesson, flowFor(stop.lesson)[0].id);
+    const href = '#/foundation/letters/' + ((stop && stop.group && stop.group.id) || 'g1');
     return h('button', {
       class: 'zfstart2',
       type: 'button',
@@ -1586,9 +1686,9 @@
     });
     const sideBtn = (label, go) => h('button', { class: 'btn big fs-sidebtn', type: 'button', onclick: go }, label);
     const banner = h('header', { class: 'hbanner' },
-      h('h1', null, h('a', { class: 'fs-titlelink', href: '#/home' }, 'Foundation Skills')),
+      IR.ui.pageNav('#/home'),
+      h('h1', null, 'Foundation Skills'),
       h('div', { class: 'grownwrap' }, h('span', { class: 'grownlab' }, 'Parent and Teacher Materials'), IR.ui.gearButton()));
-    const homeBtn = h('a', { class: 'btn big fs-homebtn', href: '#/home' }, icon('home'), h('span', null, 'Home'));
     const hero = h('section', { class: 'homefeature', 'aria-label': 'Review the letters with Zip and Frill' },
       h('div', { class: 'zfpics' }, h('img', { class: 'homeart', src: 'foundation/img/foundations_sidebar.jpg', width: 900, height: 506, alt: 'Zip and Frill with Team 1 letters a, m, s, t on the beach.' })),
       h('div', { class: 'hfbody' },
@@ -1596,16 +1696,14 @@
         h('p', { class: 'zfsub' }, 'Names and sounds, then real words.'),
         letterContinue()));
     const materials = h('section', { class: 'fs-mats', 'aria-label': 'For grown-ups' },
-      teacherSlides(),
       teacherGuideDrop(),
-      printablesDrop(),
       trackingDrop(),
       sideBtn('Teacher mode', () => { if (IR.teach) IR.teach.toggle(); }));
     app.append(h('div', { class: 'screen home mapscreen gridhome fs-home' },
       h('div', { class: 'mwrap' },
         banner,
         h('div', { class: 'homelay' },
-          h('div', { class: 'homeside' }, homeBtn, hero, aboutOrder(), materials),
+          h('div', { class: 'homeside' }, hero, aboutOrder(), materials),
           h('div', { class: 'bellslot' }, h('div', { class: 'bellpath' }, h('div', { class: 'bellgrid' }, ...cards)))))));
     if (IR.teach) IR.teach.sync();
   }
@@ -1860,9 +1958,8 @@
     else paintStep(stage, group, lesson, step);
     app.append(h('div', { class: 'screen trailscreen unitpage llpage fs-lesson' },
       h('header', { class: 'uA-top' },
-        h('button', { class: 'back homebtn', type: 'button', onclick: () => { Snd.stop(); location.hash = '#/foundation/letters/' + group.id; } }, icon('back'), h('span', null, 'Lessons')),
-        h('h1', { class: 'uA-title' }, lesson.label || ('Lesson ' + lesson.lesson_number)),
-        IR.ui.gearButton()),
+        IR.ui.pageNav('#/foundation/letters/' + group.id),
+        h('h1', { class: 'uA-title' }, lesson.label || ('Lesson ' + lesson.lesson_number))),
       strip,
       h('main', { class: 'llmain fs-stagewrap' }, stage),
       h('div', { class: 'llnav' }, h('button', {
@@ -1933,9 +2030,8 @@
     show();
     app.append(h('div', { class: 'screen trailscreen unitpage llpage fs-lesson' },
       h('header', { class: 'uA-top' },
-        h('button', { class: 'back homebtn', type: 'button', onclick: () => { Snd.stop(); location.hash = '#/foundation/letters/' + group.id; } }, icon('back'), h('span', null, 'Lessons')),
-        h('h1', { class: 'uA-title' }, 'Team check'),
-        IR.ui.gearButton()),
+        IR.ui.pageNav('#/foundation/letters/' + group.id),
+        h('h1', { class: 'uA-title' }, 'Team check')),
       h('main', { class: 'llmain fs-stagewrap' }, stage),
       h('div', { class: 'llnav' }, h('button', {
         class: 'btn big primary',
@@ -1954,11 +2050,11 @@
     g1: {
       file: 'foundation/slides/Learn_the_Letters_Team1.pdf',
       days: [
-        { label: 'Day 1a', page: 3 },
-        { label: 'Day 1b', page: 21 },
-        { label: 'Day 2', page: 44 },
-        { label: 'Day 3', page: 79 },
-        { label: 'Day 4', page: 110 },
+        { label: 'Day 1', page: 3 },
+        { label: 'Day 2', page: 21 },
+        { label: 'Day 3', page: 44 },
+        { label: 'Day 4', page: 79 },
+        { label: 'Day 5', page: 110 },
         { label: 'Team check', page: 110 }
       ]
     },
@@ -1978,11 +2074,14 @@
     location.hash = '#/foundation/slides/' + team + (page ? '/' + page : '');
   }
   function teamTeacher(group) {
-    if (!SLIDES[group.id]) return null;
+    const deck = SLIDES[group.id];
     const files = group.id === 'g1'
       ? [{ title: 'Team 1 Quick Sounds', href: 'foundation/printables/Team1_Quick_Sounds.pdf' }]
-      : [{ title: 'Team 2 Quick Sounds', href: 'foundation/printables/Team2_Quick_Sounds.pdf' }];
-    return { slides: '#/foundation/slides/' + group.id, files: files };
+      : group.id === 'g2'
+        ? [{ title: 'Team 2 Quick Sounds', href: 'foundation/printables/Team2_Quick_Sounds.pdf' }]
+        : [];
+    const days = deck ? deck.days.map((day) => ({ label: day.label, href: '#/foundation/slides/' + group.id + '/' + day.page })) : [];
+    return { slides: deck ? '#/foundation/slides/' + group.id : '', files: files, days: days };
   }
   function pdfLink(label, href) {
     return h('a', { class: 'drop-link', href: href, target: '_blank', rel: 'noopener' }, label);
@@ -2066,7 +2165,7 @@
     };
     view.append(
       h('header', { class: 'uA-top' },
-        h('button', { class: 'back homebtn', type: 'button', onclick: () => { Snd.stop(); if (document.fullscreenElement && document.exitFullscreen) document.exitFullscreen(); location.hash = '#/foundation'; } }, icon('back'), h('span', null, 'Foundation')),
+        IR.ui.pageNav('#/foundation/letters/' + team),
         h('h1', { class: 'uA-title' }, title),
         h('button', { class: 'btn big primary fs-slidebtn', type: 'button', onclick: goFull }, 'Full screen')),
       h('iframe', { class: 'fs-pdf', src: deck.file + (page ? '#page=' + page : ''), title: title }));
@@ -2086,6 +2185,19 @@
       if (!groupOpen(g) && !(IR.teach && IR.teach.on && IR.teach.on())) { foundationPage(app); return true; }
       lessonScreen(app, g, row, lesson[3] || '');
       return true;
+    }
+    const intro = /^#\/foundation\/letters\/(g[1-7])\/intro\/?$/.exec(hash);
+    if (intro) {
+      const g = groupById(intro[1]);
+      if (!g || !groupOpen(g)) return false;
+      introScreen(app, g);
+      return true;
+    }
+    const play10 = /^#\/foundation\/letters\/g1\/play\/([a-z]+)\/?$/.exec(hash);
+    if (play10 && IR.day1Play) {
+      const g = groupById('g1');
+      if (!g || !groupOpen(g)) return false;
+      return IR.day1Play(app, play10[1], teamOnePack(), '#/foundation/letters/g1');
     }
     const group = /^#\/foundation\/letters\/(g[1-7])\/?$/.exec(hash);
     if (group) {

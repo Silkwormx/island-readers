@@ -72,13 +72,13 @@
     const story = pick('story')[0];
     if (story) { story.title = N.storyTitle || story.title; story.note = 'Story Time'; story.img = IR.storyCovers['4.2']; story.alt = N.storyTitle || ''; story.big = true; }
     app.append(h('div', { class: 'screen trailscreen unitpage unitA nkunit stepage' },
-      h('header', { class: 'uA-top' }, IR.ui.homeButton(), h('h1', { class: 'uA-title' }, h('small', null, 'Unit 4 Lesson 2'), 'nk'), IR.teacherBox({
+      h('header', { class: 'uA-top' }, IR.ui.pageNav('#/home'), h('h1', { class: 'uA-title' }, h('small', null, 'Unit 4 Lesson 2'), 'nk'), IR.teacherBox({
         slides: '#/teachers/slides/nk',
         files: [
           { title: 'Daily practice sheets', href: 'teachers/nk/Lesson3.2_nk_Daily_Practice_Sheets.pdf' },
           { title: 'Teacher pack', href: 'teachers/nk/Lesson3.2_nk_Teacher_Pack.pdf' }
         ]
-      }), IR.ui.gearButton()),
+      })),
       IR.modeBar({
         lesson: pick('lesson'),
         games: pick('activities').concat(pick('extra')),
@@ -111,7 +111,7 @@
         const last = !!OV || idx === STEPS.length - 1; const nx = STEPS[idx + 1];
         const ov = h('div', { class: 'complete' }, h('div', { class: 'cbox' }, IR.celebration(false), h('h1', null, 'Great job!'), h('p', { class: 'lead' }, S0.title),
           h('div', { class: 'bigstars', 'aria-label': stars + ' stars' }, ...[1, 2, 3].map((k) => icon(k <= stars ? 'star' : 'starOutline', (k <= stars ? 'on' : 'off') + ' k' + k))),
-          h('div', { class: 'row' }, h('button', { class: 'btn big back', type: 'button', onclick: () => { location.hash = '#/nk'; } }, icon('back'), 'Back to the trail'),
+          h('div', { class: 'row' }, h('button', { class: 'btn big back', type: 'button', onclick: () => { location.hash = '#/nk'; } }, icon('back'), 'Back'),
             h('button', { class: 'btn big primary', type: 'button', onclick: () => { location.hash = OV ? '#/home' : last ? '#/nk' : '#/nk/' + nx.id; } }, OV ? 'See the sky map' : last ? 'Back to the unit' : 'Next: ' + nx.title, icon('next')))));
         app.append(ov); Snd.play(IR.A.sfx.done);
       }
@@ -119,8 +119,7 @@
     const nextBtn = h('button', { class: 'btn big next', type: 'button', 'aria-label': 'Next', onclick: () => ctx.goNext() }, 'Next', icon('next'));
     const nav = h('div', { class: 'lesson-nav' }, nextBtn);
     const navApi = IR.simpleNav(nav, nextBtn, () => { Snd.stop(); location.hash = '#/nk'; });
-    const x = h('button', { class: 'xbtn', type: 'button', 'aria-label': 'Back to the unit', onclick: () => { location.hash = '#/nk'; } }, icon('close'));
-    const screen = h('div', { class: 'screen lessonscreen nkstep nk-' + S0.id + (S0.group === 'lesson' ? ' is-lesson' : ''), style: '--c:' + S0.color }, h('header', { class: 'lesson-top' }, x, bar, IR.ui.homeButton(), unitSheetBtn(S0.id), IR.ui.gearButton()), instrBox, stage, nav);
+    const screen = h('div', { class: 'screen lessonscreen nkstep nk-' + S0.id + (S0.group === 'lesson' ? ' is-lesson' : ''), style: '--c:' + S0.color }, h('header', { class: 'lesson-top' }, IR.ui.pageNav('#/nk'), bar), instrBox, stage, nav);
     app.append(screen);
     if (S0.group === 'activities') IR.attachGameRules(ctx, screen, S0.title);
     ctx.progress(0); S0.run(ctx);
@@ -394,7 +393,7 @@
   }
   function resultPage(app) {
     IR.newScreen(); const S = IR.S(); const score = (S.nkCheck && S.nkCheck.last) || 0; const wrap = h('div', { class: 'result' });
-    const trail = h('button', { class: 'btn big back', type: 'button', onclick: () => { location.hash = '#/nk'; } }, icon('back'), 'Back to the trail');
+    const trail = h('button', { class: 'btn big back', type: 'button', onclick: () => { location.hash = '#/nk'; } }, icon('back'), 'Back');
     const again = h('button', { class: 'btn big next', type: 'button', onclick: () => { location.hash = '#/nk/check'; } }, 'Try the check again');
     const home = h('button', { class: 'btn big primary next', type: 'button', onclick: () => { location.hash = '#/home'; } }, 'See the sky map');
     if (score < 7) wrap.append(h('img', { class: 'char zip big', src: 'img/zip.webp', alt: 'Zip' }));
@@ -402,7 +401,7 @@
     else if (score >= 7) wrap.append(h('h1', null, 'Review islet'), h('p', { class: 'lead' }, 'Good work! Let\u2019s practice a little more, then try again.'), h('p', null, 'You got ' + score + ' out of 10. Replay Hear and Pick or ng or nk?, then take the check again.'), h('div', { class: 'row' }, trail, again));
     else wrap.append(h('h1', null, 'Re-teach islet'), h('p', { class: 'lead' }, 'Thank you for trying! Let\u2019s learn nk again with a grown-up.'), h('p', null, 'You got ' + score + ' out of 10. A grown-up can teach the nk sound again with you, then try the check again.'), h('div', { class: 'row' }, trail, again));
     if (score >= 7) wrap.prepend(IR.celebration(score >= 9));
-    app.append(h('div', { class: 'screen resultscreen' }, h('div', { class: 'unitbar' }, IR.ui.homeButton()), wrap)); Snd.play(score >= 9 ? IR.A.sfx.gong : IR.A.sfx.done);
+    app.append(h('div', { class: 'screen resultscreen' }, h('div', { class: 'unitbar' }, IR.ui.pageNav('#/nk')), wrap)); Snd.play(score >= 9 ? IR.A.sfx.gong : IR.A.sfx.done);
   }
   /* Island 3 Review: ng and nk mixed */
   function reviewPage(app) {

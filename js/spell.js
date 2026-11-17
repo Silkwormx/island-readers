@@ -63,9 +63,8 @@
     IR.newScreen();
     const stage = h('div', { class: 'stage' });
     const instr = h('div', { class: 'instr' });
-    const x = h('button', { class: 'xbtn', type: 'button', 'aria-label': 'Back to Spelling Practice', onclick: () => { Snd.stop(); location.hash = '#/practice/spelling'; } }, icon('close'));
     app.append(h('div', { class: 'screen lessonscreen spellstep' },
-      h('header', { class: 'lesson-top' }, x, IR.ui.homeButton(), IR.ui.gearButton()),
+      h('header', { class: 'lesson-top' }, IR.ui.pageNav('#/practice/spelling')),
       h('h2', { class: 'acttitle' }, title),
       instr, stage));
     return { stage: stage, instr: instr };
@@ -78,7 +77,7 @@
 
   function menu(app, L) {
     IR.newScreen();
-    const x = h('button', { class: 'xbtn', type: 'button', 'aria-label': 'Back to Spelling Practice', onclick: () => { location.hash = '#/practice/spelling'; } }, icon('close'));
+    const up = '#/practice/spelling';
     const cards = STEPS.map((s, i) => {
       const open = unlocked(L.id, i);
       const done = IR.isDone(doneId(L.id, s.id));
@@ -97,7 +96,7 @@
       }));
     });
     app.append(h('div', { class: 'screen trailscreen unitpage unitA spellmenu' },
-      h('header', { class: 'uA-top' }, x, IR.ui.homeButton(), h('h1', { class: 'uA-title' }, h('small', null, 'Unit ' + L.unit + ' · Lesson ' + IR.kidLesson(L.n) + ' · '), 'Spelling'), IR.ui.gearButton()),
+      h('header', { class: 'uA-top' }, IR.ui.pageNav(up), h('h1', { class: 'uA-title' }, h('small', null, 'Unit ' + L.unit + ' · Lesson ' + IR.kidLesson(L.n) + ' · '), 'Spelling')),
       h('p', { class: 'spelllead' }, 'Five spelling steps. Each one opens after the one before it.'),
       h('ul', { class: 'spellsteps' }, ...cards)));
   }

@@ -280,7 +280,7 @@
       const story = pick('story')[0];
       if (story) { story.title = N.storyTitle || story.title; story.note = 'Story Time'; story.img = IR.storyCovers[KEY === 'u51' ? '5.1' : '5.2']; story.alt = N.storyTitle || ''; story.big = true; }
       app.append(h('div', { class: 'screen trailscreen unitpage unitA u5menu stepage' },
-        h('header', { class: 'uA-top' }, IR.ui.homeButton(), h('h1', { class: 'uA-title' }, h('small', null, 'Unit 5 Lesson ' + IR.kidLesson(NUM)), N.name), IR.teacherBox({}), IR.ui.gearButton()),
+        h('header', { class: 'uA-top' }, IR.ui.pageNav('#/home'), h('h1', { class: 'uA-title' }, h('small', null, 'Unit 5 Lesson ' + IR.kidLesson(NUM)), N.name), IR.teacherBox({})),
         IR.modeBar({
           lesson: pick('lesson'),
           games: pick('activities').concat(pick('extra')),
@@ -320,8 +320,7 @@
       const nextBtn = h('button', { class: 'btn big next', type: 'button', 'aria-label': 'Next', onclick: () => ctx.goNext() }, 'Next', icon('next'));
       const nav = h('div', { class: 'lesson-nav' }, nextBtn);
       const navApi = IR.simpleNav(nav, nextBtn, () => { Snd.stop(); location.hash = BASE; });
-      const x = h('button', { class: 'xbtn', type: 'button', 'aria-label': 'Back to the unit', onclick: () => { location.hash = BASE; } }, icon('close'));
-      const screen = h('div', { class: 'screen lessonscreen nkstep u5step nk-' + S0.id + (S0.group === 'lesson' ? ' is-lesson' : ''), style: '--c:' + S0.color }, h('header', { class: 'lesson-top' }, x, bar, IR.ui.homeButton(), unitSheetBtn(S0.id), IR.ui.gearButton()), instrBox, stage, nav);
+      const screen = h('div', { class: 'screen lessonscreen nkstep u5step nk-' + S0.id + (S0.group === 'lesson' ? ' is-lesson' : ''), style: '--c:' + S0.color }, h('header', { class: 'lesson-top' }, IR.ui.pageNav(BASE), bar), instrBox, stage, nav);
       app.append(screen);
       if (S0.group === 'activities') IR.attachGameRules(ctx, screen, S0.title);
       if (IR.engage) IR.engage.mount(ctx, screen);
@@ -605,14 +604,14 @@
     }
     function resultPage(app) {
       IR.newScreen(); const S = IR.S(); const score = (S[KEY + 'Check'] && S[KEY + 'Check'].last) || 0; const wrap = h('div', { class: 'result' });
-      const trail = h('button', { class: 'btn big back', type: 'button', onclick: () => { location.hash = BASE; } }, icon('back'), 'Back to the trail');
+      const trail = h('button', { class: 'btn big back', type: 'button', onclick: () => { location.hash = BASE; } }, icon('back'), 'Back');
       const again = h('button', { class: 'btn big next', type: 'button', onclick: () => { location.hash = BASE + '/check'; } }, 'Try the check again');
       const home = h('button', { class: 'btn big primary next', type: 'button', onclick: () => { location.hash = '#/home'; } }, 'See the sky map');
       wrap.prepend(IR.engage.faces(), h('div', { class: 'badgeart', html: IR.ICON.badge }));
       if (score >= 9) wrap.append(h('h1', null, N.name + ' sticker!'), h('p', { class: 'lead' }, 'Your ' + N.name + ' sticker is on the map.'), h('p', null, 'You got ' + score + ' out of 10.'), h('div', { class: 'row' }, home, trail));
       else if (score >= 7) wrap.append(h('h1', null, 'Review islet'), h('p', { class: 'lead' }, 'Good work! Let\u2019s practice a little more, then try again.'), h('p', null, 'You got ' + score + ' out of 10. Replay Hear and Pick or ' + N.pairT + ', then take the check again.'), h('div', { class: 'row' }, trail, again));
       else wrap.append(h('h1', null, 'Re-teach islet'), h('p', { class: 'lead' }, 'Thank you for trying! Let\u2019s learn ' + N.name + ' again with a grown-up.'), h('p', null, 'You got ' + score + ' out of 10. A grown-up can teach ' + N.name + ' again with you, then try the check again.'), h('div', { class: 'row' }, trail, again));
-      app.append(h('div', { class: 'screen resultscreen' }, h('div', { class: 'unitbar' }, IR.ui.homeButton()), wrap)); Snd.play(score >= 9 ? IR.A.sfx.gong : IR.A.sfx.done);
+      app.append(h('div', { class: 'screen resultscreen' }, h('div', { class: 'unitbar' }, IR.ui.pageNav(BASE)), wrap)); Snd.play(score >= 9 ? IR.A.sfx.gong : IR.A.sfx.done);
     }
     /* Island 3 Review: ng and nk mixed */
     function reviewPage(app) {

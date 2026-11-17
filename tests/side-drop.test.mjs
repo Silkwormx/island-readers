@@ -57,7 +57,8 @@ test('home and Foundation sidebars use the dropdown and keep Continue', () => {
   assert.match(drop, /'aria-label': 'Close'/);
   assert.match(screens, /resetSideGroup\('home'\)/);
   assert.match(screens, /label: 'About Island Readers'/);
-  assert.match(screens, /label: 'Trail Map and Placement Test'/);
+  assert.match(screens, /'Trail Map and Placement Test'/);
+  assert.match(screens, /function openTrailMap/);
   assert.match(screens, /label: 'Sight Word Practice'/);
   assert.match(screens, /tab\('#\/find', 'Find It'/);
   assert.match(screens, /h\('b', null, 'Continue'\)/);
