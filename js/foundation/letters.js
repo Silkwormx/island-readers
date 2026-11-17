@@ -1579,10 +1579,11 @@
     });
     const sideBtn = (label, go) => h('button', { class: 'btn big fs-sidebtn', type: 'button', onclick: go }, label);
     const banner = h('header', { class: 'hbanner' },
-      h('h1', null, 'Foundation Skills'),
+      h('h1', null, h('a', { class: 'fs-titlelink', href: '#/home' }, 'Foundation Skills')),
       h('div', { class: 'grownwrap' }, h('span', { class: 'grownlab' }, 'Parent and Teacher Materials'), IR.ui.gearButton()));
+    const homeBtn = h('a', { class: 'btn big fs-homebtn', href: '#/home' }, icon('home'), h('span', null, 'Home'));
     const hero = h('section', { class: 'homefeature', 'aria-label': 'Review the letters with Zip and Frill' },
-      h('div', { class: 'zfpics' }, h('img', { class: 'homeart', src: 'img/home_zip_frill.webp', width: 1280, height: 720, alt: 'Zip and Frill reading together' })),
+      h('div', { class: 'zfpics' }, h('img', { class: 'homeart', src: 'foundation/img/foundations_sidebar.jpg', width: 900, height: 506, alt: 'Zip and Frill with Team 1 letters a, m, s, t on the beach.' })),
       h('div', { class: 'hfbody' },
         h('h2', { class: 'zfline' }, 'Review the letters with Zip and Frill'),
         h('p', { class: 'zfsub' }, 'Names and sounds, then real words.'),
@@ -1597,7 +1598,7 @@
       h('div', { class: 'mwrap' },
         banner,
         h('div', { class: 'homelay' },
-          h('div', { class: 'homeside' }, hero, aboutOrder(), materials),
+          h('div', { class: 'homeside' }, homeBtn, hero, aboutOrder(), materials),
           h('div', { class: 'bellslot' }, h('div', { class: 'bellpath' }, h('div', { class: 'bellgrid' }, ...cards)))))));
     if (IR.teach) IR.teach.sync();
   }

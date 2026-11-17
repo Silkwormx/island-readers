@@ -210,7 +210,12 @@ html.teach .llist .u5name,html.teach .llplay .u5name{font-size:32px}
 .fs-home .homelay{align-items:start}
 .fs-home .homeside{gap:.75rem;max-height:none!important;height:auto;overflow:visible!important;position:static;align-self:start}
 .fs-home .homefeature{flex:none;min-height:auto;height:auto;overflow:visible}
-.fs-home .homefeature .zfpics img.homeart{width:100%;max-width:100%;height:auto;max-height:9.5rem;object-fit:contain}
+.fs-home .homefeature .zfpics{overflow:visible;background:transparent}
+.fs-home .homeside .homefeature .zfpics img.homeart,
+.fs-home .homefeature .zfpics img.homeart{display:block;width:100%!important;max-width:100%!important;height:auto!important;max-height:none!important;aspect-ratio:auto!important;object-fit:contain!important;object-position:center!important}
+.fs-home .fs-homebtn{width:100%;display:inline-flex;align-items:center;justify-content:center;gap:.45rem;background:linear-gradient(180deg,#FFE7B8,#F6C56A);border:3px solid #C9841A;border-radius:1rem;box-shadow:0 3px 0 #C9841A;color:#3A2400;font-family:Andika,sans-serif;text-decoration:none}
+.fs-home .fs-homebtn .ico{width:1.25rem;height:1.25rem;color:#C45C2A;flex:none}
+.fs-home .hbanner h1 a.fs-titlelink{color:inherit;text-decoration:none;display:inline-block}
 .fs-home .fs-mats{display:flex;flex-direction:column;gap:.35rem;background:#FFFDF8;border-radius:1.2rem;padding:.7rem .75rem .85rem;box-shadow:0 6px 18px rgba(60,40,20,.1)}
 .fs-home .fs-mats .fs-h{margin:0 0 .1rem}
 .fs-home .fs-soon{margin:0;font-weight:700}

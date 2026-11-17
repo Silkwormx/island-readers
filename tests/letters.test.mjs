@@ -127,7 +127,8 @@ test('home opens Foundation Skills from the first bell, not a sidebar tab', () =
   assert.match(html, /js\/foundation\/letters\.js/);
   assert.match(html, /foundation\/foundation\.css/);
   assert.match(sw, /js\/foundation\/letters\.js/);
-  assert.match(sw, /ir-20261118g/);
+  assert.match(sw, /ir-20261118h/);
+  assert.match(sw, /foundation\/img\/foundations_sidebar\.jpg/);
   assert.match(teach, /#\/foundation/);
   assert.match(letters, /Teacher Slideshows/);
   assert.match(letters, /Team 1 slideshow/);
@@ -138,5 +139,10 @@ test('home opens Foundation Skills from the first bell, not a sidebar tab', () =
   assert.equal(letters.includes(' free'), false);
   assert.equal(sw.includes('Learn_the_Letters_Group1.pdf'), false);
   assert.match(letters, /Foundation Skills/);
+  assert.match(letters, /class: 'btn big fs-homebtn', href: '#\/home'/);
+  assert.match(letters, /class: 'fs-titlelink', href: '#\/home'/);
+  assert.match(letters, /foundation\/img\/foundations_sidebar\.jpg/);
+  assert.match(letters, /Zip and Frill with Team 1 letters a, m, s, t on the beach/);
+  assert.equal(letters.includes('img/home_zip_frill.webp'), false);
   assert.match(letters, /#\/foundation\/letters/);
 });
