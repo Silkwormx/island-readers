@@ -114,8 +114,12 @@ test('home opens Foundation Skills from the first bell, not a sidebar tab', () =
   assert.match(html, /js\/foundation\/letters\.js/);
   assert.match(html, /foundation\/foundation\.css/);
   assert.match(sw, /js\/foundation\/letters\.js/);
-  assert.match(sw, /ir-20261117y/);
+  assert.match(sw, /ir-20261118b/);
   assert.match(teach, /#\/foundation/);
+  assert.match(letters, /Group 1 slideshow/);
+  assert.match(letters, /Learn_the_Letters_Group1\.pdf/);
+  assert.match(letters, /Groups 2 to 7 coming soon/);
+  assert.equal(sw.includes('Learn_the_Letters_Group1.pdf'), false);
   assert.match(letters, /Foundation Skills/);
   assert.match(letters, /#\/foundation\/letters/);
 });
