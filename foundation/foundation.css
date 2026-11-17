@@ -189,6 +189,70 @@ html.teach .llist .u5name,html.teach .llplay .u5name{font-size:32px}
 .fs-scene{margin:0;max-width:18rem;text-align:center}
 .fs-scene img{display:block;width:100%;height:auto;object-fit:contain}
 .fs-scene figcaption{margin:.35rem 0 0;font-family:Andika,sans-serif;font-size:1.6rem;font-weight:700}
+.ll-day1{background:#FFF8E7;overflow:hidden;font-family:Andika,sans-serif}
+.ll-day1 .ll1top{display:flex;align-items:center;gap:.4rem;padding:.4rem .6rem}
+.ll-day1 .ll1top h1{flex:1;margin:0;font-size:1.35rem;text-align:left}
+.ll-day1 .ll1face{width:2.4rem;height:2.4rem;object-fit:contain}
+.ll-day1 .stage{flex:1;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.6rem;overflow:hidden;padding:.4rem .8rem}
+.ll-day1 .ll1foot{flex:none;padding:.35rem .8rem .55rem}
+.ll-day1 .ll1bar{height:.5rem;border-width:2px}
+.ll-day1 .ll1bar i{background:#F28C00}
+.ll-day1 .ll1pair{display:flex;gap:.7rem;justify-content:center;width:100%;max-width:40rem}
+.ll-day1 .ll1card{flex:1;min-width:7rem;min-height:6.5rem;border:3px solid #C95A10;border-radius:1.2rem;background:#fff;box-shadow:0 4px 0 #C95A10;font-family:Andika,sans-serif;font-size:3rem;color:#2B2540;cursor:pointer}
+.ll-day1 .ll1card.lit{background:#FFE7B8}
+.ll-day1 .ll1card b{font-size:3.2rem}
+.ll-day1 .ll1letter{flex:1;display:flex;flex-direction:column;gap:.4rem;min-width:0}
+.ll-day1 .ll1name{width:100%;min-height:3.4rem;border:3px solid #2B2540;border-radius:1rem;background:#fff;font-family:Andika,sans-serif;font-size:1.15rem;font-weight:700;cursor:pointer}
+.ll-day1 .ll1name.lit{background:#FFF3D0}
+.ll-day1 .ll1sound,.ll-day1 .ll1mouth{background:#0E7C7C;color:#fff;border-radius:1rem;padding:.45rem .5rem .55rem;text-align:center}
+.ll-day1 .ll1sound p,.ll-day1 .ll1mouth p{margin:.1rem 0 .3rem;font-weight:700}
+.ll-day1 .ll1taps{display:flex;gap:.4rem;justify-content:center}
+.ll-day1 .ll1tap,.ll-day1 .ll1circle{width:3.2rem;height:3.2rem;border-radius:50%;border:3px solid #fff;background:transparent;color:#fff;font-family:Andika,sans-serif;font-size:1.3rem;font-weight:700;cursor:pointer}
+.ll-day1 .ll1tap.lit,.ll-day1 .ll1circle.lit{background:#fff;color:#0E7C7C}
+.ll-day1 .ll1built{margin:0;font-size:2.4rem;font-weight:700;min-height:2.6rem}
+.ll-day1 .ll1link,.ll-day1 .ll1pic img{width:min(16rem,70vw);height:auto;object-fit:contain}
+.ll-day1 .ll1heart,.ll-day1 .ll1read{display:flex;flex-direction:column;align-items:center;justify-content:center;background:#F28C00;color:#fff;border-color:#C95A10}
+.ll-day1 .ll1heart span{font-size:1.1rem;font-weight:700}
+.ll-day1 .btn.primary,.ll1end .btn.primary{background:#F28C00;border-color:#C95A10;box-shadow:0 4px 0 #C95A10;color:#fff}
+.ll-day1 .stage:has(.ll1menu){justify-content:stretch;align-items:stretch}
+.ll1menu{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));grid-template-rows:repeat(2,minmax(0,1fr));gap:.55rem;width:100%;height:100%;max-width:none}
+.ll1game{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.25rem;height:100%;min-height:0;padding:.35rem;border:3px solid #C95A10;border-radius:1.1rem;background:#fff;box-shadow:0 4px 0 #C95A10;font-family:Andika,sans-serif;font-size:clamp(.85rem,1.8vh,1.25rem);font-weight:700;color:#2B2540;cursor:pointer}
+.ll1game img{width:auto;height:48%;max-width:78%;object-fit:contain}
+.ll1gnum{position:absolute;top:.3rem;left:.3rem;width:1.7rem;height:1.7rem;border-radius:.45rem;background:#F28C00;color:#fff;display:flex;align-items:center;justify-content:center;font-size:.95rem}
+.ll1mouthico{display:flex;justify-content:center}
+.ll1mouthico svg{width:4.2rem;height:auto}
+.ll1miss{animation:ll1shake .42s ease;filter:brightness(.7)}
+@keyframes ll1shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-7px)}50%{transform:translateX(7px)}75%{transform:translateX(-4px)}}
+.ll1trio{display:flex;gap:.6rem;justify-content:center;width:100%}
+.ll1bubbles{display:flex;flex-wrap:wrap;justify-content:center;gap:1rem;width:100%}
+.ll1bubble{width:clamp(6.2rem,20vh,11rem);height:clamp(6.2rem,20vh,11rem);border-radius:50%;border:4px solid #0E7C7C;background:#E4F6F6;font-family:Andika,sans-serif;font-size:clamp(2.4rem,6vh,4rem);font-weight:700;color:#2B2540;cursor:pointer}
+.ll1bubble.popped{opacity:.3}
+.ll1friend{flex:1;min-height:16rem;border:3px solid #C95A10;border-radius:1.2rem;background:#fff;box-shadow:0 4px 0 #C95A10;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.2rem;cursor:pointer;padding:.4rem}
+.ll1friend img{width:78%;height:auto;max-height:28vh;object-fit:contain}
+.ll1friend b{font-size:clamp(2rem,5vh,3.2rem)}
+.ll1beach{position:relative;width:min(46rem,100%);height:min(48vh,24rem);border-radius:1.2rem;background:linear-gradient(#9FD4F2,#FFF6E3 52%,#E7C48A)}
+.ll1hunt{position:absolute;width:clamp(3.6rem,10vh,5.2rem);height:clamp(3.6rem,10vh,5.2rem);margin-left:-1.8rem;margin-top:-1.8rem;border-radius:50%;border:3px solid #C95A10;background:#fff;font-family:Andika,sans-serif;font-size:2rem;font-weight:700;cursor:pointer}
+.ll1hunt.lit{background:#F28C00;color:#fff}
+.ll1flash{margin:0;font-size:clamp(4rem,14vh,8rem);font-weight:700}
+.ll1meter{width:min(22rem,80%);height:.7rem;border-radius:1rem;background:#EADFC3;overflow:hidden}
+.ll1meter i{display:block;height:100%;width:0;background:#F28C00;transition:width 4s linear}
+.ll1celebrate{display:flex;flex-direction:column;align-items:center;gap:.35rem}
+.ll1celebrate img{width:5rem;height:auto}
+.ll1cap,.ll1readline{margin:0;font-size:2.2rem;font-weight:700}
+@media (max-width:700px){
+  .ll1menu{grid-template-columns:repeat(5,minmax(0,1fr));gap:.28rem}
+  .ll1game{font-size:.68rem;padding:.2rem}
+  .ll1gnum{width:1.2rem;height:1.2rem;font-size:.75rem}
+  .ll1friend{min-height:8rem}
+  .ll-day1 .ll1top{flex-wrap:wrap}
+  .ll-day1 .ll1top h1{white-space:nowrap;flex:1 1 auto;font-size:1.15rem}
+  .ll-day1 .ll1faces,.ll-day1 .ll1top .teachtoggle{order:5}
+}
+@media (min-width:1600px){
+  .ll-day1 .ll1top h1{font-size:2rem}
+  .ll1game{min-height:8rem;font-size:1.8rem}
+  .ll-day1 .ll1card{min-height:9rem}
+}
 .fs-meet{display:flex;gap:.6rem;justify-content:center;flex-wrap:wrap}
 .fs-meetone{display:flex;flex-direction:column;align-items:center;gap:.2rem}
 .llrow{display:flex;gap:.4rem;justify-content:center;flex-wrap:wrap}

@@ -627,6 +627,7 @@
     const next = lessons.filter((lesson) => !map[String(lesson.lesson_number)])[0] || lessons[0];
     if (!next) return;
     Snd.stop();
+    if (group.id === 'g1' && next.lesson_number === 1) { location.hash = '#/foundation/sample'; return; }
     location.hash = lessonHash(group, next, flowFor(next)[0].id);
   }
   function groupPage(app, group) {
@@ -640,7 +641,11 @@
       lessonItems.push({
         title: lesson.label || ('Lesson ' + lesson.lesson_number),
         note: lessonLine(lesson),
-        go: () => { Snd.stop(); location.hash = lessonHash(group, lesson, flowFor(lesson)[0].id); }
+        go: () => {
+          Snd.stop();
+          if (group.id === 'g1' && lesson.lesson_number === 1) { location.hash = '#/foundation/sample'; return; }
+          location.hash = lessonHash(group, lesson, flowFor(lesson)[0].id);
+        }
       });
     });
     if (lessons.some((lesson) => lesson.mastery_check)) {
