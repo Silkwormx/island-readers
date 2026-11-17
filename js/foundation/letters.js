@@ -2079,14 +2079,14 @@
       if (i >= rounds.length) { ready(); return; }
       const round = rounds[i];
       const picks = round.choices || [round.answer].concat(foils.filter((ch) => ch !== round.answer)).slice(0, 3);
-      host.append(
-        round.art ? h('img', { class: 'llkidart sm', src: round.art, alt: '' }) : null,
-        round.word ? h('b', { class: 'llkidbig' }, round.word) : null,
-        kidChoices(picks, round.answer, () => {
-          shells[i].classList.add('on');
-          i += 1;
-          setTimeout(show, 280);
-        }));
+      const bits = [kidChoices(picks, round.answer, () => {
+        shells[i].classList.add('on');
+        i += 1;
+        setTimeout(show, 280);
+      })];
+      if (round.art) bits.unshift(h('img', { class: 'llkidart sm', src: round.art, alt: '' }));
+      if (round.word) bits.unshift(h('b', { class: 'llkidbig' }, round.word));
+      host.append(...bits);
       if (!round.word) setTimeout(() => { if (host.querySelector('.llkidchoice')) hearPure(BY[id]); }, 1600);
     }
     show();
