@@ -52,8 +52,8 @@
   IR.islandSVG = islandSVG;
   /* ONE treasure-chest design for all four chests: a wooden box with a curved lid, iron bands, studs, a glowing keyhole and small sparkles.
      Only the big number badge (1-4) tells them apart. */
-  function chestSVG(n) {
-    n = [1, 2, 3, 4].includes(+n) ? +n : 1; const k = 'ch_' + n;
+  function chestSVG(n, salt) {
+    n = [1, 2, 3, 4].includes(+n) ? +n : 1; const k = 'ch_' + n + (salt ? '_' + salt : '');
     const body = '#8A5430', lid = '#B8773F', hi = '#D9A06A', iron = '#5F6572', ironHi = '#9AA1AE', line = '#3F2412';
     const stud = (x, y) => `<circle cx="${x}" cy="${y}" r="1.9" fill="${ironHi}" stroke="${line}" stroke-width=".8"/>`;
     return `<svg viewBox="0 0 100 84" class="chestsvg chest-n${n}" data-chest="${n}" aria-hidden="true"><defs>

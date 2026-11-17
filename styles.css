@@ -2856,16 +2856,35 @@ button,
   .boxgrid .boxcount{font-size:.98rem!important}
   .boxgrid.chestlist .gchest.boxcard{min-height:236px!important;padding:.7rem .4rem .8rem!important}
 }
-/* All Treasure Boxes sits with Back and Home on a chest and on every game inside it. */
+/* Box menu sits with Back and Home on a chest and on every game inside it. */
 .chestscreen .lesson-top,.chestmenu .top2{flex-wrap:wrap;align-items:center;gap:.45rem .7rem;padding-right:.8rem;background:var(--cream);position:sticky;top:0;z-index:80}
-.chestscreen .pagenav,.chestmenu .pagenav{display:flex;flex-wrap:wrap;align-items:center;gap:.4rem;max-width:100%}
+.chestscreen .pagenav,.chestmenu .pagenav{display:flex;flex-wrap:wrap;align-items:center;gap:.45rem;max-width:100%}
 .chestscreen .pagenav .homebtn,.chestmenu .pagenav .homebtn{margin-right:0!important}
-.boxesbtn{color:#B04A00!important;background:#FFF4E6!important;border-color:#F28C00!important;letter-spacing:0;word-spacing:0}
-.boxesbtn span{white-space:nowrap}
+.boxdrop{position:relative;flex:none}
+.boxdrop-btn{display:inline-flex;align-items:center;justify-content:center;gap:.45rem;min-height:3.15rem;min-width:10.5rem;padding:.3rem .85rem .3rem .45rem;border:3px solid #F28C00;border-radius:1.15rem;background:#FFF4E6;color:#B04A00;font-family:Andika,sans-serif;font-weight:700;font-size:1.15rem;letter-spacing:0;word-spacing:0;box-shadow:0 3px 0 #E07A00;cursor:pointer}
+.boxdrop-btn .boxdrop-name{flex:1;text-align:center;line-height:1}
+.boxdrop-ico{display:inline-flex;align-items:center;justify-content:center;width:2.5rem;height:2.05rem;flex:none}
+.boxdrop-ico svg{width:100%;height:100%;display:block}
+.boxdrop-caret{display:inline-flex;flex:none}
+.boxdrop-caret .ico{width:1.15rem;height:1.15rem;transform:rotate(90deg)}
+.boxdrop.is-open .boxdrop-caret .ico{transform:rotate(-90deg)}
+.boxdrop-list{z-index:95;margin:0;padding:.45rem;list-style:none;background:#FFFDF8;border:4px solid #F28C00;border-radius:1.2rem;box-shadow:0 10px 28px rgba(60,40,20,.2);box-sizing:border-box}
+.boxdrop-list:not([hidden]){display:flex;flex-direction:column;gap:.35rem}
+.boxdrop-opt{display:flex;align-items:center;gap:.65rem;width:100%;min-height:4.6rem;padding:.4rem .65rem;border:3px solid transparent;border-radius:1rem;background:#fff;color:#2B2540;font-family:Andika,sans-serif;font-weight:700;letter-spacing:0;word-spacing:0;cursor:pointer;text-align:center}
+.boxdrop-opt.is-current{border-color:#F28C00;background:#FFF4E6}
+.boxdrop-copy{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;min-width:0;gap:.12rem}
+.boxdrop-opt .boxdrop-name{font-size:1.3rem;line-height:1.1}
+.boxdrop-count{font-size:1.02rem;line-height:1.15;color:#C45C00;font-weight:700}
+.boxdrop-mark{display:flex;align-items:center;justify-content:center;width:2.15rem;height:2.15rem;border-radius:50%;border:3px solid #F28C00;background:#fff;color:#F28C00;flex:none}
+.boxdrop-mark .ico{width:1.15rem;height:1.15rem}
+.boxdrop-opt.played .boxdrop-mark.is-check{background:#2E9E6B;border-color:#1E7A4E;color:#fff}
+.boxdrop-opt .boxdrop-ico{width:3.3rem;height:2.7rem}
 .chestscreen .complete,.chestdone{z-index:60}
 .chestdone{padding-top:5.4rem}
 @media (max-width:700px){
   .chestscreen .lesson-top .acttitle{flex:1 1 100%}
-  .boxesbtn{font-size:.86rem!important;padding:.12rem .5rem!important}
-  .chestdone{padding-top:7.2rem}
+  .chestscreen .pagenav,.chestmenu .pagenav{width:100%}
+  .boxdrop{flex:1 1 100%}
+  .boxdrop-btn{width:100%;min-height:3.5rem;font-size:1.2rem}
+  .chestdone{padding-top:8.4rem}
 }
