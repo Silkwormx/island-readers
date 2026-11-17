@@ -242,8 +242,8 @@ html.teach .llist .u5name,html.teach .llplay .u5name{font-size:32px}
 .fs-home .fs-groupcard{position:relative}
 .fs-home .fs-groupcard.locked{opacity:.7;filter:saturate(.2);background:#F3EEE6}
 .fs-home .fs-groupcard.locked .tpic{filter:grayscale(.45)}
-.lockbadge{position:absolute;top:.4rem;left:.4rem;z-index:2;display:inline-flex;align-items:center;gap:.25rem;padding:.12rem .45rem;border-radius:.5rem;background:#6A6256;color:#fff;font-family:Andika,sans-serif;font-weight:700;font-size:.78rem;line-height:1.2}
-.lockbadge .ico{width:.95rem;height:.95rem}
+.fs-home .fs-groupcard .lockbadge{position:absolute;left:.45rem;top:.45rem;right:auto;transform:none;width:auto;height:auto;min-width:0;min-height:0;padding:.15rem .5rem;border:0;border-radius:.55rem;background:#6A6256;color:#fff;display:inline-flex;align-items:center;justify-content:flex-start;gap:.25rem;z-index:2;font-family:Andika,sans-serif;font-weight:700;font-size:.78rem;line-height:1.2;white-space:nowrap}
+.fs-home .fs-groupcard .lockbadge .ico{width:.95rem;height:.95rem;flex:none}
 .fs-home .fs-about{background:#E4F6F6;border:2px solid #9FCFCF;border-radius:1rem;padding:.35rem .7rem}
 .fs-home .fs-about summary{font-weight:700;cursor:pointer;min-height:2.4rem;display:flex;align-items:center}
 .fs-home .fs-bank{background:#fff;border:3px solid var(--ink);border-radius:.9rem;padding:.4rem .6rem}

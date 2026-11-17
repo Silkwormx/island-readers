@@ -517,6 +517,7 @@
   function itemCard(item, num) {
     const body = [
       num ? h('span', { class: 'gamenum' }, String(num)) : null,
+      num ? h('span', { class: 'gameico', 'aria-hidden': 'true' }, icon('play')) : null,
       item.img ? h('img', { class: 'storypic', src: item.img, alt: item.alt || '' }) : null,
       h('span', { class: 'gametxt' }, h('b', null, item.title), item.note ? h('span', { class: 'gamenote' }, item.note) : null, item.min ? h('span', { class: 'gamemin' }, item.min + ' min') : null)
     ];

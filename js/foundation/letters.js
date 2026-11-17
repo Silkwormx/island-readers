@@ -1572,8 +1572,8 @@
         onclick: () => { if (open) { Snd.stop(); location.hash = '#/foundation/letters/' + group.id; } }
       },
         h('span', { class: 'tpic fs-setpic', style: 'grid-template-columns:repeat(' + (group.letters.length > 2 ? 2 : group.letters.length) + ',minmax(0,1fr))' }, ...faces,
-          isNext ? h('span', { class: 'herechip' }, 'Next up') : null,
-          open ? null : h('span', { class: 'lockbadge' }, icon('lock'), h('span', null, 'Locked'))),
+          isNext ? h('span', { class: 'herechip' }, 'Next up') : null),
+        open ? null : h('span', { class: 'lockbadge' }, icon('lock'), h('span', null, 'Locked')),
         h('span', { class: 'tbody' },
           h('span', { class: 'thead' }, h('b', { class: 'tnum' }, 'Team ' + group.n)),
           h('span', { class: 'tname' }, group.letters.join(', ')),
