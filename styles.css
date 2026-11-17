@@ -27,6 +27,9 @@ p{margin:.4em 0}
 .btn.big{font-size:1.2rem;min-height:4rem;padding:.7rem 1.8rem}
 .btn.small{min-height:3rem;font-size:.9rem;padding:.4rem 1rem}
 .btn.primary{background:var(--teal);color:#fff;border-color:var(--teal-d);box-shadow:0 5px 0 var(--teal-d)}
+.teachslidewrap{max-width:84rem;margin:0 auto;padding:.2rem 1.1rem 0}
+.teachslide{display:flex;align-items:center;justify-content:center;width:100%;max-width:24rem;min-height:3.2rem;margin:.35rem 0 .8rem;padding:.45rem 1rem;border:3px solid #C95A10;border-radius:1rem;background:#F28C00;box-shadow:0 4px 0 #C95A10;color:#fff;font-family:Andika,sans-serif;font-weight:700;font-size:1.15rem;text-decoration:none;cursor:pointer}
+.teachslide.soon{background:#E7E0D4;border-color:#8A8175;box-shadow:none;color:#5c5648;cursor:default}
 .btn.good{background:#DDF4E6;border-color:var(--green);box-shadow:0 5px 0 var(--green)}
 .btn.warm{background:#FFE9C7;border-color:#C98400;box-shadow:0 5px 0 #C98400}
 .btn.warn{background:#FFE3DC;border-color:#C2452A;box-shadow:0 5px 0 #C2452A}

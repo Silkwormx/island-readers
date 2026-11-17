@@ -555,6 +555,7 @@
         h('button', { class: 'cartoonpill', type: 'button', 'aria-label': 'Welcome cartoon, optional. Opens a video.', onclick: () => IR.openCartoon() }, icon('play'), h('span', { class: 'cp-long' }, 'Welcome Cartoon (optional)'), h('span', { class: 'cp-short' }, 'Cartoon')),
         h('span', { class: 'uA-time', 'aria-label': 'About ' + totalMin + ' minutes in total' }, h('span', { class: 't-long' }, 'About ' + totalMin + ' min total'), h('span', { class: 't-short' }, totalMin + ' min')), gearButton()),
       unitIntro('i3'),
+      h('div', { class: 'teachslidewrap' }, h('button', { class: 'btn big teachslide', type: 'button', onclick: () => { Snd.stop(); location.hash = '#/teachers/slides/ng'; } }, 'Teacher Slideshow')),
       h('main', { class: 'uA-main' }, left, right), foot));
   }
 

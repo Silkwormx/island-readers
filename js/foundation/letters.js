@@ -660,7 +660,7 @@
         h('p', { class: 'llask' }, 'Team ' + group.n + ', ' + group.letters.join(', ') + '. Tap the name, then the sound three times.'),
         overview,
         h('button', { class: 'btn big primary fs-slidebtn', type: 'button', onclick: () => startLetters(group) }, 'One letter at a time'),
-        SLIDES[group.id] ? h('p', { class: 'fs-slidenote' }, h('button', { class: 'fs-slidetext', type: 'button', onclick: () => openSlides(group.id) }, 'Team ' + group.n + ' slideshow')) : null,
+        teacherSlideControl(group),
         h('ol', { class: 'fs-lessons' }, ...cards))));
     if (IR.teach) IR.teach.sync();
   }
@@ -1968,6 +1968,12 @@
   function openSlides(team, page) {
     Snd.stop();
     location.hash = '#/foundation/slides/' + team + (page ? '/' + page : '');
+  }
+  function teacherSlideControl(group) {
+    if (SLIDES[group.id]) {
+      return h('button', { class: 'btn big teachslide', type: 'button', onclick: () => openSlides(group.id) }, 'Teacher Slideshow');
+    }
+    return h('p', { class: 'teachslide soon' }, 'Teacher Slideshow coming soon');
   }
   function pdfLink(label, href) {
     return h('a', { class: 'drop-link', href: href, target: '_blank', rel: 'noopener' }, label);
