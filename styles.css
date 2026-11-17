@@ -2652,11 +2652,14 @@ html.teach .u5step .itext{font-size:32px}
   .fs-home.gridhome .mwrap > .hbanner .grownwrap{position:static;transform:none;max-width:none;margin-left:auto}
   .fs-home.gridhome .mwrap > .hbanner h1{flex:1 1 100%;order:3;min-width:0;font-size:1.55rem;white-space:normal}
 }
-.gamegrid.pics{grid-template-columns:repeat(3,minmax(0,1fr))}
-.gamegrid.pics .gamecard{position:relative;flex-direction:column;align-items:stretch;text-align:center;padding:.4rem;gap:.28rem;min-height:0}
-.gamegrid.pics .gamepic{width:100%;height:4.4rem;object-fit:cover;border-radius:.65rem;background:#FFF6E3}
-.gamegrid.pics .gamepair{display:grid;grid-template-columns:1fr 1fr;gap:.15rem;width:100%;height:4.4rem}
-.gamegrid.pics .gamepair .gamepic{height:100%;object-fit:contain;background:#fff}
+.gamegrid.pics{grid-template-columns:repeat(3,minmax(0,1fr));align-items:stretch}
+.gamegrid.pics > li{display:flex;min-width:0;min-height:0}
+.gamegrid.pics .gamecard{position:relative;flex-direction:column;align-items:stretch;justify-content:flex-start;text-align:center;width:100%;height:100%;padding:.4rem;gap:.28rem;min-height:0;overflow:hidden}
+.gamegrid.pics .gamepic,.gamegrid.pics .gamepair{display:block;width:100%;height:4.4rem;min-height:4.4rem;max-height:4.4rem;flex:none;overflow:hidden;border-radius:.65rem;background:#FFF6E3;object-fit:cover}
+.gamegrid.pics .gamepair{display:grid;grid-template-columns:1fr 1fr;gap:.12rem;align-items:center;justify-items:center;padding:.15rem;box-sizing:border-box}
+.gamegrid.pics .gamepair .gamepic{width:100%;height:100%;min-width:0;min-height:0;max-width:100%;max-height:100%;object-fit:contain;background:transparent}
+.gamegrid.pics .gametxt{display:flex;align-items:center;justify-content:center;min-height:2.4em;flex:none}
+.gamegrid.pics .gametxt b{display:block;width:100%}
 .gamegrid.pics .gamenum{position:absolute;top:.55rem;left:.55rem;width:1.7rem;height:1.7rem;font-size:1rem;border-radius:.5rem}
 .gamegrid.pics .gamedone{position:absolute;top:.5rem;right:.5rem;display:inline-flex;width:1.45rem;height:1.45rem;border-radius:50%;background:#fff;color:#1f7a3a;box-shadow:0 1px 3px rgba(60,40,20,.25)}
 .gamegrid.pics .gamedone .ico{width:1.45rem;height:1.45rem}
@@ -2669,8 +2672,9 @@ html.teach .u5step .itext{font-size:32px}
 .trailpop .trailgo{margin-top:0}
 @media (max-width:700px){
   .gamegrid.pics{grid-template-columns:repeat(3,minmax(0,1fr));gap:.4rem}
-  .gamegrid.pics .gamepic{height:3.2rem}
-  .gamegrid.pics .gametxt b{font-size:.78rem}
+  .gamegrid.pics .gamepic,.gamegrid.pics .gamepair{height:3.2rem;min-height:3.2rem;max-height:3.2rem}
+  .gamegrid.pics .gametxt{min-height:2.7em}
+  .gamegrid.pics .gametxt b{font-size:.72rem;line-height:1.15}
 }
 @media (max-width:480px){
   .scrim:has(.trailpop){padding:0;align-items:stretch}
