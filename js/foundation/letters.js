@@ -1471,21 +1471,6 @@
   function lessonHash(group, lesson, step) {
     return '#/foundation/letters/' + group.id + '/l/' + lesson.lesson_number + '/' + step;
   }
-  function nextStop() {
-    for (let i = 0; i < GROUPS.length; i++) {
-      const group = GROUPS[i];
-      if (!groupOpen(group)) continue;
-      const lessons = lessonsOf(group);
-      const map = doneMap();
-      for (let n = 0; n < lessons.length; n++) {
-        if (!map[String(lessons[n].lesson_number)]) return { group: group, lesson: lessons[n] };
-      }
-      if (lessons.some((lesson) => lesson.mastery_check) && !checkMap()[programId(group)]) {
-        return { group: group, check: true };
-      }
-    }
-    return { group: GROUPS[0], lesson: lessonsOf(GROUPS[0])[0] };
-  }
   function nextUpGroup() {
     for (let i = 0; i < GROUPS.length; i++) {
       const group = GROUPS[i];
@@ -1496,12 +1481,6 @@
       if (done < lessons.length || !checked) return group;
     }
     return null;
-  }
-  function openNext() {
-    const stop = nextStop();
-    if (!stop || !stop.group) return;
-    if (stop.check) location.hash = '#/foundation/letters/' + stop.group.id + '/check';
-    else if (stop.lesson) location.hash = lessonHash(stop.group, stop.lesson, flowFor(stop.lesson)[0].id);
   }
   function faceRow(group) {
     return h('span', { class: 'fs-faces' }, ...group.letters.map((id) => {
@@ -1524,7 +1503,6 @@
   }
   function foundationPage(app) {
     IR.newScreen();
-    const started = Object.keys(doneMap()).length > 0;
     const up = nextUpGroup();
     const words = readBank();
     const cards = GROUPS.map((group) => {
@@ -1557,8 +1535,7 @@
       h('div', { class: 'zfpics' }, h('img', { class: 'homeart', src: 'img/home_zip_frill.webp', width: 1280, height: 720, alt: 'Zip and Frill reading together' })),
       h('div', { class: 'hfbody' },
         h('h2', { class: 'zfline' }, 'Review the letters with Zip and Frill'),
-        h('p', { class: 'zfsub' }, 'Names and sounds, then real words.'),
-        h('button', { class: 'btn big primary fs-continue', type: 'button', onclick: openNext }, started ? 'Continue' : 'Start Group 1')));
+        h('p', { class: 'zfsub' }, 'Names and sounds, then real words.')));
     const materials = h('section', { class: 'fs-mats', 'aria-label': 'For grown-ups' },
       h('h2', { class: 'fs-h' }, 'Teacher slideshows'),
       h('button', { class: 'btn big primary fs-slidebtn', type: 'button', onclick: openSlides }, 'Group 1 slideshow'),
