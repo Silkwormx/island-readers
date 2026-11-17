@@ -171,6 +171,12 @@ html.teach .llist .u5name,html.teach .llplay .u5name{font-size:32px}
 .fs-taps{display:flex;justify-content:center;gap:.35rem;margin-top:.25rem}
 .fs-tapc{width:2.3rem;height:2.3rem;border-radius:50%;border:3px solid #0E7C7C;background:#fff;color:#085E5C;font-family:Andika,sans-serif;font-weight:700;font-size:1rem;cursor:pointer}
 .fs-tapc.lit{background:#0E7C7C;color:#fff}
+.fs-bigtap{width:4.4rem;height:4.4rem;font-size:1.8rem}
+.fs-bigname{min-height:4rem;font-size:2rem}
+.fs-bigname .fs-nametext{font-size:2rem;padding:.35rem 1.1rem}
+.fs-introst{display:flex;flex-direction:column;align-items:center;gap:1rem;width:100%}
+.ll1mouthico{display:flex;justify-content:center}
+.ll1mouthico svg{width:4.6rem;height:auto}
 .fs-group .llmain{overflow:auto;align-items:center;gap:.4rem}
 .fs-group .fs-slidebtn{align-self:center}
 .fs-lessons{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:.4rem;align-content:start;width:100%}
