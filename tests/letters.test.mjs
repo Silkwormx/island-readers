@@ -127,7 +127,7 @@ test('home opens Foundation Skills from the first bell, not a sidebar tab', () =
   assert.match(html, /js\/foundation\/letters\.js/);
   assert.match(html, /foundation\/foundation\.css/);
   assert.match(sw, /js\/foundation\/letters\.js/);
-  assert.match(sw, /ir-20261118f/);
+  assert.match(sw, /ir-20261118g/);
   assert.match(teach, /#\/foundation/);
   assert.match(letters, /Teacher Slideshows/);
   assert.match(letters, /Team 1 slideshow/);

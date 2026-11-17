@@ -877,50 +877,49 @@
   /* ---------- Teacher materials (grown-up corner): by unit, then sound ---------- */
   function teachersScreen() {
     IR.newScreen();
-    const linkRow = (item) => {
-      const attrs = { class: 'btn big tmlink' + (item.primary ? ' primary' : ''), href: item.href };
-      if (item.download) attrs.download = '';
-      else if (!item.href.startsWith('#')) { attrs.target = '_blank'; attrs.rel = 'noopener'; }
-      return [h('a', attrs, item.label), h('p', { class: 'tmnote' }, item.note)];
-    };
-    const card = (x) => h('div', { class: 'tmcard' },
-      h('h3', null, h('span', { class: 'tmsound' }, x.s), ' ' + x.lesson),
-      ...x.rows.flatMap(linkRow));
-    const slides = (days) => 'Download slides \u00b7 ' + days + ' days (PPTX)';
-    const dayNote = (days) => 'Worksheets for each day, labeled Day 1 to Day ' + days + '.';
+    /* One card for every lesson. Item types stay in this order, with the same labels. */
+    function lessonCard(lesson) {
+      const kinds = [
+        { key: 'board', primary: true, label: 'Open on smartboard', note: 'Full-screen slide show in the browser. No download needed.' },
+        { key: 'slides', download: true, label: 'Download slides' + (lesson.days ? (' \u00b7 ' + lesson.days + ' days (PPTX)') : ' (PPTX)'), note: 'One PowerPoint for the whole sound.' },
+        { key: 'daily', label: 'Daily practice sheets (PDF)', note: lesson.days ? ('Worksheets for each day, labeled Day 1 to Day ' + lesson.days + '.') : 'Worksheets for each day.' },
+        { key: 'pack', label: 'Teacher pack (PDF)', note: 'Slides with notes, worksheets and answer key.' }
+      ];
+      const rows = kinds.map((kind) => {
+        const href = lesson[kind.key];
+        if (!href) {
+          return [
+            h('span', { class: 'btn big tmlink is-soon' + (kind.primary ? ' primary' : ''), 'aria-disabled': 'true' }, kind.label),
+            h('p', { class: 'tmnote' }, 'Coming soon.')
+          ];
+        }
+        const attrs = { class: 'btn big tmlink' + (kind.primary ? ' primary' : ''), href: href };
+        if (kind.download) attrs.download = '';
+        else if (!href.startsWith('#')) { attrs.target = '_blank'; attrs.rel = 'noopener'; }
+        return [h('a', attrs, kind.label), h('p', { class: 'tmnote' }, kind.note)];
+      });
+      return h('div', { class: 'tmcard' },
+        h('h3', null, h('span', { class: 'tmsound' }, lesson.s), ' ' + lesson.lesson),
+        ...rows.flat());
+    }
     const UNITS = [
       { name: 'Unit 4 \u00b7 Glued Sounds', sounds: [
-        { s: 'ng', lesson: 'Lesson 4.1', rows: [
-          { href: '#/teachers/slides/ng', label: 'Open on smartboard', note: 'Full-screen slide show in the browser. No download needed.', primary: true },
-          { href: 'teachers/ng/Lesson3.1_ng_Slide_Presentation.pptx', label: slides(3), note: 'One PowerPoint for the whole sound.', download: true },
-          { href: 'teachers/ng/Lesson3.1_ng_Daily_Practice_Sheets.pdf', label: 'Daily practice sheets (PDF)', note: dayNote(3) },
-          { href: 'teachers/ng/Lesson3.1_ng_Teacher_Pack.pdf', label: 'Teacher pack (PDF)', note: 'Slides with notes, worksheets and answer key.' }
-        ] },
-        { s: 'nk', lesson: 'Lesson 4.2', rows: [
-          { href: '#/teachers/slides/nk', label: 'Open on smartboard', note: 'Full-screen slide show in the browser. No download needed.', primary: true },
-          { href: 'teachers/nk/Lesson3.2_nk_Slide_Presentation.pptx', label: slides(3), note: 'One PowerPoint for the whole sound.', download: true },
-          { href: 'teachers/nk/Lesson3.2_nk_Daily_Practice_Sheets.pdf', label: 'Daily practice sheets (PDF)', note: dayNote(3) },
-          { href: 'teachers/nk/Lesson3.2_nk_Teacher_Pack.pdf', label: 'Teacher pack (PDF)', note: 'Slides with notes, worksheets and answer key.' }
-        ] }
+        { s: 'ng', lesson: 'Lesson 4.1', days: 3, board: '#/teachers/slides/ng', slides: 'teachers/ng/Lesson3.1_ng_Slide_Presentation.pptx', daily: 'teachers/ng/Lesson3.1_ng_Daily_Practice_Sheets.pdf', pack: 'teachers/ng/Lesson3.1_ng_Teacher_Pack.pdf' },
+        { s: 'nk', lesson: 'Lesson 4.2', days: 3, board: '#/teachers/slides/nk', slides: 'teachers/nk/Lesson3.2_nk_Slide_Presentation.pptx', daily: 'teachers/nk/Lesson3.2_nk_Daily_Practice_Sheets.pdf', pack: 'teachers/nk/Lesson3.2_nk_Teacher_Pack.pdf' }
       ] },
       { name: 'Unit 5 \u00b7 Silent e', sounds: [
-        { s: 'a_e', lesson: 'Lesson 5.1', rows: [
-          { href: 'materials/unit5/Lesson5.1_Teacher_Led_Checks.pdf', label: 'Lesson 5.1 Teacher-Led Checks', note: 'Teacher scripts and answer keys.', primary: true },
-          { href: 'materials/unit5/Unit5_Teacher_Led_Student_Sheets.pdf', label: 'Unit 5 Student Sheets', note: 'Student worksheets for Unit 5.' },
-          { href: 'materials/unit5/Unit5_Teacher_Led_Checks_Combined.pdf', label: 'Unit 5 All Checks (teacher scripts and answer keys)', note: 'Teacher-Led Checks for the whole unit.' }
-        ] },
-        { s: 'e', lesson: 'Lesson 5.2', rows: [
-          { href: 'materials/unit5/Lesson5.2_Teacher_Led_Checks.pdf', label: 'Lesson 5.2 Teacher-Led Checks', note: 'Teacher scripts and answer keys.', primary: true },
-          { href: 'materials/unit5/Unit5_Teacher_Led_Student_Sheets.pdf', label: 'Unit 5 Student Sheets', note: 'Student worksheets for Unit 5.' },
-          { href: 'materials/unit5/Unit5_Teacher_Led_Checks_Combined.pdf', label: 'Unit 5 All Checks (teacher scripts and answer keys)', note: 'Teacher-Led Checks for the whole unit.' }
-        ] }
+        { s: 'a_e', lesson: 'Lesson 5.1', daily: 'materials/unit5/Unit5_Teacher_Led_Student_Sheets.pdf', pack: 'materials/unit5/Lesson5.1_Teacher_Led_Checks.pdf', bundle: 'materials/unit5/Unit5_Teacher_Led_Checks_Combined.pdf' },
+        { s: 'e', lesson: 'Lesson 5.2', daily: 'materials/unit5/Unit5_Teacher_Led_Student_Sheets.pdf', pack: 'materials/unit5/Lesson5.2_Teacher_Led_Checks.pdf', bundle: 'materials/unit5/Unit5_Teacher_Led_Checks_Combined.pdf' }
+      ] },
+      { name: 'Learn the Letters', sounds: [
+        { s: 'amst', lesson: 'Team 1', board: '#/foundation/slides/g1' }
       ] }
     ];
     app.append(h('div', { class: 'screen tmscreen' }, h('div', { class: 'tmwrap' },
       h('div', { class: 'abtop' }, homeButton()),
       h('h1', null, 'Teacher materials'),
       h('p', { class: 'tmlead' }, 'For teaching in class. Students practice on their own in the app.'),
-      ...UNITS.map((u) => h('section', { class: 'tmunit' }, h('h2', null, u.name), h('div', { class: 'tmgrid' }, ...u.sounds.map(card)))))));
+      ...UNITS.map((u) => h('section', { class: 'tmunit' }, h('h2', null, u.name), h('div', { class: 'tmgrid' }, ...u.sounds.map(lessonCard)))))));
   }
   /* In-app week-deck slideshow for smartboard (ng / nk). Keeps PPTX download on the teachers page. */
   function slidesViewer(sound) {

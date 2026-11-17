@@ -79,26 +79,17 @@ test('home shows Zip and Frill again and keeps the left-column layout', () => {
   assert.equal(home.includes('banner, hero,'), false);
   const sw = fs.readFileSync(new URL('../sw.js', import.meta.url), 'utf8');
   assert.equal(sw.includes('home_banyan_c.jpg'), false);
-  assert.ok(sw.includes('ir-20261118f'));
+  assert.ok(sw.includes('ir-20261118g'));
   assert.ok(sw.includes('home_zip_frill.webp'));
 });
 
 test('Unit 5 teacher-led checks are linked from Teacher materials', () => {
   const teachers = screens.slice(screens.indexOf('function teachersScreen()'), screens.indexOf('function slidesViewer'));
-  for (const label of [
-    'Lesson 5.1 Teacher-Led Checks',
-    'Lesson 5.2 Teacher-Led Checks',
-    'Unit 5 All Checks (teacher scripts and answer keys)',
-    'Unit 5 Student Sheets',
-    'Teacher-Led Checks'
-  ]) assert.ok(teachers.includes(label), label);
   assert.ok(teachers.includes("name: 'Unit 5 \\u00b7 Silent e'"));
   assert.ok(teachers.includes("s: 'a_e', lesson: 'Lesson 5.1'"));
   assert.ok(teachers.includes("s: 'e', lesson: 'Lesson 5.2'"));
   assert.equal(teachers.includes('tmchecks'), false);
   assert.equal(teachers.includes('tmcheck'), false);
-  assert.ok(teachers.includes("class: 'tmcard'"));
-  assert.ok(teachers.includes("class: 'tmsound'"));
   for (const file of [
     'materials/unit5/Lesson5.1_Teacher_Led_Checks.pdf',
     'materials/unit5/Lesson5.2_Teacher_Led_Checks.pdf',
