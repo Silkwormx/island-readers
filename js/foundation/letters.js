@@ -660,7 +660,7 @@
         h('p', { class: 'llask' }, 'Team ' + group.n + ', ' + group.letters.join(', ') + '. Tap the name, then the sound three times.'),
         overview,
         h('button', { class: 'btn big primary fs-slidebtn', type: 'button', onclick: () => startLetters(group) }, 'One letter at a time'),
-        group.n === 1 ? h('p', { class: 'fs-slidenote' }, h('button', { class: 'fs-slidetext', type: 'button', onclick: () => openSlides() }, 'Team 1 slideshow')) : null,
+        SLIDES[group.id] ? h('p', { class: 'fs-slidenote' }, h('button', { class: 'fs-slidetext', type: 'button', onclick: () => openSlides(group.id) }, 'Team ' + group.n + ' slideshow')) : null,
         h('ol', { class: 'fs-lessons' }, ...cards))));
     if (IR.teach) IR.teach.sync();
   }
@@ -1927,18 +1927,32 @@
     if (IR.teach) IR.teach.sync();
   }
 
-  const SLIDE_PDF = 'foundation/slides/Learn_the_Letters_Group1.pdf';
-  const TEAM1_DAYS = [
-    { label: 'Day 1a', page: 4 },
-    { label: 'Day 1b', page: 19 },
-    { label: 'Day 2', page: 39 },
-    { label: 'Day 3', page: 70 },
-    { label: 'Day 4', page: 95 },
-    { label: 'Team check', page: 112 }
-  ];
-  function openSlides(page) {
+  const SLIDES = {
+    g1: {
+      file: 'foundation/slides/Learn_the_Letters_Team1.pdf',
+      days: [
+        { label: 'Day 1a', page: 3 },
+        { label: 'Day 1b', page: 20 },
+        { label: 'Day 2', page: 42 },
+        { label: 'Day 3', page: 76 },
+        { label: 'Day 4', page: 106 },
+        { label: 'Team check', page: 130 }
+      ]
+    },
+    g2: {
+      file: 'foundation/slides/Learn_the_Letters_Team2.pdf',
+      days: [
+        { label: 'Day 1', page: 3 },
+        { label: 'Day 2', page: 27 },
+        { label: 'Day 3', page: 51 },
+        { label: 'Day 4', page: 90 },
+        { label: 'Team check', page: 124 }
+      ]
+    }
+  };
+  function openSlides(team, page) {
     Snd.stop();
-    location.hash = '#/foundation/slides/g1' + (page ? '/' + page : '');
+    location.hash = '#/foundation/slides/' + team + (page ? '/' + page : '');
   }
   function pdfLink(label, href) {
     return h('a', { class: 'drop-link', href: href, target: '_blank', rel: 'noopener' }, label);
@@ -1949,9 +1963,13 @@
       label: 'Teacher Slideshows',
       tabClass: 'btn big fs-sidebtn',
       fill(body) {
-        body.append(h('button', { class: 'drop-link', type: 'button', onclick: () => openSlides() }, 'Team 1'));
-        TEAM1_DAYS.forEach((day) => body.append(h('button', { class: 'drop-link', type: 'button', onclick: () => openSlides(day.page) }, day.label)));
-        for (let n = 2; n <= 7; n++) body.append(h('p', { class: 'drop-soon' }, 'Team ' + n + ' coming soon'));
+        [1, 2].forEach((n) => {
+          const id = 'g' + n;
+          const deck = SLIDES[id];
+          body.append(h('button', { class: 'drop-link', type: 'button', onclick: () => openSlides(id) }, 'Team ' + n));
+          deck.days.forEach((day) => body.append(h('button', { class: 'drop-link fs-daylink', type: 'button', onclick: () => openSlides(id, day.page) }, day.label)));
+        });
+        for (let n = 3; n <= 7; n++) body.append(h('p', { class: 'drop-soon' }, 'Team ' + n + ' coming soon'));
       }
     });
   }
@@ -1997,10 +2015,11 @@
       }
     });
   }
-  function slidesScreen(app, page) {
+  function slidesScreen(app, team, page) {
     IR.newScreen();
-    const day = TEAM1_DAYS.filter((item) => String(item.page) === String(page))[0];
-    const title = day ? ('Team 1, ' + day.label) : 'Team 1 slideshow';
+    const deck = SLIDES[team];
+    const day = deck.days.filter((item) => String(item.page) === String(page))[0];
+    const title = day ? ('Team ' + team.slice(1) + ', ' + day.label) : ('Team ' + team.slice(1) + ' slideshow');
     const view = h('div', { class: 'screen fs-slideview' });
     const goFull = () => {
       const el = document.querySelector('.fs-slideview');
@@ -2011,14 +2030,14 @@
         h('button', { class: 'back homebtn', type: 'button', onclick: () => { Snd.stop(); if (document.fullscreenElement && document.exitFullscreen) document.exitFullscreen(); location.hash = '#/foundation'; } }, icon('back'), h('span', null, 'Foundation')),
         h('h1', { class: 'uA-title' }, title),
         h('button', { class: 'btn big primary fs-slidebtn', type: 'button', onclick: goFull }, 'Full screen')),
-      h('iframe', { class: 'fs-pdf', src: SLIDE_PDF + (page ? '#page=' + page : ''), title: title }));
+      h('iframe', { class: 'fs-pdf', src: deck.file + (page ? '#page=' + page : ''), title: title }));
     app.append(view);
     if (IR.teach) IR.teach.sync();
   }
   IR.letters = { GROUPS: GROUPS, LETTERS: LETTERS, artNeeded: ART_NEEDED, who: WHO };
   IR.lettersRoute = function (hash, app) {
-    const deck = hash.match(/^#\/foundation\/slides\/g1(?:\/(\d+))?\/?$/);
-    if (deck) { slidesScreen(app, deck[1]); return true; }
+    const deck = hash.match(/^#\/foundation\/slides\/(g[12])(?:\/(\d+))?\/?$/);
+    if (deck && SLIDES[deck[1]]) { slidesScreen(app, deck[1], deck[2]); return true; }
     if (/^#\/foundation\/letters\/?$/.test(hash)) { foundationPage(app); return true; }
     const lesson = /^#\/foundation\/letters\/(g[1-7])\/l\/(\d+)(?:\/([a-z0-9-]+))?\/?$/.exec(hash);
     if (lesson) {
