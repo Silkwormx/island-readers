@@ -53,7 +53,7 @@ test('sight word chooser is an equal card grid and every chest can return to it'
   assert.match(sight, /icon\('check'\)/);
   assert.equal(sight.includes('locked'), false);
   assert.match(css, /\.boxgrid\.chestlist\{display:grid!important;grid-template-columns:repeat\(2,minmax\(0,1fr\)\)!important/);
-  assert.match(css, /\.boxgrid\.chestlist\{grid-template-columns:repeat\(3,minmax\(0,1fr\)\)!important/);
+  assert.equal(/\.boxgrid\.chestlist\{grid-template-columns:repeat\(3/.test(css), false);
   assert.equal(chest.includes('All Treasure Boxes'), false);
   assert.match(chest, /#\/practice\/skills\/sight/);
   assert.match(chest, /aria-haspopup': 'menu'/);
