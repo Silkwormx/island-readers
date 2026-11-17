@@ -287,8 +287,13 @@
       app.append(h('div', { class: 'screen trailscreen unitpage unitA u5menu' },
         h('header', { class: 'uA-top' }, IR.ui.homeButton(), h('h1', { class: 'uA-title' }, h('small', null, 'Unit 5 \u00b7 Lesson ' + IR.kidLesson(NUM) + ' \u00b7 '), N.name),
           h('span', { class: 'uA-time' }, h('span', { class: 't-long' }, 'About ' + totalMin + ' min total'), h('span', { class: 't-short' }, totalMin + ' min')), IR.ui.gearButton()),
-        IR.unitIntro ? IR.unitIntro('i5') : null,
-        menu));
+        IR.modeBar(h('div', null, IR.unitIntro ? IR.unitIntro('i5') : null, menu), {
+          files: [
+            { label: KEY === 'u51' ? 'Lesson 5.1 Teacher-Led Checks' : 'Lesson 5.2 Teacher-Led Checks', href: KEY === 'u51' ? 'materials/unit5/Lesson5.1_Teacher_Led_Checks.pdf' : 'materials/unit5/Lesson5.2_Teacher_Led_Checks.pdf' },
+            { label: 'Unit 5 Student Sheets', href: 'materials/unit5/Unit5_Teacher_Led_Student_Sheets.pdf' },
+            { label: 'Unit 5 All Checks', href: 'materials/unit5/Unit5_Teacher_Led_Checks_Combined.pdf' }
+          ]
+        })));
       if (IR.teach) IR.teach.sync();
     }
   

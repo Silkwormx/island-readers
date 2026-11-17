@@ -495,7 +495,7 @@
     app.append(h('div', { class: 'screen trailscreen unitpage unitA' },
       h('header', { class: 'uA-top' }, IR.ui.homeButton(), h('h1', { class: 'uA-title' }, h('small', null, 'Unit 6 \u00b7 Lesson ' + IR.kidLesson(L.n) + ' \u00b7 '), L.name),
         h('button', { class: 'btn', type: 'button', onclick: () => { location.hash = '#/u6'; } }, 'All lessons'), IR.ui.gearButton()),
-      h('main', { class: 'uA-main' }, left, right)));
+      IR.modeBar(h('main', { class: 'uA-main' }, left, right), null)));
   }
 
   function picker(app) {
@@ -514,8 +514,8 @@
     });
     app.append(h('div', { class: 'screen trailscreen unitpage unitA' },
       h('header', { class: 'uA-top' }, IR.ui.homeButton(), h('h1', { class: 'uA-title' }, h('small', null, 'Unit 6 \u00b7 '), 'Endings'), IR.ui.gearButton()),
-      h('main', { class: 'uA-main' }, h('ul', { class: 'uA-left' }, ...cards),
-        h('section', { class: 'uA-right' }, h('h2', { class: 'uA-h' }, 'Three lessons'), h('p', null, 'Lesson 1 is -s and -es. Lesson 2 is -ed. Lesson 3 is -ing. Each lesson has ten activities. Zip\u2019s Check is last.'), h('p', { class: 'small' }, GROWN)))));
+      IR.modeBar(h('main', { class: 'uA-main' }, h('ul', { class: 'uA-left' }, ...cards),
+        h('section', { class: 'uA-right' }, h('h2', { class: 'uA-h' }, 'Three lessons'), h('p', null, 'Lesson 1 is -s and -es. Lesson 2 is -ed. Lesson 3 is -ing. Each lesson has ten activities. Zip\u2019s Check is last.'), h('p', { class: 'small' }, GROWN))), null)));
   }
 
   function stepScreen(app, L, idx) {

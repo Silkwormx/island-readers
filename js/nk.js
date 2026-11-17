@@ -100,9 +100,13 @@
     app.append(h('div', { class: 'screen trailscreen unitpage unitA nkunit' },
       h('header', { class: 'uA-top' }, IR.ui.homeButton(), h('h1', { class: 'uA-title' }, h('small', null, 'Unit 4 \u00b7 Lesson 2 \u00b7 '), 'nk'),
         h('span', { class: 'uA-time' }, h('span', { class: 't-long' }, 'About ' + totalMin + ' min total'), h('span', { class: 't-short' }, totalMin + ' min')), IR.ui.gearButton()),
-      IR.unitIntro ? IR.unitIntro('i3') : null,
-      h('div', { class: 'teachslidewrap' }, h('button', { class: 'btn big teachslide', type: 'button', onclick: () => { Snd.stop(); location.hash = '#/teachers/slides/nk'; } }, 'Teacher Slideshow')),
-      h('main', { class: 'uA-main' }, left, right), foot));
+      IR.modeBar(h('div', null, IR.unitIntro ? IR.unitIntro('i3') : null, h('main', { class: 'uA-main' }, left, right), foot), {
+        slides: '#/teachers/slides/nk',
+        files: [
+          { label: 'Daily practice sheets', href: 'teachers/nk/Lesson3.2_nk_Daily_Practice_Sheets.pdf' },
+          { label: 'Teacher pack', href: 'teachers/nk/Lesson3.2_nk_Teacher_Pack.pdf' }
+        ]
+      })));
   }
 
   /* ---------- step shell (same top bar / instructions / Back-Next as the ng lessons) ---------- */

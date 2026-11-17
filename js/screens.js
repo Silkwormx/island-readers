@@ -507,6 +507,39 @@
   }
   IR.teacherRow = teacherRow;
   /* ---------- Unit page (Option A): Lesson + Story boxes on the left, numbered Activities with minutes on the right, total time on top ---------- */
+  function modeBar(student, teacher) {
+    const has = !!(teacher && (teacher.slides || (teacher.files && teacher.files.length)));
+    const board = h('span', { class: 'ico', html: '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M8 20h8M12 16v4" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>' });
+    const lessonTab = h('button', { class: 'modetab on', type: 'button', role: 'tab', 'aria-selected': 'true' }, icon('book'), h('span', null, 'Independent Lesson'));
+    const teachTab = h('button', {
+      class: 'modetab' + (has ? '' : ' soon'),
+      type: 'button',
+      role: 'tab',
+      'aria-selected': 'false',
+      disabled: has ? null : true
+    }, board, h('span', { class: 'modetab-lab' }, 'Teacher-Led', has ? null : h('small', null, 'coming soon')));
+    const lessonPane = h('div', { class: 'modepane' }, student);
+    const teachBox = h('div', { class: 'mode-teach' });
+    const teachPane = h('div', { class: 'modepane', hidden: '' }, teachBox);
+    if (has && teacher.slides) {
+      teachBox.append(h('button', { class: 'btn big teachslide', type: 'button', onclick: () => { Snd.stop(); location.hash = teacher.slides; } }, 'Teacher Slideshow'));
+    }
+    if (has) (teacher.files || []).forEach((file) => {
+      teachBox.append(h('a', { class: 'teachfile', href: file.href, target: '_blank', rel: 'noopener' }, file.label));
+    });
+    function show(teach) {
+      lessonPane.hidden = teach;
+      teachPane.hidden = !teach;
+      lessonTab.classList.toggle('on', !teach);
+      teachTab.classList.toggle('on', teach);
+      lessonTab.setAttribute('aria-selected', teach ? 'false' : 'true');
+      teachTab.setAttribute('aria-selected', teach ? 'true' : 'false');
+    }
+    lessonTab.addEventListener('click', () => show(false));
+    if (has) teachTab.addEventListener('click', () => show(true));
+    return h('div', { class: 'modebar' }, h('div', { class: 'modebar-tabs', role: 'tablist' }, lessonTab, teachTab), lessonPane, has ? teachPane : null);
+  }
+  IR.modeBar = modeBar;
   function trailScreen() {
     const S = IR.S(); IR.newScreen();
     const secs = unitSections(); const nx = nextUp(); const req = secs.filter((r) => !r.optional); const doneN = req.filter((r) => r.done).length; const total = req.length; const complete = doneN === total;
@@ -554,9 +587,13 @@
       h('header', { class: 'uA-top' }, homeButton(), h('h1', { class: 'uA-title' }, h('small', null, 'Unit 4 \u00b7 Lesson 1 \u00b7 '), 'ng'),
         h('button', { class: 'cartoonpill', type: 'button', 'aria-label': 'Welcome cartoon, optional. Opens a video.', onclick: () => IR.openCartoon() }, icon('play'), h('span', { class: 'cp-long' }, 'Welcome Cartoon (optional)'), h('span', { class: 'cp-short' }, 'Cartoon')),
         h('span', { class: 'uA-time', 'aria-label': 'About ' + totalMin + ' minutes in total' }, h('span', { class: 't-long' }, 'About ' + totalMin + ' min total'), h('span', { class: 't-short' }, totalMin + ' min')), gearButton()),
-      unitIntro('i3'),
-      h('div', { class: 'teachslidewrap' }, h('button', { class: 'btn big teachslide', type: 'button', onclick: () => { Snd.stop(); location.hash = '#/teachers/slides/ng'; } }, 'Teacher Slideshow')),
-      h('main', { class: 'uA-main' }, left, right), foot));
+      modeBar(h('div', null, unitIntro('i3'), h('main', { class: 'uA-main' }, left, right), foot), {
+        slides: '#/teachers/slides/ng',
+        files: [
+          { label: 'Daily practice sheets', href: 'teachers/ng/Lesson3.1_ng_Daily_Practice_Sheets.pdf' },
+          { label: 'Teacher pack', href: 'teachers/ng/Lesson3.1_ng_Teacher_Pack.pdf' }
+        ]
+      })));
   }
 
   /* ---------- lesson shell ---------- */

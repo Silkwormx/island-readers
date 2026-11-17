@@ -656,12 +656,11 @@
         h('button', { class: 'back homebtn', type: 'button', onclick: () => { Snd.stop(); location.hash = '#/foundation'; } }, icon('back'), h('span', null, 'Foundation')),
         h('h1', { class: 'uA-title' }, 'Meet the Team'),
         IR.ui.gearButton()),
-      h('main', { class: 'llmain' },
+      IR.modeBar(h('main', { class: 'llmain' },
         h('p', { class: 'llask' }, 'Team ' + group.n + ', ' + group.letters.join(', ') + '. Tap the name, then the sound three times.'),
         overview,
         h('button', { class: 'btn big primary fs-slidebtn', type: 'button', onclick: () => startLetters(group) }, 'One letter at a time'),
-        teacherSlideControl(group),
-        h('ol', { class: 'fs-lessons' }, ...cards))));
+        h('ol', { class: 'fs-lessons' }, ...cards)), teamTeacher(group))));
     if (IR.teach) IR.teach.sync();
   }
 
@@ -1969,11 +1968,12 @@
     Snd.stop();
     location.hash = '#/foundation/slides/' + team + (page ? '/' + page : '');
   }
-  function teacherSlideControl(group) {
-    if (SLIDES[group.id]) {
-      return h('button', { class: 'btn big teachslide', type: 'button', onclick: () => openSlides(group.id) }, 'Teacher Slideshow');
-    }
-    return h('p', { class: 'teachslide soon' }, 'Teacher Slideshow coming soon');
+  function teamTeacher(group) {
+    if (!SLIDES[group.id]) return null;
+    const files = group.id === 'g1'
+      ? [{ label: 'Team 1 Quick Sounds', href: 'foundation/printables/Team1_Quick_Sounds.pdf' }]
+      : [{ label: 'Team 2 Quick Sounds', href: 'foundation/printables/Team2_Quick_Sounds.pdf' }];
+    return { slides: '#/foundation/slides/' + group.id, files: files };
   }
   function pdfLink(label, href) {
     return h('a', { class: 'drop-link', href: href, target: '_blank', rel: 'noopener' }, label);
