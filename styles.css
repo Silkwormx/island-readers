@@ -58,8 +58,11 @@ p{margin:.4em 0}
 .gamenum{width:2.5rem;height:2.5rem;font-size:1.25rem}
 .stepbefore{width:min(100%,68rem);margin:.8rem auto 0;padding:0 1.2rem}
 .stepbefore .fs-overview{width:100%}
-.stepcard:focus-visible,.gamecard:focus-visible{outline:3px solid #F28C00;outline-offset:3px}
-.stepcard:hover,.gamecard:hover{background:#FFF3DE}
+.storycard{display:flex;align-items:center;gap:1.1rem;width:100%;min-height:8rem;margin:0;padding:1rem 1.2rem;border:3px solid #E4D6B4;border-radius:1.4rem;background:#fff;box-shadow:0 4px 0 rgba(43,37,64,.08);color:#2B2540;font-family:Andika,sans-serif;font-weight:700;text-align:left;text-decoration:none;cursor:pointer}
+.storycard b{font-size:1.7rem;line-height:1.2}
+.storypic{width:9rem;height:6.6rem;object-fit:cover;border-radius:1rem;flex:none;background:#FFF6E3}
+.stepcard:focus-visible,.gamecard:focus-visible,.storycard:focus-visible{outline:3px solid #F28C00;outline-offset:3px}
+.stepcard:hover,.gamecard:hover,.storycard:hover{background:#FFF3DE}
 .stepage{max-width:100%}
 .stepage .uA-top{flex-wrap:wrap;width:100%;max-width:100%;box-sizing:border-box}
 .stepage.llpage{height:auto;min-height:100dvh;max-height:none;overflow:auto}

@@ -468,13 +468,14 @@
     IR.newScreen();
     const items = STEPS.map((s) => ({ id: s.id, title: s.title, group: s.group, href: '#/u6/' + L.key + '/' + s.id, done: !!(lights(L.key)[s.id]), min: s.id === 'read' ? 6 : s.id === 'check' ? 4 : s.id === 'meet' ? 4 : 3 }));
     items.filter((r) => r.group === 'activities').forEach((r, k) => { r.act = k + 1; });
-    const story = { title: L.storyTitle, href: '#/u6/' + L.key + '/read' };
+    const story = { title: L.storyTitle, href: '#/u6/' + L.key + '/read', min: 6, img: IR.storyCovers[L.n], alt: L.storyTitle, big: true };
     app.append(h('div', { class: 'screen trailscreen unitpage unitA stepage' },
       h('header', { class: 'uA-top' }, IR.ui.homeButton(), h('h1', { class: 'uA-title' }, h('small', null, 'Unit 6 Lesson ' + IR.kidLesson(L.n)), L.name),
         h('button', { class: 'btn', type: 'button', onclick: () => { location.hash = '#/u6'; } }, 'All lessons'), IR.ui.gearButton()),
       IR.modeBar({
-        lesson: items.filter((r) => r.group === 'lesson').map((r) => ({ title: r.title, href: r.href, min: r.min })).concat([story]),
-        games: items.filter((r) => r.group === 'activities').map((r) => ({ title: r.title, href: r.href, note: TIPS[r.id], min: r.min }))
+        lesson: items.filter((r) => r.group === 'lesson').map((r) => ({ title: r.title, href: r.href, min: r.min })),
+        games: items.filter((r) => r.group === 'activities').map((r) => ({ title: r.title, href: r.href, note: TIPS[r.id], min: r.min })),
+        story: story
       })));
   }
 

@@ -277,11 +277,14 @@
       if (!new RegExp('^#/' + KEY + '(/|$)').test(prev) && prev !== '#/review5') resetLights();
       IR.newScreen(); const all = sections();
       const pick = (group) => all.filter((r) => r.group === group).map((r) => ({ title: r.title, href: r.href, note: TIPS[r.id], min: r.min }));
+      const story = pick('story')[0];
+      if (story) { story.title = N.storyTitle || story.title; story.note = 'Story Time'; story.img = IR.storyCovers[KEY === 'u51' ? '5.1' : '5.2']; story.alt = N.storyTitle || ''; story.big = true; }
       app.append(h('div', { class: 'screen trailscreen unitpage unitA u5menu stepage' },
         h('header', { class: 'uA-top' }, IR.ui.homeButton(), h('h1', { class: 'uA-title' }, h('small', null, 'Unit 5 Lesson ' + IR.kidLesson(NUM)), N.name), IR.ui.gearButton()),
         IR.modeBar({
-          lesson: pick('lesson').concat(pick('story')),
-          games: pick('activities').concat(pick('extra'))
+          lesson: pick('lesson'),
+          games: pick('activities').concat(pick('extra')),
+          story: story
         })));
       if (IR.teach) IR.teach.sync();
     }

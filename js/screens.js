@@ -517,9 +517,10 @@
   function itemCard(item, num) {
     const body = [
       num ? h('span', { class: 'gamenum' }, String(num)) : null,
+      item.img ? h('img', { class: 'storypic', src: item.img, alt: item.alt || '' }) : null,
       h('span', { class: 'gametxt' }, h('b', null, item.title), item.note ? h('span', { class: 'gamenote' }, item.note) : null, item.min ? h('span', { class: 'gamemin' }, item.min + ' min') : null)
     ];
-    const cls = num ? 'gamecard' : 'stepcard';
+    const cls = item.big ? 'storycard' : (num ? 'gamecard' : 'stepcard');
     if (item.href && item.href.charAt(0) !== '#') return h('a', { class: cls, href: item.href, target: '_blank', rel: 'noopener' }, ...body);
     return h('button', { class: cls, type: 'button', onclick: goItem(item) }, ...body);
   }
@@ -552,6 +553,7 @@
       h('div', { class: 'stepflow' },
         plan.choose ? null : stepSection(1, 'Lesson', plan.lesson || []),
         plan.choose ? null : stepSection(2, 'Games', plan.games || [], true),
+        plan.choose || !plan.story ? null : stepSection(3, 'Story', [plan.story]),
         ...(plan.choose || []).map((item, i) => stepSection(i + 1, item.title, [item]))));
     const teachPane = h('div', { class: 'modepane', hidden: '' },
       h('p', { class: 'stepnote' }, 'Teach from the slideshow, then use the printables.'),
@@ -578,11 +580,14 @@
     if (!/^#\/(island3|lesson\/|check)/.test(prevH)) try { sessionStorage.removeItem(LK); } catch (e) {}
     IR._ngHashWas = location.hash || '#/island3';
     const pick = (group) => secs.filter((r) => r.group === group).map((r) => ({ title: r.title, href: r.href, note: TIPS[r.id], min: r.min }));
+    const story = pick('story')[0];
+    if (story) { story.title = D.storyTitle || story.title; story.note = 'Story Time'; story.img = IR.storyCovers['4.1']; story.alt = D.storyTitle || ''; story.big = true; }
     app.append(h('div', { class: 'screen trailscreen unitpage unitA orangeunit stepage' },
       h('header', { class: 'uA-top' }, homeButton(), h('h1', { class: 'uA-title' }, h('small', null, 'Unit 4 Lesson 1'), 'ng'), gearButton()),
       modeBar({
-        lesson: pick('lesson').concat(pick('story')),
+        lesson: pick('lesson'),
         games: pick('activities'),
+        story: story,
         slides: '#/teachers/slides/ng',
         files: [
           { title: 'Daily practice sheets', href: 'teachers/ng/Lesson3.1_ng_Daily_Practice_Sheets.pdf' },
