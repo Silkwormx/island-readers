@@ -1967,7 +1967,7 @@
           pdfLink('nk teacher pack', 'teachers/nk/Lesson3.2_nk_Teacher_Pack.pdf'),
           pdfLink('Lesson 5.1 Teacher-Led Checks', 'materials/unit5/Lesson5.1_Teacher_Led_Checks.pdf'),
           pdfLink('Lesson 5.2 Teacher-Led Checks', 'materials/unit5/Lesson5.2_Teacher_Led_Checks.pdf'),
-          pdfLink('Unit 5 all checks', 'materials/unit5/Unit5_Teacher_Led_Checks_Combined.pdf'));
+          pdfLink('Unit 5 All Checks (teacher scripts and answer keys)', 'materials/unit5/Unit5_Teacher_Led_Checks_Combined.pdf'));
       }
     });
   }
@@ -1980,7 +1980,7 @@
         body.append(
           pdfLink('ng daily practice sheets', 'teachers/ng/Lesson3.1_ng_Daily_Practice_Sheets.pdf'),
           pdfLink('nk daily practice sheets', 'teachers/nk/Lesson3.2_nk_Daily_Practice_Sheets.pdf'),
-          pdfLink('Unit 5 student sheets', 'materials/unit5/Unit5_Teacher_Led_Student_Sheets.pdf'));
+          pdfLink('Unit 5 Student Sheets', 'materials/unit5/Unit5_Teacher_Led_Student_Sheets.pdf'));
       }
     });
   }

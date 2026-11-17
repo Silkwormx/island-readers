@@ -877,32 +877,50 @@
   /* ---------- Teacher materials (grown-up corner): by unit, then sound ---------- */
   function teachersScreen() {
     IR.newScreen();
-    const UNITS = [{ name: 'Unit 4 \u00b7 Glued Sounds', sounds: [
-      { s: 'ng', lesson: 'Lesson 4.1', days: 3, daily: 'teachers/ng/Lesson3.1_ng_Daily_Practice_Sheets.pdf', pack: 'teachers/ng/Lesson3.1_ng_Teacher_Pack.pdf', deck: 'teachers/ng/Lesson3.1_ng_Slide_Presentation.pptx', view: '#/teachers/slides/ng' },
-      { s: 'nk', lesson: 'Lesson 4.2', days: 3, daily: 'teachers/nk/Lesson3.2_nk_Daily_Practice_Sheets.pdf', pack: 'teachers/nk/Lesson3.2_nk_Teacher_Pack.pdf', deck: 'teachers/nk/Lesson3.2_nk_Slide_Presentation.pptx', view: '#/teachers/slides/nk' }] }];
-    const CHECKS = [
-      ['Lesson 5.1 Teacher-Led Checks', 'materials/unit5/Lesson5.1_Teacher_Led_Checks.pdf'],
-      ['Lesson 5.2 Teacher-Led Checks', 'materials/unit5/Lesson5.2_Teacher_Led_Checks.pdf'],
-      ['Unit 5 All Checks (teacher scripts and answer keys)', 'materials/unit5/Unit5_Teacher_Led_Checks_Combined.pdf'],
-      ['Unit 5 Student Sheets', 'materials/unit5/Unit5_Teacher_Led_Student_Sheets.pdf']
+    const linkRow = (item) => {
+      const attrs = { class: 'btn big tmlink' + (item.primary ? ' primary' : ''), href: item.href };
+      if (item.download) attrs.download = '';
+      else if (!item.href.startsWith('#')) { attrs.target = '_blank'; attrs.rel = 'noopener'; }
+      return [h('a', attrs, item.label), h('p', { class: 'tmnote' }, item.note)];
+    };
+    const card = (x) => h('div', { class: 'tmcard' },
+      h('h3', null, h('span', { class: 'tmsound' }, x.s), ' ' + x.lesson),
+      ...x.rows.flatMap(linkRow));
+    const slides = (days) => 'Download slides \u00b7 ' + days + ' days (PPTX)';
+    const dayNote = (days) => 'Worksheets for each day, labeled Day 1 to Day ' + days + '.';
+    const UNITS = [
+      { name: 'Unit 4 \u00b7 Glued Sounds', sounds: [
+        { s: 'ng', lesson: 'Lesson 4.1', rows: [
+          { href: '#/teachers/slides/ng', label: 'Open on smartboard', note: 'Full-screen slide show in the browser. No download needed.', primary: true },
+          { href: 'teachers/ng/Lesson3.1_ng_Slide_Presentation.pptx', label: slides(3), note: 'One PowerPoint for the whole sound.', download: true },
+          { href: 'teachers/ng/Lesson3.1_ng_Daily_Practice_Sheets.pdf', label: 'Daily practice sheets (PDF)', note: dayNote(3) },
+          { href: 'teachers/ng/Lesson3.1_ng_Teacher_Pack.pdf', label: 'Teacher pack (PDF)', note: 'Slides with notes, worksheets and answer key.' }
+        ] },
+        { s: 'nk', lesson: 'Lesson 4.2', rows: [
+          { href: '#/teachers/slides/nk', label: 'Open on smartboard', note: 'Full-screen slide show in the browser. No download needed.', primary: true },
+          { href: 'teachers/nk/Lesson3.2_nk_Slide_Presentation.pptx', label: slides(3), note: 'One PowerPoint for the whole sound.', download: true },
+          { href: 'teachers/nk/Lesson3.2_nk_Daily_Practice_Sheets.pdf', label: 'Daily practice sheets (PDF)', note: dayNote(3) },
+          { href: 'teachers/nk/Lesson3.2_nk_Teacher_Pack.pdf', label: 'Teacher pack (PDF)', note: 'Slides with notes, worksheets and answer key.' }
+        ] }
+      ] },
+      { name: 'Unit 5 \u00b7 Silent e', sounds: [
+        { s: 'a_e', lesson: 'Lesson 5.1', rows: [
+          { href: 'materials/unit5/Lesson5.1_Teacher_Led_Checks.pdf', label: 'Lesson 5.1 Teacher-Led Checks', note: 'Teacher scripts and answer keys.', primary: true },
+          { href: 'materials/unit5/Unit5_Teacher_Led_Student_Sheets.pdf', label: 'Unit 5 Student Sheets', note: 'Student worksheets for Unit 5.' },
+          { href: 'materials/unit5/Unit5_Teacher_Led_Checks_Combined.pdf', label: 'Unit 5 All Checks (teacher scripts and answer keys)', note: 'Teacher-Led Checks for the whole unit.' }
+        ] },
+        { s: 'e', lesson: 'Lesson 5.2', rows: [
+          { href: 'materials/unit5/Lesson5.2_Teacher_Led_Checks.pdf', label: 'Lesson 5.2 Teacher-Led Checks', note: 'Teacher scripts and answer keys.', primary: true },
+          { href: 'materials/unit5/Unit5_Teacher_Led_Student_Sheets.pdf', label: 'Unit 5 Student Sheets', note: 'Student worksheets for Unit 5.' },
+          { href: 'materials/unit5/Unit5_Teacher_Led_Checks_Combined.pdf', label: 'Unit 5 All Checks (teacher scripts and answer keys)', note: 'Teacher-Led Checks for the whole unit.' }
+        ] }
+      ] }
     ];
-    const checkBtn = (label, href) => h('a', { class: 'btn big tmlink tmcheck', href: href, target: '_blank', rel: 'noopener' }, label);
-    const card = (x) => h('div', { class: 'tmcard' }, h('h3', null, h('span', { class: 'tmsound' }, x.s), ' ' + x.lesson),
-      h('a', { class: 'btn big tmlink primary', href: x.view }, 'Open on smartboard'),
-      h('p', { class: 'tmnote' }, 'Full-screen slide show in the browser. No download needed.'),
-      h('a', { class: 'btn big tmlink', href: x.deck, download: '' }, 'Download slides \u00b7 ' + x.days + ' days (PPTX)'),
-      h('p', { class: 'tmnote' }, 'One PowerPoint for the whole sound.'),
-      h('a', { class: 'btn big tmlink', href: x.daily, target: '_blank', rel: 'noopener' }, 'Daily practice sheets (PDF)'),
-      h('p', { class: 'tmnote' }, 'Worksheets for each day, labeled Day 1 to Day ' + x.days + '.'),
-      h('a', { class: 'btn big tmlink', href: x.pack, target: '_blank', rel: 'noopener' }, 'Teacher pack (PDF)'),
-      h('p', { class: 'tmnote' }, 'Slides with notes, worksheets and answer key.'));
     app.append(h('div', { class: 'screen tmscreen' }, h('div', { class: 'tmwrap' },
       h('div', { class: 'abtop' }, homeButton()),
       h('h1', null, 'Teacher materials'),
       h('p', { class: 'tmlead' }, 'For teaching in class. Students practice on their own in the app.'),
-      ...UNITS.map((u) => h('section', { class: 'tmunit' }, h('h2', null, u.name), h('div', { class: 'tmgrid' }, ...u.sounds.map(card)))),
-      h('section', { class: 'tmunit', id: 'unit5-checks' }, h('h2', null, 'Unit 5 \u00b7 Silent e'),
-        h('div', { class: 'tmchecks' }, h('h3', null, 'Teacher-Led Checks'), ...CHECKS.map(([label, href]) => checkBtn(label, href)))))));
+      ...UNITS.map((u) => h('section', { class: 'tmunit' }, h('h2', null, u.name), h('div', { class: 'tmgrid' }, ...u.sounds.map(card)))))));
   }
   /* In-app week-deck slideshow for smartboard (ng / nk). Keeps PPTX download on the teachers page. */
   function slidesViewer(sound) {
