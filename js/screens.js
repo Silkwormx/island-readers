@@ -508,7 +508,7 @@
   IR.teacherRow = teacherRow;
   /* ---------- Unit page (Option A): Lesson + Story boxes on the left, numbered Activities with minutes on the right, total time on top ---------- */
   function modeBar(student, teacher) {
-    const has = !!(teacher && (teacher.slides || (teacher.files && teacher.files.length)));
+    const has = !!(teacher && teacher.slides);
     const board = h('span', { class: 'ico', html: '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M8 20h8M12 16v4" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>' });
     const lessonTab = h('button', { class: 'modetab on', type: 'button', role: 'tab', 'aria-selected': 'true' }, icon('book'), h('span', null, 'Independent Lesson'));
     const teachTab = h('button', {
