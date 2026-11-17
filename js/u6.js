@@ -468,54 +468,23 @@
     IR.newScreen();
     const items = STEPS.map((s) => ({ id: s.id, title: s.title, group: s.group, href: '#/u6/' + L.key + '/' + s.id, done: !!(lights(L.key)[s.id]), min: s.id === 'read' ? 6 : s.id === 'check' ? 4 : s.id === 'meet' ? 4 : 3 }));
     items.filter((r) => r.group === 'activities').forEach((r, k) => { r.act = k + 1; });
-    const nx = items.find((r) => !r.done) || null;
-    const star = (on) => h('span', { class: 'sstar' + (on ? ' on' : '') }, icon(on ? 'star' : 'starOutline'));
-    const go = (r) => () => { Snd.stop(); location.hash = r.href; };
-    /* Same two boxes as Unit 4: Lesson on the left, Story on the right. */
-    const actFlags = items.filter((r) => r.group === 'activities').map((r) => !!r.done);
-    const big = (r) => IR.pairCard({
-      lesson: r.group === 'lesson',
-      title: r.title,
-      min: r.min,
-      href: r.href,
-      img: r.group === 'lesson' ? IR.lessonArt : IR.storyCovers[L.n],
-      alt: r.group === 'lesson' ? IR.lessonArtAlt : r.title,
-      done: r.done,
-      next: nx && nx.id === r.id,
-      flags: actFlags
-    });
-    const row = (r) => h('li', null, h('button', { class: 'stopcard arow gamestop' + (r.done ? ' done' : '') + (nx && nx.id === r.id ? ' nextup' : ''), type: 'button', 'data-id': r.id, onclick: go(r) },
-      h('span', { class: 'snum' }, String(r.act)), h('span', { class: 'stxt' }, h('b', null, r.title), TIPS[r.id] ? h('span', { class: 'sblurb' }, TIPS[r.id]) : null),
-      h('span', { class: 'sside' }, star(r.done))));
-    const meet = items.filter((r) => r.group !== 'activities')[0];
-    const story = { id: 'read', title: L.storyTitle, group: 'story', href: '#/u6/' + L.key + '/read', done: !!(lights(L.key).read), min: 6 };
-    const left = h('ul', { class: 'uA-left' }, big(meet), big(story));
-    const right = h('section', { class: 'uA-right' }, h('h2', { class: 'uA-h' }, 'Activities'), h('ol', { class: 'stoplist uA-acts' }, ...items.filter((r) => r.group === 'activities').map(row)),
-      h('p', { class: 'small' }, GROWN));
-    app.append(h('div', { class: 'screen trailscreen unitpage unitA' },
-      h('header', { class: 'uA-top' }, IR.ui.homeButton(), h('h1', { class: 'uA-title' }, h('small', null, 'Unit 6 \u00b7 Lesson ' + IR.kidLesson(L.n) + ' \u00b7 '), L.name),
+    const story = { title: L.storyTitle, href: '#/u6/' + L.key + '/read' };
+    app.append(h('div', { class: 'screen trailscreen unitpage unitA stepage' },
+      h('header', { class: 'uA-top' }, IR.ui.homeButton(), h('h1', { class: 'uA-title' }, h('small', null, 'Unit 6 Lesson ' + IR.kidLesson(L.n)), L.name),
         h('button', { class: 'btn', type: 'button', onclick: () => { location.hash = '#/u6'; } }, 'All lessons'), IR.ui.gearButton()),
-      IR.modeBar(h('main', { class: 'uA-main' }, left, right), null)));
+      IR.modeBar({
+        lesson: items.filter((r) => r.group === 'lesson').map((r) => ({ title: r.title, href: r.href })).concat([story]),
+        games: items.filter((r) => r.group === 'activities').map((r) => ({ title: r.title, href: r.href }))
+      })));
   }
 
   function picker(app) {
     IR.newScreen();
-    const cards = PACK.lessons.flatMap((L) => {
-      const flags = stepsFor(L).filter((s) => s.group === 'activities').map((s) => !!(lights(L.key)[s.id] || IR.isDone(L.key + '_' + s.id)));
-      const lesson = IR.pairCard({
-        lesson: true, kicker: 'Lesson ' + IR.kidLesson(L.n), title: L.name, href: '#/u6/' + L.key,
-        img: IR.lessonArt, alt: IR.lessonArtAlt, flags: flags
-      });
-      const story = IR.pairCard({
-        lesson: false, title: L.storyTitle, min: 6, href: '#/u6/' + L.key + '/read',
-        img: IR.storyCovers[L.n], alt: L.storyTitle
-      });
-      return [lesson, story];
-    });
-    app.append(h('div', { class: 'screen trailscreen unitpage unitA' },
-      h('header', { class: 'uA-top' }, IR.ui.homeButton(), h('h1', { class: 'uA-title' }, h('small', null, 'Unit 6 \u00b7 '), 'Endings'), IR.ui.gearButton()),
-      IR.modeBar(h('main', { class: 'uA-main' }, h('ul', { class: 'uA-left' }, ...cards),
-        h('section', { class: 'uA-right' }, h('h2', { class: 'uA-h' }, 'Three lessons'), h('p', null, 'Lesson 1 is -s and -es. Lesson 2 is -ed. Lesson 3 is -ing. Each lesson has ten activities. Zip\u2019s Check is last.'), h('p', { class: 'small' }, GROWN))), null)));
+    app.append(h('div', { class: 'screen trailscreen unitpage unitA stepage' },
+      h('header', { class: 'uA-top' }, IR.ui.homeButton(), h('h1', { class: 'uA-title' }, h('small', null, 'Unit 6'), 'Endings'), IR.ui.gearButton()),
+      IR.modeBar({
+        choose: PACK.lessons.map((L) => ({ title: 'Lesson ' + IR.kidLesson(L.n) + ' ' + L.name, href: '#/u6/' + L.key }))
+      })));
   }
 
   function stepScreen(app, L, idx) {

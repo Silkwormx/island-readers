@@ -275,19 +275,14 @@
       /* Completion lights reset when this lesson menu is opened from outside the unit (or closed). */
       const prev = IR['_u5Was_' + KEY] || '';
       if (!new RegExp('^#/' + KEY + '(/|$)').test(prev) && prev !== '#/review5') resetLights();
-      IR.newScreen(); const all = sections(); const secs = all.filter((r) => !r.optional); const extras = all.filter((r) => r.optional); const nx = nextUp(); const doneN = secs.filter((r) => r.done).length; const total = secs.length;
-      const totalMin = secs.reduce((a, r) => a + r.min, 0);
-      const asCard = (r, n) => ({ n: n, title: r.title, href: r.href, done: !!r.done, min: r.min, next: !!(nx && nx.id === r.id) });
-      const complete = doneN === total;
-      const menu = IR.lessonMenu({
-        items: secs.map((r, i) => asCard(r, i + 1)),
-        extras: extras.map((r, i) => asCard(r, secs.length + i + 1)),
-        review: { open: complete, href: '#/review5', title: 'Unit 5 Review', note: complete ? 'Mix all the silent e words.' : 'Finish the lesson to open the review.' }
-      });
-      app.append(h('div', { class: 'screen trailscreen unitpage unitA u5menu' },
-        h('header', { class: 'uA-top' }, IR.ui.homeButton(), h('h1', { class: 'uA-title' }, h('small', null, 'Unit 5 \u00b7 Lesson ' + IR.kidLesson(NUM) + ' \u00b7 '), N.name),
-          h('span', { class: 'uA-time' }, h('span', { class: 't-long' }, 'About ' + totalMin + ' min total'), h('span', { class: 't-short' }, totalMin + ' min')), IR.ui.gearButton()),
-        IR.modeBar(h('div', null, IR.unitIntro ? IR.unitIntro('i5') : null, menu), null)));
+      IR.newScreen(); const all = sections();
+      const pick = (group) => all.filter((r) => r.group === group).map((r) => ({ title: r.title, href: r.href }));
+      app.append(h('div', { class: 'screen trailscreen unitpage unitA u5menu stepage' },
+        h('header', { class: 'uA-top' }, IR.ui.homeButton(), h('h1', { class: 'uA-title' }, h('small', null, 'Unit 5 Lesson ' + IR.kidLesson(NUM)), N.name), IR.ui.gearButton()),
+        IR.modeBar({
+          lesson: pick('lesson').concat(pick('story')),
+          games: pick('activities').concat(pick('extra'))
+        })));
       if (IR.teach) IR.teach.sync();
     }
   

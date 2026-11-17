@@ -507,8 +507,31 @@
   }
   IR.teacherRow = teacherRow;
   /* ---------- Unit page (Option A): Lesson + Story boxes on the left, numbered Activities with minutes on the right, total time on top ---------- */
-  function modeBar(student, teacher) {
-    const has = !!(teacher && teacher.slides);
+  function goItem(item) {
+    return () => {
+      Snd.stop();
+      if (item.go) item.go();
+      else if (item.href) location.hash = item.href;
+    };
+  }
+  function stepRow(item) {
+    if (item.href && item.href.charAt(0) !== '#') return h('a', { class: 'steprow', href: item.href, target: '_blank', rel: 'noopener' }, item.title);
+    return h('button', { class: 'steprow', type: 'button', onclick: goItem(item) }, item.title);
+  }
+  function stepCard(n, label, items) {
+    const head = h('div', { class: 'stephead' }, h('span', { class: 'stepnum' }, String(n)), h('span', { class: 'steplab' }, label));
+    if (!items || !items.length) return h('section', { class: 'stepcard' }, head, h('p', { class: 'stepsoon' }, 'Coming soon'));
+    if (items.length === 1) {
+      const item = items[0];
+      const sub = item.title && item.title !== label ? h('span', { class: 'stepsub' }, item.title) : null;
+      if (item.href && item.href.charAt(0) !== '#') return h('a', { class: 'stepcard', href: item.href, target: '_blank', rel: 'noopener' }, head, sub);
+      return h('button', { class: 'stepcard', type: 'button', onclick: goItem(item) }, head, sub);
+    }
+    return h('section', { class: 'stepcard' }, head, ...items.map(stepRow));
+  }
+  function modeBar(plan) {
+    plan = plan || {};
+    const has = !!plan.slides;
     const board = h('span', { class: 'ico', html: '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M8 20h8M12 16v4" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>' });
     const lessonTab = h('button', { class: 'modetab on', type: 'button', role: 'tab', 'aria-selected': 'true' }, icon('book'), h('span', null, 'Independent Lesson'));
     const teachTab = h('button', {
@@ -518,15 +541,17 @@
       'aria-selected': 'false',
       disabled: has ? null : true
     }, board, h('span', { class: 'modetab-lab' }, 'Teacher-Led', has ? null : h('small', null, 'coming soon')));
-    const lessonPane = h('div', { class: 'modepane' }, student);
-    const teachBox = h('div', { class: 'mode-teach' });
-    const teachPane = h('div', { class: 'modepane', hidden: '' }, teachBox);
-    if (has && teacher.slides) {
-      teachBox.append(h('button', { class: 'btn big teachslide', type: 'button', onclick: () => { Snd.stop(); location.hash = teacher.slides; } }, 'Teacher Slideshow'));
-    }
-    if (has) (teacher.files || []).forEach((file) => {
-      teachBox.append(h('a', { class: 'teachfile', href: file.href, target: '_blank', rel: 'noopener' }, file.label));
-    });
+    const lessonPane = h('div', { class: 'modepane' },
+      h('p', { class: 'stepnote' }, 'Kids watch the lesson, then play the games.'),
+      h('div', { class: 'stepcards' },
+        plan.choose ? null : stepCard(1, 'Lesson', plan.lesson || []),
+        plan.choose ? null : stepCard(2, 'Games', plan.games || []),
+        ...(plan.choose || []).map((item, i) => stepCard(i + 1, item.title, [item]))));
+    const teachPane = h('div', { class: 'modepane', hidden: '' },
+      h('p', { class: 'stepnote' }, 'Teach from the slideshow, then use the printables.'),
+      h('div', { class: 'stepcards' },
+        stepCard(1, 'Slideshow', has ? [{ title: 'Slideshow', href: plan.slides }] : []),
+        stepCard(2, 'Printables', plan.files || [])));
     function show(teach) {
       lessonPane.hidden = teach;
       teachPane.hidden = !teach;
@@ -541,57 +566,21 @@
   }
   IR.modeBar = modeBar;
   function trailScreen() {
-    const S = IR.S(); IR.newScreen();
-    const secs = unitSections(); const nx = nextUp(); const req = secs.filter((r) => !r.optional); const doneN = req.filter((r) => r.done).length; const total = req.length; const complete = doneN === total;
-    const totalMin = req.reduce((a, r) => a + r.min, 0);
-    const star = (on) => h('span', { class: 'sstar' + (on ? ' on' : ''), 'aria-hidden': 'true' }, icon(on ? 'star' : 'starOutline'));
-    const aria = (r, extra) => r.label + '. ' + r.min + ' minutes. ' + extra + (r.done ? ' Done, star earned.' : nx && nx.id === r.id ? ' Next up.' : '');
-    const actFlags = secs.filter((r) => r.group === 'activities').map((r) => !!r.done);
-    function bigBox(r) {
-      const lesson = r.group === 'lesson';
-      return IR.pairCard({
-        lesson: lesson,
-        kicker: lesson ? 'Lesson' : 'Story',
-        title: r.title,
-        min: r.min,
-        href: r.href,
-        img: lesson ? IR.lessonArt : IR.storyCovers['4.1'],
-        alt: lesson ? IR.lessonArtAlt : 'The Twigs in the Bell',
-        done: r.done,
-        next: nx && nx.id === r.id,
-        flags: actFlags
-      });
-    }
-    function actRow(r) {
-      const isNext = nx && nx.id === r.id;
-      return h('li', null, h('button', { class: 'stopcard arow gamestop' + (r.done ? ' done' : '') + (isNext ? ' nextup' : ''), type: 'button', 'data-id': r.id, 'data-group': 'activities',
-        'aria-label': aria(r, 'Activity ' + r.act + '.'), 'aria-current': isNext ? 'step' : null, onclick: () => { Snd.stop(); location.hash = r.href; } },
-        h('span', { class: 'snum', 'aria-hidden': 'true' }, String(r.act)),
-        h('span', { class: 'stxt' }, h('b', null, r.title), TIPS[r.id] ? h('span', { class: 'sblurb' }, TIPS[r.id]) : null),
-        h('span', { class: 'smin' + (r.optional ? ' opt' : '') }, r.optional ? 'Optional' : r.min + ' min'),
-        h('span', { class: 'sside' }, star(r.done), h('span', { class: 'slabel ' + (isNext ? 'tag' : 'none') }, isNext ? 'Next' : ''))));
-    }
+    IR.newScreen();
+    const secs = unitSections();
     const LK = 'ir_sess_ng'; const prevH = IR._ngHashWas || '';
     if (!/^#\/(island3|lesson\/|check)/.test(prevH)) try { sessionStorage.removeItem(LK); } catch (e) {}
     IR._ngHashWas = location.hash || '#/island3';
-    let lit = {}; try { lit = JSON.parse(sessionStorage.getItem(LK) || '{}'); } catch (e) {}
-    const lights = h('div', { class: 'clights', role: 'status', 'aria-label': 'Session progress lights' }, h('span', { class: 'clab' }, 'This visit:'),
-      h('span', { class: 'clightdots' }, ...secs.map((r) => h('span', { class: 'clight' + (lit[r.id] || r.done ? ' on' : ''), 'data-kind': r.group, 'data-id': r.id, title: r.title }))));
-    const left = h('section', { class: 'uA-sec uA-start' }, h('h2', { class: 'uA-h' }, 'Start here'), h('ul', { class: 'uA-left' }, ...secs.filter((r) => r.group !== 'activities').map(bigBox)));
-    const right = h('section', { class: 'uA-sec uA-right' }, lights, h('h2', { class: 'uA-h' }, 'Activities'), h('ol', { class: 'stoplist uA-acts' }, ...secs.filter((r) => r.group === 'activities').map(actRow)));
-    const foot = h('footer', { class: 'uA-foot island4 ' + (complete ? 'open' : 'locked'), 'aria-live': 'polite' },
-      h('span', { class: 'i4ico', 'aria-hidden': 'true' }, icon(complete ? 'star' : 'lock')),
-      h('span', { class: 'i4txt' }, h('small', null, complete ? 'Unit 4 is unlocked!' : 'Unit 4 unlocks when all stars are done')),
-      h('span', { class: 'i4count' }, doneN + ' of ' + total));
-    app.append(h('div', { class: 'screen trailscreen unitpage unitA orangeunit' },
-      h('header', { class: 'uA-top' }, homeButton(), h('h1', { class: 'uA-title' }, h('small', null, 'Unit 4 \u00b7 Lesson 1 \u00b7 '), 'ng'),
-        h('button', { class: 'cartoonpill', type: 'button', 'aria-label': 'Welcome cartoon, optional. Opens a video.', onclick: () => IR.openCartoon() }, icon('play'), h('span', { class: 'cp-long' }, 'Welcome Cartoon (optional)'), h('span', { class: 'cp-short' }, 'Cartoon')),
-        h('span', { class: 'uA-time', 'aria-label': 'About ' + totalMin + ' minutes in total' }, h('span', { class: 't-long' }, 'About ' + totalMin + ' min total'), h('span', { class: 't-short' }, totalMin + ' min')), gearButton()),
-      modeBar(h('div', null, unitIntro('i3'), h('main', { class: 'uA-main' }, left, right), foot), {
+    const pick = (group) => secs.filter((r) => r.group === group).map((r) => ({ title: r.title, href: r.href }));
+    app.append(h('div', { class: 'screen trailscreen unitpage unitA orangeunit stepage' },
+      h('header', { class: 'uA-top' }, homeButton(), h('h1', { class: 'uA-title' }, h('small', null, 'Unit 4 Lesson 1'), 'ng'), gearButton()),
+      modeBar({
+        lesson: pick('lesson').concat(pick('story')),
+        games: pick('activities'),
         slides: '#/teachers/slides/ng',
         files: [
-          { label: 'Daily practice sheets', href: 'teachers/ng/Lesson3.1_ng_Daily_Practice_Sheets.pdf' },
-          { label: 'Teacher pack', href: 'teachers/ng/Lesson3.1_ng_Teacher_Pack.pdf' }
+          { title: 'Daily practice sheets', href: 'teachers/ng/Lesson3.1_ng_Daily_Practice_Sheets.pdf' },
+          { title: 'Teacher pack', href: 'teachers/ng/Lesson3.1_ng_Teacher_Pack.pdf' }
         ]
       })));
   }

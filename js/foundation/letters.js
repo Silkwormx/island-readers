@@ -632,35 +632,21 @@
   function groupPage(app, group) {
     IR.newScreen();
     const lessons = lessonsOf(group);
-    const map = doneMap();
-    const overview = h('div', { class: 'fs-overview', style: 'grid-template-columns:repeat(' + Math.min(group.letters.length, 4) + ',minmax(0,1fr))' },
-      ...group.letters.map((id) => h('div', { class: 'fs-over' }, letterIntro(id))));
-    const cards = lessons.map((lesson) => h('li', null, h('button', {
-      class: 'fs-lesson' + (map[String(lesson.lesson_number)] ? ' done' : ''),
-      type: 'button',
-      onclick: () => { Snd.stop(); location.hash = lessonHash(group, lesson, flowFor(lesson)[0].id); }
-    },
-      h('span', { class: 'fs-day' }, lesson.label || ('Lesson ' + lesson.lesson_number)),
-      h('span', { class: 'fs-line' }, lessonLine(lesson)))));
-    if (lessons.some((lesson) => lesson.mastery_check)) {
-      cards.push(h('li', null, h('button', {
-        class: 'fs-lesson' + (checkMap()[programId(group)] ? ' done' : ''),
-        type: 'button',
-        onclick: () => { Snd.stop(); location.hash = '#/foundation/letters/' + group.id + '/check'; }
-      },
-        h('span', { class: 'fs-day' }, 'Team check'),
-        h('span', { class: 'fs-line' }, 'Plain letters only. Show what you know.'))));
-    }
-    app.append(h('div', { class: 'screen trailscreen unitpage u5menu llpage fs-group' },
+    const teach = teamTeacher(group) || {};
+    const games = gamesFor(group).map((game) => ({ title: game.title, href: '#/foundation/letters/' + group.id + '/' + game.id }));
+    if (lessons.some((lesson) => lesson.mastery_check)) games.push({ title: 'Team check', href: '#/foundation/letters/' + group.id + '/check' });
+    app.append(h('div', { class: 'screen trailscreen unitpage u5menu llpage fs-group stepage' },
       h('header', { class: 'uA-top' },
+        IR.ui.homeButton(),
         h('button', { class: 'back homebtn', type: 'button', onclick: () => { Snd.stop(); location.hash = '#/foundation'; } }, icon('back'), h('span', null, 'Foundation')),
         h('h1', { class: 'uA-title' }, 'Meet the Team'),
         IR.ui.gearButton()),
-      IR.modeBar(h('main', { class: 'llmain' },
-        h('p', { class: 'llask' }, 'Team ' + group.n + ', ' + group.letters.join(', ') + '. Tap the name, then the sound three times.'),
-        overview,
-        h('button', { class: 'btn big primary fs-slidebtn', type: 'button', onclick: () => startLetters(group) }, 'One letter at a time'),
-        h('ol', { class: 'fs-lessons' }, ...cards)), teamTeacher(group))));
+      IR.modeBar({
+        lesson: [{ title: 'One letter at a time', go: () => startLetters(group) }],
+        games: games,
+        slides: teach.slides,
+        files: teach.files
+      })));
     if (IR.teach) IR.teach.sync();
   }
 
@@ -1971,8 +1957,8 @@
   function teamTeacher(group) {
     if (!SLIDES[group.id]) return null;
     const files = group.id === 'g1'
-      ? [{ label: 'Team 1 Quick Sounds', href: 'foundation/printables/Team1_Quick_Sounds.pdf' }]
-      : [{ label: 'Team 2 Quick Sounds', href: 'foundation/printables/Team2_Quick_Sounds.pdf' }];
+      ? [{ title: 'Team 1 Quick Sounds', href: 'foundation/printables/Team1_Quick_Sounds.pdf' }]
+      : [{ title: 'Team 2 Quick Sounds', href: 'foundation/printables/Team2_Quick_Sounds.pdf' }];
     return { slides: '#/foundation/slides/' + group.id, files: files };
   }
   function pdfLink(label, href) {
