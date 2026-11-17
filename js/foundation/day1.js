@@ -25,16 +25,16 @@
     { id: 'link', title: 'Link Arms' }
   ];
   const GAMES = [
-    { id: 'pop', title: 'Sound Pop', icon: ASA },
-    { id: 'feed', title: 'Feed the Friend', icon: MANNY },
-    { id: 'catch', title: 'Beginning Sound Catch', icon: 'foundation/img/objects/apple.jpg' },
-    { id: 'hunt', title: 'Letter Hunt', icon: ASA },
-    { id: 'build', title: 'Build It', icon: LINK },
-    { id: 'ears', title: 'Ears Only Blend', icon: AM },
-    { id: 'flash', title: 'Quick Flash', icon: MANNY },
-    { id: 'match', title: 'Read and Match', icon: AM },
-    { id: 'sound', title: 'Sound Match', icon: 'foundation/img/objects/mango.jpg' },
-    { id: 'sort', title: 'Sort the Sound', icon: 'img/refresh_mop.jpg' }
+    { id: 'pop', title: 'Sound Pop', icon: 'foundation/img/games/pop.jpg' },
+    { id: 'feed', title: 'Feed the Friend', icon: 'foundation/img/games/feed.jpg' },
+    { id: 'catch', title: 'Beginning Sound Catch', icon: 'foundation/img/games/catch.jpg' },
+    { id: 'hunt', title: 'Letter Hunt', icon: 'foundation/img/games/hunt.jpg' },
+    { id: 'build', title: 'Build It', icon: 'foundation/img/games/build.jpg' },
+    { id: 'ears', title: 'Ears Only Blend', icon: 'foundation/img/games/ears.jpg' },
+    { id: 'flash', title: 'Quick Flash', icon: 'foundation/img/games/flash.jpg' },
+    { id: 'match', title: 'Read and Match', icon: 'foundation/img/games/match.jpg' },
+    { id: 'sound', title: 'Sound Match', icon: 'foundation/img/games/sound.jpg' },
+    { id: 'sort', title: 'Sort the Sound', icon: 'foundation/img/games/sort.jpg' }
   ];
 
   function say(text) {
