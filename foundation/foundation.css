@@ -214,6 +214,29 @@ html.teach .llist .u5name,html.teach .llplay .u5name{font-size:32px}
 .ll-day1 .ll1heart,.ll-day1 .ll1read{display:flex;flex-direction:column;align-items:center;justify-content:center;background:#F28C00;color:#fff;border-color:#C95A10}
 .ll-day1 .ll1heart span{font-size:1.1rem;font-weight:700}
 .ll-day1 .btn.primary,.ll1end .btn.primary{background:#F28C00;border-color:#C95A10;box-shadow:0 4px 0 #C95A10;color:#fff}
+.ll1menu{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.7rem;width:100%;max-width:72rem}
+.ll1game{min-height:6.2rem;padding:.4rem;border:3px solid #C95A10;border-radius:1.1rem;background:#fff;box-shadow:0 4px 0 #C95A10;font-family:Andika,sans-serif;font-size:clamp(1.15rem,2.4vh,1.7rem);font-weight:700;color:#2B2540;cursor:pointer}
+.ll1bubbles{display:flex;flex-wrap:wrap;justify-content:center;gap:1rem;width:100%}
+.ll1bubble{width:clamp(6.2rem,20vh,11rem);height:clamp(6.2rem,20vh,11rem);border-radius:50%;border:4px solid #0E7C7C;background:#E4F6F6;font-family:Andika,sans-serif;font-size:clamp(2.4rem,6vh,4rem);font-weight:700;color:#2B2540;cursor:pointer}
+.ll1bubble.popped{opacity:.3}
+.ll1friend{flex:1;min-height:16rem;border:3px solid #C95A10;border-radius:1.2rem;background:#fff;box-shadow:0 4px 0 #C95A10;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.2rem;cursor:pointer;padding:.4rem}
+.ll1friend img{width:78%;height:auto;max-height:28vh;object-fit:contain}
+.ll1friend b{font-size:clamp(2rem,5vh,3.2rem)}
+.ll1beach{position:relative;width:min(46rem,100%);height:min(48vh,24rem);border-radius:1.2rem;background:linear-gradient(#9FD4F2,#FFF6E3 52%,#E7C48A)}
+.ll1hunt{position:absolute;width:clamp(3.6rem,10vh,5.2rem);height:clamp(3.6rem,10vh,5.2rem);margin-left:-1.8rem;margin-top:-1.8rem;border-radius:50%;border:3px solid #C95A10;background:#fff;font-family:Andika,sans-serif;font-size:2rem;font-weight:700;cursor:pointer}
+.ll1hunt.lit{background:#F28C00;color:#fff}
+.ll1flash{margin:0;font-size:clamp(4rem,14vh,8rem);font-weight:700}
+.ll1meter{width:min(22rem,80%);height:.7rem;border-radius:1rem;background:#EADFC3;overflow:hidden}
+.ll1meter i{display:block;height:100%;width:0;background:#F28C00;transition:width 4s linear}
+.ll1celebrate{display:flex;flex-direction:column;align-items:center;gap:.35rem}
+.ll1celebrate img{width:5rem;height:auto}
+.ll1cap,.ll1readline{margin:0;font-size:2.2rem;font-weight:700}
+@media (max-width:700px){.ll1menu{grid-template-columns:1fr 1fr}.ll1friend{min-height:11rem}}
+@media (min-width:1600px){
+  .ll-day1 .ll1top h1{font-size:2rem}
+  .ll1game{min-height:8rem;font-size:1.8rem}
+  .ll-day1 .ll1card{min-height:9rem}
+}
 .fs-meet{display:flex;gap:.6rem;justify-content:center;flex-wrap:wrap}
 .fs-meetone{display:flex;flex-direction:column;align-items:center;gap:.2rem}
 .llrow{display:flex;gap:.4rem;justify-content:center;flex-wrap:wrap}
