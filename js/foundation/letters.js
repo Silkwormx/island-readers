@@ -1703,7 +1703,7 @@
       { n: 7, x: 52, y: 84 }
     ];
     const art = h('img', { class: 'trailmap-art', src: 'img/trail/trail_map.webp', alt: '' });
-    const frame = h('div', { class: 'trailmap fs-trailmap' }, art);
+    const frame = h('div', { class: 'trailmap fs-trailmap', style: 'aspect-ratio:720 / 520' }, art);
     const closeTips = () => { frame.querySelectorAll('.trailpinwrap.tipopen').forEach((el) => el.classList.remove('tipopen')); };
     const pins = spots.map((spot) => {
       const group = GROUPS[spot.n - 1];
@@ -1749,7 +1749,19 @@
   function foundationPage(app) {
     IR.resetSideGroup('foundation');
     IR.newScreen();
-    const trail = foundationTrail();
+    const hereTeam = nextUpGroup();
+    const trailBtn = h('button', {
+      class: 'btn big primary trailgo fs-trailbtn',
+      type: 'button',
+      onclick: () => {
+        Snd.stop();
+        if (IR.openMapPopup) IR.openMapPopup({ title: 'Teams', fill: () => [foundationTrail()] });
+      }
+    }, 'Trail Map');
+    const trailCard = h('section', { class: 'fs-trailcard' },
+      h('h2', null, 'Trail Map'),
+      h('p', null, hereTeam ? ('You are here: Team ' + hereTeam.n) : 'Teams'),
+      trailBtn);
     const sideBtn = (label, go) => h('button', { class: 'btn big fs-sidebtn', type: 'button', onclick: go }, label);
     const banner = h('header', { class: 'hbanner' },
       h('h1', null, h('a', { class: 'fs-titlelink', href: '#/home' }, 'Foundation Skills')),
@@ -1772,7 +1784,7 @@
         banner,
         h('div', { class: 'homelay' },
           h('div', { class: 'homeside' }, homeBtn, hero, aboutOrder(), materials),
-          h('div', { class: 'bellslot' }, trail)))));
+          h('div', { class: 'bellslot' }, trailCard)))));
     if (IR.teach) IR.teach.sync();
   }
 

@@ -308,8 +308,8 @@ html.teach .llist .u5name,html.teach .llplay .u5name{font-size:32px}
 .fs-home .btn.primary.fs-continue,.fs-home .btn.primary.fs-slidebtn{width:100%;background:#F28C00;border-color:#C95A10;box-shadow:0 4px 0 #C95A10;color:#fff}
 .fs-home .bellslot,.fs-home .fs-trail{width:100%;align-self:stretch}
 .fs-home .fs-trail{max-width:34rem;margin:0 auto}
-.fs-home .fs-trailmap{aspect-ratio:720/520;background:#d7eef6}
-.fs-home .fs-trailmap .trailmap-art{object-fit:cover;object-position:center 6%}
+.fs-trailmap{aspect-ratio:720/520;background:#d7eef6}
+.fs-trailmap .trailmap-art{object-fit:cover;object-position:center 6%}
 .fs-home .fs-trailock{position:absolute;left:calc(100% + .35rem);top:50%;transform:translateY(-50%);width:auto;height:auto;min-width:0;min-height:0;padding:.12rem .4rem;border:0;border-radius:.55rem;background:#6A6256;color:#fff;display:inline-flex;align-items:center;gap:.2rem;font-family:Andika,sans-serif;font-weight:700;font-size:.72rem;line-height:1.2;white-space:nowrap;pointer-events:none}
 .fs-home .fs-trailock .ico{width:.85rem;height:.85rem}
 .fs-home .fs-trailock.flip,.fs-home .heretag.flip{left:auto;right:calc(100% + .35rem)}

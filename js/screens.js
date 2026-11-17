@@ -334,21 +334,11 @@
       extraClass: 'about-drop',
       fill(body) { aboutNodes().forEach((node) => body.append(node)); }
     });
-    const trailDrop = IR.sideDrop({
-      group: 'home',
-      label: 'Trail Map and Placement Test',
-      ico: 'map',
-      fill(body) {
-        const place = trailPlace();
-        body.append(h('button', { class: 'drop-link', type: 'button', onclick: () => { Snd.stop(); location.hash = '#/trail'; } }, 'Open the Trail Map'));
-        body.append(h('button', { class: 'drop-link', type: 'button', onclick: () => { Snd.stop(); location.hash = '#/placement'; } }, 'Take the Placement Test'));
-        for (let n = 1; n <= 22; n++) {
-          const status = unitStatus(n, place);
-          body.append(h('button', { class: 'drop-link', type: 'button', onclick: () => openTrailBell(n) }, 'Unit ' + n + '. ' + UNIT_NAMES[n] + '. ' + status));
-        }
-        body.append(h('p', { class: 'drop-soon' }, 'Golden Bell coming soon'));
-      }
-    });
+    const trailBtn = h('button', {
+      class: 'hometab',
+      type: 'button',
+      onclick: () => { Snd.stop(); openTrailMapPopup(); }
+    }, h('span', { class: 'hometab-ico', 'aria-hidden': 'true' }, icon('map')), h('span', { class: 'hometab-name' }, 'Trail Map'));
     const sightDrop = IR.sideDrop({
       group: 'home',
       label: 'Sight Word Practice',
@@ -361,7 +351,7 @@
       }
     });
     const tabs = h('nav', { class: 'hometabs', 'aria-label': 'More places' },
-      trailDrop, sightDrop, tab('#/trail', 'Trail Map', 'map'), tab('#/find', 'Find It', 'search'));
+      trailBtn, sightDrop, tab('#/find', 'Find It', 'search'));
     /* Nov 6 2026: full-width home feature (approved banyan scene), then About + the hero beside the unit grid */
     const banner = h('header', { class: 'hbanner' }, h('h1', null, 'Island Readers'),
       h('div', { class: 'grownwrap' }, h('span', { class: 'grownlab' }, 'Parent and Teacher Materials'), IR.ui.gearButton()));
@@ -1161,16 +1151,11 @@
         open();
       });
       const isHere = mark.kind === 'unit' && mark.n === here;
-      const hereTag = isHere ? h('span', { class: 'heretag', 'aria-hidden': 'true' }, 'You are here') : null;
-      const wrap = h('div', { class: 'trailpinwrap' + (isHere ? ' here' : ''), style: style }, btn, tip, hereTag);
+      const coming = mark.kind === 'unit' && unitStatus(mark.n, place) === 'Coming soon';
+      const hereTag = isHere ? h('span', { class: 'heretag' + (mark.x > 78 ? ' flip' : ''), 'aria-hidden': 'true' }, 'You are here') : null;
+      const lock = coming ? h('span', { class: 'lockbadge trailock' + (mark.x > 78 ? ' flip' : '') }, icon('lock'), h('span', null, 'Locked')) : null;
+      const wrap = h('div', { class: 'trailpinwrap' + (isHere ? ' here' : ''), style: style }, btn, tip, hereTag, lock);
       return wrap;
-    };
-    const listItem = (mark) => {
-      if (mark.kind === 'finale') return h('li', null, h('button', { type: 'button', onclick: () => { Snd.stop(); toast('Golden Bell is coming soon.'); } }, 'Golden Bell'));
-      const name = UNIT_NAMES[mark.n];
-      const status = unitStatus(mark.n, place);
-      const label = 'Unit ' + mark.n + '. ' + name + '. ' + status + '.';
-      return h('li', null, h('button', { type: 'button', class: mark.n === here ? 'here' : '', 'aria-label': label, onclick: () => openTrailBell(mark.n) }, h('b', null, 'Unit ' + mark.n), h('span', null, name), place.finished[mark.n] ? h('span', { class: 'pindone', 'aria-hidden': 'true' }, icon('check')) : null));
     };
     if (IR._trailPointer) document.removeEventListener('pointerdown', IR._trailPointer, true);
     IR._trailPointer = (e) => { pointer = e.pointerType || 'mouse'; if (!e.target.closest('.trailpinwrap')) closeTips(); };
@@ -1179,10 +1164,89 @@
       h('div', { class: 'gtop' }, back),
       h('h1', null, 'Trail Map'),
       test,
-      h('div', { class: 'trailstage' }, frame, h('div', { class: 'trailpins' }, ...TRAIL_MAP.marks.map(pin))),
-      h('h2', null, 'Every bell'),
-      h('ol', { class: 'traillist' }, ...TRAIL_MAP.marks.map(listItem)))));
+      h('div', { class: 'trailstage' }, frame, h('div', { class: 'trailpins' }, ...TRAIL_MAP.marks.map(pin))))));
   }
+  function unitTrailStage() {
+    const place = trailPlace();
+    const here = place.here;
+    let pointer = 'mouse';
+    const art = h('img', { class: 'trailmap-art', src: TRAIL_MAP.src, alt: '' });
+    const frame = h('div', { class: 'trailmap', style: 'aspect-ratio:' + TRAIL_MAP.width + ' / ' + TRAIL_MAP.height }, art);
+    const closeTips = () => { stage.querySelectorAll('.trailpinwrap.tipopen').forEach((el) => el.classList.remove('tipopen')); };
+    const touchNow = () => pointer === 'touch' || (window.matchMedia && matchMedia('(hover: none) and (pointer: coarse)').matches);
+    const pins = TRAIL_MAP.marks.map((mark) => {
+      const style = 'left:' + mark.x + '%;top:' + mark.y + '%';
+      const tipId = 'poptip-' + (mark.kind === 'unit' ? mark.n : mark.kind);
+      let title = 'Golden Bell';
+      let lines = [h('span', { class: 'tipmeta' }, 'The end of the path. Coming soon.')];
+      let open = () => { Snd.stop(); toast('Golden Bell is coming soon.'); };
+      let pinClass = 'trailpin finale';
+      let bits = [h('span', { class: 'pinstar', 'aria-hidden': 'true' }, icon('star'))];
+      let label = 'Golden Bell. The end of the path. Coming soon.';
+      let pinStyle = '';
+      let coming = false;
+      if (mark.kind === 'unit') {
+        const meta = UNIT_META[mark.n];
+        const status = unitStatus(mark.n, place);
+        const hex = UNIT_BELL[mark.n] === 'rainbow' ? '' : BELL_HEX[UNIT_BELL[mark.n]];
+        title = 'Unit ' + mark.n;
+        coming = status === 'Coming soon';
+        lines = [h('span', { class: 'tipskill' }, UNIT_NAMES[mark.n]), h('span', { class: 'tipsounds' }, meta[0]), h('span', { class: 'tipmeta' }, meta[1] + (meta[1] === 1 ? ' lesson' : ' lessons') + ' \u00b7 ' + status)];
+        open = () => openTrailBell(mark.n);
+        pinClass = 'trailpin' + (mark.n === here ? ' here' : '') + (place.finished[mark.n] ? ' done' : '') + (UNIT_BELL[mark.n] === 'rainbow' ? ' rainbow' : '');
+        bits = [h('span', { class: 'pinnum' + (mark.n > 9 ? ' pinnum2' : '') }, String(mark.n)), place.finished[mark.n] ? h('span', { class: 'pindone', 'aria-hidden': 'true' }, icon('check')) : null];
+        label = 'Unit ' + mark.n + '. ' + UNIT_NAMES[mark.n] + '. ' + status + '.';
+        if (hex) pinStyle = 'background:' + hex + ';color:' + bellInk(hex);
+      }
+      const go = h('button', { class: 'tipgo', type: 'button' }, 'Open');
+      const tip = h('div', { class: 'trailtip' + (mark.y < 18 ? ' below' : ''), id: tipId, role: 'tooltip' }, h('b', null, title), ...lines, go);
+      const btn = h('button', { class: pinClass, type: 'button', style: pinStyle, 'aria-label': label, 'aria-describedby': tipId }, ...bits);
+      const isHere = mark.kind === 'unit' && mark.n === here;
+      const hereTag = isHere ? h('span', { class: 'heretag' + (mark.x > 78 ? ' flip' : ''), 'aria-hidden': 'true' }, 'You are here') : null;
+      const lock = coming ? h('span', { class: 'lockbadge trailock' + (mark.x > 78 ? ' flip' : '') }, icon('lock'), h('span', null, 'Locked')) : null;
+      const wrap = h('div', { class: 'trailpinwrap' + (isHere ? ' here' : ''), style: style }, btn, tip, hereTag, lock);
+      go.addEventListener('click', (e) => { e.stopPropagation(); open(); });
+      btn.addEventListener('click', () => {
+        if (touchNow() && !wrap.classList.contains('tipopen')) { closeTips(); wrap.classList.add('tipopen'); return; }
+        open();
+      });
+      return wrap;
+    });
+    const stage = h('div', { class: 'trailstage' }, frame, h('div', { class: 'trailpins' }, ...pins));
+    stage.addEventListener('pointerdown', (e) => { pointer = e.pointerType || 'mouse'; });
+    return stage;
+  }
+  function openTrailMapPopup() {
+    IR.openMapPopup({
+      title: 'Trail Map',
+      fill(close) {
+        return [
+          h('a', { class: 'btn big primary trailgo', href: '#/placement', onclick: () => { Snd.stop(); close(); } }, 'Take the Placement Test'),
+          unitTrailStage()
+        ];
+      }
+    });
+  }
+  IR.openMapPopup = function (opts) {
+    opts = opts || {};
+    const root = modalRoot;
+    function close() {
+      root.innerHTML = '';
+      document.removeEventListener('keydown', onKey);
+    }
+    function onKey(e) { if (e.key === 'Escape') close(); }
+    const x = h('button', { class: 'trailpop-x', type: 'button', 'aria-label': 'Close', onclick: close }, '\u00d7');
+    const scrim = h('div', { class: 'trailpop-scrim' });
+    const box = h('div', { class: 'trailpop', role: 'dialog', 'aria-modal': 'true', 'aria-label': opts.title || 'Trail Map' },
+      x,
+      h('div', { class: 'trailpop-body' }, ...(opts.fill ? opts.fill(close) : [])));
+    scrim.addEventListener('click', (e) => { if (e.target === scrim) close(); });
+    scrim.append(box);
+    root.innerHTML = '';
+    root.append(scrim);
+    document.addEventListener('keydown', onKey);
+    x.focus();
+  };
   function findCatalog() {
     const skills = skillCatalog();
     const bag = (id) => ((skills.filter((s) => s.id === id)[0] || {}).items || []).filter((it) => it.href);
