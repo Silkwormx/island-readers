@@ -566,7 +566,7 @@
   function modeBar(plan) {
     plan = plan || {};
     return h('div', { class: 'modebar' },
-      h('p', { class: 'stepnote' }, 'Kids watch the lesson, then play the games.'),
+      h('p', { class: 'stepnote' }, 'Watch the lesson, then play.'),
       plan.before || null,
       h('div', { class: 'stepflow' },
         plan.choose ? null : stepSection(1, 'Lesson', plan.lesson || []),

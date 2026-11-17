@@ -41,7 +41,7 @@ p{margin:.4em 0}
 .modetab .ico svg path[stroke]{stroke:currentColor!important}
 .llpage .modebar-tabs{flex:none}
 .llpage .modepane{display:flex;flex-direction:column;flex:1;min-height:0}
-.stepnote{max-width:32rem;margin:1.15rem auto .2rem;padding:0 1.2rem;text-align:center;font-size:1.35rem;font-weight:700;line-height:1.35;color:#2B2540}
+.stepnote{max-width:100%;margin:1.15rem auto .2rem;padding:0 1.2rem;text-align:center;font-size:1.35rem;font-weight:700;line-height:1.2;color:#2B2540;white-space:nowrap}
 .stepflow{display:flex;flex-direction:column;gap:1.6rem;width:min(100%,68rem);margin:1.15rem auto 2.6rem;padding:0 1.2rem}
 .stepblock{display:flex;flex-direction:column;gap:.85rem}
 .stephead{display:flex;align-items:center;gap:.85rem}
@@ -80,7 +80,7 @@ p{margin:.4em 0}
 .teachpop[hidden]{display:none!important}
 .teachstep{display:flex;align-items:center;gap:.45rem;margin:.45rem 0 .15rem;color:#6A6256;font-weight:700;font-size:.95rem}
 .teachstep span{display:flex;align-items:center;justify-content:center;width:1.35rem;height:1.35rem;border-radius:.35rem;background:#E7DFD0;color:#5c5648;font-size:.8rem}
-.teachlink{display:flex;align-items:center;width:100%;min-height:2.4rem;margin-top:.3rem;padding:.3rem .6rem;border:2px solid #E7DFD0;border-radius:.65rem;background:#fff;color:#5c5648;font:inherit;font-weight:700;font-size:.95rem;text-align:left;text-decoration:none;cursor:pointer}
+.teachlink{display:flex;align-items:center;justify-content:center;width:100%;min-height:2.5rem;margin-top:.3rem;padding:.4rem .55rem;border:2px solid #E7DFD0;border-radius:.65rem;background:#fff;color:#5c5648;font:inherit;font-weight:700;font-size:.92rem;line-height:1.2;text-align:center;text-wrap:balance;white-space:normal;text-decoration:none;cursor:pointer}
 .teachsoon{margin:.15rem 0 .2rem;color:#8A8175;font-size:.85rem;font-weight:700}
 .stepage{max-width:100%}
 @media (max-width:700px){.teachcorner{order:-1;flex:1 0 100%;display:flex;justify-content:flex-end;margin-left:0;width:100%}}
