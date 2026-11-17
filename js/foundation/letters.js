@@ -1947,21 +1947,21 @@
       file: 'foundation/slides/Learn_the_Letters_Team1.pdf',
       days: [
         { label: 'Day 1a', page: 3 },
-        { label: 'Day 1b', page: 20 },
-        { label: 'Day 2', page: 42 },
-        { label: 'Day 3', page: 76 },
-        { label: 'Day 4', page: 106 },
-        { label: 'Team check', page: 130 }
+        { label: 'Day 1b', page: 21 },
+        { label: 'Day 2', page: 44 },
+        { label: 'Day 3', page: 79 },
+        { label: 'Day 4', page: 110 },
+        { label: 'Team check', page: 135 }
       ]
     },
     g2: {
       file: 'foundation/slides/Learn_the_Letters_Team2.pdf',
       days: [
         { label: 'Day 1', page: 3 },
-        { label: 'Day 2', page: 27 },
-        { label: 'Day 3', page: 51 },
-        { label: 'Day 4', page: 90 },
-        { label: 'Team check', page: 124 }
+        { label: 'Day 2', page: 28 },
+        { label: 'Day 3', page: 53 },
+        { label: 'Day 4', page: 93 },
+        { label: 'Team check', page: 128 }
       ]
     }
   };
@@ -1972,6 +1972,7 @@
   function pdfLink(label, href) {
     return h('a', { class: 'drop-link', href: href, target: '_blank', rel: 'noopener' }, label);
   }
+  const SCORE_TRACKER = '';
   function teacherSlides() {
     return IR.sideDrop({
       group: 'foundation',
@@ -2011,6 +2012,10 @@
       label: 'Printables',
       tabClass: 'btn big fs-sidebtn',
       fill(body) {
+        body.append(
+          pdfLink('Team 1 Quick Sounds', 'foundation/printables/Team1_Quick_Sounds.pdf'),
+          pdfLink('Team 2 Quick Sounds', 'foundation/printables/Team2_Quick_Sounds.pdf'));
+        if (SCORE_TRACKER) body.append(h('a', { class: 'drop-link', href: SCORE_TRACKER, target: '_blank', rel: 'noopener' }, 'Score Tracker'));
         body.append(
           pdfLink('ng daily practice sheets', 'teachers/ng/Lesson3.1_ng_Daily_Practice_Sheets.pdf'),
           pdfLink('nk daily practice sheets', 'teachers/nk/Lesson3.2_nk_Daily_Practice_Sheets.pdf'),
