@@ -1686,33 +1686,70 @@
     });
     return seen.slice(0, 4).join(', ');
   }
+  function teamDone(group) {
+    if (teamHas(group, 'read')) return true;
+    const lessons = lessonsOf(group);
+    return lessons.length > 0 && lessons.every((lesson) => !!doneMap()[String(lesson.lesson_number)]);
+  }
+  function foundationTrail() {
+    const here = nextUpGroup();
+    const spots = [
+      { n: 1, x: 34, y: 20 },
+      { n: 2, x: 58, y: 16 },
+      { n: 3, x: 76, y: 30 },
+      { n: 4, x: 58, y: 44 },
+      { n: 5, x: 36, y: 52 },
+      { n: 6, x: 28, y: 70 },
+      { n: 7, x: 52, y: 84 }
+    ];
+    const art = h('img', { class: 'trailmap-art', src: 'img/trail/trail_map.webp', alt: '' });
+    const frame = h('div', { class: 'trailmap fs-trailmap' }, art);
+    const closeTips = () => { frame.querySelectorAll('.trailpinwrap.tipopen').forEach((el) => el.classList.remove('tipopen')); };
+    const pins = spots.map((spot) => {
+      const group = GROUPS[spot.n - 1];
+      const open = groupOpen(group);
+      const done = teamDone(group);
+      const isHere = !!(here && here.id === group.id);
+      const letters = group.letters.join(' ');
+      const status = done ? 'Done' : isHere ? 'You are here' : open ? 'Open' : 'Locked';
+      const tipId = 'fstrail-' + group.id;
+      const go = h('button', { class: 'tipgo', type: 'button' }, open ? 'Open' : 'Locked');
+      const tip = h('div', { class: 'trailtip' + (spot.y < 24 ? ' below' : ''), id: tipId, role: 'tooltip' },
+        h('b', null, 'Team ' + group.n),
+        h('span', { class: 'tipsounds' }, letters),
+        h('span', { class: 'tipmeta' }, status),
+        open ? go : null);
+      const btn = h('button', {
+        class: 'trailpin' + (isHere ? ' here' : '') + (done ? ' done' : '') + (open ? '' : ' locked'),
+        type: 'button',
+        'aria-label': 'Team ' + group.n + '. ' + letters + '. ' + status + '.',
+        'aria-describedby': tipId
+      }, h('span', { class: 'pinnum' }, String(group.n)), done ? h('span', { class: 'pindone', 'aria-hidden': 'true' }, icon('check')) : null);
+      const openTeam = () => {
+        if (!open) { wrap.classList.add('tipopen'); return; }
+        Snd.stop();
+        location.hash = '#/foundation/letters/' + group.id;
+      };
+      go.addEventListener('click', (e) => { e.stopPropagation(); openTeam(); });
+      btn.addEventListener('click', () => {
+        const touch = window.matchMedia && matchMedia('(hover: none) and (pointer: coarse)').matches;
+        if (touch && !wrap.classList.contains('tipopen')) { closeTips(); wrap.classList.add('tipopen'); return; }
+        openTeam();
+      });
+      const hereTag = isHere ? h('span', { class: 'heretag' + (spot.x > 64 ? ' flip' : ''), 'aria-hidden': 'true' }, 'You are here') : null;
+      const lock = open ? null : h('span', { class: 'lockbadge fs-trailock' + (spot.x > 64 ? ' flip' : '') }, icon('lock'), h('span', null, 'Locked'));
+      const wrap = h('div', { class: 'trailpinwrap' + (isHere ? ' here' : ''), style: 'left:' + spot.x + '%;top:' + spot.y + '%' }, btn, tip, hereTag, lock);
+      return wrap;
+    });
+    if (IR._fsTrailPointer) document.removeEventListener('pointerdown', IR._fsTrailPointer, true);
+    IR._fsTrailPointer = (e) => { if (!e.target.closest('.fs-trail')) closeTips(); };
+    document.addEventListener('pointerdown', IR._fsTrailPointer, true);
+    return h('div', { class: 'fs-trail trailstage' }, frame, h('div', { class: 'trailpins' }, ...pins));
+  }
   function foundationPage(app) {
     IR.resetSideGroup('foundation');
     IR.newScreen();
-    const up = nextUpGroup();
-    const cards = GROUPS.map((group) => {
-      const open = groupOpen(group);
-      const isNext = up && up.id === group.id;
-      const faces = group.letters.map((id) => {
-        const src = artUrl(id);
-        return src ? h('img', { src: src, alt: id }) : null;
-      });
-      const taught = sampleWords(group);
-      return h('button', {
-        class: 'tcard fs-groupcard' + (isNext ? ' t-current' : '') + (open ? '' : ' locked'),
-        type: 'button',
-        'aria-disabled': open ? 'false' : 'true',
-        'aria-label': 'Team ' + group.n + ': ' + group.letters.join(', ') + (taught ? '. Words: ' + taught : '') + '. Opens the lessons.',
-        onclick: () => { if (open) { Snd.stop(); location.hash = '#/foundation/letters/' + group.id; } }
-      },
-        h('span', { class: 'tpic fs-setpic', style: 'grid-template-columns:repeat(' + (group.letters.length > 2 ? 2 : group.letters.length) + ',minmax(0,1fr))' }, ...faces,
-          isNext ? h('span', { class: 'herechip' }, 'Next up') : null),
-        open ? null : h('span', { class: 'lockbadge' }, icon('lock'), h('span', null, 'Locked')),
-        h('span', { class: 'tbody' },
-          h('span', { class: 'thead' }, h('b', { class: 'tnum' }, 'Team ' + group.n)),
-          h('span', { class: 'tname' }, group.letters.join(', ')),
-          h('span', { class: 'tsnd' }, taught ? ('Words: ' + taught) : (open ? '' : 'After the last check'))));
-    });
+    const trail = foundationTrail();
     const sideBtn = (label, go) => h('button', { class: 'btn big fs-sidebtn', type: 'button', onclick: go }, label);
     const banner = h('header', { class: 'hbanner' },
       h('h1', null, h('a', { class: 'fs-titlelink', href: '#/home' }, 'Foundation Skills')),
@@ -1735,7 +1772,7 @@
         banner,
         h('div', { class: 'homelay' },
           h('div', { class: 'homeside' }, homeBtn, hero, aboutOrder(), materials),
-          h('div', { class: 'bellslot' }, h('div', { class: 'bellpath' }, h('div', { class: 'bellgrid' }, ...cards)))))));
+          h('div', { class: 'bellslot' }, trail)))));
     if (IR.teach) IR.teach.sync();
   }
 
