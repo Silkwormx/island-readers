@@ -64,6 +64,104 @@
     return { btn, list, stop };
   }
 
+  /* Back returns to the chooser. The box menu sits with Back and Home and jumps straight to a box. */
+  const CHOOSER = '#/practice/skills/sight';
+  function boxPlayed(n) {
+    const st = IR.S()['chest' + n];
+    return !!(st && st.plays && Object.keys(st.plays).some((id) => st.plays[id] > 0));
+  }
+  function boxMenu() {
+    const listId = 'boxmenu-' + N;
+    let open = false;
+    const btn = h('button', { class: 'boxdrop-btn', type: 'button', 'aria-haspopup': 'menu', 'aria-expanded': 'false', 'aria-controls': listId, 'aria-label': 'Box ' + N + '. Choose a treasure box.' },
+      h('span', { class: 'boxdrop-ico', html: IR.chestSVG(N, 'pick'), 'aria-hidden': 'true' }),
+      h('span', { class: 'boxdrop-name' }, 'Box ' + N),
+      h('span', { class: 'boxdrop-caret', 'aria-hidden': 'true' }, icon('next')));
+    const opts = [1, 2, 3, 4].map((n) => {
+      const words = (D['box' + n] || []).length;
+      const played = boxPlayed(n);
+      const opt = h('button', { class: 'boxdrop-opt' + (n === N ? ' is-current' : '') + (played ? ' played' : ''), type: 'button', role: 'menuitem', 'data-n': String(n), 'aria-current': n === N ? 'true' : 'false', 'aria-label': 'Box ' + n + '. ' + words + ' words. ' + (played ? 'Check.' : 'Open.') + (n === N ? ' Current.' : '') },
+        h('span', { class: 'boxdrop-ico', html: IR.chestSVG(n, 'opt'), 'aria-hidden': 'true' }),
+        h('span', { class: 'boxdrop-copy' }, h('span', { class: 'boxdrop-name' }, 'Box ' + n), h('span', { class: 'boxdrop-count' }, words + ' words')),
+        h('span', { class: 'boxdrop-mark' + (played ? ' is-check' : ' is-open'), 'aria-hidden': 'true' }, icon('check')));
+      opt.addEventListener('click', () => {
+        Snd.stop();
+        const href = '#/chest' + n;
+        if (location.hash === href) { setOpen(false); btn.focus(); return; }
+        location.hash = href;
+      });
+      return opt;
+    });
+    const list = h('div', { id: listId, class: 'boxdrop-list', role: 'menu', 'aria-label': 'Treasure boxes', hidden: true }, ...opts);
+    const wrap = h('div', { class: 'boxdrop' }, btn, list);
+    const buttons = () => [...list.querySelectorAll('[role="menuitem"]')];
+    function place() {
+      const r = btn.getBoundingClientRect();
+      const width = Math.min(360, window.innerWidth - 16);
+      let left = Math.max(8, Math.min(r.left, window.innerWidth - width - 8));
+      list.style.position = 'fixed';
+      list.style.width = width + 'px';
+      list.style.left = left + 'px';
+      list.style.right = 'auto';
+      const est = 300;
+      if (window.innerHeight - r.bottom < est && r.top > window.innerHeight - r.bottom) {
+        list.style.top = 'auto';
+        list.style.bottom = (window.innerHeight - r.top + 8) + 'px';
+      } else {
+        list.style.bottom = 'auto';
+        list.style.top = (r.bottom + 8) + 'px';
+      }
+    }
+    function setOpen(on) {
+      if (on === open) return;
+      open = on;
+      btn.setAttribute('aria-expanded', on ? 'true' : 'false');
+      list.hidden = !on;
+      wrap.classList.toggle('is-open', on);
+      if (on) {
+        place();
+        const cur = list.querySelector('[aria-current="true"]') || buttons()[0];
+        if (cur) cur.focus({ preventScroll: true });
+        requestAnimationFrame(place);
+      }
+    }
+    btn.addEventListener('click', () => setOpen(!open));
+    btn.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowDown' || e.key === 'ArrowUp') { e.preventDefault(); setOpen(true); }
+    });
+    list.addEventListener('keydown', (e) => {
+      const items = buttons();
+      const i = items.indexOf(document.activeElement);
+      if (e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); setOpen(false); btn.focus(); }
+      else if (e.key === 'ArrowDown') { e.preventDefault(); items[(i + 1) % items.length].focus(); }
+      else if (e.key === 'ArrowUp') { e.preventDefault(); items[(i - 1 + items.length) % items.length].focus(); }
+      else if (e.key === 'Home') { e.preventDefault(); items[0].focus(); }
+      else if (e.key === 'End') { e.preventDefault(); items[items.length - 1].focus(); }
+      else if (e.key === 'Tab') setOpen(false);
+    });
+    const onDoc = (e) => { if (open && !wrap.contains(e.target)) setOpen(false); };
+    const onKey = (e) => { if (open && e.key === 'Escape') { setOpen(false); btn.focus(); } };
+    const onResize = () => { if (open) place(); };
+    document.addEventListener('pointerdown', onDoc);
+    document.addEventListener('keydown', onKey);
+    window.addEventListener('resize', onResize);
+    document.addEventListener('scroll', onResize, true);
+    const mo = new MutationObserver(() => {
+      if (wrap.isConnected) return;
+      document.removeEventListener('pointerdown', onDoc);
+      document.removeEventListener('keydown', onKey);
+      window.removeEventListener('resize', onResize);
+      document.removeEventListener('scroll', onResize, true);
+      mo.disconnect();
+    });
+    mo.observe(document.body, { childList: true, subtree: true });
+    return wrap;
+  }
+  function chestNav() {
+    const back = IR.ui.backButton(CHOOSER);
+    back.setAttribute('aria-label', 'Back to the treasure boxes');
+    return h('div', { class: 'pagenav' }, back, IR.ui.homeButton(), boxMenu());
+  }
   /* shared screen frame: X (back to chest), title, Back/Next footer */
   function frame(app, { title, backHref, nextHref, backLabel, nextLabel, body, cls }) {
     const nav = h('div', { class: 'lesson-nav' },
@@ -71,7 +169,7 @@
       h('button', { class: 'btn big next', type: 'button', 'aria-label': nextLabel || 'Next', onclick: () => { Snd.stop(); location.hash = nextHref; } }, 'Next', icon('next')));
     const countEl = h('p', { class: 'qcount', 'aria-live': 'polite' }, '');
     const screen = h('div', { class: 'screen lessonscreen chestscreen ' + (cls || ''), style: '--c:#A9693B' },
-      h('header', { class: 'lesson-top' }, IR.ui.pageNav(P), h('h2', { class: 'acttitle chest-title' }, h('span', { class: 'chestmini', html: IR.chestSVG(N) }), title)), h('div', { class: 'stage' }, body), countEl, nav);
+      h('header', { class: 'lesson-top' }, chestNav(), h('h2', { class: 'acttitle chest-title' }, h('span', { class: 'chestmini', html: IR.chestSVG(N, 'mini') }), title)), h('div', { class: 'stage' }, body), countEl, nav);
     app.append(screen);
     screen._qcount = countEl;
   }
@@ -119,9 +217,9 @@
       h('span', { class: 'stxt' }, h('b', null, g.title), h('small', null, g.blurb)), h('span', { class: 'sside' }, h('span', { class: 'slabel' }, 'Play')))));
     const chips = h('div', { class: 'wordchips', 'aria-label': 'The ' + WORDS.length + ' words' }, ...WORDS.map((w) => { const b = wordCard(w, 'mini'); b.addEventListener('click', () => IR.sayWord(w)); return b; }));
     app.append(h('div', { class: 'screen trailscreen unitpage chestmenu' },
-      h('header', { class: 'top2' }, IR.ui.pageNav('#/home')),
+      h('header', { class: 'top2' }, chestNav()),
       h('div', { class: 'unitwrap' },
-        h('section', { class: 'unithero' }, h('div', { class: 'chestbig', html: IR.chestSVG(N) }), h('div', { class: 'ut-title' }, h('span', { class: 'ut-isle' }, 'Level ' + N + ' treasure'), h('h1', null, 'Treasure chest ' + N)),
+        h('section', { class: 'unithero' }, h('div', { class: 'chestbig', html: IR.chestSVG(N, 'hero') }), h('div', { class: 'ut-title' }, h('span', { class: 'ut-isle' }, 'Level ' + N + ' treasure'), h('h1', null, 'Treasure chest ' + N)),
           h('p', { class: 'small' }, WORDS.length + ' words. Play the games as often as you like. They never hold anything up.')),
         h('section', { class: 'ugrp activities' }, h('h2', { class: 'ugrp-t' }, icon('play'), 'Games', h('small', null, 'Play as often as you like')), h('ol', { class: 'stoplist' }, ...cards)),
         h('section', { class: 'ugrp' }, h('h2', { class: 'ugrp-t' }, 'The words', h('small', null, 'A star means a heart word you learned. Tap a word to hear it.')), chips)),

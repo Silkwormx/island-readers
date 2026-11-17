@@ -40,6 +40,31 @@ test('boxes 3 and 4 have 50 words, fill-in rounds, and every audio file', () => 
   assert.deepEqual(missing, []);
 });
 
+test('sight word chooser is an equal card grid and every chest can return to it', () => {
+  const screens = read('js/screens.js');
+  const chest = read('js/chest.js');
+  const css = read('styles.css');
+  const sight = screens.slice(screens.indexOf("if (key === 'sight')"), screens.indexOf("if (key === 'fluency')"));
+  assert.match(sight, /class: 'gchest sbox open'/);
+  assert.match(sight, /'#\/chest' \+ n/);
+  assert.match(sight, /class: 'chestlist boxgrid'/);
+  assert.match(sight, /Treasure Box /);
+  assert.match(sight, /words \+ ' words'/);
+  assert.match(sight, /icon\('check'\)/);
+  assert.equal(sight.includes('locked'), false);
+  assert.match(css, /\.boxgrid\.chestlist\{display:grid!important;grid-template-columns:repeat\(2,minmax\(0,1fr\)\)!important/);
+  assert.equal(/\.boxgrid\.chestlist\{grid-template-columns:repeat\(3/.test(css), false);
+  assert.equal(chest.includes('All Treasure Boxes'), false);
+  assert.match(chest, /#\/practice\/skills\/sight/);
+  assert.match(chest, /aria-haspopup': 'menu'/);
+  assert.match(chest, /aria-expanded/);
+  assert.match(chest, /e\.key === 'Escape'/);
+  assert.match(chest, /'#\/chest' \+ n/);
+  assert.match(chest, /chestNav\(\)/);
+  assert.match(chest, /id: 'flip'/);
+  assert.match(chest, /id: 'trace'/);
+});
+
 test('fluency page lists the stories that exist and drops the coming-soon line', () => {
   const screens = read('js/screens.js');
   const data = read('data.js');
