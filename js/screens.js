@@ -1475,30 +1475,15 @@
   function paintNav() {
     const old = document.querySelector('.appnav');
     if (old) old.remove();
-    const parts = crumbParts(location.hash || '#/home');
-    const bits = [];
-    parts.forEach((part, i) => {
-      if (i) bits.push(h('span', { class: 'crumbsep', 'aria-hidden': 'true' }, '>'));
-      bits.push(h('button', {
-        type: 'button',
-        class: i === parts.length - 1 ? 'now' : '',
-        onclick: () => { Snd.stop(); location.hash = part.href; }
-      }, part.label));
-    });
     const hsh = (location.hash || '#/home').split('?')[0];
-    const onHome = hsh === '#/home' || hsh === '#/' || hsh === '';
-    const controls = [];
-    if (!onHome) {
-      controls.push(h('button', {
-        class: 'back homebtn appnav-back',
-        type: 'button',
-        'aria-label': 'Back',
-        onclick: () => { Snd.stop(); location.hash = upHref(); }
-      }, icon('back'), h('span', null, 'Back')));
-    }
-    document.body.insertBefore(h('div', { class: 'appnav' },
-      ...controls,
-      h('nav', { class: 'crumb', 'aria-label': 'You are here' }, ...bits)), document.body.firstChild);
+    if (hsh === '#/home' || hsh === '#/' || hsh === '') return;
+    const back = h('button', {
+      class: 'back homebtn appnav-back',
+      type: 'button',
+      'aria-label': 'Back',
+      onclick: () => { Snd.stop(); location.hash = upHref(); }
+    }, icon('back'), h('span', null, 'Back'));
+    document.body.insertBefore(h('div', { class: 'appnav' }, back, homeButton()), document.body.firstChild);
   }
   document.addEventListener('click', (e) => {
     const b = e.target.closest && e.target.closest('.back, .xbtn');
