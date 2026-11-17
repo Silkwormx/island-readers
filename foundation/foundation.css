@@ -189,6 +189,31 @@ html.teach .llist .u5name,html.teach .llplay .u5name{font-size:32px}
 .fs-scene{margin:0;max-width:18rem;text-align:center}
 .fs-scene img{display:block;width:100%;height:auto;object-fit:contain}
 .fs-scene figcaption{margin:.35rem 0 0;font-family:Andika,sans-serif;font-size:1.6rem;font-weight:700}
+.ll-day1{background:#FFF8E7;overflow:hidden;font-family:Andika,sans-serif}
+.ll-day1 .ll1top{display:flex;align-items:center;gap:.4rem;padding:.4rem .6rem}
+.ll-day1 .ll1top h1{flex:1;margin:0;font-size:1.35rem;text-align:left}
+.ll-day1 .ll1face{width:2.4rem;height:2.4rem;object-fit:contain}
+.ll-day1 .stage{flex:1;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.6rem;overflow:hidden;padding:.4rem .8rem}
+.ll-day1 .ll1foot{flex:none;padding:.35rem .8rem .55rem}
+.ll-day1 .ll1bar{height:.5rem;border-width:2px}
+.ll-day1 .ll1bar i{background:#F28C00}
+.ll-day1 .ll1pair{display:flex;gap:.7rem;justify-content:center;width:100%;max-width:40rem}
+.ll-day1 .ll1card{flex:1;min-width:7rem;min-height:6.5rem;border:3px solid #C95A10;border-radius:1.2rem;background:#fff;box-shadow:0 4px 0 #C95A10;font-family:Andika,sans-serif;font-size:3rem;color:#2B2540;cursor:pointer}
+.ll-day1 .ll1card.lit{background:#FFE7B8}
+.ll-day1 .ll1card b{font-size:3.2rem}
+.ll-day1 .ll1letter{flex:1;display:flex;flex-direction:column;gap:.4rem;min-width:0}
+.ll-day1 .ll1name{width:100%;min-height:3.4rem;border:3px solid #2B2540;border-radius:1rem;background:#fff;font-family:Andika,sans-serif;font-size:1.15rem;font-weight:700;cursor:pointer}
+.ll-day1 .ll1name.lit{background:#FFF3D0}
+.ll-day1 .ll1sound,.ll-day1 .ll1mouth{background:#0E7C7C;color:#fff;border-radius:1rem;padding:.45rem .5rem .55rem;text-align:center}
+.ll-day1 .ll1sound p,.ll-day1 .ll1mouth p{margin:.1rem 0 .3rem;font-weight:700}
+.ll-day1 .ll1taps{display:flex;gap:.4rem;justify-content:center}
+.ll-day1 .ll1tap,.ll-day1 .ll1circle{width:3.2rem;height:3.2rem;border-radius:50%;border:3px solid #fff;background:transparent;color:#fff;font-family:Andika,sans-serif;font-size:1.3rem;font-weight:700;cursor:pointer}
+.ll-day1 .ll1tap.lit,.ll-day1 .ll1circle.lit{background:#fff;color:#0E7C7C}
+.ll-day1 .ll1built{margin:0;font-size:2.4rem;font-weight:700;min-height:2.6rem}
+.ll-day1 .ll1link,.ll-day1 .ll1pic img{width:min(16rem,70vw);height:auto;object-fit:contain}
+.ll-day1 .ll1heart,.ll-day1 .ll1read{display:flex;flex-direction:column;align-items:center;justify-content:center;background:#F28C00;color:#fff;border-color:#C95A10}
+.ll-day1 .ll1heart span{font-size:1.1rem;font-weight:700}
+.ll-day1 .btn.primary,.ll1end .btn.primary{background:#F28C00;border-color:#C95A10;box-shadow:0 4px 0 #C95A10;color:#fff}
 .fs-meet{display:flex;gap:.6rem;justify-content:center;flex-wrap:wrap}
 .fs-meetone{display:flex;flex-direction:column;align-items:center;gap:.2rem}
 .llrow{display:flex;gap:.4rem;justify-content:center;flex-wrap:wrap}
