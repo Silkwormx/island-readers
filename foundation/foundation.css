@@ -402,7 +402,16 @@ html.teach .llist .u5name,html.teach .llplay .u5name{font-size:32px}
 .ll-lessoncard .herechip{position:absolute;left:.55rem;top:.55rem}
 .llkid{height:100dvh;max-height:100dvh;overflow:hidden;display:flex;flex-direction:column;align-items:center;background:var(--cream);font-family:Andika,sans-serif}
 .llkid .uA-top{width:100%}
-.llkidprog{margin:0;font-weight:700;color:#C45C00}
+.llbar{width:100%;box-sizing:border-box;flex-wrap:nowrap}
+.llbar .uA-title{flex:1;text-align:center;white-space:nowrap}
+.llkidprog{margin:0;flex:none;white-space:nowrap;font-weight:700;color:#C45C00}
+.llkidnext{min-width:8.5rem;justify-content:center;text-align:center;background:#fff;color:#B04A00;border:3px solid #F28C00;box-shadow:0 4px 0 #F28C00}
+.llkidnext.ready{background:#F28C00;color:#fff;box-shadow:0 0 0 4px rgba(242,140,0,.28),0 4px 0 #C45C00}
+@media (max-width:700px){
+  .llbar{padding:.4rem .5rem;gap:.35rem}
+  .llbar .uA-title{font-size:1.2rem}
+  .llkidprog{font-size:.95rem}
+}
 .llkidbar{width:min(100% - 2rem,36rem);height:.7rem;margin-top:.45rem;border-radius:1rem;background:#E7D3A8;overflow:hidden}
 .llkidbar i{display:block;height:100%;background:#F28C00}
 .llkidhear{width:2.6rem;height:2.6rem;border-radius:50%;border:3px solid #F28C00;background:#fff;color:#F28C00;display:inline-flex;align-items:center;justify-content:center;flex:none;padding:0}
@@ -429,7 +438,5 @@ html.teach .llist .u5name,html.teach .llplay .u5name{font-size:32px}
 .llkidshells i{width:1.3rem;height:1rem;border-radius:1rem 1rem .4rem .4rem;background:#E4D6B4}
 .llkidshells i.on{background:#F28C00}
 .llkiddone{margin:0;font-size:2rem;font-weight:700;color:#C45C00;text-align:center}
-.llkidnav{padding:0 0 .8rem}
-.llkidnext{min-width:5rem;justify-content:center;text-align:center;background:#F28C00;border-color:#C45C00;color:#fff;box-shadow:0 4px 0 #C45C00}
-.llkidnext.ready{box-shadow:0 0 0 4px rgba(242,140,0,.35),0 4px 0 #C45C00}
+.llkidnav{width:100%;display:flex;justify-content:center;padding:0 0 .9rem}
 .llkidcheck{display:flex;flex-direction:column;align-items:center;gap:.6rem}

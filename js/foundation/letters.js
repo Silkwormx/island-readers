@@ -808,7 +808,7 @@
         h('b', { class: 'tname' }, game.title),
         game.done ? h('span', { class: 'llcardone' }, icon('check'), 'Done') : null))));
     app.append(h('div', { class: 'screen fs-team' },
-      h('header', { class: 'uA-top' },
+      h('header', { class: 'uA-top llbar' },
         IR.ui.pageNav('#/foundation/letters/' + group.id),
         h('h1', { class: 'uA-title' }, 'Games')),
       h('main', { class: 'fs-teammain' }, h('ol', { class: 'll-lessongrid ll-gamegrid' }, ...cards))));
@@ -1713,14 +1713,14 @@
     v: 'foundation/img/letters/v_vida_vine.jpg', z: 'foundation/img/letters/z_zuzu_zigzag_cloud.jpg'
   };
   const KID_STEPS = [
-    { id: 'hear', say: 'Tap the sound.' },
-    { id: 'find', say: 'Tap the letter.' },
-    { id: 'play', say: 'Pick a game.' },
-    { id: 'blend', say: 'Tap the letters.' },
-    { id: 'trace', say: 'Trace the letter.' },
-    { id: 'read', say: 'Tap a word.' },
-    { id: 'check', say: 'Tap the letter.' },
-    { id: 'done', say: 'You did it.' }
+    { id: 'hear', say: 'Tap the sound.', label: 'Hear' },
+    { id: 'find', say: 'Tap the letter.', label: 'Find' },
+    { id: 'play', say: 'Pick a game.', label: 'Play' },
+    { id: 'blend', say: 'Tap the letters.', label: 'Blend' },
+    { id: 'trace', say: 'Trace the letter.', label: 'Trace' },
+    { id: 'read', say: 'Tap a word.', label: 'Read' },
+    { id: 'check', say: 'Tap the letter.', label: 'Check' },
+    { id: 'done', say: 'You did it.', label: 'Done' }
   ];
   function letterArt(id) { return artUrl(id) || ART_FILE[id] || ''; }
   function pureSound(L) {
@@ -1821,7 +1821,8 @@
       words: [],
       foils: foilIds(id, ids),
       roundN: 4,
-      nextLabel: 'Back to the lesson',
+      lesson: true,
+      nextLabel: 'Next',
       after: '#/foundation/letters/' + group.id + '/lesson/' + id + '/play',
       onDone(gameId) {
         const map = playNote(group, id);
@@ -1892,12 +1893,13 @@
     }
     show();
   }
-  function paintPlay(stage, group, id) {
+  function paintPlay(stage, group, id, ready) {
     const played = playNote(group, id);
     const games = [{ id: 'pop', title: 'Sound Pop' }, { id: 'hunt', title: 'Letter Hunt' }];
+    const nextGame = games.filter((game) => !played[game.id])[0];
     const back = '#/foundation/letters/' + group.id + '/lesson/' + id + '/play';
     stage.append(h('div', { class: 'llkidgames' }, ...games.map((game) => h('button', {
-      class: 'tcard llkidgame' + (played[game.id] ? ' is-done' : ''),
+      class: 'tcard llkidgame' + (played[game.id] ? ' is-done' : '') + (nextGame && nextGame.id === game.id ? ' t-current' : ''),
       type: 'button',
       'aria-label': game.title,
       onclick: () => {
@@ -1906,6 +1908,7 @@
         IR.day1Play(root, game.id, lessonPack(group, id), back);
       }
     }, h('b', null, game.title), played[game.id] ? h('span', { class: 'llcardone' }, icon('check'), 'Done') : null))));
+    if (!nextGame) ready();
   }
   function paintBlend(stage, group, id, ready) {
     const words = lessonWordList(group, id);
@@ -2092,36 +2095,35 @@
     const index = KID_STEPS.indexOf(step);
     const base = '#/foundation/letters/' + group.id;
     const stage = h('main', { class: 'llkidstage' });
-    const next = h('button', { class: 'btn big next llkidnext', type: 'button', 'aria-label': 'Next' }, icon('next'));
+    const last = index >= KID_STEPS.length - 1;
+    const next = h('button', { class: 'btn big llkidnext', type: 'button', 'aria-label': last ? 'Done' : 'Next' }, last ? 'Done' : 'Next');
     function ready() { next.classList.add('ready'); }
     function go() {
       Snd.stop();
       try { speechSynthesis.cancel(); } catch (e) { /* quiet */ }
-      if (index >= KID_STEPS.length - 1) { location.hash = base; return; }
+      if (last) { location.hash = base; return; }
       location.hash = base + '/lesson/' + id + '/' + KID_STEPS[index + 1].id;
     }
     next.addEventListener('click', go);
     if (step.id === 'hear') paintHear(stage, L, ready);
     else if (step.id === 'find') paintFind(stage, group, id, ready);
-    else if (step.id === 'play') paintPlay(stage, group, id);
+    else if (step.id === 'play') paintPlay(stage, group, id, ready);
     else if (step.id === 'blend') paintBlend(stage, group, id, ready);
     else if (step.id === 'trace') paintTrace(stage, L, ready);
     else if (step.id === 'read') paintRead(stage, group, id, ready);
     else if (step.id === 'check') paintCheck(stage, group, id, ready);
     else paintCelebrate(stage, group, id);
-    const say = step.id === 'hear' ? null : h('button', { class: 'llkidhear', type: 'button', 'aria-label': 'Hear it', onclick: () => speak(step.say) }, icon('speaker'));
     app.append(h('div', { class: 'screen llkid' },
-      h('header', { class: 'uA-top' },
+      h('header', { class: 'uA-top llbar' },
         IR.ui.pageNav(base),
-        h('h1', { class: 'uA-title' }, id),
-        say,
-        h('p', { class: 'llkidprog' }, (index + 1) + ' of ' + KID_STEPS.length)),
+        h('h1', { class: 'uA-title' }, step.label),
+        h('p', { class: 'llkidprog' }, 'Step ' + (index + 1) + ' of ' + KID_STEPS.length)),
       h('div', { class: 'llkidbar', role: 'progressbar', 'aria-valuemin': 1, 'aria-valuemax': KID_STEPS.length, 'aria-valuenow': index + 1 },
         h('i', { style: 'width:' + Math.round((index + 1) / KID_STEPS.length * 100) + '%' })),
       stage,
       h('div', { class: 'llkidnav' }, next)));
     speak(step.say);
-    if (step.id === 'play' || step.id === 'done') ready();
+    if (step.id === 'done') ready();
   }
   function groupPage(app, group) {
     IR.newScreen();
@@ -2154,7 +2156,7 @@
       onclick: () => { Snd.stop(); location.hash = base + '/games'; }
     }, h('span', { class: 'tbody' }, h('b', { class: 'tname' }, 'Games'))));
     app.append(h('div', { class: 'screen fs-team' },
-      h('header', { class: 'uA-top' },
+      h('header', { class: 'uA-top llbar' },
         IR.ui.pageNav('#/foundation'),
         h('h1', { class: 'uA-title' }, 'Team ' + group.n)),
       h('main', { class: 'fs-teammain' },
@@ -2186,11 +2188,13 @@
         h('span', { class: 'tbody' },
           h('span', { class: 'thead' }, h('b', { class: 'tnum' }, 'Team ' + group.n)),
           h('span', { class: 'tname llteamlets' }, ...group.letters.map((ch) => h('span', null, ch))),
-          done ? h('span', { class: 'llcardone' }, icon('check'), 'Done') : null));
+          done ? h('span', { class: 'llcardone' }, icon('check'), 'Done') : (isNext ? h('span', { class: 'llup' }, 'Up next') : null)));
     });
-    app.append(h('div', { class: 'screen home mapscreen gridhome fs-home fs-teams' },
-      h('div', { class: 'mwrap' },
-        h('header', { class: 'hbanner' }, IR.ui.pageNav('#/home'), h('h1', null, 'Foundation Skills')),
+    app.append(h('div', { class: 'screen fs-team fs-teams fs-home' },
+      h('header', { class: 'uA-top llbar' },
+        IR.ui.pageNav('#/home'),
+        h('h1', { class: 'uA-title' }, 'Foundation Skills')),
+      h('main', { class: 'fs-teammain' },
         h('div', { class: 'bellslot' }, h('div', { class: 'bellpath' }, h('div', { class: 'bellgrid fs-teamgrid' }, ...cards))))));
     if (COVER_SRC && COVER_NOTE) { /* art stays in the program; the team cards are the page */ }
   }
