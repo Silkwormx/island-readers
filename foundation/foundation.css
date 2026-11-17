@@ -152,6 +152,12 @@ html.teach .llist .u5name,html.teach .llplay .u5name{font-size:32px}
 .fs-words{margin:0;font-weight:700;line-height:1.2}
 .fs-words.big{font-size:clamp(1.2rem,3vh,1.8rem);text-align:center}
 .fs-grown a,.fs-grown button{font-family:Andika,sans-serif;font-weight:700;background:transparent;border:0;color:var(--ink);text-decoration:underline;padding:.1rem .2rem;cursor:pointer}
+.fs-slides{display:flex;align-items:center;gap:.45rem;flex-wrap:wrap;background:#fff;border:3px solid var(--ink);border-radius:.9rem;padding:.25rem .55rem}
+.fs-soon{margin:0;font-weight:700}
+.fs-page .btn.primary.fs-slidebtn,.fs-group .btn.primary.fs-slidebtn,.fs-slideview .btn.primary.fs-slidebtn{background:#F28C00;border-color:#C95A10;box-shadow:0 4px 0 #C95A10;color:#fff;min-height:2.6rem;padding:.2rem .9rem}
+.fs-slideview{height:100dvh;max-height:100dvh;display:flex;flex-direction:column;background:var(--cream);overflow:hidden}
+.fs-slideview:fullscreen{background:#111}
+.fs-pdf{flex:1;width:100%;min-height:0;border:0;background:#fff}
 .fs-lessons{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:.4rem;align-content:start}
 .fs-lesson{width:100%;display:flex;flex-direction:column;align-items:flex-start;gap:.1rem;text-align:left;padding:.45rem .7rem;background:#fff;border:3px solid var(--ink);border-radius:.9rem;font-family:Andika,sans-serif;color:var(--ink);cursor:pointer}
 .fs-lesson.done{background:#FFF3D6}

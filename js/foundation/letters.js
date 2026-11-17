@@ -646,7 +646,7 @@
         h('button', { class: 'back homebtn', type: 'button', onclick: () => { Snd.stop(); location.hash = '#/foundation'; } }, icon('back'), h('span', null, 'Foundation')),
         h('h1', { class: 'uA-title' }, 'Group ' + group.n + ' · ' + group.letters.join(' ')),
         IR.ui.gearButton()),
-      h('main', { class: 'llmain' }, h('ol', { class: 'fs-lessons' }, ...cards))));
+      h('main', { class: 'llmain' }, slideBlock(group), h('ol', { class: 'fs-lessons' }, ...cards))));
     if (IR.teach) IR.teach.sync();
   }
 
@@ -1485,10 +1485,10 @@
         h('section', { class: 'fs-bank' },
           h('h2', { class: 'fs-h' }, 'Look what I can read!'),
           h('p', { class: 'fs-words' }, words.length ? words.join('  ') : 'Your words will show up here.')),
+        slideBlock(null),
         h('section', { class: 'fs-grown' },
           h('h2', { class: 'fs-h' }, 'For grown-ups'),
           h('a', { href: '#/teachers' }, 'Teacher Guide'),
-          h('a', { href: '#/teachers' }, 'Slideshows'),
           h('a', { href: '#/teachers' }, 'Tracking sheet'),
           h('button', { type: 'button', onclick: () => { if (IR.teach) IR.teach.toggle(); } }, 'Teacher mode')))));
     if (IR.teach) IR.teach.sync();
@@ -1725,8 +1725,35 @@
     if (IR.teach) IR.teach.sync();
   }
 
+  const SLIDE_PDF = 'foundation/slides/Learn_the_Letters_Group1.pdf';
+  function openSlides() { Snd.stop(); location.hash = '#/foundation/slides/g1'; }
+  function slideBlock(group) {
+    const here = !group || group.id === 'g1';
+    return h('section', { class: 'fs-slides' },
+      h('h2', { class: 'fs-h' }, 'Teacher slideshow'),
+      here ? h('button', { class: 'btn big primary fs-slidebtn', type: 'button', onclick: openSlides }, 'Group 1 slideshow') : null,
+      here && !group ? h('p', { class: 'fs-soon' }, 'Groups 2 to 7 coming soon') : null,
+      !here ? h('p', { class: 'fs-soon' }, 'Groups 2 to 7 coming soon') : null);
+  }
+  function slidesScreen(app) {
+    IR.newScreen();
+    const view = h('div', { class: 'screen fs-slideview' });
+    const goFull = () => {
+      const el = document.querySelector('.fs-slideview');
+      if (el && el.requestFullscreen) el.requestFullscreen();
+    };
+    view.append(
+      h('header', { class: 'uA-top' },
+        h('button', { class: 'back homebtn', type: 'button', onclick: () => { Snd.stop(); if (document.fullscreenElement && document.exitFullscreen) document.exitFullscreen(); location.hash = '#/foundation'; } }, icon('back'), h('span', null, 'Foundation')),
+        h('h1', { class: 'uA-title' }, 'Group 1 slideshow'),
+        h('button', { class: 'btn big primary fs-slidebtn', type: 'button', onclick: goFull }, 'Full screen')),
+      h('iframe', { class: 'fs-pdf', src: SLIDE_PDF, title: 'Learn the Letters Group 1 slideshow' }));
+    app.append(view);
+    if (IR.teach) IR.teach.sync();
+  }
   IR.letters = { GROUPS: GROUPS, LETTERS: LETTERS, artNeeded: ART_NEEDED, who: WHO };
   IR.lettersRoute = function (hash, app) {
+    if (hash === '#/foundation/slides/g1' || hash === '#/foundation/slides/g1/') { slidesScreen(app); return true; }
     if (/^#\/foundation\/letters\/?$/.test(hash)) { foundationPage(app); return true; }
     const lesson = /^#\/foundation\/letters\/(g[1-7])\/l\/(\d+)(?:\/(warm|review|meet|read|write|bank))?\/?$/.exec(hash);
     if (lesson) {
