@@ -64,6 +64,13 @@
     return { btn, list, stop };
   }
 
+  /* Back and Home stay. All Treasure Boxes sits with them and returns to the box chooser. */
+  function allBoxesButton() {
+    return h('button', { class: 'back homebtn boxesbtn', type: 'button', 'aria-label': 'All Treasure Boxes', onclick: () => { Snd.stop(); location.hash = '#/practice/skills/sight'; } }, icon('map'), h('span', null, 'All Treasure Boxes'));
+  }
+  function chestNav(up) {
+    return h('div', { class: 'pagenav' }, IR.ui.backButton(up), IR.ui.homeButton(), allBoxesButton());
+  }
   /* shared screen frame: X (back to chest), title, Back/Next footer */
   function frame(app, { title, backHref, nextHref, backLabel, nextLabel, body, cls }) {
     const nav = h('div', { class: 'lesson-nav' },
@@ -71,7 +78,7 @@
       h('button', { class: 'btn big next', type: 'button', 'aria-label': nextLabel || 'Next', onclick: () => { Snd.stop(); location.hash = nextHref; } }, 'Next', icon('next')));
     const countEl = h('p', { class: 'qcount', 'aria-live': 'polite' }, '');
     const screen = h('div', { class: 'screen lessonscreen chestscreen ' + (cls || ''), style: '--c:#A9693B' },
-      h('header', { class: 'lesson-top' }, IR.ui.pageNav(P), h('h2', { class: 'acttitle chest-title' }, h('span', { class: 'chestmini', html: IR.chestSVG(N) }), title)), h('div', { class: 'stage' }, body), countEl, nav);
+      h('header', { class: 'lesson-top' }, chestNav(P), h('h2', { class: 'acttitle chest-title' }, h('span', { class: 'chestmini', html: IR.chestSVG(N) }), title)), h('div', { class: 'stage' }, body), countEl, nav);
     app.append(screen);
     screen._qcount = countEl;
   }
@@ -119,7 +126,7 @@
       h('span', { class: 'stxt' }, h('b', null, g.title), h('small', null, g.blurb)), h('span', { class: 'sside' }, h('span', { class: 'slabel' }, 'Play')))));
     const chips = h('div', { class: 'wordchips', 'aria-label': 'The ' + WORDS.length + ' words' }, ...WORDS.map((w) => { const b = wordCard(w, 'mini'); b.addEventListener('click', () => IR.sayWord(w)); return b; }));
     app.append(h('div', { class: 'screen trailscreen unitpage chestmenu' },
-      h('header', { class: 'top2' }, IR.ui.pageNav('#/home')),
+      h('header', { class: 'top2' }, chestNav('#/home')),
       h('div', { class: 'unitwrap' },
         h('section', { class: 'unithero' }, h('div', { class: 'chestbig', html: IR.chestSVG(N) }), h('div', { class: 'ut-title' }, h('span', { class: 'ut-isle' }, 'Level ' + N + ' treasure'), h('h1', null, 'Treasure chest ' + N)),
           h('p', { class: 'small' }, WORDS.length + ' words. Play the games as often as you like. They never hold anything up.')),

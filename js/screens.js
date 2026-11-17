@@ -849,16 +849,26 @@
   }
   function practiceScreen(key) {
     if (key === 'sight') {
-      const curUnit = islandDone('i3') ? 4 : 3; const curBox = Math.ceil(curUnit / 2);   /* same rule as the You-are-here bar */
       const rows = [1, 2, 3, 4].map((n) => {
         const href = '#/chest' + n;
-        const mine = n === curBox;
-        const b = h('button', { class: 'gchest sbox open' + (mine ? ' mine' : ''), type: 'button', 'data-kind': 'chest', 'data-n': n, 'aria-label': 'Sight words ' + n + ', for Units ' + (2 * n - 1) + ' and ' + (2 * n) + '. Word games.' + (mine ? ' Practice this one.' : '') },
-          h('b', null, String(n)), h('span', { class: 'sbt' }, h('span', null, 'Sight words ' + n), h('small', null, 'Units ' + (2 * n - 1) + '\u2013' + (2 * n)), mine ? h('span', { class: 'mine-tag' }, 'Practice this one') : null));
+        const words = (D['box' + n] || []).length;
+        const st = IR.S()['chest' + n];
+        const played = !!(st && st.plays && Object.keys(st.plays).some((id) => st.plays[id] > 0));
+        const b = h('button', { class: 'gchest sbox open' + (played ? ' boxcard played' : ' boxcard'), type: 'button', 'data-kind': 'chest', 'data-n': n, 'data-state': played ? 'check' : 'open', 'aria-label': 'Treasure Box ' + n + '. ' + words + ' words. ' + (played ? 'Check.' : 'Open.') },
+          h('span', { class: 'boxpic', html: IR.chestSVG(n), 'aria-hidden': 'true' }),
+          h('span', { class: 'boxname' }, 'Box ' + n),
+          h('span', { class: 'boxcount' }, words + ' words'),
+          h('span', { class: 'boxmark' + (played ? ' is-check' : ' is-open'), 'aria-hidden': 'true' }, icon('check')));
         b.addEventListener('click', () => { location.hash = href; });
         return b;
       });
-      return simplePage('Sight Word Practice', h('p', { class: 'calm' }, 'Tap a box. All four are open, and each one has its games.'), h('div', { class: 'chestlist' }, ...rows), h('p', { class: 'calm small' }, 'Units 9\u201310: sight words come later.'));
+      IR.newScreen();
+      app.append(h('div', { class: 'screen simplepage boxpage' }, h('div', { class: 'mwrap' },
+        h('div', { class: 'gtop' }, pageNav('#/home')),
+        h('h1', null, 'Sight Word Practice'),
+        h('p', { class: 'calm' }, 'Tap a box.'),
+        h('div', { class: 'chestlist boxgrid' }, ...rows))));
+      return;
     }
     if (key === 'fluency') {
       const stories = fluencyStories();

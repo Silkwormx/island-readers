@@ -2828,3 +2828,44 @@ button,
 .tcard .tcount,
 .tcard .thead,
 .tcard .tnum{text-align:center}
+/* Sight Word Practice: equal treasure-box cards. Two across on a phone, three across on a desktop. */
+.boxpage{background:var(--cream)!important;background-image:none!important}
+.boxpage .mwrap{max-width:68rem;padding-top:.55rem;padding-bottom:1rem}
+.boxpage h1,.boxpage .calm{text-align:center}
+.boxpage h1{color:#2B2540;font-size:1.7rem;margin:.15rem 0 .15rem}
+.boxpage .calm{margin:.2rem 0 .4rem}
+.boxpage h1::after{content:'';display:block;width:4.2rem;height:.32rem;border-radius:1rem;background:#F28C00;margin:.35rem auto 0}
+.boxgrid.chestlist{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;grid-auto-rows:1fr!important;gap:.85rem!important;width:100%!important;max-width:62rem;margin:.5rem auto 1rem!important;justify-content:stretch!important;align-items:stretch!important;list-style:none!important}
+.boxgrid.chestlist .gchest.boxcard{position:relative;grid-column:auto!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;width:100%!important;height:100%!important;min-height:250px!important;max-height:none!important;aspect-ratio:auto!important;gap:.3rem!important;margin:0;padding:.75rem .55rem .85rem!important;overflow:hidden;box-sizing:border-box;border:4px solid #F28C00!important;border-radius:1.4rem!important;background:#FFFDF8!important;color:#2B2540!important;font-family:Andika,sans-serif!important;font-weight:700;text-align:center!important;letter-spacing:.02em;word-spacing:.04em;box-shadow:0 4px 0 rgba(242,140,0,.28);cursor:pointer}
+.boxgrid .boxpic{display:flex;align-items:center;justify-content:center;width:118px;height:100px;flex:none}
+.boxgrid .boxpic svg{width:100%;height:100%;display:block}
+.boxgrid .boxname{font-size:1.35rem!important;font-weight:700;line-height:1.15;text-align:center}
+.boxgrid .boxcount{font-size:1.05rem!important;font-weight:700;line-height:1.2;color:#C45C00;text-align:center}
+.boxgrid .boxmark{position:absolute;top:.6rem;right:.6rem;display:flex;align-items:center;justify-content:center;width:2.35rem;height:2.35rem;border-radius:50%;background:#fff;border:3px solid #F28C00;color:#F28C00}
+.boxgrid .boxmark .ico{width:1.25rem;height:1.25rem}
+.boxgrid .boxcard.played .boxmark.is-check{background:#2E9E6B;border-color:#1E7A4E;color:#fff}
+@media (min-width:760px){
+  .boxgrid.chestlist{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+  .boxgrid.chestlist .gchest.boxcard{min-height:292px!important}
+  .boxgrid .boxpic{width:148px;height:124px}
+  .boxgrid .boxname{font-size:1.55rem!important}
+}
+@media (max-width:759px){
+  .boxgrid .boxpic{width:104px;height:88px}
+  .boxgrid .boxname{font-size:1.15rem!important}
+  .boxgrid .boxcount{font-size:.98rem!important}
+  .boxgrid.chestlist .gchest.boxcard{min-height:236px!important;padding:.7rem .4rem .8rem!important}
+}
+/* All Treasure Boxes sits with Back and Home on a chest and on every game inside it. */
+.chestscreen .lesson-top,.chestmenu .top2{flex-wrap:wrap;align-items:center;gap:.45rem .7rem;padding-right:.8rem;background:var(--cream);position:sticky;top:0;z-index:80}
+.chestscreen .pagenav,.chestmenu .pagenav{display:flex;flex-wrap:wrap;align-items:center;gap:.4rem;max-width:100%}
+.chestscreen .pagenav .homebtn,.chestmenu .pagenav .homebtn{margin-right:0!important}
+.boxesbtn{color:#B04A00!important;background:#FFF4E6!important;border-color:#F28C00!important;letter-spacing:0;word-spacing:0}
+.boxesbtn span{white-space:nowrap}
+.chestscreen .complete,.chestdone{z-index:60}
+.chestdone{padding-top:5.4rem}
+@media (max-width:700px){
+  .chestscreen .lesson-top .acttitle{flex:1 1 100%}
+  .boxesbtn{font-size:.86rem!important;padding:.12rem .5rem!important}
+  .chestdone{padding-top:7.2rem}
+}
