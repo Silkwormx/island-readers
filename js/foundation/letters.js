@@ -660,7 +660,7 @@
         h('p', { class: 'llask' }, 'Team ' + group.n + ', ' + group.letters.join(', ') + '. Tap the name, then the sound three times.'),
         overview,
         h('button', { class: 'btn big primary fs-slidebtn', type: 'button', onclick: () => startLetters(group) }, 'One letter at a time'),
-        slideBlock(group),
+        group.n === 1 ? h('p', { class: 'fs-slidenote' }, h('button', { class: 'fs-slidetext', type: 'button', onclick: () => openSlides() }, 'Team 1 slideshow')) : null,
         h('ol', { class: 'fs-lessons' }, ...cards))));
     if (IR.teach) IR.teach.sync();
   }
@@ -1581,14 +1581,7 @@
         h('p', { class: 'zfsub' }, 'Names and sounds, then real words.'),
         letterContinue()));
     const materials = h('section', { class: 'fs-mats', 'aria-label': 'For grown-ups' },
-      h('h2', { class: 'fs-h' }, 'Teacher slideshows'),
-      h('button', { class: 'btn big primary fs-slidebtn', type: 'button', onclick: openSlides }, 'Team 1 slideshow'),
-      h('p', { class: 'fs-soon' }, 'Team 2 coming soon'),
-      h('p', { class: 'fs-soon' }, 'Team 3 coming soon'),
-      h('p', { class: 'fs-soon' }, 'Team 4 coming soon'),
-      h('p', { class: 'fs-soon' }, 'Team 5 coming soon'),
-      h('p', { class: 'fs-soon' }, 'Team 6 coming soon'),
-      h('p', { class: 'fs-soon' }, 'Team 7 coming soon'),
+      teacherSlides(),
       sideBtn('Teacher guide', () => { location.hash = '#/teachers'; }),
       sideBtn('Printables', () => { location.hash = '#/teachers'; }),
       sideBtn('Tracking sheet', () => { location.hash = '#/teachers'; }),
@@ -1927,17 +1920,47 @@
   }
 
   const SLIDE_PDF = 'foundation/slides/Learn_the_Letters_Group1.pdf';
-  function openSlides() { Snd.stop(); location.hash = '#/foundation/slides/g1'; }
-  function slideBlock(group) {
-    const here = !group || group.id === 'g1';
-    return h('section', { class: 'fs-slides' },
-      h('h2', { class: 'fs-h' }, 'Teacher slideshow'),
-      here ? h('button', { class: 'btn big primary fs-slidebtn', type: 'button', onclick: openSlides }, 'Team 1 slideshow') : null,
-      here && !group ? h('p', { class: 'fs-soon' }, 'Teams 2 to 7 coming soon') : null,
-      !here ? h('p', { class: 'fs-soon' }, 'Teams 2 to 7 coming soon') : null);
+  const TEAM1_DAYS = [
+    { label: 'Day 1a', page: 4 },
+    { label: 'Day 1b', page: 19 },
+    { label: 'Day 2', page: 39 },
+    { label: 'Day 3', page: 70 },
+    { label: 'Day 4', page: 95 },
+    { label: 'Team check', page: 112 }
+  ];
+  function openSlides(page) {
+    Snd.stop();
+    location.hash = '#/foundation/slides/g1' + (page ? '/' + page : '');
   }
-  function slidesScreen(app) {
+  function teacherSlides() {
+    const panel = h('div', { class: 'fs-slidedrop', hidden: '' });
+    const tab = h('button', {
+      class: 'btn big fs-sidebtn',
+      type: 'button',
+      'aria-expanded': 'false',
+      'aria-controls': 'fs-slide-list',
+      onclick: () => {
+        const open = panel.hidden;
+        panel.hidden = !open;
+        tab.setAttribute('aria-expanded', open ? 'true' : 'false');
+      }
+    }, 'Teacher Slideshows');
+    panel.id = 'fs-slide-list';
+    const dayBtn = (day) => h('button', {
+      class: 'fs-daylink',
+      type: 'button',
+      onclick: () => openSlides(day.page)
+    }, day.label);
+    panel.append(
+      h('button', { class: 'fs-teamlink', type: 'button', onclick: () => openSlides() }, 'Team 1'),
+      ...TEAM1_DAYS.map(dayBtn));
+    for (let n = 2; n <= 7; n++) panel.append(h('p', { class: 'fs-soon' }, 'Team ' + n + ' coming soon'));
+    return h('div', { class: 'fs-slidetab' }, tab, panel);
+  }
+  function slidesScreen(app, page) {
     IR.newScreen();
+    const day = TEAM1_DAYS.filter((item) => String(item.page) === String(page))[0];
+    const title = day ? ('Team 1, ' + day.label) : 'Team 1 slideshow';
     const view = h('div', { class: 'screen fs-slideview' });
     const goFull = () => {
       const el = document.querySelector('.fs-slideview');
@@ -1946,15 +1969,16 @@
     view.append(
       h('header', { class: 'uA-top' },
         h('button', { class: 'back homebtn', type: 'button', onclick: () => { Snd.stop(); if (document.fullscreenElement && document.exitFullscreen) document.exitFullscreen(); location.hash = '#/foundation'; } }, icon('back'), h('span', null, 'Foundation')),
-        h('h1', { class: 'uA-title' }, 'Team 1 slideshow'),
+        h('h1', { class: 'uA-title' }, title),
         h('button', { class: 'btn big primary fs-slidebtn', type: 'button', onclick: goFull }, 'Full screen')),
-      h('iframe', { class: 'fs-pdf', src: SLIDE_PDF, title: 'Learn the Letters Team 1 slideshow' }));
+      h('iframe', { class: 'fs-pdf', src: SLIDE_PDF + (page ? '#page=' + page : ''), title: title }));
     app.append(view);
     if (IR.teach) IR.teach.sync();
   }
   IR.letters = { GROUPS: GROUPS, LETTERS: LETTERS, artNeeded: ART_NEEDED, who: WHO };
   IR.lettersRoute = function (hash, app) {
-    if (hash === '#/foundation/slides/g1' || hash === '#/foundation/slides/g1/') { slidesScreen(app); return true; }
+    const deck = hash.match(/^#\/foundation\/slides\/g1(?:\/(\d+))?\/?$/);
+    if (deck) { slidesScreen(app, deck[1]); return true; }
     if (/^#\/foundation\/letters\/?$/.test(hash)) { foundationPage(app); return true; }
     const lesson = /^#\/foundation\/letters\/(g[1-7])\/l\/(\d+)(?:\/([a-z0-9-]+))?\/?$/.exec(hash);
     if (lesson) {

@@ -214,6 +214,14 @@ html.teach .llist .u5name,html.teach .llplay .u5name{font-size:32px}
 .fs-home .fs-mats{display:flex;flex-direction:column;gap:.35rem;background:#FFFDF8;border-radius:1.2rem;padding:.7rem .75rem .85rem;box-shadow:0 6px 18px rgba(60,40,20,.1)}
 .fs-home .fs-mats .fs-h{margin:0 0 .1rem}
 .fs-home .fs-soon{margin:0;font-weight:700}
+.fs-home .fs-slidetab{margin:0}
+.fs-home .fs-slidedrop{display:flex;flex-direction:column;gap:2px;margin:8px 0 2px;padding:8px 10px 8px;background:#fff;border:3px solid #C9841A;border-radius:1rem}
+.fs-home .fs-teamlink,.fs-home .fs-daylink{display:block;width:100%;margin:0;padding:5px 4px;border:0;background:transparent;font-family:Andika,sans-serif;text-align:left;cursor:pointer}
+.fs-home .fs-teamlink{color:#1F6F78;font-size:1.05rem;font-weight:700}
+.fs-home .fs-daylink{padding-left:18px;color:#1F6F78;font-size:1rem;text-decoration:underline}
+.fs-home .fs-slidedrop .fs-soon{margin:1px 4px;color:#8A7A62}
+.fs-group .fs-slidenote{margin:.2rem 0 .4rem;text-align:center}
+.fs-group .fs-slidetext{border:0;background:transparent;color:#1F6F78;font-family:Andika,sans-serif;font-size:1rem;text-decoration:underline;cursor:pointer}
 .fs-home .fs-sidebtn{width:100%;background:#fff;border:3px solid #C9841A;border-radius:1rem;box-shadow:0 3px 0 #C9841A;font-family:Andika,sans-serif}
 .fs-home .btn.primary.fs-continue,.fs-home .btn.primary.fs-slidebtn{width:100%;background:#F28C00;border-color:#C95A10;box-shadow:0 4px 0 #C95A10;color:#fff}
 .fs-home .bellgrid{grid-template-columns:repeat(3,minmax(0,1fr));gap:.7rem}
