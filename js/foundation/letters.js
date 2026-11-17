@@ -1357,7 +1357,7 @@
 
   function aboutOrder() {
     return h('details', { class: 'fs-about' },
-      h('summary', null, 'Why this letter order'),
+      h('summary', null, 'Why this order?'),
       h('div', { class: 'fs-aboutbody' },
         h('p', null, 'This is a letter review. It firms up each letter name and its sound before reading.'),
         h('p', null, 'We review lowercase letters and their sounds first. Capitals come lightly, a little later.'),
@@ -1514,6 +1514,7 @@
     IR.newScreen();
     const started = Object.keys(doneMap()).length > 0;
     const up = nextUpGroup();
+    const words = readBank();
     const cards = GROUPS.map((group) => {
       const lessons = lessonsOf(group);
       const done = lessons.filter((lesson) => doneMap()[String(lesson.lesson_number)]).length;
@@ -1524,35 +1525,49 @@
         return src ? h('img', { src: src, alt: id }) : null;
       });
       return h('button', {
-        class: 'tcard fs-set' + (isNext ? ' next' : '') + (open ? '' : ' locked'),
+        class: 'tcard fs-groupcard' + (isNext ? ' t-current' : '') + (open ? '' : ' locked'),
         type: 'button',
         'aria-disabled': open ? 'false' : 'true',
-        onclick: () => { if (open) location.hash = '#/foundation/letters/' + group.id; }
+        'aria-label': 'Group ' + group.n + ', ' + group.letters.join(' ') + '. Opens the lessons.',
+        onclick: () => { if (open) { Snd.stop(); location.hash = '#/foundation/letters/' + group.id; } }
       },
-        h('span', { class: 'tpic fs-setpic', style: 'grid-template-columns:repeat(' + group.letters.length + ',minmax(0,1fr))' }, ...faces),
+        h('span', { class: 'tpic fs-setpic', style: 'grid-template-columns:repeat(' + (group.letters.length > 2 ? 2 : group.letters.length) + ',minmax(0,1fr))' }, ...faces),
         h('span', { class: 'tbody' },
-          h('b', { class: 'tnum' }, group.letters.join(' ')),
-          h('span', { class: 'tname' }, isNext ? 'Next up' : (open ? 'Review this set' : 'After the last check')),
-          h('span', { class: 'tsnd' }, done + ' of ' + lessons.length)));
+          h('b', { class: 'tnum' }, 'Group ' + group.n + ' \u00b7 ' + group.letters.join(' ')),
+          h('span', { class: 'tname' }, isNext ? 'Next up' : (open ? (done + ' of ' + lessons.length) : 'After the last check'))));
     });
-    const words = readBank();
-    app.append(h('div', { class: 'screen trailscreen unitpage llpage fs-page' },
-      h('header', { class: 'uA-top' }, IR.ui.homeButton(), h('h1', { class: 'uA-title' }, 'Foundation Skills'), IR.ui.gearButton()),
-      h('main', { class: 'llmain fs-hub' },
-        h('p', { class: 'fs-lead' }, 'Review the letters and read real words from day one.'),
-        h('button', { class: 'btn big primary fs-continue', type: 'button', onclick: openNext }, started ? 'Continue' : 'Start Group 1'),
-        aboutOrder(),
-        h('h2', { class: 'fs-h' }, 'Your letter path'),
-        h('div', { class: 'fs-setmap' }, ...cards),
-        h('section', { class: 'fs-bank' },
-          h('h2', { class: 'fs-h' }, 'Look what I can read!'),
-          h('p', { class: 'fs-words' }, words.length ? words.join('  ') : 'Your words will show up here.')),
-        slideBlock(null),
-        h('section', { class: 'fs-grown' },
-          h('h2', { class: 'fs-h' }, 'For grown-ups'),
-          h('a', { href: '#/teachers' }, 'Teacher Guide'),
-          h('a', { href: '#/teachers' }, 'Tracking sheet'),
-          h('button', { type: 'button', onclick: () => { if (IR.teach) IR.teach.toggle(); } }, 'Teacher mode')))));
+    const sideBtn = (label, go) => h('button', { class: 'btn big fs-sidebtn', type: 'button', onclick: go }, label);
+    const banner = h('header', { class: 'hbanner' },
+      h('h1', null, 'Foundation Skills'),
+      h('div', { class: 'grownwrap' }, h('span', { class: 'grownlab' }, 'Parent and Teacher Materials'), IR.ui.gearButton()));
+    const hero = h('section', { class: 'homefeature', 'aria-label': 'Review the letters with Zip and Frill' },
+      h('div', { class: 'zfpics' }, h('img', { class: 'homeart', src: 'img/home_zip_frill.webp', width: 1280, height: 720, alt: 'Zip and Frill reading together' })),
+      h('div', { class: 'hfbody' },
+        h('h2', { class: 'zfline' }, 'Review the letters with Zip and Frill'),
+        h('p', { class: 'zfsub' }, 'Names and sounds, then real words.'),
+        h('button', { class: 'btn big primary fs-continue', type: 'button', onclick: openNext }, started ? 'Continue' : 'Start Group 1')));
+    const materials = h('section', { class: 'fs-mats', 'aria-label': 'For grown-ups' },
+      h('h2', { class: 'fs-h' }, 'Teacher slideshows'),
+      h('button', { class: 'btn big primary fs-slidebtn', type: 'button', onclick: openSlides }, 'Group 1 slideshow'),
+      h('p', { class: 'fs-soon' }, 'Group 2 coming soon'),
+      h('p', { class: 'fs-soon' }, 'Group 3 coming soon'),
+      h('p', { class: 'fs-soon' }, 'Group 4 coming soon'),
+      h('p', { class: 'fs-soon' }, 'Group 5 coming soon'),
+      h('p', { class: 'fs-soon' }, 'Group 6 coming soon'),
+      h('p', { class: 'fs-soon' }, 'Group 7 coming soon'),
+      sideBtn('Teacher guide', () => { location.hash = '#/teachers'; }),
+      sideBtn('Printables', () => { location.hash = '#/teachers'; }),
+      sideBtn('Tracking sheet', () => { location.hash = '#/teachers'; }),
+      sideBtn('Teacher mode', () => { if (IR.teach) IR.teach.toggle(); }));
+    const bank = h('section', { class: 'fs-bank' },
+      h('h2', { class: 'fs-h' }, 'Look what I can read!'),
+      h('p', { class: 'fs-words' }, words.length ? words.join('  ') : 'Your words will show up here.'));
+    app.append(h('div', { class: 'screen home mapscreen gridhome fs-home' },
+      h('div', { class: 'mwrap' },
+        banner,
+        h('div', { class: 'homelay' },
+          h('div', { class: 'homeside' }, hero, aboutOrder(), bank, materials),
+          h('div', { class: 'bellslot' }, h('div', { class: 'bellgrid' }, ...cards))))));
     if (IR.teach) IR.teach.sync();
   }
 

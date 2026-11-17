@@ -191,6 +191,30 @@ html.teach .llist .u5name,html.teach .llplay .u5name{font-size:32px}
   .fs-path{grid-template-columns:1fr 1fr}
   .fs-face{height:2.4rem}
 }
+.fs-home.gridhome{background:var(--cream,#FFF8E7)}
+.fs-home .homelay{align-items:start}
+.fs-home .homeside{gap:.75rem;max-height:none!important;height:auto;overflow:visible!important;position:static;align-self:start}
+.fs-home .homefeature{flex:none;min-height:auto;height:auto;overflow:visible}
+.fs-home .homefeature .zfpics img.homeart{width:100%;max-width:100%;height:auto;max-height:9.5rem;object-fit:contain}
+.fs-home .fs-mats{display:flex;flex-direction:column;gap:.35rem;background:#FFFDF8;border-radius:1.2rem;padding:.7rem .75rem .85rem;box-shadow:0 6px 18px rgba(60,40,20,.1)}
+.fs-home .fs-mats .fs-h{margin:0 0 .1rem}
+.fs-home .fs-soon{margin:0;font-weight:700}
+.fs-home .fs-sidebtn{width:100%;background:#fff;border:3px solid #C9841A;border-radius:1rem;box-shadow:0 3px 0 #C9841A;font-family:Andika,sans-serif}
+.fs-home .btn.primary.fs-continue,.fs-home .btn.primary.fs-slidebtn{width:100%;background:#F28C00;border-color:#C95A10;box-shadow:0 4px 0 #C95A10;color:#fff}
+.fs-home .bellgrid{grid-template-columns:repeat(3,minmax(0,1fr));gap:.7rem}
+.fs-home .fs-groupcard{width:100%;text-align:left}
+.fs-home .fs-groupcard .tpic.fs-setpic{display:grid;align-items:center;justify-items:center;align-content:center;aspect-ratio:1/1;padding:.4rem;gap:.15rem;background:#FFF6E3;overflow:hidden}
+.fs-home .fs-setpic img{width:100%;height:auto;max-height:100%;aspect-ratio:1/1;object-fit:contain}
+.fs-home .fs-groupcard .tbody{padding:.55rem .7rem .7rem}
+.fs-home .fs-groupcard .tnum{display:block;font-size:1.15rem;line-height:1.25;white-space:normal}
+.fs-home .fs-groupcard .tname{display:block;height:auto;font-size:.95rem;white-space:normal}
+.fs-home .fs-groupcard.locked{opacity:.55}
+.fs-home .fs-about{background:#E4F6F6;border:2px solid #9FCFCF;border-radius:1rem;padding:.35rem .7rem}
+.fs-home .fs-about summary{font-weight:700;cursor:pointer;min-height:2.4rem;display:flex;align-items:center}
+.fs-home .fs-bank{background:#fff;border:3px solid var(--ink);border-radius:.9rem;padding:.4rem .6rem}
+@media (max-width:759px){
+  .fs-home .bellgrid{grid-template-columns:1fr}
+}
 .fs-setmap{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.35rem}
 .fs-page .fs-set{width:100%}
 .fs-set .tpic.fs-setpic{display:grid;align-items:center;justify-items:center;aspect-ratio:1.5/1;padding:.2rem;background:#FFF6E3;overflow:hidden}
