@@ -15,6 +15,10 @@ test('Day 1 sample is a short lesson plus a and m games', () => {
   assert.match(day1, /My sound is ' \+ L\.sound/);
   assert.match(day1, /I said it/);
   assert.match(letters, /#\/foundation\/sample/);
+  assert.match(day1, /ROUND_N = 12/);
+  assert.match(day1, /Round ' \+ x \+ ' of ' \+ n/);
+  assert.match(letters, /function plan12/);
+  assert.match(letters, /Round ' \+ x \+ ' of ' \+ n/);
   assert.equal(day1.includes('sat'), false);
   assert.equal(day1.includes('Sam'), false);
   assert.equal(day1.includes('best on a tablet'), false);
