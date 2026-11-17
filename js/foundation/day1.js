@@ -17,7 +17,7 @@
     mango: 'foundation/img/objects/mango.jpg',
     mop: 'img/refresh_mop.jpg'
   };
-  const MOUTH = '<svg viewBox="0 0 64 40" aria-hidden="true"><path d="M8 14 Q32 36 56 14 Q32 30 8 14Z" fill="#fff"/><path d="M16 18 Q32 28 48 18" fill="none" stroke="#0E7C7C" stroke-width="3" stroke-linecap="round"/></svg>';
+  const MOUTH = '<svg viewBox="0 0 88 64" aria-hidden="true"><ellipse cx="44" cy="34" rx="36" ry="22" fill="#FFE4D6" stroke="#E39A86" stroke-width="3"/><path d="M16 30 Q44 58 72 30 Q44 44 16 30Z" fill="#E23B4A" stroke="#8E1D2C" stroke-width="4" stroke-linejoin="round"/><path d="M24 33 Q44 50 64 33 Q44 41 24 33Z" fill="#4A1020"/><ellipse cx="44" cy="40" rx="11" ry="6" fill="#F08A98"/></svg>';
   function samplePack() {
     return {
       ids: ['a', 'm'],
@@ -38,7 +38,7 @@
   ];
   const GAMES = [
     { id: 'pop', title: 'Sound Pop', icon: 'foundation/img/games/pop.jpg' },
-    { id: 'feed', title: 'Feed the Friend', icon: 'foundation/img/games/feed.jpg' },
+    { id: 'feed', title: 'Feed the Friend', icon: ADDIE, faces: [ADDIE, MANNY] },
     { id: 'catch', title: 'Beginning Sound Catch', icon: 'foundation/img/games/catch.jpg' },
     { id: 'hunt', title: 'Letter Hunt', icon: 'foundation/img/games/hunt.jpg' },
     { id: 'build', title: 'Build It', icon: 'foundation/img/games/build.jpg' },
@@ -239,7 +239,11 @@
       class: 'll1game',
       type: 'button',
       onclick: () => go(game.id)
-    }, h('span', { class: 'll1gnum' }, String(n + 1)), h('img', { src: game.icon, alt: '' }), h('b', null, game.title)))));
+    }, h('span', { class: 'll1gnum' }, String(n + 1)),
+      game.faces
+        ? h('span', { class: 'll1faces2' }, ...game.faces.map((src) => h('img', { src: src, alt: '' })))
+        : h('img', { src: game.icon, alt: '' }),
+      h('b', null, game.title)))));
   }
 
   function rounds(ctx, list, draw, id) {

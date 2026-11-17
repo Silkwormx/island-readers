@@ -629,7 +629,7 @@
     if (group.id === 'g1' && next.lesson_number === 1) { location.hash = '#/foundation/sample'; return; }
     location.hash = lessonHash(group, next, flowFor(next)[0].id);
   }
-  const MOUTH = '<svg viewBox="0 0 64 40" aria-hidden="true"><path d="M8 14 Q32 36 56 14 Q32 30 8 14Z" fill="#fff"/><path d="M16 18 Q32 28 48 18" fill="none" stroke="#0E7C7C" stroke-width="3" stroke-linecap="round"/></svg>';
+  const MOUTH = '<svg viewBox="0 0 88 64" aria-hidden="true"><ellipse cx="44" cy="34" rx="36" ry="22" fill="#FFE4D6" stroke="#E39A86" stroke-width="3"/><path d="M16 30 Q44 58 72 30 Q44 44 16 30Z" fill="#E23B4A" stroke="#8E1D2C" stroke-width="4" stroke-linejoin="round"/><path d="M24 33 Q44 50 64 33 Q44 41 24 33Z" fill="#4A1020"/><ellipse cx="44" cy="40" rx="11" ry="6" fill="#F08A98"/></svg>';
   const GAME_ART = {
     find: 'foundation/img/games/hunt.jpg',
     match: 'foundation/img/games/flash.jpg',
@@ -680,7 +680,8 @@
     if (group.id !== 'g1' || !IR.day1Flow) return older;
     const ten = IR.day1Flow.GAMES.map((game) => ({
       title: game.title,
-      img: game.icon,
+      img: game.faces ? '' : game.icon,
+      imgs: game.faces || null,
       alt: game.title,
       done: IR.isDone('ll_g1_d1_' + game.id),
       go: () => { Snd.stop(); location.hash = '#/foundation/letters/g1/play/' + game.id; }

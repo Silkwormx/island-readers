@@ -2655,6 +2655,8 @@ html.teach .u5step .itext{font-size:32px}
 .gamegrid.pics{grid-template-columns:repeat(3,minmax(0,1fr))}
 .gamegrid.pics .gamecard{position:relative;flex-direction:column;align-items:stretch;text-align:center;padding:.4rem;gap:.28rem;min-height:0}
 .gamegrid.pics .gamepic{width:100%;height:4.4rem;object-fit:cover;border-radius:.65rem;background:#FFF6E3}
+.gamegrid.pics .gamepair{display:grid;grid-template-columns:1fr 1fr;gap:.15rem;width:100%;height:4.4rem}
+.gamegrid.pics .gamepair .gamepic{height:100%;object-fit:contain;background:#fff}
 .gamegrid.pics .gamenum{position:absolute;top:.55rem;left:.55rem;width:1.7rem;height:1.7rem;font-size:1rem;border-radius:.5rem}
 .gamegrid.pics .gamedone{position:absolute;top:.5rem;right:.5rem;display:inline-flex;width:1.45rem;height:1.45rem;border-radius:50%;background:#fff;color:#1f7a3a;box-shadow:0 1px 3px rgba(60,40,20,.25)}
 .gamegrid.pics .gamedone .ico{width:1.45rem;height:1.45rem}
