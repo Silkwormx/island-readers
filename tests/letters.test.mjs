@@ -40,7 +40,7 @@ test('Learn the Letters follows the UFLI group order and is not a unit', () => {
   assert.match(letters, /Mastery check/);
   assert.match(letters, /cueFor/);
   assert.match(letters, /llfont-a/);
-  assert.match(letters, /'Group ' \+ group\.n/);
+  assert.match(letters, /'Team ' \+ group\.n/);
   assert.match(letters, /join\(', '\)/);
   assert.match(letters, /Why this order\?/);
   assert.match(letters, /Meet the Team/);
@@ -51,7 +51,7 @@ test('Learn the Letters follows the UFLI group order and is not a unit', () => {
   assert.equal(letters.includes('Start Group 1'), false);
   assert.match(letters, /class: 'zfstart2'/);
   assert.match(letters, /Pick up where you left off/);
-  assert.match(letters, /Group check/);
+  assert.match(letters, /Team check/);
   assert.match(letters, /function lessonsOf/);
   assert.match(letters, /Warm-up/);
   assert.match(letters, /Blend and read/);
@@ -125,9 +125,9 @@ test('home opens Foundation Skills from the first bell, not a sidebar tab', () =
   assert.match(sw, /js\/foundation\/letters\.js/);
   assert.match(sw, /ir-20261118b/);
   assert.match(teach, /#\/foundation/);
-  assert.match(letters, /Group 1 slideshow/);
+  assert.match(letters, /Team 1 slideshow/);
   assert.match(letters, /Learn_the_Letters_Group1\.pdf/);
-  assert.match(letters, /Groups 2 to 7 coming soon/);
+  assert.match(letters, /Teams 2 to 7 coming soon/);
   assert.equal(sw.includes('Learn_the_Letters_Group1.pdf'), false);
   assert.match(letters, /Foundation Skills/);
   assert.match(letters, /#\/foundation\/letters/);

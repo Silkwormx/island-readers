@@ -598,11 +598,11 @@
     const cards = items.map((it) => h('li', null, h('button', {
       class: 'u5card llgroup' + (it.done === it.total ? ' done' : ''),
       type: 'button',
-      'aria-label': 'Group ' + it.g.n + ', ' + it.g.letters.join(' ') + '.',
+      'aria-label': 'Team ' + it.g.n + ', ' + it.g.letters.join(', ') + '.',
       onclick: () => { Snd.stop(); location.hash = '#/foundation/letters/' + it.g.id; }
     },
       h('span', { class: 'u5ord' }, String(it.g.n)),
-      h('span', { class: 'u5name' }, it.g.letters.join(' \u00b7 ')),
+      h('span', { class: 'u5name' }, it.g.letters.join(', ')),
       h('span', { class: 'u5min' }, it.done + ' of ' + it.total),
       it.done === it.total ? h('span', { class: 'u5mark', 'aria-hidden': 'true' }, icon('check')) : null)));
     app.append(h('div', { class: 'screen trailscreen unitpage u5menu llpage lllist' },
@@ -613,7 +613,7 @@
         h('div', { class: 'llintro' },
           h('img', { src: 'img/zipA.webp', alt: '' }),
           h('img', { src: 'img/frill.webp', alt: '' }),
-          h('p', null, 'Seven groups, before Unit 1. This is not a unit.'),
+          h('p', null, 'Seven teams, before Unit 1. This is not a unit.'),
           h('p', null, 'Same steps every time.')),
         h('div', { class: 'u5teachrow' }, h('button', { class: 'btn teachgo', type: 'button', onclick: () => { if (IR.teach) IR.teach.toggle(true); } }, 'Teacher mode')),
         h('div', { class: 'u5prog' }, bar, h('span', { class: 'u5count' }, finished + ' of ' + items.length)),
@@ -658,7 +658,7 @@
         type: 'button',
         onclick: () => { Snd.stop(); location.hash = '#/foundation/letters/' + group.id + '/check'; }
       },
-        h('span', { class: 'fs-day' }, 'Group check'),
+        h('span', { class: 'fs-day' }, 'Team check'),
         h('span', { class: 'fs-line' }, 'Plain letters only. Show what you know.'))));
     }
     app.append(h('div', { class: 'screen trailscreen unitpage u5menu llpage fs-group' },
@@ -667,7 +667,7 @@
         h('h1', { class: 'uA-title' }, 'Meet the Team'),
         IR.ui.gearButton()),
       h('main', { class: 'llmain' },
-        h('p', { class: 'llask' }, 'Group ' + group.n + ', ' + group.letters.join(', ') + '. Tap one to hear its name and sound.'),
+        h('p', { class: 'llask' }, 'Team ' + group.n + ', ' + group.letters.join(', ') + '. Tap one to hear its name and sound.'),
         overview,
         h('button', { class: 'btn big primary fs-slidebtn', type: 'button', onclick: () => startLetters(group) }, 'One letter at a time'),
         slideBlock(group),
@@ -689,7 +689,7 @@
     });
     app.append(h('div', { class: 'screen trailscreen unitpage u5menu llpage' },
       h('header', { class: 'uA-top' },
-        h('button', { class: 'back homebtn', type: 'button', onclick: () => { Snd.stop(); location.hash = '#/foundation/letters/' + group.id; } }, icon('back'), h('span', null, 'Group')),
+        h('button', { class: 'back homebtn', type: 'button', onclick: () => { Snd.stop(); location.hash = '#/foundation/letters/' + group.id; } }, icon('back'), h('span', null, 'Team')),
         h('h1', { class: 'uA-title' }, 'Games'),
         IR.ui.gearButton()),
       h('main', { class: 'llmain' }, h('ol', { class: 'llsteps llgames' }, ...cards))));
@@ -1514,15 +1514,16 @@
   }
   function letterContinue() {
     const stop = nextStop();
+    const team = 'Team ' + ((stop && stop.group && stop.group.n) || 1);
     let href = '#/foundation/letters/g1';
     if (stop && stop.check) href = '#/foundation/letters/' + stop.group.id + '/check';
     else if (stop && stop.lesson) href = lessonHash(stop.group, stop.lesson, flowFor(stop.lesson)[0].id);
     return h('button', {
       class: 'zfstart2',
       type: 'button',
-      'aria-label': 'Continue. Pick up where you left off',
+      'aria-label': 'Continue. ' + team + '. Pick up where you left off',
       onclick: () => { Snd.stop(); location.hash = href; }
-    }, h('span', { class: 'zfst' }, h('b', null, 'Continue'), h('small', null, 'Pick up where you left off')));
+    }, h('span', { class: 'zfst' }, h('b', null, 'Continue'), h('small', null, team + '. Pick up where you left off')));
   }
   function nextUpGroup() {
     for (let i = 0; i < GROUPS.length; i++) {
@@ -1570,15 +1571,15 @@
         class: 'tcard fs-groupcard' + (isNext ? ' t-current' : '') + (open ? '' : ' locked'),
         type: 'button',
         'aria-disabled': open ? 'false' : 'true',
-        'aria-label': 'Group ' + group.n + ', ' + group.letters.join(', ') + (taught ? ', ' + taught : '') + '. Opens the lessons.',
+        'aria-label': 'Team ' + group.n + ': ' + group.letters.join(', ') + (taught ? '. Words: ' + taught : '') + '. Opens the lessons.',
         onclick: () => { if (open) { Snd.stop(); location.hash = '#/foundation/letters/' + group.id; } }
       },
         h('span', { class: 'tpic fs-setpic', style: 'grid-template-columns:repeat(' + (group.letters.length > 2 ? 2 : group.letters.length) + ',minmax(0,1fr))' }, ...faces,
           isNext ? h('span', { class: 'herechip' }, 'Next up') : null),
         h('span', { class: 'tbody' },
-          h('span', { class: 'thead' }, h('b', { class: 'tnum' }, 'Group ' + group.n)),
+          h('span', { class: 'thead' }, h('b', { class: 'tnum' }, 'Team ' + group.n)),
           h('span', { class: 'tname' }, group.letters.join(', ')),
-          h('span', { class: 'tsnd' }, taught || (open ? '' : 'After the last check'))));
+          h('span', { class: 'tsnd' }, taught ? ('Words: ' + taught) : (open ? '' : 'After the last check'))));
     });
     const sideBtn = (label, go) => h('button', { class: 'btn big fs-sidebtn', type: 'button', onclick: go }, label);
     const banner = h('header', { class: 'hbanner' },
@@ -1592,13 +1593,13 @@
         letterContinue()));
     const materials = h('section', { class: 'fs-mats', 'aria-label': 'For grown-ups' },
       h('h2', { class: 'fs-h' }, 'Teacher slideshows'),
-      h('button', { class: 'btn big primary fs-slidebtn', type: 'button', onclick: openSlides }, 'Group 1 slideshow'),
-      h('p', { class: 'fs-soon' }, 'Group 2 coming soon'),
-      h('p', { class: 'fs-soon' }, 'Group 3 coming soon'),
-      h('p', { class: 'fs-soon' }, 'Group 4 coming soon'),
-      h('p', { class: 'fs-soon' }, 'Group 5 coming soon'),
-      h('p', { class: 'fs-soon' }, 'Group 6 coming soon'),
-      h('p', { class: 'fs-soon' }, 'Group 7 coming soon'),
+      h('button', { class: 'btn big primary fs-slidebtn', type: 'button', onclick: openSlides }, 'Team 1 slideshow'),
+      h('p', { class: 'fs-soon' }, 'Team 2 coming soon'),
+      h('p', { class: 'fs-soon' }, 'Team 3 coming soon'),
+      h('p', { class: 'fs-soon' }, 'Team 4 coming soon'),
+      h('p', { class: 'fs-soon' }, 'Team 5 coming soon'),
+      h('p', { class: 'fs-soon' }, 'Team 6 coming soon'),
+      h('p', { class: 'fs-soon' }, 'Team 7 coming soon'),
       sideBtn('Teacher guide', () => { location.hash = '#/teachers'; }),
       sideBtn('Printables', () => { location.hash = '#/teachers'; }),
       sideBtn('Tracking sheet', () => { location.hash = '#/teachers'; }),
@@ -1940,7 +1941,7 @@
     app.append(h('div', { class: 'screen trailscreen unitpage llpage fs-lesson' },
       h('header', { class: 'uA-top' },
         h('button', { class: 'back homebtn', type: 'button', onclick: () => { Snd.stop(); location.hash = '#/foundation/letters/' + group.id; } }, icon('back'), h('span', null, 'Lessons')),
-        h('h1', { class: 'uA-title' }, 'Group check'),
+        h('h1', { class: 'uA-title' }, 'Team check'),
         IR.ui.gearButton()),
       h('main', { class: 'llmain fs-stagewrap' }, stage),
       h('div', { class: 'llnav' }, h('button', {
@@ -1962,9 +1963,9 @@
     const here = !group || group.id === 'g1';
     return h('section', { class: 'fs-slides' },
       h('h2', { class: 'fs-h' }, 'Teacher slideshow'),
-      here ? h('button', { class: 'btn big primary fs-slidebtn', type: 'button', onclick: openSlides }, 'Group 1 slideshow') : null,
-      here && !group ? h('p', { class: 'fs-soon' }, 'Groups 2 to 7 coming soon') : null,
-      !here ? h('p', { class: 'fs-soon' }, 'Groups 2 to 7 coming soon') : null);
+      here ? h('button', { class: 'btn big primary fs-slidebtn', type: 'button', onclick: openSlides }, 'Team 1 slideshow') : null,
+      here && !group ? h('p', { class: 'fs-soon' }, 'Teams 2 to 7 coming soon') : null,
+      !here ? h('p', { class: 'fs-soon' }, 'Teams 2 to 7 coming soon') : null);
   }
   function slidesScreen(app) {
     IR.newScreen();
@@ -1976,9 +1977,9 @@
     view.append(
       h('header', { class: 'uA-top' },
         h('button', { class: 'back homebtn', type: 'button', onclick: () => { Snd.stop(); if (document.fullscreenElement && document.exitFullscreen) document.exitFullscreen(); location.hash = '#/foundation'; } }, icon('back'), h('span', null, 'Foundation')),
-        h('h1', { class: 'uA-title' }, 'Group 1 slideshow'),
+        h('h1', { class: 'uA-title' }, 'Team 1 slideshow'),
         h('button', { class: 'btn big primary fs-slidebtn', type: 'button', onclick: goFull }, 'Full screen')),
-      h('iframe', { class: 'fs-pdf', src: SLIDE_PDF, title: 'Learn the Letters Group 1 slideshow' }));
+      h('iframe', { class: 'fs-pdf', src: SLIDE_PDF, title: 'Learn the Letters Team 1 slideshow' }));
     app.append(view);
     if (IR.teach) IR.teach.sync();
   }
