@@ -69,6 +69,7 @@
       const w = targets[r];
       ctx.progress(r / bites);
       if (ctx.count) ctx.count(r + 1, bites);
+      if (ctx.showRound) ctx.showRound(r + 1, bites);
       stage.innerHTML = '';
       let locked = false;
       const status = h('p', { class: 'status', 'aria-live': 'polite' }, '\u00a0');
@@ -111,7 +112,7 @@
           b.classList.add('right', 'feeding');
           zip.classList.add('yum');
           const treat = nextTreat();
-          status.textContent = treat.yuck ? 'Yuck!' : 'Yum! Zip munched ' + w + '.';
+          status.textContent = row && row % 3 === 0 ? row + ' in a row!' : (treat.yuck ? 'Yuck!' : 'Yum! Zip munched ' + w + '.');
           streak.textContent = 'In a row: ' + row;
           const dots = document.querySelectorAll('.fz-bites i');
           if (dots[r]) dots[r].classList.add('full');
@@ -132,6 +133,7 @@
           streak.textContent = 'In a row: 0';
           status.textContent = "Zip isn't hungry for that one, listen again.";
           if (ctx.miss) ctx.miss();
+          if (r + 3 < targets.length) targets[r + 3] = w;
           await Snd.play(A.sfx.tryagain);
           if (ctx.scr.ok() && my === token) say(w);
         }

@@ -91,12 +91,18 @@
         h('span', { class: 'll1faces' },
           h('img', { class: 'll1face', src: ZIP, alt: 'Zip' }),
           h('img', { class: 'll1face', src: FRILL, alt: 'Frill' }))),
+      h('p', { class: 'qcount llround', 'aria-live': 'polite' }, ''),
       instr, stage,
       h('div', { class: 'll1foot' }, bar));
+    const roundEl = screen.querySelector('.llround');
     const ctx = {
       scr: scr,
       stage: stage,
       mistakes: 0,
+      roundTo(x, n) {
+        if (roundEl) roundEl.textContent = 'Round ' + x + ' of ' + n;
+        ctx.progress((x - 1) / Math.max(1, n));
+      },
       miss() { ctx.mistakes += 1; },
       progress(f) {
         const v = Math.round(Math.max(0, Math.min(1, f)) * 100);
@@ -113,15 +119,23 @@
         ctx.progress(1);
         if (PACK.onDone) PACK.onDone(again);
         IR.touchStreak();
+        const team = /^#\/foundation\/letters\/g(\d+)/.exec(back || '');
         const done = IR.engage.endScreen({
           title: label,
           stars: ctx.mistakes ? 2 : 3,
-          nextLabel: 'More games',
           backLabel: 'Play again',
-          onBack: () => { const app = document.querySelector('#app'); app.innerHTML = ''; open('#/foundation/sample/' + again, app); },
-          onNext: () => go('play')
+          nextLabel: team ? 'Back to Team ' + team[1] : 'More games',
+          onBack: () => {
+            const app = document.querySelector('#app');
+            app.innerHTML = '';
+            if (team && IR.day1Play) IR.day1Play(app, again, PACK, back);
+            else open('#/foundation/sample/' + again, app);
+          },
+          onNext: () => { if (team) location.hash = back; else go('play'); }
         });
         done.classList.add('ll1end');
+        const againBtn = done.querySelector('.menulink');
+        if (againBtn) { againBtn.classList.remove('menulink'); againBtn.classList.add('btn', 'big', 'llagain'); }
         document.querySelector('#app').append(done);
         Snd.play(A.sfx.done);
       }
@@ -246,13 +260,44 @@
       h('b', null, game.title)))));
   }
 
+  const ROUND_N = 12;
+  const LIKE = { a: 'ocdu', m: 'nwh', s: 'zcf', t: 'ilf', p: 'bdq', f: 'vth', i: 'ljt', n: 'mhu', o: 'acu', d: 'bpq', c: 'oea', u: 'nao', g: 'qjy', b: 'dph', e: 'cao', k: 'cgx', h: 'nbl', r: 'n', l: 'itf', w: 'vu', j: 'giy', y: 'vjg', x: 'kz', q: 'gp', v: 'fw', z: 's' };
+  function cycle(list, n) {
+    const out = [];
+    if (!list.length) return out;
+    const early = list.slice(0, Math.max(1, Math.ceil(list.length / 2)));
+    for (let i = 0; i < (n || ROUND_N); i++) {
+      const bag = i < 4 ? early : list;
+      out.push(bag[i % bag.length]);
+    }
+    return out;
+  }
+  function likeIds(answer, ids, count) {
+    const raw = (LIKE[answer] || '') + ids.join('');
+    const out = [];
+    for (const ch of raw) {
+      if (ch !== answer && ids.indexOf(ch) >= 0 && out.indexOf(ch) < 0) out.push(ch);
+      if (out.length >= count) break;
+    }
+    return out;
+  }
   function rounds(ctx, list, draw, id) {
+    const plan = cycle(list, ROUND_N);
     let i = 0;
+    let streak = 0;
     function step() {
-      if (i >= list.length) { ctx.badge(GAMES.filter((g) => g.id === id)[0].title, id); return; }
-      ctx.progress(i / list.length);
+      if (i >= plan.length) { ctx.badge(GAMES.filter((g) => g.id === id)[0].title, id); return; }
+      ctx.roundTo(i + 1, plan.length);
       ctx.stage.innerHTML = '';
-      draw(list[i], () => { i += 1; yes(); setTimeout(step, 280); });
+      if (streak >= 3 && streak % 3 === 0) ctx.stage.append(h('p', { class: 'llpraise', role: 'status' }, streak + ' in a row!'));
+      const item = plan[i];
+      draw(item, () => { streak += 1; i += 1; yes(); setTimeout(step, 280); }, (el) => {
+        streak = 0;
+        miss(el);
+        const at = i + 3;
+        if (at < plan.length) plan[at] = item;
+        else if (plan.length < 14) plan.push(item);
+      }, i);
     }
     step();
   }
@@ -274,14 +319,16 @@
   function pop(ctx) {
     ctx.setInstr('Hear the sound. Pop that bubble.');
     const ids = PACK.ids;
-    rounds(ctx, letterBag(), (id, ok) => {
+    rounds(ctx, ids, (id, ok, again, i) => {
       say(PACK.say[id]);
-      const shown = ids.length > 2 ? shuffle(ids) : shuffle(ids.concat(ids));
-      const bubbles = shown.map((letter) => h('button', {
+      const shown = [id].concat(likeIds(id, ids, i < 4 ? 1 : i < 8 ? 2 : Math.max(2, ids.length - 1)));
+      const bubbles = shuffle(shown).map((letter) => h('button', {
         class: 'll1bubble',
         type: 'button',
+        'data-yes': letter === id ? '1' : '0',
         onclick: (e) => {
-          if (letter !== id) { miss(e.currentTarget); return; }
+          if (e.currentTarget.classList.contains('popped')) return;
+          if (letter !== id) { again(e.currentTarget); return; }
           e.currentTarget.classList.add('popped');
           ok();
         }
@@ -301,187 +348,163 @@
 
   function feed(ctx) {
     ctx.setInstr('Hear the sound. Tap that friend.');
-    rounds(ctx, letterBag(), (id, ok) => {
+    rounds(ctx, PACK.ids, (id, ok, again, i) => {
       say(PACK.say[id]);
-      const friends = PACK.ids.map((letter) => h('button', {
+      const shown = [id].concat(likeIds(id, PACK.ids, i < 4 ? 1 : Math.max(2, PACK.ids.length - 1)));
+      const friends = shuffle(shown).map((letter) => h('button', {
         class: 'll1friend',
         type: 'button',
-        onclick: (e) => { if (letter === id) ok(); else miss(e.currentTarget); }
+        'data-yes': letter === id ? '1' : '0',
+        onclick: (e) => { if (letter === id) ok(); else again(e.currentTarget); }
       }, h('img', { src: PACK.art[letter], alt: letter }), h('b', null, letter)));
-      ctx.stage.append(h('div', { class: PACK.ids.length > 2 ? 'll1friends' : 'll1pair' }, ...friends));
+      ctx.stage.append(h('div', { class: 'll1friends' }, ...friends));
     }, 'feed');
   }
 
   function catchSound(ctx) {
     ctx.setInstr('Tap the first sound.');
-    rounds(ctx, pictureCards(), (pic, ok) => {
+    rounds(ctx, pictureCards(), (pic, ok, again, i) => {
+      const choices = [pic.answer].concat(likeIds(pic.answer, PACK.ids, i < 4 ? 1 : Math.max(2, PACK.ids.length - 1)));
       ctx.stage.append(
         h('img', { class: 'll1link', src: pic.src, alt: '' }),
-        h('div', { class: PACK.ids.length > 2 ? 'll1friends' : 'll1pair' }, ...PACK.ids.map((letter) => big(letter, (e) => {
-          if (letter === pic.answer) ok(); else miss(e.currentTarget);
-        }))));
+        h('div', { class: 'll1friends' }, ...shuffle(choices).map((letter) => {
+          const b = big(letter, (e) => { if (letter === pic.answer) ok(); else again(e.currentTarget); });
+          b.setAttribute('data-yes', letter === pic.answer ? '1' : '0');
+          return b;
+        })));
     }, 'catch');
   }
 
   function hunt(ctx) {
     ctx.setInstr('Tap the letter you hear.');
     const spots = [[12, 18], [70, 14], [40, 42], [78, 58], [18, 66]];
-    let round = 0;
-    function show() {
-      if (round >= PACK.ids.length) { ctx.badge('Letter Hunt', 'hunt'); return; }
-      const target = PACK.ids[round];
+    rounds(ctx, PACK.ids, (target, ok, again) => {
       say(PACK.say[target]);
-      const others = PACK.ids.filter((id) => id !== target);
-      const letters = [target, target, target].concat(others).slice(0, spots.length);
-      let left = 3;
+      const others = likeIds(target, PACK.ids, 2);
+      const letters = [target, target].concat(others).slice(0, spots.length);
+      let left = letters.filter((id) => id === target).length;
       const beach = h('div', { class: 'll1beach' });
       shuffle(letters).forEach((id, n) => {
         const spot = spots[n];
         beach.append(h('button', {
           class: 'll1hunt',
           type: 'button',
+          'data-yes': id === target ? '1' : '0',
           style: 'left:' + spot[0] + '%;top:' + spot[1] + '%',
           onclick: (e) => {
             if (e.currentTarget.classList.contains('lit')) return;
-            if (id !== target) { miss(e.currentTarget); return; }
+            if (id !== target) { again(e.currentTarget); return; }
             e.currentTarget.classList.add('lit');
             left -= 1;
             say(PACK.say[target]);
-            ctx.progress((round + (3 - left) / 3) / PACK.ids.length);
             if (left > 0) return;
-            yes();
-            round += 1;
-            setTimeout(show, 280);
+            ok();
           }
         }, id));
       });
-      ctx.stage.innerHTML = '';
       ctx.stage.append(beach);
-    }
-    show();
+    }, 'hunt');
   }
 
   function build(ctx) {
     ctx.setInstr('Tap the letters to make the word.');
-    let w = 0;
-    function show() {
-      if (w >= PACK.words.length) { ctx.badge('Build It', 'build'); return; }
-      const word = PACK.words[w];
+    rounds(ctx, PACK.words, (word, ok, again) => {
       let at = 0;
       const built = h('p', { class: 'll1built' }, '');
-      ctx.stage.innerHTML = '';
-      ctx.stage.append(built, h('div', { class: 'll1pair' }, ...shuffle(word.parts).map((id) => big(id, (e) => {
-        const btn = e.currentTarget;
-        if (btn.disabled) return;
-        if (word.parts[at] !== id) { miss(btn); return; }
-        btn.disabled = true;
-        btn.classList.add('lit');
-        at += 1;
-        built.textContent += id;
-        say(PACK.say[id]);
-        ctx.progress((w + at / word.parts.length) / PACK.words.length);
-        if (at < word.parts.length) return;
-        yes();
-        w += 1;
-        setTimeout(show, 350);
-      }))));
-    }
-    show();
+      const extras = likeIds(word.parts[0], PACK.ids, 1);
+      const tiles = shuffle(word.parts.concat(extras.filter((id) => word.parts.indexOf(id) < 0)));
+      ctx.stage.append(built, h('div', { class: 'll1friends' }, ...tiles.map((id) => {
+        const b = big(id, (e) => {
+          const btn = e.currentTarget;
+          if (btn.disabled) return;
+          if (word.parts[at] !== id) { again(btn); return; }
+          btn.disabled = true;
+          btn.classList.add('lit');
+          at += 1;
+          built.textContent += id;
+          say(PACK.say[id]);
+          if (at < word.parts.length) return;
+          ok();
+        });
+        return b;
+      })));
+    }, 'build');
   }
 
   function ears(ctx) {
     ctx.setInstr('Listen. Then tap the picture.');
-    let w = 0;
-    function show() {
-      if (w >= PACK.words.length) { ctx.badge('Ears Only Blend', 'ears'); return; }
-      const word = PACK.words[w];
-      const choices = h('div', { class: 'll1pair' });
-      ctx.stage.innerHTML = '';
+    rounds(ctx, PACK.words, (word, ok, again, i) => {
+      const choices = h('div', { class: 'll1friends' });
       ctx.stage.append(choices);
+      const pics = [{ src: word.src, good: true }];
+      const decoys = PACK.words.filter((item) => item.src !== word.src).slice(0, i < 4 ? 1 : 2);
+      decoys.forEach((item) => pics.push({ src: item.src, good: false }));
+      if (pics.length < 2) pics.push({ src: word.decoy || OBJ.apple, good: false });
       const pick = (src, good) => h('button', {
-        class: 'll1friend', type: 'button',
-        onclick: (e) => {
-          if (!good) { miss(e.currentTarget); return; }
-          yes();
-          w += 1;
-          ctx.progress(w / PACK.words.length);
-          setTimeout(show, 280);
-        }
+        class: 'll1friend', type: 'button', 'data-yes': good ? '1' : '0',
+        onclick: (e) => { if (!good) { again(e.currentTarget); return; } ok(); }
       }, h('img', { src: src, alt: '' }));
       word.parts.reduce((p, id) => p.then(() => say(PACK.say[id])), Promise.resolve()).then(() => {
-        choices.append(pick(word.src, true), pick(word.decoy || OBJ.apple, false));
+        shuffle(pics).forEach((item) => choices.append(pick(item.src, item.good)));
       });
-    }
-    show();
+    }, 'ears');
   }
 
   function flash(ctx) {
-    const deck = PACK.ids.slice();
-    function show() {
-      if (!deck.length) { ctx.badge('Quick Flash', 'flash'); return; }
-      const id = deck[0];
-      ctx.progress(1 - deck.length / PACK.ids.length);
-      ctx.setInstr('Say the sound. Tap I said it.');
-      const meter = h('i');
-      ctx.stage.innerHTML = '';
+    ctx.setInstr('Say the sound. Tap I said it.');
+    rounds(ctx, PACK.ids, (id, ok, again) => {
       ctx.stage.append(
         h('p', { class: 'll1flash' }, id),
-        h('div', { class: 'll1meter', 'aria-hidden': 'true' }, meter),
         h('div', { class: 'll1pair' },
-          h('button', { class: 'btn big primary', type: 'button', onclick: () => { say(PACK.say[id]); deck.shift(); show(); } }, 'I said it'),
-          h('button', { class: 'btn big', type: 'button', onclick: () => { deck.push(deck.shift()); ctx.miss(); show(); } }, 'Not yet')));
-      requestAnimationFrame(() => { meter.style.width = '100%'; });
-    }
-    show();
+          h('button', { class: 'btn big primary', type: 'button', 'data-yes': '1', onclick: () => { say(PACK.say[id]); ok(); } }, 'I said it'),
+          h('button', { class: 'btn big', type: 'button', onclick: () => again() }, 'Not yet')));
+    }, 'flash');
   }
 
   function match(ctx) {
     ctx.setInstr('Tap the word for the picture.');
-    let w = 0;
-    function show() {
-      if (w >= PACK.words.length) { ctx.badge('Read and Match', 'match'); return; }
-      const word = PACK.words[w];
-      const next = PACK.words[(w + 1) % PACK.words.length];
-      const wrong = PACK.words.length > 1 ? next.text : (PACK.ids[0] === word.text ? PACK.ids[1] : PACK.ids[0]);
-      ctx.stage.innerHTML = '';
+    rounds(ctx, PACK.words, (word, ok, again, i) => {
+      const others = PACK.words.filter((item) => item.text !== word.text).slice(0, i < 6 ? 1 : 2);
+      const choices = shuffle([{ text: word.text, good: true }].concat(others.map((item) => ({ text: item.text, good: false }))));
       ctx.stage.append(
         h('figure', { class: 'fs-scene ll1pic' },
           h('img', { src: word.src, alt: capWord(word.text) }),
           h('figcaption', null, capWord(word.text))),
-        h('div', { class: 'll1pair' },
-          big(word.text, () => {
-            yes();
-            w += 1;
-            ctx.progress(w / PACK.words.length);
-            setTimeout(show, 280);
-          }),
-          big(wrong, (e) => miss(e.currentTarget))));
-    }
-    show();
+        h('div', { class: 'll1friends' }, ...choices.map((choice) => {
+          const b = big(choice.text, (e) => { if (choice.good) ok(); else again(e.currentTarget); });
+          b.setAttribute('data-yes', choice.good ? '1' : '0');
+          return b;
+        })));
+    }, 'match');
   }
 
   function soundMatch(ctx) {
     ctx.setInstr('Hear the sound. Tap the picture.');
     const list = pictureCards().map((pic) => ({ sound: pic.answer, src: pic.src }));
-    rounds(ctx, list, (item, ok) => {
+    rounds(ctx, list, (item, ok, again, i) => {
       say(PACK.say[item.sound]);
-      const rest = pictureCards().filter((pic) => pic.src !== item.src).slice(0, 2);
-      const options = shuffle([{ src: item.src, good: true }].concat(rest.map((pic) => ({ src: pic.src, good: false }))));
+      const rest = pictureCards().filter((pic) => pic.src !== item.src);
+      const decoys = rest.filter((pic) => likeIds(item.sound, PACK.ids, 3).indexOf(pic.answer) >= 0);
+      const pool = (decoys.length ? decoys : rest).slice(0, i < 4 ? 1 : 2);
+      const options = shuffle([{ src: item.src, good: true }].concat(pool.map((pic) => ({ src: pic.src, good: false }))));
       ctx.stage.append(h('div', { class: 'll1trio' }, ...options.map((opt) => h('button', {
-        class: 'll1friend', type: 'button',
-        onclick: (e) => { if (opt.good) ok(); else miss(e.currentTarget); }
+        class: 'll1friend', type: 'button', 'data-yes': opt.good ? '1' : '0',
+        onclick: (e) => { if (opt.good) ok(); else again(e.currentTarget); }
       }, h('img', { src: opt.src, alt: '' })))));
     }, 'sound');
   }
 
   function sortGame(ctx) {
     ctx.setInstr('Tap the first sound.');
-    rounds(ctx, pictureCards(), (card, ok) => {
+    rounds(ctx, pictureCards(), (card, ok, again, i) => {
+      const choices = [card.answer].concat(likeIds(card.answer, PACK.ids, i < 4 ? 1 : Math.max(2, PACK.ids.length - 1)));
       ctx.stage.append(
         h('img', { class: 'll1link', src: card.src, alt: '' }),
-        h('div', { class: PACK.ids.length > 2 ? 'll1friends' : 'll1pair' }, ...PACK.ids.map((letter) => big(letter, (e) => {
-          if (letter === card.answer) ok(); else miss(e.currentTarget);
-        }))));
+        h('div', { class: 'll1friends' }, ...shuffle(choices).map((letter) => {
+          const b = big(letter, (e) => { if (letter === card.answer) ok(); else again(e.currentTarget); });
+          b.setAttribute('data-yes', letter === card.answer ? '1' : '0');
+          return b;
+        })));
     }, 'sort');
   }
 

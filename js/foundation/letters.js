@@ -578,9 +578,24 @@
     }
     return out;
   }
+  /* Twelve rounds: the first few stay with the earlier letters, then the whole set mixes in. */
+  function plan12(pool) {
+    const n = 12;
+    if (!pool.length) return [];
+    const early = pool.slice(0, Math.max(1, Math.ceil(pool.length / 2)));
+    const out = [];
+    for (let i = 0; i < n; i++) {
+      const bag = i < 4 ? early : pool;
+      out.push(bag[i % bag.length]);
+    }
+    return out;
+  }
+  const LIKE = { a: 'ocdu', m: 'nwh', s: 'zcf', t: 'ilf', p: 'bdq', f: 'vth', i: 'ljt', n: 'mhu', o: 'acu', d: 'bpq', c: 'oea', u: 'nao', g: 'qjy', b: 'dph', e: 'cao', k: 'cgx', h: 'nbl', r: 'n', l: 'itf', w: 'vu', j: 'giy', y: 'vjg', x: 'kz', q: 'gp', v: 'fw', z: 's' };
   function options(correct, pool, n) {
-    const rest = shuffle(pool.filter((x) => x.id !== correct.id));
+    const likes = (LIKE[correct.id] || '').split('').map((id) => pool.filter((x) => x.id === id)[0]).filter(Boolean);
+    const rest = shuffle(pool.filter((x) => x.id !== correct.id && likes.indexOf(x) < 0));
     const picked = [correct];
+    likes.forEach((x) => { if (picked.length < n) picked.push(x); });
     rest.forEach((x) => { if (picked.length < n) picked.push(x); });
     return shuffle(picked);
   }
@@ -799,6 +814,7 @@
     let mistakes = 0;
     const fill = h('i');
     const bar = h('div', { class: 'pbar', role: 'progressbar', 'aria-valuemin': 0, 'aria-valuemax': 100, 'aria-valuenow': 0 }, fill);
+    const roundEl = h('p', { class: 'qcount llround', 'aria-live': 'polite' }, '');
     const instrBox = h('div', { class: 'instr' });
     const stage = h('div', { class: 'stage' });
     const base = '#/foundation/letters/' + group.id;
@@ -812,6 +828,10 @@
         const v = Math.round(Math.max(0, Math.min(1, f)) * 100);
         fill.style.width = v + '%';
         bar.setAttribute('aria-valuenow', v);
+      },
+      showRound(x, n) {
+        roundEl.textContent = 'Round ' + x + ' of ' + n;
+        ctx.progress((x - 1) / Math.max(1, n));
       },
       setInstr(text) {
         instrBox.innerHTML = '';
@@ -831,11 +851,14 @@
         const ov = IR.engage.endScreen({
           title: game.title,
           stars: stars,
-          nextLabel: 'Back to the group',
-          backLabel: 'Back to the group',
-          onBack: () => { location.hash = base; },
+          backLabel: 'Play again',
+          nextLabel: 'Back to Team ' + group.n,
+          onBack: () => { location.hash = base + '/' + game.id; },
           onNext: () => { location.hash = base; }
         });
+        ov.classList.add('llend');
+        const again = ov.querySelector('.menulink');
+        if (again) { again.classList.remove('menulink'); again.classList.add('btn', 'big', 'llagain'); }
         app.append(ov);
         Snd.play(A.sfx.done);
       }
@@ -858,7 +881,7 @@
     };
     const screen = h('div', { class: 'screen lessonscreen nkstep u5step llstep' },
       h('header', { class: 'lesson-top' }, IR.ui.pageNav(base), bar),
-      instrBox, stage, nav);
+      roundEl, instrBox, stage, nav);
     app.append(screen);
     IR.attachGameRules(ctx, screen, game.title);
     if (IR.engage) IR.engage.mount(ctx, screen);
@@ -880,21 +903,12 @@
   }
 
   function runFlash(ctx, group) {
-    const prior = shuffle(earlierLetters(group));
-    if (!prior.length) {
-      ctx.setInstr('This is the first group. No earlier letters yet.');
-      ctx.stage.append(h('div', { class: 'activity llgame llflash' },
-        h('img', { src: 'img/zipA.webp', alt: '' }),
-        h('img', { src: 'img/frill.webp', alt: '' }),
-        h('p', { class: 'llprompt' }, 'Today you meet ' + group.letters.join(', ') + '.')));
-      ctx.setNextLabel('Done');
-      ctx.setNext(() => { ctx.quietDone(); return true; });
-      return;
-    }
+    const prior = plan12(taughtThrough(group));
     ctx.setInstr('Say the sound. Then tap the letter.');
     let i = 0;
     function show() {
-      if (i >= prior.length) { ctx.quietDone(); return; }
+      if (i >= prior.length) { ctx.finish(); return; }
+      if (ctx.showRound) ctx.showRound(i + 1, prior.length);
       const L = prior[i];
       ctx.progress(i / prior.length);
       if (ctx.count) ctx.count(i + 1, prior.length);
@@ -919,13 +933,15 @@
   }
 
   function runMeet(ctx, group) {
-    const letters = lettersOf(group);
+    const letters = plan12(taughtThrough(group));
     let i = 0;
     ctx.setInstr('Look, chant, and do the action.');
     function show() {
+      if (i >= letters.length) { ctx.finish(); return; }
       const L = letters[i];
       const mem = MEMORY[L.id];
       const info = program && program.letters && program.letters.filter((row) => row.letter === L.id)[0];
+      if (ctx.showRound) ctx.showRound(i + 1, letters.length);
       ctx.progress(i / letters.length);
       if (ctx.count) ctx.count(i + 1, letters.length);
       ctx.stage.innerHTML = '';
@@ -946,7 +962,7 @@
     }
     ctx.setNext(() => {
       if (i < letters.length - 1) { i++; show(); return true; }
-      ctx.quietDone();
+      ctx.finish();
       return true;
     });
     ctx.setBack(() => { if (i > 0) { i--; show(); return true; } return false; });
@@ -954,13 +970,15 @@
   }
 
   function runTrace(ctx, group) {
-    const letters = lettersOf(group);
+    const letters = plan12(taughtThrough(group));
     let i = 0;
     ctx.setInstr(dayOf(group) === 1 ? 'Draw the letter over the character. Or tap the numbers.' : 'Trace the plain letter, or tap the numbers.');
     function show() {
+      if (i >= letters.length) { ctx.finish(); return; }
       const L = letters[i];
       let stroke = 0;
       let moved = 0;
+      if (ctx.showRound) ctx.showRound(i + 1, letters.length);
       ctx.progress(i / letters.length);
       if (ctx.count) ctx.count(i + 1, letters.length);
       ctx.stage.innerHTML = '';
@@ -1007,19 +1025,21 @@
     }
     ctx.setNext(() => {
       if (i < letters.length - 1) { i++; show(); return true; }
-      ctx.quietDone();
+      ctx.finish();
       return true;
     });
     show();
   }
 
   function runSay(ctx, group) {
-    const letters = lettersOf(group);
+    const letters = plan12(taughtThrough(group));
     let i = 0;
     ctx.setInstr('Say it from the letter. No picture.');
     function show() {
+      if (i >= letters.length) { ctx.finish(); return; }
       const L = letters[i];
       const look = printLook(L.id, i + 1);
+      if (ctx.showRound) ctx.showRound(i + 1, letters.length);
       ctx.progress(i / letters.length);
       if (ctx.count) ctx.count(i + 1, letters.length);
       ctx.stage.innerHTML = '';
@@ -1032,7 +1052,7 @@
     }
     ctx.setNext(() => {
       if (i < letters.length - 1) { i++; show(); return true; }
-      ctx.quietDone();
+      ctx.finish();
       return true;
     });
     ctx.setBack(() => { if (i > 0) { i--; show(); return true; } return false; });
@@ -1045,13 +1065,14 @@
   }
 
   function runRead(ctx, group) {
-    const items = wordsFor(group);
+    const items = plan12(wordsFor(group));
     let i = 0;
     let token = 0;
     ctx.setInstr('Tap each letter. They step in, hold hands, and say the word.');
     function show() {
       const my = ++token;
       if (i >= items.length) { ctx.finishRead(); return; }
+      if (ctx.showRound) ctx.showRound(i + 1, items.length);
       const item = items[i];
       const parts = graphemes(item.w);
       let at = 0;
@@ -1143,15 +1164,15 @@
   function runEars(ctx, group) {
     const pool = taughtThrough(group);
     const words = readable(group);
-    const kinds = ['first', 'blend', 'segment'];
     const rounds = [];
-    for (let n = 0; n < 6; n++) rounds.push({ kind: kinds[n % 3], item: words[n % words.length] });
+    for (let n = 0; n < 12; n++) rounds.push({ kind: n < 4 ? 'first' : n < 8 ? 'blend' : 'segment', item: words[n % words.length] });
     shuffle(rounds);
     let i = 0;
     let token = 0;
     function show() {
       const my = ++token;
-      if (i >= rounds.length) { ctx.quietDone(); return; }
+      if (i >= rounds.length) { ctx.finish(); return; }
+      if (ctx.showRound) ctx.showRound(i + 1, rounds.length);
       const round = rounds[i];
       const item = round.item;
       const parts = graphemes(item.w);
@@ -1249,14 +1270,15 @@
   }
 
   function runSpell(ctx, group) {
-    const items = wordsFor(group).slice(0, 5);
+    const items = plan12(wordsFor(group));
     const bank = taughtThrough(group);
     let i = 0;
     let token = 0;
     ctx.setInstr('Listen. Tap the letters to build the word.');
     function show() {
       const my = ++token;
-      if (i >= items.length) { ctx.quietDone(); return; }
+      if (i >= items.length) { ctx.finish(); return; }
+      if (ctx.showRound) ctx.showRound(i + 1, items.length);
       const item = items[i];
       const parts = graphemes(item.w);
       let at = 0;
@@ -1308,7 +1330,7 @@
     }
     ctx.setNext(() => {
       if (i < items.length - 1) { i++; show(); return true; }
-      ctx.quietDone();
+      ctx.finish();
       return true;
     });
     show();
@@ -1331,15 +1353,17 @@
   function runRounds(ctx, rounds, draw) {
     let i = 0;
     let token = 0;
+    let streak = 0;
     function show() {
       const my = ++token;
       if (i >= rounds.length) { ctx.progress(1); ctx.finish(); return; }
+      if (ctx.showRound) ctx.showRound(i + 1, rounds.length);
       ctx.progress(i / rounds.length);
       if (ctx.count) ctx.count(i + 1, rounds.length);
       const round = rounds[i];
       let locked = false;
       ctx.stage.innerHTML = '';
-      const status = h('p', { class: 'status', 'aria-live': 'polite' }, '\u00a0');
+      const status = h('p', { class: 'status', 'aria-live': 'polite' }, streak >= 3 && streak % 3 === 0 ? streak + ' in a row!' : '\u00a0');
       const host = h('div', { class: 'activity llgame' });
       ctx.stage.append(host);
       if (ctx.armReveal) ctx.armReveal(round.reveal, (stage) => [...stage.querySelectorAll('.llchoice')].filter((el) => el.dataset.yes === '1'));
@@ -1347,15 +1371,20 @@
         if (locked || my !== token) return;
         if (!ok) {
           btn.classList.add('tried');
+          streak = 0;
           ctx.miss();
           status.textContent = 'Try again.';
+          const at = i + 3;
+          if (at < rounds.length) rounds[at] = round;
+          else if (rounds.length < 14) rounds.push(round);
           await Snd.play(A.sfx.tryagain);
           if (round.replay && ctx.scr.ok() && my === token) round.replay();
           return;
         }
         locked = true;
+        streak += 1;
         btn.classList.add('right');
-        status.textContent = 'Yes.';
+        status.textContent = streak >= 3 && streak % 3 === 0 ? streak + ' in a row!' : 'Yes.';
         await Snd.play(A.sfx.ding);
         if (!ctx.scr.ok() || my !== token) return;
         i++;
@@ -1372,14 +1401,15 @@
 
   function runFind(ctx, pool, instr) {
     ctx.setInstr(instr || 'Hear the sound. Tap that letter.');
-    const rounds = take(pool, Math.max(6, pool.length)).map((L) => ({
+    const rounds = plan12(pool).map((L, i) => ({
       letter: L,
       reveal: L.id,
       replay: () => hear(L, 'sound'),
-      upper: Math.random() < 0.5
+      upper: i >= 8,
+      nChoices: i < 4 ? 2 : i < 8 ? 3 : Math.min(4, pool.length)
     }));
     runRounds(ctx, rounds, (round, host, pick) => {
-      const opts = options(round.letter, pool, Math.min(4, pool.length)).map((L) => ({
+      const opts = options(round.letter, pool, round.nChoices || Math.min(4, pool.length)).map((L) => ({
         letter: L,
         yes: L.id === round.letter.id,
         label: glyph(L.id, round.upper)
@@ -1391,10 +1421,10 @@
 
   function runMatch(ctx, pool) {
     ctx.setInstr('Tap the letter that matches.');
-    const rounds = take(pool, Math.max(6, pool.length)).map((L, n) => ({ letter: L, reveal: L.id, showUpper: n % 2 === 0 }));
+    const rounds = plan12(pool).map((L, n) => ({ letter: L, reveal: L.id, showUpper: n % 2 === 0, nChoices: n < 4 ? 2 : n < 8 ? 3 : Math.min(4, pool.length) }));
     runRounds(ctx, rounds, (round, host, pick) => {
       const wantUpper = !round.showUpper;
-      const opts = options(round.letter, pool, Math.min(4, pool.length)).map((L) => ({
+      const opts = options(round.letter, pool, round.nChoices || Math.min(4, pool.length)).map((L) => ({
         letter: L,
         yes: L.id === round.letter.id,
         label: glyph(L.id, wantUpper)
@@ -1407,11 +1437,11 @@
 
   function runSound(ctx, pool) {
     ctx.setInstr('Look at the picture. Tap the letter.');
-    const rounds = take(pool, Math.max(6, pool.length)).map((L) => ({ letter: L, reveal: L.id }));
+    const rounds = plan12(pool).map((L, i) => ({ letter: L, reveal: L.id, nChoices: i < 4 ? 2 : i < 8 ? 3 : Math.min(4, pool.length) }));
     runRounds(ctx, rounds, (round, host, pick) => {
       const L = round.letter;
       const end = L.where === 'end';
-      const opts = options(L, pool, Math.min(4, pool.length)).map((item) => ({
+      const opts = options(L, pool, round.nChoices || Math.min(4, pool.length)).map((item) => ({
         letter: item,
         yes: item.id === L.id,
         label: glyph(item.id, false)
@@ -1428,7 +1458,7 @@
   function runFeed(ctx, pool) {
     IR.runFeedZip(ctx, {
       words: pool.map((L) => L.id),
-      bites: Math.max(4, pool.length),
+      bites: 12,
       line: 'Listen. Feed Zip the letter you hear.',
       promptAudio: '',
       say: (id) => hear(BY[id], 'sound'),
@@ -1445,16 +1475,17 @@
   function runReview(ctx, pool) {
     ctx.setInstr('These letters are from this group and the groups before it.');
     const kinds = ['find', 'match', 'sound'];
-    const rounds = shuffle(take(pool, 8).map((L, n) => ({
+    const rounds = plan12(pool).map((L, n) => ({
       letter: L,
       reveal: L.id,
       kind: kinds[n % kinds.length],
       showUpper: n % 2 === 0,
+      nChoices: n < 4 ? 2 : n < 8 ? 3 : Math.min(4, pool.length),
       replay: () => hear(L, 'sound')
-    })));
+    }));
     runRounds(ctx, rounds, (round, host, pick) => {
       const L = round.letter;
-      const opts = options(L, pool, Math.min(4, pool.length));
+      const opts = options(L, pool, round.nChoices || Math.min(4, pool.length));
       if (round.kind === 'match') {
         const wantUpper = !round.showUpper;
         host.append(
