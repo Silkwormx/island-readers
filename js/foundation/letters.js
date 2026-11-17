@@ -1572,7 +1572,8 @@
         onclick: () => { if (open) { Snd.stop(); location.hash = '#/foundation/letters/' + group.id; } }
       },
         h('span', { class: 'tpic fs-setpic', style: 'grid-template-columns:repeat(' + (group.letters.length > 2 ? 2 : group.letters.length) + ',minmax(0,1fr))' }, ...faces,
-          isNext ? h('span', { class: 'herechip' }, 'Next up') : null),
+          isNext ? h('span', { class: 'herechip' }, 'Next up') : null,
+          open ? null : h('span', { class: 'lockbadge' }, icon('lock'), h('span', null, 'Locked'))),
         h('span', { class: 'tbody' },
           h('span', { class: 'thead' }, h('b', { class: 'tnum' }, 'Team ' + group.n)),
           h('span', { class: 'tname' }, group.letters.join(', ')),
@@ -1699,8 +1700,9 @@
       stage.append(h('div', { class: 'fs-scenes' }, ...scenes.map((scene) => {
         const src = sceneSrc(scene);
         const caption = scene.caption || '';
+        if (!src) return null;
         return h('figure', { class: 'fs-scene' },
-          src ? h('img', { src: src, alt: scene.scene || '' }) : null,
+          h('img', { src: src, alt: scene.scene || '' }),
           caption ? h('figcaption', null, caption) : null);
       })));
     }
@@ -1952,7 +1954,7 @@
         { label: 'Day 2', page: 44 },
         { label: 'Day 3', page: 79 },
         { label: 'Day 4', page: 110 },
-        { label: 'Team check', page: 135 }
+        { label: 'Team check', page: 110 }
       ]
     },
     g2: {
@@ -1962,7 +1964,7 @@
         { label: 'Day 2', page: 28 },
         { label: 'Day 3', page: 53 },
         { label: 'Day 4', page: 93 },
-        { label: 'Team check', page: 128 }
+        { label: 'Team check', page: 93 }
       ]
     }
   };
@@ -1986,14 +1988,18 @@
       group: 'foundation',
       label: 'Teacher Slideshows',
       tabClass: 'btn big fs-sidebtn',
+      extraClass: 'fs-slidepanel',
       fill(body) {
+        const cols = h('div', { class: 'fs-slidecols' });
         [1, 2].forEach((n) => {
           const id = 'g' + n;
           const deck = SLIDES[id];
-          body.append(h('button', { class: 'drop-link', type: 'button', onclick: () => openSlides(id) }, 'Team ' + n));
-          deck.days.forEach((day) => body.append(h('button', { class: 'drop-link fs-daylink', type: 'button', onclick: () => openSlides(id, day.page) }, day.label)));
+          const col = h('div', { class: 'fs-slidecol' });
+          col.append(h('button', { class: 'drop-link', type: 'button', onclick: () => openSlides(id) }, 'Team ' + n));
+          deck.days.forEach((day) => col.append(h('button', { class: 'drop-link fs-daylink', type: 'button', onclick: () => openSlides(id, day.page) }, day.label)));
+          cols.append(col);
         });
-        for (let n = 3; n <= 7; n++) body.append(h('p', { class: 'drop-soon' }, 'Team ' + n + ' coming soon'));
+        body.append(cols, h('p', { class: 'drop-soon' }, 'Teams 3-7 coming soon'));
       }
     });
   }

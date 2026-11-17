@@ -1371,12 +1371,14 @@
     {
      "word": "Tam",
      "scene": "Tam, Sam's little sister, waves with both hands",
-     "caption": "Tam sat."
+     "image": "img/scenes/tam.jpg",
+     "caption": "Tam."
     },
     {
      "word": "mats",
      "scene": "Three woven mats stacked in a neat pile",
-     "caption": "A mats."
+     "image": "img/scenes/mats.jpg",
+     "caption": "Mats."
     }
    ],
    "dictation": {

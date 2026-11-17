@@ -239,7 +239,11 @@ html.teach .llist .u5name,html.teach .llplay .u5name{font-size:32px}
 .fs-home .fs-setpic img{width:100%;height:auto;max-height:100%;aspect-ratio:1/1;object-fit:contain}
 .fs-home .fs-groupcard .tbody{margin-top:auto}
 .fs-home .bellpath .fs-groupcard .tname,.fs-home .bellpath .fs-groupcard .tsnd{height:auto;overflow:visible;white-space:normal}
-.fs-home .fs-groupcard.locked{opacity:.55}
+.fs-home .fs-groupcard{position:relative}
+.fs-home .fs-groupcard.locked{opacity:.7;filter:saturate(.2);background:#F3EEE6}
+.fs-home .fs-groupcard.locked .tpic{filter:grayscale(.45)}
+.lockbadge{position:absolute;top:.4rem;left:.4rem;z-index:2;display:inline-flex;align-items:center;gap:.25rem;padding:.12rem .45rem;border-radius:.5rem;background:#6A6256;color:#fff;font-family:Andika,sans-serif;font-weight:700;font-size:.78rem;line-height:1.2}
+.lockbadge .ico{width:.95rem;height:.95rem}
 .fs-home .fs-about{background:#E4F6F6;border:2px solid #9FCFCF;border-radius:1rem;padding:.35rem .7rem}
 .fs-home .fs-about summary{font-weight:700;cursor:pointer;min-height:2.4rem;display:flex;align-items:center}
 .fs-home .fs-bank{background:#fff;border:3px solid var(--ink);border-radius:.9rem;padding:.4rem .6rem}
