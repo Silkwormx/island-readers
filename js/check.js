@@ -77,7 +77,7 @@
     const S = IR.S(); const score = S.check.last == null ? 0 : S.check.last;
     const wrap = h('div', { class: 'result' });
     const home = h('button', { class: 'btn big primary next', type: 'button', onclick: () => { location.hash = '#/home'; } }, 'See the sky map');
-    const trail = h('button', { class: 'btn big back', type: 'button', onclick: () => { location.hash = '#/island3'; } }, icon('back'), 'Back to the trail');
+    const trail = h('button', { class: 'btn big back', type: 'button', onclick: () => { location.hash = '#/island3'; } }, icon('back'), 'Back');
     const again = h('button', { class: 'btn big next', type: 'button', onclick: () => { location.hash = '#/check'; } }, 'Try the check again');
     if (score < 7) wrap.append(h('img', { class: 'char zip big', src: 'img/zipA.webp', alt: 'Zip' }));
     if (score >= 9) {

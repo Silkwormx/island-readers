@@ -76,7 +76,7 @@ p{margin:.4em 0}
 .teachcorner{position:relative;flex:none;margin-left:auto}
 .teachbox{display:inline-flex;align-items:center;justify-content:center;min-height:2.15rem;padding:.15rem .7rem;border:2px solid #E4D6B4;border-radius:.7rem;background:transparent;color:#7A7268;font-family:Andika,sans-serif;font-weight:700;font-size:.82rem;line-height:1.1;cursor:pointer}
 .teachbox.is-open{background:#F7F1E4}
-.teachpop{position:absolute;top:100%;right:0;width:11.5rem;margin-top:.35rem;padding:.55rem .6rem .65rem;background:#FFFDF8;border:2px solid #E4D6B4;border-radius:.85rem;z-index:50}
+.teachpop{position:absolute;top:100%;right:0;width:12.5rem;max-height:min(70vh,26rem);overflow:auto;margin-top:.35rem;padding:.55rem .6rem .65rem;background:#FFFDF8;border:2px solid #E4D6B4;border-radius:.85rem;z-index:50}
 .teachpop[hidden]{display:none!important}
 .teachstep{display:flex;align-items:center;gap:.45rem;margin:.45rem 0 .15rem;color:#6A6256;font-weight:700;font-size:.95rem}
 .teachstep span{display:flex;align-items:center;justify-content:center;width:1.35rem;height:1.35rem;border-radius:.35rem;background:#E7DFD0;color:#5c5648;font-size:.8rem}
@@ -1909,6 +1909,11 @@ a.btn.tmlink.tmcheck:visited{color:#fff}
 .pindone .ico{width:14px;height:14px}
 .heretag{position:absolute;left:calc(100% + 6px);top:50%;transform:translateY(-50%);padding:2px 7px;border-radius:.55rem;background:#F28C00;color:#fff;font-family:Andika,system-ui,sans-serif;font-size:12px;font-weight:700;line-height:1.2;white-space:nowrap;pointer-events:none;box-shadow:0 2px 6px rgba(60,40,20,.2)}
 .trailpin.here{box-shadow:0 0 0 3px #fff,0 0 0 6px #F28C00,0 0 14px 3px rgba(242,140,0,.8)}
+.lockpill{display:inline-flex;margin-top:.35rem;padding:1px 8px;border-radius:999px;background:#fff;border:2px solid #C9A56A;color:#7A5310;font-family:Andika,system-ui,sans-serif;font-size:12px;font-weight:700;line-height:1.3}
+.lockpill.maplock{position:absolute;left:50%;top:calc(100% + 1px);transform:translateX(-50%);margin-top:0;font-size:10px;pointer-events:none;z-index:1}
+@media (max-width:700px){.lockpill.maplock{display:none}}
+.pinlock{color:#7A5310}
+.heretag.below{left:50%;top:calc(100% + 4px);transform:translate(-50%,0)}
 .trailtip{display:none;position:absolute;z-index:7;left:50%;bottom:calc(100% + 8px);transform:translateX(-50%);width:max-content;max-width:13.5rem;padding:.5rem .65rem .55rem;border:2px solid #E6D9B8;border-radius:.85rem;background:#FFFDF8;box-shadow:0 8px 18px rgba(60,40,20,.16);font-family:Andika,system-ui,sans-serif;color:#3b2a1a;text-align:left;white-space:normal}
 .trailtip.below{bottom:auto;top:calc(100% + 8px)}
 .trailpinwrap:hover .trailtip,.trailpinwrap:focus-within .trailtip,.trailpinwrap.tipopen .trailtip{display:block}
@@ -2634,4 +2639,38 @@ html.teach .u5step .itext{font-size:32px}
   .nkstep .u5cue,.nkstep .nkmeet .cap{font-size:1rem;margin:0}
   .nkstep .chips{gap:.25rem;margin:0}
   .nkstep .meetrow{margin-top:.2rem;gap:.4rem}
+}
+.pagenav{display:inline-flex;align-items:center;gap:.35rem;flex:none}
+.uA-top .pagenav .homebtn,.lesson-top .pagenav .homebtn,.gtop .pagenav .homebtn,.abtop .pagenav .homebtn,.slide-top .pagenav .homebtn,.unitbar .pagenav .homebtn,.top2 .pagenav .homebtn,.hbanner .pagenav .homebtn{min-height:2.15rem;padding:.1rem .55rem;font-size:.92rem;border-width:2px;box-shadow:0 2px 0 var(--ink);gap:.28rem}
+.pagenav .homebtn .ico{width:1.1rem;height:1.1rem}
+.fs-home .hbanner{justify-content:flex-start;gap:.45rem;padding-left:.55rem}
+.fs-home .hbanner h1{text-align:left;font-size:clamp(1.35rem,3vw,1.8rem)}
+.fs-home .hbanner h1::after{margin-left:0}
+@media (max-width:700px){
+  .fs-home.gridhome .mwrap > .hbanner{flex-wrap:wrap;align-items:center;padding:.4rem .55rem .2rem}
+  .fs-home.gridhome .mwrap > .hbanner .grownlab{display:none}
+  .fs-home.gridhome .mwrap > .hbanner .grownwrap{position:static;transform:none;max-width:none;margin-left:auto}
+  .fs-home.gridhome .mwrap > .hbanner h1{flex:1 1 100%;order:3;min-width:0;font-size:1.55rem;white-space:normal}
+}
+.gamegrid.pics{grid-template-columns:repeat(3,minmax(0,1fr))}
+.gamegrid.pics .gamecard{position:relative;flex-direction:column;align-items:stretch;text-align:center;padding:.4rem;gap:.28rem;min-height:0}
+.gamegrid.pics .gamepic{width:100%;height:4.4rem;object-fit:cover;border-radius:.65rem;background:#FFF6E3}
+.gamegrid.pics .gamenum{position:absolute;top:.55rem;left:.55rem;width:1.7rem;height:1.7rem;font-size:1rem;border-radius:.5rem}
+.gamegrid.pics .gamedone{position:absolute;top:.5rem;right:.5rem;display:inline-flex;width:1.45rem;height:1.45rem;border-radius:50%;background:#fff;color:#1f7a3a;box-shadow:0 1px 3px rgba(60,40,20,.25)}
+.gamegrid.pics .gamedone .ico{width:1.45rem;height:1.45rem}
+.gamegrid.pics .gametxt b{font-size:.95rem;line-height:1.15}
+.llnav .btn.next{background:#F28C00;border-color:#C95A10;box-shadow:0 4px 0 #C95A10;color:#fff}
+.trailpop{width:min(28rem,100%);max-height:min(92vh,100dvh);overflow:auto;-webkit-overflow-scrolling:touch;padding:1rem .9rem 1.1rem}
+.trail-x{position:sticky;top:.15rem;float:right;z-index:4;display:inline-flex;align-items:center;justify-content:center;width:3.4rem;height:3.4rem;margin:0 0 .2rem .4rem;border-radius:50%;border:3px solid #C45C00;background:#F28C00;color:#fff;box-shadow:0 4px 0 #C45C00}
+.trail-x .ico{width:1.6rem;height:1.6rem}
+.trailpop h2{margin:.1rem 0 .55rem;text-align:center;font-family:Andika,sans-serif}
+.trailpop .trailgo{margin-top:0}
+@media (max-width:700px){
+  .gamegrid.pics{grid-template-columns:repeat(3,minmax(0,1fr));gap:.4rem}
+  .gamegrid.pics .gamepic{height:3.2rem}
+  .gamegrid.pics .gametxt b{font-size:.78rem}
+}
+@media (max-width:480px){
+  .scrim:has(.trailpop){padding:0;align-items:stretch}
+  .trailpop{width:100%;max-height:100%;height:100%;border-radius:0;border-width:0}
 }

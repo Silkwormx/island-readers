@@ -55,7 +55,7 @@
     IR.newScreen(); stopSpeech();
     const wrap = h('div', { class: 'mwrap plc' });
     const home = () => { stopSpeech(); location.hash = '#/home'; };
-    const top = h('div', { class: 'gtop' }, h('button', { class: 'back homebtn', type: 'button', onclick: home }, icon('home'), h('span', null, 'Home')));
+    const top = h('div', { class: 'gtop' }, IR.ui.pageNav(home));
     app.append(h('div', { class: 'screen home placement' }, wrap));
     const show = (...kids) => { wrap.innerHTML = ''; wrap.append(top, ...kids.filter((k) => k != null && k !== false)); try { window.scrollTo(0, 0); } catch (e) {} };
 

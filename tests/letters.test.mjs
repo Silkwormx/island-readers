@@ -47,7 +47,8 @@ test('Learn the Letters follows the UFLI group order and is not a unit', () => {
   assert.match(letters, /My name is: /);
   assert.match(letters, /My sound is /);
   assert.match(letters, /function letterIntro/);
-  assert.match(letters, /One letter at a time/);
+  assert.match(letters, /Meet the letters/);
+  assert.match(letters, /labels: \['Introduction', 'Games', 'Read It'\]/);
   assert.match(letters, /function paintIdo/);
   assert.match(letters, /function paintWedo/);
   assert.match(letters, /If your child needs a hand/);
@@ -115,7 +116,7 @@ test('home opens Foundation Skills from the first bell, not a sidebar tab', () =
   const homeEnd = screens.indexOf('function gemScreen()');
   const home = screens.slice(homeStart, homeEnd);
   assert.equal(home.includes("tab('#/foundation'"), false);
-  assert.ok(home.indexOf('Trail Map and Placement Test') < home.indexOf("tab('#/find'"));
+  assert.ok(home.indexOf('Trail Map') < home.indexOf("tab('#/find'"));
   assert.ok(home.indexOf('Sight Word Practice') < home.indexOf("tab('#/find'"));
   assert.ok(home.indexOf("'Foundations'") < home.indexOf('for (let n = 1; n <= 22; n++)'));
   assert.match(home, /foundation\/img\/foundations_cover\.jpg/);
@@ -127,7 +128,7 @@ test('home opens Foundation Skills from the first bell, not a sidebar tab', () =
   assert.match(html, /js\/foundation\/letters\.js/);
   assert.match(html, /foundation\/foundation\.css/);
   assert.match(sw, /js\/foundation\/letters\.js/);
-  assert.match(sw, /ir-20261118y/);
+  assert.match(sw, /ir-20261118z/);
   assert.match(sw, /foundation\/img\/foundations_sidebar\.jpg/);
   assert.match(teach, /#\/foundation/);
   assert.match(letters, /Teacher Slideshows/);
@@ -139,8 +140,10 @@ test('home opens Foundation Skills from the first bell, not a sidebar tab', () =
   assert.match(screens, /Coming soon/);
   assert.match(letters, /Learn_the_Letters_Team1\.pdf/);
   assert.match(letters, /Learn_the_Letters_Team2\.pdf/);
-  assert.match(letters, /label: 'Day 1a', page: 3/);
-  assert.match(letters, /label: 'Day 1b', page: 21/);
+  assert.equal(letters.includes('Day 1a'), false);
+  assert.equal(letters.includes('Day 1b'), false);
+  assert.match(letters, /label: 'Day 2', page: 21/);
+  assert.match(letters, /label: 'Day 3', page: 44/);
   assert.match(letters, /label: 'Team check', page: 110/);
   assert.match(letters, /label: 'Day 1', page: 3/);
   assert.match(letters, /label: 'Day 4', page: 93/);
@@ -154,8 +157,9 @@ test('home opens Foundation Skills from the first bell, not a sidebar tab', () =
   assert.equal(sw.includes('Learn_the_Letters_Group1.pdf'), false);
   assert.equal(sw.includes('Learn_the_Letters_Team1.pdf'), false);
   assert.match(letters, /Foundation Skills/);
-  assert.match(letters, /class: 'btn big fs-homebtn', href: '#\/home'/);
-  assert.match(letters, /class: 'fs-titlelink', href: '#\/home'/);
+  assert.match(letters, /pageNav\('#\/home'\)/);
+  assert.equal(letters.includes('fs-homebtn'), false);
+  assert.equal(letters.includes('fs-titlelink'), false);
   assert.match(letters, /foundation\/img\/foundations_sidebar\.jpg/);
   assert.match(letters, /Zip and Frill with Team 1 letters a, m, s, t on the beach/);
   assert.equal(letters.includes('img/home_zip_frill.webp'), false);
