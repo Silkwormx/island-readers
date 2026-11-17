@@ -1155,9 +1155,9 @@
         open();
       });
       const isHere = mark.kind === 'unit' && mark.n === here;
-      const hereTag = isHere ? h('span', { class: 'heretag' + (mark.y < 22 ? ' below' : ''), 'aria-hidden': 'true' }, 'You are here') : null;
-      const mapPill = mark.kind === 'unit' && unitStatus(mark.n, place) === 'Coming soon' ? h('span', { class: 'lockpill maplock' }, 'Coming soon') : null;
-      const wrap = h('div', { class: 'trailpinwrap' + (isHere ? ' here' : ''), style: style }, btn, tip, hereTag, mapPill);
+      const hereSide = mark.x > 58 ? ' left' : '';
+      const hereTag = isHere ? h('span', { class: 'heretag' + hereSide, 'aria-hidden': 'true' }, 'You are here') : null;
+      const wrap = h('div', { class: 'trailpinwrap' + (isHere ? ' here' : ''), style: style }, btn, tip, hereTag);
       return wrap;
     };
     const listItem = (mark) => {
@@ -1223,9 +1223,7 @@
       const tip = h('div', { class: 'trailtip' + (mark.y < 18 ? ' below' : ''), id: tipId, role: 'tooltip' }, h('b', null, title), ...lines, go);
       const btn = h('button', { class: pinClass, type: 'button', style: pinStyle, 'aria-label': label, 'aria-describedby': tipId }, ...bits);
       const isHere = mark.kind === 'unit' && mark.n === here;
-      const hereTag = isHere ? h('span', { class: 'heretag' + (mark.y < 22 ? ' below' : ''), 'aria-hidden': 'true' }, 'You are here') : null;
-      const mapPill = mark.kind === 'unit' && unitStatus(mark.n, place) === 'Coming soon' ? h('span', { class: 'lockpill maplock' }, 'Coming soon') : null;
-      const wrap = h('div', { class: 'trailpinwrap' + (isHere ? ' here' : ''), style: style }, btn, tip, hereTag, mapPill);
+      const wrap = h('div', { class: 'trailpinwrap' + (isHere ? ' here' : ''), style: style }, btn, tip);
       go.addEventListener('click', (e) => { e.stopPropagation(); open(); });
       btn.addEventListener('click', () => {
         if (touchNow() && !wrap.classList.contains('tipopen')) { closeTips(); wrap.classList.add('tipopen'); return; }
@@ -1240,6 +1238,7 @@
     const box = h('div', { class: 'modal trailpop', role: 'dialog', 'aria-modal': 'true', 'aria-label': 'Trail Map' },
       x,
       h('h2', null, 'Trail Map'),
+      h('p', { class: 'trailhere' }, 'You are here: Unit ' + here),
       test,
       h('div', { class: 'trailstage' }, frame, h('div', { class: 'trailpins' }, ...pins)));
     const scrim = h('div', { class: 'scrim' }, box);
