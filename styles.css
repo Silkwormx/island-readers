@@ -2680,3 +2680,145 @@ html.teach .u5step .itext{font-size:32px}
   .scrim:has(.trailpop){padding:0;align-items:stretch}
   .trailpop{width:100%;max-height:100%;height:100%;border-radius:0;border-width:0}
 }
+/* Every button centers its words, including a second line, and keeps an icon with the words as one group. */
+button,
+.btn,
+.hometab,
+.homebtn,
+.teachbox,
+.teachtoggle,
+.teachlink,
+.zfstart2,
+.pill,
+.lockpill,
+.lockbadge,
+.drop-link,
+.menulink,
+.tipgo,
+.trailgo,
+.fs-sidebtn,
+.fs-nametag,
+.ll1card,
+.ll1name,
+.ll1tap,
+.ll1circle,
+.gamecard,
+.stepcard,
+.storycard,
+.u5card,
+.stopcard,
+.spellunit,
+.spellesson,
+.tcard,
+.urow{
+  text-align:center;
+}
+button,
+.btn,
+.hometab,
+.homebtn,
+.teachbox,
+.teachtoggle,
+.teachlink,
+.zfstart2,
+.pill,
+.lockpill,
+.lockbadge,
+.drop-link,
+.menulink,
+.fs-sidebtn,
+.fs-nametag,
+.ll1card,
+.ll1name,
+.tipgo,
+.trailgo,
+.spellesson,
+.spellunit,
+.u5card,
+.stopcard,
+.urow{
+  align-items:center;
+  justify-content:center;
+}
+.hometab,
+.homebtn,
+.teachbox,
+.teachtoggle,
+.teachlink,
+.zfstart2,
+.btn,
+.pill,
+.lockbadge,
+.lockpill,
+.drop-link,
+.menulink,
+.fs-sidebtn,
+.spellesson,
+.spellunit,
+.u5card,
+.stopcard,
+.urow{
+  display:inline-flex;
+}
+.hometab,
+.zfstart2,
+.fs-sidebtn,
+.gamecard,
+.stepcard,
+.storycard{
+  width:100%;
+}
+.zfst,
+.zfst b,
+.zfst small,
+.hometab-name,
+.hometab-ico,
+.gametxt,
+.gametxt b,
+.gamenote,
+.gamemin,
+.grownlab,
+.fs-nametext,
+.teachlink,
+.drop-link,
+.menulink,
+.tcard .tbody,
+.tcard .tname,
+.tcard .tsnd,
+.tcard .tcount,
+.tcard .thead,
+.tcard .tnum{
+  text-align:center;
+}
+.zfst,
+.gametxt,
+.tcard .tbody,
+.tcard .thead{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+}
+.grownlab{text-align:center}
+.fs-nametext{flex:1;display:flex;align-items:center;justify-content:center}
+.gamecard .gametxt,
+.stepcard .gametxt,
+.storycard .gametxt{align-items:center;justify-content:center;text-align:center}
+.gamecard,
+.stepcard,
+.storycard,
+.u5card,
+.stopcard{justify-content:center}
+.fs-home .fs-groupcard,
+.fs-home .fs-groupcard .tbody,
+.fs-home .fs-groupcard .tname,
+.fs-home .fs-groupcard .tsnd,
+.fs-home .fs-groupcard .tcount,
+.fs-home .fs-groupcard .thead,
+.fs-home .fs-groupcard .tnum,
+.tcard .tbody,
+.tcard .tname,
+.tcard .tsnd,
+.tcard .tcount,
+.tcard .thead,
+.tcard .tnum{text-align:center}
