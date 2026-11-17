@@ -119,15 +119,23 @@
         ctx.progress(1);
         if (PACK.onDone) PACK.onDone(again);
         IR.touchStreak();
+        const team = /^#\/foundation\/letters\/g(\d+)/.exec(back || '');
         const done = IR.engage.endScreen({
           title: label,
           stars: ctx.mistakes ? 2 : 3,
-          nextLabel: 'More games',
           backLabel: 'Play again',
-          onBack: () => { const app = document.querySelector('#app'); app.innerHTML = ''; open('#/foundation/sample/' + again, app); },
-          onNext: () => go('play')
+          nextLabel: team ? 'Back to Team ' + team[1] : 'More games',
+          onBack: () => {
+            const app = document.querySelector('#app');
+            app.innerHTML = '';
+            if (team && IR.day1Play) IR.day1Play(app, again, PACK, back);
+            else open('#/foundation/sample/' + again, app);
+          },
+          onNext: () => { if (team) location.hash = back; else go('play'); }
         });
         done.classList.add('ll1end');
+        const againBtn = done.querySelector('.menulink');
+        if (againBtn) { againBtn.classList.remove('menulink'); againBtn.classList.add('btn', 'big', 'llagain'); }
         document.querySelector('#app').append(done);
         Snd.play(A.sfx.done);
       }

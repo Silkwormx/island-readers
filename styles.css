@@ -2558,6 +2558,11 @@ button.tapcard:focus-visible{outline:4px solid #1F6FEB;outline-offset:3px}
 .calmend .badgeart svg,.resultscreen .badgeart svg{width:100%;height:100%}
 .streakend,.starline{margin:0;font-weight:700;font-size:1.2rem}
 .calmend .endrow{align-items:center}
+.llend .cbox,.ll1end .cbox{text-align:center}
+.llend .endrow,.ll1end .endrow{justify-content:center;flex-wrap:wrap;gap:.8rem}
+.llend .endrow .btn,.ll1end .endrow .btn{flex:1 1 12rem;max-width:18rem;text-align:center;justify-content:center}
+.llend .llagain,.ll1end .llagain{background:#fff;color:#B04A00;border-color:#F28C00;box-shadow:0 4px 0 #F28C00;text-decoration:none}
+.llend .btn.primary .ico,.ll1end .btn.primary .ico{display:none}
 .u5step .fz-streak,.u5step .sorstreak{display:none}
 /* Smart board: large words, big taps, teacher controls. Scoped to Unit 5. */
 .teachtoggle{position:static;z-index:8;font-family:Andika,sans-serif;font-size:16px;font-weight:700;padding:6px 12px;border-radius:999px;border:3px solid #C95A10;background:#fff;color:#2B2540;flex:none}

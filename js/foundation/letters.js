@@ -851,11 +851,14 @@
         const ov = IR.engage.endScreen({
           title: game.title,
           stars: stars,
-          nextLabel: 'Back to the group',
-          backLabel: 'Back to the group',
-          onBack: () => { location.hash = base; },
+          backLabel: 'Play again',
+          nextLabel: 'Back to Team ' + group.n,
+          onBack: () => { location.hash = base + '/' + game.id; },
           onNext: () => { location.hash = base; }
         });
+        ov.classList.add('llend');
+        const again = ov.querySelector('.menulink');
+        if (again) { again.classList.remove('menulink'); again.classList.add('btn', 'big', 'llagain'); }
         app.append(ov);
         Snd.play(A.sfx.done);
       }
