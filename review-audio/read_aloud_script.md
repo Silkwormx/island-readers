@@ -18,5 +18,5 @@ Sound buttons and word taps are not character lines. They keep the existing devi
 | lesson-blend | Frill | Blend | Tap the letters. |
 | lesson-trace | Frill | Trace | Trace the letter. |
 | lesson-read | Frill | Read | Tap a word. |
-| lesson-check | Frill | Check | Tap the letter. |
-| lesson-done | Zip | Done | You did it. |
+| lesson-check | Frill | Quick Check | Tap the letter. |
+| lesson-done | Zip | Celebrate | You did it. |

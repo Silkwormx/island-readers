@@ -1719,8 +1719,8 @@
     { id: 'blend', say: 'Tap the letters.', label: 'Blend', who: 'Frill' },
     { id: 'trace', say: 'Trace the letter.', label: 'Trace', who: 'Frill' },
     { id: 'read', say: 'Tap a word.', label: 'Read', who: 'Frill' },
-    { id: 'check', say: 'Tap the letter.', label: 'Check', who: 'Frill' },
-    { id: 'done', say: 'You did it.', label: 'Done', who: 'Zip' }
+    { id: 'check', say: 'Tap the letter.', label: 'Quick Check', who: 'Frill' },
+    { id: 'done', say: 'You did it.', label: 'Celebrate', who: 'Zip' }
   ];
   function letterArt(id) { return artUrl(id) || ART_FILE[id] || ''; }
   function pureSound(L) {
@@ -1865,7 +1865,6 @@
   }
   function paintHear(stage, L, ready) {
     let taps = 0;
-    const dots = [0, 1, 2].map(() => h('i'));
     const src = letterArt(L.id);
     stage.append(
       src ? h('img', { class: 'llkidart', src: src, alt: '' }) : h('b', { class: 'llkidbig' }, L.id),
@@ -1876,13 +1875,11 @@
         onclick: () => {
           hearPure(L);
           if (taps < 3) {
-            dots[taps].classList.add('on');
             taps += 1;
             if (taps >= 3) ready();
           }
         }
-      }, icon('speaker')),
-      h('div', { class: 'llkiddots', 'aria-hidden': 'true' }, ...dots));
+      }, icon('speaker')));
   }
   function paintFind(stage, group, id, ready) {
     const known = knownIds(group, id);
@@ -2071,16 +2068,16 @@
     if (word) rounds.push({ answer: word, art: '', word: word, choices: shuffle([word, foils[0] || id]) });
     else rounds.push({ answer: id, art: '', word: '' });
     let i = 0;
-    const shells = rounds.map(() => h('i'));
+    const ask = h('p', { class: 'llkidq' }, '');
+    const host = h('div', { class: 'llkidcheck' });
+    stage.append(ask, host);
     function show() {
-      const host = stage.querySelector('.llkidcheck') || h('div', { class: 'llkidcheck' });
       host.innerHTML = '';
-      if (!host.parentNode) stage.append(h('div', { class: 'llkidshells' }, ...shells), host);
       if (i >= rounds.length) { ready(); return; }
+      ask.textContent = 'Question ' + (i + 1) + ' of ' + rounds.length;
       const round = rounds[i];
       const picks = round.choices || [round.answer].concat(foils.filter((ch) => ch !== round.answer)).slice(0, 3);
       const bits = [kidChoices(picks, round.answer, () => {
-        shells[i].classList.add('on');
         i += 1;
         setTimeout(show, 280);
       })];
@@ -2106,8 +2103,8 @@
     const base = '#/foundation/letters/' + group.id;
     const stage = h('main', { class: 'llkidstage' });
     const last = index >= KID_STEPS.length - 1;
-    const next = h('button', { class: 'btn big llkidnext', type: 'button', 'aria-label': last ? 'Done' : 'Next' }, last ? 'Done' : 'Next');
-    function ready() { next.classList.add('ready'); }
+    const next = h('button', { class: 'btn big llkidnext', type: 'button', disabled: true, 'aria-label': last ? 'Done' : 'Next' }, last ? 'Done' : 'Next');
+    function ready() { next.disabled = false; next.classList.add('ready'); }
     function go() {
       Snd.stop();
       try { speechSynthesis.cancel(); } catch (e) { /* quiet */ }
@@ -2135,6 +2132,12 @@
       h('div', { class: 'llkidnav' }, next)));
     if (step.id === 'done') ready();
   }
+  function prettyName(name) {
+    return String(name || '').split(/\s+/).map((word) => {
+      if (word.toLowerCase() === 'the') return 'the';
+      return word.charAt(0).toUpperCase() + word.slice(1);
+    }).join(' ');
+  }
   function groupPage(app, group) {
     IR.newScreen();
     const base = '#/foundation/letters/' + group.id;
@@ -2142,7 +2145,7 @@
     const nextId = group.letters.filter((id) => !letterDone(group, id))[0];
     const lessons = group.letters.map((id) => {
       const info = letterInfo(id);
-      const name = (info && info.character) || WHO[id] || id;
+      const name = prettyName((info && info.character) || WHO[id] || id);
       const src = letterArt(id);
       const done = letterDone(group, id);
       const up = id === nextId;
@@ -2164,7 +2167,10 @@
       type: 'button',
       'aria-label': 'Games',
       onclick: () => { Snd.stop(); location.hash = base + '/games'; }
-    }, h('span', { class: 'tbody' }, h('b', { class: 'tname' }, 'Games'))));
+    }, h('span', { class: 'll-gamefaces' },
+      h('img', { src: 'img/zipA.webp', alt: '' }),
+      h('img', { src: 'img/frill.webp', alt: '' })),
+      h('span', { class: 'tbody' }, h('b', { class: 'tname' }, 'Games'))));
     app.append(h('div', { class: 'screen fs-team' },
       h('header', { class: 'uA-top llbar' },
         IR.ui.pageNav('#/foundation'),
@@ -2173,7 +2179,7 @@
         h('div', { class: 'llshellrow', 'aria-label': doneN + ' of ' + group.letters.length + ' lessons done' },
           ...group.letters.map((id) => h('span', { class: 'llshell' + (letterDone(group, id) ? ' on' : ''), html: shellSvg(letterDone(group, id)) })),
           h('b', null, doneN + ' of ' + group.letters.length)),
-        h('div', { class: 'll-lessongrid' }, ...lessons))));
+        h('div', { class: 'll-lessongrid ll-teamlessons' }, ...lessons))));
   }
   function foundationPage(app) {
     IR.resetSideGroup('foundation');

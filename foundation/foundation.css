@@ -393,7 +393,40 @@ html.teach .llist .u5name,html.teach .llplay .u5name{font-size:32px}
 .ll-lessongrid,.ll-gamegrid{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.8rem}
 @media (min-width:900px){.ll-lessongrid{grid-template-columns:repeat(3,minmax(0,1fr))}}
 .ll-lessoncard,.ll-gamescard,.ll-gamecard{position:relative;min-height:11rem;border:3px solid #F28C00;border-radius:1.2rem;background:#fff;text-align:center}
-.ll-lessoncard .ll-lessonart,.ll-gamecard .llgameface{width:100%;height:8.5rem;object-fit:contain;background:#FFF6E3}
+.ll-lessoncard .ll-lessonart,.ll-gamecard .llgameface{width:100%;height:8.5rem;object-fit:cover;object-position:center 42%;background:#FFF6E3}
+@media (min-width:431px){
+  .ll-lessoncard .ll-lessonart{height:auto;aspect-ratio:1/1}
+}
+.ll-gamescard{display:flex;flex-direction:column;background:#fff}
+.ll-gamescard .tbody{position:static;min-height:0;flex:none}
+.ll-gamefaces{display:flex;align-items:center;justify-content:center;gap:.35rem;height:8.5rem;background:#FFF6E3}
+.ll-gamefaces img{height:78%;width:auto;max-width:46%;object-fit:contain}
+.llkidnext:disabled{opacity:.42;cursor:default;box-shadow:none}
+.llkidq{margin:0;font-weight:700;color:#C45C00;text-align:center}
+.ll-lessonplay .ll1foot{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:.4rem .7rem}
+.ll-lessonplay .ll1foot .pbar{flex:1 0 100%;margin:0}
+.ll-lessonplay .streakline{font-family:Andika,sans-serif;font-weight:700;font-size:1.05rem;white-space:nowrap}
+.ll-lessonplay .sfxmute{width:2.6rem;height:2.6rem;min-width:2.6rem;border-radius:50%;border:3px solid #C95A10;background:#F28C00;color:#fff;padding:0;display:inline-flex;align-items:center;justify-content:center}
+.ll-lessonplay .sfxmute.off{background:#fff;color:#5c5648;border-color:#E4D6B4}
+.ll-lessonplay .sfxmute .ico{width:1.2rem;height:1.2rem}
+@media (max-width:520px){
+  .ll-lessonplay .uA-top.llbar{flex-wrap:wrap;row-gap:.05rem}
+  .ll-lessonplay .llkidprog{flex:1 1 100%;text-align:center;font-size:.95rem}
+}
+@media (max-width:430px){
+  .fs-teammain:has(.ll-teamlessons){overflow:hidden;display:flex;flex-direction:column;padding:.15rem .45rem .3rem}
+  .fs-teammain:has(.ll-teamlessons) .llshellrow{margin:0 0 .25rem}
+  .fs-teammain:has(.ll-teamlessons) .llshell{width:1.55rem;height:1.55rem}
+  .ll-teamlessons{flex:1;min-height:0;grid-template-rows:repeat(3,minmax(0,1fr));gap:.35rem}
+  .ll-teamlessons .ll-lessoncard,.ll-teamlessons .ll-gamescard{min-height:0;height:100%}
+  .ll-teamlessons .ll-lessonart{flex:1 1 auto;width:100%;height:auto;min-height:0;object-fit:cover;object-position:center 42%}
+  .ll-teamlessons .ll-gamescard .tbody{flex:none;min-height:0}
+  .ll-teamlessons .ll-gamefaces{flex:1 1 auto;display:flex;align-items:center;justify-content:center;height:auto;min-height:0;background:#FFF6E3}
+  .ll-teamlessons .ll-gamefaces img{height:68%;width:auto;max-height:none;max-width:42%}
+  .ll-teamlessons .tbody{padding:.15rem .3rem .25rem}
+  .ll-teamlessons .tnum{font-size:1rem}
+  .ll-teamlessons .tname{font-size:.78rem;line-height:1.1}
+}
 .ll-gamescard .tbody{min-height:11rem;align-items:center;justify-content:center}
 .ll-gamescard .tname,.ll-gamecard .tname,.ll-lessoncard .tname,.ll-lessoncard .tnum{text-align:center}
 .llsticker{position:absolute;top:.45rem;right:.45rem;width:2.4rem;height:1.8rem;z-index:2}
