@@ -205,9 +205,8 @@ html.teach .llist .u5name,html.teach .llplay .u5name{font-size:32px}
 .fs-home .fs-groupcard{width:100%;text-align:left}
 .fs-home .fs-groupcard .tpic.fs-setpic{display:grid;align-items:center;justify-items:center;align-content:center;aspect-ratio:1/1;padding:.4rem;gap:.15rem;background:#FFF6E3;overflow:hidden}
 .fs-home .fs-setpic img{width:100%;height:auto;max-height:100%;aspect-ratio:1/1;object-fit:contain}
-.fs-home .fs-groupcard .tbody{padding:.55rem .7rem .7rem}
-.fs-home .fs-groupcard .tnum{display:block;font-size:1.15rem;line-height:1.25;white-space:normal}
-.fs-home .fs-groupcard .tname{display:block;height:auto;font-size:.95rem;white-space:normal}
+.fs-home .fs-groupcard .tbody{margin-top:auto}
+.fs-home .bellpath .fs-groupcard .tname,.fs-home .bellpath .fs-groupcard .tsnd{height:auto;overflow:visible;white-space:normal}
 .fs-home .fs-groupcard.locked{opacity:.55}
 .fs-home .fs-about{background:#E4F6F6;border:2px solid #9FCFCF;border-radius:1rem;padding:.35rem .7rem}
 .fs-home .fs-about summary{font-weight:700;cursor:pointer;min-height:2.4rem;display:flex;align-items:center}

@@ -644,7 +644,7 @@
     app.append(h('div', { class: 'screen trailscreen unitpage u5menu llpage fs-group' },
       h('header', { class: 'uA-top' },
         h('button', { class: 'back homebtn', type: 'button', onclick: () => { Snd.stop(); location.hash = '#/foundation'; } }, icon('back'), h('span', null, 'Foundation')),
-        h('h1', { class: 'uA-title' }, 'Group ' + group.n + ' · ' + group.letters.join(' ')),
+        h('h1', { class: 'uA-title' }, 'Group ' + group.n + ', ' + group.letters.join(', ')),
         IR.ui.gearButton()),
       h('main', { class: 'llmain' }, slideBlock(group), h('ol', { class: 'fs-lessons' }, ...cards))));
     if (IR.teach) IR.teach.sync();
@@ -1510,31 +1510,44 @@
       return h('span', { class: 'fs-face', html: character(id) });
     }));
   }
+  function sampleWords(group) {
+    const seen = [];
+    lessonsOf(group).forEach((lesson) => {
+      (lesson.new_words || []).forEach((word) => {
+        const clean = String(word).replace(/[^A-Za-z]/g, '');
+        if (clean.length < 2) return;
+        if (seen.some((item) => item.toLowerCase() === clean.toLowerCase())) return;
+        seen.push(word);
+      });
+    });
+    return seen.slice(0, 4).join(', ');
+  }
   function foundationPage(app) {
     IR.newScreen();
     const started = Object.keys(doneMap()).length > 0;
     const up = nextUpGroup();
     const words = readBank();
     const cards = GROUPS.map((group) => {
-      const lessons = lessonsOf(group);
-      const done = lessons.filter((lesson) => doneMap()[String(lesson.lesson_number)]).length;
       const open = groupOpen(group);
       const isNext = up && up.id === group.id;
       const faces = group.letters.map((id) => {
         const src = artUrl(id);
         return src ? h('img', { src: src, alt: id }) : null;
       });
+      const taught = sampleWords(group);
       return h('button', {
         class: 'tcard fs-groupcard' + (isNext ? ' t-current' : '') + (open ? '' : ' locked'),
         type: 'button',
         'aria-disabled': open ? 'false' : 'true',
-        'aria-label': 'Group ' + group.n + ', ' + group.letters.join(' ') + '. Opens the lessons.',
+        'aria-label': 'Group ' + group.n + ', ' + group.letters.join(', ') + (taught ? ', ' + taught : '') + '. Opens the lessons.',
         onclick: () => { if (open) { Snd.stop(); location.hash = '#/foundation/letters/' + group.id; } }
       },
-        h('span', { class: 'tpic fs-setpic', style: 'grid-template-columns:repeat(' + (group.letters.length > 2 ? 2 : group.letters.length) + ',minmax(0,1fr))' }, ...faces),
+        h('span', { class: 'tpic fs-setpic', style: 'grid-template-columns:repeat(' + (group.letters.length > 2 ? 2 : group.letters.length) + ',minmax(0,1fr))' }, ...faces,
+          isNext ? h('span', { class: 'herechip' }, 'Next up') : null),
         h('span', { class: 'tbody' },
-          h('b', { class: 'tnum' }, 'Group ' + group.n + ' \u00b7 ' + group.letters.join(' ')),
-          h('span', { class: 'tname' }, isNext ? 'Next up' : (open ? (done + ' of ' + lessons.length) : 'After the last check'))));
+          h('span', { class: 'thead' }, h('b', { class: 'tnum' }, 'Group ' + group.n)),
+          h('span', { class: 'tname' }, group.letters.join(', ')),
+          h('span', { class: 'tsnd' }, taught || (open ? '' : 'After the last check'))));
     });
     const sideBtn = (label, go) => h('button', { class: 'btn big fs-sidebtn', type: 'button', onclick: go }, label);
     const banner = h('header', { class: 'hbanner' },
@@ -1567,7 +1580,7 @@
         banner,
         h('div', { class: 'homelay' },
           h('div', { class: 'homeside' }, hero, aboutOrder(), bank, materials),
-          h('div', { class: 'bellslot' }, h('div', { class: 'bellgrid' }, ...cards))))));
+          h('div', { class: 'bellslot' }, h('div', { class: 'bellpath' }, h('div', { class: 'bellgrid' }, ...cards)))))));
     if (IR.teach) IR.teach.sync();
   }
 
