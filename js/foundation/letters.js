@@ -1471,6 +1471,34 @@
   function lessonHash(group, lesson, step) {
     return '#/foundation/letters/' + group.id + '/l/' + lesson.lesson_number + '/' + step;
   }
+  function nextStop() {
+    for (let i = 0; i < GROUPS.length; i++) {
+      const group = GROUPS[i];
+      if (!groupOpen(group)) continue;
+      const lessons = lessonsOf(group);
+      const map = doneMap();
+      for (let n = 0; n < lessons.length; n++) {
+        if (!map[String(lessons[n].lesson_number)]) return { group: group, lesson: lessons[n] };
+      }
+      if (lessons.some((lesson) => lesson.mastery_check) && !checkMap()[programId(group)]) {
+        return { group: group, check: true };
+      }
+    }
+    const first = lessonsOf(GROUPS[0])[0];
+    return { group: GROUPS[0], lesson: first };
+  }
+  function letterContinue() {
+    const stop = nextStop();
+    let href = '#/foundation/letters/g1';
+    if (stop && stop.check) href = '#/foundation/letters/' + stop.group.id + '/check';
+    else if (stop && stop.lesson) href = lessonHash(stop.group, stop.lesson, flowFor(stop.lesson)[0].id);
+    return h('button', {
+      class: 'zfstart2',
+      type: 'button',
+      'aria-label': 'Continue. Pick up where you left off',
+      onclick: () => { Snd.stop(); location.hash = href; }
+    }, h('span', { class: 'zfst' }, h('b', null, 'Continue'), h('small', null, 'Pick up where you left off')));
+  }
   function nextUpGroup() {
     for (let i = 0; i < GROUPS.length; i++) {
       const group = GROUPS[i];
@@ -1535,7 +1563,8 @@
       h('div', { class: 'zfpics' }, h('img', { class: 'homeart', src: 'img/home_zip_frill.webp', width: 1280, height: 720, alt: 'Zip and Frill reading together' })),
       h('div', { class: 'hfbody' },
         h('h2', { class: 'zfline' }, 'Review the letters with Zip and Frill'),
-        h('p', { class: 'zfsub' }, 'Names and sounds, then real words.')));
+        h('p', { class: 'zfsub' }, 'Names and sounds, then real words.'),
+        letterContinue()));
     const materials = h('section', { class: 'fs-mats', 'aria-label': 'For grown-ups' },
       h('h2', { class: 'fs-h' }, 'Teacher slideshows'),
       h('button', { class: 'btn big primary fs-slidebtn', type: 'button', onclick: openSlides }, 'Group 1 slideshow'),

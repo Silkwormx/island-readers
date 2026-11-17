@@ -47,6 +47,8 @@ test('Learn the Letters follows the UFLI group order and is not a unit', () => {
   assert.match(letters, /function paintWedo/);
   assert.match(letters, /If your child needs a hand/);
   assert.equal(letters.includes('Start Group 1'), false);
+  assert.match(letters, /class: 'zfstart2'/);
+  assert.match(letters, /Pick up where you left off/);
   assert.match(letters, /Group check/);
   assert.match(letters, /function lessonsOf/);
   assert.match(letters, /Warm-up/);
