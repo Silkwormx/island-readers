@@ -2810,6 +2810,11 @@ button,
 .storycard,
 .u5card,
 .stopcard{justify-content:center}
+.hometabs .trailtab,
+.homeside .hometabs .trailtab,
+.gridhome .homeside .hometabs .trailtab{height:auto;min-height:3.2rem;max-height:none;white-space:normal}
+.hometabs .trailtab .hometab-name,
+.gridhome .homeside .hometabs .trailtab .hometab-name{white-space:normal;text-align:center;line-height:1.15}
 .fs-home .fs-groupcard,
 .fs-home .fs-groupcard .tbody,
 .fs-home .fs-groupcard .tname,

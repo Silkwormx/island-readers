@@ -67,8 +67,7 @@ test('home shows Zip and Frill again and keeps the left-column layout', () => {
   assert.ok(screens.includes("'Continue'"));
   assert.ok(screens.includes("sub: 'Pick up where you left off'"));
   assert.equal(screens.includes('Find your first bell'), false);
-  assert.ok(screens.includes('Trail Map'));
-  assert.equal(screens.includes('Trail Map and Placement Test'), false);
+  assert.ok(screens.includes('Trail Map and Placement Test'));
   assert.ok(screens.includes('function openTrailMap'));
   assert.ok(screens.includes('Find It'));
   assert.ok(screens.includes('Parent and Teacher Materials'));

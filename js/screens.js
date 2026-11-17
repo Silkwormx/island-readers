@@ -341,11 +341,11 @@
       fill(body) { aboutNodes().forEach((node) => body.append(node)); }
     });
     const trailBtn = h('button', {
-      class: 'hometab',
+      class: 'hometab trailtab',
       type: 'button',
-      'aria-label': 'Trail Map',
+      'aria-label': 'Trail Map and Placement Test',
       onclick: () => openTrailMap()
-    }, h('span', { class: 'hometab-ico', 'aria-hidden': 'true' }, icon('map')), h('span', { class: 'hometab-name' }, 'Trail Map'));
+    }, h('span', { class: 'hometab-ico', 'aria-hidden': 'true' }, icon('map')), h('span', { class: 'hometab-name' }, 'Trail Map and Placement Test'));
     const sightDrop = IR.sideDrop({
       group: 'home',
       label: 'Sight Word Practice',
