@@ -1548,7 +1548,6 @@
   function foundationPage(app) {
     IR.newScreen();
     const up = nextUpGroup();
-    const words = readBank();
     const cards = GROUPS.map((group) => {
       const open = groupOpen(group);
       const isNext = up && up.id === group.id;
@@ -1594,14 +1593,11 @@
       sideBtn('Printables', () => { location.hash = '#/teachers'; }),
       sideBtn('Tracking sheet', () => { location.hash = '#/teachers'; }),
       sideBtn('Teacher mode', () => { if (IR.teach) IR.teach.toggle(); }));
-    const bank = h('section', { class: 'fs-bank' },
-      h('h2', { class: 'fs-h' }, 'Look what I can read!'),
-      h('p', { class: 'fs-words' }, words.length ? words.join('  ') : 'Your words will show up here.'));
     app.append(h('div', { class: 'screen home mapscreen gridhome fs-home' },
       h('div', { class: 'mwrap' },
         banner,
         h('div', { class: 'homelay' },
-          h('div', { class: 'homeside' }, hero, aboutOrder(), bank, materials),
+          h('div', { class: 'homeside' }, hero, aboutOrder(), materials),
           h('div', { class: 'bellslot' }, h('div', { class: 'bellpath' }, h('div', { class: 'bellgrid' }, ...cards)))))));
     if (IR.teach) IR.teach.sync();
   }
