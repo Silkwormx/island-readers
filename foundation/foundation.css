@@ -185,6 +185,10 @@ html.teach .llist .u5name,html.teach .llplay .u5name{font-size:32px}
 .fs-step.past{background:#FFF3D6}
 .fs-stagewrap{display:flex;align-items:center;justify-content:center;min-height:0}
 .fs-stage{width:100%;display:flex;flex-direction:column;align-items:center;gap:.4rem}
+.fs-scenes{display:flex;flex-wrap:wrap;justify-content:center;gap:.8rem;width:100%}
+.fs-scene{margin:0;max-width:18rem;text-align:center}
+.fs-scene img{display:block;width:100%;height:auto;object-fit:contain}
+.fs-scene figcaption{margin:.35rem 0 0;font-family:Andika,sans-serif;font-size:1.6rem;font-weight:700}
 .fs-meet{display:flex;gap:.6rem;justify-content:center;flex-wrap:wrap}
 .fs-meetone{display:flex;flex-direction:column;align-items:center;gap:.2rem}
 .llrow{display:flex;gap:.4rem;justify-content:center;flex-wrap:wrap}

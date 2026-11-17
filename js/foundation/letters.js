@@ -1686,8 +1686,23 @@
       return h('div', { class: 'fs-meetone' }, letterCardStep(letter, lookStep(lesson, id)), hintButton([id]));
     })));
   }
+  function sceneSrc(scene) {
+    const file = scene && scene.image;
+    if (!file) return '';
+    return file.indexOf('foundation/') === 0 ? file : 'foundation/' + file;
+  }
   function paintRead(stage, lesson, phase) {
     const words = allowedWords(lesson, phase).slice(0, 6);
+    const scenes = (lesson.word_scenes || []).filter((scene) => scene && scene.word);
+    if (scenes.length) {
+      stage.append(h('div', { class: 'fs-scenes' }, ...scenes.map((scene) => {
+        const src = sceneSrc(scene);
+        const caption = scene.caption || '';
+        return h('figure', { class: 'fs-scene' },
+          src ? h('img', { src: src, alt: scene.scene || '' }) : null,
+          caption ? h('figcaption', null, caption) : null);
+      })));
+    }
     stage.append(
       h('p', { class: 'llask' }, 'Tap a word. Say each sound, then the word.'),
       h('div', { class: 'llrow' }, ...words.map((word) => h('button', {
