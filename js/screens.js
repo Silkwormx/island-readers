@@ -1420,13 +1420,91 @@
     { n: 6, id: 'u6', href: '#/u6', test: (hs) => /^#\/u6(\/|$)/.test(hs) || /^#\/spell\/u6(\/|$)/.test(hs) }];
   function addUnitBack() {
     const hs = location.hash || ''; const u = IR.UNIT_ROUTES.find((r) => r.test(hs));
-    if (!u || app.querySelector('.unitback') || app.querySelector('.lessonscreen')) return;
+    if (!u || crumbParts(hs).length <= 2 || app.querySelector('.unitback') || app.querySelector('.lessonscreen')) return;
     const home = app.querySelector('.homebtn'); if (!home) return;
     const b = h('button', { class: 'back homebtn unitback', type: 'button', 'aria-label': 'Back to Unit ' + u.n + ': pick another lesson', onclick: () => { Snd.stop(); if (u.href) location.hash = u.href; else { location.hash = '#/home'; setTimeout(() => openIsland(u.id), 0); } } }, icon('back'), h('span', null, 'Back to Unit ' + u.n));
     home.style.marginRight = '0'; home.after(b);
   }
   IR.addUnitBack = addUnitBack;
-  const route0 = route; route = function () { route0(); addUnitBack(); setTimeout(addUnitBack, 60); };
+  function crumbParts(hash) {
+    const hsh = (hash || '#/home').split('?')[0];
+    const home = { label: 'Home', href: '#/home' };
+    if (hsh === '#/home' || hsh === '#/' || hsh === '') return [home];
+    if (hsh.startsWith('#/foundation')) {
+      const bits = [home, { label: 'Foundations', href: '#/foundation' }];
+      const team = hsh.match(/#\/foundation\/(?:letters|play)\/(g[1-7])/);
+      if (team) {
+        bits.push({ label: 'Team ' + team[1].slice(1), href: '#/foundation/letters/' + team[1] });
+        if (/\/intro\/?$/.test(hsh)) bits.push({ label: 'Introduction', href: hsh });
+        else if (/\/play\//.test(hsh) || /\/sample\//.test(hsh)) bits.push({ label: 'Games', href: hsh });
+        else if (/\/words\/?$/.test(hsh)) bits.push({ label: 'Read It', href: hsh });
+        else if (/\/cheer/.test(hsh)) bits.push({ label: 'Done', href: hsh });
+        else if (/\/check\/?$/.test(hsh)) bits.push({ label: 'Check', href: hsh });
+      } else if (hsh.startsWith('#/foundation/slides')) bits.push({ label: 'Slides', href: hsh });
+      return bits;
+    }
+    if (/^#\/(island3|nk|lesson\/|check|result)/.test(hsh)) {
+      const bits = [home, { label: 'Unit 4', href: '#/island3' }];
+      if (hsh.startsWith('#/nk')) bits.push({ label: 'nk', href: '#/nk' });
+      else if (/^#\/lesson\//.test(hsh) || hsh.startsWith('#/check') || hsh.startsWith('#/result')) bits.push({ label: 'Lesson', href: hsh });
+      return bits;
+    }
+    if (/^#\/u5/.test(hsh) || hsh.startsWith('#/review5')) return [home, { label: 'Unit 5', href: '#/u51' }, { label: 'Lesson', href: hsh }];
+    if (hsh === '#/u6') return [home, { label: 'Unit 6', href: '#/u6' }];
+    if (hsh.startsWith('#/u6/')) return [home, { label: 'Unit 6', href: '#/u6' }, { label: 'Lesson', href: hsh }];
+    if (hsh.startsWith('#/trail')) return [home, { label: 'Trail Map', href: '#/trail' }];
+    if (hsh.startsWith('#/find')) return [home, { label: 'Find It', href: '#/find' }];
+    if (hsh.startsWith('#/placement')) return [home, { label: 'Placement', href: '#/placement' }];
+    if (hsh.startsWith('#/about')) return [home, { label: 'About', href: '#/about' }];
+    const chest = hsh.match(/^#\/(chest[1-4])/);
+    if (chest) {
+      const bits = [home, { label: 'Sight words', href: '#/' + chest[1] }];
+      if (hsh !== '#/' + chest[1]) bits.push({ label: 'Game', href: hsh });
+      return bits;
+    }
+    if (hsh.startsWith('#/practice')) return [home, { label: 'Practice', href: '#/practice/skills' }];
+    if (hsh.startsWith('#/teachers')) return [home, { label: 'Teachers', href: '#/teachers' }];
+    if (hsh.startsWith('#/gems')) return [home, { label: 'Gems', href: '#/gems' }];
+    if (hsh.startsWith('#/spell')) return [home, { label: 'Spelling', href: hsh }];
+    return [home, { label: 'Here', href: hsh }];
+  }
+  function upHref() {
+    const parts = crumbParts(location.hash);
+    return (parts.length > 1 ? parts[parts.length - 2] : parts[0]).href;
+  }
+  function paintNav() {
+    const old = document.querySelector('.appnav');
+    if (old) old.remove();
+    const parts = crumbParts(location.hash || '#/home');
+    const bits = [];
+    parts.forEach((part, i) => {
+      if (i) bits.push(h('span', { class: 'crumbsep', 'aria-hidden': 'true' }, '>'));
+      bits.push(h('button', {
+        type: 'button',
+        class: i === parts.length - 1 ? 'now' : '',
+        onclick: () => { Snd.stop(); location.hash = part.href; }
+      }, part.label));
+    });
+    const trail = h('button', {
+      class: 'back homebtn appnav-trail',
+      type: 'button',
+      onclick: () => { Snd.stop(); openTrailMapPopup(); }
+    }, icon('map'), h('span', null, 'Trail Map'));
+    document.body.insertBefore(h('div', { class: 'appnav' },
+      homeButton(),
+      trail,
+      h('nav', { class: 'crumb', 'aria-label': 'You are here' }, ...bits)), document.body.firstChild);
+  }
+  document.addEventListener('click', (e) => {
+    const b = e.target.closest && e.target.closest('.back, .xbtn');
+    if (!b || b.closest('.appnav')) return;
+    if ((b.getAttribute('aria-label') || '').indexOf('Home') === 0) return;
+    e.preventDefault();
+    e.stopImmediatePropagation();
+    Snd.stop();
+    location.hash = upHref();
+  }, true);
+  const route0 = route; route = function () { route0(); addUnitBack(); setTimeout(addUnitBack, 60); paintNav(); };
   /* Route inside the click that opened the screen, so the first tap can start audio the way Unit 4 does. */
   let routeQueued = false;
   document.addEventListener('click', () => { if (routeQueued) return; routeQueued = true; queueMicrotask(() => { routeQueued = false; route(); }); }, true);
