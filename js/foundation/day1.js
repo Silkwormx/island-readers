@@ -61,6 +61,7 @@
   function clearWait() {
     if (IR._day1Wait) { clearTimeout(IR._day1Wait); IR._day1Wait = 0; }
   }
+  const DAY = '#/foundation/letters/g1/day/day1a';
   function go(id) { clearWait(); Snd.stop(); location.hash = '#/foundation/sample/' + id; }
 
   function shell(title, back) {
@@ -103,7 +104,7 @@
           nextLabel: 'More games',
           backLabel: 'Play again',
           onBack: () => { const app = document.querySelector('#app'); app.innerHTML = ''; open('#/foundation/sample/' + again, app); },
-          onNext: () => go('play')
+          onNext: () => { location.hash = DAY; }
         });
         done.classList.add('ll1end');
         document.querySelector('#app').append(done);
@@ -200,7 +201,7 @@
         h('p', { class: 'll1cap' }, 'Am.'));
       yes();
       ctx.progress(1);
-      IR._day1Wait = setTimeout(() => go('done'), 700);
+      IR._day1Wait = setTimeout(() => { location.hash = DAY; }, 700);
     }))));
   }
 
@@ -440,11 +441,12 @@
     const m = /^#\/foundation\/sample(?:\/([a-z]+))?\/?$/.exec(hash || '');
     if (!m) return false;
     const id = m[1] || 'team';
+    if (id === 'play') { location.hash = DAY; return true; }
     if (!RUN[id]) return false;
     app.innerHTML = '';
     const titles = { done: 'Look what I can read', play: 'Games' };
     const step = LESSON.filter((item) => item.id === id)[0] || GAMES.filter((item) => item.id === id)[0];
-    const back = (id === 'team' || id === 'meet' || id === 'link' || id === 'done') ? '#/foundation/letters/g1' : '#/foundation/sample/play';
+    const back = DAY;
     const ctx = shell(titles[id] || (step && step.title) || 'Day 1', back);
     if (id === 'meet') meet(ctx, '');
     else RUN[id](ctx);

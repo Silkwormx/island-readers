@@ -517,8 +517,8 @@
   function itemCard(item, num) {
     const body = [
       num ? h('span', { class: 'gamenum' }, String(num)) : null,
-      num ? h('span', { class: 'gameico', 'aria-hidden': 'true' }, icon('play')) : null,
-      item.img ? h('img', { class: 'storypic', src: item.img, alt: item.alt || '' }) : null,
+      num ? h('span', { class: 'gameico', 'aria-hidden': 'true' }, item.img ? h('img', { src: item.img, alt: '' }) : icon('play')) : null,
+      !num && item.img ? h('img', { class: 'storypic', src: item.img, alt: item.alt || '' }) : null,
       h('span', { class: 'gametxt' }, h('b', null, item.title), item.note ? h('span', { class: 'gamenote' }, item.note) : null, item.min ? h('span', { class: 'gamemin' }, item.min + ' min') : null)
     ];
     const cls = item.big ? 'storycard' : (num ? 'gamecard' : 'stepcard');
@@ -528,9 +528,9 @@
   function stepHead(n, label) {
     return h('div', { class: 'stephead' }, h('span', { class: 'stepnum' }, String(n)), h('span', { class: 'steplab' }, label));
   }
-  function stepSection(n, label, items, numbered) {
+  function stepSection(n, label, items, numbered, soon) {
     const cards = !items || !items.length
-      ? h('p', { class: 'stepsoon' }, 'Coming soon')
+      ? h('p', { class: 'stepsoon' }, soon || 'Coming soon')
       : numbered
         ? h('ol', { class: 'gamegrid' }, ...items.map((item, i) => h('li', null, itemCard(item, i + 1))))
         : h('div', { class: 'lessonrow' }, ...items.map((item) => itemCard(item)));
@@ -541,7 +541,7 @@
     const files = plan.files || [];
     const panel = h('div', { class: 'teachpop', hidden: '' },
       h('p', { class: 'teachstep' }, h('span', null, '1'), 'Slideshow'),
-      plan.slides ? h('button', { class: 'teachlink', type: 'button', onclick: () => { Snd.stop(); location.hash = plan.slides; } }, 'Open the slideshow') : h('p', { class: 'teachsoon' }, 'Coming soon'),
+      plan.slides ? h('button', { class: 'teachlink', type: 'button', onclick: () => { Snd.stop(); location.hash = plan.slides; } }, plan.slideLabel || 'Open the slideshow') : h('p', { class: 'teachsoon' }, 'Coming soon'),
       h('p', { class: 'teachstep' }, h('span', null, '2'), 'Printables'),
       files.length ? h('div', null, ...files.map((file) => h('a', { class: 'teachlink', href: file.href, target: '_blank', rel: 'noopener' }, file.title))) : h('p', { class: 'teachsoon' }, 'Coming soon'));
     const btn = h('button', { class: 'teachbox', type: 'button', 'aria-expanded': 'false' }, 'Teacher Materials');
@@ -566,12 +566,12 @@
   function modeBar(plan) {
     plan = plan || {};
     return h('div', { class: 'modebar' },
-      h('p', { class: 'stepnote' }, 'Watch the lesson, then play.'),
+      h('p', { class: 'stepnote' }, plan.note || 'Watch the lesson, then play.'),
       plan.before || null,
       h('div', { class: 'stepflow' },
-        plan.choose ? null : stepSection(1, 'Lesson', plan.lesson || []),
-        plan.choose ? null : stepSection(2, 'Games', plan.games || [], true),
-        plan.choose || !plan.story ? null : stepSection(3, 'Story', [plan.story]),
+        plan.choose ? null : stepSection(1, plan.lessonLabel || 'Lesson', plan.lesson || [], false, plan.lessonSoon),
+        plan.choose ? null : stepSection(2, 'Games', plan.games || [], true, plan.gamesSoon),
+        plan.choose || (!plan.story && !plan.storySoon) ? null : stepSection(3, plan.storyLabel || 'Story', plan.story ? [plan.story] : [], false, plan.storySoon),
         ...(plan.choose || []).map((item, i) => stepSection(i + 1, item.title, [item]))));
   }
   IR.modeBar = modeBar;

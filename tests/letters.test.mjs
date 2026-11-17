@@ -47,7 +47,9 @@ test('Learn the Letters follows the UFLI group order and is not a unit', () => {
   assert.match(letters, /My name is: /);
   assert.match(letters, /My sound is /);
   assert.match(letters, /function letterIntro/);
-  assert.match(letters, /One letter at a time/);
+  assert.match(letters, /Games coming soon/);
+  assert.match(letters, /function daySlug/);
+  assert.match(letters, /storyLabel: 'Read It'/);
   assert.match(letters, /function paintIdo/);
   assert.match(letters, /function paintWedo/);
   assert.match(letters, /If your child needs a hand/);
@@ -127,7 +129,7 @@ test('home opens Foundation Skills from the first bell, not a sidebar tab', () =
   assert.match(html, /js\/foundation\/letters\.js/);
   assert.match(html, /foundation\/foundation\.css/);
   assert.match(sw, /js\/foundation\/letters\.js/);
-  assert.match(sw, /ir-20261118y/);
+  assert.match(sw, /ir-20261119a/);
   assert.match(sw, /foundation\/img\/foundations_sidebar\.jpg/);
   assert.match(teach, /#\/foundation/);
   assert.match(letters, /Teacher Slideshows/);

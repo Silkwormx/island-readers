@@ -627,45 +627,91 @@
     const next = lessons.filter((lesson) => !map[String(lesson.lesson_number)])[0] || lessons[0];
     if (!next) return;
     Snd.stop();
-    if (group.id === 'g1' && next.lesson_number === 1) { location.hash = '#/foundation/sample'; return; }
-    location.hash = lessonHash(group, next, flowFor(next)[0].id);
+    location.hash = dayHash(group, next);
   }
-  function groupPage(app, group) {
+  function daySlug(lesson) {
+    return String(lesson.label || ('Day ' + lesson.lesson_number)).toLowerCase().replace(/[^a-z0-9]+/g, '');
+  }
+  function dayHash(group, lesson) {
+    return '#/foundation/letters/' + group.id + '/day/' + daySlug(lesson);
+  }
+  function dayTabs(group, current) {
+    const lessons = lessonsOf(group);
+    const tabs = lessons.map((lesson) => {
+      const slug = daySlug(lesson);
+      return h('button', {
+        class: 'daytab' + (slug === current ? ' on' : ''),
+        type: 'button',
+        'aria-pressed': slug === current ? 'true' : 'false',
+        onclick: () => { Snd.stop(); location.hash = dayHash(group, lesson); }
+      }, lesson.label || ('Day ' + lesson.lesson_number));
+    });
+    tabs.push(h('button', {
+      class: 'daytab' + (current === 'check' ? ' on' : ''),
+      type: 'button',
+      'aria-pressed': current === 'check' ? 'true' : 'false',
+      onclick: () => { Snd.stop(); location.hash = '#/foundation/letters/' + group.id + '/day/check'; }
+    }, 'Team check'));
+    return h('div', { class: 'daytabs', role: 'tablist' }, ...tabs);
+  }
+  function dayTeacher(group, lesson, isCheck) {
+    const deck = SLIDES[group.id];
+    const label = isCheck ? 'Team check' : (lesson && lesson.label);
+    const day = deck && (deck.days || []).filter((row) => row.label === label)[0];
+    const slides = deck ? '#/foundation/slides/' + group.id + (day && day.page ? '/' + day.page : '') : '';
+    const files = group.id === 'g1'
+      ? [{ title: 'Team 1 Quick Sounds', href: 'foundation/printables/Team1_Quick_Sounds.pdf' }]
+      : group.id === 'g2'
+        ? [{ title: 'Team 2 Quick Sounds', href: 'foundation/printables/Team2_Quick_Sounds.pdf' }]
+        : [];
+    return { slides: slides, slideLabel: (label || 'Team') + ' slideshow', files: files };
+  }
+  function dayGames(group, lesson) {
+    if (group.id === 'g1' && lesson && lesson.lesson_number === 1 && IR.day1Flow && IR.day1Flow.GAMES) {
+      return IR.day1Flow.GAMES.map((game) => ({
+        title: game.title,
+        img: game.icon,
+        href: '#/foundation/sample/' + game.id
+      }));
+    }
+    return [];
+  }
+  function groupPage(app, group, slug) {
     IR.newScreen();
     const lessons = lessonsOf(group);
-    const teach = teamTeacher(group) || {};
-    const overview = h('div', { class: 'fs-overview stepbefore', style: 'grid-template-columns:repeat(' + Math.min(group.letters.length, 4) + ',minmax(0,1fr))' },
-      ...group.letters.map((id) => h('div', { class: 'fs-over' }, letterIntro(id))));
-    const lessonItems = [{ title: 'One letter at a time', go: () => startLetters(group) }];
-    lessons.forEach((lesson) => {
-      lessonItems.push({
-        title: lesson.label || ('Lesson ' + lesson.lesson_number),
-        note: lessonLine(lesson),
-        go: () => {
-          Snd.stop();
-          if (group.id === 'g1' && lesson.lesson_number === 1) { location.hash = '#/foundation/sample'; return; }
-          location.hash = lessonHash(group, lesson, flowFor(lesson)[0].id);
-        }
-      });
-    });
-    if (lessons.some((lesson) => lesson.mastery_check)) {
-      lessonItems.push({ title: 'Team check', note: 'Plain letters only. Show what you know.', href: '#/foundation/letters/' + group.id + '/check' });
-    }
-    const games = gamesFor(group).map((game) => ({ title: game.title, href: '#/foundation/letters/' + group.id + '/' + game.id }));
+    const isCheck = slug === 'check';
+    const lesson = isCheck ? null : (lessons.filter((row) => daySlug(row) === slug)[0] || (!slug ? lessons[0] : null));
+    if (!isCheck && !lesson) { foundationPage(app); return; }
+    const current = isCheck ? 'check' : daySlug(lesson);
+    const teach = dayTeacher(group, lesson, isCheck);
+    const day1 = group.id === 'g1' && lesson && lesson.lesson_number === 1;
+    const lessonCard = isCheck
+      ? { title: 'Team check', note: 'Plain letters only. Show what you know.', href: '#/foundation/letters/' + group.id + '/check' }
+      : day1
+        ? { title: 'Meet a and m', note: 'A short lesson.', href: '#/foundation/sample/team' }
+        : { title: lesson.label || 'Lesson', note: lessonLine(lesson), href: lessonHash(group, lesson, flowFor(lesson)[0].id) };
+    const games = isCheck ? [] : dayGames(group, lesson);
+    const words = !isCheck && lesson && (lesson.new_words || []).slice(0, 4).join(', ');
+    const read = isCheck ? null : day1
+      ? { title: 'Look what I can read', note: 'am', img: 'foundation/img/scenes/am.jpg', alt: 'The word am', big: true, href: '#/foundation/sample/done' }
+      : { title: 'Look what I can read', note: words || lessonLine(lesson), big: true, href: lessonHash(group, lesson, 'read') };
     app.append(h('div', { class: 'screen trailscreen unitpage u5menu llpage fs-group stepage' },
       h('header', { class: 'uA-top' },
         IR.ui.homeButton(),
-        h('button', { class: 'back homebtn', type: 'button', onclick: () => { Snd.stop(); location.hash = '#/foundation'; } }, icon('back'), h('span', null, 'Foundation')),
-        h('h1', { class: 'uA-title' }, 'Meet the Team'),
-        IR.teacherBox({ slides: teach.slides, files: teach.files }),
+        h('button', { class: 'back homebtn unitback', type: 'button', onclick: () => { Snd.stop(); location.hash = '#/foundation'; } }, icon('back'), h('span', null, 'Foundations')),
+        h('h1', { class: 'uA-title' }, h('small', null, 'Meet the Team'), 'Team ' + group.n),
+        IR.teacherBox(teach),
         IR.ui.gearButton()),
+      dayTabs(group, current),
       IR.modeBar({
-        before: h('div', { class: 'stepbefore' },
-          h('p', { class: 'llask' }, 'Team ' + group.n + ', ' + group.letters.join(', ') + '. Tap the name, then the sound three times.'),
-          overview),
-        lesson: lessonItems,
+        note: isCheck ? 'Show what you know.' : lessonLine(lesson),
+        lesson: [lessonCard],
         games: games,
+        gamesSoon: 'Games coming soon',
+        story: read,
+        storyLabel: 'Read It',
         slides: teach.slides,
+        slideLabel: teach.slideLabel,
         files: teach.files
       })));
     if (IR.teach) IR.teach.sync();
@@ -1860,7 +1906,7 @@
     else paintStep(stage, group, lesson, step);
     app.append(h('div', { class: 'screen trailscreen unitpage llpage fs-lesson' },
       h('header', { class: 'uA-top' },
-        h('button', { class: 'back homebtn', type: 'button', onclick: () => { Snd.stop(); location.hash = '#/foundation/letters/' + group.id; } }, icon('back'), h('span', null, 'Lessons')),
+        h('button', { class: 'back homebtn', type: 'button', onclick: () => { Snd.stop(); location.hash = dayHash(group, lesson); } }, icon('back'), h('span', null, 'Day')),
         h('h1', { class: 'uA-title' }, lesson.label || ('Lesson ' + lesson.lesson_number)),
         IR.ui.gearButton()),
       strip,
@@ -1933,7 +1979,7 @@
     show();
     app.append(h('div', { class: 'screen trailscreen unitpage llpage fs-lesson' },
       h('header', { class: 'uA-top' },
-        h('button', { class: 'back homebtn', type: 'button', onclick: () => { Snd.stop(); location.hash = '#/foundation/letters/' + group.id; } }, icon('back'), h('span', null, 'Lessons')),
+        h('button', { class: 'back homebtn', type: 'button', onclick: () => { Snd.stop(); location.hash = '#/foundation/letters/' + group.id + '/day/check'; } }, icon('back'), h('span', null, 'Day')),
         h('h1', { class: 'uA-title' }, 'Team check'),
         IR.ui.gearButton()),
       h('main', { class: 'llmain fs-stagewrap' }, stage),
@@ -1942,7 +1988,7 @@
         type: 'button',
         onclick: () => {
           Snd.stop();
-          if (i >= items.length) { location.hash = '#/foundation/letters/' + group.id; return; }
+          if (i >= items.length) { location.hash = '#/foundation/letters/' + group.id + '/day/check'; return; }
           i += 1;
           show();
         }
@@ -2087,12 +2133,20 @@
       lessonScreen(app, g, row, lesson[3] || '');
       return true;
     }
+    const day = /^#\/foundation\/letters\/(g[1-7])\/day\/([a-z0-9]+)\/?$/.exec(hash);
+    if (day) {
+      const g = groupById(day[1]);
+      if (!g) return false;
+      if (!groupOpen(g)) { foundationPage(app); return true; }
+      groupPage(app, g, day[2]);
+      return true;
+    }
     const group = /^#\/foundation\/letters\/(g[1-7])\/?$/.exec(hash);
     if (group) {
       const g = groupById(group[1]);
       if (!g) return false;
       if (!groupOpen(g)) { foundationPage(app); return true; }
-      groupPage(app, g);
+      groupPage(app, g, '');
       return true;
     }
     const check = /^#\/foundation\/letters\/(g[1-7])\/check\/?$/.exec(hash);

@@ -56,8 +56,19 @@ p{margin:.4em 0}
 .gamegrid{display:grid;grid-template-columns:1fr 1fr;gap:.9rem;list-style:none;margin:0;padding:0}
 .gamegrid li{margin:0;min-width:0}
 .gamenum{width:2.5rem;height:2.5rem;font-size:1.25rem}
-.gameico{display:flex;align-items:center;justify-content:center;width:1.6rem;height:1.6rem;flex:none;color:#C95A10}
+.gameico{display:flex;align-items:center;justify-content:center;width:2.6rem;height:2.6rem;flex:none;color:#C95A10}
 .gameico .ico{width:1.45rem;height:1.45rem}
+.gameico img{width:2.6rem;height:2.6rem;object-fit:cover;border-radius:.55rem}
+.fs-group .stepnote{white-space:normal}
+.daytabs{display:flex;flex-wrap:wrap;gap:.45rem;width:min(100%,68rem);margin:.85rem auto 0;padding:0 1.2rem}
+.daytab{min-height:3.1rem;padding:.35rem .9rem;border:3px solid #E4D6B4;border-radius:1rem;background:#fff;color:#2B2540;font-family:Andika,sans-serif;font-size:1.15rem;font-weight:700;cursor:pointer}
+.daytab.on{background:#0E7C7C;border-color:#0E7C7C;color:#fff}
+@media (max-width:700px){
+  .daytab{min-height:2.7rem;padding:.3rem .7rem;font-size:1rem}
+  .fs-group .uA-top{gap:.35rem;row-gap:.35rem}
+  .fs-group .teachbox{max-width:9.5rem}
+  .fs-group .teachpop{width:min(11.5rem,calc(100vw - 1.2rem))}
+}
 @media (min-width:1000px){
   .stepage .modebar{padding-right:16rem;box-sizing:border-box}
   .gamegrid{grid-template-columns:repeat(3,minmax(0,1fr));gap:.55rem}
