@@ -652,6 +652,7 @@
         IR.ui.homeButton(),
         h('button', { class: 'back homebtn', type: 'button', onclick: () => { Snd.stop(); location.hash = '#/foundation'; } }, icon('back'), h('span', null, 'Foundation')),
         h('h1', { class: 'uA-title' }, 'Meet the Team'),
+        IR.teacherBox({ slides: teach.slides, files: teach.files }),
         IR.ui.gearButton()),
       IR.modeBar({
         before: h('div', { class: 'stepbefore' },

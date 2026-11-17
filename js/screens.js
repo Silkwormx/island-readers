@@ -535,19 +535,36 @@
         : h('div', { class: 'lessonrow' }, ...items.map((item) => itemCard(item)));
     return h('section', { class: 'stepblock' }, stepHead(n, label), cards);
   }
+  function teacherBox(plan) {
+    plan = plan || {};
+    const files = plan.files || [];
+    const panel = h('div', { class: 'teachpop', hidden: '' },
+      h('p', { class: 'teachstep' }, h('span', null, '1'), 'Slideshow'),
+      plan.slides ? h('button', { class: 'teachlink', type: 'button', onclick: () => { Snd.stop(); location.hash = plan.slides; } }, 'Open the slideshow') : h('p', { class: 'teachsoon' }, 'Coming soon'),
+      h('p', { class: 'teachstep' }, h('span', null, '2'), 'Printables'),
+      files.length ? h('div', null, ...files.map((file) => h('a', { class: 'teachlink', href: file.href, target: '_blank', rel: 'noopener' }, file.title))) : h('p', { class: 'teachsoon' }, 'Coming soon'));
+    const btn = h('button', { class: 'teachbox', type: 'button', 'aria-expanded': 'false' }, 'Teacher Materials');
+    const wrap = h('div', { class: 'teachcorner' }, btn, panel);
+    function onDoc(e) { if (!wrap.contains(e.target)) setOpen(false); }
+    function onKey(e) { if (e.key === 'Escape') setOpen(false); }
+    function setOpen(open) {
+      panel.hidden = !open;
+      btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      btn.classList.toggle('is-open', open);
+      document.removeEventListener('click', onDoc);
+      document.removeEventListener('keydown', onKey);
+      if (open) {
+        document.addEventListener('click', onDoc);
+        document.addEventListener('keydown', onKey);
+      }
+    }
+    btn.addEventListener('click', (e) => { e.stopPropagation(); setOpen(panel.hidden); });
+    return wrap;
+  }
+  IR.teacherBox = teacherBox;
   function modeBar(plan) {
     plan = plan || {};
-    const has = !!plan.slides;
-    const board = h('span', { class: 'ico', html: '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M8 20h8M12 16v4" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>' });
-    const lessonTab = h('button', { class: 'modetab on', type: 'button', role: 'tab', 'aria-selected': 'true' }, icon('book'), h('span', null, 'Independent Lesson'));
-    const teachTab = h('button', {
-      class: 'modetab' + (has ? '' : ' soon'),
-      type: 'button',
-      role: 'tab',
-      'aria-selected': 'false',
-      disabled: has ? null : true
-    }, board, h('span', { class: 'modetab-lab' }, 'Teacher-Led', has ? null : h('small', null, 'coming soon')));
-    const lessonPane = h('div', { class: 'modepane' },
+    return h('div', { class: 'modebar' },
       h('p', { class: 'stepnote' }, 'Kids watch the lesson, then play the games.'),
       plan.before || null,
       h('div', { class: 'stepflow' },
@@ -555,22 +572,6 @@
         plan.choose ? null : stepSection(2, 'Games', plan.games || [], true),
         plan.choose || !plan.story ? null : stepSection(3, 'Story', [plan.story]),
         ...(plan.choose || []).map((item, i) => stepSection(i + 1, item.title, [item]))));
-    const teachPane = h('div', { class: 'modepane', hidden: '' },
-      h('p', { class: 'stepnote' }, 'Teach from the slideshow, then use the printables.'),
-      h('div', { class: 'stepflow' },
-        stepSection(1, 'Slideshow', has ? [{ title: 'Open the slideshow', href: plan.slides }] : []),
-        stepSection(2, 'Printables', plan.files || [])));
-    function show(teach) {
-      lessonPane.hidden = teach;
-      teachPane.hidden = !teach;
-      lessonTab.classList.toggle('on', !teach);
-      teachTab.classList.toggle('on', teach);
-      lessonTab.setAttribute('aria-selected', teach ? 'false' : 'true');
-      teachTab.setAttribute('aria-selected', teach ? 'true' : 'false');
-    }
-    lessonTab.addEventListener('click', () => show(false));
-    if (has) teachTab.addEventListener('click', () => show(true));
-    return h('div', { class: 'modebar' }, h('div', { class: 'modebar-tabs', role: 'tablist' }, lessonTab, teachTab), lessonPane, has ? teachPane : null);
   }
   IR.modeBar = modeBar;
   function trailScreen() {
@@ -583,7 +584,13 @@
     const story = pick('story')[0];
     if (story) { story.title = D.storyTitle || story.title; story.note = 'Story Time'; story.img = IR.storyCovers['4.1']; story.alt = D.storyTitle || ''; story.big = true; }
     app.append(h('div', { class: 'screen trailscreen unitpage unitA orangeunit stepage' },
-      h('header', { class: 'uA-top' }, homeButton(), h('h1', { class: 'uA-title' }, h('small', null, 'Unit 4 Lesson 1'), 'ng'), gearButton()),
+      h('header', { class: 'uA-top' }, homeButton(), h('h1', { class: 'uA-title' }, h('small', null, 'Unit 4 Lesson 1'), 'ng'), teacherBox({
+        slides: '#/teachers/slides/ng',
+        files: [
+          { title: 'Daily practice sheets', href: 'teachers/ng/Lesson3.1_ng_Daily_Practice_Sheets.pdf' },
+          { title: 'Teacher pack', href: 'teachers/ng/Lesson3.1_ng_Teacher_Pack.pdf' }
+        ]
+      }), gearButton()),
       modeBar({
         lesson: pick('lesson'),
         games: pick('activities'),
