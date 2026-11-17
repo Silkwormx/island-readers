@@ -1355,6 +1355,44 @@
     });
   }
 
+  function aboutOrder() {
+    return h('details', { class: 'fs-about' },
+      h('summary', null, 'Why this letter order'),
+      h('div', { class: 'fs-aboutbody' },
+        h('p', null, 'We teach the lowercase letter and its sound first. Capitals come lightly, a little later.'),
+        h('p', null, 'The first set is a m s t. Those letters make real words right away: am, at, Sam, and sat.'),
+        h('p', null, 'Letters that look alike, like b and d and p, are spread apart so they are easier to tell apart.'),
+        h('p', null, 'Sounds children use every day come early. Rare letters, q and x and z, come last.'),
+        h('p', null, 'The order follows a research-based science of reading sequence.')));
+  }
+  function flowFor(lesson) {
+    if (lesson.new_letters && lesson.new_letters.length) {
+      return [{ id: 'ido', title: 'I do' }, { id: 'wedo', title: 'We do' }].concat(FLOW);
+    }
+    return FLOW;
+  }
+  function grownTip(lesson) {
+    const tips = [];
+    if (program && program.correction_words) tips.push(program.correction_words);
+    if (program && program.word_error_script) tips.push(program.word_error_script);
+    (lesson.new_letters || []).forEach((id) => {
+      const row = letterInfo(id);
+      if (row && row.cue) tips.push(id + ': ' + String(row.cue).replace(/'/g, '').replace(/\s*\+\s*/g, '. '));
+      if (row && row.formation) tips.push('Trace ' + id + '. ' + row.formation);
+    });
+    const show = IR.teach && IR.teach.on && IR.teach.on();
+    return h('details', { class: 'fs-tip', open: show || null },
+      h('summary', null, 'If your child needs a hand'),
+      ...tips.map((tip) => h('p', null, tip)));
+  }
+  function modelBlend(word) {
+    const parts = graphemes(String(word));
+    parts.forEach((part, n) => {
+      const letter = BY[part.id];
+      if (letter) setTimeout(() => hear(letter, 'sound'), n * 420);
+    });
+    setTimeout(() => speak(word), parts.length * 420 + 180);
+  }
   const FLOW = [
     { id: 'warm', title: 'Warm-up' },
     { id: 'review', title: 'Review' },
@@ -1463,16 +1501,21 @@
       const done = lessons.filter((lesson) => doneMap()[String(lesson.lesson_number)]).length;
       const open = groupOpen(group);
       const isNext = up && up.id === group.id;
+      const faces = group.letters.map((id) => {
+        const src = artUrl(id);
+        return src ? h('img', { src: src, alt: id }) : null;
+      });
       return h('button', {
-        class: 'fs-group' + (isNext ? ' next' : '') + (open ? '' : ' locked'),
+        class: 'tcard fs-set' + (isNext ? ' next' : '') + (open ? '' : ' locked'),
         type: 'button',
         'aria-disabled': open ? 'false' : 'true',
         onclick: () => { if (open) location.hash = '#/foundation/letters/' + group.id; }
       },
-        isNext ? h('span', { class: 'fs-next' }, 'Next up') : h('span', { class: 'fs-next' }, open ? '' : 'After the last check'),
-        faceRow(group),
-        h('span', { class: 'fs-plain' }, group.letters.join(' ')),
-        h('span', { class: 'fs-count' }, done + ' of ' + lessons.length));
+        h('span', { class: 'tpic fs-setpic', style: 'grid-template-columns:repeat(' + group.letters.length + ',minmax(0,1fr))' }, ...faces),
+        h('span', { class: 'tbody' },
+          h('b', { class: 'tnum' }, group.letters.join(' ')),
+          h('span', { class: 'tname' }, isNext ? 'Next up' : (open ? 'Open this set' : 'After the last check')),
+          h('span', { class: 'tsnd' }, done + ' of ' + lessons.length)));
     });
     const words = readBank();
     app.append(h('div', { class: 'screen trailscreen unitpage llpage fs-page' },
@@ -1480,8 +1523,9 @@
       h('main', { class: 'llmain fs-hub' },
         h('p', { class: 'fs-lead' }, 'Learn the letters and read real words from day one.'),
         h('button', { class: 'btn big primary fs-continue', type: 'button', onclick: openNext }, started ? 'Continue' : 'Start Group 1'),
+        aboutOrder(),
         h('h2', { class: 'fs-h' }, 'Your letter path'),
-        h('div', { class: 'fs-path' }, ...cards),
+        h('div', { class: 'fs-setmap' }, ...cards),
         h('section', { class: 'fs-bank' },
           h('h2', { class: 'fs-h' }, 'Look what I can read!'),
           h('p', { class: 'fs-words' }, words.length ? words.join('  ') : 'Your words will show up here.')),
@@ -1496,6 +1540,8 @@
 
   function paintStep(stage, group, lesson, stepId) {
     stage.innerHTML = '';
+    if (stepId === 'ido') return paintIdo(stage, lesson);
+    if (stepId === 'wedo') return paintWedo(stage, lesson);
     if (stepId === 'warm') return paintWarm(stage, lesson);
     if (stepId === 'review') return paintReview(stage, lesson, group);
     if (stepId === 'meet') return paintMeet(stage, lesson);
@@ -1612,6 +1658,50 @@
         }
       }, ch))));
   }
+  function paintIdo(stage, lesson) {
+    const ids = lesson.new_letters || [];
+    const word = (lesson.new_words && lesson.new_words[0]) || '';
+    stage.append(
+      h('div', { class: 'llbuddies' }, h('img', { src: 'img/frill.webp', alt: 'Frill' })),
+      h('p', { class: 'llask' }, 'Watch. Frill shows the letter, the sound, and the word.'),
+      h('div', { class: 'fs-meet' }, ...ids.map((id) => {
+        const letter = BY[id];
+        const row = letterInfo(id) || {};
+        return h('div', { class: 'fs-ido' },
+          letter ? letterCardStep(letter, 'picture') : null,
+          h('p', { class: 'fs-chant' }, row.action || ''),
+          h('p', { class: 'fs-chant' }, row.chant || ''));
+      })),
+      word ? h('button', { class: 'lltap', type: 'button', onclick: () => modelBlend(word) }, 'Hear ' + word) : null,
+      grownTip(lesson));
+  }
+  function paintWedo(stage, lesson) {
+    const id = (lesson.new_letters || [])[0];
+    const letter = BY[id];
+    const word = (lesson.new_words && lesson.new_words[0]) || id || 'am';
+    const parts = graphemes(String(word));
+    let at = 0;
+    const line = h('p', { class: 'llshown llprint' }, '');
+    stage.append(
+      h('div', { class: 'llbuddies' }, h('img', { src: 'img/zipA.webp', alt: 'Zip' }), h('img', { src: 'img/frill.webp', alt: 'Frill' })),
+      h('p', { class: 'llask' }, 'Say it with us. Tap each sound.'),
+      letter ? h('button', { class: 'lltap', type: 'button', onclick: () => hear(letter, 'sound') }, id) : null,
+      line,
+      h('div', { class: 'llrow' }, ...parts.map((part, n) => h('button', {
+        class: 'lltap',
+        type: 'button',
+        onclick: (e) => {
+          if (n !== at) return;
+          at += 1;
+          e.currentTarget.classList.add('lit');
+          line.textContent += part.g;
+          const bit = BY[part.id];
+          if (bit) hear(bit, 'sound');
+          if (at >= parts.length) { speak(word); rememberWord(word); }
+        }
+      }, part.g))),
+      grownTip(lesson));
+  }
   function paintBank(stage, lesson) {
     const words = readBank();
     stage.append(
@@ -1621,12 +1711,13 @@
     if (lesson) markDone(lesson.lesson_number);
   }
   function lessonScreen(app, group, lesson, stepId) {
-    const step = FLOW.filter((item) => item.id === stepId)[0] || FLOW[0];
-    const index = FLOW.indexOf(step);
+    const steps = flowFor(lesson);
+    const step = steps.filter((item) => item.id === stepId)[0] || steps[0];
+    const index = steps.indexOf(step);
     IR.newScreen();
     const stage = h('div', { class: 'fs-stage' });
     const teacher = IR.teach && IR.teach.on && IR.teach.on();
-    const strip = h('div', { class: 'fs-strip', role: 'list' }, ...FLOW.map((item, i) => {
+    const strip = h('div', { class: 'fs-strip', role: 'list' }, ...steps.map((item, i) => {
       const cls = 'fs-step' + (i === index ? ' on' : '') + (i < index ? ' past' : '');
       if (i > index && !teacher) return h('span', { class: cls, role: 'listitem' }, item.title);
       return h('button', {
@@ -1650,12 +1741,12 @@
         type: 'button',
         onclick: () => {
           Snd.stop();
-          if (index >= FLOW.length - 1) {
+          if (index >= steps.length - 1) {
             markDone(lesson.lesson_number);
             location.hash = '#/foundation/letters/' + group.id;
             return;
           }
-          location.hash = lessonHash(group, lesson, FLOW[index + 1].id);
+          location.hash = lessonHash(group, lesson, steps[index + 1].id);
         }
       }, index >= FLOW.length - 1 ? 'Done' : 'Next'))));
     if (IR.teach) IR.teach.sync();
@@ -1755,7 +1846,7 @@
   IR.lettersRoute = function (hash, app) {
     if (hash === '#/foundation/slides/g1' || hash === '#/foundation/slides/g1/') { slidesScreen(app); return true; }
     if (/^#\/foundation\/letters\/?$/.test(hash)) { foundationPage(app); return true; }
-    const lesson = /^#\/foundation\/letters\/(g[1-7])\/l\/(\d+)(?:\/(warm|review|meet|read|write|bank))?\/?$/.exec(hash);
+    const lesson = /^#\/foundation\/letters\/(g[1-7])\/l\/(\d+)(?:\/(ido|wedo|warm|review|meet|read|write|bank))?\/?$/.exec(hash);
     if (lesson) {
       const g = groupById(lesson[1]);
       const row = lessonsOf(g || { id: lesson[1] }).filter((item) => item.lesson_number === Number(lesson[2]))[0];
