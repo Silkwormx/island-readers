@@ -124,14 +124,18 @@
           title: label,
           stars: ctx.mistakes ? 2 : 3,
           backLabel: 'Play again',
-          nextLabel: team ? 'Back to Team ' + team[1] : 'More games',
+          nextLabel: (PACK && PACK.nextLabel) || (team ? 'Back to Team ' + team[1] : 'More games'),
           onBack: () => {
             const app = document.querySelector('#app');
             app.innerHTML = '';
             if (team && IR.day1Play) IR.day1Play(app, again, PACK, back);
             else open('#/foundation/sample/' + again, app);
           },
-          onNext: () => { if (team) location.hash = back; else go('play'); }
+          onNext: () => {
+            if (PACK && PACK.after) { location.hash = PACK.after; return; }
+            if (team) location.hash = back;
+            else go('play');
+          }
         });
         done.classList.add('ll1end');
         const againBtn = done.querySelector('.menulink');
@@ -281,8 +285,14 @@
     }
     return out;
   }
+  function choicesFor(id, n) {
+    const pool = (PACK.ids || []).concat(PACK.foils || []);
+    const out = [id];
+    likeIds(id, pool, n).forEach((ch) => { if (out.indexOf(ch) < 0) out.push(ch); });
+    return out;
+  }
   function rounds(ctx, list, draw, id) {
-    const plan = cycle(list, ROUND_N);
+    const plan = cycle(list, (PACK && PACK.roundN) || ROUND_N);
     let i = 0;
     let streak = 0;
     function step() {
@@ -321,7 +331,7 @@
     const ids = PACK.ids;
     rounds(ctx, ids, (id, ok, again, i) => {
       say(PACK.say[id]);
-      const shown = [id].concat(likeIds(id, ids, i < 4 ? 1 : i < 8 ? 2 : Math.max(2, ids.length - 1)));
+      const shown = choicesFor(id, i < 4 ? 1 : i < 8 ? 2 : Math.max(2, ids.length - 1));
       const bubbles = shuffle(shown).map((letter) => h('button', {
         class: 'll1bubble',
         type: 'button',
@@ -380,7 +390,7 @@
     const spots = [[12, 18], [70, 14], [40, 42], [78, 58], [18, 66]];
     rounds(ctx, PACK.ids, (target, ok, again) => {
       say(PACK.say[target]);
-      const others = likeIds(target, PACK.ids, 2);
+      const others = choicesFor(target, 2).filter((ch) => ch !== target);
       const letters = [target, target].concat(others).slice(0, spots.length);
       let left = letters.filter((id) => id === target).length;
       const beach = h('div', { class: 'll1beach' });
