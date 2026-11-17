@@ -2669,7 +2669,8 @@ html.teach .u5step .itext{font-size:32px}
 .trail-x{position:sticky;top:.15rem;float:right;z-index:4;display:inline-flex;align-items:center;justify-content:center;width:3.4rem;height:3.4rem;margin:0 0 .2rem .4rem;border-radius:50%;border:3px solid #C45C00;background:#F28C00;color:#fff;box-shadow:0 4px 0 #C45C00}
 .trail-x .ico{width:1.6rem;height:1.6rem}
 .trailpop h2{margin:.1rem 0 .55rem;text-align:center;font-family:Andika,sans-serif}
-.trailpop .trailgo{margin-top:0}
+.trailpop .trailgo{clear:both;display:flex;width:max-content;max-width:100%;margin:.2rem auto .75rem;text-decoration:none;text-align:center;align-items:center;justify-content:center}
+.trailpop .trailgo:hover,.trailpop .trailgo:focus,.trailpop .trailgo:visited{text-decoration:none}
 @media (max-width:700px){
   .gamegrid.pics{grid-template-columns:repeat(3,minmax(0,1fr));gap:.4rem}
   .gamegrid.pics .gamepic,.gamegrid.pics .gamepair{height:3.2rem;min-height:3.2rem;max-height:3.2rem}
