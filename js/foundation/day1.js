@@ -77,6 +77,7 @@
 
   function shell(title, back) {
     const scr = IR.newScreen();
+    const lesson = PACK && PACK.lesson;
     const fill = h('i');
     const bar = h('div', { class: 'pbar ll1bar', role: 'progressbar', 'aria-valuemin': 0, 'aria-valuemax': 100, 'aria-valuenow': 0 }, fill);
     const instr = h('div', { class: 'instr' });
@@ -84,17 +85,20 @@
     const topNav = IR.ui && IR.ui.pageNav
       ? IR.ui.pageNav(() => { clearWait(); location.hash = back; })
       : h('button', { class: 'xbtn', type: 'button', 'aria-label': 'Back', onclick: () => { clearWait(); Snd.stop(); location.hash = back; } }, icon('close'));
-    const screen = h('div', { class: 'screen lessonscreen u5step ll-day1' },
-      h('header', { class: 'lesson-top ll1top' },
+    const roundEl = h('p', { class: lesson ? 'llkidprog' : 'qcount llround', 'aria-live': 'polite' }, '');
+    const header = lesson
+      ? h('header', { class: 'uA-top llbar' }, topNav, h('h1', { class: 'uA-title' }, title), roundEl)
+      : h('header', { class: 'lesson-top ll1top' },
         topNav,
         h('h1', null, title),
         h('span', { class: 'll1faces' },
           h('img', { class: 'll1face', src: ZIP, alt: 'Zip' }),
-          h('img', { class: 'll1face', src: FRILL, alt: 'Frill' }))),
-      h('p', { class: 'qcount llround', 'aria-live': 'polite' }, ''),
+          h('img', { class: 'll1face', src: FRILL, alt: 'Frill' })));
+    const screen = h('div', { class: lesson ? 'screen fs-team ll-day1 ll-lessonplay' : 'screen lessonscreen u5step ll-day1' },
+      header,
+      lesson ? null : roundEl,
       instr, stage,
       h('div', { class: 'll1foot' }, bar));
-    const roundEl = screen.querySelector('.llround');
     const ctx = {
       scr: scr,
       stage: stage,
@@ -112,6 +116,16 @@
       setInstr(text) {
         instr.innerHTML = '';
         if (!text) return;
+        if (PACK && PACK.lesson) {
+          instr.append(h('button', {
+            class: 'llnarr',
+            type: 'button',
+            'aria-label': 'Frill says: ' + text,
+            onclick: () => say(text)
+          }, h('img', { src: FRILL, alt: 'Frill' }), h('span', null, text)));
+          say(text);
+          return;
+        }
         instr.append(speakerBtn(() => say(text), 'Hear the directions'), h('span', { class: 'itext' }, text));
         say(text);
       },
@@ -119,23 +133,33 @@
         ctx.progress(1);
         if (PACK.onDone) PACK.onDone(again);
         IR.touchStreak();
+        if (PACK && PACK.lesson && PACK.after) {
+          Snd.play(A.sfx.done);
+          location.hash = PACK.after;
+          return;
+        }
         const team = /^#\/foundation\/letters\/g(\d+)/.exec(back || '');
         const done = IR.engage.endScreen({
           title: label,
           stars: ctx.mistakes ? 2 : 3,
           backLabel: 'Play again',
-          nextLabel: team ? 'Back to Team ' + team[1] : 'More games',
+          nextLabel: (PACK && PACK.nextLabel) || (team ? 'Back to Team ' + team[1] : 'More games'),
           onBack: () => {
             const app = document.querySelector('#app');
             app.innerHTML = '';
             if (team && IR.day1Play) IR.day1Play(app, again, PACK, back);
             else open('#/foundation/sample/' + again, app);
           },
-          onNext: () => { if (team) location.hash = back; else go('play'); }
+          onNext: () => {
+            if (PACK && PACK.after) { location.hash = PACK.after; return; }
+            if (team) location.hash = back;
+            else go('play');
+          }
         });
         done.classList.add('ll1end');
         const againBtn = done.querySelector('.menulink');
         if (againBtn) { againBtn.classList.remove('menulink'); againBtn.classList.add('btn', 'big', 'llagain'); }
+        if (PACK && PACK.lesson && againBtn) againBtn.remove();
         document.querySelector('#app').append(done);
         Snd.play(A.sfx.done);
       }
@@ -281,8 +305,14 @@
     }
     return out;
   }
+  function choicesFor(id, n) {
+    const pool = (PACK.ids || []).concat(PACK.foils || []);
+    const out = [id];
+    likeIds(id, pool, n).forEach((ch) => { if (out.indexOf(ch) < 0) out.push(ch); });
+    return out;
+  }
   function rounds(ctx, list, draw, id) {
-    const plan = cycle(list, ROUND_N);
+    const plan = cycle(list, (PACK && PACK.roundN) || ROUND_N);
     let i = 0;
     let streak = 0;
     function step() {
@@ -321,7 +351,7 @@
     const ids = PACK.ids;
     rounds(ctx, ids, (id, ok, again, i) => {
       say(PACK.say[id]);
-      const shown = [id].concat(likeIds(id, ids, i < 4 ? 1 : i < 8 ? 2 : Math.max(2, ids.length - 1)));
+      const shown = choicesFor(id, i < 4 ? 1 : i < 8 ? 2 : Math.max(2, ids.length - 1));
       const bubbles = shuffle(shown).map((letter) => h('button', {
         class: 'll1bubble',
         type: 'button',
@@ -380,7 +410,7 @@
     const spots = [[12, 18], [70, 14], [40, 42], [78, 58], [18, 66]];
     rounds(ctx, PACK.ids, (target, ok, again) => {
       say(PACK.say[target]);
-      const others = likeIds(target, PACK.ids, 2);
+      const others = choicesFor(target, 2).filter((ch) => ch !== target);
       const letters = [target, target].concat(others).slice(0, spots.length);
       let left = letters.filter((id) => id === target).length;
       const beach = h('div', { class: 'll1beach' });

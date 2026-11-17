@@ -367,3 +367,121 @@ html.teach .llist .u5name,html.teach .llplay .u5name{font-size:32px}
   .llstep .llgame.llmeet{grid-template-columns:1fr}
   .llmemo svg{width:7rem}
 }
+.fs-teams{background:var(--cream)}
+.fs-teams.fs-home .hbanner{justify-content:center}
+.fs-teams.fs-home .hbanner h1,
+.fs-teams.fs-home.gridhome .mwrap > .hbanner h1{text-align:center;flex:1 1 auto;order:0}
+.fs-teams.fs-home .hbanner h1::after,
+.fs-teams.fs-home.gridhome .mwrap > .hbanner h1::after{margin-left:auto;margin-right:auto}
+.fs-teams .bellgrid.fs-teamgrid{grid-template-columns:repeat(2,minmax(0,1fr))}
+@media (min-width:900px){.fs-teams .bellgrid.fs-teamgrid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.fs-teams .fs-groupcard{position:relative;min-height:12rem}
+.fs-teams .fs-groupcard.locked{opacity:.62}
+.fs-team{height:100dvh;max-height:100dvh;overflow:hidden;display:flex;flex-direction:column;background:var(--cream);font-family:Andika,sans-serif}
+.fs-team .uA-title,.llkid .uA-title{display:block;flex:1;text-align:center}
+.fs-teammain{flex:1;min-height:0;overflow:auto;width:min(100%,74rem);margin:0 auto;padding:.2rem .9rem 1.2rem}
+.llshellrow{display:flex;align-items:center;justify-content:center;gap:.45rem;margin:.2rem 0 .7rem}
+.llshellrow b{margin-left:.35rem;font-size:1.2rem;color:#C45C00}
+.llshell{width:2.5rem;height:2.5rem;display:inline-flex}
+.llshell svg{width:100%;height:100%}
+.llshell.big{width:5.2rem;height:5.2rem}
+.fs-groupcard .tname.llteamlets{display:flex;gap:.8rem;justify-content:center;font-size:1.4rem}
+.llup{display:inline-flex;align-items:center;justify-content:center;margin:.15rem auto 0;padding:.12rem .65rem;border-radius:.7rem;background:#F28C00;color:#fff;font-weight:700}
+.ll-gamescard{background:#FFF6E3}
+.ll-gamescard .tbody{position:absolute;inset:0;min-height:0}
+.ll-gamescard .tname{font-size:2rem}
+.ll-lessongrid,.ll-gamegrid{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.8rem}
+@media (min-width:900px){.ll-lessongrid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.ll-lessoncard,.ll-gamescard,.ll-gamecard{position:relative;min-height:11rem;border:3px solid #F28C00;border-radius:1.2rem;background:#fff;text-align:center}
+.ll-lessoncard .ll-lessonart,.ll-gamecard .llgameface{width:100%;height:auto;aspect-ratio:4/3;object-fit:contain;object-position:center;background:#FFF6E3}
+@media (min-width:900px){
+  .fs-team:has(.ll-teamlessons){height:100dvh;max-height:100dvh;overflow:hidden}
+  .fs-teammain:has(.ll-teamlessons){flex:1;min-height:0;overflow:hidden;display:flex;flex-direction:column;width:min(100%,68rem);margin:0 auto;padding:.15rem .8rem .4rem}
+  .fs-teammain:has(.ll-teamlessons) .llshellrow{margin:.05rem 0 .35rem}
+  .ll-teamlessons{flex:1;min-height:0;grid-template-columns:repeat(3,minmax(0,1fr));grid-template-rows:repeat(2,minmax(0,1fr));gap:.55rem;align-content:stretch}
+  .ll-teamlessons .ll-lessoncard,.ll-teamlessons .ll-gamescard{min-height:0;height:100%;overflow:hidden}
+  .ll-teamlessons .ll-lessonart{flex:1 1 auto;width:100%;height:auto;min-height:0;aspect-ratio:auto;object-fit:contain;object-position:center;background:#FFF6E3}
+  .ll-teamlessons .ll-gamefaces{flex:1 1 auto;height:auto;min-height:0}
+  .ll-teamlessons .tbody,.ll-teamlessons .ll-gamescard .tbody{flex:0 0 auto;min-height:0}
+}
+.ll-gamescard{display:flex;flex-direction:column;background:#fff}
+.ll-gamescard .tbody{position:static;min-height:0;flex:none}
+.ll-gamefaces{display:flex;align-items:center;justify-content:center;gap:.35rem;height:8.5rem;background:#FFF6E3}
+.ll-gamefaces img{height:78%;width:auto;max-width:46%;object-fit:contain}
+.llkidnext:disabled{opacity:.42;cursor:default;box-shadow:none}
+.llkidq{margin:0;font-weight:700;color:#C45C00;text-align:center}
+.ll-lessonplay .ll1foot{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:.4rem .7rem}
+.ll-lessonplay .ll1foot .pbar{flex:1 0 100%;margin:0}
+.ll-lessonplay .streakline{font-family:Andika,sans-serif;font-weight:700;font-size:1.05rem;white-space:nowrap}
+.ll-lessonplay .sfxmute{width:2.6rem;height:2.6rem;min-width:2.6rem;border-radius:50%;border:3px solid #C95A10;background:#F28C00;color:#fff;padding:0;display:inline-flex;align-items:center;justify-content:center}
+.ll-lessonplay .sfxmute.off{background:#fff;color:#5c5648;border-color:#E4D6B4}
+.ll-lessonplay .sfxmute .ico{width:1.2rem;height:1.2rem}
+@media (max-width:520px){
+  .ll-lessonplay .uA-top.llbar{flex-wrap:wrap;row-gap:.05rem}
+  .ll-lessonplay .llkidprog{flex:1 1 100%;text-align:center;font-size:.95rem}
+}
+@media (max-width:430px){
+  .fs-teammain:has(.ll-teamlessons){overflow:hidden;display:flex;flex-direction:column;padding:.15rem .45rem .3rem}
+  .fs-teammain:has(.ll-teamlessons) .llshellrow{margin:0 0 .25rem}
+  .fs-teammain:has(.ll-teamlessons) .llshell{width:1.55rem;height:1.55rem}
+  .ll-teamlessons{flex:1;min-height:0;grid-template-rows:repeat(3,minmax(0,1fr));gap:.35rem}
+  .ll-teamlessons .ll-lessoncard,.ll-teamlessons .ll-gamescard{min-height:0;height:100%}
+  .ll-teamlessons .ll-lessonart{flex:1 1 0;width:100%;height:auto;min-height:0;aspect-ratio:auto;object-fit:contain;object-position:center;background:#FFF6E3}
+  .ll-teamlessons .ll-gamescard .tbody,.ll-teamlessons .ll-lessoncard .tbody{flex:0 0 auto;min-height:0;padding:.12rem .28rem .28rem;gap:.04rem}
+  .ll-teamlessons .ll-gamefaces{flex:1 1 0;display:flex;align-items:center;justify-content:center;height:auto;min-height:0;background:#FFF6E3}
+  .ll-teamlessons .ll-gamefaces img{height:70%;width:auto;max-height:none;max-width:42%}
+  .ll-teamlessons .tnum{font-size:.95rem;line-height:1}
+  .ll-teamlessons .tname{font-size:.72rem;line-height:1.05}
+  .ll-teamlessons .llup,.ll-teamlessons .llcardone{margin-top:.04rem;flex:none}
+}
+.ll-gamescard .tbody{min-height:11rem;align-items:center;justify-content:center}
+.ll-gamescard .tname,.ll-gamecard .tname,.ll-lessoncard .tname,.ll-lessoncard .tnum{text-align:center}
+.llsticker{position:absolute;top:.45rem;right:.45rem;width:2.4rem;height:1.8rem;z-index:2}
+.llsticker svg{width:100%;height:100%}
+.llcardone{display:inline-flex;align-items:center;justify-content:center;gap:.25rem;color:#2E9E6B;font-weight:700}
+.ll-lessoncard .herechip{position:absolute;left:.55rem;top:.55rem}
+.llkid{height:100dvh;max-height:100dvh;overflow:hidden;display:flex;flex-direction:column;align-items:center;background:var(--cream);font-family:Andika,sans-serif}
+.llkid .uA-top{width:100%}
+.llbar{width:100%;box-sizing:border-box;flex-wrap:nowrap}
+.llbar .uA-title{flex:1;text-align:center;white-space:nowrap}
+.llnarr{display:inline-flex;align-items:center;justify-content:center;gap:.55rem;max-width:calc(100% - 1.4rem);margin:.35rem auto 0;padding:.15rem .35rem;border:0;background:transparent;font-family:Andika,sans-serif;font-weight:700;font-size:1.25rem;line-height:1.2;color:#2B2540;text-align:left;cursor:pointer}
+.llnarr img{width:3rem;height:3rem;object-fit:contain;flex:none;border-radius:50%;background:#FFF6E3}
+.ll-lessonplay .instr{justify-content:center}
+.llkidnext{min-width:8.5rem;justify-content:center;text-align:center;background:#fff;color:#B04A00;border:3px solid #F28C00;box-shadow:0 4px 0 #F28C00}
+.llkidnext.ready{background:#F28C00;color:#fff;box-shadow:0 0 0 4px rgba(242,140,0,.28),0 4px 0 #C45C00}
+@media (max-width:700px){
+  .llbar{padding:.4rem .5rem;gap:.35rem}
+  .llbar .uA-title{font-size:1.2rem}
+  .llkidprog{font-size:.95rem}
+}
+.llkidbar{width:min(100% - 2rem,36rem);height:.7rem;margin-top:.45rem;border-radius:1rem;background:#E7D3A8;overflow:hidden}
+.llkidbar i{display:block;height:100%;background:#F28C00}
+.llkidhear{width:2.6rem;height:2.6rem;border-radius:50%;border:3px solid #F28C00;background:#fff;color:#F28C00;display:inline-flex;align-items:center;justify-content:center;flex:none;padding:0}
+.llkidstage{flex:1;min-height:0;width:min(100%,40rem);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.7rem;padding:.4rem .8rem;overflow:auto}
+.llkidart.sm{width:min(34vw,11rem);max-height:22vh}
+.llkidart{width:min(46vw,16rem);height:auto;max-height:34vh;object-fit:contain;border-radius:1rem;background:#FFF6E3}
+.llkidart.sm{width:min(34vw,11rem);max-height:22vh}
+.llkidbig{margin:0;font-size:clamp(3rem,8vw,5rem);line-height:1;color:#2B2540}
+.llkidsound{width:5.2rem;height:5.2rem;border-radius:50%;border:4px solid #C45C00;background:#F28C00;color:#fff;box-shadow:0 5px 0 #C45C00;display:flex;align-items:center;justify-content:center}
+.llkidsound .ico{width:2.4rem;height:2.4rem}
+.llkiddots{display:flex;gap:.45rem}
+.llkiddots i{width:1rem;height:1rem;border-radius:50%;background:#E4D6B4}
+.llkiddots i.on{background:#F28C00}
+.llkidchoices,.llkidtiles,.llkidslots,.llkidread,.llkidgames{display:flex;flex-wrap:wrap;gap:.7rem;justify-content:center;align-items:center}
+.llkidgames{flex-direction:column;flex-wrap:nowrap;width:min(100%,22rem)}
+.llkidgame{min-height:5.4rem;width:100%;border:3px solid #F28C00;border-radius:1.2rem;padding:.8rem;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:1.35rem;background:#fff;color:#2B2540}
+.llkidchoice,.llkidtile,.llkidword{min-width:4.6rem;min-height:4.6rem;padding:.4rem 1rem;border:4px solid #F28C00;border-radius:1.1rem;background:#fff;color:#2B2540;font-family:Andika,sans-serif;font-size:2.4rem;font-weight:700;text-align:center;box-shadow:0 4px 0 #F28C00}
+.llkidchoice.lit,.llkidtile.lit,.llkidword.lit{background:#F28C00;color:#fff}
+.llkidchoice.tried,.llkidtile.tried{animation:llshake .35s linear}
+@keyframes llshake{25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+.llkidslot{display:inline-flex;align-items:center;justify-content:center;min-width:4.2rem;min-height:4.6rem;border:4px dashed #E7B56A;border-radius:1rem;background:#fff;font-family:Andika,sans-serif;font-size:2.6rem;font-weight:700;color:#2B2540}
+.llkidslot.filled{background:#F28C00;color:#fff;border-style:solid}
+.llkidtracewrap{width:min(70vw,16rem);touch-action:none}
+.llkidtrace{width:100%;height:auto;touch-action:none;background:#fff;border:3px solid #F3E6C4;border-radius:1rem}
+.llkidtracewrap{width:min(70vw,16rem);touch-action:none}
+.llkidshells{display:flex;gap:.4rem}
+.llkidshells i{width:1.3rem;height:1rem;border-radius:1rem 1rem .4rem .4rem;background:#E4D6B4}
+.llkidshells i.on{background:#F28C00}
+.llkiddone{margin:0;font-size:2rem;font-weight:700;color:#C45C00;text-align:center}
+.llkidnav{width:100%;display:flex;justify-content:center;padding:0 0 .9rem}
+.llkidcheck{display:flex;flex-direction:column;align-items:center;gap:.6rem}

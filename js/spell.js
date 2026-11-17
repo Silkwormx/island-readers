@@ -26,6 +26,7 @@
   function lessonById(id) { return plans().filter((L) => L.id === id)[0] || null; }
   const doneId = (lesson, step) => 'spell_' + lesson + '_' + step;
   function unlocked(lessonId, index) {
+    if (IR.DEMO_UNLOCK_ALL) return true;
     if (IR.S && IR.S().settings && IR.S().settings.openAll) return true;
     if (index <= 0) return true;
     return IR.isDone(doneId(lessonId, STEPS[index - 1].id));
