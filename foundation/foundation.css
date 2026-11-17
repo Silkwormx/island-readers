@@ -236,6 +236,9 @@ html.teach .llist .u5name,html.teach .llplay .u5name{font-size:32px}
 .ll1flash{margin:0;font-size:clamp(4rem,14vh,8rem);font-weight:700}
 .ll1meter{width:min(22rem,80%);height:.7rem;border-radius:1rem;background:#EADFC3;overflow:hidden}
 .ll1meter i{display:block;height:100%;width:0;background:#F28C00;transition:width 4s linear}
+.fs-cheer{background:var(--cream,#FFF8E7)}
+.fs-cheer .llmain{display:flex;align-items:center;justify-content:center;min-height:70vh}
+.fs-cheer .ll1celebrate h2{margin:.2rem 0 0;font-size:2rem}
 .ll1celebrate{display:flex;flex-direction:column;align-items:center;gap:.35rem}
 .ll1celebrate img{width:5rem;height:auto}
 .ll1cap,.ll1readline{margin:0;font-size:2.2rem;font-weight:700}

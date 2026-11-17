@@ -635,23 +635,50 @@
   function dayHash(group, lesson) {
     return '#/foundation/letters/' + group.id + '/day/' + daySlug(lesson);
   }
+  function pathKey(group, lesson) { return group.id + ':' + lesson.lesson_number; }
+  function pathMap() { return readStore('ir_ll_path'); }
+  function pathHas(group, lesson, step) {
+    const row = pathMap()[pathKey(group, lesson)] || {};
+    return !!row[step];
+  }
+  function markPath(group, lesson, step) {
+    const all = pathMap();
+    const row = all[pathKey(group, lesson)] || {};
+    row[step] = 1;
+    all[pathKey(group, lesson)] = row;
+    writeStore('ir_ll_path', all);
+    if (row.lesson && row.games && row.read) markDone(lesson.lesson_number);
+  }
+  function dayComplete(group, lesson) {
+    return pathHas(group, lesson, 'lesson') && pathHas(group, lesson, 'games') && pathHas(group, lesson, 'read');
+  }
+  function orangeNext(fn) {
+    return h('button', { class: 'btn big primary daynext', type: 'button', onclick: () => { Snd.stop(); fn(); } }, 'Next', icon('next'));
+  }
+  function cheerHash(group, lesson) {
+    return '#/foundation/letters/' + group.id + '/cheer/' + lesson.lesson_number;
+  }
   function dayTabs(group, current) {
     const lessons = lessonsOf(group);
     const tabs = lessons.map((lesson) => {
       const slug = daySlug(lesson);
+      const done = dayComplete(group, lesson);
       return h('button', {
-        class: 'daytab' + (slug === current ? ' on' : ''),
+        class: 'daytab' + (slug === current ? ' on' : '') + (done ? ' is-done' : ''),
         type: 'button',
         'aria-pressed': slug === current ? 'true' : 'false',
+        'aria-label': (lesson.label || ('Day ' + lesson.lesson_number)) + (done ? '. Done.' : ''),
         onclick: () => { Snd.stop(); location.hash = dayHash(group, lesson); }
-      }, lesson.label || ('Day ' + lesson.lesson_number));
+      }, lesson.label || ('Day ' + lesson.lesson_number), done ? h('span', { class: 'daycheck', 'aria-hidden': 'true' }, icon('check')) : null);
     });
+    const checked = !!checkMap()[programId(group)];
     tabs.push(h('button', {
-      class: 'daytab' + (current === 'check' ? ' on' : ''),
+      class: 'daytab' + (current === 'check' ? ' on' : '') + (checked ? ' is-done' : ''),
       type: 'button',
       'aria-pressed': current === 'check' ? 'true' : 'false',
+      'aria-label': 'Team check' + (checked ? '. Done.' : ''),
       onclick: () => { Snd.stop(); location.hash = '#/foundation/letters/' + group.id + '/day/check'; }
-    }, 'Team check'));
+    }, 'Team check', checked ? h('span', { class: 'daycheck', 'aria-hidden': 'true' }, icon('check')) : null));
     return h('div', { class: 'daytabs', role: 'tablist' }, ...tabs);
   }
   function dayTeacher(group, lesson, isCheck) {
@@ -674,14 +701,22 @@
     if (words.length) return words.join(' ');
     return 'Review';
   }
-  function dayGames(group, lesson) {
+  function dayGames(group, lesson, here) {
     if (group.id === 'g1' && lesson && lesson.lesson_number === 1 && IR.day1Flow && IR.day1Flow.GAMES) {
-      return IR.day1Flow.GAMES.map((game) => ({
-        title: DAY1_SHORT[game.id] || game.title,
-        label: game.title,
-        img: game.icon,
-        href: '#/foundation/sample/' + game.id
-      }));
+      let next = true;
+      return IR.day1Flow.GAMES.map((game) => {
+        const done = IR.isDone(doneId(group, game.id));
+        const now = here && !done && next;
+        if (now) next = false;
+        return {
+          title: DAY1_SHORT[game.id] || game.title,
+          label: game.title,
+          img: game.icon,
+          href: '#/foundation/sample/' + game.id,
+          done: done,
+          now: now
+        };
+      });
     }
     return [];
   }
@@ -701,15 +736,25 @@
     if (!isCheck && !lesson) { foundationPage(app); return; }
     const current = isCheck ? 'check' : daySlug(lesson);
     const day1 = group.id === 'g1' && lesson && lesson.lesson_number === 1;
+    const lessonDone = !isCheck && pathHas(group, lesson, 'lesson');
+    const gamesDone = !isCheck && pathHas(group, lesson, 'games');
+    const readDone = !isCheck && pathHas(group, lesson, 'read');
+    const nowStep = isCheck ? '' : !lessonDone ? 'lesson' : !gamesDone ? 'games' : !readDone ? 'read' : '';
+    const games = isCheck ? [] : dayGames(group, lesson, nowStep === 'games');
+    const gamesReady = !games.length || games.every((game) => game.done);
     const lessonCard = isCheck
       ? { title: 'Start', href: '#/foundation/letters/' + group.id + '/check' }
       : day1
-        ? { title: 'a, m', href: '#/foundation/sample/team' }
-        : { title: dayFocus(lesson), href: lessonHash(group, lesson, flowFor(lesson)[0].id) };
+        ? { title: 'a, m', href: '#/foundation/sample/team', now: nowStep === 'lesson', done: lessonDone }
+        : { title: dayFocus(lesson), href: lessonHash(group, lesson, flowFor(lesson)[0].id), now: nowStep === 'lesson', done: lessonDone };
     const words = !isCheck && ((lesson.new_words || []).slice(0, 3).join(' '));
+    const readHref = day1 ? '#/foundation/sample/done' : lessonHash(group, lesson, 'read');
     const read = isCheck ? null : day1
-      ? { title: 'am', img: 'foundation/img/scenes/am.jpg', alt: 'am', big: true, href: '#/foundation/sample/done' }
-      : { title: words || 'Read', big: true, href: lessonHash(group, lesson, 'read') };
+      ? { title: 'am', img: 'foundation/img/scenes/am.jpg', alt: 'am', big: true, href: readHref, now: nowStep === 'read', done: readDone }
+      : { title: words || 'Read', big: true, href: readHref, now: nowStep === 'read', done: readDone };
+    const gamesNext = nowStep === 'games' && gamesReady
+      ? orangeNext(() => { markPath(group, lesson, 'games'); location.hash = readHref; })
+      : null;
     app.append(h('div', { class: 'screen trailscreen unitpage llpage fs-group stepage' },
       h('header', { class: 'uA-top' },
         IR.ui.homeButton(),
@@ -721,13 +766,19 @@
       IR.modeBar({
         note: false,
         lessonLabel: isCheck ? 'Check' : 'Lesson',
+        lessonState: nowStep === 'lesson' ? 'now' : lessonDone ? 'done' : '',
         lesson: [lessonCard],
         hideGames: isCheck,
-        games: isCheck ? [] : dayGames(group, lesson),
+        games: games,
+        gamesState: nowStep === 'games' ? 'now' : gamesDone ? 'done' : '',
         gamesSoon: 'Games coming soon',
+        gamesExtra: gamesNext,
         story: read,
+        storyState: nowStep === 'read' ? 'now' : readDone ? 'done' : '',
         storyLabel: 'Read It'
       })));
+    const here = app.querySelector('.stepblock.is-now');
+    if (here && here.scrollIntoView) here.scrollIntoView({ block: 'nearest' });
     if (IR.teach) IR.teach.sync();
   }
 
@@ -1926,18 +1977,38 @@
       strip,
       h('main', { class: 'llmain fs-stagewrap' }, stage),
       h('div', { class: 'llnav' }, h('button', {
-        class: 'btn big primary',
+        class: 'btn big primary daynext',
         type: 'button',
         onclick: () => {
           Snd.stop();
+          if (step.id === 'read' && pathHas(group, lesson, 'lesson')) {
+            markPath(group, lesson, 'read');
+            location.hash = cheerHash(group, lesson);
+            return;
+          }
           if (index >= steps.length - 1) {
-            markDone(lesson.lesson_number);
-            location.hash = '#/foundation/letters/' + group.id;
+            markPath(group, lesson, 'lesson');
+            location.hash = dayHash(group, lesson);
             return;
           }
           location.hash = lessonHash(group, lesson, steps[index + 1].id);
         }
-      }, index >= FLOW.length - 1 ? 'Done' : 'Next'))));
+      }, 'Next'))));
+    if (IR.teach) IR.teach.sync();
+  }
+  function cheerScreen(app, group, lesson) {
+    IR.newScreen();
+    markPath(group, lesson, 'read');
+    app.append(h('div', { class: 'screen trailscreen unitpage llpage fs-cheer' },
+      h('header', { class: 'uA-top' },
+        h('button', { class: 'back homebtn', type: 'button', onclick: () => { Snd.stop(); location.hash = dayHash(group, lesson); } }, icon('back'), h('span', null, 'Day')),
+        h('h1', { class: 'uA-title' }, lesson.label || 'Day'),
+        IR.ui.gearButton()),
+      h('main', { class: 'llmain' }, h('div', { class: 'll1celebrate' },
+        h('img', { src: 'img/zipA.webp', alt: 'Zip' }),
+        h('img', { src: 'img/frill.webp', alt: 'Frill' }),
+        h('div', { class: 'badgeart', html: IR.ICON.badge }),
+        h('h2', null, 'You did it!')))));
     if (IR.teach) IR.teach.sync();
   }
   function checkScreen(app, group) {
@@ -2134,10 +2205,32 @@
     if (IR.teach) IR.teach.sync();
   }
   IR.letters = { GROUPS: GROUPS, LETTERS: LETTERS, artNeeded: ART_NEEDED, who: WHO };
+  IR.letterPath = {
+    mark: function (groupId, lessonNumber, step) {
+      const g = groupById(groupId);
+      const row = g && lessonsOf(g).filter((item) => item.lesson_number === Number(lessonNumber))[0];
+      if (g && row) markPath(g, row, step);
+    },
+    cheer: function (groupId, lessonNumber) {
+      return '#/foundation/letters/' + groupId + '/cheer/' + lessonNumber;
+    },
+    markGame: function (groupId, gameId, stars) {
+      IR.recordActivity(doneId({ id: groupId }, gameId), stars || 3);
+    }
+  };
   IR.lettersRoute = function (hash, app) {
     const deck = hash.match(/^#\/foundation\/slides\/(g[12])(?:\/(\d+))?\/?$/);
     if (deck && SLIDES[deck[1]]) { slidesScreen(app, deck[1], deck[2]); return true; }
     if (/^#\/foundation\/letters\/?$/.test(hash)) { foundationPage(app); return true; }
+    const cheer = /^#\/foundation\/letters\/(g[1-7])\/cheer\/(\d+)\/?$/.exec(hash);
+    if (cheer) {
+      const g = groupById(cheer[1]);
+      const row = g && lessonsOf(g).filter((item) => item.lesson_number === Number(cheer[2]))[0];
+      if (!g || !row) return false;
+      if (!groupOpen(g) && !(IR.teach && IR.teach.on && IR.teach.on())) { foundationPage(app); return true; }
+      cheerScreen(app, g, row);
+      return true;
+    }
     const lesson = /^#\/foundation\/letters\/(g[1-7])\/l\/(\d+)(?:\/([a-z0-9-]+))?\/?$/.exec(hash);
     if (lesson) {
       const g = groupById(lesson[1]);

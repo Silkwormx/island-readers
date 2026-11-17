@@ -66,6 +66,17 @@ p{margin:.4em 0}
 .daytabs{display:flex;flex-wrap:wrap;gap:.2rem .15rem;width:min(100%,46rem);margin:1.35rem auto 0;padding:0 1.2rem}
 .daytab{min-height:2.75rem;padding:.2rem .7rem;border:0;border-radius:.6rem;background:transparent;color:#6d655c;font-family:Andika,sans-serif;font-size:1.15rem;font-weight:700;cursor:pointer}
 .daytab.on{background:transparent;color:#0E7C7C;box-shadow:inset 0 -3px 0 #0E7C7C;border-radius:0}
+.daytab .daycheck{display:inline-flex;width:1.05rem;height:1.05rem;margin-left:.3rem;color:#1F8A4C}
+.daytab .daycheck .ico{width:1.05rem;height:1.05rem}
+.btn.daynext{display:flex;align-items:center;justify-content:center;width:min(100%,16rem);min-height:3.6rem;margin:.8rem 0 0;background:#F28C00;border-color:#C95A10;box-shadow:0 5px 0 #C95A10;color:#fff;font-size:1.35rem}
+.stephead.is-done .stepnum{background:#1F8A4C}
+.stephead.is-done .stepnum .ico{width:1.45rem;height:1.45rem}
+.fs-group .stepblock.is-now{margin:0 -.4rem;padding:.85rem .8rem 1rem;border-radius:1.3rem;background:#FFF8EC;box-shadow:inset 0 0 0 3px #F28C00}
+.gamecard.is-now,.stepcard.is-now,.storycard.is-now{border-color:#F28C00;box-shadow:0 4px 0 #F28C00}
+.gamecard.is-done,.stepcard.is-done,.storycard.is-done{border-color:#B7D7C3}
+.gamecard .gametxt{flex:1}
+.gamedone{margin-left:auto;display:flex;flex:none;color:#1F8A4C}
+.gamedone .ico{width:1.35rem;height:1.35rem}
 .teachpop.teachquiet{display:flex;flex-direction:column;gap:.4rem;width:12.5rem;padding:.7rem}
 @media (max-width:700px){
   .daytab{min-height:2.6rem;padding:.2rem .55rem;font-size:1.05rem}

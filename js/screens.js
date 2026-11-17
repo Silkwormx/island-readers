@@ -519,23 +519,29 @@
       num ? h('span', { class: 'gamenum' }, String(num)) : null,
       num ? h('span', { class: 'gameico', 'aria-hidden': 'true' }, item.img ? h('img', { src: item.img, alt: '' }) : icon('play')) : null,
       !num && item.img ? h('img', { class: 'storypic', src: item.img, alt: item.alt || '' }) : null,
-      h('span', { class: 'gametxt' }, h('b', null, item.title), item.note ? h('span', { class: 'gamenote' }, item.note) : null, item.min ? h('span', { class: 'gamemin' }, item.min + ' min') : null)
+      h('span', { class: 'gametxt' }, h('b', null, item.title), item.note ? h('span', { class: 'gamenote' }, item.note) : null, item.min ? h('span', { class: 'gamemin' }, item.min + ' min') : null),
+      item.done ? h('span', { class: 'gamedone', 'aria-hidden': 'true' }, icon('check')) : null
     ];
-    const cls = item.big ? 'storycard' : (num ? 'gamecard' : 'stepcard');
+    const cls = (item.big ? 'storycard' : (num ? 'gamecard' : 'stepcard')) + (item.done ? ' is-done' : '') + (item.now ? ' is-now' : '');
     const label = item.label || item.title;
     if (item.href && item.href.charAt(0) !== '#') return h('a', { class: cls, href: item.href, target: '_blank', rel: 'noopener', 'aria-label': label }, ...body);
     return h('button', { class: cls, type: 'button', 'aria-label': label, onclick: goItem(item) }, ...body);
   }
-  function stepHead(n, label) {
-    return h('div', { class: 'stephead' }, h('span', { class: 'stepnum' }, String(n)), h('span', { class: 'steplab' }, label));
+  function stepHead(n, label, state) {
+    return h('div', { class: 'stephead' + (state ? ' is-' + state : '') },
+      h('span', { class: 'stepnum' }, state === 'done' ? icon('check') : String(n)),
+      h('span', { class: 'steplab' }, label));
   }
-  function stepSection(n, label, items, numbered, soon) {
+  function stepSection(n, label, items, numbered, soon, opt) {
+    opt = opt || {};
+    const state = opt.state || '';
     const cards = !items || !items.length
       ? h('p', { class: 'stepsoon' }, soon || 'Coming soon')
       : numbered
         ? h('ol', { class: 'gamegrid' }, ...items.map((item, i) => h('li', null, itemCard(item, i + 1))))
         : h('div', { class: 'lessonrow' }, ...items.map((item) => itemCard(item)));
-    return h('section', { class: 'stepblock' }, stepHead(n, label), cards);
+    return h('section', { class: 'stepblock' + (state ? ' is-' + state : ''), 'aria-current': state === 'now' ? 'step' : null },
+      stepHead(n, label, state), cards, opt.extra || null);
   }
   function teacherLink(link) {
     if (link.href && link.href.charAt(0) !== '#') return h('a', { class: 'teachlink', href: link.href, target: '_blank', rel: 'noopener' }, link.title);
@@ -576,9 +582,9 @@
       plan.note === false ? null : h('p', { class: 'stepnote' }, plan.note || 'Watch the lesson, then play.'),
       plan.before || null,
       h('div', { class: 'stepflow' },
-        plan.choose ? null : stepSection(1, plan.lessonLabel || 'Lesson', plan.lesson || [], false, plan.lessonSoon),
-        plan.choose || plan.hideGames ? null : stepSection(2, 'Games', plan.games || [], true, plan.gamesSoon),
-        plan.choose || (!plan.story && !plan.storySoon) ? null : stepSection(3, plan.storyLabel || 'Story', plan.story ? [plan.story] : [], false, plan.storySoon),
+        plan.choose ? null : stepSection(1, plan.lessonLabel || 'Lesson', plan.lesson || [], false, plan.lessonSoon, { state: plan.lessonState, extra: plan.lessonExtra }),
+        plan.choose || plan.hideGames ? null : stepSection(2, 'Games', plan.games || [], true, plan.gamesSoon, { state: plan.gamesState, extra: plan.gamesExtra }),
+        plan.choose || (!plan.story && !plan.storySoon) ? null : stepSection(3, plan.storyLabel || 'Story', plan.story ? [plan.story] : [], false, plan.storySoon, { state: plan.storyState, extra: plan.storyExtra }),
         ...(plan.choose || []).map((item, i) => stepSection(i + 1, item.title, [item]))));
   }
   IR.modeBar = modeBar;

@@ -98,12 +98,12 @@
       badge(label, again) {
         ctx.progress(1);
         IR.touchStreak();
+        if (IR.letterPath) IR.letterPath.markGame('g1', again, ctx.mistakes ? 2 : 3);
         const done = IR.engage.endScreen({
           title: label,
           stars: ctx.mistakes ? 2 : 3,
-          nextLabel: 'More games',
-          backLabel: 'Play again',
-          onBack: () => { const app = document.querySelector('#app'); app.innerHTML = ''; open('#/foundation/sample/' + again, app); },
+          onlyNext: true,
+          orange: true,
           onNext: () => { location.hash = DAY; }
         });
         done.classList.add('ll1end');
@@ -198,10 +198,14 @@
       if (at < 2) return;
       ctx.stage.append(
         h('img', { class: 'll1link', src: LINK, alt: 'a and m link arms' }),
-        h('p', { class: 'll1cap' }, 'Am.'));
+        h('p', { class: 'll1cap' }, 'Am.'),
+        h('button', { class: 'btn big primary daynext', type: 'button', onclick: () => {
+          clearWait();
+          if (IR.letterPath) IR.letterPath.mark('g1', 1, 'lesson');
+          location.hash = DAY;
+        } }, 'Next', icon('next')));
       yes();
       ctx.progress(1);
-      IR._day1Wait = setTimeout(() => { location.hash = DAY; }, 700);
     }))));
   }
 
@@ -214,7 +218,10 @@
       h('div', { class: 'badgeart', html: IR.ICON.badge }),
       h('h2', null, 'Look what I can read!'),
       h('p', { class: 'll1readline' }, 'am'),
-      h('button', { class: 'btn big primary', type: 'button', onclick: () => go('play') }, 'Play the games')));
+      h('button', { class: 'btn big primary daynext', type: 'button', onclick: () => {
+        if (IR.letterPath) IR.letterPath.mark('g1', 1, 'read');
+        location.hash = IR.letterPath ? IR.letterPath.cheer('g1', 1) : DAY;
+      } }, 'Next', icon('next'))));
   }
 
   function menu(ctx) {

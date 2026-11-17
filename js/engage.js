@@ -134,8 +134,8 @@
         h('p', { class: 'streakend' }, 'In a row: ' + best),
         stars ? h('p', { class: 'starline' }, stars + (stars === 1 ? ' star' : ' stars')) : null,
         h('div', { class: 'row endrow' },
-          h('button', { class: 'menulink', type: 'button', onclick: o.onBack }, o.backLabel || 'Back to lesson menu'),
-          h('button', { class: 'btn big primary', type: 'button', onclick: o.onNext }, o.nextLabel || 'Continue', icon('next')))));
+          o.onlyNext ? null : h('button', { class: 'menulink', type: 'button', onclick: o.onBack }, o.backLabel || 'Back to lesson menu'),
+          h('button', { class: 'btn big primary' + (o.orange ? ' daynext' : ''), type: 'button', onclick: o.onNext }, o.onlyNext ? 'Next' : (o.nextLabel || 'Continue'), icon('next')))));
     }
   };
 
