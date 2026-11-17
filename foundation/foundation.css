@@ -214,8 +214,16 @@ html.teach .llist .u5name,html.teach .llplay .u5name{font-size:32px}
 .ll-day1 .ll1heart,.ll-day1 .ll1read{display:flex;flex-direction:column;align-items:center;justify-content:center;background:#F28C00;color:#fff;border-color:#C95A10}
 .ll-day1 .ll1heart span{font-size:1.1rem;font-weight:700}
 .ll-day1 .btn.primary,.ll1end .btn.primary{background:#F28C00;border-color:#C95A10;box-shadow:0 4px 0 #C95A10;color:#fff}
-.ll1menu{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.7rem;width:100%;max-width:72rem}
-.ll1game{min-height:6.2rem;padding:.4rem;border:3px solid #C95A10;border-radius:1.1rem;background:#fff;box-shadow:0 4px 0 #C95A10;font-family:Andika,sans-serif;font-size:clamp(1.15rem,2.4vh,1.7rem);font-weight:700;color:#2B2540;cursor:pointer}
+.ll-day1 .stage:has(.ll1menu){justify-content:stretch;align-items:stretch}
+.ll1menu{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));grid-template-rows:repeat(2,minmax(0,1fr));gap:.55rem;width:100%;height:100%;max-width:none}
+.ll1game{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.25rem;height:100%;min-height:0;padding:.35rem;border:3px solid #C95A10;border-radius:1.1rem;background:#fff;box-shadow:0 4px 0 #C95A10;font-family:Andika,sans-serif;font-size:clamp(.85rem,1.8vh,1.25rem);font-weight:700;color:#2B2540;cursor:pointer}
+.ll1game img{width:auto;height:48%;max-width:78%;object-fit:contain}
+.ll1gnum{position:absolute;top:.3rem;left:.3rem;width:1.7rem;height:1.7rem;border-radius:.45rem;background:#F28C00;color:#fff;display:flex;align-items:center;justify-content:center;font-size:.95rem}
+.ll1mouthico{display:flex;justify-content:center}
+.ll1mouthico svg{width:4.2rem;height:auto}
+.ll1miss{animation:ll1shake .42s ease;filter:brightness(.7)}
+@keyframes ll1shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-7px)}50%{transform:translateX(7px)}75%{transform:translateX(-4px)}}
+.ll1trio{display:flex;gap:.6rem;justify-content:center;width:100%}
 .ll1bubbles{display:flex;flex-wrap:wrap;justify-content:center;gap:1rem;width:100%}
 .ll1bubble{width:clamp(6.2rem,20vh,11rem);height:clamp(6.2rem,20vh,11rem);border-radius:50%;border:4px solid #0E7C7C;background:#E4F6F6;font-family:Andika,sans-serif;font-size:clamp(2.4rem,6vh,4rem);font-weight:700;color:#2B2540;cursor:pointer}
 .ll1bubble.popped{opacity:.3}
@@ -231,7 +239,15 @@ html.teach .llist .u5name,html.teach .llplay .u5name{font-size:32px}
 .ll1celebrate{display:flex;flex-direction:column;align-items:center;gap:.35rem}
 .ll1celebrate img{width:5rem;height:auto}
 .ll1cap,.ll1readline{margin:0;font-size:2.2rem;font-weight:700}
-@media (max-width:700px){.ll1menu{grid-template-columns:1fr 1fr}.ll1friend{min-height:11rem}}
+@media (max-width:700px){
+  .ll1menu{grid-template-columns:repeat(5,minmax(0,1fr));gap:.28rem}
+  .ll1game{font-size:.68rem;padding:.2rem}
+  .ll1gnum{width:1.2rem;height:1.2rem;font-size:.75rem}
+  .ll1friend{min-height:8rem}
+  .ll-day1 .ll1top{flex-wrap:wrap}
+  .ll-day1 .ll1top h1{white-space:nowrap;flex:1 1 auto;font-size:1.15rem}
+  .ll-day1 .ll1faces,.ll-day1 .ll1top .teachtoggle{order:5}
+}
 @media (min-width:1600px){
   .ll-day1 .ll1top h1{font-size:2rem}
   .ll1game{min-height:8rem;font-size:1.8rem}
