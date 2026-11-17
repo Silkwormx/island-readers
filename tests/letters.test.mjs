@@ -115,7 +115,8 @@ test('home opens Foundation Skills from the first bell, not a sidebar tab', () =
   const homeEnd = screens.indexOf('function gemScreen()');
   const home = screens.slice(homeStart, homeEnd);
   assert.equal(home.includes("tab('#/foundation'"), false);
-  assert.ok(home.indexOf("tab('#/trail'") < home.indexOf("tab('#/find'"));
+  assert.ok(home.indexOf('Trail Map and Placement Test') < home.indexOf("tab('#/find'"));
+  assert.ok(home.indexOf('Sight Word Practice') < home.indexOf("tab('#/find'"));
   assert.ok(home.indexOf("'Foundations'") < home.indexOf('for (let n = 1; n <= 22; n++)'));
   assert.match(home, /foundation\/img\/foundations_cover\.jpg/);
   assert.match(home, /Learn the letters/);
@@ -126,7 +127,7 @@ test('home opens Foundation Skills from the first bell, not a sidebar tab', () =
   assert.match(html, /js\/foundation\/letters\.js/);
   assert.match(html, /foundation\/foundation\.css/);
   assert.match(sw, /js\/foundation\/letters\.js/);
-  assert.match(sw, /ir-20261118d/);
+  assert.match(sw, /ir-20261118e/);
   assert.match(teach, /#\/foundation/);
   assert.match(letters, /Teacher Slideshows/);
   assert.match(letters, /Team 1 slideshow/);

@@ -1,7 +1,7 @@
 /* Island Readers sample service worker.
    Code (HTML/JS/CSS/data) is network-first so a new version always wins; the cache is only an offline fallback.
    Media (images/audio/video) is cache-first. Install never fails because of one file. */
-const CACHE = 'ir-20261118d';
+const CACHE = 'ir-20261118e';
 const ASSETS = [
  "./",
  "./index.html",
@@ -737,6 +737,7 @@ const ASSETS = [
  "./audio/home_intro.mp3",
  "./audio/place_kid.mp3",
  "./js/screens.js",
+ "./js/side-drop.js",
  "./js/skills.js",
  "./js/sor.js",
  "./manifest.webmanifest",

@@ -4,7 +4,7 @@ import fs from 'node:fs';
 
 const screens = fs.readFileSync(new URL('../js/screens.js', import.meta.url), 'utf8');
 const css = fs.readFileSync(new URL('../styles.css', import.meta.url), 'utf8');
-const aboutStart = screens.indexOf('function aboutScreen()');
+const aboutStart = screens.indexOf('function aboutNodes()');
 const aboutEnd = screens.indexOf('function teachersScreen()');
 const about = screens.slice(aboutStart, aboutEnd);
 const homeStart = screens.indexOf('function homeScreen()');
@@ -53,7 +53,9 @@ test('home shows Zip and Frill again and keeps the left-column layout', () => {
   const featureCss = css.slice(css.indexOf('Zip and Frill portraits back in the left-column card'));
   assert.equal(/scaleX\s*\(\s*-1|rotateY\(180/.test(home + featureCss), false);
   assert.ok(featureCss.includes('.homefeature .zfpics'));
-  assert.ok(home.includes("href: '#/about'"));
+  assert.equal(home.includes("href: '#/about'"), false);
+  assert.ok(home.includes("label: 'About Island Readers'"));
+  assert.ok(home.includes("group: 'home'"));
   assert.ok(screens.includes("href: '#/placement'"));
   assert.ok(home.includes('Learn to read with Zip and Frill'));
   assert.equal(home.includes('Read with Brick and Dash'), false);
@@ -77,7 +79,7 @@ test('home shows Zip and Frill again and keeps the left-column layout', () => {
   assert.equal(home.includes('banner, hero,'), false);
   const sw = fs.readFileSync(new URL('../sw.js', import.meta.url), 'utf8');
   assert.equal(sw.includes('home_banyan_c.jpg'), false);
-  assert.ok(sw.includes('ir-20261118d'));
+  assert.ok(sw.includes('ir-20261118e'));
   assert.ok(sw.includes('home_zip_frill.webp'));
 });
 

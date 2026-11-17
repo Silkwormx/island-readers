@@ -1371,15 +1371,21 @@
   }
 
   function aboutOrder() {
-    return h('details', { class: 'fs-about' },
-      h('summary', null, 'Why this order?'),
-      h('div', { class: 'fs-aboutbody' },
-        h('p', null, 'This is a letter review. It firms up each letter name and its sound before reading.'),
-        h('p', null, 'We review lowercase letters and their sounds first. Capitals come lightly, a little later.'),
-        h('p', null, 'The first set is a m s t. Those letters make real words right away: am, at, Sam, and sat.'),
-        h('p', null, 'Letters that look alike, like b and d and p, are spread apart so they are easier to tell apart.'),
-        h('p', null, 'Sounds children use every day come early. Rare letters, q and x and z, come last.'),
-        h('p', null, 'The order follows a research-based science of reading sequence.')));
+    return IR.sideDrop({
+      group: 'foundation',
+      label: 'Why this order?',
+      tabClass: 'btn big fs-sidebtn',
+      fill(body) {
+        [
+          'This is a letter review. It firms up each letter name and its sound before reading.',
+          'We review lowercase letters and their sounds first. Capitals come lightly, a little later.',
+          'The first set is a m s t. Those letters make real words right away: am, at, Sam, and sat.',
+          'Letters that look alike, like b and d and p, are spread apart so they are easier to tell apart.',
+          'Sounds children use every day come early. Rare letters, q and x and z, come last.',
+          'The order follows a research-based science of reading sequence.'
+        ].forEach((line) => body.append(h('p', { class: 'drop-note' }, line)));
+      }
+    });
   }
   function planFor(lesson) {
     if (!window.IRLetterScope || !program || !program.lessons) return null;
@@ -1546,6 +1552,7 @@
     return seen.slice(0, 4).join(', ');
   }
   function foundationPage(app) {
+    IR.resetSideGroup('foundation');
     IR.newScreen();
     const up = nextUpGroup();
     const cards = GROUPS.map((group) => {
@@ -1582,9 +1589,9 @@
         letterContinue()));
     const materials = h('section', { class: 'fs-mats', 'aria-label': 'For grown-ups' },
       teacherSlides(),
-      sideBtn('Teacher guide', () => { location.hash = '#/teachers'; }),
-      sideBtn('Printables', () => { location.hash = '#/teachers'; }),
-      sideBtn('Tracking sheet', () => { location.hash = '#/teachers'; }),
+      teacherGuideDrop(),
+      printablesDrop(),
+      trackingDrop(),
       sideBtn('Teacher mode', () => { if (IR.teach) IR.teach.toggle(); }));
     app.append(h('div', { class: 'screen home mapscreen gridhome fs-home' },
       h('div', { class: 'mwrap' },
@@ -1932,30 +1939,62 @@
     Snd.stop();
     location.hash = '#/foundation/slides/g1' + (page ? '/' + page : '');
   }
+  function pdfLink(label, href) {
+    return h('a', { class: 'drop-link', href: href, target: '_blank', rel: 'noopener' }, label);
+  }
   function teacherSlides() {
-    const panel = h('div', { class: 'fs-slidedrop', hidden: '' });
-    const tab = h('button', {
-      class: 'btn big fs-sidebtn',
-      type: 'button',
-      'aria-expanded': 'false',
-      'aria-controls': 'fs-slide-list',
-      onclick: () => {
-        const open = panel.hidden;
-        panel.hidden = !open;
-        tab.setAttribute('aria-expanded', open ? 'true' : 'false');
+    return IR.sideDrop({
+      group: 'foundation',
+      label: 'Teacher Slideshows',
+      tabClass: 'btn big fs-sidebtn',
+      fill(body) {
+        body.append(h('button', { class: 'drop-link', type: 'button', onclick: () => openSlides() }, 'Team 1'));
+        TEAM1_DAYS.forEach((day) => body.append(h('button', { class: 'drop-link', type: 'button', onclick: () => openSlides(day.page) }, day.label)));
+        for (let n = 2; n <= 7; n++) body.append(h('p', { class: 'drop-soon' }, 'Team ' + n + ' coming soon'));
       }
-    }, 'Teacher Slideshows');
-    panel.id = 'fs-slide-list';
-    const dayBtn = (day) => h('button', {
-      class: 'fs-daylink',
-      type: 'button',
-      onclick: () => openSlides(day.page)
-    }, day.label);
-    panel.append(
-      h('button', { class: 'fs-teamlink', type: 'button', onclick: () => openSlides() }, 'Team 1'),
-      ...TEAM1_DAYS.map(dayBtn));
-    for (let n = 2; n <= 7; n++) panel.append(h('p', { class: 'fs-soon' }, 'Team ' + n + ' coming soon'));
-    return h('div', { class: 'fs-slidetab' }, tab, panel);
+    });
+  }
+  function teacherGuideDrop() {
+    return IR.sideDrop({
+      group: 'foundation',
+      label: 'Teacher guide',
+      tabClass: 'btn big fs-sidebtn',
+      fill(body) {
+        body.append(
+          h('a', { class: 'drop-link', href: '#/teachers/slides/ng' }, 'ng slides'),
+          h('a', { class: 'drop-link', href: '#/teachers/slides/nk' }, 'nk slides'),
+          pdfLink('ng teacher pack', 'teachers/ng/Lesson3.1_ng_Teacher_Pack.pdf'),
+          pdfLink('nk teacher pack', 'teachers/nk/Lesson3.2_nk_Teacher_Pack.pdf'),
+          pdfLink('Lesson 5.1 Teacher-Led Checks', 'materials/unit5/Lesson5.1_Teacher_Led_Checks.pdf'),
+          pdfLink('Lesson 5.2 Teacher-Led Checks', 'materials/unit5/Lesson5.2_Teacher_Led_Checks.pdf'),
+          pdfLink('Unit 5 all checks', 'materials/unit5/Unit5_Teacher_Led_Checks_Combined.pdf'));
+      }
+    });
+  }
+  function printablesDrop() {
+    return IR.sideDrop({
+      group: 'foundation',
+      label: 'Printables',
+      tabClass: 'btn big fs-sidebtn',
+      fill(body) {
+        body.append(
+          pdfLink('ng daily practice sheets', 'teachers/ng/Lesson3.1_ng_Daily_Practice_Sheets.pdf'),
+          pdfLink('nk daily practice sheets', 'teachers/nk/Lesson3.2_nk_Daily_Practice_Sheets.pdf'),
+          pdfLink('Unit 5 student sheets', 'materials/unit5/Unit5_Teacher_Led_Student_Sheets.pdf'));
+      }
+    });
+  }
+  function trackingDrop() {
+    const track = (program && program.tracking) || { fields: [], decision_rules: [] };
+    return IR.sideDrop({
+      group: 'foundation',
+      label: 'Tracking sheet',
+      tabClass: 'btn big fs-sidebtn',
+      fill(body) {
+        track.fields.forEach((line) => body.append(h('p', { class: 'drop-note' }, line)));
+        track.decision_rules.forEach((line) => body.append(h('p', { class: 'drop-note' }, line)));
+      }
+    });
   }
   function slidesScreen(app, page) {
     IR.newScreen();

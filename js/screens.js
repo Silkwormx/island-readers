@@ -325,10 +325,42 @@
     const tab = (href, name, icoName) => h('a', { class: 'hometab', href: href, 'aria-label': name },
       h('span', { class: 'hometab-ico', 'aria-hidden': 'true' }, icon(icoName)),
       h('span', { class: 'hometab-name' }, name));
+    IR.resetSideGroup('home');
+    const aboutDrop = IR.sideDrop({
+      group: 'home',
+      label: 'About Island Readers',
+      ico: 'info',
+      tabClass: 'btn big aboutbtn',
+      extraClass: 'about-drop',
+      fill(body) { aboutNodes().forEach((node) => body.append(node)); }
+    });
+    const trailDrop = IR.sideDrop({
+      group: 'home',
+      label: 'Trail Map and Placement Test',
+      ico: 'map',
+      fill(body) {
+        const place = trailPlace();
+        body.append(h('button', { class: 'drop-link', type: 'button', onclick: () => { Snd.stop(); location.hash = '#/placement'; } }, 'Take the Placement Test'));
+        for (let n = 1; n <= 22; n++) {
+          const status = unitStatus(n, place);
+          body.append(h('button', { class: 'drop-link', type: 'button', onclick: () => openTrailBell(n) }, 'Unit ' + n + '. ' + UNIT_NAMES[n] + '. ' + status));
+        }
+        body.append(h('p', { class: 'drop-soon' }, 'Golden Bell coming soon'));
+      }
+    });
+    const sightDrop = IR.sideDrop({
+      group: 'home',
+      label: 'Sight Word Practice',
+      ico: 'star',
+      fill(body) {
+        for (let n = 1; n <= 4; n++) {
+          body.append(h('button', { class: 'drop-link', type: 'button', onclick: () => { Snd.stop(); location.hash = '#/chest' + n; } }, 'Sight words ' + n + '. Units ' + (2 * n - 1) + ' and ' + (2 * n)));
+        }
+        body.append(h('p', { class: 'drop-soon' }, 'Units 9 and 10 come later.'));
+      }
+    });
     const tabs = h('nav', { class: 'hometabs', 'aria-label': 'More places' },
-      tab('#/trail', 'Trail Map and Placement Test', 'map'),
-      tab('#/practice/sight', 'Sight Word Practice', 'star'),
-      tab('#/find', 'Find It', 'search'));
+      trailDrop, sightDrop, tab('#/find', 'Find It', 'search'));
     /* Nov 6 2026: full-width home feature (approved banyan scene), then About + the hero beside the unit grid */
     const banner = h('header', { class: 'hbanner' }, h('h1', null, 'Island Readers'),
       h('div', { class: 'grownwrap' }, h('span', { class: 'grownlab' }, 'Parent and Teacher Materials'), IR.ui.gearButton()));
@@ -359,17 +391,41 @@
         h('div', { class: 'zfhead' }, h('h2', { class: 'zfline' }, 'Learn to read with Zip and Frill'), readAloudBtn()),
         h('p', { class: 'zfsub' }, 'Ring every bell by learning its sounds.'),
         continueButton()));
-    app.append(h('div', { class: 'screen home mapscreen gridhome' }, h('div', { class: 'mwrap' }, banner, h('div', { class: 'homelay' }, h('div', { class: 'homeside' }, h('a', { class: 'btn big aboutbtn', href: '#/about' }, icon('info'), h('span', null, 'About Island Readers')), hero, tabs), h('div', { class: 'bellslot' }, grid)))));
+    app.append(h('div', { class: 'screen home mapscreen gridhome' }, h('div', { class: 'mwrap' }, banner, h('div', { class: 'homelay' }, h('div', { class: 'homeside' }, aboutDrop, hero, tabs), h('div', { class: 'bellslot' }, grid)))));
     /* Nov 3 2026: the whole left sidebar (About, Start here, Practice) stays in one spot while the tiles scroll (wide layouts only). */
     const side = app.querySelector('.homeside'); const scr = app.querySelector('.screen.home');
     const pin = () => {
       if (!side || !scr || !side.isConnected) { window.removeEventListener('resize', pin); return; }
-      if (!matchMedia('(min-width:1000px)').matches) { side.style.removeProperty('--side-top'); return; }
+      const nav = side.querySelector('.hometabs');
+      const tabs = nav ? [...nav.querySelectorAll('.hometab')] : [];
+      const relax = () => {
+        side.style.removeProperty('height');
+        side.style.removeProperty('max-height');
+        side.style.removeProperty('gap');
+        if (nav) nav.style.removeProperty('gap');
+        tabs.forEach((t) => { t.style.removeProperty('height'); t.style.removeProperty('min-height'); t.style.removeProperty('max-height'); });
+      };
+      if (!matchMedia('(min-width:1000px)').matches) { side.style.removeProperty('--side-top'); relax(); return; }
       const banner = scr.querySelector('.hbanner');
       const bannerH = banner ? banner.offsetHeight : 0;
       side.style.setProperty('--side-top', bannerH + 'px');
+      const room = Math.max(240, scr.getBoundingClientRect().bottom - side.getBoundingClientRect().top - 8);
+      side.style.height = room + 'px';
+      side.style.maxHeight = room + 'px';
+      const open = side.querySelector('.sidedrop.is-open');
+      if (!open && side.scrollHeight > side.clientHeight + 2) {
+        side.style.gap = '8px';
+        if (nav) nav.style.gap = '8px';
+        tabs.forEach((t) => { t.style.height = '48px'; t.style.minHeight = '48px'; t.style.maxHeight = '48px'; });
+      } else if (!open) {
+        side.style.removeProperty('gap');
+        if (nav) nav.style.removeProperty('gap');
+        tabs.forEach((t) => { t.style.removeProperty('height'); t.style.removeProperty('min-height'); t.style.removeProperty('max-height'); });
+      }
     };
     requestAnimationFrame(pin); window.addEventListener('resize', pin);
+    const art = side.querySelector('.homeart');
+    if (art && !art.complete) art.addEventListener('load', pin, { once: true });
   }
   function gemScreen() {
     IR.newScreen(); const earned = gemsEarned(); const nEarned = earned.filter(Boolean).length; const nx = gemNext();
@@ -766,17 +822,13 @@
     location.hash = '#/home';
   }
   /* ---------- About Island Readers (approved copy, Nov 6 2026) ---------- */
-  function aboutScreen() {
-    IR.newScreen();
+  function aboutNodes() {
     const a = (href, t) => h('a', { href, target: '_blank', rel: 'noopener' }, t);
     const sec = (title, ...kids) => h('section', { class: 'absec' }, h('h2', null, title), ...kids);
     const p = (...k) => h('p', null, ...k);
     const ul = (...items) => h('ul', null, ...items.map((x) => h('li', null, ...[].concat(x))));
     const UNITS = [['1', 'short vowels and floss'], ['2', 'blends'], ['3', 'sh, ch, th, wh, ck'], ['4', 'ng, nk (glued sounds)'], ['5', 'silent e'], ['6', '-s, -es, -ed, -ing'], ['7', 'syllables'], ['8', 'tricky sounds: tch, dge, -ild, -old'], ['9', 'bossy r: ar, or, er, ir, ur'], ['10', 'air, are, ear'], ['11', 'ai, ay, ee, ea, ey'], ['12', 'oa, ow, oe, ie, igh'], ['13', 'oo, ew, ui, ue'], ['14', 'au, aw, augh, ea'], ['15', 'oi, oy, ou, ow'], ['16', 'ei, eigh, ew, ough'], ['17', 'soft c and g'], ['18', 'silent letters: kn, wr, mb, gn, gh'], ['19', 'suffixes: -er, -est, -ly, -ful'], ['20', 'suffix spelling rules'], ['21', 'prefixes: un-, pre-, re-, dis-'], ['22', 'big endings: -tion, -ture, -ment']];
-    const home2 = h('button', { class: 'btn big primary abhome', type: 'button', onclick: () => { location.hash = '#/home'; } }, icon('home'), h('span', null, 'Back to Home'));
-    app.append(h('div', { class: 'screen aboutscreen' }, h('div', { class: 'abwrap' },
-      h('div', { class: 'abtop' }, homeButton()),
-      h('h1', null, 'About Island Readers'),
+    return [
       h('p', { class: 'ablead' }, 'A guide for families, schools and anyone helping a reader.'),
       sec('Building reading confidence through phonics practice',
         p('Island Readers gives older children a way to revisit the skills they need to become confident readers without being treated like younger learners. Through engaging stories, puzzles and games, the program sparks curiosity and makes reading practice something children want to do.')),
@@ -811,7 +863,15 @@
       sec('Why this order',
         p('The units follow a research-based scope and sequence like those used in schools. Each step builds on the last, from simple to complex, with the most useful patterns first.'),
         h('ol', { class: 'abunits' }, ...UNITS.map(([n, t]) => h('li', null, h('b', null, 'Unit ' + n + ': '), t))),
-        p('Readers start with short vowels and simple words, then learn sounds made by two letters, then longer words and word parts. That way no step asks for a skill that has not been taught.')),
+        p('Readers start with short vowels and simple words, then learn sounds made by two letters, then longer words and word parts. That way no step asks for a skill that has not been taught.'))];
+  }
+  function aboutScreen() {
+    IR.newScreen();
+    const home2 = h('button', { class: 'btn big primary abhome', type: 'button', onclick: () => { location.hash = '#/home'; } }, icon('home'), h('span', null, 'Back to Home'));
+    app.append(h('div', { class: 'screen aboutscreen' }, h('div', { class: 'abwrap' },
+      h('div', { class: 'abtop' }, homeButton()),
+      h('h1', null, 'About Island Readers'),
+      ...aboutNodes(),
       h('div', { class: 'abbottom' }, home2))));
   }
   /* ---------- Teacher materials (grown-up corner): by unit, then sound ---------- */
