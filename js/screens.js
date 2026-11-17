@@ -325,10 +325,42 @@
     const tab = (href, name, icoName) => h('a', { class: 'hometab', href: href, 'aria-label': name },
       h('span', { class: 'hometab-ico', 'aria-hidden': 'true' }, icon(icoName)),
       h('span', { class: 'hometab-name' }, name));
+    IR.resetSideGroup('home');
+    const aboutDrop = IR.sideDrop({
+      group: 'home',
+      label: 'About Island Readers',
+      ico: 'info',
+      tabClass: 'btn big aboutbtn',
+      extraClass: 'about-drop',
+      fill(body) { aboutNodes().forEach((node) => body.append(node)); }
+    });
+    const trailDrop = IR.sideDrop({
+      group: 'home',
+      label: 'Trail Map and Placement Test',
+      ico: 'map',
+      fill(body) {
+        const place = trailPlace();
+        body.append(h('button', { class: 'drop-link', type: 'button', onclick: () => { Snd.stop(); location.hash = '#/placement'; } }, 'Take the Placement Test'));
+        for (let n = 1; n <= 22; n++) {
+          const status = unitStatus(n, place);
+          body.append(h('button', { class: 'drop-link', type: 'button', onclick: () => openTrailBell(n) }, 'Unit ' + n + '. ' + UNIT_NAMES[n] + '. ' + status));
+        }
+        body.append(h('p', { class: 'drop-soon' }, 'Golden Bell coming soon'));
+      }
+    });
+    const sightDrop = IR.sideDrop({
+      group: 'home',
+      label: 'Sight Word Practice',
+      ico: 'star',
+      fill(body) {
+        for (let n = 1; n <= 4; n++) {
+          body.append(h('button', { class: 'drop-link', type: 'button', onclick: () => { Snd.stop(); location.hash = '#/chest' + n; } }, 'Sight words ' + n + '. Units ' + (2 * n - 1) + ' and ' + (2 * n)));
+        }
+        body.append(h('p', { class: 'drop-soon' }, 'Units 9 and 10 come later.'));
+      }
+    });
     const tabs = h('nav', { class: 'hometabs', 'aria-label': 'More places' },
-      tab('#/trail', 'Trail Map and Placement Test', 'map'),
-      tab('#/practice/sight', 'Sight Word Practice', 'star'),
-      tab('#/find', 'Find It', 'search'));
+      trailDrop, sightDrop, tab('#/find', 'Find It', 'search'));
     /* Nov 6 2026: full-width home feature (approved banyan scene), then About + the hero beside the unit grid */
     const banner = h('header', { class: 'hbanner' }, h('h1', null, 'Island Readers'),
       h('div', { class: 'grownwrap' }, h('span', { class: 'grownlab' }, 'Parent and Teacher Materials'), IR.ui.gearButton()));
@@ -359,17 +391,41 @@
         h('div', { class: 'zfhead' }, h('h2', { class: 'zfline' }, 'Learn to read with Zip and Frill'), readAloudBtn()),
         h('p', { class: 'zfsub' }, 'Ring every bell by learning its sounds.'),
         continueButton()));
-    app.append(h('div', { class: 'screen home mapscreen gridhome' }, h('div', { class: 'mwrap' }, banner, h('div', { class: 'homelay' }, h('div', { class: 'homeside' }, h('a', { class: 'btn big aboutbtn', href: '#/about' }, icon('info'), h('span', null, 'About Island Readers')), hero, tabs), h('div', { class: 'bellslot' }, grid)))));
+    app.append(h('div', { class: 'screen home mapscreen gridhome' }, h('div', { class: 'mwrap' }, banner, h('div', { class: 'homelay' }, h('div', { class: 'homeside' }, aboutDrop, hero, tabs), h('div', { class: 'bellslot' }, grid)))));
     /* Nov 3 2026: the whole left sidebar (About, Start here, Practice) stays in one spot while the tiles scroll (wide layouts only). */
     const side = app.querySelector('.homeside'); const scr = app.querySelector('.screen.home');
     const pin = () => {
       if (!side || !scr || !side.isConnected) { window.removeEventListener('resize', pin); return; }
-      if (!matchMedia('(min-width:1000px)').matches) { side.style.removeProperty('--side-top'); return; }
+      const nav = side.querySelector('.hometabs');
+      const tabs = nav ? [...nav.querySelectorAll('.hometab')] : [];
+      const relax = () => {
+        side.style.removeProperty('height');
+        side.style.removeProperty('max-height');
+        side.style.removeProperty('gap');
+        if (nav) nav.style.removeProperty('gap');
+        tabs.forEach((t) => { t.style.removeProperty('height'); t.style.removeProperty('min-height'); t.style.removeProperty('max-height'); });
+      };
+      if (!matchMedia('(min-width:1000px)').matches) { side.style.removeProperty('--side-top'); relax(); return; }
       const banner = scr.querySelector('.hbanner');
       const bannerH = banner ? banner.offsetHeight : 0;
       side.style.setProperty('--side-top', bannerH + 'px');
+      const room = Math.max(240, scr.getBoundingClientRect().bottom - side.getBoundingClientRect().top - 8);
+      side.style.height = room + 'px';
+      side.style.maxHeight = room + 'px';
+      const open = side.querySelector('.sidedrop.is-open');
+      if (!open && side.scrollHeight > side.clientHeight + 2) {
+        side.style.gap = '8px';
+        if (nav) nav.style.gap = '8px';
+        tabs.forEach((t) => { t.style.height = '48px'; t.style.minHeight = '48px'; t.style.maxHeight = '48px'; });
+      } else if (!open) {
+        side.style.removeProperty('gap');
+        if (nav) nav.style.removeProperty('gap');
+        tabs.forEach((t) => { t.style.removeProperty('height'); t.style.removeProperty('min-height'); t.style.removeProperty('max-height'); });
+      }
     };
     requestAnimationFrame(pin); window.addEventListener('resize', pin);
+    const art = side.querySelector('.homeart');
+    if (art && !art.complete) art.addEventListener('load', pin, { once: true });
   }
   function gemScreen() {
     IR.newScreen(); const earned = gemsEarned(); const nEarned = earned.filter(Boolean).length; const nx = gemNext();
@@ -451,55 +507,101 @@
   }
   IR.teacherRow = teacherRow;
   /* ---------- Unit page (Option A): Lesson + Story boxes on the left, numbered Activities with minutes on the right, total time on top ---------- */
+  function goItem(item) {
+    return () => {
+      Snd.stop();
+      if (item.go) item.go();
+      else if (item.href) location.hash = item.href;
+    };
+  }
+  function itemCard(item, num) {
+    const body = [
+      num ? h('span', { class: 'gamenum' }, String(num)) : null,
+      num ? h('span', { class: 'gameico', 'aria-hidden': 'true' }, icon('play')) : null,
+      item.img ? h('img', { class: 'storypic', src: item.img, alt: item.alt || '' }) : null,
+      h('span', { class: 'gametxt' }, h('b', null, item.title), item.note ? h('span', { class: 'gamenote' }, item.note) : null, item.min ? h('span', { class: 'gamemin' }, item.min + ' min') : null)
+    ];
+    const cls = item.big ? 'storycard' : (num ? 'gamecard' : 'stepcard');
+    if (item.href && item.href.charAt(0) !== '#') return h('a', { class: cls, href: item.href, target: '_blank', rel: 'noopener' }, ...body);
+    return h('button', { class: cls, type: 'button', onclick: goItem(item) }, ...body);
+  }
+  function stepHead(n, label) {
+    return h('div', { class: 'stephead' }, h('span', { class: 'stepnum' }, String(n)), h('span', { class: 'steplab' }, label));
+  }
+  function stepSection(n, label, items, numbered) {
+    const cards = !items || !items.length
+      ? h('p', { class: 'stepsoon' }, 'Coming soon')
+      : numbered
+        ? h('ol', { class: 'gamegrid' }, ...items.map((item, i) => h('li', null, itemCard(item, i + 1))))
+        : h('div', { class: 'lessonrow' }, ...items.map((item) => itemCard(item)));
+    return h('section', { class: 'stepblock' }, stepHead(n, label), cards);
+  }
+  function teacherBox(plan) {
+    plan = plan || {};
+    const files = plan.files || [];
+    const panel = h('div', { class: 'teachpop', hidden: '' },
+      h('p', { class: 'teachstep' }, h('span', null, '1'), 'Slideshow'),
+      plan.slides ? h('button', { class: 'teachlink', type: 'button', onclick: () => { Snd.stop(); location.hash = plan.slides; } }, 'Open the slideshow') : h('p', { class: 'teachsoon' }, 'Coming soon'),
+      h('p', { class: 'teachstep' }, h('span', null, '2'), 'Printables'),
+      files.length ? h('div', null, ...files.map((file) => h('a', { class: 'teachlink', href: file.href, target: '_blank', rel: 'noopener' }, file.title))) : h('p', { class: 'teachsoon' }, 'Coming soon'));
+    const btn = h('button', { class: 'teachbox', type: 'button', 'aria-expanded': 'false' }, 'Teacher Materials');
+    const wrap = h('div', { class: 'teachcorner' }, btn, panel);
+    function onDoc(e) { if (!wrap.contains(e.target)) setOpen(false); }
+    function onKey(e) { if (e.key === 'Escape') setOpen(false); }
+    function setOpen(open) {
+      panel.hidden = !open;
+      btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      btn.classList.toggle('is-open', open);
+      document.removeEventListener('click', onDoc);
+      document.removeEventListener('keydown', onKey);
+      if (open) {
+        document.addEventListener('click', onDoc);
+        document.addEventListener('keydown', onKey);
+      }
+    }
+    btn.addEventListener('click', (e) => { e.stopPropagation(); setOpen(panel.hidden); });
+    return wrap;
+  }
+  IR.teacherBox = teacherBox;
+  function modeBar(plan) {
+    plan = plan || {};
+    return h('div', { class: 'modebar' },
+      h('p', { class: 'stepnote' }, 'Watch the lesson, then play.'),
+      plan.before || null,
+      h('div', { class: 'stepflow' },
+        plan.choose ? null : stepSection(1, 'Lesson', plan.lesson || []),
+        plan.choose ? null : stepSection(2, 'Games', plan.games || [], true),
+        plan.choose || !plan.story ? null : stepSection(3, 'Story', [plan.story]),
+        ...(plan.choose || []).map((item, i) => stepSection(i + 1, item.title, [item]))));
+  }
+  IR.modeBar = modeBar;
   function trailScreen() {
-    const S = IR.S(); IR.newScreen();
-    const secs = unitSections(); const nx = nextUp(); const req = secs.filter((r) => !r.optional); const doneN = req.filter((r) => r.done).length; const total = req.length; const complete = doneN === total;
-    const totalMin = req.reduce((a, r) => a + r.min, 0);
-    const star = (on) => h('span', { class: 'sstar' + (on ? ' on' : ''), 'aria-hidden': 'true' }, icon(on ? 'star' : 'starOutline'));
-    const aria = (r, extra) => r.label + '. ' + r.min + ' minutes. ' + extra + (r.done ? ' Done, star earned.' : nx && nx.id === r.id ? ' Next up.' : '');
-    const actFlags = secs.filter((r) => r.group === 'activities').map((r) => !!r.done);
-    function bigBox(r) {
-      const lesson = r.group === 'lesson';
-      return IR.pairCard({
-        lesson: lesson,
-        kicker: lesson ? 'Lesson' : 'Story',
-        title: r.title,
-        min: r.min,
-        href: r.href,
-        img: lesson ? IR.lessonArt : IR.storyCovers['4.1'],
-        alt: lesson ? IR.lessonArtAlt : 'The Twigs in the Bell',
-        done: r.done,
-        next: nx && nx.id === r.id,
-        flags: actFlags
-      });
-    }
-    function actRow(r) {
-      const isNext = nx && nx.id === r.id;
-      return h('li', null, h('button', { class: 'stopcard arow gamestop' + (r.done ? ' done' : '') + (isNext ? ' nextup' : ''), type: 'button', 'data-id': r.id, 'data-group': 'activities',
-        'aria-label': aria(r, 'Activity ' + r.act + '.'), 'aria-current': isNext ? 'step' : null, onclick: () => { Snd.stop(); location.hash = r.href; } },
-        h('span', { class: 'snum', 'aria-hidden': 'true' }, String(r.act)),
-        h('span', { class: 'stxt' }, h('b', null, r.title), TIPS[r.id] ? h('span', { class: 'sblurb' }, TIPS[r.id]) : null),
-        h('span', { class: 'smin' + (r.optional ? ' opt' : '') }, r.optional ? 'Optional' : r.min + ' min'),
-        h('span', { class: 'sside' }, star(r.done), h('span', { class: 'slabel ' + (isNext ? 'tag' : 'none') }, isNext ? 'Next' : ''))));
-    }
+    IR.newScreen();
+    const secs = unitSections();
     const LK = 'ir_sess_ng'; const prevH = IR._ngHashWas || '';
     if (!/^#\/(island3|lesson\/|check)/.test(prevH)) try { sessionStorage.removeItem(LK); } catch (e) {}
     IR._ngHashWas = location.hash || '#/island3';
-    let lit = {}; try { lit = JSON.parse(sessionStorage.getItem(LK) || '{}'); } catch (e) {}
-    const lights = h('div', { class: 'clights', role: 'status', 'aria-label': 'Session progress lights' }, h('span', { class: 'clab' }, 'This visit:'),
-      h('span', { class: 'clightdots' }, ...secs.map((r) => h('span', { class: 'clight' + (lit[r.id] || r.done ? ' on' : ''), 'data-kind': r.group, 'data-id': r.id, title: r.title }))));
-    const left = h('section', { class: 'uA-sec uA-start' }, h('h2', { class: 'uA-h' }, 'Start here'), h('ul', { class: 'uA-left' }, ...secs.filter((r) => r.group !== 'activities').map(bigBox)));
-    const right = h('section', { class: 'uA-sec uA-right' }, lights, h('h2', { class: 'uA-h' }, 'Activities'), h('ol', { class: 'stoplist uA-acts' }, ...secs.filter((r) => r.group === 'activities').map(actRow)));
-    const foot = h('footer', { class: 'uA-foot island4 ' + (complete ? 'open' : 'locked'), 'aria-live': 'polite' },
-      h('span', { class: 'i4ico', 'aria-hidden': 'true' }, icon(complete ? 'star' : 'lock')),
-      h('span', { class: 'i4txt' }, h('small', null, complete ? 'Unit 4 is unlocked!' : 'Unit 4 unlocks when all stars are done')),
-      h('span', { class: 'i4count' }, doneN + ' of ' + total));
-    app.append(h('div', { class: 'screen trailscreen unitpage unitA orangeunit' },
-      h('header', { class: 'uA-top' }, homeButton(), h('h1', { class: 'uA-title' }, h('small', null, 'Unit 4 \u00b7 Lesson 1 \u00b7 '), 'ng'),
-        h('button', { class: 'cartoonpill', type: 'button', 'aria-label': 'Welcome cartoon, optional. Opens a video.', onclick: () => IR.openCartoon() }, icon('play'), h('span', { class: 'cp-long' }, 'Welcome Cartoon (optional)'), h('span', { class: 'cp-short' }, 'Cartoon')),
-        h('span', { class: 'uA-time', 'aria-label': 'About ' + totalMin + ' minutes in total' }, h('span', { class: 't-long' }, 'About ' + totalMin + ' min total'), h('span', { class: 't-short' }, totalMin + ' min')), gearButton()),
-      unitIntro('i3'),
-      h('main', { class: 'uA-main' }, left, right), foot));
+    const pick = (group) => secs.filter((r) => r.group === group).map((r) => ({ title: r.title, href: r.href, note: TIPS[r.id], min: r.min }));
+    const story = pick('story')[0];
+    if (story) { story.title = D.storyTitle || story.title; story.note = 'Story Time'; story.img = IR.storyCovers['4.1']; story.alt = D.storyTitle || ''; story.big = true; }
+    app.append(h('div', { class: 'screen trailscreen unitpage unitA orangeunit stepage' },
+      h('header', { class: 'uA-top' }, homeButton(), h('h1', { class: 'uA-title' }, h('small', null, 'Unit 4 Lesson 1'), 'ng'), teacherBox({
+        slides: '#/teachers/slides/ng',
+        files: [
+          { title: 'Daily practice sheets', href: 'teachers/ng/Lesson3.1_ng_Daily_Practice_Sheets.pdf' },
+          { title: 'Teacher pack', href: 'teachers/ng/Lesson3.1_ng_Teacher_Pack.pdf' }
+        ]
+      }), gearButton()),
+      modeBar({
+        lesson: pick('lesson'),
+        games: pick('activities'),
+        story: story,
+        slides: '#/teachers/slides/ng',
+        files: [
+          { title: 'Daily practice sheets', href: 'teachers/ng/Lesson3.1_ng_Daily_Practice_Sheets.pdf' },
+          { title: 'Teacher pack', href: 'teachers/ng/Lesson3.1_ng_Teacher_Pack.pdf' }
+        ]
+      })));
   }
 
   /* ---------- lesson shell ---------- */
@@ -766,17 +868,13 @@
     location.hash = '#/home';
   }
   /* ---------- About Island Readers (approved copy, Nov 6 2026) ---------- */
-  function aboutScreen() {
-    IR.newScreen();
+  function aboutNodes() {
     const a = (href, t) => h('a', { href, target: '_blank', rel: 'noopener' }, t);
     const sec = (title, ...kids) => h('section', { class: 'absec' }, h('h2', null, title), ...kids);
     const p = (...k) => h('p', null, ...k);
     const ul = (...items) => h('ul', null, ...items.map((x) => h('li', null, ...[].concat(x))));
     const UNITS = [['1', 'short vowels and floss'], ['2', 'blends'], ['3', 'sh, ch, th, wh, ck'], ['4', 'ng, nk (glued sounds)'], ['5', 'silent e'], ['6', '-s, -es, -ed, -ing'], ['7', 'syllables'], ['8', 'tricky sounds: tch, dge, -ild, -old'], ['9', 'bossy r: ar, or, er, ir, ur'], ['10', 'air, are, ear'], ['11', 'ai, ay, ee, ea, ey'], ['12', 'oa, ow, oe, ie, igh'], ['13', 'oo, ew, ui, ue'], ['14', 'au, aw, augh, ea'], ['15', 'oi, oy, ou, ow'], ['16', 'ei, eigh, ew, ough'], ['17', 'soft c and g'], ['18', 'silent letters: kn, wr, mb, gn, gh'], ['19', 'suffixes: -er, -est, -ly, -ful'], ['20', 'suffix spelling rules'], ['21', 'prefixes: un-, pre-, re-, dis-'], ['22', 'big endings: -tion, -ture, -ment']];
-    const home2 = h('button', { class: 'btn big primary abhome', type: 'button', onclick: () => { location.hash = '#/home'; } }, icon('home'), h('span', null, 'Back to Home'));
-    app.append(h('div', { class: 'screen aboutscreen' }, h('div', { class: 'abwrap' },
-      h('div', { class: 'abtop' }, homeButton()),
-      h('h1', null, 'About Island Readers'),
+    return [
       h('p', { class: 'ablead' }, 'A guide for families, schools and anyone helping a reader.'),
       sec('Building reading confidence through phonics practice',
         p('Island Readers gives older children a way to revisit the skills they need to become confident readers without being treated like younger learners. Through engaging stories, puzzles and games, the program sparks curiosity and makes reading practice something children want to do.')),
@@ -811,38 +909,63 @@
       sec('Why this order',
         p('The units follow a research-based scope and sequence like those used in schools. Each step builds on the last, from simple to complex, with the most useful patterns first.'),
         h('ol', { class: 'abunits' }, ...UNITS.map(([n, t]) => h('li', null, h('b', null, 'Unit ' + n + ': '), t))),
-        p('Readers start with short vowels and simple words, then learn sounds made by two letters, then longer words and word parts. That way no step asks for a skill that has not been taught.')),
+        p('Readers start with short vowels and simple words, then learn sounds made by two letters, then longer words and word parts. That way no step asks for a skill that has not been taught.'))];
+  }
+  function aboutScreen() {
+    IR.newScreen();
+    const home2 = h('button', { class: 'btn big primary abhome', type: 'button', onclick: () => { location.hash = '#/home'; } }, icon('home'), h('span', null, 'Back to Home'));
+    app.append(h('div', { class: 'screen aboutscreen' }, h('div', { class: 'abwrap' },
+      h('div', { class: 'abtop' }, homeButton()),
+      h('h1', null, 'About Island Readers'),
+      ...aboutNodes(),
       h('div', { class: 'abbottom' }, home2))));
   }
   /* ---------- Teacher materials (grown-up corner): by unit, then sound ---------- */
   function teachersScreen() {
     IR.newScreen();
-    const UNITS = [{ name: 'Unit 4 \u00b7 Glued Sounds', sounds: [
-      { s: 'ng', lesson: 'Lesson 4.1', days: 3, daily: 'teachers/ng/Lesson3.1_ng_Daily_Practice_Sheets.pdf', pack: 'teachers/ng/Lesson3.1_ng_Teacher_Pack.pdf', deck: 'teachers/ng/Lesson3.1_ng_Slide_Presentation.pptx', view: '#/teachers/slides/ng' },
-      { s: 'nk', lesson: 'Lesson 4.2', days: 3, daily: 'teachers/nk/Lesson3.2_nk_Daily_Practice_Sheets.pdf', pack: 'teachers/nk/Lesson3.2_nk_Teacher_Pack.pdf', deck: 'teachers/nk/Lesson3.2_nk_Slide_Presentation.pptx', view: '#/teachers/slides/nk' }] }];
-    const CHECKS = [
-      ['Lesson 5.1 Teacher-Led Checks', 'materials/unit5/Lesson5.1_Teacher_Led_Checks.pdf'],
-      ['Lesson 5.2 Teacher-Led Checks', 'materials/unit5/Lesson5.2_Teacher_Led_Checks.pdf'],
-      ['Unit 5 All Checks (teacher scripts and answer keys)', 'materials/unit5/Unit5_Teacher_Led_Checks_Combined.pdf'],
-      ['Unit 5 Student Sheets', 'materials/unit5/Unit5_Teacher_Led_Student_Sheets.pdf']
+    /* One card for every lesson. Item types stay in this order, with the same labels. */
+    function lessonCard(lesson) {
+      const kinds = [
+        { key: 'board', primary: true, label: 'Open on smartboard', note: 'Full-screen slide show in the browser. No download needed.' },
+        { key: 'slides', download: true, label: 'Download slides' + (lesson.days ? (' \u00b7 ' + lesson.days + ' days (PPTX)') : ' (PPTX)'), note: 'One PowerPoint for the whole sound.' },
+        { key: 'daily', label: 'Daily practice sheets (PDF)', note: lesson.days ? ('Worksheets for each day, labeled Day 1 to Day ' + lesson.days + '.') : 'Worksheets for each day.' },
+        { key: 'pack', label: 'Teacher pack (PDF)', note: 'Slides with notes, worksheets and answer key.' }
+      ];
+      const rows = kinds.map((kind) => {
+        const href = lesson[kind.key];
+        if (!href) {
+          return [
+            h('span', { class: 'btn big tmlink is-soon' + (kind.primary ? ' primary' : ''), 'aria-disabled': 'true' }, kind.label),
+            h('p', { class: 'tmnote' }, 'Coming soon.')
+          ];
+        }
+        const attrs = { class: 'btn big tmlink' + (kind.primary ? ' primary' : ''), href: href };
+        if (kind.download) attrs.download = '';
+        else if (!href.startsWith('#')) { attrs.target = '_blank'; attrs.rel = 'noopener'; }
+        return [h('a', attrs, kind.label), h('p', { class: 'tmnote' }, kind.note)];
+      });
+      return h('div', { class: 'tmcard' },
+        h('h3', null, h('span', { class: 'tmsound' }, lesson.s), ' ' + lesson.lesson),
+        ...rows.flat());
+    }
+    const UNITS = [
+      { name: 'Unit 4 \u00b7 Glued Sounds', sounds: [
+        { s: 'ng', lesson: 'Lesson 4.1', days: 3, board: '#/teachers/slides/ng', slides: 'teachers/ng/Lesson3.1_ng_Slide_Presentation.pptx', daily: 'teachers/ng/Lesson3.1_ng_Daily_Practice_Sheets.pdf', pack: 'teachers/ng/Lesson3.1_ng_Teacher_Pack.pdf' },
+        { s: 'nk', lesson: 'Lesson 4.2', days: 3, board: '#/teachers/slides/nk', slides: 'teachers/nk/Lesson3.2_nk_Slide_Presentation.pptx', daily: 'teachers/nk/Lesson3.2_nk_Daily_Practice_Sheets.pdf', pack: 'teachers/nk/Lesson3.2_nk_Teacher_Pack.pdf' }
+      ] },
+      { name: 'Unit 5 \u00b7 Silent e', sounds: [
+        { s: 'a_e', lesson: 'Lesson 5.1', daily: 'materials/unit5/Unit5_Teacher_Led_Student_Sheets.pdf', pack: 'materials/unit5/Lesson5.1_Teacher_Led_Checks.pdf', bundle: 'materials/unit5/Unit5_Teacher_Led_Checks_Combined.pdf' },
+        { s: 'e', lesson: 'Lesson 5.2', daily: 'materials/unit5/Unit5_Teacher_Led_Student_Sheets.pdf', pack: 'materials/unit5/Lesson5.2_Teacher_Led_Checks.pdf', bundle: 'materials/unit5/Unit5_Teacher_Led_Checks_Combined.pdf' }
+      ] },
+      { name: 'Learn the Letters', sounds: [
+        { s: 'amst', lesson: 'Team 1', board: '#/foundation/slides/g1' }
+      ] }
     ];
-    const checkBtn = (label, href) => h('a', { class: 'btn big tmlink tmcheck', href: href, target: '_blank', rel: 'noopener' }, label);
-    const card = (x) => h('div', { class: 'tmcard' }, h('h3', null, h('span', { class: 'tmsound' }, x.s), ' ' + x.lesson),
-      h('a', { class: 'btn big tmlink primary', href: x.view }, 'Open on smartboard'),
-      h('p', { class: 'tmnote' }, 'Full-screen slide show in the browser. No download needed.'),
-      h('a', { class: 'btn big tmlink', href: x.deck, download: '' }, 'Download slides \u00b7 ' + x.days + ' days (PPTX)'),
-      h('p', { class: 'tmnote' }, 'One PowerPoint for the whole sound.'),
-      h('a', { class: 'btn big tmlink', href: x.daily, target: '_blank', rel: 'noopener' }, 'Daily practice sheets (PDF)'),
-      h('p', { class: 'tmnote' }, 'Worksheets for each day, labeled Day 1 to Day ' + x.days + '.'),
-      h('a', { class: 'btn big tmlink', href: x.pack, target: '_blank', rel: 'noopener' }, 'Teacher pack (PDF)'),
-      h('p', { class: 'tmnote' }, 'Slides with notes, worksheets and answer key.'));
     app.append(h('div', { class: 'screen tmscreen' }, h('div', { class: 'tmwrap' },
       h('div', { class: 'abtop' }, homeButton()),
       h('h1', null, 'Teacher materials'),
       h('p', { class: 'tmlead' }, 'For teaching in class. Students practice on their own in the app.'),
-      ...UNITS.map((u) => h('section', { class: 'tmunit' }, h('h2', null, u.name), h('div', { class: 'tmgrid' }, ...u.sounds.map(card)))),
-      h('section', { class: 'tmunit', id: 'unit5-checks' }, h('h2', null, 'Unit 5 \u00b7 Silent e'),
-        h('div', { class: 'tmchecks' }, h('h3', null, 'Teacher-Led Checks'), ...CHECKS.map(([label, href]) => checkBtn(label, href)))))));
+      ...UNITS.map((u) => h('section', { class: 'tmunit' }, h('h2', null, u.name), h('div', { class: 'tmgrid' }, ...u.sounds.map(lessonCard)))))));
   }
   /* In-app week-deck slideshow for smartboard (ng / nk). Keeps PPTX download on the teachers page. */
   function slidesViewer(sound) {

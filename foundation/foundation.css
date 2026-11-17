@@ -185,6 +185,10 @@ html.teach .llist .u5name,html.teach .llplay .u5name{font-size:32px}
 .fs-step.past{background:#FFF3D6}
 .fs-stagewrap{display:flex;align-items:center;justify-content:center;min-height:0}
 .fs-stage{width:100%;display:flex;flex-direction:column;align-items:center;gap:.4rem}
+.fs-scenes{display:flex;flex-wrap:wrap;justify-content:center;gap:.8rem;width:100%}
+.fs-scene{margin:0;max-width:18rem;text-align:center}
+.fs-scene img{display:block;width:100%;height:auto;object-fit:contain}
+.fs-scene figcaption{margin:.35rem 0 0;font-family:Andika,sans-serif;font-size:1.6rem;font-weight:700}
 .fs-meet{display:flex;gap:.6rem;justify-content:center;flex-wrap:wrap}
 .fs-meetone{display:flex;flex-direction:column;align-items:center;gap:.2rem}
 .llrow{display:flex;gap:.4rem;justify-content:center;flex-wrap:wrap}
@@ -210,10 +214,23 @@ html.teach .llist .u5name,html.teach .llplay .u5name{font-size:32px}
 .fs-home .homelay{align-items:start}
 .fs-home .homeside{gap:.75rem;max-height:none!important;height:auto;overflow:visible!important;position:static;align-self:start}
 .fs-home .homefeature{flex:none;min-height:auto;height:auto;overflow:visible}
-.fs-home .homefeature .zfpics img.homeart{width:100%;max-width:100%;height:auto;max-height:9.5rem;object-fit:contain}
+.fs-home .homefeature .zfpics{overflow:visible;background:transparent}
+.fs-home .homeside .homefeature .zfpics img.homeart,
+.fs-home .homefeature .zfpics img.homeart{display:block;width:100%!important;max-width:100%!important;height:auto!important;max-height:none!important;aspect-ratio:auto!important;object-fit:contain!important;object-position:center!important}
+.fs-home .fs-homebtn{width:100%;display:inline-flex;align-items:center;justify-content:center;gap:.45rem;background:linear-gradient(180deg,#FFE7B8,#F6C56A);border:3px solid #C9841A;border-radius:1rem;box-shadow:0 3px 0 #C9841A;color:#3A2400;font-family:Andika,sans-serif;text-decoration:none}
+.fs-home .fs-homebtn .ico{width:1.25rem;height:1.25rem;color:#C45C2A;flex:none}
+.fs-home .hbanner h1 a.fs-titlelink{color:inherit;text-decoration:none;display:inline-block}
 .fs-home .fs-mats{display:flex;flex-direction:column;gap:.35rem;background:#FFFDF8;border-radius:1.2rem;padding:.7rem .75rem .85rem;box-shadow:0 6px 18px rgba(60,40,20,.1)}
 .fs-home .fs-mats .fs-h{margin:0 0 .1rem}
 .fs-home .fs-soon{margin:0;font-weight:700}
+.fs-home .fs-slidetab{margin:0}
+.fs-home .fs-slidedrop{display:flex;flex-direction:column;gap:2px;margin:8px 0 2px;padding:8px 10px 8px;background:#fff;border:3px solid #C9841A;border-radius:1rem}
+.fs-home .fs-teamlink,.fs-home .fs-daylink{display:block;width:100%;margin:0;padding:5px 4px;border:0;background:transparent;font-family:Andika,sans-serif;text-align:left;cursor:pointer}
+.fs-home .fs-teamlink{color:#1F6F78;font-size:1.05rem;font-weight:700}
+.fs-home .fs-daylink{padding-left:18px;color:#1F6F78;font-size:1rem;text-decoration:underline}
+.fs-home .fs-slidedrop .fs-soon{margin:1px 4px;color:#8A7A62}
+.fs-group .fs-slidenote{margin:.2rem 0 .4rem;text-align:center}
+.fs-group .fs-slidetext{border:0;background:transparent;color:#1F6F78;font-family:Andika,sans-serif;font-size:1rem;text-decoration:underline;cursor:pointer}
 .fs-home .fs-sidebtn{width:100%;background:#fff;border:3px solid #C9841A;border-radius:1rem;box-shadow:0 3px 0 #C9841A;font-family:Andika,sans-serif}
 .fs-home .btn.primary.fs-continue,.fs-home .btn.primary.fs-slidebtn{width:100%;background:#F28C00;border-color:#C95A10;box-shadow:0 4px 0 #C95A10;color:#fff}
 .fs-home .bellgrid{grid-template-columns:repeat(3,minmax(0,1fr));gap:.7rem}
@@ -222,7 +239,11 @@ html.teach .llist .u5name,html.teach .llplay .u5name{font-size:32px}
 .fs-home .fs-setpic img{width:100%;height:auto;max-height:100%;aspect-ratio:1/1;object-fit:contain}
 .fs-home .fs-groupcard .tbody{margin-top:auto}
 .fs-home .bellpath .fs-groupcard .tname,.fs-home .bellpath .fs-groupcard .tsnd{height:auto;overflow:visible;white-space:normal}
-.fs-home .fs-groupcard.locked{opacity:.55}
+.fs-home .fs-groupcard{position:relative}
+.fs-home .fs-groupcard.locked{opacity:.7;filter:saturate(.2);background:#F3EEE6}
+.fs-home .fs-groupcard.locked .tpic{filter:grayscale(.45)}
+.fs-home .fs-groupcard .lockbadge{position:absolute;left:.45rem;top:.45rem;right:auto;transform:none;width:auto;height:auto;min-width:0;min-height:0;padding:.15rem .5rem;border:0;border-radius:.55rem;background:#6A6256;color:#fff;display:inline-flex;align-items:center;justify-content:flex-start;gap:.25rem;z-index:2;font-family:Andika,sans-serif;font-weight:700;font-size:.78rem;line-height:1.2;white-space:nowrap}
+.fs-home .fs-groupcard .lockbadge .ico{width:.95rem;height:.95rem;flex:none}
 .fs-home .fs-about{background:#E4F6F6;border:2px solid #9FCFCF;border-radius:1rem;padding:.35rem .7rem}
 .fs-home .fs-about summary{font-weight:700;cursor:pointer;min-height:2.4rem;display:flex;align-items:center}
 .fs-home .fs-bank{background:#fff;border:3px solid var(--ink);border-radius:.9rem;padding:.4rem .6rem}

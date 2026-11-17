@@ -67,41 +67,28 @@
     /* Completion lights reset when this lesson menu is opened from outside the unit (or closed). */
     const prev = IR._nkHashWas || '';
     if (!/^#\/nk(\/|$)/.test(prev) && prev !== '#/review3') resetLights();
-    IR.newScreen(); const all = sections(); const secs = all.filter((r) => !r.optional); const extras = all.filter((r) => r.optional); const nx = nextUp(); const doneN = secs.filter((r) => r.done).length; const total = secs.length;
-    const totalMin = secs.reduce((a, r) => a + r.min, 0);
-    const star = (on) => h('span', { class: 'sstar' + (on ? ' on' : ''), 'aria-hidden': 'true' }, icon(on ? 'star' : 'starOutline'));
-    const go = (r) => () => { Snd.stop(); location.hash = r.href; };
-    const actFlags = secs.filter((r) => r.group === 'activities').map((r) => !!r.done);
-    const big = (r) => IR.pairCard({
-      lesson: r.group === 'lesson',
-      title: r.title,
-      min: r.min,
-      href: r.href,
-      img: r.group === 'lesson' ? IR.lessonArt : IR.storyCovers['4.2'],
-      alt: r.group === 'lesson' ? IR.lessonArtAlt : 'The Skunk in the Trunk',
-      done: r.done,
-      next: nx && nx.id === r.id,
-      flags: actFlags
-    });
-    const row = (r) => { const isNext = nx && nx.id === r.id;
-      return h('li', null, h('button', { class: 'stopcard arow gamestop' + (r.done ? ' done' : '') + (isNext ? ' nextup' : ''), type: 'button', 'data-id': r.id, 'aria-label': r.label + '. ' + r.min + ' minutes.', onclick: go(r) },
-        h('span', { class: 'snum', 'aria-hidden': 'true' }, r.optional ? '+' : String(r.act)), h('span', { class: 'stxt' }, h('b', null, r.title), TIPS[r.id] ? h('span', { class: 'sblurb' }, TIPS[r.id]) : null), h('span', { class: 'smin' }, r.min + ' min'),
-        h('span', { class: 'sside' }, star(r.done), h('span', { class: 'slabel ' + (isNext ? 'tag' : 'none') }, isNext ? 'Next' : '')))); };
-    const lit = loadLights();
-    const lights = h('div', { class: 'clights', role: 'status', 'aria-label': 'Session progress lights' },
-      h('span', { class: 'clab' }, 'This visit:'),
-      h('span', { class: 'clightdots' }, ...secs.map((r) => h('span', { class: 'clight' + (lit[r.id] || r.done ? ' on' : ''), 'data-kind': r.group, 'data-id': r.id, title: r.title, 'aria-label': r.title + (lit[r.id] || r.done ? ' done this visit' : ' not yet') }))));
-    const left = h('ul', { class: 'uA-left' }, ...secs.filter((r) => r.group !== 'activities').map(big));
-      const right = h('section', { class: 'uA-right' }, lights, h('h2', { class: 'uA-h' }, 'Activities'), h('ol', { class: 'stoplist uA-acts' }, ...secs.filter((r) => r.group === 'activities').map(row)),
-      extras.length ? h('h2', { class: 'uA-h uA-extra' }, 'Extras (optional)') : null, extras.length ? h('ul', { class: 'stoplist uA-acts uA-extras' }, ...extras.map(row)) : null);
-    const complete = doneN === total;
-    const foot = h('footer', { class: 'uA-foot island4 ' + (complete ? 'open' : 'locked') }, h('span', { class: 'i4ico', 'aria-hidden': 'true' }, icon(complete ? 'star' : 'lock')),
-      h('span', { class: 'i4txt' }, h('b', null, 'Unit 4 Review'), h('small', null, complete ? 'Unlocked! Mix ng and nk.' : 'Finish all stars to unlock')), h('span', { class: 'i4count' }, doneN + ' of ' + total));
-    app.append(h('div', { class: 'screen trailscreen unitpage unitA nkunit' },
-      h('header', { class: 'uA-top' }, IR.ui.homeButton(), h('h1', { class: 'uA-title' }, h('small', null, 'Unit 4 \u00b7 Lesson 2 \u00b7 '), 'nk'),
-        h('span', { class: 'uA-time' }, h('span', { class: 't-long' }, 'About ' + totalMin + ' min total'), h('span', { class: 't-short' }, totalMin + ' min')), IR.ui.gearButton()),
-      IR.unitIntro ? IR.unitIntro('i3') : null,
-      h('main', { class: 'uA-main' }, left, right), foot));
+    IR.newScreen(); const all = sections();
+    const pick = (group) => all.filter((r) => r.group === group).map((r) => ({ title: r.title, href: r.href, note: TIPS[r.id], min: r.min }));
+    const story = pick('story')[0];
+    if (story) { story.title = N.storyTitle || story.title; story.note = 'Story Time'; story.img = IR.storyCovers['4.2']; story.alt = N.storyTitle || ''; story.big = true; }
+    app.append(h('div', { class: 'screen trailscreen unitpage unitA nkunit stepage' },
+      h('header', { class: 'uA-top' }, IR.ui.homeButton(), h('h1', { class: 'uA-title' }, h('small', null, 'Unit 4 Lesson 2'), 'nk'), IR.teacherBox({
+        slides: '#/teachers/slides/nk',
+        files: [
+          { title: 'Daily practice sheets', href: 'teachers/nk/Lesson3.2_nk_Daily_Practice_Sheets.pdf' },
+          { title: 'Teacher pack', href: 'teachers/nk/Lesson3.2_nk_Teacher_Pack.pdf' }
+        ]
+      }), IR.ui.gearButton()),
+      IR.modeBar({
+        lesson: pick('lesson'),
+        games: pick('activities').concat(pick('extra')),
+        story: story,
+        slides: '#/teachers/slides/nk',
+        files: [
+          { title: 'Daily practice sheets', href: 'teachers/nk/Lesson3.2_nk_Daily_Practice_Sheets.pdf' },
+          { title: 'Teacher pack', href: 'teachers/nk/Lesson3.2_nk_Teacher_Pack.pdf' }
+        ]
+      })));
   }
 
   /* ---------- step shell (same top bar / instructions / Back-Next as the ng lessons) ---------- */

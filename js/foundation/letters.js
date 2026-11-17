@@ -632,36 +632,37 @@
   function groupPage(app, group) {
     IR.newScreen();
     const lessons = lessonsOf(group);
-    const map = doneMap();
-    const overview = h('div', { class: 'fs-overview', style: 'grid-template-columns:repeat(' + Math.min(group.letters.length, 4) + ',minmax(0,1fr))' },
+    const teach = teamTeacher(group) || {};
+    const overview = h('div', { class: 'fs-overview stepbefore', style: 'grid-template-columns:repeat(' + Math.min(group.letters.length, 4) + ',minmax(0,1fr))' },
       ...group.letters.map((id) => h('div', { class: 'fs-over' }, letterIntro(id))));
-    const cards = lessons.map((lesson) => h('li', null, h('button', {
-      class: 'fs-lesson' + (map[String(lesson.lesson_number)] ? ' done' : ''),
-      type: 'button',
-      onclick: () => { Snd.stop(); location.hash = lessonHash(group, lesson, flowFor(lesson)[0].id); }
-    },
-      h('span', { class: 'fs-day' }, lesson.label || ('Lesson ' + lesson.lesson_number)),
-      h('span', { class: 'fs-line' }, lessonLine(lesson)))));
+    const lessonItems = [{ title: 'One letter at a time', go: () => startLetters(group) }];
+    lessons.forEach((lesson) => {
+      lessonItems.push({
+        title: lesson.label || ('Lesson ' + lesson.lesson_number),
+        note: lessonLine(lesson),
+        go: () => { Snd.stop(); location.hash = lessonHash(group, lesson, flowFor(lesson)[0].id); }
+      });
+    });
     if (lessons.some((lesson) => lesson.mastery_check)) {
-      cards.push(h('li', null, h('button', {
-        class: 'fs-lesson' + (checkMap()[programId(group)] ? ' done' : ''),
-        type: 'button',
-        onclick: () => { Snd.stop(); location.hash = '#/foundation/letters/' + group.id + '/check'; }
-      },
-        h('span', { class: 'fs-day' }, 'Team check'),
-        h('span', { class: 'fs-line' }, 'Plain letters only. Show what you know.'))));
+      lessonItems.push({ title: 'Team check', note: 'Plain letters only. Show what you know.', href: '#/foundation/letters/' + group.id + '/check' });
     }
-    app.append(h('div', { class: 'screen trailscreen unitpage u5menu llpage fs-group' },
+    const games = gamesFor(group).map((game) => ({ title: game.title, href: '#/foundation/letters/' + group.id + '/' + game.id }));
+    app.append(h('div', { class: 'screen trailscreen unitpage u5menu llpage fs-group stepage' },
       h('header', { class: 'uA-top' },
+        IR.ui.homeButton(),
         h('button', { class: 'back homebtn', type: 'button', onclick: () => { Snd.stop(); location.hash = '#/foundation'; } }, icon('back'), h('span', null, 'Foundation')),
         h('h1', { class: 'uA-title' }, 'Meet the Team'),
+        IR.teacherBox({ slides: teach.slides, files: teach.files }),
         IR.ui.gearButton()),
-      h('main', { class: 'llmain' },
-        h('p', { class: 'llask' }, 'Team ' + group.n + ', ' + group.letters.join(', ') + '. Tap the name, then the sound three times.'),
-        overview,
-        h('button', { class: 'btn big primary fs-slidebtn', type: 'button', onclick: () => startLetters(group) }, 'One letter at a time'),
-        slideBlock(group),
-        h('ol', { class: 'fs-lessons' }, ...cards))));
+      IR.modeBar({
+        before: h('div', { class: 'stepbefore' },
+          h('p', { class: 'llask' }, 'Team ' + group.n + ', ' + group.letters.join(', ') + '. Tap the name, then the sound three times.'),
+          overview),
+        lesson: lessonItems,
+        games: games,
+        slides: teach.slides,
+        files: teach.files
+      })));
     if (IR.teach) IR.teach.sync();
   }
 
@@ -1371,15 +1372,21 @@
   }
 
   function aboutOrder() {
-    return h('details', { class: 'fs-about' },
-      h('summary', null, 'Why this order?'),
-      h('div', { class: 'fs-aboutbody' },
-        h('p', null, 'This is a letter review. It firms up each letter name and its sound before reading.'),
-        h('p', null, 'We review lowercase letters and their sounds first. Capitals come lightly, a little later.'),
-        h('p', null, 'The first set is a m s t. Those letters make real words right away: am, at, Sam, and sat.'),
-        h('p', null, 'Letters that look alike, like b and d and p, are spread apart so they are easier to tell apart.'),
-        h('p', null, 'Sounds children use every day come early. Rare letters, q and x and z, come last.'),
-        h('p', null, 'The order follows a research-based science of reading sequence.')));
+    return IR.sideDrop({
+      group: 'foundation',
+      label: 'Why this order?',
+      tabClass: 'btn big fs-sidebtn',
+      fill(body) {
+        [
+          'This is a letter review. It firms up each letter name and its sound before reading.',
+          'We review lowercase letters and their sounds first. Capitals come lightly, a little later.',
+          'The first set is a m s t. Those letters make real words right away: am, at, Sam, and sat.',
+          'Letters that look alike, like b and d and p, are spread apart so they are easier to tell apart.',
+          'Sounds children use every day come early. Rare letters, q and x and z, come last.',
+          'The order follows a research-based science of reading sequence.'
+        ].forEach((line) => body.append(h('p', { class: 'drop-note' }, line)));
+      }
+    });
   }
   function planFor(lesson) {
     if (!window.IRLetterScope || !program || !program.lessons) return null;
@@ -1546,9 +1553,9 @@
     return seen.slice(0, 4).join(', ');
   }
   function foundationPage(app) {
+    IR.resetSideGroup('foundation');
     IR.newScreen();
     const up = nextUpGroup();
-    const words = readBank();
     const cards = GROUPS.map((group) => {
       const open = groupOpen(group);
       const isNext = up && up.id === group.id;
@@ -1566,6 +1573,7 @@
       },
         h('span', { class: 'tpic fs-setpic', style: 'grid-template-columns:repeat(' + (group.letters.length > 2 ? 2 : group.letters.length) + ',minmax(0,1fr))' }, ...faces,
           isNext ? h('span', { class: 'herechip' }, 'Next up') : null),
+        open ? null : h('span', { class: 'lockbadge' }, icon('lock'), h('span', null, 'Locked')),
         h('span', { class: 'tbody' },
           h('span', { class: 'thead' }, h('b', { class: 'tnum' }, 'Team ' + group.n)),
           h('span', { class: 'tname' }, group.letters.join(', ')),
@@ -1573,35 +1581,26 @@
     });
     const sideBtn = (label, go) => h('button', { class: 'btn big fs-sidebtn', type: 'button', onclick: go }, label);
     const banner = h('header', { class: 'hbanner' },
-      h('h1', null, 'Foundation Skills'),
+      h('h1', null, h('a', { class: 'fs-titlelink', href: '#/home' }, 'Foundation Skills')),
       h('div', { class: 'grownwrap' }, h('span', { class: 'grownlab' }, 'Parent and Teacher Materials'), IR.ui.gearButton()));
+    const homeBtn = h('a', { class: 'btn big fs-homebtn', href: '#/home' }, icon('home'), h('span', null, 'Home'));
     const hero = h('section', { class: 'homefeature', 'aria-label': 'Review the letters with Zip and Frill' },
-      h('div', { class: 'zfpics' }, h('img', { class: 'homeart', src: 'img/home_zip_frill.webp', width: 1280, height: 720, alt: 'Zip and Frill reading together' })),
+      h('div', { class: 'zfpics' }, h('img', { class: 'homeart', src: 'foundation/img/foundations_sidebar.jpg', width: 900, height: 506, alt: 'Zip and Frill with Team 1 letters a, m, s, t on the beach.' })),
       h('div', { class: 'hfbody' },
         h('h2', { class: 'zfline' }, 'Review the letters with Zip and Frill'),
         h('p', { class: 'zfsub' }, 'Names and sounds, then real words.'),
         letterContinue()));
     const materials = h('section', { class: 'fs-mats', 'aria-label': 'For grown-ups' },
-      h('h2', { class: 'fs-h' }, 'Teacher slideshows'),
-      h('button', { class: 'btn big primary fs-slidebtn', type: 'button', onclick: openSlides }, 'Team 1 slideshow'),
-      h('p', { class: 'fs-soon' }, 'Team 2 coming soon'),
-      h('p', { class: 'fs-soon' }, 'Team 3 coming soon'),
-      h('p', { class: 'fs-soon' }, 'Team 4 coming soon'),
-      h('p', { class: 'fs-soon' }, 'Team 5 coming soon'),
-      h('p', { class: 'fs-soon' }, 'Team 6 coming soon'),
-      h('p', { class: 'fs-soon' }, 'Team 7 coming soon'),
-      sideBtn('Teacher guide', () => { location.hash = '#/teachers'; }),
-      sideBtn('Printables', () => { location.hash = '#/teachers'; }),
-      sideBtn('Tracking sheet', () => { location.hash = '#/teachers'; }),
+      teacherSlides(),
+      teacherGuideDrop(),
+      printablesDrop(),
+      trackingDrop(),
       sideBtn('Teacher mode', () => { if (IR.teach) IR.teach.toggle(); }));
-    const bank = h('section', { class: 'fs-bank' },
-      h('h2', { class: 'fs-h' }, 'Look what I can read!'),
-      h('p', { class: 'fs-words' }, words.length ? words.join('  ') : 'Your words will show up here.'));
     app.append(h('div', { class: 'screen home mapscreen gridhome fs-home' },
       h('div', { class: 'mwrap' },
         banner,
         h('div', { class: 'homelay' },
-          h('div', { class: 'homeside' }, hero, aboutOrder(), bank, materials),
+          h('div', { class: 'homeside' }, homeBtn, hero, aboutOrder(), materials),
           h('div', { class: 'bellslot' }, h('div', { class: 'bellpath' }, h('div', { class: 'bellgrid' }, ...cards)))))));
     if (IR.teach) IR.teach.sync();
   }
@@ -1689,8 +1688,24 @@
       return h('div', { class: 'fs-meetone' }, letterCardStep(letter, lookStep(lesson, id)), hintButton([id]));
     })));
   }
+  function sceneSrc(scene) {
+    const file = scene && scene.image;
+    if (!file) return '';
+    return file.indexOf('foundation/') === 0 ? file : 'foundation/' + file;
+  }
   function paintRead(stage, lesson, phase) {
     const words = allowedWords(lesson, phase).slice(0, 6);
+    const scenes = (lesson.word_scenes || []).filter((scene) => scene && scene.word);
+    if (scenes.length) {
+      stage.append(h('div', { class: 'fs-scenes' }, ...scenes.map((scene) => {
+        const src = sceneSrc(scene);
+        const caption = scene.caption || '';
+        if (!src) return null;
+        return h('figure', { class: 'fs-scene' },
+          h('img', { src: src, alt: scene.scene || '' }),
+          caption ? h('figcaption', null, caption) : null);
+      })));
+    }
     stage.append(
       h('p', { class: 'llask' }, 'Tap a word. Say each sound, then the word.'),
       h('div', { class: 'llrow' }, ...words.map((word) => h('button', {
@@ -1930,18 +1945,115 @@
     if (IR.teach) IR.teach.sync();
   }
 
-  const SLIDE_PDF = 'foundation/slides/Learn_the_Letters_Group1.pdf';
-  function openSlides() { Snd.stop(); location.hash = '#/foundation/slides/g1'; }
-  function slideBlock(group) {
-    const here = !group || group.id === 'g1';
-    return h('section', { class: 'fs-slides' },
-      h('h2', { class: 'fs-h' }, 'Teacher slideshow'),
-      here ? h('button', { class: 'btn big primary fs-slidebtn', type: 'button', onclick: openSlides }, 'Team 1 slideshow') : null,
-      here && !group ? h('p', { class: 'fs-soon' }, 'Teams 2 to 7 coming soon') : null,
-      !here ? h('p', { class: 'fs-soon' }, 'Teams 2 to 7 coming soon') : null);
+  const SLIDES = {
+    g1: {
+      file: 'foundation/slides/Learn_the_Letters_Team1.pdf',
+      days: [
+        { label: 'Day 1a', page: 3 },
+        { label: 'Day 1b', page: 21 },
+        { label: 'Day 2', page: 44 },
+        { label: 'Day 3', page: 79 },
+        { label: 'Day 4', page: 110 },
+        { label: 'Team check', page: 110 }
+      ]
+    },
+    g2: {
+      file: 'foundation/slides/Learn_the_Letters_Team2.pdf',
+      days: [
+        { label: 'Day 1', page: 3 },
+        { label: 'Day 2', page: 28 },
+        { label: 'Day 3', page: 53 },
+        { label: 'Day 4', page: 93 },
+        { label: 'Team check', page: 93 }
+      ]
+    }
+  };
+  function openSlides(team, page) {
+    Snd.stop();
+    location.hash = '#/foundation/slides/' + team + (page ? '/' + page : '');
   }
-  function slidesScreen(app) {
+  function teamTeacher(group) {
+    if (!SLIDES[group.id]) return null;
+    const files = group.id === 'g1'
+      ? [{ title: 'Team 1 Quick Sounds', href: 'foundation/printables/Team1_Quick_Sounds.pdf' }]
+      : [{ title: 'Team 2 Quick Sounds', href: 'foundation/printables/Team2_Quick_Sounds.pdf' }];
+    return { slides: '#/foundation/slides/' + group.id, files: files };
+  }
+  function pdfLink(label, href) {
+    return h('a', { class: 'drop-link', href: href, target: '_blank', rel: 'noopener' }, label);
+  }
+  const SCORE_TRACKER = '';
+  function teacherSlides() {
+    return IR.sideDrop({
+      group: 'foundation',
+      label: 'Teacher Slideshows',
+      tabClass: 'btn big fs-sidebtn',
+      extraClass: 'fs-slidepanel',
+      fill(body) {
+        const cols = h('div', { class: 'fs-slidecols' });
+        [1, 2].forEach((n) => {
+          const id = 'g' + n;
+          const deck = SLIDES[id];
+          const col = h('div', { class: 'fs-slidecol' });
+          col.append(h('button', { class: 'drop-link', type: 'button', onclick: () => openSlides(id) }, 'Team ' + n));
+          deck.days.forEach((day) => col.append(h('button', { class: 'drop-link fs-daylink', type: 'button', onclick: () => openSlides(id, day.page) }, day.label)));
+          cols.append(col);
+        });
+        body.append(cols, h('p', { class: 'drop-soon' }, 'Teams 3-7 coming soon'));
+      }
+    });
+  }
+  function teacherGuideDrop() {
+    return IR.sideDrop({
+      group: 'foundation',
+      label: 'Teacher guide',
+      tabClass: 'btn big fs-sidebtn',
+      fill(body) {
+        body.append(
+          h('a', { class: 'drop-link', href: '#/teachers/slides/ng' }, 'ng slides'),
+          h('a', { class: 'drop-link', href: '#/teachers/slides/nk' }, 'nk slides'),
+          pdfLink('ng teacher pack', 'teachers/ng/Lesson3.1_ng_Teacher_Pack.pdf'),
+          pdfLink('nk teacher pack', 'teachers/nk/Lesson3.2_nk_Teacher_Pack.pdf'),
+          pdfLink('Lesson 5.1 Teacher-Led Checks', 'materials/unit5/Lesson5.1_Teacher_Led_Checks.pdf'),
+          pdfLink('Lesson 5.2 Teacher-Led Checks', 'materials/unit5/Lesson5.2_Teacher_Led_Checks.pdf'),
+          pdfLink('Unit 5 All Checks (teacher scripts and answer keys)', 'materials/unit5/Unit5_Teacher_Led_Checks_Combined.pdf'));
+      }
+    });
+  }
+  function printablesDrop() {
+    return IR.sideDrop({
+      group: 'foundation',
+      label: 'Printables',
+      tabClass: 'btn big fs-sidebtn',
+      fill(body) {
+        body.append(
+          pdfLink('Team 1 Quick Sounds', 'foundation/printables/Team1_Quick_Sounds.pdf'),
+          pdfLink('Team 2 Quick Sounds', 'foundation/printables/Team2_Quick_Sounds.pdf'));
+        if (SCORE_TRACKER) body.append(h('a', { class: 'drop-link', href: SCORE_TRACKER, target: '_blank', rel: 'noopener' }, 'Score Tracker'));
+        body.append(
+          pdfLink('ng daily practice sheets', 'teachers/ng/Lesson3.1_ng_Daily_Practice_Sheets.pdf'),
+          pdfLink('nk daily practice sheets', 'teachers/nk/Lesson3.2_nk_Daily_Practice_Sheets.pdf'),
+          pdfLink('Unit 5 Student Sheets', 'materials/unit5/Unit5_Teacher_Led_Student_Sheets.pdf'));
+      }
+    });
+  }
+  function trackingDrop() {
+    const track = (program && program.tracking) || { fields: [], decision_rules: [] };
+    return IR.sideDrop({
+      group: 'foundation',
+      label: 'Tracking sheet',
+      tabClass: 'btn big fs-sidebtn',
+      fill(body) {
+        track.fields.forEach((line) => body.append(h('p', { class: 'drop-note' }, line)));
+        track.decision_rules.forEach((line) => body.append(h('p', { class: 'drop-note' }, line)));
+      }
+    });
+  }
+  function slidesScreen(app, team, page) {
     IR.newScreen();
+    const deck = SLIDES[team];
+    const day = deck.days.filter((item) => String(item.page) === String(page))[0];
+    const title = day ? ('Team ' + team.slice(1) + ', ' + day.label) : ('Team ' + team.slice(1) + ' slideshow');
     const view = h('div', { class: 'screen fs-slideview' });
     const goFull = () => {
       const el = document.querySelector('.fs-slideview');
@@ -1950,15 +2062,16 @@
     view.append(
       h('header', { class: 'uA-top' },
         h('button', { class: 'back homebtn', type: 'button', onclick: () => { Snd.stop(); if (document.fullscreenElement && document.exitFullscreen) document.exitFullscreen(); location.hash = '#/foundation'; } }, icon('back'), h('span', null, 'Foundation')),
-        h('h1', { class: 'uA-title' }, 'Team 1 slideshow'),
+        h('h1', { class: 'uA-title' }, title),
         h('button', { class: 'btn big primary fs-slidebtn', type: 'button', onclick: goFull }, 'Full screen')),
-      h('iframe', { class: 'fs-pdf', src: SLIDE_PDF, title: 'Learn the Letters Team 1 slideshow' }));
+      h('iframe', { class: 'fs-pdf', src: deck.file + (page ? '#page=' + page : ''), title: title }));
     app.append(view);
     if (IR.teach) IR.teach.sync();
   }
   IR.letters = { GROUPS: GROUPS, LETTERS: LETTERS, artNeeded: ART_NEEDED, who: WHO };
   IR.lettersRoute = function (hash, app) {
-    if (hash === '#/foundation/slides/g1' || hash === '#/foundation/slides/g1/') { slidesScreen(app); return true; }
+    const deck = hash.match(/^#\/foundation\/slides\/(g[12])(?:\/(\d+))?\/?$/);
+    if (deck && SLIDES[deck[1]]) { slidesScreen(app, deck[1], deck[2]); return true; }
     if (/^#\/foundation\/letters\/?$/.test(hash)) { foundationPage(app); return true; }
     const lesson = /^#\/foundation\/letters\/(g[1-7])\/l\/(\d+)(?:\/([a-z0-9-]+))?\/?$/.exec(hash);
     if (lesson) {

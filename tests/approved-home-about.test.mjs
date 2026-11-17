@@ -4,7 +4,7 @@ import fs from 'node:fs';
 
 const screens = fs.readFileSync(new URL('../js/screens.js', import.meta.url), 'utf8');
 const css = fs.readFileSync(new URL('../styles.css', import.meta.url), 'utf8');
-const aboutStart = screens.indexOf('function aboutScreen()');
+const aboutStart = screens.indexOf('function aboutNodes()');
 const aboutEnd = screens.indexOf('function teachersScreen()');
 const about = screens.slice(aboutStart, aboutEnd);
 const homeStart = screens.indexOf('function homeScreen()');
@@ -53,7 +53,9 @@ test('home shows Zip and Frill again and keeps the left-column layout', () => {
   const featureCss = css.slice(css.indexOf('Zip and Frill portraits back in the left-column card'));
   assert.equal(/scaleX\s*\(\s*-1|rotateY\(180/.test(home + featureCss), false);
   assert.ok(featureCss.includes('.homefeature .zfpics'));
-  assert.ok(home.includes("href: '#/about'"));
+  assert.equal(home.includes("href: '#/about'"), false);
+  assert.ok(home.includes("label: 'About Island Readers'"));
+  assert.ok(home.includes("group: 'home'"));
   assert.ok(screens.includes("href: '#/placement'"));
   assert.ok(home.includes('Learn to read with Zip and Frill'));
   assert.equal(home.includes('Read with Brick and Dash'), false);
@@ -77,19 +79,17 @@ test('home shows Zip and Frill again and keeps the left-column layout', () => {
   assert.equal(home.includes('banner, hero,'), false);
   const sw = fs.readFileSync(new URL('../sw.js', import.meta.url), 'utf8');
   assert.equal(sw.includes('home_banyan_c.jpg'), false);
-  assert.ok(sw.includes('ir-20261118b'));
+  assert.ok(sw.includes('ir-20261118x'));
   assert.ok(sw.includes('home_zip_frill.webp'));
 });
 
 test('Unit 5 teacher-led checks are linked from Teacher materials', () => {
   const teachers = screens.slice(screens.indexOf('function teachersScreen()'), screens.indexOf('function slidesViewer'));
-  for (const label of [
-    'Lesson 5.1 Teacher-Led Checks',
-    'Lesson 5.2 Teacher-Led Checks',
-    'Unit 5 All Checks (teacher scripts and answer keys)',
-    'Unit 5 Student Sheets',
-    'Teacher-Led Checks'
-  ]) assert.ok(teachers.includes(label), label);
+  assert.ok(teachers.includes("name: 'Unit 5 \\u00b7 Silent e'"));
+  assert.ok(teachers.includes("s: 'a_e', lesson: 'Lesson 5.1'"));
+  assert.ok(teachers.includes("s: 'e', lesson: 'Lesson 5.2'"));
+  assert.equal(teachers.includes('tmchecks'), false);
+  assert.equal(teachers.includes('tmcheck'), false);
   for (const file of [
     'materials/unit5/Lesson5.1_Teacher_Led_Checks.pdf',
     'materials/unit5/Lesson5.2_Teacher_Led_Checks.pdf',

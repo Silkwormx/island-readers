@@ -969,7 +969,8 @@
     {
      "word": "am",
      "scene": "Sam points to himself with a big smile: I am Sam!",
-     "image": "img/scenes/am.jpg"
+     "image": "img/scenes/am.jpg",
+     "caption": "Am."
     }
    ],
    "dictation": null,
@@ -1145,16 +1146,19 @@
    "word_scenes": [
     {
      "word": "at",
-     "scene": "Tama the turtle waits at a little dock, pointing at the boat"
+     "scene": "Tama the turtle waits at a little dock, pointing at the boat",
+     "caption": "At."
     },
     {
      "word": "Sam",
-     "scene": "Sam, an island boy in a blue shirt, waves hello"
+     "scene": "Sam, an island boy in a blue shirt, waves hello",
+     "caption": "Sam sat."
     },
     {
      "word": "sat",
      "scene": "Sam sits cross-legged on a woven mat",
-     "image": "img/scenes/sat.jpg"
+     "image": "img/scenes/sat.jpg",
+     "caption": "Sam sat."
     }
    ],
    "dictation": null,
@@ -1361,15 +1365,20 @@
     {
      "word": "mat",
      "scene": "A woven straw mat with a teal border lies on the floor",
-     "image": "img/scenes/mat.jpg"
+     "image": "img/scenes/mat.jpg",
+     "caption": "A mat."
     },
     {
      "word": "Tam",
-     "scene": "Tam, Sam's little sister, waves with both hands"
+     "scene": "Tam, Sam's little sister, waves with both hands",
+     "image": "img/scenes/tam.jpg",
+     "caption": "Tam."
     },
     {
      "word": "mats",
-     "scene": "Three woven mats stacked in a neat pile"
+     "scene": "Three woven mats stacked in a neat pile",
+     "image": "img/scenes/mats.jpg",
+     "caption": "Mats."
     }
    ],
    "dictation": {
@@ -2128,35 +2137,43 @@
    "word_scenes": [
     {
      "word": "pat",
-     "scene": "Pam gently pats a sleepy cat"
+     "scene": "Pam gently pats a sleepy cat",
+     "caption": "A pat."
     },
     {
      "word": "tap",
-     "scene": "A finger taps on a drum, tap tap"
+     "scene": "A finger taps on a drum, tap tap",
+     "caption": "A tap."
     },
     {
      "word": "map",
-     "scene": "Sam holds a treasure map of the island"
+     "scene": "Sam holds a treasure map of the island",
+     "caption": "A map."
     },
     {
      "word": "sap",
-     "scene": "Sticky sap drips slowly down a tree trunk"
+     "scene": "Sticky sap drips slowly down a tree trunk",
+     "caption": "A sap."
     },
     {
      "word": "Pam",
-     "scene": "Pam, a girl with a sun hat, smiles and waves"
+     "scene": "Pam, a girl with a sun hat, smiles and waves",
+     "caption": "Pam taps."
     },
     {
      "word": "fat",
-     "scene": "A round, fat, happy pufferfish puffs up"
+     "scene": "A round, fat, happy pufferfish puffs up",
+     "caption": "A fat."
     },
     {
      "word": "taps",
-     "scene": "Rain taps on a window"
+     "scene": "Rain taps on a window",
+     "caption": "Pam taps."
     },
     {
      "word": "maps",
-     "scene": "Two rolled-up maps on a table"
+     "scene": "Two rolled-up maps on a table",
+     "caption": "A maps."
     }
    ],
    "dictation": {
@@ -2451,35 +2468,43 @@
    "word_scenes": [
     {
      "word": "it",
-     "scene": "Sam points to a shell on the sand: it!"
+     "scene": "Sam points to a shell on the sand: it!",
+     "caption": "It."
     },
     {
      "word": "in",
-     "scene": "Iggy the inchworm crawls in a cup"
+     "scene": "Iggy the inchworm crawls in a cup",
+     "caption": "In."
     },
     {
      "word": "if",
-     "scene": "Pam thinks: if it rains, the umbrella goes up"
+     "scene": "Pam thinks: if it rains, the umbrella goes up",
+     "caption": "If."
     },
     {
      "word": "an",
-     "scene": "Pam holds up one shiny ant"
+     "scene": "Pam holds up one shiny ant",
+     "caption": "An."
     },
     {
      "word": "pin",
-     "scene": "A small pin holds a map to the wall"
+     "scene": "A small pin holds a map to the wall",
+     "caption": "A pin."
     },
     {
      "word": "fin",
-     "scene": "A fish fin pokes up from the blue water"
+     "scene": "A fish fin pokes up from the blue water",
+     "caption": "A fin."
     },
     {
      "word": "sit",
-     "scene": "Tam sits on a little stool"
+     "scene": "Tam sits on a little stool",
+     "caption": "A sit."
     },
     {
      "word": "tip",
-     "scene": "Tama touches the tip of her nose"
+     "scene": "Tama touches the tip of her nose",
+     "caption": "A tip."
     }
    ],
    "dictation": {
@@ -2819,35 +2844,43 @@
    "word_scenes": [
     {
      "word": "tin",
-     "scene": "A shiny tin can on a shelf"
+     "scene": "A shiny tin can on a shelf",
+     "caption": "A tin."
     },
     {
      "word": "fit",
-     "scene": "Tam's sandal fits her foot just right"
+     "scene": "Tam's sandal fits her foot just right",
+     "caption": "A fit."
     },
     {
      "word": "pit",
-     "scene": "A small pit dug in the sand"
+     "scene": "A small pit dug in the sand",
+     "caption": "A pit."
     },
     {
      "word": "sip",
-     "scene": "Pam sips mango juice through a straw"
+     "scene": "Pam sips mango juice through a straw",
+     "caption": "A sip."
     },
     {
      "word": "man",
-     "scene": "A friendly fisherman by his boat"
+     "scene": "A friendly fisherman by his boat",
+     "caption": "A man."
     },
     {
      "word": "pan",
-     "scene": "Eggs cook in a pan"
+     "scene": "Eggs cook in a pan",
+     "caption": "Pam sits in the pan."
     },
     {
      "word": "fan",
-     "scene": "A paper fan cools Pam's face"
+     "scene": "A paper fan cools Pam's face",
+     "caption": "The tan fan."
     },
     {
      "word": "tan",
-     "scene": "A tan sandy beach with one footprint"
+     "scene": "A tan sandy beach with one footprint",
+     "caption": "The tan fan."
     }
    ],
    "dictation": {
@@ -3184,15 +3217,18 @@
    "word_scenes": [
     {
      "word": "nap",
-     "scene": "Sam naps under the banyan tree"
+     "scene": "Sam naps under the banyan tree",
+     "caption": "A nap."
     },
     {
      "word": "Tim",
-     "scene": "Tim, a boy with glasses, gives a thumbs up"
+     "scene": "Tim, a boy with glasses, gives a thumbs up",
+     "caption": "Tim is in the pit."
     },
     {
      "word": "Nan",
-     "scene": "Nan, a kind grandmother, holds a teacup"
+     "scene": "Nan, a kind grandmother, holds a teacup",
+     "caption": "Nan taps the tin pan."
     }
    ],
    "dictation": {
@@ -3632,35 +3668,43 @@
    "word_scenes": [
     {
      "word": "on",
-     "scene": "A cat sits on a box"
+     "scene": "A cat sits on a box",
+     "caption": "The pot is on top."
     },
     {
      "word": "not",
-     "scene": "Sam shakes his head: not that one!"
+     "scene": "Sam shakes his head: not that one!",
+     "caption": "A not."
     },
     {
      "word": "dot",
-     "scene": "One big red dot on paper"
+     "scene": "One big red dot on paper",
+     "caption": "A dot."
     },
     {
      "word": "pot",
-     "scene": "A clay pot full of soup"
+     "scene": "A clay pot full of soup",
+     "caption": "The pot is on top."
     },
     {
      "word": "top",
-     "scene": "Tama stands on top of a rock"
+     "scene": "Tama stands on top of a rock",
+     "caption": "The pot is on top."
     },
     {
      "word": "mop",
-     "scene": "Dad mops the kitchen floor"
+     "scene": "Dad mops the kitchen floor",
+     "caption": "A mop."
     },
     {
      "word": "dad",
-     "scene": "Dad carries Tam on his shoulders"
+     "scene": "Dad carries Tam on his shoulders",
+     "caption": "Dad naps."
     },
     {
      "word": "sad",
-     "scene": "A sad puppy with droopy ears"
+     "scene": "A sad puppy with droopy ears",
+     "caption": "A sad."
     }
    ],
    "dictation": {
@@ -4046,35 +4090,43 @@
    "word_scenes": [
     {
      "word": "cat",
-     "scene": "A striped cat curls up"
+     "scene": "A striped cat curls up",
+     "caption": "A cat in the sun."
     },
     {
      "word": "can",
-     "scene": "Sam can lift a big shell"
+     "scene": "Sam can lift a big shell",
+     "caption": "Dad can mop."
     },
     {
      "word": "cap",
-     "scene": "A blue baseball cap"
+     "scene": "A blue baseball cap",
+     "caption": "A cap."
     },
     {
      "word": "cup",
-     "scene": "A cup of warm tea"
+     "scene": "A cup of warm tea",
+     "caption": "A cup."
     },
     {
      "word": "cut",
-     "scene": "Mom cuts a mango in half"
+     "scene": "Mom cuts a mango in half",
+     "caption": "A cut."
     },
     {
      "word": "up",
-     "scene": "A balloon floats up, up"
+     "scene": "A balloon floats up, up",
+     "caption": "Up."
     },
     {
      "word": "mud",
-     "scene": "Feet squish in brown mud"
+     "scene": "Feet squish in brown mud",
+     "caption": "A mud."
     },
     {
      "word": "sun",
-     "scene": "A bright sun over the sea"
+     "scene": "A bright sun over the sea",
+     "caption": "A cat in the sun."
     }
    ],
    "dictation": {
@@ -4485,35 +4537,43 @@
    "word_scenes": [
     {
      "word": "pop",
-     "scene": "A bubble pops, pop!"
+     "scene": "A bubble pops, pop!",
+     "caption": "A pop."
     },
     {
      "word": "Tom",
-     "scene": "Tom, a boy with a kite, grins"
+     "scene": "Tom, a boy with a kite, grins",
+     "caption": "Tom."
     },
     {
      "word": "Don",
-     "scene": "Don, a tall uncle, plays a sanshin"
+     "scene": "Don, a tall uncle, plays a sanshin",
+     "caption": "Don."
     },
     {
      "word": "nod",
-     "scene": "Tam nods yes"
+     "scene": "Tam nods yes",
+     "caption": "A nod."
     },
     {
      "word": "mad",
-     "scene": "A mad crab waves both claws"
+     "scene": "A mad crab waves both claws",
+     "caption": "A mad."
     },
     {
      "word": "pad",
-     "scene": "A dog's soft paw pad"
+     "scene": "A dog's soft paw pad",
+     "caption": "A pad."
     },
     {
      "word": "did",
-     "scene": "Sam did it: the block tower stands"
+     "scene": "Sam did it: the block tower stands",
+     "caption": "A did."
     },
     {
      "word": "dip",
-     "scene": "Pam dips a toe in the sea"
+     "scene": "Pam dips a toe in the sea",
+     "caption": "A dip."
     }
    ],
    "dictation": {
@@ -4910,35 +4970,43 @@
    "word_scenes": [
     {
      "word": "dim",
-     "scene": "A dim lamp at night"
+     "scene": "A dim lamp at night",
+     "caption": "A dim."
     },
     {
      "word": "mom",
-     "scene": "Mom hugs Tam"
+     "scene": "Mom hugs Tam",
+     "caption": "A mom."
     },
     {
      "word": "cot",
-     "scene": "A small camping cot"
+     "scene": "A small camping cot",
+     "caption": "A cot."
     },
     {
      "word": "cod",
-     "scene": "A silver cod fish"
+     "scene": "A silver cod fish",
+     "caption": "A cod."
     },
     {
      "word": "us",
-     "scene": "Sam and Pam point to each other: us!"
+     "scene": "Sam and Pam point to each other: us!",
+     "caption": "Us."
     },
     {
      "word": "nut",
-     "scene": "A round nut in a shell"
+     "scene": "A round nut in a shell",
+     "caption": "A nut."
     },
     {
      "word": "fun",
-     "scene": "Kids laugh on a swing: fun!"
+     "scene": "Kids laugh on a swing: fun!",
+     "caption": "A fun."
     },
     {
      "word": "pup",
-     "scene": "A tiny puppy wags its tail"
+     "scene": "A tiny puppy wags its tail",
+     "caption": "A pup is in the mud."
     }
    ],
    "dictation": {
@@ -5865,35 +5933,43 @@
    "word_scenes": [
     {
      "word": "bag",
-     "scene": "A beach bag full of towels"
+     "scene": "A beach bag full of towels",
+     "caption": "A bag."
     },
     {
      "word": "big",
-     "scene": "A big whale next to a tiny fish"
+     "scene": "A big whale next to a tiny fish",
+     "caption": "A big pig."
     },
     {
      "word": "bug",
-     "scene": "A small ladybug on a leaf"
+     "scene": "A small ladybug on a leaf",
+     "caption": "A bug."
     },
     {
      "word": "bat",
-     "scene": "A cute bat hangs upside down"
+     "scene": "A cute bat hangs upside down",
+     "caption": "A bat."
     },
     {
      "word": "bib",
-     "scene": "A baby wears a bib"
+     "scene": "A baby wears a bib",
+     "caption": "A bib."
     },
     {
      "word": "dig",
-     "scene": "Sam digs in the sand with a shovel"
+     "scene": "Sam digs in the sand with a shovel",
+     "caption": "A dig."
     },
     {
      "word": "pig",
-     "scene": "A pink pig rolls in the mud"
+     "scene": "A pink pig rolls in the mud",
+     "caption": "A big pig."
     },
     {
      "word": "dog",
-     "scene": "A happy dog runs"
+     "scene": "A happy dog runs",
+     "caption": "The dog digs."
     }
    ],
    "dictation": {
@@ -6328,35 +6404,43 @@
    "word_scenes": [
     {
      "word": "bed",
-     "scene": "A cozy bed with a pillow"
+     "scene": "A cozy bed with a pillow",
+     "caption": "The kid is on the bed."
     },
     {
      "word": "pet",
-     "scene": "Tam pets a soft bunny"
+     "scene": "Tam pets a soft bunny",
+     "caption": "Ken gets a pet."
     },
     {
      "word": "net",
-     "scene": "A fishing net full of fish"
+     "scene": "A fishing net full of fish",
+     "caption": "A net."
     },
     {
      "word": "ten",
-     "scene": "Ten fingers held up"
+     "scene": "Ten fingers held up",
+     "caption": "A ten."
     },
     {
      "word": "get",
-     "scene": "Pam gets a ball from the shelf"
+     "scene": "Pam gets a ball from the shelf",
+     "caption": "A get."
     },
     {
      "word": "kid",
-     "scene": "A kid jumps for joy"
+     "scene": "A kid jumps for joy",
+     "caption": "The kid is on the bed."
     },
     {
      "word": "kit",
-     "scene": "A little first aid kit"
+     "scene": "A little first aid kit",
+     "caption": "A kit."
     },
     {
      "word": "Ken",
-     "scene": "Ken, a boy in a cap, waves"
+     "scene": "Ken, a boy in a cap, waves",
+     "caption": "Ken gets a pet."
     }
    ],
    "dictation": {
@@ -6803,35 +6887,43 @@
    "word_scenes": [
     {
      "word": "bit",
-     "scene": "A bite out of a cookie"
+     "scene": "A bite out of a cookie",
+     "caption": "A bit."
     },
     {
      "word": "bud",
-     "scene": "A flower bud about to open"
+     "scene": "A flower bud about to open",
+     "caption": "A bud."
     },
     {
      "word": "bun",
-     "scene": "A soft round bun"
+     "scene": "A soft round bun",
+     "caption": "A bun."
     },
     {
      "word": "bus",
-     "scene": "A yellow school bus"
+     "scene": "A yellow school bus",
+     "caption": "Ken can get to the bus."
     },
     {
      "word": "fig",
-     "scene": "A purple fig cut open"
+     "scene": "A purple fig cut open",
+     "caption": "A fig."
     },
     {
      "word": "fog",
-     "scene": "Thick fog over the sea"
+     "scene": "Thick fog over the sea",
+     "caption": "A fog."
     },
     {
      "word": "gum",
-     "scene": "Pam blows a gum bubble"
+     "scene": "Pam blows a gum bubble",
+     "caption": "A gum."
     },
     {
      "word": "mug",
-     "scene": "A warm mug of cocoa"
+     "scene": "A warm mug of cocoa",
+     "caption": "A mug."
     }
    ],
    "dictation": {
@@ -7291,35 +7383,43 @@
    "word_scenes": [
     {
      "word": "tug",
-     "scene": "Two kids tug a rope"
+     "scene": "Two kids tug a rope",
+     "caption": "A tug."
     },
     {
      "word": "dug",
-     "scene": "A hole dug in the garden"
+     "scene": "A hole dug in the garden",
+     "caption": "A dug."
     },
     {
      "word": "gap",
-     "scene": "A gap between two rocks"
+     "scene": "A gap between two rocks",
+     "caption": "A gap."
     },
     {
      "word": "Gus",
-     "scene": "Gus, a big friendly dog"
+     "scene": "Gus, a big friendly dog",
+     "caption": "Get up, Gus!."
     },
     {
      "word": "beg",
-     "scene": "A puppy begs for a treat"
+     "scene": "A puppy begs for a treat",
+     "caption": "A beg."
     },
     {
      "word": "bet",
-     "scene": "Two friends shake hands on a bet"
+     "scene": "Two friends shake hands on a bet",
+     "caption": "A bet."
     },
     {
      "word": "peg",
-     "scene": "A clothes peg on a line"
+     "scene": "A clothes peg on a line",
+     "caption": "A peg."
     },
     {
      "word": "set",
-     "scene": "Pam sets the table"
+     "scene": "Pam sets the table",
+     "caption": "A set."
     }
    ],
    "dictation": {
@@ -7774,23 +7874,28 @@
    "word_scenes": [
     {
      "word": "men",
-     "scene": "Two men carry a boat"
+     "scene": "Two men carry a boat",
+     "caption": "A men."
     },
     {
      "word": "pen",
-     "scene": "A blue pen"
+     "scene": "A blue pen",
+     "caption": "A pen."
     },
     {
      "word": "den",
-     "scene": "A fox peeks out of its den"
+     "scene": "A fox peeks out of its den",
+     "caption": "A den."
     },
     {
      "word": "Meg",
-     "scene": "Meg, a girl with braids, smiles"
+     "scene": "Meg, a girl with braids, smiles",
+     "caption": "Meg and Ken dig."
     },
     {
      "word": "Ben",
-     "scene": "Ben, a boy with a skateboard"
+     "scene": "Ben, a boy with a skateboard",
+     "caption": "Ben."
     }
    ],
    "dictation": {
@@ -8352,35 +8457,43 @@
    "word_scenes": [
     {
      "word": "hat",
-     "scene": "A straw sun hat"
+     "scene": "A straw sun hat",
+     "caption": "A hat."
     },
     {
      "word": "hen",
-     "scene": "A red hen on her nest"
+     "scene": "A red hen on her nest",
+     "caption": "A red hen."
     },
     {
      "word": "hug",
-     "scene": "Mom and Tam hug"
+     "scene": "Mom and Tam hug",
+     "caption": "A hug."
     },
     {
      "word": "hop",
-     "scene": "A frog hops"
+     "scene": "A frog hops",
+     "caption": "A hop."
     },
     {
      "word": "rat",
-     "scene": "A small curious rat"
+     "scene": "A small curious rat",
+     "caption": "Run, rat, run!."
     },
     {
      "word": "red",
-     "scene": "A red hibiscus flower"
+     "scene": "A red hibiscus flower",
+     "caption": "A red hen."
     },
     {
      "word": "rug",
-     "scene": "A round woven rug"
+     "scene": "A round woven rug",
+     "caption": "A rug."
     },
     {
      "word": "run",
-     "scene": "Sam runs on the beach"
+     "scene": "Sam runs on the beach",
+     "caption": "Run, rat, run!."
     }
    ],
    "dictation": {
@@ -8851,35 +8964,43 @@
    "word_scenes": [
     {
      "word": "lap",
-     "scene": "A cat on Nan's lap"
+     "scene": "A cat on Nan's lap",
+     "caption": "A lap."
     },
     {
      "word": "lid",
-     "scene": "A lid on a pot"
+     "scene": "A lid on a pot",
+     "caption": "A lid."
     },
     {
      "word": "lip",
-     "scene": "A smiling mouth, lips pressed for a kiss"
+     "scene": "A smiling mouth, lips pressed for a kiss",
+     "caption": "A lip."
     },
     {
      "word": "log",
-     "scene": "A log by the river"
+     "scene": "A log by the river",
+     "caption": "A wet log."
     },
     {
      "word": "leg",
-     "scene": "A crab lifts one leg"
+     "scene": "A crab lifts one leg",
+     "caption": "A leg."
     },
     {
      "word": "wet",
-     "scene": "A wet dog shakes off water"
+     "scene": "A wet dog shakes off water",
+     "caption": "A wet log."
     },
     {
      "word": "web",
-     "scene": "A spider web with dew"
+     "scene": "A spider web with dew",
+     "caption": "A web."
     },
     {
      "word": "wig",
-     "scene": "A curly wig on a stand"
+     "scene": "A curly wig on a stand",
+     "caption": "A wig."
     }
    ],
    "dictation": {
@@ -9365,35 +9486,43 @@
    "word_scenes": [
     {
      "word": "hit",
-     "scene": "A bat hits a ball"
+     "scene": "A bat hits a ball",
+     "caption": "A hit."
     },
     {
      "word": "hot",
-     "scene": "Steam rises from hot soup"
+     "scene": "Steam rises from hot soup",
+     "caption": "A hot."
     },
     {
      "word": "hut",
-     "scene": "A small island hut"
+     "scene": "A small island hut",
+     "caption": "A hut."
     },
     {
      "word": "him",
-     "scene": "Pam points to Sam: him!"
+     "scene": "Pam points to Sam: him!",
+     "caption": "A him."
     },
     {
      "word": "hum",
-     "scene": "Nan hums a song"
+     "scene": "Nan hums a song",
+     "caption": "A hum."
     },
     {
      "word": "hip",
-     "scene": "Hands on hips"
+     "scene": "Hands on hips",
+     "caption": "A hip."
     },
     {
      "word": "hid",
-     "scene": "Tam hid behind a tree"
+     "scene": "Tam hid behind a tree",
+     "caption": "A hid."
     },
     {
      "word": "rib",
-     "scene": "Ruri points to her side"
+     "scene": "Ruri points to her side",
+     "caption": "A rib."
     }
    ],
    "dictation": {
@@ -9892,35 +10021,43 @@
    "word_scenes": [
     {
      "word": "rip",
-     "scene": "A paper rips in two"
+     "scene": "A paper rips in two",
+     "caption": "A rip."
     },
     {
      "word": "rod",
-     "scene": "A fishing rod"
+     "scene": "A fishing rod",
+     "caption": "A rod."
     },
     {
      "word": "rag",
-     "scene": "A cleaning rag"
+     "scene": "A cleaning rag",
+     "caption": "A rag."
     },
     {
      "word": "ran",
-     "scene": "Footprints where Sam ran"
+     "scene": "Footprints where Sam ran",
+     "caption": "A rat ran up the log."
     },
     {
      "word": "let",
-     "scene": "Mom lets Tam open the door"
+     "scene": "Mom lets Tam open the door",
+     "caption": "A let."
     },
     {
      "word": "lot",
-     "scene": "A lot of shells in a pile"
+     "scene": "A lot of shells in a pile",
+     "caption": "A lot."
     },
     {
      "word": "lit",
-     "scene": "A candle is lit"
+     "scene": "A candle is lit",
+     "caption": "A lit."
     },
     {
      "word": "win",
-     "scene": "Pam wins a race and cheers"
+     "scene": "Pam wins a race and cheers",
+     "caption": "A win."
     }
    ],
    "dictation": {
@@ -10402,11 +10539,13 @@
    "word_scenes": [
     {
      "word": "wag",
-     "scene": "A dog wags its tail"
+     "scene": "A dog wags its tail",
+     "caption": "A wag."
     },
     {
      "word": "wit",
-     "scene": "Two friends laugh at a funny joke"
+     "scene": "Two friends laugh at a funny joke",
+     "caption": "A wit."
     }
    ],
    "dictation": {
@@ -10995,35 +11134,43 @@
    "word_scenes": [
     {
      "word": "jam",
-     "scene": "A jar of mango jam"
+     "scene": "A jar of mango jam",
+     "caption": "Yum, jam!."
     },
     {
      "word": "jet",
-     "scene": "A jet flies over the island"
+     "scene": "A jet flies over the island",
+     "caption": "Yes, the jet is red."
     },
     {
      "word": "jog",
-     "scene": "Dad jogs on the path"
+     "scene": "Dad jogs on the path",
+     "caption": "A jog."
     },
     {
      "word": "jug",
-     "scene": "A water jug"
+     "scene": "A water jug",
+     "caption": "A jug."
     },
     {
      "word": "yes",
-     "scene": "Tam nods and gives a thumbs up: yes!"
+     "scene": "Tam nods and gives a thumbs up: yes!",
+     "caption": "Yes, the jet is red."
     },
     {
      "word": "yet",
-     "scene": "A chick about to hatch, not yet out"
+     "scene": "A chick about to hatch, not yet out",
+     "caption": "A yet."
     },
     {
      "word": "yum",
-     "scene": "Sam rubs his tummy: yum!"
+     "scene": "Sam rubs his tummy: yum!",
+     "caption": "Yum, jam!."
     },
     {
      "word": "yak",
-     "scene": "A shaggy yak"
+     "scene": "A shaggy yak",
+     "caption": "A yak."
     }
    ],
    "dictation": {
@@ -11525,31 +11672,38 @@
    "word_scenes": [
     {
      "word": "box",
-     "scene": "A gift box"
+     "scene": "A gift box",
+     "caption": "A fox in a box."
     },
     {
      "word": "fox",
-     "scene": "A red fox"
+     "scene": "A red fox",
+     "caption": "Quit it, fox!."
     },
     {
      "word": "six",
-     "scene": "Six shells in a row"
+     "scene": "Six shells in a row",
+     "caption": "A six."
     },
     {
      "word": "mix",
-     "scene": "Pam mixes cake batter"
+     "scene": "Pam mixes cake batter",
+     "caption": "A mix."
     },
     {
      "word": "fix",
-     "scene": "Dad fixes a bike"
+     "scene": "Dad fixes a bike",
+     "caption": "A fix."
     },
     {
      "word": "ox",
-     "scene": "A strong ox"
+     "scene": "A strong ox",
+     "caption": "Ox."
     },
     {
      "word": "quit",
-     "scene": "Sam stops the game and puts it away"
+     "scene": "Sam stops the game and puts it away",
+     "caption": "Quit it, fox!."
     }
    ],
    "dictation": {
@@ -12081,35 +12235,43 @@
    "word_scenes": [
     {
      "word": "job",
-     "scene": "A baker at her job"
+     "scene": "A baker at her job",
+     "caption": "A job."
     },
     {
      "word": "jab",
-     "scene": "A boxer kangaroo jabs a pillow"
+     "scene": "A boxer kangaroo jabs a pillow",
+     "caption": "A jab."
     },
     {
      "word": "jig",
-     "scene": "Kids dance a happy jig"
+     "scene": "Kids dance a happy jig",
+     "caption": "A jig."
     },
     {
      "word": "Jim",
-     "scene": "Jim, a boy with a red shirt"
+     "scene": "Jim, a boy with a red shirt",
+     "caption": "Jim."
     },
     {
      "word": "Jen",
-     "scene": "Jen, a girl with a ponytail"
+     "scene": "Jen, a girl with a ponytail",
+     "caption": "Jen."
     },
     {
      "word": "yap",
-     "scene": "A small dog yaps"
+     "scene": "A small dog yaps",
+     "caption": "A yap."
     },
     {
      "word": "wax",
-     "scene": "A wax crayon"
+     "scene": "A wax crayon",
+     "caption": "A wax."
     },
     {
      "word": "tax",
-     "scene": "A shopkeeper counts coins"
+     "scene": "A shopkeeper counts coins",
+     "caption": "A tax."
     }
    ],
    "dictation": {
@@ -12630,11 +12792,13 @@
    "word_scenes": [
     {
      "word": "Max",
-     "scene": "Max, a big gentle ox"
+     "scene": "Max, a big gentle ox",
+     "caption": "Max can mix the jam."
     },
     {
      "word": "Rex",
-     "scene": "Rex, a playful fox"
+     "scene": "Rex, a playful fox",
+     "caption": "Rex."
     }
    ],
    "dictation": {
@@ -13252,27 +13416,33 @@
    "word_scenes": [
     {
      "word": "van",
-     "scene": "A blue van"
+     "scene": "A blue van",
+     "caption": "A red van."
     },
     {
      "word": "vet",
-     "scene": "A vet listens to a puppy's heart"
+     "scene": "A vet listens to a puppy's heart",
+     "caption": "The vet has a van."
     },
     {
      "word": "vat",
-     "scene": "A big vat of soup"
+     "scene": "A big vat of soup",
+     "caption": "A vat."
     },
     {
      "word": "Viv",
-     "scene": "Viv, a girl with a backpack"
+     "scene": "Viv, a girl with a backpack",
+     "caption": "Viv."
     },
     {
      "word": "Val",
-     "scene": "Val, a girl on a bike"
+     "scene": "Val, a girl on a bike",
+     "caption": "Val."
     },
     {
      "word": "Vin",
-     "scene": "Vin, a boy with a ball"
+     "scene": "Vin, a boy with a ball",
+     "caption": "Vin."
     }
    ],
    "dictation": {
@@ -13797,31 +13967,38 @@
    "word_scenes": [
     {
      "word": "zip",
-     "scene": "Tam zips up her jacket"
+     "scene": "Tam zips up her jacket",
+     "caption": "Zip the bag."
     },
     {
      "word": "zap",
-     "scene": "A tiny flash of light zaps"
+     "scene": "A tiny flash of light zaps",
+     "caption": "A zap."
     },
     {
      "word": "zig",
-     "scene": "A path zigs one way"
+     "scene": "A path zigs one way",
+     "caption": "Zig and zag!."
     },
     {
      "word": "zag",
-     "scene": "The path zags the other way"
+     "scene": "The path zags the other way",
+     "caption": "Zig and zag!."
     },
     {
      "word": "Zed",
-     "scene": "Zed, a boy on a scooter"
+     "scene": "Zed, a boy on a scooter",
+     "caption": "Zed."
     },
     {
      "word": "Liz",
-     "scene": "Liz, a girl holding a book"
+     "scene": "Liz, a girl holding a book",
+     "caption": "Liz."
     },
     {
      "word": "quiz",
-     "scene": "Liz gets a star on her quiz"
+     "scene": "Liz gets a star on her quiz",
+     "caption": "A quiz."
     }
    ],
    "dictation": {
