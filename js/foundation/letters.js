@@ -42,7 +42,7 @@
 
   /* Stroke numbers sit at the start. The arrow is the end of the stroke. */
   const LETTERS = [
-    { id: 'a', name: 'a', nameSay: 'ay', sound: '/a/', soundSay: 'ah, ant', word: 'ant', cue: 'a as in ant', where: 'start',
+    { id: 'a', name: 'a', nameSay: 'ay', sound: '/a/', soundSay: 'ah, apple', word: 'apple', cue: 'a as in apple', where: 'start',
       strokes: [{ d: 'M68 78 C68 48 28 46 28 76 C28 106 70 108 70 78', nx: 96, ny: 70 }, { d: 'M70 58 L70 112', nx: 96, ny: 44 }] },
     { id: 'm', name: 'm', nameSay: 'em', sound: '/m/', soundSay: 'mmm, map', word: 'map', audio: 'audio/w_map.mp3', cue: 'm as in map', where: 'start',
       strokes: [{ d: 'M24 112 L24 52', nx: 12, ny: 40 }, { d: 'M24 70 C24 48 52 48 52 74 L52 112', nx: 36, ny: 40 }, { d: 'M52 70 C52 48 82 48 82 74 L82 112', nx: 70, ny: 40 }] },
@@ -127,7 +127,7 @@
     { id: 'celebrate', title: 'Look what I can read!' }
   ];
   const MEMORY = {
-    a: { chant: 'Ant on an apple, /a/ /a/ /a/.', action: 'Open wide, like a bite.' },
+    a: { chant: 'Addie the Apple, /a/ /a/ /a/.', action: 'Open wide, like a bite.' },
     m: { chant: 'Twin mountains hum, /m/ /m/ /m/.', action: 'Lips together. Hum.' },
     s: { chant: 'Sea snake in the sand, /s/ /s/ /s/.', action: 'Slide your hand like the snake.' },
     t: { chant: 'Palm tree tap, /t/ /t/ /t/.', action: 'Tap two fingers.' },

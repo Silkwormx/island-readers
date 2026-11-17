@@ -14,8 +14,8 @@ test('Day 1 sample is a short lesson plus a and m games', () => {
   assert.match(day1, /My name is: ' \+ id/);
   assert.match(day1, /My sound is ' \+ L\.sound/);
   assert.match(day1, /I said it/);
-  assert.match(letters, /#\/foundation\/sample/);
-  assert.equal(day1.includes('sat'), false);
-  assert.equal(day1.includes('Sam'), false);
+  assert.match(letters, /#\/foundation\/play\//);
+  assert.match(day1, /have\.indexOf\(ch\)/);
+  assert.match(day1, /\['a', 'm'\]/);
   assert.equal(day1.includes('best on a tablet'), false);
 });

@@ -304,7 +304,7 @@
     const pic = h('span', { class: 'tpic' }, cover);
     cover.addEventListener('error', () => {
       pic.className = 'tpic tfaces';
-      pic.replaceChildren(...['a_asa_apple_snail.jpg', 'm_manny_mangrove.jpg', 's_sami_sea_snake.jpg', 't_tama_sea_turtle.jpg'].map((file) => h('img', { src: 'foundation/img/letters/' + file, alt: '' })));
+      pic.replaceChildren(...['a_apple.jpg', 'm_manny_mangrove.jpg', 's_sami_sea_snake.jpg', 't_tama_sea_turtle.jpg'].map((file) => h('img', { src: 'foundation/img/letters/' + file, alt: '' })));
     });
     const foundations = h('button', {
       class: 'tcard',

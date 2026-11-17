@@ -6,7 +6,7 @@
   const { h, icon, Snd, A, speakerBtn } = IR;
   const ZIP = 'img/zipA.webp';
   const FRILL = 'img/frill.webp';
-  const ASA = 'foundation/img/letters/a_asa_apple_snail.jpg';
+  const ADDIE = 'foundation/img/letters/a_apple.jpg';
   const MANNY = 'foundation/img/letters/m_manny_mangrove.jpg';
   const AM = 'foundation/img/scenes/am.jpg';
   const LINK = 'foundation/img/scenes/link_am.jpg';
@@ -77,7 +77,7 @@
   }
   function face(id) {
     return ({
-      a: ASA,
+      a: ADDIE,
       m: MANNY,
       s: 'foundation/img/letters/s_sami_sea_snake.jpg',
       t: 'foundation/img/letters/t_tama_sea_turtle.jpg'
