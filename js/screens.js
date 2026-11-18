@@ -540,9 +540,12 @@
     plan = plan || {};
     const files = plan.files || [];
     const days = plan.days || [];
+    const pdfLink = plan.pdf
+      ? h('a', { class: 'teachlink', href: plan.pdf, target: '_blank', rel: 'noopener' }, plan.pdfLabel || 'Open the slideshow (PDF)')
+      : null;
     const slides = days.length
       ? days.map((day) => h('button', { class: 'teachlink', type: 'button', onclick: () => { Snd.stop(); location.hash = day.href; } }, day.label))
-      : [plan.slides ? h('button', { class: 'teachlink', type: 'button', onclick: () => { Snd.stop(); location.hash = plan.slides; } }, 'Open the slideshow') : h('p', { class: 'teachsoon' }, 'Coming soon')];
+      : [plan.slides ? h('button', { class: 'teachlink', type: 'button', onclick: () => { Snd.stop(); location.hash = plan.slides; } }, 'Open the slideshow') : (pdfLink || h('p', { class: 'teachsoon' }, 'Coming soon'))];
     const panel = h('div', { class: 'teachpop', hidden: '' },
       h('p', { class: 'teachstep' }, h('span', null, '1'), 'Slideshow'),
       ...slides,
@@ -959,6 +962,12 @@
         h('h3', null, h('span', { class: 'tmsound' }, lesson.s), ' ' + lesson.lesson),
         ...rows.flat());
     }
+    function magicSlideshow() {
+      return h('div', { class: 'tmcard' },
+        h('h3', null, 'Magic e Slideshow'),
+        h('a', { class: 'btn big tmlink tmslide', href: 'materials/unit5/Island_Readers_Magic_e_Lesson.pdf', target: '_blank', rel: 'noopener' }, 'Magic e Slideshow (PDF)'),
+        h('a', { class: 'btn big tmlink tmslide', href: 'materials/unit5/Island_Readers_Magic_e_Lesson.pptx', download: '' }, 'Magic e Slideshow (PowerPoint)'));
+    }
     const UNITS = [
       { name: 'Unit 4 \u00b7 Glued Sounds', sounds: [
         { s: 'ng', lesson: 'Lesson 4.1', days: 3, board: '#/teachers/slides/ng', slides: 'teachers/ng/Lesson3.1_ng_Slide_Presentation.pptx', daily: 'teachers/ng/Lesson3.1_ng_Daily_Practice_Sheets.pdf', pack: 'teachers/ng/Lesson3.1_ng_Teacher_Pack.pdf' },
@@ -976,7 +985,10 @@
       h('div', { class: 'abtop' }, pageNav('#/home')),
       h('h1', null, 'Teacher materials'),
       h('p', { class: 'tmlead' }, 'For teaching in class. Students practice on their own in the app.'),
-      ...UNITS.map((u) => h('section', { class: 'tmunit' }, h('h2', null, u.name), h('div', { class: 'tmgrid' }, ...u.sounds.map(lessonCard)))))));
+      ...UNITS.map((u) => h('section', { class: 'tmunit' },
+        h('h2', null, u.name),
+        h('div', { class: 'tmgrid' }, ...u.sounds.map(lessonCard)),
+        u.name.indexOf('Unit 5') === 0 ? magicSlideshow() : null)))));
   }
   /* In-app week-deck slideshow for smartboard (ng / nk). Keeps PPTX download on the teachers page. */
   function slidesViewer(sound) {

@@ -20,7 +20,7 @@ test('Find It is a search box and four tabs', () => {
   assert.equal(screens.includes('Review stop'), false);
   assert.match(screens, /class: 'bellpath'/);
   assert.equal(screens.includes('TRAIL_STAGES'), false);
-  assert.match(sw, /ir-20261121k/);
+  assert.match(sw, /ir-20261121l/);
   assert.match(screens, /openKey === g\.name/);
   assert.match(screens, /data\[mode\]/);
   const css = fs.readFileSync(new URL('../styles.css', import.meta.url), 'utf8');
