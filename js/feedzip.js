@@ -121,12 +121,17 @@
           $$fade();
           const pop = h('img', { class: 'fz-treat' + (treat.yuck ? ' yuck' : ''), src: treat.src, alt: treat.yuck ? 'A silly snack Zip does not like' : 'A treat for Zip' });
           zip.append(pop);
-          await Snd.play(treat.yuck ? 'audio/sfx_yuck.mp3' : nextYum());
+          const here = r;
+          const advance = () => {
+            if (my !== token || r !== here) return;
+            r++;
+            ctx.progress(r / bites);
+            round();
+          };
+          setTimeout(advance, 1100);
+          await Promise.race([Snd.play(treat.yuck ? 'audio/sfx_yuck.mp3' : nextYum()), sleep(700)]);
           if (!ctx.scr.ok() || my !== token) return;
-          r++;
-          ctx.progress(r / bites);
-          await sleep(700);
-          if (ctx.scr.ok() && my === token) round();
+          setTimeout(advance, 200);
         } else {
           b.classList.add('tried');
           row = 0;
@@ -144,7 +149,12 @@
     }
 
     ctx.setBack(() => { if (r > 0) { token++; r--; if (row > 0) row--; round(); return true; } return false; });
-    ctx.setNext(() => { if (r < bites - 1) { token++; r++; round(); return true; } return false; });
+    ctx.setNext(() => {
+      token++;
+      if (r < bites - 1) { r++; round(); return true; }
+      if (ctx.finish) { ctx.finish(); return true; }
+      return false;
+    });
     round();
   };
 })();

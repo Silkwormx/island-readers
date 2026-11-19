@@ -1545,16 +1545,26 @@
         streak += 1;
         btn.classList.add('right');
         status.textContent = streak >= 3 && streak % 3 === 0 ? streak + ' in a row!' : 'Yes.';
-        await Snd.play(A.sfx.ding);
+        const here = i;
+        const advance = () => {
+          if (my !== token || i !== here) return;
+          i++;
+          show();
+        };
+        setTimeout(advance, 1100);
+        await Promise.race([Snd.play(A.sfx.ding), sleep(700)]);
         if (!ctx.scr.ok() || my !== token) return;
-        i++;
-        await sleep(420);
-        if (ctx.scr.ok() && my === token) show();
+        setTimeout(advance, 200);
       });
       if (round.letter) host.append(hintButton([round.letter.id]));
       host.append(status);
     }
-    ctx.setNext(() => { if (i < rounds.length - 1) { i++; show(); return true; } return false; });
+    ctx.setNext(() => {
+      token += 1;
+      if (i < rounds.length - 1) { i++; show(); return true; }
+      ctx.finish();
+      return true;
+    });
     ctx.setBack(() => { if (i > 0) { i--; show(); return true; } return false; });
     show();
   }

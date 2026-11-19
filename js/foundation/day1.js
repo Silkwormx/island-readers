@@ -357,7 +357,18 @@
       ctx.stage.innerHTML = '';
       if (streak >= 3 && streak % 3 === 0) ctx.stage.append(h('p', { class: 'llpraise', role: 'status' }, streak + ' in a row!'));
       const item = plan[i];
-      draw(item, () => { streak += 1; i += 1; yes(); setTimeout(step, 280); }, (el) => {
+      draw(item, () => {
+        streak += 1;
+        const here = i;
+        const move = () => {
+          if (i !== here) return;
+          i += 1;
+          yes();
+          setTimeout(step, 200);
+        };
+        setTimeout(move, 280);
+        setTimeout(move, 1200);
+      }, (el) => {
         streak = 0;
         miss(el);
         const at = i + 3;
@@ -630,7 +641,7 @@
   }
   function countSay(text) {
     const key = bareSound(text);
-    if (key) return playSound(key);
+    if (key) return Promise.race([playSound(key), new Promise((r) => setTimeout(r, 700))]);
     if (String(text || '').replace(/[^A-Za-z]/g, '').length < 2) return Promise.resolve();
     return new Promise((resolve) => {
       let done = false;
@@ -694,8 +705,7 @@
         ctx.progress(done / total);
       }
       ctx.setNext(() => {
-        const next = rows.findIndex((_, i) => !revealed.has(i));
-        if (next >= 0) { play(next); return true; }
+        token += 1;
         if (screen < screens.length - 1) { screen += 1; draw(); return true; }
         ctx.badge('Count the Sounds', 'count');
         return true;
