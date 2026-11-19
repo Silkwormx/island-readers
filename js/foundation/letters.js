@@ -2226,7 +2226,15 @@
     const here = base + '/lesson/' + id;
     const name = shortName(id);
     menuScreen(app, group, base, id + ' · ' + name, 'Team ' + group.n, {
-      lesson: [{ title: 'Lesson', note: name, go: () => { Snd.stop(); location.hash = here + '/hear'; } }],
+      lesson: [{
+        pick: true,
+        kicker: 'Lesson',
+        title: id + ' · ' + name,
+        img: letterArt(id),
+        note: name,
+        goLabel: 'Open lesson',
+        go: () => { Snd.stop(); location.hash = here + '/hear'; }
+      }],
       games: teamGames(group),
       story: {
         title: 'Read It',
@@ -2263,9 +2271,12 @@
     const base = '#/foundation/letters/' + group.id;
     const nextId = group.letters.filter((id) => !letterDone(group, id))[0];
     const lessons = group.letters.map((id) => ({
+      pick: true,
+      kicker: 'Lesson',
       title: id + ' · ' + shortName(id),
+      img: letterArt(id),
       note: letterDone(group, id) ? 'Done' : (id === nextId ? 'Up next' : ''),
-      done: letterDone(group, id),
+      goLabel: 'Open lesson',
       go: () => { Snd.stop(); location.hash = base + '/lesson/' + id; }
     }));
     const phrase = storyLine(group);

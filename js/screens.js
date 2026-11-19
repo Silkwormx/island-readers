@@ -511,7 +511,26 @@
       else if (item.href) location.hash = item.href;
     };
   }
+  function lessonTab(item) {
+    const pics = item.imgs && item.imgs.length ? item.imgs : (item.img ? [item.img] : []);
+    const stars = item.stars;
+    return h('button', {
+      class: 'tapcard ucard open lessontab',
+      type: 'button',
+      'aria-label': (item.kicker || 'Lesson') + '. ' + item.title + '. Opens the lesson.',
+      onclick: goItem(item)
+    },
+      h('div', { class: 'uimg' }, ...pics.map((src) => h('img', { src: src, alt: '' }))),
+      h('div', { class: 'ubody' },
+        h('div', { class: 'uk' }, item.kicker || 'Lesson'),
+        h('h2', null, item.title),
+        item.note ? h('div', { class: 'umin' }, item.note) : null,
+        stars && stars.total ? h('div', { class: 'dots', 'aria-hidden': 'true' }, ...Array.from({ length: stars.total }, (_, k) => h('span', { class: 'sstar' + (k < stars.done ? ' on' : '') }, icon('star')))) : null,
+        stars && stars.total ? h('div', { class: 'uprog' }, stars.done + ' of ' + stars.total + ' stars') : null,
+        h('span', { class: 'obtn' }, item.goLabel || 'Open lesson')));
+  }
   function itemCard(item, num) {
+    if (!num && item.pick) return lessonTab(item);
     const body = [
       num ? h('span', { class: 'gamenum' }, String(num)) : null,
       num && !item.img && !(item.imgs && item.imgs.length) ? h('span', { class: 'gameico', 'aria-hidden': 'true' }, icon('play')) : null,

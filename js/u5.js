@@ -292,10 +292,16 @@
       const pick = (group) => all.filter((r) => r.group === group).map((r) => ({ title: r.title, href: r.href, note: TIPS[r.id], min: r.min }));
       const story = pick('story')[0];
       if (story) { story.title = N.storyTitle || story.title; story.note = 'Story Time'; story.img = IR.storyCovers[KEY === 'u51' ? '5.1' : '5.2']; story.alt = N.storyTitle || ''; story.big = true; }
+      const lesson = pick('lesson').map((item) => Object.assign(item, {
+        pick: true,
+        kicker: 'Lesson',
+        goLabel: 'Open lesson',
+        img: /refresh/i.test(item.href) ? 'img/lesson_zip_frill.webp' : (KEY === 'u53' ? 'img/frill.webp' : 'img/zipA.webp')
+      }));
       app.append(h('div', { class: 'screen trailscreen unitpage unitA u5menu stepage' },
         h('header', { class: 'uA-top' }, IR.ui.pageNav('#/u5'), h('h1', { class: 'uA-title' }, h('small', null, 'Unit 5 Lesson ' + IR.kidLesson(NUM)), capName(N.name)), IR.teacherBox(u5Teach())),
         IR.modeBar({
-          lesson: pick('lesson'),
+          lesson: lesson,
           games: pick('activities').concat(pick('extra')),
           story: story
         })));
@@ -673,7 +679,19 @@
   function unitHub(app) {
     IR.newScreen();
     const lessons = (IR.u5Lessons || []).slice().sort((a, b) => String(a.n).localeCompare(String(b.n), undefined, { numeric: true }));
-    const lesson = lessons.map((L) => ({ title: 'Lesson ' + IR.kidLesson(L.n) + ' · ' + capName(L.name), href: '#/' + L.key }));
+    const lesson = lessons.map((L) => {
+      const prog = IR.nkProgress ? IR.nkProgress(L.key) : null;
+      return {
+        pick: true,
+        kicker: 'Lesson ' + IR.kidLesson(L.n),
+        title: capName(L.name),
+        href: '#/' + L.key,
+        img: L.key === 'u53' ? 'img/frill.webp' : 'img/zipA.webp',
+        note: prog && prog.min ? 'About ' + prog.min + ' min' : '',
+        stars: prog ? { done: prog.done, total: prog.total } : null,
+        goLabel: 'Open lesson'
+      };
+    });
     const seen = {};
     const games = [];
     lessons.forEach((L) => {
