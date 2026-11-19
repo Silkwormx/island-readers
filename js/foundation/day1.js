@@ -634,48 +634,28 @@
     }, 'sound');
   }
 
-  const COUNT_WORDS = {
-    a: [
-      { w: 'at', n: 2, sounds: ['ah', 't'] },
-      { w: 'am', n: 2, sounds: ['ah', 'mmm'] },
-      { w: 'add', n: 2, sounds: ['ah', 'd'] },
-      { w: 'ant', n: 3, sounds: ['ah', 'nnn', 't'] },
-      { w: 'ask', n: 3, sounds: ['ah', 'sss', 'k'] }
-    ],
-    m: [
-      { w: 'me', n: 2, sounds: ['mmm', 'ee'] },
-      { w: 'map', n: 3, sounds: ['mmm', 'ah', 'p'] },
-      { w: 'mat', n: 3, sounds: ['mmm', 'ah', 't'] },
-      { w: 'mud', n: 3, sounds: ['mmm', 'uh', 'd'] },
-      { w: 'mask', n: 4, sounds: ['mmm', 'ah', 'sss', 'k'] }
-    ],
-    s: [
-      { w: 'so', n: 2, sounds: ['sss', 'oh'] },
-      { w: 'sun', n: 3, sounds: ['sss', 'uh', 'nnn'] },
-      { w: 'sit', n: 3, sounds: ['sss', 'ih', 't'] },
-      { w: 'sock', n: 3, sounds: ['sss', 'ah', 'k'] },
-      { w: 'sand', n: 4, sounds: ['sss', 'ah', 'nnn', 'd'] }
-    ],
-    t: [
-      { w: 'toe', n: 2, sounds: ['t', 'oh'] },
-      { w: 'tap', n: 3, sounds: ['t', 'ah', 'p'] },
-      { w: 'ten', n: 3, sounds: ['t', 'eh', 'nnn'] },
-      { w: 'top', n: 3, sounds: ['t', 'ah', 'p'] },
-      { w: 'tent', n: 4, sounds: ['t', 'eh', 'nnn', 't'] }
-    ]
-  };
-  function countScreens() {
-    const letter = PACK && PACK.countLetter;
-    if (letter && COUNT_WORDS[letter]) return [COUNT_WORDS[letter]];
-    const all = [];
-    for (let i = 0; i < 5; i++) ['a', 'm', 's', 't'].forEach((id) => all.push(COUNT_WORDS[id][i]));
-    const screens = [];
-    for (let i = 0; i < all.length; i += 5) screens.push(all.slice(i, i + 5));
-    return screens;
+  const PHONEME_KEY = { a: 'a', m: 'm', s: 's', t: 't', ee: 'ee', uh: 'u' };
+  function countItems(words) {
+    return words.map((word) => {
+      const sounds = (window.IRPhonemes && IRPhonemes.of(word)) || [];
+      return { w: word, sounds: sounds, n: sounds.length };
+    }).filter((item) => item.n > 0);
   }
-  function countSay(text) {
-    const key = bareSound(text);
-    if (key) return Promise.race([playSound(key), new Promise((r) => setTimeout(r, 700))]);
+  function countScreens() {
+    const all = countItems((window.IRPhonemes && IRPhonemes.countWords) || []);
+    const letter = PACK && PACK.countLetter;
+    const list = letter
+      ? all.filter((item) => item.sounds[0] === letter || item.w.toLowerCase().charAt(0) === letter)
+      : all;
+    const use = list.length ? list : all;
+    const screens = [];
+    for (let i = 0; i < use.length; i += 5) screens.push(use.slice(i, i + 5));
+    return screens.length ? screens : [[]];
+  }
+  function countSay(text, phoneme) {
+    const key = phoneme ? (PHONEME_KEY[text] || '') : bareSound(text);
+    if (key) return Promise.race([Promise.resolve(playSound(key)).catch(() => {}), new Promise((r) => setTimeout(r, 700))]);
+    if (phoneme) return Promise.resolve();
     if (String(text || '').replace(/[^A-Za-z]/g, '').length < 2) return Promise.resolve();
     return new Promise((resolve) => {
       let done = false;
@@ -724,14 +704,15 @@
         row.num.textContent = '';
         row.num.classList.remove('on');
         revealed.delete(i);
-        await countSay(row.item.w);
+        row.item.sounds.forEach(() => row.chips.append(h('i', { class: 'llcountdot' })));
+        await countSay(row.item.w, false);
         if (my !== token) return;
         for (let s = 0; s < row.item.sounds.length; s++) {
-          row.chips.append(h('i', { class: 'llcountdot' }));
-          await countSay(row.item.sounds[s]);
+          await countSay(row.item.sounds[s], true);
           if (my !== token) return;
         }
-        row.num.textContent = String(row.item.n);
+        while (row.chips.children.length < row.item.sounds.length) row.chips.append(h('i', { class: 'llcountdot' }));
+        row.num.textContent = String(row.item.sounds.length);
         row.num.classList.add('on');
         revealed.add(i);
         const done = screen * 5 + revealed.size;

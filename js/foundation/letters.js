@@ -517,6 +517,14 @@
     return shuffle(fresh.slice(0, 6).concat(old.slice(0, 2)));
   }
   function graphemes(word) {
+    const known = window.IRPhonemes && IRPhonemes.of(word);
+    if (known) {
+      const written = String(word).replace(/[^A-Za-z]/g, '');
+      if (known.join('') === written.toLowerCase()) {
+        return known.map((id, i) => ({ g: written.charAt(i), id: id }));
+      }
+      return known.map((id) => ({ g: id, id: id }));
+    }
     const out = [];
     let i = 0;
     if (word.toLowerCase().indexOf('qu') === 0) {
@@ -787,12 +795,12 @@
         ]
       },
       words: [
-        { text: 'am', src: 'foundation/img/scenes/am.jpg', parts: ['a', 'm'], decoy: 'foundation/img/objects/apple.jpg' },
-        { text: 'at', src: art.a, parts: ['a', 't'], decoy: 'foundation/img/objects/mango.jpg' },
-        { text: 'mat', src: 'foundation/img/scenes/mat.jpg', parts: ['m', 'a', 't'], decoy: art.s },
-        { text: 'sat', src: 'foundation/img/scenes/sat.jpg', parts: ['s', 'a', 't'], decoy: art.m },
-        { text: 'Sam', src: art.s, parts: ['s', 'a', 'm'], decoy: 'foundation/img/objects/apple.jpg' },
-        { text: 'Tam', src: 'foundation/img/scenes/tam.jpg', parts: ['t', 'a', 'm'], decoy: art.a }
+        { text: 'am', src: 'foundation/img/scenes/am.jpg', parts: IRPhonemes.of('am'), decoy: 'foundation/img/objects/apple.jpg' },
+        { text: 'at', src: art.a, parts: IRPhonemes.of('at'), decoy: 'foundation/img/objects/mango.jpg' },
+        { text: 'mat', src: 'foundation/img/scenes/mat.jpg', parts: IRPhonemes.of('mat'), decoy: art.s },
+        { text: 'sat', src: 'foundation/img/scenes/sat.jpg', parts: IRPhonemes.of('sat'), decoy: art.m },
+        { text: 'Sam', src: art.s, parts: IRPhonemes.of('Sam'), decoy: 'foundation/img/objects/apple.jpg' },
+        { text: 'Tam', src: 'foundation/img/scenes/tam.jpg', parts: IRPhonemes.of('Tam'), decoy: art.a }
       ],
       onDone(id) {
         IR.recordActivity('ll_g1_d1_' + id, 3);
