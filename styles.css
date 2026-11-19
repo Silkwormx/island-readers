@@ -1848,6 +1848,35 @@ a.btn.tmlink.tmslide:visited{color:#fff}
 @container bells (min-width:520px){.bellgrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @container bells (min-width:700px){.bellgrid{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media (min-width:1000px){.gridhome .bellgrid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+/* Home previews: ?bells=6 fits six tiles, ?bells=peek shows three and half of the next three. */
+.gridhome.bells6 .bellpath,
+.gridhome.bellspeek .bellpath{padding-bottom:.35rem}
+.gridhome.bells6 .bellgrid,
+.gridhome.bellspeek .bellgrid{align-items:start;grid-template-columns:repeat(3,minmax(0,1fr))}
+.gridhome.bells6 .bellpath .tpic,
+.gridhome.bellspeek .bellpath .tpic{aspect-ratio:auto;width:100%;flex:none}
+.gridhome.bells6 .bellpath .tpic img,
+.gridhome.bellspeek .bellpath .tpic img{width:100%;height:100%;object-fit:contain;object-position:center}
+.gridhome.bells6 .bellpath .tbody,
+.gridhome.bellspeek .bellpath .tbody{flex:none;min-height:0;justify-content:flex-start;gap:.12rem;padding:.45rem .5rem .6rem}
+@media (max-width:759px){
+  .gridhome.bells6 .mwrap,
+  .gridhome.bellspeek .mwrap{padding-left:.4rem;padding-right:.4rem}
+  .gridhome.bells6 .herechip,
+  .gridhome.bellspeek .herechip{font-size:.68rem;line-height:1.1;white-space:normal;left:.28rem;top:.28rem;max-width:calc(100% - .5rem);padding:.12rem .35rem}
+  .gridhome.bells6 .bellpath .tname,
+  .gridhome.bellspeek .bellpath .tname{font-size:.86rem}
+  .gridhome.bellspeek .bellpath .tsnd,
+  .gridhome.bells6 .bellpath .tsnd{font-size:.72rem}
+}
+.gridhome.bells6 .bellpath .tname,
+.gridhome.bellspeek .bellpath .tname{height:auto;max-height:none;overflow:visible;font-size:clamp(.84rem,1.5vw,1.05rem);line-height:1.25}
+.gridhome.bells6 .bellpath .tsnd,
+.gridhome.bellspeek .bellpath .tsnd{height:auto;max-height:none;overflow:visible;font-size:clamp(.72rem,1.2vw,.9rem);line-height:1.25}
+.gridhome.bells6 .bellpath .tnum,
+.gridhome.bellspeek .bellpath .tnum{font-size:clamp(1rem,1.6vw,1.28rem);line-height:1.2}
+.gridhome.bells6 .tcard,
+.gridhome.bellspeek .tcard{min-height:44px}
 @media (min-width:1000px) and (max-width:1099px){
   .gridhome .mwrap > .hbanner{position:sticky;top:0;z-index:24;background:#FFF6E3;padding-top:.15rem;padding-bottom:.2rem}
   .gridhome .homelay{display:grid!important;grid-template-columns:18.5rem minmax(0,1fr)!important;align-items:start;gap:.55rem;margin-top:0}

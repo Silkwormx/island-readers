@@ -327,6 +327,8 @@
     foundations.addEventListener('click', () => { Snd.stop(); location.hash = '#/foundation'; });
     const cards = [foundations];
     for (let n = 1; n <= 22; n++) cards.push(unit(n));
+    const bellFlag = (new URLSearchParams(location.search).get('bells') || '').toLowerCase();
+    const bellMode = bellFlag === '6' ? 'bells6' : bellFlag === 'peek' ? 'bellspeek' : '';
     const grid = h('div', { class: 'bellpath', id: 'skymap' }, h('div', { class: 'bellgrid' }, ...cards));
     const tab = (href, name, icoName) => h('a', { class: 'hometab', href: href, 'aria-label': name },
       h('span', { class: 'hometab-ico', 'aria-hidden': 'true' }, icon(icoName)),
@@ -389,11 +391,46 @@
         h('div', { class: 'zfhead' }, h('h2', { class: 'zfline' }, 'Learn to read with Zip and Frill'), readAloudBtn()),
         h('p', { class: 'zfsub' }, 'Ring every bell by learning its sounds.'),
         continueButton()));
-    app.append(h('div', { class: 'screen home mapscreen gridhome' }, h('div', { class: 'mwrap' }, banner, h('div', { class: 'homelay' }, h('div', { class: 'homeside' }, aboutDrop, hero, tabs), h('div', { class: 'bellslot' }, grid)))));
+    app.append(h('div', { class: 'screen home mapscreen gridhome' + (bellMode ? ' ' + bellMode : '') }, h('div', { class: 'mwrap' }, banner, h('div', { class: 'homelay' }, h('div', { class: 'homeside' }, aboutDrop, hero, tabs), h('div', { class: 'bellslot' }, grid)))));
+    let fitBells = function () {};
+    if (bellMode) {
+      fitBells = () => {
+        const root = app.querySelector('.gridhome.' + bellMode);
+        const bells = root && root.querySelector('.bellgrid');
+        if (!root || !bells || !root.isConnected) return;
+        const peek = bellMode === 'bellspeek';
+        const cols = !peek && window.innerWidth < 760 ? 2 : 3;
+        const rows = peek ? 1.5 : 6 / cols;
+        bells.style.gridTemplateColumns = 'repeat(' + cols + ',minmax(0,1fr))';
+        const pics = [...bells.querySelectorAll('.tpic')];
+        pics.forEach((pic) => { pic.style.aspectRatio = 'auto'; });
+        const bodies = [...bells.querySelectorAll('.tcard')].slice(0, 6).map((card) => {
+          const body = card.querySelector('.tbody');
+          return body ? body.offsetHeight : 0;
+        });
+        const bodyH = bodies.length ? Math.max.apply(null, bodies) : 72;
+        const gap = parseFloat(getComputedStyle(bells).rowGap) || 8;
+        const top = bells.getBoundingClientRect().top;
+        let space = window.innerHeight - top - 16;
+        if (space < window.innerHeight * 0.55) space = window.innerHeight - 4;
+        const rowH = (space - gap * (rows - 1)) / rows;
+        const cardW = (bells.querySelector('.tcard') || {}).offsetWidth || 160;
+        const picH = Math.max(64, Math.min(Math.round(cardW), Math.round(rowH - bodyH - 8)));
+        const cardH = Math.floor(rowH);
+        pics.forEach((pic) => { pic.style.height = picH + 'px'; });
+        bells.querySelectorAll('.tcard').forEach((card) => {
+          card.style.height = cardH + 'px';
+          card.style.minHeight = cardH + 'px';
+          card.style.boxSizing = 'border-box';
+          card.style.overflow = 'hidden';
+        });
+      };
+    }
     /* Nov 3 2026: the whole left sidebar (About, Start here, Practice) stays in one spot while the tiles scroll (wide layouts only). */
     const side = app.querySelector('.homeside'); const scr = app.querySelector('.screen.home');
+    let layoutHome = function () {};
     const pin = () => {
-      if (!side || !scr || !side.isConnected) { window.removeEventListener('resize', pin); return; }
+      if (!side || !scr || !side.isConnected) { window.removeEventListener('resize', layoutHome); return; }
       const nav = side.querySelector('.hometabs');
       const tabs = nav ? [...nav.querySelectorAll('.hometab')] : [];
       const relax = () => {
@@ -421,9 +458,10 @@
         tabs.forEach((t) => { t.style.removeProperty('height'); t.style.removeProperty('min-height'); t.style.removeProperty('max-height'); });
       }
     };
-    requestAnimationFrame(pin); window.addEventListener('resize', pin);
+    layoutHome = () => { pin(); if (bellMode) fitBells(); };
+    requestAnimationFrame(layoutHome); window.addEventListener('resize', layoutHome);
     const art = side.querySelector('.homeart');
-    if (art && !art.complete) art.addEventListener('load', pin, { once: true });
+    if (art && !art.complete) art.addEventListener('load', layoutHome, { once: true });
   }
   function gemScreen() {
     IR.newScreen(); const earned = gemsEarned(); const nEarned = earned.filter(Boolean).length; const nx = gemNext();
