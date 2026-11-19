@@ -569,25 +569,30 @@
     plan = plan || {};
     const files = plan.files || [];
     const days = plan.days || [];
-    const pdfLink = plan.pdf
-      ? h('a', { class: 'teachlink', href: plan.pdf, target: '_blank', rel: 'noopener' }, plan.pdfLabel || 'Open the slideshow (PDF)')
-      : null;
-    const slides = days.length
-      ? days.map((day) => h('button', { class: 'teachlink teachled', type: 'button', onclick: () => { Snd.stop(); location.hash = day.href; } }, day.label))
-      : [plan.slides ? h('button', { class: 'teachlink teachled', type: 'button', onclick: () => { Snd.stop(); location.hash = plan.slides; } }, 'Open on smartboard') : (pdfLink || h('p', { class: 'teachsoon' }, 'Coming soon'))];
-    const panel = h('div', { class: 'teachpop', hidden: '' },
-      h('p', { class: 'teachstep' }, h('span', null, '1'), 'Slideshow'),
-      ...slides,
-      h('p', { class: 'teachstep' }, h('span', null, '2'), 'Printables'),
-      files.length ? h('div', null, ...files.map((file) => h('a', { class: 'teachlink', href: file.href, target: '_blank', rel: 'noopener' }, file.title))) : h('p', { class: 'teachsoon' }, 'Coming soon'));
-    const btn = h('button', { class: 'teachbox', type: 'button', 'aria-expanded': 'false' }, 'Teacher Materials');
-    const wrap = h('div', { class: 'teachcorner' }, btn, panel);
+    let deck = plan.slides || '';
+    if (!deck && days.length) {
+      const href = (days.filter((day) => day && day.href)[0] || {}).href || '';
+      deck = String(href).replace(/\/\d+\/?$/, '');
+    }
+    const materials = h('button', { class: 'teachbox', type: 'button' }, 'Teacher Materials');
+    const wrap = h('div', { class: 'teachcorner' }, materials);
+    if (deck) {
+      materials.addEventListener('click', () => { Snd.stop(); location.hash = deck; });
+    } else if (plan.pdf) {
+      materials.addEventListener('click', () => { Snd.stop(); window.open(plan.pdf, '_blank', 'noopener'); });
+    } else {
+      wrap.append(h('p', { class: 'teachsoon' }, 'Coming soon'));
+    }
+    if (!files.length) return wrap;
+    const list = h('div', { class: 'teachpop teachfiles', hidden: '' },
+      ...files.map((file) => h('a', { class: 'teachlink', href: file.href, target: '_blank', rel: 'noopener' }, file.title)));
+    const print = h('button', { class: 'teachbox teachprint', type: 'button', 'aria-expanded': 'false' }, 'Printables');
     function onDoc(e) { if (!wrap.contains(e.target)) setOpen(false); }
     function onKey(e) { if (e.key === 'Escape') setOpen(false); }
     function setOpen(open) {
-      panel.hidden = !open;
-      btn.setAttribute('aria-expanded', open ? 'true' : 'false');
-      btn.classList.toggle('is-open', open);
+      list.hidden = !open;
+      print.setAttribute('aria-expanded', open ? 'true' : 'false');
+      print.classList.toggle('is-open', open);
       document.removeEventListener('click', onDoc);
       document.removeEventListener('keydown', onKey);
       if (open) {
@@ -595,7 +600,8 @@
         document.addEventListener('keydown', onKey);
       }
     }
-    btn.addEventListener('click', (e) => { e.stopPropagation(); setOpen(panel.hidden); });
+    print.addEventListener('click', (e) => { e.stopPropagation(); setOpen(list.hidden); });
+    wrap.append(print, list);
     return wrap;
   }
   IR.teacherBox = teacherBox;
@@ -970,7 +976,7 @@
     /* One card for every lesson. Item types stay in this order, with the same labels. */
     function lessonCard(lesson) {
       const kinds = [
-        { key: 'board', primary: true, label: 'Open on smartboard', note: 'Full-screen slide show in the browser. No download needed.' },
+        { key: 'board', primary: true, label: 'Open slideshow', note: 'Slideshow in the browser. No download needed.' },
         { key: 'slides', download: true, label: 'Download slides (PPTX)', note: 'One PowerPoint for the whole sound.' },
         { key: 'daily', label: 'Daily practice sheets (PDF)', note: lesson.days ? ('Worksheets for each day, labeled Day 1 to Day ' + lesson.days + '.') : 'Worksheets for each day.' },
         { key: 'pack', label: 'Teacher pack (PDF)', note: 'Slides with notes, worksheets and answer key.' }
