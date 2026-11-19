@@ -515,7 +515,7 @@
     const pics = item.imgs && item.imgs.length ? item.imgs : (item.img ? [item.img] : []);
     const stars = item.stars;
     return h('button', {
-      class: 'tapcard ucard open lessontab',
+      class: 'tapcard ucard open lessontab' + (item.tone ? ' ' + item.tone : ''),
       type: 'button',
       'aria-label': (item.kicker || 'Lesson') + '. ' + item.title + '. Opens the lesson.',
       onclick: goItem(item)
@@ -563,8 +563,8 @@
       ? h('a', { class: 'teachlink', href: plan.pdf, target: '_blank', rel: 'noopener' }, plan.pdfLabel || 'Open the slideshow (PDF)')
       : null;
     const slides = days.length
-      ? days.map((day) => h('button', { class: 'teachlink', type: 'button', onclick: () => { Snd.stop(); location.hash = day.href; } }, day.label))
-      : [plan.slides ? h('button', { class: 'teachlink', type: 'button', onclick: () => { Snd.stop(); location.hash = plan.slides; } }, 'Open the slideshow') : (pdfLink || h('p', { class: 'teachsoon' }, 'Coming soon'))];
+      ? days.map((day) => h('button', { class: 'teachlink teachled', type: 'button', onclick: () => { Snd.stop(); location.hash = day.href; } }, day.label))
+      : [plan.slides ? h('button', { class: 'teachlink teachled', type: 'button', onclick: () => { Snd.stop(); location.hash = plan.slides; } }, 'Open the slideshow') : (pdfLink || h('p', { class: 'teachsoon' }, 'Coming soon'))];
     const panel = h('div', { class: 'teachpop', hidden: '' },
       h('p', { class: 'teachstep' }, h('span', null, '1'), 'Slideshow'),
       ...slides,

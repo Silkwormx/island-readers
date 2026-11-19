@@ -2345,20 +2345,20 @@
       ? [
         {
           pick: true,
-          kicker: 'With Frill',
+          tone: 'student',
+          kicker: 'Student',
           title: 'Independent Lesson',
-          imgs: group.letters.map(letterArt),
-          alt: 'a, m, s, and t',
+          img: 'foundation/img/letters/team1_together.png',
+          alt: 'apple, mangrove, snake, and turtle',
           note: 'a · m · s · t',
           goLabel: 'Open lesson',
           go: () => { Snd.stop(); location.hash = base + '/flow/' + group.letters[0] + '/hear'; }
         },
         {
           pick: true,
-          kicker: 'Slideshow',
+          tone: 'teachled',
+          kicker: 'Teacher',
           title: 'Teacher Led',
-          imgs: ['img/frill.webp', 'foundation/img/games/icons/teachboard.svg'],
-          alt: 'Team 1 slideshow',
           note: '5-day slideshow',
           goLabel: 'Open slideshow',
           go: () => openSlides(group.id)
