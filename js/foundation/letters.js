@@ -2828,14 +2828,13 @@
 
   const SLIDES = {
     g1: {
-      file: 'foundation/slides/Learn_the_Letters_Team1.pdf',
+      images: 'materials/team1/slides/',
       days: [
-        { label: 'Day 1', page: 3 },
-        { label: 'Day 2', page: 21 },
-        { label: 'Day 3', page: 44 },
-        { label: 'Day 4', page: 79 },
-        { label: 'Day 5', page: 110 },
-        { label: 'Team check', page: 110 }
+        { label: 'Day 1', page: 1 },
+        { label: 'Day 2', page: 34 },
+        { label: 'Day 3', page: 91 },
+        { label: 'Day 4', page: 125 },
+        { label: 'Day 5', page: 157 }
       ]
     },
     g2: {
@@ -2932,8 +2931,9 @@
     });
   }
   function slidesScreen(app, team, page) {
-    IR.newScreen();
     const deck = SLIDES[team];
+    if (deck && deck.images) { imageSlides(app, team, page, deck); return; }
+    IR.newScreen();
     const start = Math.max(1, parseInt(page, 10) || 1);
     const named = team === 'g1' ? 'Team 1: m s a t' : ('Team ' + team.slice(1) + ' slideshow');
     const counter = h('p', { class: 'fs-slidecount', 'aria-live': 'polite' }, 'Opening…');
@@ -3013,6 +3013,77 @@
       wanted = Math.min(start, doc.numPages);
       paint();
     }).catch(() => { counter.textContent = 'Could not open the slideshow'; });
+    if (IR.teach) IR.teach.sync();
+  }
+  function imageSlides(app, team, page, deck) {
+    IR.newScreen();
+    const start = Math.max(1, parseInt(page, 10) || 1);
+    const named = team === 'g1' ? 'Team 1: m s a t' : ('Team ' + team.slice(1) + ' slideshow');
+    const counter = h('p', { class: 'fs-slidecount', 'aria-live': 'polite' }, 'Opening…');
+    const dayEl = h('p', { class: 'fs-slideday' }, '');
+    const img = h('img', { class: 'fs-slideimg', alt: '' });
+    const prev = h('button', { class: 'btn big', type: 'button' }, 'Back');
+    const next = h('button', { class: 'btn big next', type: 'button' }, 'Next');
+    const jumps = h('div', { class: 'fs-dayjumps' });
+    const view = h('div', { class: 'screen fs-slideview' },
+      h('header', { class: 'uA-top' },
+        IR.ui.pageNav('#/foundation/letters/' + team),
+        h('div', { class: 'fs-slidehead' }, h('h1', { class: 'uA-title' }, named), dayEl, counter)),
+      jumps,
+      h('div', { class: 'fs-slidestage' }, img),
+      h('div', { class: 'lesson-nav fs-slidenav' }, prev, next));
+    app.append(view);
+    let total = deck.days.length ? deck.days[deck.days.length - 1].page : 1;
+    let days = deck.days.map((day, i) => ({ day: i + 1, start: day.page, end: day.page, label: day.label }));
+    let pageNum = start;
+    function dayFor(n) {
+      return days.filter((day) => n >= day.start && n <= day.end)[0] || days[0];
+    }
+    function show(n) {
+      pageNum = Math.max(1, Math.min(total, n));
+      const file = 'slide-' + String(pageNum).padStart(3, '0') + '.jpg';
+      img.src = deck.images + file;
+      img.alt = 'Slide ' + pageNum;
+      const day = dayFor(pageNum);
+      counter.textContent = pageNum + ' / ' + total;
+      dayEl.textContent = day ? day.label : '';
+      prev.disabled = pageNum <= 1;
+      next.disabled = pageNum >= total;
+      jumps.querySelectorAll('button').forEach((button) => {
+        button.classList.toggle('on', day && button.dataset.day === String(day.day));
+      });
+    }
+    function paintDays() {
+      jumps.innerHTML = '';
+      days.forEach((day) => {
+        jumps.append(h('button', {
+          class: 'btn fs-dayjump',
+          type: 'button',
+          'data-day': String(day.day),
+          onclick: () => show(day.start)
+        }, day.label));
+      });
+    }
+    prev.addEventListener('click', () => show(pageNum - 1));
+    next.addEventListener('click', () => show(pageNum + 1));
+    const onKey = (e) => {
+      if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); show(pageNum - 1); }
+      else if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') { e.preventDefault(); show(pageNum + 1); }
+    };
+    window.addEventListener('keydown', onKey);
+    const old = IR._slideCleanup;
+    if (typeof old === 'function') old();
+    IR._slideCleanup = () => window.removeEventListener('keydown', onKey);
+    fetch(deck.images + 'manifest.json').then((res) => res.json()).then((data) => {
+      if (data && data.count) total = data.count;
+      if (data && data.days && data.days.length) {
+        days = data.days.map((day) => ({ day: day.day, start: day.start, end: day.end, label: 'Day ' + day.day }));
+        paintDays();
+      }
+      show(Math.min(start, total));
+    }).catch(() => { paintDays(); show(Math.min(start, total)); });
+    paintDays();
+    show(start);
     if (IR.teach) IR.teach.sync();
   }
   IR.letters = { GROUPS: GROUPS, LETTERS: LETTERS, artNeeded: ART_NEEDED, who: WHO };

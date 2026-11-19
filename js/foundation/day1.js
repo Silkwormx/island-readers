@@ -644,9 +644,13 @@
   function countList() {
     const all = countItems((window.IRPhonemes && IRPhonemes.countWords) || []);
     const letter = PACK && PACK.countLetter;
-    if (!letter) return all;
-    const list = all.filter((item) => item.sounds[0] === letter || item.w.toLowerCase().charAt(0) === letter);
-    return list.length ? list : all;
+    if (letter) {
+      const list = all.filter((item) => item.sounds[0] === letter || item.w.toLowerCase().charAt(0) === letter);
+      return list.length ? list : all;
+    }
+    const rounds = [];
+    while (all.length && rounds.length < 12) rounds.push(all[rounds.length % all.length]);
+    return rounds;
   }
   function countSay(text, phoneme) {
     const key = phoneme ? (PHONEME_KEY[text] || '') : bareSound(text);
