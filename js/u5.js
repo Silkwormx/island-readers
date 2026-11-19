@@ -464,7 +464,19 @@
       Snd.play(AU.p('heart'));
     }
     function wordsInto(el, pg) { el.innerHTML = ''; pg.words.forEach((w, k) => el.append(h('span', { class: 'w', 'data-k': k }, w), ' ')); }
-    function hl(pg, ws) { return (t) => pg.t.forEach((tt, k) => { const e = ws[k]; if (!e) return; e.classList.toggle('hl', t >= tt[0] - 0.04 && t < (pg.t[k + 1] ? pg.t[k + 1][0] - 0.04 : 99)); e.classList.toggle('read', t >= tt[1]); }); }
+    /* Lead the clock a little so the color lands on the word as it is spoken, not after. */
+    function hl(pg, ws) {
+      const lead = 0.07;
+      return (t) => {
+        const now = t + lead;
+        pg.t.forEach((tt, k) => {
+          const e = ws[k];
+          if (!e) return;
+          e.classList.toggle('hl', now >= tt[0] && now < tt[1]);
+          e.classList.toggle('read', now >= tt[1]);
+        });
+      };
+    }
     /* 7. Story Time: same behaviour as ng Story Time (auto-read each page, Read again / Next page / Previous page, Finish, tap-to-hear fallback) */
     function runListen(ctx) { ctx.showNav(false); if (!ctx._heartDone) { ctx._heartDone = true; ctx.setNext(() => { Snd.stop(); runListen(ctx); return true; }); runHeart(ctx, () => runListen(ctx)); return; } ctx.stage.innerHTML = ''; ctx.setInstr('Listen to the story and follow along.', 'listen'); const st = ctx.stage;
       const pages = N.story; let p = 0, token = 0, mode = 'reading', finished = false; const heard = new Set();
