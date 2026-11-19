@@ -2214,21 +2214,26 @@
       h('span', { class: 'llshell big on', html: shellSvg(true) }),
       src ? h('img', { class: 'llkidart', src: src, alt: '' }) : null);
   }
-  function kidLesson(app, group, id, stepId) {
+  function kidLesson(app, group, id, stepId, flow) {
     IR.newScreen();
     const L = BY[id];
     const step = KID_STEPS.filter((item) => item.id === stepId)[0] || KID_STEPS[0];
     const index = KID_STEPS.indexOf(step);
     const base = '#/foundation/letters/' + group.id;
+    const letters = group.letters;
+    const letterAt = letters.indexOf(id);
+    const nextId = flow && letterAt >= 0 ? letters[letterAt + 1] : '';
     const stage = h('main', { class: 'llkidstage' });
     const last = index >= KID_STEPS.length - 1;
-    const next = h('button', { class: 'btn big llkidnext', type: 'button', disabled: true, 'aria-label': last ? 'Done' : 'Next' }, last ? 'Done' : 'Next');
+    const endLabel = last ? (nextId ? 'Next letter' : 'Done') : 'Next';
+    const next = h('button', { class: 'btn big llkidnext', type: 'button', disabled: true, 'aria-label': endLabel }, endLabel);
     function ready() { next.disabled = false; next.classList.add('ready'); }
     function go() {
       Snd.stop();
       try { speechSynthesis.cancel(); } catch (e) { /* quiet */ }
+      if (last && nextId) { location.hash = base + '/flow/' + nextId + '/hear'; return; }
       if (last) { location.hash = base; return; }
-      location.hash = base + '/lesson/' + id + '/' + KID_STEPS[index + 1].id;
+      location.hash = base + (flow ? '/flow/' : '/lesson/') + id + '/' + KID_STEPS[index + 1].id;
     }
     next.addEventListener('click', go);
     if (step.id === 'hear') paintHear(stage, L, ready);
@@ -2243,7 +2248,9 @@
       h('header', { class: 'uA-top llbar' },
         IR.ui.pageNav(base),
         h('h1', { class: 'uA-title' }, step.label),
-        h('p', { class: 'llkidprog' }, 'Step ' + (index + 1) + ' of ' + KID_STEPS.length)),
+        h('p', { class: 'llkidprog' }, flow
+          ? 'Letter ' + (letterAt + 1) + ' of ' + letters.length + ' · Step ' + (index + 1) + ' of ' + KID_STEPS.length
+          : 'Step ' + (index + 1) + ' of ' + KID_STEPS.length)),
       h('div', { class: 'llkidbar', role: 'progressbar', 'aria-valuemin': 1, 'aria-valuemax': KID_STEPS.length, 'aria-valuenow': index + 1 },
         h('i', { style: 'width:' + Math.round((index + 1) / KID_STEPS.length * 100) + '%' })),
       narrate(step.who || 'Frill', step.say),
@@ -2334,16 +2341,39 @@
   function groupPage(app, group) {
     const base = '#/foundation/letters/' + group.id;
     const nextId = group.letters.filter((id) => !letterDone(group, id))[0];
-    const lessons = group.letters.map((id) => ({
-      pick: true,
-      kicker: 'Lesson',
-      title: id + ' · ' + shortName(id),
-      img: letterArt(id),
-      alt: shortName(id),
-      note: letterDone(group, id) ? 'Done' : (id === nextId ? 'Up next' : ''),
-      goLabel: 'Open lesson',
-      go: () => { Snd.stop(); location.hash = base + '/lesson/' + id; }
-    }));
+    const lessons = group.id === 'g1'
+      ? [
+        {
+          pick: true,
+          kicker: 'With Frill',
+          title: 'Independent Lesson',
+          imgs: group.letters.map(letterArt),
+          alt: 'a, m, s, and t',
+          note: 'a · m · s · t',
+          goLabel: 'Open lesson',
+          go: () => { Snd.stop(); location.hash = base + '/flow/' + group.letters[0] + '/hear'; }
+        },
+        {
+          pick: true,
+          kicker: 'Slideshow',
+          title: 'Teacher Led',
+          imgs: ['img/frill.webp', 'foundation/img/games/icons/teachboard.svg'],
+          alt: 'Team 1 slideshow',
+          note: '5-day slideshow',
+          goLabel: 'Open slideshow',
+          go: () => openSlides(group.id)
+        }
+      ]
+      : group.letters.map((id) => ({
+        pick: true,
+        kicker: 'Lesson',
+        title: id + ' · ' + shortName(id),
+        img: letterArt(id),
+        alt: shortName(id),
+        note: letterDone(group, id) ? 'Done' : (id === nextId ? 'Up next' : ''),
+        goLabel: 'Open lesson',
+        go: () => { Snd.stop(); location.hash = base + '/lesson/' + id; }
+      }));
     const phrase = storyLine(group);
     menuScreen(app, group, '#/foundation', 'Team ' + group.n, 'Foundation Skills', {
       lesson: lessons,
@@ -2868,6 +2898,14 @@
       if (!g || !row) return false;
       if (!groupOpen(g) && !(IR.teach && IR.teach.on && IR.teach.on())) { foundationPage(app); return true; }
       lessonScreen(app, g, row, lesson[3] || '');
+      return true;
+    }
+    const flow = /^#\/foundation\/letters\/(g[1-7])\/flow\/([a-z])(?:\/([a-z]+))?\/?$/.exec(hash);
+    if (flow) {
+      const g = groupById(flow[1]);
+      if (!g || g.letters.indexOf(flow[2]) < 0) return false;
+      if (!groupOpen(g) && !(IR.teach && IR.teach.on && IR.teach.on())) { foundationPage(app); return true; }
+      kidLesson(app, g, flow[2], flow[3] || 'hear', true);
       return true;
     }
     const kid = /^#\/foundation\/letters\/(g[1-7])\/lesson\/([a-z])(?:\/([a-z]+))?\/?$/.exec(hash);
