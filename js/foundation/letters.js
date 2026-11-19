@@ -781,20 +781,24 @@
   function teamGames(group, letter) {
     const older = gamesFor(group).map((game) => ({
       id: game.id,
+      key: 'll-' + game.id,
       title: game.title,
       img: (group.id === 'g1' && TEAM1_MORE_ICON[game.id]) || GAME_ART[game.id] || '',
       alt: game.title,
       done: IR.isDone(doneId(group, game.id)),
+      doneIcon: 'star',
       href: '#/foundation/letters/' + group.id + '/' + game.id
     }));
     if (group.id !== 'g1' || !IR.day1Flow) return older;
     const ten = IR.day1Flow.GAMES.map((game) => ({
       id: game.id,
+      key: 'd1-' + game.id,
       title: game.title,
       img: TEAM1_DAY_ICON[game.id] || (game.faces ? '' : game.icon),
       imgs: null,
       alt: game.title,
       done: IR.isDone('ll_g1_d1_' + game.id),
+      doneIcon: 'star',
       go: () => {
         Snd.stop();
         location.hash = game.id === 'count'
@@ -803,6 +807,18 @@
       }
     }));
     return ten.concat(older);
+  }
+  function team1GameRows(games) {
+    const by = {};
+    games.forEach((game) => { by[game.key] = game; });
+    function row(label, keys) {
+      return { label: label, items: keys.map((key) => by[key]).filter(Boolean) };
+    }
+    return [
+      row('Sounds', ['d1-pop', 'd1-catch', 'll-sound', 'd1-count', 'd1-sound']),
+      row('Letters', ['d1-hunt', 'll-find', 'll-match', 'd1-feed', 'll-feed']),
+      row('Words', ['d1-build', 'd1-ears', 'd1-match', 'd1-flash', 'd1-sort'])
+    ];
   }
   function introScreen(app, group) {
     IR.newScreen();
@@ -2375,9 +2391,11 @@
         go: () => { Snd.stop(); location.hash = base + '/lesson/' + id; }
       }));
     const phrase = storyLine(group);
+    const games = teamGames(group);
     menuScreen(app, group, '#/foundation', 'Team ' + group.n, 'Foundation Skills', {
       lesson: lessons,
-      games: teamGames(group),
+      games: group.id === 'g1' ? null : games,
+      gameRows: group.id === 'g1' ? team1GameRows(games) : null,
       story: {
         title: 'Read It',
         note: phrase,

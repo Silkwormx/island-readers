@@ -538,7 +538,7 @@
         ? h('span', { class: 'gamepair' }, ...item.imgs.map((src) => h('img', { class: num ? 'gamepic' : 'storypic', src: src, alt: '' })))
         : (item.img ? h('img', { class: num ? 'gamepic' : 'storypic', src: item.img, alt: item.alt || '' }) : null),
       h('span', { class: 'gametxt' }, h('b', null, item.title), item.note ? h('span', { class: 'gamenote' }, item.note) : null, item.min ? h('span', { class: 'gamemin' }, item.min + ' min') : null),
-      item.done ? h('span', { class: 'gamedone', 'aria-hidden': 'true' }, icon('check')) : null
+      item.done ? h('span', { class: 'gamedone', 'aria-hidden': 'true' }, icon(item.doneIcon || 'check')) : null
     ];
     const cls = (item.big ? 'storycard' : (num ? 'gamecard' : 'stepcard')) + (item.done ? ' done' : '');
     if (item.href && item.href.charAt(0) !== '#') return h('a', { class: cls, href: item.href, target: '_blank', rel: 'noopener' }, ...body);
@@ -546,6 +546,16 @@
   }
   function stepHead(n, label) {
     return h('div', { class: 'stephead' }, h('span', { class: 'stepnum' }, String(n)), h('span', { class: 'steplab' }, label));
+  }
+  function gameRowsBlock(n, label, rows) {
+    let n0 = 0;
+    return h('section', { class: 'stepblock gamerowsblock' },
+      stepHead(n, label),
+      h('div', { class: 'gamerows' }, ...rows.map((row) => {
+        const cards = h('ol', { class: 'gamegrid' }, ...row.items.map((item, i) => h('li', null, itemCard(item, n0 + i + 1))));
+        n0 += row.items.length;
+        return h('div', { class: 'gamerow' }, h('p', { class: 'gamerowlab' }, row.label), cards);
+      })));
   }
   function stepSection(n, label, items, numbered, extra) {
     const cards = !items || !items.length
@@ -598,7 +608,7 @@
       plan.before || null,
       h('div', { class: 'stepflow' },
         plan.choose ? null : stepSection(1, labels[0], plan.lesson || []),
-        plan.choose ? null : stepSection(2, labels[1], plan.games || [], true, plan.gameClass || ''),
+        plan.choose ? null : (plan.gameRows ? gameRowsBlock(2, labels[1], plan.gameRows) : stepSection(2, labels[1], plan.games || [], true, plan.gameClass || '')),
         plan.choose || !storyItems ? null : stepSection(3, labels[2], storyItems),
         ...(plan.choose || []).map((item, i) => stepSection(i + 1, item.title, [item]))));
   }
