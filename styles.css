@@ -3012,12 +3012,12 @@ button,
 .llstep.u5step .stage{flex:1 1 auto;min-height:0;overflow:hidden}
 .fsteam1 .lessonrow{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));width:100%;align-items:stretch;justify-content:stretch;gap:.55rem}
 .fsteam1 .lessonrow .lessontab{max-width:none;width:100%;height:9.1rem;max-height:9.1rem}
-.fsteam1 .lessontab.student .uimg{height:48%;min-height:0;background:transparent}
+.fsteam1 .lessontab.student .uimg{height:36%;min-height:0;background:transparent}
 .fsteam1 .lessontab.student .uimg img{max-width:94%;width:auto;height:100%;object-fit:contain;object-position:center bottom}
-.fsteam1 .lessontab h2{font-size:clamp(1.15rem,2.2vh,1.55rem)}
-.fsteam1 .lessontab .ubody{padding:0 .4rem .3rem}
-.fsteam1 .lessontab .uk,.fsteam1 .lessontab .umin{font-size:.72rem}
-.fsteam1 .lessontab .obtn{min-height:1.6rem;font-size:.9rem;padding:0 .7rem;margin-bottom:.15rem}
+.fsteam1 .lessontab h2{font-size:clamp(1.05rem,2vh,1.4rem)}
+.fsteam1 .lessontab .ubody{padding:0 .4rem .55rem}
+.fsteam1 .lessontab .uk,.fsteam1 .lessontab .umin{font-size:.7rem}
+.fsteam1 .lessontab .obtn{min-height:1.55rem;font-size:.88rem;padding:0 .7rem;margin-bottom:.2rem}
 .fsteam1 .lessontab.teachled{background:#F28C00;border-color:#C95A10;color:#fff;box-shadow:0 6px 0 #B5510D}
 .fsteam1 .lessontab.teachled .uimg{display:none}
 .fsteam1 .lessontab.teachled .uk,.fsteam1 .lessontab.teachled h2,.fsteam1 .lessontab.teachled .umin{color:#fff}

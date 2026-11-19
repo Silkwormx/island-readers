@@ -80,7 +80,7 @@ test('home shows Zip and Frill again and keeps the left-column layout', () => {
   assert.equal(home.includes('banner, hero,'), false);
   const sw = fs.readFileSync(new URL('../sw.js', import.meta.url), 'utf8');
   assert.equal(sw.includes('home_banyan_c.jpg'), false);
-  assert.ok(sw.includes('ir-20261121p'));
+  assert.ok(sw.includes('ir-20261122a'));
   assert.ok(sw.includes('home_zip_frill.webp'));
 });
 
@@ -94,12 +94,14 @@ test('Unit 5 teacher-led checks are linked from Teacher materials', () => {
   for (const file of [
     'materials/unit5/Lesson5.1_Teacher_Led_Checks.pdf',
     'materials/unit5/Lesson5.2_Teacher_Led_Checks.pdf',
-    'materials/unit5/Unit5_Teacher_Led_Checks_Combined.pdf',
     'materials/unit5/Unit5_Teacher_Led_Student_Sheets.pdf'
   ]) {
     assert.ok(teachers.includes(file), file);
     assert.ok(fs.existsSync(new URL('../' + file, import.meta.url)), file);
   }
+  const u5 = fs.readFileSync(new URL('../js/u5.js', import.meta.url), 'utf8');
+  assert.ok(u5.includes('materials/unit5/Unit5_Teacher_Led_Checks_Combined.pdf'));
+  assert.ok(fs.existsSync(new URL('../materials/unit5/Unit5_Teacher_Led_Checks_Combined.pdf', import.meta.url)));
 });
 
 test('approved image file is the installed jpeg', () => {
