@@ -2913,20 +2913,85 @@
   function slidesScreen(app, team, page) {
     IR.newScreen();
     const deck = SLIDES[team];
-    const day = deck.days.filter((item) => String(item.page) === String(page))[0];
-    const title = day ? ('Team ' + team.slice(1) + ', ' + day.label) : ('Team ' + team.slice(1) + ' slideshow');
-    const view = h('div', { class: 'screen fs-slideview' });
-    const goFull = () => {
-      const el = document.querySelector('.fs-slideview');
-      if (el && el.requestFullscreen) el.requestFullscreen();
-    };
-    view.append(
+    const start = Math.max(1, parseInt(page, 10) || 1);
+    const named = team === 'g1' ? 'Team 1: m s a t' : ('Team ' + team.slice(1) + ' slideshow');
+    const counter = h('p', { class: 'fs-slidecount', 'aria-live': 'polite' }, 'Opening…');
+    const canvas = h('canvas', { class: 'fs-slidecanvas' });
+    const prev = h('button', { class: 'btn big', type: 'button' }, 'Back');
+    const next = h('button', { class: 'btn big next', type: 'button' }, 'Next');
+    const stage = h('div', { class: 'fs-slidestage' }, canvas);
+    const view = h('div', { class: 'screen fs-slideview' },
       h('header', { class: 'uA-top' },
         IR.ui.pageNav('#/foundation/letters/' + team),
-        h('h1', { class: 'uA-title' }, title),
-        h('button', { class: 'btn big primary fs-slidebtn', type: 'button', onclick: goFull }, 'Full screen')),
-      h('iframe', { class: 'fs-pdf', src: deck.file + (page ? '#page=' + page : ''), title: title }));
+        h('h1', { class: 'uA-title' }, named),
+        counter),
+      stage,
+      h('div', { class: 'lesson-nav fs-slidenav' }, prev, next));
     app.append(view);
+    let pdfDoc = null;
+    let pageNum = start;
+    let wanted = start;
+    let rendering = false;
+    function paint() {
+      if (!pdfDoc || rendering) return;
+      rendering = true;
+      const num = Math.max(1, Math.min(pdfDoc.numPages, wanted));
+      pdfDoc.getPage(num).then((pg) => {
+        const maxW = Math.max(240, stage.clientWidth - 12);
+        const maxH = Math.max(180, stage.clientHeight - 12);
+        const base = pg.getViewport({ scale: 1 });
+        const scale = Math.min(maxW / base.width, maxH / base.height);
+        const vp = pg.getViewport({ scale: scale });
+        const ctx = canvas.getContext('2d');
+        canvas.width = Math.floor(vp.width);
+        canvas.height = Math.floor(vp.height);
+        return pg.render({ canvasContext: ctx, viewport: vp }).promise.then(() => num);
+      }).then((num) => {
+        pageNum = num;
+        counter.textContent = pageNum + ' / ' + pdfDoc.numPages;
+        prev.disabled = pageNum <= 1;
+        next.disabled = pageNum >= pdfDoc.numPages;
+        rendering = false;
+        if (wanted !== pageNum) paint();
+      }).catch(() => {
+        counter.textContent = 'Could not open this slide';
+        rendering = false;
+      });
+    }
+    function go(delta) {
+      if (!pdfDoc) return;
+      wanted = Math.max(1, Math.min(pdfDoc.numPages, pageNum + delta));
+      paint();
+    }
+    prev.addEventListener('click', () => go(-1));
+    next.addEventListener('click', () => go(1));
+    const onKey = (e) => {
+      if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); go(-1); }
+      else if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') { e.preventDefault(); go(1); }
+    };
+    window.addEventListener('keydown', onKey);
+    const old = IR._slideCleanup;
+    if (typeof old === 'function') old();
+    IR._slideCleanup = () => window.removeEventListener('keydown', onKey);
+    window.addEventListener('resize', () => { if (pdfDoc) { wanted = pageNum; paint(); } });
+    function loadLib() {
+      if (window.pdfjsLib) return Promise.resolve(window.pdfjsLib);
+      return new Promise((resolve, reject) => {
+        const tag = document.createElement('script');
+        tag.src = 'js/vendor/pdf.min.js';
+        tag.onload = () => resolve(window.pdfjsLib);
+        tag.onerror = reject;
+        document.head.append(tag);
+      });
+    }
+    loadLib().then((lib) => {
+      lib.GlobalWorkerOptions.workerSrc = 'js/vendor/pdf.worker.min.js';
+      return lib.getDocument(deck.file).promise;
+    }).then((doc) => {
+      pdfDoc = doc;
+      wanted = Math.min(start, doc.numPages);
+      paint();
+    }).catch(() => { counter.textContent = 'Could not open the slideshow'; });
     if (IR.teach) IR.teach.sync();
   }
   IR.letters = { GROUPS: GROUPS, LETTERS: LETTERS, artNeeded: ART_NEEDED, who: WHO };
