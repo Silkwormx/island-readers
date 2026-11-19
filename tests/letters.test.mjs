@@ -92,8 +92,8 @@ test('reading words stay inside the letters taught so far', () => {
     const shape = body.startsWith('qu') ? /^qu[aeiou][a-z]$/ : /^[aeiou][a-z]$|^[a-z][aeiou][a-z]$/;
     assert.match(body, shape, word);
   });
-  assert.match(letters, /Sea snake in the sand/);
-  assert.match(letters, /Slide your hand like the snake/);
+  assert.match(letters, /Snakes sell sandy socks/);
+  assert.match(letters, /Slide your hand like a snake/);
   assert.match(letters, /llcast/);
   assert.match(letters, /hold hands/);
   assert.equal(/\bfree\b/i.test(letters), false);
@@ -128,7 +128,7 @@ test('home opens Foundation Skills from the first bell, not a sidebar tab', () =
   assert.match(html, /js\/foundation\/letters\.js/);
   assert.match(html, /foundation\/foundation\.css/);
   assert.match(sw, /js\/foundation\/letters\.js/);
-  assert.match(sw, /ir-20261121n/);
+  assert.match(sw, /ir-20261121o/);
   assert.match(sw, /foundation\/img\/foundations_sidebar\.jpg/);
   assert.match(teach, /#\/foundation/);
   assert.match(letters, /Teacher Slideshows/);

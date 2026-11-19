@@ -46,7 +46,8 @@
     { id: 'flash', title: 'Quick Flash', icon: 'foundation/img/games/flash.jpg' },
     { id: 'match', title: 'Read and Match', icon: 'foundation/img/games/match.jpg' },
     { id: 'sound', title: 'Sound Match', icon: 'foundation/img/games/sound.jpg' },
-    { id: 'sort', title: 'Sort the Sound', icon: 'foundation/img/games/sort.jpg' }
+    { id: 'sort', title: 'Sort the Sound', icon: 'foundation/img/games/sort.jpg' },
+    { id: 'count', title: 'Count the Sounds', icon: 'foundation/img/games/sound.jpg' }
   ];
 
   function say(text) {
@@ -75,9 +76,10 @@
   }
   function go(id) { clearWait(); Snd.stop(); location.hash = '#/foundation/sample/' + id; }
 
-  function shell(title, back) {
+  function shell(title, back, gameId) {
     const scr = IR.newScreen();
     const lesson = PACK && PACK.lesson;
+    const isGame = GAMES.some((item) => item.id === gameId);
     const fill = h('i');
     const bar = h('div', { class: 'pbar ll1bar', role: 'progressbar', 'aria-valuemin': 0, 'aria-valuemax': 100, 'aria-valuenow': 0 }, fill);
     const instr = h('div', { class: 'instr' });
@@ -86,25 +88,24 @@
       ? IR.ui.pageNav(() => { clearWait(); location.hash = back; })
       : h('button', { class: 'xbtn', type: 'button', 'aria-label': 'Back', onclick: () => { clearWait(); Snd.stop(); location.hash = back; } }, icon('close'));
     const roundEl = h('p', { class: lesson ? 'llkidprog' : 'qcount llround', 'aria-live': 'polite' }, '');
-    const header = lesson
+    const header = !isGame && lesson
       ? h('header', { class: 'uA-top llbar' }, topNav, h('h1', { class: 'uA-title' }, title), roundEl)
-      : h('header', { class: 'lesson-top ll1top' },
-        topNav,
-        h('h1', null, title),
-        h('span', { class: 'll1faces' },
-          h('img', { class: 'll1face', src: ZIP, alt: 'Zip' }),
-          h('img', { class: 'll1face', src: FRILL, alt: 'Frill' })));
-    const screen = h('div', { class: lesson ? 'screen fs-team ll-day1 ll-lessonplay' : 'screen lessonscreen u5step ll-day1' },
+      : h('header', { class: 'lesson-top ll1top' }, topNav, bar);
+    let nextH = null;
+    const nextBtn = h('button', { class: 'btn big next', type: 'button', 'aria-label': 'Next' }, 'Next', icon('next'));
+    const nav = h('div', { class: 'lesson-nav' }, nextBtn);
+    const screen = h('div', { class: (isGame ? 'screen lessonscreen u5step ll-day1' : (lesson ? 'screen fs-team ll-day1 ll-lessonplay' : 'screen lessonscreen u5step ll-day1')) },
       header,
-      lesson ? null : roundEl,
+      isGame ? null : roundEl,
       instr, stage,
-      h('div', { class: 'll1foot' }, bar));
+      isGame ? nav : h('div', { class: 'll1foot' }, bar));
     const ctx = {
       scr: scr,
       stage: stage,
       mistakes: 0,
       roundTo(x, n) {
         if (roundEl) roundEl.textContent = 'Round ' + x + ' of ' + n;
+        if (ctx.count) ctx.count(x, n);
         ctx.progress((x - 1) / Math.max(1, n));
       },
       miss() { ctx.mistakes += 1; },
@@ -116,19 +117,16 @@
       setInstr(text) {
         instr.innerHTML = '';
         if (!text) return;
-        if (PACK && PACK.lesson) {
-          instr.append(h('button', {
-            class: 'llnarr',
-            type: 'button',
-            'aria-label': 'Frill says: ' + text,
-            onclick: () => say(text)
-          }, h('img', { src: FRILL, alt: 'Frill' }), h('span', null, text)));
-          say(text);
-          return;
-        }
-        instr.append(speakerBtn(() => say(text), 'Hear the directions'), h('span', { class: 'itext' }, text));
+        instr.append(h('button', {
+          class: 'llnarr',
+          type: 'button',
+          'aria-label': 'Frill says: ' + text,
+          onclick: () => say(text)
+        }, h('img', { src: FRILL, alt: 'Frill' }), h('span', null, text)));
         say(text);
       },
+      setNext(fn) { nextH = fn; },
+      goNext() { clearWait(); Snd.stop(); if (nextH && nextH()) return; },
       badge(label, again) {
         ctx.progress(1);
         if (PACK.onDone) PACK.onDone(again);
@@ -139,18 +137,23 @@
           return;
         }
         const team = /^#\/foundation\/letters\/g(\d+)/.exec(back || '');
+        const at = GAMES.findIndex((item) => item.id === again);
+        const nxt = at >= 0 ? GAMES[at + 1] : null;
         const done = IR.engage.endScreen({
           title: label,
           stars: ctx.mistakes ? 2 : 3,
-          backLabel: 'Play again',
-          nextLabel: (PACK && PACK.nextLabel) || (team ? 'Back to Team ' + team[1] : 'More games'),
-          onBack: () => {
-            const app = document.querySelector('#app');
-            app.innerHTML = '';
-            if (team && IR.day1Play) IR.day1Play(app, again, PACK, back);
-            else open('#/foundation/sample/' + again, app);
-          },
+          backLabel: 'Back to lesson menu',
+          nextLabel: nxt ? 'Next activity' : ((PACK && PACK.nextLabel) || (team ? 'Back to Team ' + team[1] : 'More games')),
+          onBack: () => { location.hash = back; },
+          onHome: () => { location.hash = '#/home'; },
           onNext: () => {
+            if (nxt) {
+              const app = document.querySelector('#app');
+              app.innerHTML = '';
+              if (team && IR.day1Play) IR.day1Play(app, nxt.id, PACK, back);
+              else open('#/foundation/sample/' + nxt.id, app);
+              return;
+            }
             if (PACK && PACK.after) { location.hash = PACK.after; return; }
             if (team) location.hash = back;
             else go('play');
@@ -165,7 +168,19 @@
       }
     };
     document.querySelector('#app').append(screen);
-    if (IR.engage) IR.engage.mount(ctx, screen);
+    if (isGame) {
+      nextBtn.addEventListener('click', () => ctx.goNext());
+      const navApi = IR.simpleNav(nav, nextBtn, () => { clearWait(); Snd.stop(); location.hash = back; });
+      const keep = navApi.label;
+      navApi.label = function (t) {
+        keep(t && String(t).trim() ? t : 'Next');
+        nextBtn.hidden = false;
+      };
+      navApi.label('Next');
+      if (IR.attachGameRules) IR.attachGameRules(ctx, screen, title);
+      if (IR.engage) IR.engage.mount(ctx, screen);
+      if (IR.teach) { IR.teach.mount(ctx, screen); IR.teach.sync(); }
+    } else if (IR.engage) IR.engage.mount(ctx, screen);
     return ctx;
   }
 
@@ -329,6 +344,8 @@
         else if (plan.length < 14) plan.push(item);
       }, i);
     }
+    if (ctx.setNext) ctx.setNext(() => { if (i < plan.length - 1) { i += 1; step(); return true; } return false; });
+    if (ctx.setBack) ctx.setBack(() => { if (i > 0) { i -= 1; step(); return true; } return false; });
     step();
   }
 
@@ -524,6 +541,118 @@
     }, 'sound');
   }
 
+  const COUNT_WORDS = {
+    a: [
+      { w: 'at', n: 2, sounds: ['ah', 't'] },
+      { w: 'am', n: 2, sounds: ['ah', 'mmm'] },
+      { w: 'add', n: 2, sounds: ['ah', 'd'] },
+      { w: 'ant', n: 3, sounds: ['ah', 'nnn', 't'] },
+      { w: 'ask', n: 3, sounds: ['ah', 'sss', 'k'] }
+    ],
+    m: [
+      { w: 'me', n: 2, sounds: ['mmm', 'ee'] },
+      { w: 'map', n: 3, sounds: ['mmm', 'ah', 'p'] },
+      { w: 'mat', n: 3, sounds: ['mmm', 'ah', 't'] },
+      { w: 'mud', n: 3, sounds: ['mmm', 'uh', 'd'] },
+      { w: 'mask', n: 4, sounds: ['mmm', 'ah', 'sss', 'k'] }
+    ],
+    s: [
+      { w: 'so', n: 2, sounds: ['sss', 'oh'] },
+      { w: 'sun', n: 3, sounds: ['sss', 'uh', 'nnn'] },
+      { w: 'sit', n: 3, sounds: ['sss', 'ih', 't'] },
+      { w: 'sock', n: 3, sounds: ['sss', 'ah', 'k'] },
+      { w: 'sand', n: 4, sounds: ['sss', 'ah', 'nnn', 'd'] }
+    ],
+    t: [
+      { w: 'toe', n: 2, sounds: ['t', 'oh'] },
+      { w: 'tap', n: 3, sounds: ['t', 'ah', 'p'] },
+      { w: 'ten', n: 3, sounds: ['t', 'eh', 'nnn'] },
+      { w: 'top', n: 3, sounds: ['t', 'ah', 'p'] },
+      { w: 'tent', n: 4, sounds: ['t', 'eh', 'nnn', 't'] }
+    ]
+  };
+  function countScreens() {
+    const letter = PACK && PACK.countLetter;
+    if (letter && COUNT_WORDS[letter]) return [COUNT_WORDS[letter]];
+    const all = [];
+    for (let i = 0; i < 5; i++) ['a', 'm', 's', 't'].forEach((id) => all.push(COUNT_WORDS[id][i]));
+    const screens = [];
+    for (let i = 0; i < all.length; i += 5) screens.push(all.slice(i, i + 5));
+    return screens;
+  }
+  function countSay(text) {
+    return new Promise((resolve) => {
+      let done = false;
+      const fin = () => { if (done) return; done = true; resolve(); };
+      try {
+        const u = new SpeechSynthesisUtterance(text);
+        u.lang = 'en-US';
+        u.rate = 0.9;
+        u.onend = fin;
+        u.onerror = fin;
+        speechSynthesis.cancel();
+        speechSynthesis.speak(u);
+      } catch (e) { fin(); return; }
+      setTimeout(fin, Math.max(320, String(text).length * 80));
+    });
+  }
+  function countGame(ctx) {
+    const screens = countScreens();
+    let screen = 0;
+    let token = 0;
+    let revealed = new Set();
+    ctx.setInstr("Let's count the sounds together.");
+    function draw() {
+      token += 1;
+      revealed = new Set();
+      try { speechSynthesis.cancel(); } catch (e) { /* quiet */ }
+      ctx.stage.innerHTML = '';
+      if (ctx.roundTo && screens.length > 1) ctx.roundTo(screen + 1, screens.length);
+      ctx.progress(screen / screens.length);
+      const rows = screens[screen].map((item, i) => {
+        const chips = h('span', { class: 'llcountchips' });
+        const num = h('span', { class: 'llcountnum', 'aria-label': 'Number of sounds' });
+        const row = h('button', {
+          class: 'llcountrow',
+          type: 'button',
+          'aria-label': item.w,
+          onclick: () => play(i)
+        }, h('b', { class: 'llcountword' }, item.w), chips, num);
+        return { item: item, chips: chips, num: num, row: row };
+      });
+      ctx.stage.append(h('div', { class: 'llcount' }, h('div', { class: 'llcountlist' }, ...rows.map((row) => row.row))));
+      async function play(i) {
+        const my = ++token;
+        const row = rows[i];
+        row.chips.innerHTML = '';
+        row.num.textContent = '';
+        row.num.classList.remove('on');
+        revealed.delete(i);
+        await countSay(row.item.w);
+        if (my !== token) return;
+        for (let s = 0; s < row.item.sounds.length; s++) {
+          row.chips.append(h('i', { class: 'llcountdot' }));
+          await countSay(row.item.sounds[s]);
+          if (my !== token) return;
+        }
+        row.num.textContent = String(row.item.n);
+        row.num.classList.add('on');
+        revealed.add(i);
+        const done = screen * 5 + revealed.size;
+        const total = screens.length * 5;
+        ctx.progress(done / total);
+      }
+      ctx.setNext(() => {
+        const next = rows.findIndex((_, i) => !revealed.has(i));
+        if (next >= 0) { play(next); return true; }
+        if (screen < screens.length - 1) { screen += 1; draw(); return true; }
+        ctx.badge('Count the Sounds', 'count');
+        return true;
+      });
+    }
+    draw();
+  }
+
   function sortGame(ctx) {
     ctx.setInstr('Tap the first sound.');
     rounds(ctx, pictureCards(), (card, ok, again, i) => {
@@ -540,7 +669,7 @@
 
   const RUN = {
     team: team, meet: meet, link: link, done: lessonBadge, play: menu,
-    pop: pop, feed: feed, catch: catchSound, hunt: hunt, build: build, ears: ears, flash: flash, match: match, sound: soundMatch, sort: sortGame
+    pop: pop, feed: feed, catch: catchSound, hunt: hunt, build: build, ears: ears, flash: flash, match: match, sound: soundMatch, sort: sortGame, count: countGame
   };
 
   function day1Play(app, id, pack, back) {
@@ -548,7 +677,7 @@
     PACK = pack || samplePack();
     app.innerHTML = '';
     const step = GAMES.filter((item) => item.id === id)[0];
-    const ctx = shell(step.title, back || '#/foundation/letters/g1');
+    const ctx = shell(step.title, back || '#/foundation/letters/g1', id);
     RUN[id](ctx);
     return true;
   }
@@ -563,7 +692,7 @@
     const titles = { done: 'Look what I can read', play: 'Games' };
     const step = LESSON.filter((item) => item.id === id)[0] || GAMES.filter((item) => item.id === id)[0];
     const back = (id === 'team' || id === 'meet' || id === 'link' || id === 'done') ? '#/foundation/letters/g1' : '#/foundation/sample/play';
-    const ctx = shell(titles[id] || (step && step.title) || 'Day 1', back);
+    const ctx = shell(titles[id] || (step && step.title) || 'Day 1', back, id);
     if (id === 'meet') meet(ctx, '');
     else RUN[id](ctx);
     return true;

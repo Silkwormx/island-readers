@@ -2961,20 +2961,55 @@ button,
   .u5menu .stephead{gap:.35rem}
   .u5menu .stepnum{width:1.55rem;height:1.55rem;font-size:.9rem;border-radius:.45rem}
   .u5menu .steplab{font-size:1.05rem}
-  .u5menu .lessonrow{flex-direction:row;gap:.35rem}
+  .u5menu .lessonrow{flex-direction:row;flex-wrap:nowrap;justify-content:center;align-items:stretch;gap:.55rem;flex:none}
+  .u5menu .stepblock:has(.lessonrow){overflow:hidden;flex:none}
+  .u5menu .lessonrow .lessontab{flex:1 1 0;max-width:24rem;height:clamp(11.5rem,32vh,16.5rem);min-height:0;max-height:16.5rem}
   .u5menu .stepcard{min-height:0;padding:.28rem .5rem;gap:.4rem}
   .u5menu .stepcard .gametxt b{font-size:.95rem}
-  .u5menu .storycard{min-height:0;padding:.28rem .55rem;gap:.5rem}
-  .u5menu .storypic{width:3.4rem;height:2.2rem}
-  .u5menu .storycard b{font-size:1.05rem}
+  .u5menu .storycard{min-height:5.1rem;padding:.4rem .7rem;gap:.6rem}
+  .u5menu .storypic{width:7.2rem;height:4.6rem;object-fit:cover}
+  .u5menu .storycard b{font-size:1.35rem}
   .u5menu .stepblock:has(.gamegrid){display:flex;flex-direction:column;height:100%;overflow:hidden}
   .u5menu .gamegrid{flex:1 1 0;height:auto;min-height:0;grid-template-columns:repeat(5,minmax(0,1fr));grid-template-rows:repeat(3,minmax(0,1fr));gap:.45rem;align-content:stretch}
   .u5menu .gamegrid li{display:flex;min-height:0;height:100%}
-  .u5menu .gamecard{position:relative;flex-direction:column;justify-content:center;align-items:center;text-align:center;width:100%;height:100%;min-height:0;padding:2.15rem .7rem .55rem;gap:.15rem;overflow:hidden}
-  .u5menu .gamecard .gamenum{position:absolute;top:.35rem;left:.35rem;width:1.8rem;height:1.8rem;font-size:1.05rem;border-radius:.5rem}
-  .u5menu .gamegrid .gameico,.u5menu .gamegrid .gamenote,.u5menu .gamegrid .gamemin{display:none}
+  .u5menu .gamecard{position:relative;flex-direction:column;justify-content:center;align-items:center;text-align:center;width:100%;height:100%;min-height:0;padding:1.45rem .4rem .3rem;gap:.1rem;overflow:hidden}
+  .u5menu .gamecard .gamenum{position:absolute;top:.28rem;left:.28rem;width:1.45rem;height:1.45rem;font-size:.9rem;border-radius:.4rem}
+  .u5menu .gamegrid .gameico,.u5menu .gamegrid .gamenote,.u5menu .gamegrid .gamemin,.u5menu .gamecard .gamepic,.u5menu .gamecard .gamepair{display:none}
   .u5menu .gamegrid .gametxt{align-items:center;justify-content:center;min-height:0;gap:0;width:100%}
-  .u5menu .gamegrid .gametxt b{font-size:clamp(1.7rem,3.8vh,2.3rem);line-height:1.12;text-align:center}
+  .u5menu .gamegrid .gametxt b{font-size:clamp(1.02rem,2.15vh,1.45rem);line-height:1.1;text-align:center}
+.u5menu .stepblock:last-child .lessonrow{flex-direction:row}
+.lessontab{display:flex;flex-direction:column;min-width:0;border-radius:1.6rem;border:4px solid #E8731C;background:#FFF1E2;box-shadow:0 6px 0 rgba(43,37,64,.18);overflow:hidden;padding:0;text-align:center;color:var(--ink)}
+.lessontab .uimg{display:flex;align-items:flex-end;justify-content:center;height:34%;min-height:3.2rem;padding:.25rem .4rem 0;background:transparent}
+.lessontab .uimg img{height:100%;width:auto;max-width:78%;object-fit:contain;object-position:center bottom}
+.lessontab .ubody{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:.08rem;flex:1;min-height:0;padding:0 .45rem .7rem}
+.lessontab .uk{font-size:.8rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--ink2);line-height:1.1}
+.lessontab h2{margin:0;font-size:clamp(1.2rem,2.5vh,2rem);line-height:1.05}
+.lessontab .umin,.lessontab .uprog{margin:0;font-size:.82rem;font-weight:700;color:var(--ink2);line-height:1.15}
+.lessontab .dots{display:flex;flex-wrap:wrap;justify-content:center;gap:.08rem;max-width:100%}
+.lessontab .dots .sstar{display:inline-flex;width:.9rem;height:.9rem;color:#d9ceb0}
+.lessontab .dots .sstar.on{color:#F4B63F}
+.lessontab .dots .sstar svg{width:100%;height:100%}
+.lessontab .obtn{margin-top:auto;min-height:2.15rem;padding:0 .9rem;border-radius:1rem;border:3px solid #B5510D;background:#F28C00;color:#fff;font:700 1.02rem Andika,sans-serif;box-shadow:0 3px 0 #B5510D;display:inline-flex;align-items:center;justify-content:center;text-align:center}
+.fsmenu .lessonrow{flex-wrap:nowrap}
+.fsmenu .stepcard{min-width:0;padding:.35rem .55rem}
+.fsmenu .stepcard .gametxt b,.fsmenu .storycard b{font-size:clamp(1rem,2.4vh,1.45rem);line-height:1.15}
+.fsmenu .gamenote{font-size:.85rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.llword.on{background:#FFE08A;border-radius:.35rem;box-shadow:0 0 0 3px #FFE08A}
+.llstory .llstoryact{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.6rem;overflow:hidden}
+.llstory .llstoryart{max-height:28vh;width:auto;max-width:70%;object-fit:contain}
+.llstory .llstoryline{margin:0;font-size:clamp(2rem,5vh,3.2rem);font-weight:700;text-align:center}
+.llstory .lesson-nav{display:flex;justify-content:center;padding:.3rem .6rem .5rem}
+.llstory .lesson-nav .btn.next{background:#F28C00;border-color:#C95A10;box-shadow:0 3px 0 #C95A10;color:#fff;justify-content:center}
+.llstep .llspell .llbuddy,.llstep .llspell .llslot{width:5.2rem;height:5.2rem;min-width:5.2rem;min-height:5.2rem;display:flex;align-items:center;justify-content:center;font-size:2.4rem;line-height:1}
+.llstep .llspell .llslot .llprint,.llstep .llspell .llbuddy .llprint{font-size:2.4rem;line-height:1}
+.ll-day1.u5step{display:flex;flex-direction:column;overflow:hidden}
+.ll-day1.u5step .stage{flex:1 1 auto;min-height:0;overflow:hidden}
+.ll-day1.u5step .lesson-nav{flex:none;display:flex;justify-content:center;gap:.6rem;padding:.15rem .6rem .4rem}
+.ll-day1.u5step .ll1friend{min-height:0;max-height:100%}
+.ll-day1.u5step .ll1friend img,.ll-day1.u5step .ll1link{max-height:24vh;width:auto;max-width:100%;object-fit:contain}
+.ll-day1 .ll1card,.ll-day1 .ll1bubble,.ll-day1 .ll1hunt{display:inline-flex;align-items:center;justify-content:center;text-align:center;line-height:1}
+.llstep.u5step{display:flex;flex-direction:column;height:100%;overflow:hidden}
+.llstep.u5step .stage{flex:1 1 auto;min-height:0;overflow:hidden}
 }
 
 html.teach .u5step .lesson-nav .btn.next,

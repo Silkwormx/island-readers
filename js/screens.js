@@ -303,7 +303,7 @@
           h('span', { class: 'tname' }, t[0]),
           h('span', { class: 'tsnd' }, t[1]),
           h('span', { class: 'tcount' }, t[2] + (t[2] === 1 ? ' lesson' : ' lessons'))));
-      b.addEventListener('click', () => { if (u6) { Snd.stop(); location.hash = '#/u6'; } else if (u5) { openIsland('i5'); } else if (isl) openIsland(BUILT_ID); else { Snd.stop(); toast('Unit ' + n + ' is coming soon.'); } });
+      b.addEventListener('click', () => { if (u6) { Snd.stop(); location.hash = '#/u6'; } else if (u5) { Snd.stop(); location.hash = '#/u5'; } else if (isl) openIsland(BUILT_ID); else { Snd.stop(); toast('Unit ' + n + ' is coming soon.'); } });
       return b;
     };
     const cover = h('img', { src: 'foundation/img/foundations_cover.jpg', alt: '' });
@@ -511,7 +511,26 @@
       else if (item.href) location.hash = item.href;
     };
   }
+  function lessonTab(item) {
+    const pics = item.imgs && item.imgs.length ? item.imgs : (item.img ? [item.img] : []);
+    const stars = item.stars;
+    return h('button', {
+      class: 'tapcard ucard open lessontab',
+      type: 'button',
+      'aria-label': (item.kicker || 'Lesson') + '. ' + item.title + '. Opens the lesson.',
+      onclick: goItem(item)
+    },
+      h('div', { class: 'uimg' }, ...pics.map((src) => h('img', { src: src, alt: item.alt || '' }))),
+      h('div', { class: 'ubody' },
+        h('div', { class: 'uk' }, item.kicker || 'Lesson'),
+        h('h2', null, item.title),
+        item.note ? h('div', { class: 'umin' }, item.note) : null,
+        stars && stars.total ? h('div', { class: 'dots', 'aria-hidden': 'true' }, ...Array.from({ length: stars.total }, (_, k) => h('span', { class: 'sstar' + (k < stars.done ? ' on' : '') }, icon('star')))) : null,
+        stars && stars.total ? h('div', { class: 'uprog' }, stars.done + ' of ' + stars.total + ' stars') : null,
+        h('span', { class: 'obtn' }, item.goLabel || 'Open lesson')));
+  }
   function itemCard(item, num) {
+    if (!num && item.pick) return lessonTab(item);
     const body = [
       num ? h('span', { class: 'gamenum' }, String(num)) : null,
       num && !item.img && !(item.imgs && item.imgs.length) ? h('span', { class: 'gameico', 'aria-hidden': 'true' }, icon('play')) : null,
@@ -573,13 +592,14 @@
   function modeBar(plan) {
     plan = plan || {};
     const labels = plan.labels || ['Lesson', 'Games', 'Story'];
+    const storyItems = (plan.stories && plan.stories.length) ? plan.stories : (plan.story ? [plan.story] : null);
     return h('div', { class: 'modebar' },
       plan.note === false ? null : h('p', { class: 'stepnote' }, plan.note || 'Watch the lesson, then play.'),
       plan.before || null,
       h('div', { class: 'stepflow' },
         plan.choose ? null : stepSection(1, labels[0], plan.lesson || []),
         plan.choose ? null : stepSection(2, labels[1], plan.games || [], true, plan.gameClass || ''),
-        plan.choose || !plan.story ? null : stepSection(3, labels[2], [plan.story]),
+        plan.choose || !storyItems ? null : stepSection(3, labels[2], storyItems),
         ...(plan.choose || []).map((item, i) => stepSection(i + 1, item.title, [item]))));
   }
   IR.modeBar = modeBar;
@@ -1119,7 +1139,7 @@
     const u6 = n === 6 && !!IR.u6Route;
     const isl = n === 4 && !!(D.islands || {}).i3;
     if (u6) { Snd.stop(); location.hash = '#/u6'; return; }
-    if (u5) { openIsland('i5'); return; }
+    if (u5) { Snd.stop(); location.hash = '#/u5'; return; }
     if (isl) { openIsland('i3'); return; }
     Snd.stop();
     toast('Unit ' + n + ' is coming soon.');
@@ -1413,7 +1433,7 @@
     else if (hash.startsWith('#/placement')) IR.placement.render(app, (n) => {
       const bell = (IR.placement.BELL || {})[n] || { unit: n, name: 'this bell' };
       if (bell.unit === 4) { location.hash = '#/home'; setTimeout(() => openIsland('i3'), 0); return; }
-      if (bell.unit === 5) { location.hash = '#/home'; setTimeout(() => openIsland('i5'), 0); return; }
+      if (bell.unit === 5) { location.hash = '#/u5'; return; }
       if (bell.unit === 6) { location.hash = '#/u6'; return; }
       location.hash = '#/home';
       setTimeout(() => toast(bell.name + ' is coming soon in the full app. Try Glued Sounds for now.'), 50);
