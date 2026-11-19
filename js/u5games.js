@@ -476,7 +476,8 @@
     ctx.setNext(() => {
       if (!playing) { round(); return true; }
       if (i < REFRESH.practice.length - 1) { i++; round(); return true; }
-      return false;
+      finish();
+      return true;
     });
     teach();
   }

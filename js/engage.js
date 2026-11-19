@@ -135,6 +135,7 @@
         stars ? h('p', { class: 'starline' }, stars + (stars === 1 ? ' star' : ' stars')) : null,
         h('div', { class: 'row endrow' },
           h('button', { class: 'menulink', type: 'button', onclick: o.onBack }, o.backLabel || 'Back to lesson menu'),
+          o.onHome ? h('button', { class: 'btn big endhome', type: 'button', onclick: o.onHome }, 'Home') : null,
           h('button', { class: 'btn big primary', type: 'button', onclick: o.onNext }, o.nextLabel || 'Continue', icon('next')))));
     }
   };
