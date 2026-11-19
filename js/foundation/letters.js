@@ -598,7 +598,26 @@
       setTimeout(fin, Math.max(1600, words.length * slice + 500));
     });
   }
+  const PHONEME_SRC = {
+    a: 'audio/phonemes/a.mp3', ah: 'audio/phonemes/a.mp3',
+    m: 'audio/phonemes/m.mp3', mmm: 'audio/phonemes/m.mp3',
+    s: 'audio/phonemes/s.mp3', sss: 'audio/phonemes/s.mp3',
+    t: 'audio/phonemes/t.mp3',
+    d: 'audio/phonemes/d.mp3', n: 'audio/phonemes/n.mp3', nnn: 'audio/phonemes/n.mp3',
+    k: 'audio/phonemes/k.mp3', p: 'audio/phonemes/p.mp3',
+    e: 'audio/phonemes/e.mp3', eh: 'audio/phonemes/e.mp3',
+    i: 'audio/phonemes/i.mp3', ih: 'audio/phonemes/i.mp3',
+    u: 'audio/phonemes/u.mp3', uh: 'audio/phonemes/u.mp3',
+    ee: 'audio/phonemes/ee.mp3', oh: 'audio/phonemes/oh.mp3'
+  };
+  function playPhoneme(key) {
+    const src = PHONEME_SRC[key];
+    if (!src) return Promise.resolve(false);
+    return Snd.play(src);
+  }
+  IR.playPhoneme = playPhoneme;
   function hear(L, kind) {
+    if (kind !== 'name' && PHONEME_SRC[L.id]) return playPhoneme(L.id);
     if (kind === 'sound' && L.audio) {
       return Snd.play(L.audio).then((ok) => (ok ? true : speak(L.soundSay)));
     }
@@ -707,10 +726,23 @@
       say: { a: 'ah', m: 'mmm', s: 'sss', t: 't' },
       art: art,
       pics: {
-        a: ['foundation/img/objects/ant.jpg', 'foundation/img/objects/apple.jpg'],
-        m: ['foundation/img/scenes/mat.jpg', 'foundation/img/objects/mango.jpg', 'img/refresh_mop.jpg'],
-        s: ['foundation/img/scenes/sat.jpg', art.s],
-        t: ['foundation/img/scenes/tam.jpg', art.t]
+        a: [
+          { src: 'foundation/img/objects/ant.jpg', name: 'ant' },
+          { src: 'foundation/img/objects/apple.jpg', name: 'apple' }
+        ],
+        m: [
+          { src: 'foundation/img/scenes/mat.jpg', name: 'mat' },
+          { src: 'foundation/img/objects/mango.jpg', name: 'mango' },
+          { src: 'img/refresh_mop.jpg', name: 'mop' }
+        ],
+        s: [
+          { src: 'foundation/img/scenes/sat.jpg', name: 'sat' },
+          { src: art.s, name: 'snake' }
+        ],
+        t: [
+          { src: 'foundation/img/scenes/tam.jpg', name: 'turtle' },
+          { src: art.t, name: 'turtle' }
+        ]
       },
       words: [
         { text: 'am', src: 'foundation/img/scenes/am.jpg', parts: ['a', 'm'], decoy: 'foundation/img/objects/apple.jpg' },
@@ -909,7 +941,7 @@
         const ov = IR.engage.endScreen({
           title: game.title,
           stars: stars,
-          backLabel: 'Back to lesson menu',
+          backLabel: 'Games',
           nextLabel: nxt ? 'Next activity' : 'Back to the team',
           onBack: () => { location.hash = base; },
           onHome: () => { location.hash = '#/home'; },
@@ -1793,7 +1825,10 @@
     if (PURE[L.id]) return PURE[L.id];
     return String(L.soundSay || L.id).split(',')[0].trim();
   }
-  function hearPure(L) { return speak(pureSound(L)); }
+  function hearPure(L) {
+    if (L && PHONEME_SRC[L.id]) return playPhoneme(L.id);
+    return speak(pureSound(L));
+  }
   function narrate(who, text) {
     const src = who === 'Zip' ? 'img/zipA.webp' : 'img/frill.webp';
     const line = h('button', {
