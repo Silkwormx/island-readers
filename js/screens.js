@@ -533,7 +533,7 @@
     if (!num && item.pick) return lessonTab(item);
     const body = [
       num ? h('span', { class: 'gamenum' }, String(num)) : null,
-      num && !item.img && !(item.imgs && item.imgs.length) ? h('span', { class: 'gameico', 'aria-hidden': 'true' }, icon('play')) : null,
+      num ? h('span', { class: 'gameico', 'aria-hidden': 'true' }, icon('play')) : null,
       item.imgs && item.imgs.length
         ? h('span', { class: 'gamepair' }, ...item.imgs.map((src) => h('img', { class: num ? 'gamepic' : 'storypic', src: src, alt: '' })))
         : (item.img ? h('img', { class: num ? 'gamepic' : 'storypic', src: item.img, alt: item.alt || '' }) : null),

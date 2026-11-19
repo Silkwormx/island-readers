@@ -2257,7 +2257,8 @@
   function menuScreen(app, group, up, title, small, plan) {
     IR.newScreen();
     const teach = teamTeacher(group) || {};
-    app.append(h('div', { class: 'screen trailscreen unitpage unitA u5menu stepage fsmenu' },
+    const board = group.id === 'g1' && String(title).indexOf('Team ') === 0 ? ' fsteam1' : '';
+    app.append(h('div', { class: 'screen trailscreen unitpage unitA u5menu stepage fsmenu' + board },
       h('header', { class: 'uA-top' },
         IR.ui.pageNav(up),
         h('h1', { class: 'uA-title' }, small ? h('small', null, small) : null, title),
