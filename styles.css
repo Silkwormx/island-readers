@@ -2035,7 +2035,20 @@ a.btn.tmlink.tmslide:visited{color:#fff}
 .clights .clight[data-kind=lesson].on{background:#E8731C;border-color:#A84E0C}
 .clights .clight[data-kind=story].on{background:#8E5BD6;border-color:#5A2F9A}
 /* story: one screen, bigger art, single control row; hide bottom Back/Next while listening */
-.lessonscreen:has(.listenmode) .lesson-nav{display:none!important}
+.lessonscreen:has(.listenmode) .lesson-nav:not(.storynav){display:none!important}
+.lessonscreen:has(.listenmode) .lesson-nav.storynav{display:flex!important;flex:none;z-index:6;background:#FFF8E7}
+@media (max-width:900px){
+  .lessonscreen:has(.hearts),.lessonscreen:has(.listenmode){height:100dvh;max-height:100dvh;overflow:hidden;display:flex;flex-direction:column}
+  .lessonscreen:has(.hearts) .stage,.lessonscreen:has(.listenmode) .stage{flex:1 1 auto;min-height:0;overflow:auto}
+  .lessonscreen:has(.hearts) .lesson-nav,.lessonscreen:has(.listenmode) .lesson-nav.storynav{display:flex!important;flex:none;position:relative;z-index:6;background:#FFF8E7}
+  .lesson-nav.simple.storynav{gap:.4rem;padding-left:.45rem;padding-right:.45rem}
+  .lesson-nav.storynav .menulink{display:none}
+  .lesson-nav.simple.storynav{justify-content:flex-end}
+  .lesson-nav.storynav .storyback{flex:0 0 auto;min-width:5.2rem;min-height:44px}
+  .lesson-nav.storynav .btn.next{flex:0 0 auto;min-width:5.5rem}
+  .lesson-nav.storynav .btn,.lesson-nav.storynav .storyback{min-height:44px}
+  .lessonscreen:has(.hearts) .pagenav .homebtn,.lessonscreen:has(.listenmode) .pagenav .homebtn,.lessonscreen:has(.activity.story) .pagenav .homebtn{min-height:44px}
+}
 .lessonscreen:has(.listenmode){height:100dvh;max-height:100dvh;overflow:hidden;display:flex;flex-direction:column}
 .lessonscreen:has(.listenmode) .stage{flex:1 1 auto;min-height:0;overflow:hidden}
 .lessonscreen:has(.listenmode) .activity.story.listenmode{
@@ -2084,6 +2097,7 @@ a.btn.tmlink.tmslide:visited{color:#fff}
 }
 
 .lessonscreen:has(.hearts) .lesson-nav .btn,.lessonscreen:has(.listenmode) .lesson-nav .btn{display:none!important}
+.lessonscreen:has(.hearts) .lesson-nav.storynav .btn,.lessonscreen:has(.listenmode) .lesson-nav.storynav .btn{display:inline-flex!important}
 .lessonscreen:has(.hearts) .lesson-nav,.lessonscreen:has(.listenmode) .lesson-nav{display:flex!important}
 
 /* Teacher smartboard slideshow viewer */

@@ -114,7 +114,7 @@
       const stage = ctx.stage; ctx.setInstr('', null);
       /* part A: heart-word peek (tap to hear, nothing to answer) */
       function heartPeek() {
-        ctx.progress(0); stage.innerHTML = ''; ctx.showNav(false); ctx.setNextLabel(''); ctx.setBack(null); ctx.setNext(() => { Snd.stop(); storyListen(); return true; });
+        ctx.progress(0); stage.innerHTML = ''; ctx.showNav(true); ctx.setBack(null); ctx.setNext(() => { Snd.stop(); storyListen(); return true; }); ctx.setNextLabel('Next'); if (IR.pinStoryNav) IR.pinStoryNav(null);
         ctx.setInstr('Tap each heart word and each new word to hear it.', 'p_listen1');
         const seen = new Set();
         const go = h('button', { class: 'btn big primary', type: 'button' }, 'Listen to the story', icon('next'));
@@ -142,7 +142,7 @@
          Stop is always there while reading. Only a page heard to the END counts toward the star. */
       function storyListen() {
         stage.innerHTML = ''; ctx.setInstr('Listen to the story and follow along.', 'p_listen2');
-        const pages = D.story; let p = 0; let token = 0; let finished = false; let mode = 'reading'; ctx.showNav(false);
+        const pages = D.story; let p = 0; let token = 0; let finished = false; let mode = 'reading'; ctx.showNav(true); ctx.setNextLabel('Next');
         const picEl = h('img', { class: 'panel', alt: '' });
         const sentEl = h('p', { class: 'sentence', 'aria-live': 'polite' });
         const label = h('p', { class: 'small story-say', 'aria-live': 'polite' });
@@ -180,8 +180,9 @@
         const halt = () => { token++; Snd.stop(); };
         const finishNow = () => { if (finished) return; finished = true; halt(); ctx.progress(1); ctx.finish(); };
         function goPage(i) { halt(); setPage(i); playPage(); }       /* opening a page reads it right away (this runs inside the tap that asked for it) */
-        ctx.setBack(() => { if (p > 0) { goPage(p - 1); return true; } token++; Snd.stop(); heartPeek(); return true; });      /* Back = previous page, then the heart words */
-        ctx.setNext(() => { if (p < pages.length - 1) { goPage(p + 1); return true; } if (allHeard()) { finishNow(); return true; } return false; });
+        ctx.setBack(() => { if (p > 0) { goPage(p - 1); return true; } token++; Snd.stop(); heartPeek(); return true; });
+        ctx.setNext(() => { if (p < pages.length - 1) { goPage(p + 1); return true; } finishNow(); return true; });
+        if (IR.pinStoryNav) IR.pinStoryNav(() => { if (p > 0) goPage(p - 1); else { token++; Snd.stop(); heartPeek(); } });
         stage.append(h('div', { class: 'activity story listenmode' },
           h('div', { class: 'panelwrap' }, picEl), h('div', { class: 'sentrow' }, sentEl), label, ctl));
         setPage(0); playPage();

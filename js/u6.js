@@ -319,7 +319,6 @@
       st.innerHTML = '';
       ctx.setInstr('Tap each new or heart word to hear it before the story.', 'heart');
       ctx.progress(0);
-      ctx.setNextLabel('');
       const row = h('div', { class: 'hearts' }, ...words.map((it) => h('button', {
         class: 'heartchip' + (it.irregular ? '' : ' newchip'), type: 'button', onclick: (e) => {
           e.currentTarget.classList.add('seen'); seen.add(it.w); ctx.progress(seen.size / words.length);
@@ -331,12 +330,14 @@
       st.append(h('div', { class: 'activity' }, h('p', { class: 'bigprompt' }, 'Heart words and new words'), row, h('p', { class: 'small heartnote' }, 'Hearts are irregular. Stars are new words in this story.'), h('div', { class: 'row center' }, done)));
       ctx.setBack(() => false);
       ctx.setNext(() => { Snd.stop(); showPages(); return true; });
+      if (ctx.setNextLabel) ctx.setNextLabel('Next');
+      if (ctx.showNav) ctx.showNav(true);
+      if (IR.pinStoryNav) IR.pinStoryNav(null);
       Snd.play(P('heart'));
     }
     function showPages() {
       p = 0; st.innerHTML = '';
       ctx.setInstr('Read the story. One page at a time.', 'listen');
-      ctx.setNextLabel('');
       const pic = h('img', { class: 'panel', alt: '' });
       const sent = h('p', { class: 'sentence' });
       const label = h('p', { class: 'small' });
@@ -352,6 +353,9 @@
       st.append(h('div', { class: 'activity story' }, h('div', { class: 'panelwrap' }, pic), h('div', { class: 'sentrow' }, replay, sent), label, h('div', { class: 'row center' }, next)));
       ctx.setBack(() => { if (p > 0) { p--; show(); return true; } if (words.length) { showHeart(); return true; } return false; });
       ctx.setNext(() => { if (p < pages.length - 1) { p++; show(); return true; } ctx.finish(); return true; });
+      if (ctx.setNextLabel) ctx.setNextLabel('Next');
+      if (ctx.showNav) ctx.showNav(true);
+      if (IR.pinStoryNav) IR.pinStoryNav(() => { if (p > 0) { p--; show(); } else if (words.length) showHeart(); });
       show();
     }
     if (words.length) showHeart(); else showPages();

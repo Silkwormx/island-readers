@@ -80,6 +80,26 @@
      The speaker button can still replay the instruction on its own. */
   /* One small "Back to lesson menu" link, and one orange Next only when a lesson asks for it.
      Round-skip Back and Next stay off the screen. Correct answers still move on by themselves. */
+  /* Keep Next (and Back, once the story has pages) in the bottom bar. Phone story
+     screens were hiding Next, and the in-page button sat below the fold. */
+  IR.pinStoryNav = function (onBack) {
+    const nav = document.querySelector('.lesson-nav');
+    if (!nav) return;
+    nav.classList.add('storynav');
+    nav.classList.remove('nonext');
+    const next = nav.querySelector('.btn.next');
+    if (next) { next.hidden = false; if (next.firstChild && next.firstChild.nodeType === 3) next.firstChild.textContent = 'Next'; }
+    let back = nav.querySelector('.storyback');
+    if (onBack) {
+      if (!back) {
+        back = h('button', { class: 'btn big storyback', type: 'button', 'aria-label': 'Back' }, IR.icon('back'), 'Back');
+        if (next) nav.insertBefore(back, next);
+        else nav.append(back);
+      }
+      back.onclick = function () { IR.Snd.stop(); onBack(); };
+    } else if (back) back.remove();
+  };
+
   IR.simpleNav = function (nav, nextBtn, goMenu, menuLabel) {
     const back = nav.querySelector(':scope > .btn.back');
     if (back) back.remove();

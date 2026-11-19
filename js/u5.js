@@ -482,6 +482,9 @@
           if (seen.size === total) done.classList.add('glow'); } }, irregular ? h('span', { class: 'heartmark', 'aria-hidden': 'true' }, '\u2665') : h('span', { class: 'heartmark newmark', 'aria-hidden': 'true' }, '\u2605'), h('span', { class: 'word' }, w)); }));
       const done = h('button', { class: 'btn big primary', type: 'button', onclick: () => { Snd.stop(); if (after) after(); else ctx.finish(3); } }, 'Listen to the story', icon('next'));
       ctx.stage.append(h('div', { class: 'activity' }, h('p', { class: 'bigprompt' }, 'Heart words and new words'), row, h('p', { class: 'small heartnote' }, 'Hearts are irregular. Stars are new words in this story.'), h('div', { class: 'row center' }, done)));
+      if (ctx.setNextLabel) ctx.setNextLabel('Next');
+      if (ctx.showNav) ctx.showNav(true);
+      if (IR.pinStoryNav) IR.pinStoryNav(null);
       Snd.play(AU.p('heart'));
     }
     function wordsInto(el, pg) { el.innerHTML = ''; pg.words.forEach((w, k) => el.append(h('span', { class: 'w', 'data-k': k }, w), ' ')); }
@@ -499,7 +502,7 @@
       };
     }
     /* 7. Story Time: same behaviour as ng Story Time (auto-read each page, Read again / Next page / Previous page, Finish, tap-to-hear fallback) */
-    function runListen(ctx) { ctx.showNav(false); if (!ctx._heartDone) { ctx._heartDone = true; ctx.setNext(() => { Snd.stop(); runListen(ctx); return true; }); runHeart(ctx, () => runListen(ctx)); return; } ctx.stage.innerHTML = ''; ctx.setInstr('Listen to the story and follow along.', 'listen'); const st = ctx.stage;
+    function runListen(ctx) { if (ctx.showNav) ctx.showNav(true); if (!ctx._heartDone) { ctx._heartDone = true; ctx.setNext(() => { Snd.stop(); runListen(ctx); return true; }); if (ctx.setNextLabel) ctx.setNextLabel('Next'); runHeart(ctx, () => runListen(ctx)); return; } ctx.stage.innerHTML = ''; ctx.setInstr('Listen to the story and follow along.', 'listen'); const st = ctx.stage;
       const pages = N.story; let p = 0, token = 0, mode = 'reading', finished = false; const heard = new Set();
       const picEl = h('img', { class: 'panel', alt: '' }); const sentEl = h('p', { class: 'sentence', 'aria-live': 'polite' });
       const label = h('p', { class: 'small story-say' }); const ctl = h('div', { class: 'row center story-ctl' });
@@ -531,7 +534,9 @@
       const finishNow = () => { if (finished) return; finished = true; halt(); ctx.finish(3); };
       const goPage = (i) => { halt(); setPage(i); playPage(); };
       ctx.setBack(() => { if (p > 0) { goPage(p - 1); return true; } return false; });
-      ctx.setNext(() => { if (p < pages.length - 1) { goPage(p + 1); return true; } if (allHeard()) { finishNow(); return true; } return false; });
+      ctx.setNext(() => { if (p < pages.length - 1) { goPage(p + 1); return true; } finishNow(); return true; });
+      if (ctx.setNextLabel) ctx.setNextLabel('Next');
+      if (IR.pinStoryNav) IR.pinStoryNav(() => { if (p > 0) goPage(p - 1); });
       st.append(h('div', { class: 'activity story listenmode' }, h('div', { class: 'panelwrap' }, picEl), h('div', { class: 'sentrow' }, sentEl), label, ctl));
       setPage(0); playPage();
       IR['_story' + KEY] = { heardAll: () => { pages.forEach((_, k) => heard.add(k)); mode = 'done'; setPage(pages.length - 1); renderCtl(); } };
