@@ -85,6 +85,9 @@
     draw();
     return b;
   }
+  function showScores() {
+    return (location.hash || '').indexOf('#/foundation') !== 0;
+  }
 
   function highlight(stage, info) {
     stage.querySelectorAll('.teachshow').forEach((el) => el.classList.remove('teachshow'));
@@ -126,7 +129,7 @@
         screen.querySelectorAll('.teampip.frill').forEach((el) => { el.textContent = 'Frill 0'; });
       });
       const bar = h('div', { class: 'teachbar', hidden: !on() },
-        reveal, next, teamButton('Zip', 'zip'), teamButton('Frill', 'frill'), clear, ans);
+        reveal, next, ...(showScores() ? [teamButton('Zip', 'zip'), teamButton('Frill', 'frill'), clear] : []), ans);
       screen.append(bar);
       const prevSet = ctx.setNext.bind(ctx);
       ctx.setNext = function (fn) { ctx._stepNext = fn; prevSet(fn); };

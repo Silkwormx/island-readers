@@ -117,9 +117,9 @@
 html.teach .lltile,html.teach .llflashcard{font-size:88px;min-height:96px;min-width:88px}
 html.teach .lltracenum{width:96px;height:96px;font-size:48px}
 .llstep .llgame{height:100%;min-height:0;display:flex;flex-direction:column;gap:.3rem;align-items:stretch}
-.llchoices{flex:1 1 auto;min-height:0;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:.4rem}
-.llchoices.few{grid-template-rows:minmax(0,1fr)}
-.llchoice{height:100%;min-height:0;font-family:Andika,sans-serif;font-weight:700;font-size:clamp(36px,8vh,64px);background:#fff;border:3px solid var(--ink);border-radius:1rem;color:var(--ink)}
+.llchoices{flex:1 1 auto;min-height:0;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:repeat(2,minmax(4.5rem,1fr));gap:.4rem}
+.llchoices.few{grid-template-rows:minmax(4.5rem,1fr)}
+.llchoice{height:100%;min-height:4.5rem;font-family:Andika,sans-serif;font-weight:700;font-size:clamp(36px,8vh,64px);background:#fff;border:3px solid var(--ink);border-radius:1rem;color:var(--ink)}
 .llchoice.tried{opacity:.4}
 .llchoice.right{background:#E5F6EA;border-color:#1E8F4A}
 .llshown{margin:0;text-align:center;font-weight:700;font-size:clamp(56px,12vh,92px);line-height:1}
@@ -205,6 +205,10 @@ html.teach .llist .u5name,html.teach .llplay .u5name{font-size:32px}
 .llfirst .ll1link{width:auto;max-width:70%;max-height:28vh;object-fit:contain}
 .llfirst .ll1friends{max-height:24vh;flex-wrap:nowrap;width:100%}
 .llfirst .ll1friend,.llfirst .ll1card{min-height:0;height:18vh;max-height:7.5rem;flex:1}
+.llfirst.llhear{overflow:auto;justify-content:flex-start;gap:.45rem}
+.llhear .ll1link{max-height:18vh}
+.llhear .ll1trio,.llhear .ll1friends{flex-wrap:wrap;max-height:none;width:100%}
+.llhear .ll1friend,.llhear .ll1card{flex:1 1 7rem;min-width:44px;min-height:44px;max-width:14rem;height:auto;max-height:22vh}
 .llfirst .ll1friend img{max-height:14vh;width:auto;object-fit:contain}
 .llbuildslots{display:flex;gap:.55rem;justify-content:center}
 .llbuildslot{width:4.4rem;height:4.4rem;border:4px dashed #C4A574;border-radius:1rem;background:#fff;display:flex;align-items:center;justify-content:center;font-family:Andika,sans-serif;font-size:2.4rem;font-weight:700;line-height:1;color:#2B2540}

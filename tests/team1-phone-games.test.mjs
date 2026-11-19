@@ -2,6 +2,8 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { spawn } from 'node:child_process';
 
+const HEAR = new Set(['Beginning Sound Catch', 'First sound', 'Sound Match', 'Sort the Sound']);
+
 const GAMES = [
   ['Sound Pop', '#/foundation/letters/g1/play/pop'],
   ['Beginning Sound Catch', '#/foundation/letters/g1/play/catch'],
@@ -100,17 +102,47 @@ test('every Team 1 game reaches its end screen in 12 rounds on a phone', async (
       assert.equal(fit.home, true, name + ' Home is not on screen');
       assert.deepEqual(fit.small, [], name + ' has a small target ' + fit.small.join(','));
       let ended = false;
+      let seen = 0;
       for (let round = 0; round < 16 && !ended; round++) {
         ended = await session.evalJs(`!!document.querySelector('.ll1end, .llend, .complete')`);
         if (ended) break;
+        if (HEAR.has(name)) {
+          const hear = await session.evalJs(`(() => {
+            const text = document.body.innerText || '';
+            const choices = [...document.querySelectorAll('[data-yes]')].filter((el) => {
+              const r = el.getBoundingClientRect();
+              return r.width >= 44 && r.height >= 44;
+            });
+            const replay = [...document.querySelectorAll('button')].some((b) => (b.textContent || '').trim() === 'Hear the word');
+            const next = document.querySelector('.lesson-nav .btn.next');
+            const nr = next ? next.getBoundingClientRect() : null;
+            return {
+              choices: choices.length,
+              replay,
+              next: !!(nr && !next.hidden && nr.height >= 44),
+              any: /\\bany\\b/i.test(text),
+              scores: document.querySelectorAll('.teampip').length
+            };
+          })()`);
+          assert.ok(hear.choices >= 3 && hear.choices <= 4, name + ' round ' + (seen + 1) + ' has ' + hear.choices + ' choices');
+          assert.equal(hear.replay, true, name + ' is missing Hear the word');
+          assert.equal(hear.next, true, name + ' Next is missing');
+          assert.equal(hear.any, false, name + ' still says any');
+          assert.equal(hear.scores, 0, name + ' still shows Zip or Frill scores');
+          seen += 1;
+        }
         await session.evalJs(`(() => {
-          const yes = document.querySelector('[data-yes="1"]');
-          if (yes) yes.click();
+          const hearGame = ${HEAR.has(name) ? 'true' : 'false'};
+          if (!hearGame) {
+            const yes = document.querySelector('[data-yes="1"]');
+            if (yes) yes.click();
+          }
           const next = document.querySelector('.lesson-nav .btn.next');
           if (next && !next.hidden) next.click();
         })()`);
         await session.sleep(400);
       }
+      if (HEAR.has(name)) assert.ok(seen >= 12, name + ' only checked ' + seen + ' rounds');
       ended = await session.evalJs(`!!document.querySelector('.ll1end, .llend, .complete')`);
       assert.equal(ended, true, name + ' did not reach the end screen');
     }

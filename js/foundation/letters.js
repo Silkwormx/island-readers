@@ -1547,7 +1547,7 @@
         status.textContent = streak >= 3 && streak % 3 === 0 ? streak + ' in a row!' : 'Yes.';
         const here = i;
         const advance = () => {
-          if (my !== token || i !== here) return;
+          if (my !== token || i !== here || !ctx.stage.isConnected) return;
           i++;
           show();
         };
@@ -1606,22 +1606,25 @@
   }
 
   function runSound(ctx, pool) {
-    ctx.setInstr('Look at the picture. Tap the letter.');
-    const rounds = plan12(pool).map((L, i) => ({ letter: L, reveal: L.id, nChoices: i < 4 ? 2 : i < 8 ? 3 : Math.min(4, pool.length) }));
+    ctx.setInstr('Hear the word. Tap its first sound.');
+    const rounds = plan12(pool).map((L, i) => ({ letter: L, reveal: L.id, nChoices: i < 6 ? 3 : Math.min(4, Math.max(3, pool.length)) }));
     runRounds(ctx, rounds, (round, host, pick) => {
       const L = round.letter;
       const end = L.where === 'end';
+      const word = L.word && L.word !== 'any' ? L.word : '';
       const opts = options(L, pool, round.nChoices || Math.min(4, pool.length)).map((item) => ({
         letter: item,
         yes: item.id === L.id,
         label: glyph(item.id, false)
       }));
+      const hearWord = () => { if (word) sayRead(word); };
       host.append(
-        h('div', { class: 'llpic big', html: PICS[L.word] || '' }),
-        h('p', { class: 'llword' }, L.word),
+        h('div', { class: 'llpic big', html: PICS[word] || '' }),
+        word ? h('p', { class: 'llword' }, word) : null,
+        h('button', { class: 'btn big primary', type: 'button', onclick: hearWord }, 'Hear the word'),
         h('p', { class: 'llask' }, end ? 'Which letter is at the end?' : 'Which letter is at the start?'),
         choiceGrid(opts, (it, btn) => pick(it.yes, btn)));
-      hear(L, 'sound');
+      hearWord();
     });
   }
 

@@ -93,7 +93,18 @@
     el.classList.add('ll1miss');
   }
   function clearWait() {
+    (IR._day1Waits || []).forEach((id) => clearTimeout(id));
+    IR._day1Waits = [];
     if (IR._day1Wait) { clearTimeout(IR._day1Wait); IR._day1Wait = 0; }
+  }
+  function later(fn, ms) {
+    const id = setTimeout(() => {
+      IR._day1Waits = (IR._day1Waits || []).filter((item) => item !== id);
+      fn();
+    }, ms);
+    IR._day1Waits = IR._day1Waits || [];
+    IR._day1Waits.push(id);
+    return id;
   }
   function go(id) { clearWait(); Snd.stop(); location.hash = '#/foundation/sample/' + id; }
 
@@ -341,6 +352,20 @@
     }
     return out;
   }
+  /* 3 choices on the early rounds, 4 once the set is familiar. Never a blank or a placeholder. */
+  function soundChoices(answer, total) {
+    const want = total >= 4 ? 4 : 3;
+    const ids = (PACK.ids || []).filter((id) => id && id !== answer);
+    const out = [answer];
+    likeIds(answer, (PACK.ids || []).concat(PACK.foils || []), want - 1).forEach((id) => {
+      if (out.indexOf(id) < 0) out.push(id);
+    });
+    ids.forEach((id) => { if (out.length < want && out.indexOf(id) < 0) out.push(id); });
+    (LIKE[answer] || '').split('').forEach((id) => {
+      if (out.length < want && id && out.indexOf(id) < 0) out.push(id);
+    });
+    return out.slice(0, want);
+  }
   function choicesFor(id, n) {
     const pool = (PACK.ids || []).concat(PACK.foils || []);
     const out = [id];
@@ -361,13 +386,13 @@
         streak += 1;
         const here = i;
         const move = () => {
-          if (i !== here) return;
+          if (i !== here || !ctx.stage.isConnected) return;
           i += 1;
           yes();
-          setTimeout(step, 200);
+          later(step, 200);
         };
-        setTimeout(move, 280);
-        setTimeout(move, 1200);
+        later(move, 280);
+        later(move, 1200);
       }, (el) => {
         streak = 0;
         miss(el);
@@ -450,14 +475,14 @@
   }
 
   function catchSound(ctx) {
-    ctx.setInstr('Tap the first sound.');
+    ctx.setInstr('Hear the word. Tap its first sound.');
     rounds(ctx, pictureCards(), (pic, ok, again, i) => {
-      const choices = [pic.answer].concat(likeIds(pic.answer, PACK.ids, i < 4 ? 1 : Math.max(2, PACK.ids.length - 1)));
-      const hear = () => { if (pic.name) say(pic.name); };
+      const choices = soundChoices(pic.answer, i < 6 ? 3 : 4);
+      const hear = () => { if (pic.name && pic.name !== 'any') say(pic.name); };
       hear();
-      ctx.stage.append(h('div', { class: 'llfirst' },
-        h('button', { class: 'btn big primary', type: 'button', onclick: hear }, 'Hear it'),
-        h('img', { class: 'll1link', src: pic.src, alt: pic.name || '' }),
+      ctx.stage.append(h('div', { class: 'llfirst llhear' },
+        h('button', { class: 'btn big primary', type: 'button', onclick: hear }, 'Hear the word'),
+        h('img', { class: 'll1link', src: pic.src, alt: '' }),
         h('div', { class: 'll1friends' }, ...shuffle(choices).map((letter) => {
           const b = big(letter, (e) => { if (letter === pic.answer) ok(); else again(e.currentTarget); });
           b.setAttribute('data-yes', letter === pic.answer ? '1' : '0');
@@ -585,18 +610,27 @@
   }
 
   function soundMatch(ctx) {
-    ctx.setInstr('Hear the sound. Tap the picture.');
-    const list = pictureCards().map((pic) => ({ sound: pic.answer, src: pic.src }));
-    rounds(ctx, list, (item, ok, again, i) => {
-      playSound(item.sound);
-      const rest = pictureCards().filter((pic) => pic.src !== item.src);
-      const decoys = rest.filter((pic) => likeIds(item.sound, PACK.ids, 3).indexOf(pic.answer) >= 0);
-      const pool = (decoys.length ? decoys : rest).slice(0, i < 4 ? 1 : 2);
-      const options = shuffle([{ src: item.src, good: true }].concat(pool.map((pic) => ({ src: pic.src, good: false }))));
-      ctx.stage.append(h('div', { class: 'll1trio' }, ...options.map((opt) => h('button', {
-        class: 'll1friend', type: 'button', 'data-yes': opt.good ? '1' : '0',
-        onclick: (e) => { if (opt.good) ok(); else again(e.currentTarget); }
-      }, h('img', { src: opt.src, alt: '' })))));
+    ctx.setInstr('Hear the word. Tap the picture.');
+    const cards = pictureCards().filter((pic) => pic && pic.src);
+    rounds(ctx, cards, (item, ok, again, i) => {
+      const hear = () => { if (item.name && item.name !== 'any') say(item.name); };
+      hear();
+      const rest = shuffle(cards.filter((pic) => pic.src !== item.src));
+      const seen = {};
+      const decoys = [];
+      rest.forEach((pic) => {
+        if (seen[pic.src] || decoys.length >= (i < 6 ? 2 : 3)) return;
+        seen[pic.src] = 1;
+        decoys.push(pic);
+      });
+      const options = shuffle([item].concat(decoys));
+      ctx.stage.append(h('div', { class: 'llfirst llhear' },
+        h('button', { class: 'btn big primary', type: 'button', onclick: hear }, 'Hear the word'),
+        h('div', { class: 'll1trio' }, ...options.map((opt) => h('button', {
+          class: 'll1friend', type: 'button', 'data-yes': opt.src === item.src ? '1' : '0',
+          'aria-label': opt.name && opt.name !== 'any' ? opt.name : 'picture',
+          onclick: (e) => { if (opt.src === item.src) ok(); else again(e.currentTarget); }
+        }, h('img', { src: opt.src, alt: '' }))))));
     }, 'sound');
   }
 
@@ -715,16 +749,19 @@
   }
 
   function sortGame(ctx) {
-    ctx.setInstr('Tap the first sound.');
+    ctx.setInstr('Hear the word. Tap its first sound.');
     rounds(ctx, pictureCards(), (card, ok, again, i) => {
-      const choices = [card.answer].concat(likeIds(card.answer, PACK.ids, i < 4 ? 1 : Math.max(2, PACK.ids.length - 1)));
-      ctx.stage.append(
+      const choices = soundChoices(card.answer, i < 6 ? 3 : 4);
+      const hear = () => { if (card.name && card.name !== 'any') say(card.name); };
+      hear();
+      ctx.stage.append(h('div', { class: 'llfirst llhear' },
+        h('button', { class: 'btn big primary', type: 'button', onclick: hear }, 'Hear the word'),
         h('img', { class: 'll1link', src: card.src, alt: '' }),
         h('div', { class: 'll1friends' }, ...shuffle(choices).map((letter) => {
           const b = big(letter, (e) => { if (letter === card.answer) ok(); else again(e.currentTarget); });
           b.setAttribute('data-yes', letter === card.answer ? '1' : '0');
           return b;
-        })));
+        }))));
     }, 'sort');
   }
 
@@ -735,6 +772,7 @@
 
   function day1Play(app, id, pack, back) {
     if (!RUN[id] || !GAMES.some((item) => item.id === id)) return false;
+    clearWait();
     PACK = pack || samplePack();
     app.innerHTML = '';
     const step = GAMES.filter((item) => item.id === id)[0];
