@@ -2440,8 +2440,12 @@
     const phrase = storyLine(group);
     const games = teamGames(group);
     const teamTitle = group.id === 'g1' ? 'Team 1: m s a t' : ('Team ' + group.n);
+    const deck = group.id === 'g1' ? '' : ((teamTeacher(group) || {}).slides || '');
     menuScreen(app, group, '#/foundation', teamTitle, 'Foundation Skills', {
       lesson: lessons,
+      slides: deck,
+      slideTitle: teamTitle,
+      slideNote: 'Slideshow',
       games: group.id === 'g1' ? null : games,
       gameRows: group.id === 'g1' ? team1GameRows(games) : null,
       story: {

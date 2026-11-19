@@ -596,22 +596,8 @@
   function teacherBox(plan) {
     plan = plan || {};
     const files = plan.files || [];
-    const days = plan.days || [];
-    let deck = plan.slides || '';
-    if (!deck && days.length) {
-      const href = (days.filter((day) => day && day.href)[0] || {}).href || '';
-      deck = String(href).replace(/\/\d+\/?$/, '');
-    }
-    const materials = h('button', { class: 'teachbox', type: 'button' }, 'Slideshow');
-    const wrap = h('div', { class: 'teachcorner' }, materials);
-    if (deck) {
-      materials.addEventListener('click', () => { Snd.stop(); location.hash = deck; });
-    } else if (plan.pdf) {
-      materials.addEventListener('click', () => { Snd.stop(); window.open(plan.pdf, '_blank', 'noopener'); });
-    } else {
-      wrap.append(h('p', { class: 'teachsoon' }, 'Coming soon'));
-    }
-    if (!files.length) return wrap;
+    if (!files.length) return null;
+    const wrap = h('div', { class: 'teachcorner' });
     const list = h('div', { class: 'teachpop teachfiles', hidden: '' },
       ...files.map((file) => h('a', { class: 'teachlink', href: file.href, target: '_blank', rel: 'noopener' }, file.title)));
     const print = h('button', { class: 'teachbox teachprint', type: 'button', 'aria-expanded': 'false' }, 'Printables');
@@ -633,15 +619,30 @@
     return wrap;
   }
   IR.teacherBox = teacherBox;
+  function teacherLedCard(deck, title, note) {
+    return {
+      pick: true,
+      tone: 'teachled',
+      kicker: 'Teacher Led',
+      title: title || 'Slideshow',
+      note: note || 'Slideshow',
+      goLabel: 'Open slideshow',
+      go: () => { Snd.stop(); location.hash = deck; }
+    };
+  }
   function modeBar(plan) {
     plan = plan || {};
     const labels = plan.labels || ['Lesson', 'Games', 'Story'];
     const storyItems = (plan.stories && plan.stories.length) ? plan.stories : (plan.story ? [plan.story] : null);
+    const lessons = (plan.lesson || []).slice();
+    if (plan.slides && !lessons.some((item) => item && item.tone === 'teachled')) {
+      lessons.push(teacherLedCard(plan.slides, plan.slideTitle, plan.slideNote));
+    }
     return h('div', { class: 'modebar' },
       plan.note === false ? null : h('p', { class: 'stepnote' }, plan.note || 'Watch the lesson, then play.'),
       plan.before || null,
       h('div', { class: 'stepflow' },
-        plan.choose ? null : stepSection(1, labels[0], plan.lesson || []),
+        plan.choose ? null : stepSection(1, labels[0], lessons),
         plan.choose ? null : (plan.gameRows ? gameRowsBlock(2, labels[1], plan.gameRows) : stepSection(2, labels[1], plan.games || [], true, plan.gameClass || '')),
         plan.choose || !storyItems ? null : stepSection(3, labels[2], storyItems),
         ...(plan.choose || []).map((item, i) => stepSection(i + 1, item.title, [item]))));
