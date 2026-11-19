@@ -92,7 +92,7 @@ test('reading words stay inside the letters taught so far', () => {
     const shape = body.startsWith('qu') ? /^qu[aeiou][a-z]$/ : /^[aeiou][a-z]$|^[a-z][aeiou][a-z]$/;
     assert.match(body, shape, word);
   });
-  assert.match(letters, /Sea snake in the sand/);
+  assert.match(letters, /Snakes sell sandy socks/);
   assert.match(letters, /Slide your hand like the snake/);
   assert.match(letters, /llcast/);
   assert.match(letters, /hold hands/);

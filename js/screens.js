@@ -520,7 +520,7 @@
       'aria-label': (item.kicker || 'Lesson') + '. ' + item.title + '. Opens the lesson.',
       onclick: goItem(item)
     },
-      h('div', { class: 'uimg' }, ...pics.map((src) => h('img', { src: src, alt: '' }))),
+      h('div', { class: 'uimg' }, ...pics.map((src) => h('img', { src: src, alt: item.alt || '' }))),
       h('div', { class: 'ubody' },
         h('div', { class: 'uk' }, item.kicker || 'Lesson'),
         h('h2', null, item.title),

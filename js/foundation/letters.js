@@ -127,10 +127,10 @@
     { id: 'celebrate', title: 'Look what I can read!' }
   ];
   const MEMORY = {
-    a: { chant: 'Addie the Apple, /a/ /a/ /a/.', action: 'Open wide, like a bite of apple.' },
-    m: { chant: 'Twin mountains hum, /m/ /m/ /m/.', action: 'Lips together. Hum.' },
-    s: { chant: 'Sea snake in the sand, /s/ /s/ /s/.', action: 'Slide your hand like the snake.' },
-    t: { chant: 'Palm tree tap, /t/ /t/ /t/.', action: 'Tap two fingers.' },
+    a: { chant: 'Ants add apples. Alligators act angry.', action: 'Open wide, like a bite of apple.' },
+    m: { chant: 'Moles make mighty mud mountains. Messy monkeys munch muffins.', action: 'Lips together. Hum.' },
+    s: { chant: 'Snakes sell sandy socks. Silly seals sip soup.', action: 'Slide your hand like the snake.' },
+    t: { chant: 'Tigers tap ten toes. Tiny turtles tumble.', action: 'Tap two fingers.' },
     p: { chant: 'Puff like a pig, /p/ /p/ /p/.', action: 'Puff your lips.' },
     f: { chant: 'Fan the fish, /f/ /f/ /f/.', action: 'Bite your lip and blow.' },
     i: { chant: 'Little insect, /i/ /i/ /i/.', action: 'Smile a little and say /i/.' },
@@ -186,7 +186,7 @@
   };
   /* Placeholder island characters. Final art is still needed for every letter. */
   const WHO = {
-    a: 'Addie the Apple', m: 'Twin mountains', s: 'Sea snake', t: 'Palm tree',
+    a: 'apple', m: 'mangrove', s: 'sea snake', t: 'sea turtle',
     p: 'Puffer fish', f: 'Fan coral', i: 'Island sun', n: 'Fishing net',
     o: 'Round ox', d: 'Island dog', c: 'Crab claw', u: 'Uppy the umbrella',
     g: 'Hill goat', b: 'Beach bus', e: 'Reef eel', k: 'Reef kite',
@@ -465,7 +465,7 @@
     const plain = h('b', { class: 'llplain' + (step === 'plain' ? ' ' + look.className : '') }, step === 'plain' ? look.text : L.id);
     const src = artUrl(L.id);
     if (step === 'plain' || !src) return h('span', { class: 'llfade plain' }, plain);
-    const img = h('img', { src: src, alt: '' });
+    const img = h('img', { src: src, alt: pictureWord(L.id) });
     if (step === 'outline') return h('span', { class: 'llfade outline' }, img, plain);
     return h('span', { class: 'llfade picture' }, img, plain);
   }
@@ -2205,7 +2205,11 @@
     if (rows.length) return rows[0].line;
     return readable(group).slice(0, 3).map((item) => item.w).join(' ');
   }
+  function pictureWord(id) {
+    return ({ a: 'apple', m: 'mangrove', s: 'sea snake', t: 'sea turtle' })[id] || '';
+  }
   function shortName(id) {
+    if (pictureWord(id)) return pictureWord(id);
     const info = letterInfo(id);
     const name = prettyName((info && info.character) || WHO[id] || id);
     return name.split(' ')[0] || id;
@@ -2231,7 +2235,7 @@
         kicker: 'Lesson',
         title: id + ' · ' + name,
         img: letterArt(id),
-        note: name,
+        alt: name,
         goLabel: 'Open lesson',
         go: () => { Snd.stop(); location.hash = here + '/hear'; }
       }],
@@ -2275,6 +2279,7 @@
       kicker: 'Lesson',
       title: id + ' · ' + shortName(id),
       img: letterArt(id),
+      alt: shortName(id),
       note: letterDone(group, id) ? 'Done' : (id === nextId ? 'Up next' : ''),
       goLabel: 'Open lesson',
       go: () => { Snd.stop(); location.hash = base + '/lesson/' + id; }
