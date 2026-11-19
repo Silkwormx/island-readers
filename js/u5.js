@@ -22,15 +22,17 @@
   }
   const U5PROG = {}, U5ROUTE = {};
   function capName(s) { s = String(s || ''); return s ? s.charAt(0).toUpperCase() + s.slice(1) : s; }
-  function u5Teach() {
+  function u5Teach(key) {
+    const pack = key === 'u53'
+      ? 'materials/unit5/Lesson5.2_Teacher_Led_Checks.pdf'
+      : key === 'hub'
+        ? 'materials/unit5/Unit5_Teacher_Led_Checks_Combined.pdf'
+        : 'materials/unit5/Lesson5.1_Teacher_Led_Checks.pdf';
     return {
-      pdf: 'materials/unit5/Island_Readers_Magic_e_Lesson.pdf',
-      pdfLabel: 'Magic e Slideshow (PDF)',
+      slides: '#/teachers/slides/u5',
       files: [
-        { title: 'Magic e Slideshow (PowerPoint)', href: 'materials/unit5/Island_Readers_Magic_e_Lesson.pptx' },
-        { title: 'Student sheets', href: 'materials/unit5/Unit5_Teacher_Led_Student_Sheets.pdf' },
-        { title: 'Lesson 5.1 checks', href: 'materials/unit5/Lesson5.1_Teacher_Led_Checks.pdf' },
-        { title: 'Lesson 5.2 checks', href: 'materials/unit5/Lesson5.2_Teacher_Led_Checks.pdf' }
+        { title: 'Daily practice sheets', href: 'materials/unit5/Unit5_Teacher_Led_Student_Sheets.pdf' },
+        { title: 'Teacher pack', href: pack }
       ]
     };
   }
@@ -299,7 +301,7 @@
         img: /refresh/i.test(item.href) ? 'img/lesson_zip_frill.webp' : (KEY === 'u53' ? 'img/frill.webp' : 'img/zipA.webp')
       }));
       app.append(h('div', { class: 'screen trailscreen unitpage unitA u5menu stepage' },
-        h('header', { class: 'uA-top' }, IR.ui.pageNav('#/u5'), h('h1', { class: 'uA-title' }, h('small', null, 'Unit 5 Lesson ' + IR.kidLesson(NUM)), capName(N.name)), IR.teacherBox(u5Teach())),
+        h('header', { class: 'uA-top' }, IR.ui.pageNav('#/u5'), h('h1', { class: 'uA-title' }, h('small', null, 'Unit 5 Lesson ' + IR.kidLesson(NUM)), capName(N.name)), IR.teacherBox(u5Teach(KEY))),
         IR.modeBar({
           lesson: lesson,
           games: pick('activities').concat(pick('extra')),
@@ -715,7 +717,7 @@
       };
     });
     app.append(h('div', { class: 'screen trailscreen unitpage unitA u5menu stepage' },
-      h('header', { class: 'uA-top' }, IR.ui.pageNav('#/home'), h('h1', { class: 'uA-title' }, h('small', null, 'Unit 5'), 'Silent e'), IR.teacherBox(u5Teach())),
+      h('header', { class: 'uA-top' }, IR.ui.pageNav('#/home'), h('h1', { class: 'uA-title' }, h('small', null, 'Unit 5'), 'Silent e'), IR.teacherBox(u5Teach('hub'))),
       IR.modeBar({ lesson: lesson, games: games, stories: stories })));
     if (IR.teach) IR.teach.sync();
   }

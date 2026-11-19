@@ -574,7 +574,7 @@
       : null;
     const slides = days.length
       ? days.map((day) => h('button', { class: 'teachlink teachled', type: 'button', onclick: () => { Snd.stop(); location.hash = day.href; } }, day.label))
-      : [plan.slides ? h('button', { class: 'teachlink teachled', type: 'button', onclick: () => { Snd.stop(); location.hash = plan.slides; } }, 'Open the slideshow') : (pdfLink || h('p', { class: 'teachsoon' }, 'Coming soon'))];
+      : [plan.slides ? h('button', { class: 'teachlink teachled', type: 'button', onclick: () => { Snd.stop(); location.hash = plan.slides; } }, 'Open on smartboard') : (pdfLink || h('p', { class: 'teachsoon' }, 'Coming soon'))];
     const panel = h('div', { class: 'teachpop', hidden: '' },
       h('p', { class: 'teachstep' }, h('span', null, '1'), 'Slideshow'),
       ...slides,
@@ -992,33 +992,38 @@
         h('h3', null, h('span', { class: 'tmsound' }, lesson.s), ' ' + lesson.lesson),
         ...rows.flat());
     }
-    function magicSlideshow() {
-      return h('div', { class: 'tmcard' },
-        h('h3', null, 'Magic e Slideshow'),
-        h('a', { class: 'btn big tmlink tmslide', href: 'materials/unit5/Island_Readers_Magic_e_Lesson.pdf', target: '_blank', rel: 'noopener' }, 'Magic e Slideshow (PDF)'),
-        h('a', { class: 'btn big tmlink tmslide', href: 'materials/unit5/Island_Readers_Magic_e_Lesson.pptx', download: '' }, 'Magic e Slideshow (PowerPoint)'));
-    }
     const UNITS = [
+      { name: 'Learn the Letters', sounds: [
+        { s: 'a m s t', lesson: 'Team 1', board: '#/foundation/slides/g1', daily: 'foundation/printables/Team1_Quick_Sounds.pdf' },
+        { s: 'p f i n', lesson: 'Team 2', board: '#/foundation/slides/g2', daily: 'foundation/printables/Team2_Quick_Sounds.pdf' },
+        { s: 'o d c u', lesson: 'Team 3' },
+        { s: 'g b e k', lesson: 'Team 4' },
+        { s: 'h r l w', lesson: 'Team 5' },
+        { s: 'j y x q', lesson: 'Team 6' },
+        { s: 'v z', lesson: 'Team 7' }
+      ] },
       { name: 'Unit 4 \u00b7 Glued Sounds', sounds: [
         { s: 'ng', lesson: 'Lesson 4.1', days: 3, board: '#/teachers/slides/ng', slides: 'teachers/ng/Lesson3.1_ng_Slide_Presentation.pptx', daily: 'teachers/ng/Lesson3.1_ng_Daily_Practice_Sheets.pdf', pack: 'teachers/ng/Lesson3.1_ng_Teacher_Pack.pdf' },
         { s: 'nk', lesson: 'Lesson 4.2', days: 3, board: '#/teachers/slides/nk', slides: 'teachers/nk/Lesson3.2_nk_Slide_Presentation.pptx', daily: 'teachers/nk/Lesson3.2_nk_Daily_Practice_Sheets.pdf', pack: 'teachers/nk/Lesson3.2_nk_Teacher_Pack.pdf' }
       ] },
       { name: 'Unit 5 \u00b7 Silent e', sounds: [
-        { s: 'a_e', lesson: 'Lesson 5.1', daily: 'materials/unit5/Unit5_Teacher_Led_Student_Sheets.pdf', pack: 'materials/unit5/Lesson5.1_Teacher_Led_Checks.pdf', bundle: 'materials/unit5/Unit5_Teacher_Led_Checks_Combined.pdf' },
-        { s: 'e', lesson: 'Lesson 5.2', daily: 'materials/unit5/Unit5_Teacher_Led_Student_Sheets.pdf', pack: 'materials/unit5/Lesson5.2_Teacher_Led_Checks.pdf', bundle: 'materials/unit5/Unit5_Teacher_Led_Checks_Combined.pdf' }
+        { s: 'a_e', lesson: 'Lesson 5.1', board: '#/teachers/slides/u5', slides: 'materials/unit5/Island_Readers_Magic_e_Lesson.pptx', daily: 'materials/unit5/Unit5_Teacher_Led_Student_Sheets.pdf', pack: 'materials/unit5/Lesson5.1_Teacher_Led_Checks.pdf' },
+        { s: 'e', lesson: 'Lesson 5.2', board: '#/teachers/slides/u5', slides: 'materials/unit5/Island_Readers_Magic_e_Lesson.pptx', daily: 'materials/unit5/Unit5_Teacher_Led_Student_Sheets.pdf', pack: 'materials/unit5/Lesson5.2_Teacher_Led_Checks.pdf' }
       ] },
-      { name: 'Learn the Letters', sounds: [
-        { s: 'amst', lesson: 'Team 1', board: '#/foundation/slides/g1' }
+      { name: 'Unit 6 \u00b7 Endings', sounds: [
+        { s: '-s -es', lesson: 'Lesson 6.1' },
+        { s: '-ed', lesson: 'Lesson 6.2' },
+        { s: '-ing', lesson: 'Lesson 6.3' }
       ] }
     ];
+    const sections = UNITS.map((u) => h('section', { class: 'tmunit' },
+      h('h2', null, u.name),
+      h('div', { class: 'tmgrid' }, ...u.sounds.map(lessonCard))));
     app.append(h('div', { class: 'screen tmscreen' }, h('div', { class: 'tmwrap' },
       h('div', { class: 'abtop' }, pageNav('#/home')),
       h('h1', null, 'Teacher materials'),
       h('p', { class: 'tmlead' }, 'For teaching in class. Students practice on their own in the app.'),
-      ...UNITS.map((u) => h('section', { class: 'tmunit' },
-        h('h2', null, u.name),
-        h('div', { class: 'tmgrid' }, ...u.sounds.map(lessonCard)),
-        u.name.indexOf('Unit 5') === 0 ? magicSlideshow() : null)))));
+      ...sections)));
   }
   /* In-app week-deck slideshow for smartboard (ng / nk). Keeps PPTX download on the teachers page. */
   function slidesViewer(sound) {
@@ -1438,7 +1443,7 @@
     else if (hash.startsWith('#/about')) aboutScreen();
     else if (hash.startsWith('#/trail')) islandTrailPage();
     else if (hash.startsWith('#/find')) findScreen();
-    else if ((m = /^#\/teachers\/slides\/(ng|nk)$/.exec(hash))) slidesViewer(m[1]);
+    else if ((m = /^#\/teachers\/slides\/(ng|nk|u5)$/.exec(hash))) slidesViewer(m[1]);
     else if (hash.startsWith('#/teachers')) { if (IR._slideCleanup) { IR._slideCleanup(); IR._slideCleanup = null; } teachersScreen(); }
     else if (hash.startsWith('#/placement')) IR.placement.render(app, (n) => {
       const bell = (IR.placement.BELL || {})[n] || { unit: n, name: 'this bell' };

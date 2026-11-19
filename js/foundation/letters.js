@@ -2807,13 +2807,11 @@
   }
   function teamTeacher(group) {
     const deck = SLIDES[group.id];
-    const files = group.id === 'g1'
-      ? [{ title: 'Team 1 Quick Sounds', href: 'foundation/printables/Team1_Quick_Sounds.pdf' }]
-      : group.id === 'g2'
-        ? [{ title: 'Team 2 Quick Sounds', href: 'foundation/printables/Team2_Quick_Sounds.pdf' }]
-        : [];
-    const days = deck ? deck.days.map((day) => ({ label: day.label, href: '#/foundation/slides/' + group.id + '/' + day.page })) : [];
-    return { slides: deck ? '#/foundation/slides/' + group.id : '', files: files, days: days };
+    const sheets = { g1: 'foundation/printables/Team1_Quick_Sounds.pdf', g2: 'foundation/printables/Team2_Quick_Sounds.pdf' };
+    const files = sheets[group.id]
+      ? [{ title: 'Daily practice sheets', href: sheets[group.id] }]
+      : [];
+    return { slides: deck ? '#/foundation/slides/' + group.id : '', files: files };
   }
   function pdfLink(label, href) {
     return h('a', { class: 'drop-link', href: href, target: '_blank', rel: 'noopener' }, label);
