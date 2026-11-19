@@ -704,11 +704,6 @@
               pick: true, tone: 'student', kicker: 'Independent', title: lesson ? lesson.title : 'Meet ng',
               img: 'img/lesson_zip_frill.webp', alt: 'Zip and Frill', goLabel: 'Open lesson',
               go: () => { Snd.stop(); location.hash = lesson ? lesson.href : '#/lesson/1'; }
-            }),
-            lessonTab({
-              pick: true, tone: 'teachled', kicker: 'Teacher Led', title: 'ng',
-              note: 'Slideshow', goLabel: 'Open slideshow',
-              go: () => { Snd.stop(); location.hash = '#/teachers/slides/ng'; }
             }))),
         h('section', { class: 'ngstep' },
           h('div', { class: 'stephead' }, h('span', { class: 'stepnum' }, '2'), h('span', { class: 'steplab' }, 'Games')),

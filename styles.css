@@ -3172,7 +3172,7 @@ html.teach .u5step .sentact .tile.word{font-size:clamp(1.7rem,4vh,2.4rem)!import
 .ngpreview .stephead{gap:.7rem}
 .ngpreview .stepnum{width:3.1rem;height:3.1rem;font-size:1.55rem;border-radius:1rem}
 .ngpreview .steplab{font-size:1.7rem}
-.ngpreview .lessonrow{display:grid;grid-template-columns:1fr 1fr;gap:1rem;align-items:stretch}
+.ngpreview .lessonrow{display:grid;grid-template-columns:minmax(0,1fr);gap:1rem;align-items:stretch}
 .ngpreview .lessontab{display:flex;flex-direction:column;justify-content:center;min-height:15rem;height:100%;border-radius:1.6rem;border:4px solid #E8731C;background:#FFF1E2;box-shadow:0 6px 0 rgba(43,37,64,.16);overflow:hidden;text-align:center;color:#2B2540;padding:0}
 .ngpreview .lessontab .uimg{display:flex;align-items:flex-end;justify-content:center;height:8.5rem;min-height:0;background:transparent}
 .ngpreview .lessontab .uimg img{height:100%;width:auto;max-width:86%;object-fit:contain}
