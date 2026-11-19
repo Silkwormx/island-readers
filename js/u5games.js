@@ -392,12 +392,13 @@
       });
       ctx.stage.append(h('div', { class: 'activity vrefresh', 'data-game': 'refresh', 'data-phase': 'teach' },
         h('p', { class: 'bigprompt' }, 'Vowel Refresher'),
-        ...rows,
-        h('div', { class: 'efocusbox' },
-          h('p', { class: 'efocuslab' }, 'Listen to e'),
-          speakerBtnHear(),
-          h('div', { class: 'erow' }, h('span', null, 'Quick'), ...chips(REFRESH.eShort, 'short')),
-          h('div', { class: 'erow' }, h('span', null, 'Name'), ...chips(REFRESH.eLong, 'long'))),
+        h('div', { class: 'vteach' },
+          h('div', { class: 'vpairs' }, ...rows),
+          h('div', { class: 'efocusbox' },
+            h('p', { class: 'efocuslab' }, 'Listen to e'),
+            speakerBtnHear(),
+            h('div', { class: 'erow' }, h('span', null, 'Quick'), ...chips(REFRESH.eShort, 'short')),
+            h('div', { class: 'erow' }, h('span', null, 'Name'), ...chips(REFRESH.eLong, 'long')))),
         h('button', { class: 'btn big primary', type: 'button', onclick: () => round() }, 'Practice', icon('next'))));
       if (IR.sayItem) IR.sayItem(ctx, 'audio/u51_p_refresh.mp3');
     }
