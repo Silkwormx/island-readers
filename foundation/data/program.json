@@ -205,13 +205,13 @@
    "group": "G1",
    "sound": "/s/ as in sea snake",
    "keyword": "sea snake",
-   "character": "Sami the sea snake",
+   "character": "Sam the sea snake",
    "concept": "A friendly blue-and-white banded sea snake curled into an s, head at the top curve and paddle tail at the bottom.",
-   "chant": "Sami slides through the sea: /sss/!",
+   "chant": "Sam slides through the sea: /sss/!",
    "action": "Slide your hand like a snake in an s path while you hiss /sss/.",
-   "formation": "Start just under the middle line on the right. Curve back to the left, swing across to the right, then curve back at the bottom. Slide like Sami.",
+   "formation": "Start just under the middle line on the right. Curve back to the left, swing across to the right, then curve back at the bottom. Slide like Sam.",
    "art": "img/letters/s_sami_sea_snake.jpg",
-   "cue": "'Think of Sami' + snake slide",
+   "cue": "'Think of Sam' + snake slide",
    "capital": "S"
   },
   {
@@ -1204,10 +1204,10 @@
       "cue": "'Think of Manny' + rub tummy, hum"
      },
      "s": {
-      "picture": "Sami beside the plain s: 'Sami makes an s shape. This is s. s says /s/.' Trace s over Sami, then trace the plain s.",
-      "outline": "Plain s over a faint Sami: 'Can you still see Sami? This is s.' Cover Sami: child says /s/ from the letter alone.",
+      "picture": "Sam beside the plain s: 'Sam makes an s shape. This is s. s says /s/.' Trace s over Sam, then trace the plain s.",
+      "outline": "Plain s over a faint Sam: 'Can you still see Sam? This is s.' Cover Sam: child says /s/ from the letter alone.",
       "plain": "Plain lowercase s only, in 2-3 fonts. 'Same letter, different clothes. What does it say?'",
-      "cue": "'Think of Sami' + snake slide"
+      "cue": "'Think of Sam' + snake slide"
      },
      "t": {
       "picture": "Tama beside the plain t: 'Tama makes a t shape. This is t. t says /t/.' Trace t over Tama, then trace the plain t.",
@@ -1247,7 +1247,7 @@
      "id": "meet",
      "step": "Meet the letter",
      "minutes": 3,
-     "what_to_do": "Sami beside the plain s: 'Sami makes an s shape. This is s. s says /s/.' Trace s over Sami, then trace the plain s. Chant and action. Tama beside the plain t: 'Tama makes a t shape. This is t. t says /t/.' Trace t over Tama, then trace the plain t. Chant and action."
+     "what_to_do": "Sam beside the plain s: 'Sam makes an s shape. This is s. s says /s/.' Trace s over Sam, then trace the plain s. Chant and action. Tama beside the plain t: 'Tama makes a t shape. This is t. t says /t/.' Trace t over Tama, then trace the plain t. Chant and action."
     },
     {
      "id": "trace",
@@ -1438,10 +1438,10 @@
       "cue": "'Think of Manny' + rub tummy, hum"
      },
      "s": {
-      "picture": "Sami beside the plain s: 'Sami makes an s shape. This is s. s says /s/.' Trace s over Sami, then trace the plain s.",
-      "outline": "Plain s over a faint Sami: 'Can you still see Sami? This is s.' Cover Sami: child says /s/ from the letter alone.",
+      "picture": "Sam beside the plain s: 'Sam makes an s shape. This is s. s says /s/.' Trace s over Sam, then trace the plain s.",
+      "outline": "Plain s over a faint Sam: 'Can you still see Sam? This is s.' Cover Sam: child says /s/ from the letter alone.",
       "plain": "Plain lowercase s only, in 2-3 fonts. 'Same letter, different clothes. What does it say?'",
-      "cue": "'Think of Sami' + snake slide"
+      "cue": "'Think of Sam' + snake slide"
      },
      "t": {
       "picture": "Tama beside the plain t: 'Tama makes a t shape. This is t. t says /t/.' Trace t over Tama, then trace the plain t.",
@@ -1668,10 +1668,10 @@
       "cue": "'Think of Manny' + rub tummy, hum"
      },
      "s": {
-      "picture": "Sami beside the plain s: 'Sami makes an s shape. This is s. s says /s/.' Trace s over Sami, then trace the plain s.",
-      "outline": "Plain s over a faint Sami: 'Can you still see Sami? This is s.' Cover Sami: child says /s/ from the letter alone.",
+      "picture": "Sam beside the plain s: 'Sam makes an s shape. This is s. s says /s/.' Trace s over Sam, then trace the plain s.",
+      "outline": "Plain s over a faint Sam: 'Can you still see Sam? This is s.' Cover Sam: child says /s/ from the letter alone.",
       "plain": "Plain lowercase s only, in 2-3 fonts. 'Same letter, different clothes. What does it say?'",
-      "cue": "'Think of Sami' + snake slide"
+      "cue": "'Think of Sam' + snake slide"
      },
      "t": {
       "picture": "Tama beside the plain t: 'Tama makes a t shape. This is t. t says /t/.' Trace t over Tama, then trace the plain t.",
@@ -1886,10 +1886,10 @@
       "cue": "'Think of Manny' + rub tummy, hum"
      },
      "s": {
-      "picture": "Sami beside the plain s: 'Sami makes an s shape. This is s. s says /s/.' Trace s over Sami, then trace the plain s.",
-      "outline": "Plain s over a faint Sami: 'Can you still see Sami? This is s.' Cover Sami: child says /s/ from the letter alone.",
+      "picture": "Sam beside the plain s: 'Sam makes an s shape. This is s. s says /s/.' Trace s over Sam, then trace the plain s.",
+      "outline": "Plain s over a faint Sam: 'Can you still see Sam? This is s.' Cover Sam: child says /s/ from the letter alone.",
       "plain": "Plain lowercase s only, in 2-3 fonts. 'Same letter, different clothes. What does it say?'",
-      "cue": "'Think of Sami' + snake slide"
+      "cue": "'Think of Sam' + snake slide"
      },
      "t": {
       "picture": "Tama beside the plain t: 'Tama makes a t shape. This is t. t says /t/.' Trace t over Tama, then trace the plain t.",
