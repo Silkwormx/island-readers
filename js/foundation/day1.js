@@ -75,9 +75,10 @@
   }
   function go(id) { clearWait(); Snd.stop(); location.hash = '#/foundation/sample/' + id; }
 
-  function shell(title, back) {
+  function shell(title, back, gameId) {
     const scr = IR.newScreen();
     const lesson = PACK && PACK.lesson;
+    const isGame = GAMES.some((item) => item.id === gameId);
     const fill = h('i');
     const bar = h('div', { class: 'pbar ll1bar', role: 'progressbar', 'aria-valuemin': 0, 'aria-valuemax': 100, 'aria-valuenow': 0 }, fill);
     const instr = h('div', { class: 'instr' });
@@ -86,25 +87,24 @@
       ? IR.ui.pageNav(() => { clearWait(); location.hash = back; })
       : h('button', { class: 'xbtn', type: 'button', 'aria-label': 'Back', onclick: () => { clearWait(); Snd.stop(); location.hash = back; } }, icon('close'));
     const roundEl = h('p', { class: lesson ? 'llkidprog' : 'qcount llround', 'aria-live': 'polite' }, '');
-    const header = lesson
+    const header = !isGame && lesson
       ? h('header', { class: 'uA-top llbar' }, topNav, h('h1', { class: 'uA-title' }, title), roundEl)
-      : h('header', { class: 'lesson-top ll1top' },
-        topNav,
-        h('h1', null, title),
-        h('span', { class: 'll1faces' },
-          h('img', { class: 'll1face', src: ZIP, alt: 'Zip' }),
-          h('img', { class: 'll1face', src: FRILL, alt: 'Frill' })));
-    const screen = h('div', { class: lesson ? 'screen fs-team ll-day1 ll-lessonplay' : 'screen lessonscreen u5step ll-day1' },
+      : h('header', { class: 'lesson-top ll1top' }, topNav, bar);
+    let nextH = null;
+    const nextBtn = h('button', { class: 'btn big next', type: 'button', 'aria-label': 'Next' }, 'Next', icon('next'));
+    const nav = h('div', { class: 'lesson-nav' }, nextBtn);
+    const screen = h('div', { class: (isGame ? 'screen lessonscreen u5step ll-day1' : (lesson ? 'screen fs-team ll-day1 ll-lessonplay' : 'screen lessonscreen u5step ll-day1')) },
       header,
-      lesson ? null : roundEl,
+      isGame ? null : roundEl,
       instr, stage,
-      h('div', { class: 'll1foot' }, bar));
+      isGame ? nav : h('div', { class: 'll1foot' }, bar));
     const ctx = {
       scr: scr,
       stage: stage,
       mistakes: 0,
       roundTo(x, n) {
         if (roundEl) roundEl.textContent = 'Round ' + x + ' of ' + n;
+        if (ctx.count) ctx.count(x, n);
         ctx.progress((x - 1) / Math.max(1, n));
       },
       miss() { ctx.mistakes += 1; },
@@ -116,19 +116,16 @@
       setInstr(text) {
         instr.innerHTML = '';
         if (!text) return;
-        if (PACK && PACK.lesson) {
-          instr.append(h('button', {
-            class: 'llnarr',
-            type: 'button',
-            'aria-label': 'Frill says: ' + text,
-            onclick: () => say(text)
-          }, h('img', { src: FRILL, alt: 'Frill' }), h('span', null, text)));
-          say(text);
-          return;
-        }
-        instr.append(speakerBtn(() => say(text), 'Hear the directions'), h('span', { class: 'itext' }, text));
+        instr.append(h('button', {
+          class: 'llnarr',
+          type: 'button',
+          'aria-label': 'Frill says: ' + text,
+          onclick: () => say(text)
+        }, h('img', { src: FRILL, alt: 'Frill' }), h('span', null, text)));
         say(text);
       },
+      setNext(fn) { nextH = fn; },
+      goNext() { clearWait(); Snd.stop(); if (nextH && nextH()) return; },
       badge(label, again) {
         ctx.progress(1);
         if (PACK.onDone) PACK.onDone(again);
@@ -139,18 +136,23 @@
           return;
         }
         const team = /^#\/foundation\/letters\/g(\d+)/.exec(back || '');
+        const at = GAMES.findIndex((item) => item.id === again);
+        const nxt = at >= 0 ? GAMES[at + 1] : null;
         const done = IR.engage.endScreen({
           title: label,
           stars: ctx.mistakes ? 2 : 3,
-          backLabel: 'Play again',
-          nextLabel: (PACK && PACK.nextLabel) || (team ? 'Back to Team ' + team[1] : 'More games'),
-          onBack: () => {
-            const app = document.querySelector('#app');
-            app.innerHTML = '';
-            if (team && IR.day1Play) IR.day1Play(app, again, PACK, back);
-            else open('#/foundation/sample/' + again, app);
-          },
+          backLabel: 'Back to lesson menu',
+          nextLabel: nxt ? 'Next activity' : ((PACK && PACK.nextLabel) || (team ? 'Back to Team ' + team[1] : 'More games')),
+          onBack: () => { location.hash = back; },
+          onHome: () => { location.hash = '#/home'; },
           onNext: () => {
+            if (nxt) {
+              const app = document.querySelector('#app');
+              app.innerHTML = '';
+              if (team && IR.day1Play) IR.day1Play(app, nxt.id, PACK, back);
+              else open('#/foundation/sample/' + nxt.id, app);
+              return;
+            }
             if (PACK && PACK.after) { location.hash = PACK.after; return; }
             if (team) location.hash = back;
             else go('play');
@@ -165,7 +167,19 @@
       }
     };
     document.querySelector('#app').append(screen);
-    if (IR.engage) IR.engage.mount(ctx, screen);
+    if (isGame) {
+      nextBtn.addEventListener('click', () => ctx.goNext());
+      const navApi = IR.simpleNav(nav, nextBtn, () => { clearWait(); Snd.stop(); location.hash = back; });
+      const keep = navApi.label;
+      navApi.label = function (t) {
+        keep(t && String(t).trim() ? t : 'Next');
+        nextBtn.hidden = false;
+      };
+      navApi.label('Next');
+      if (IR.attachGameRules) IR.attachGameRules(ctx, screen, title);
+      if (IR.engage) IR.engage.mount(ctx, screen);
+      if (IR.teach) { IR.teach.mount(ctx, screen); IR.teach.sync(); }
+    } else if (IR.engage) IR.engage.mount(ctx, screen);
     return ctx;
   }
 
@@ -329,6 +343,8 @@
         else if (plan.length < 14) plan.push(item);
       }, i);
     }
+    if (ctx.setNext) ctx.setNext(() => { if (i < plan.length - 1) { i += 1; step(); return true; } return false; });
+    if (ctx.setBack) ctx.setBack(() => { if (i > 0) { i -= 1; step(); return true; } return false; });
     step();
   }
 
@@ -548,7 +564,7 @@
     PACK = pack || samplePack();
     app.innerHTML = '';
     const step = GAMES.filter((item) => item.id === id)[0];
-    const ctx = shell(step.title, back || '#/foundation/letters/g1');
+    const ctx = shell(step.title, back || '#/foundation/letters/g1', id);
     RUN[id](ctx);
     return true;
   }
@@ -563,7 +579,7 @@
     const titles = { done: 'Look what I can read', play: 'Games' };
     const step = LESSON.filter((item) => item.id === id)[0] || GAMES.filter((item) => item.id === id)[0];
     const back = (id === 'team' || id === 'meet' || id === 'link' || id === 'done') ? '#/foundation/letters/g1' : '#/foundation/sample/play';
-    const ctx = shell(titles[id] || (step && step.title) || 'Day 1', back);
+    const ctx = shell(titles[id] || (step && step.title) || 'Day 1', back, id);
     if (id === 'meet') meet(ctx, '');
     else RUN[id](ctx);
     return true;

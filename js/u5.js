@@ -21,6 +21,19 @@
     const out = []; letters.forEach((l, k) => { (L[l] || L.e)(k ? 620 : 220).forEach((pts, j) => out.push({ letter: l, slot: k, num: j + 1, pts })); }); return out;
   }
   const U5PROG = {}, U5ROUTE = {};
+  function capName(s) { s = String(s || ''); return s ? s.charAt(0).toUpperCase() + s.slice(1) : s; }
+  function u5Teach() {
+    return {
+      pdf: 'materials/unit5/Island_Readers_Magic_e_Lesson.pdf',
+      pdfLabel: 'Magic e Slideshow (PDF)',
+      files: [
+        { title: 'Magic e Slideshow (PowerPoint)', href: 'materials/unit5/Island_Readers_Magic_e_Lesson.pptx' },
+        { title: 'Student sheets', href: 'materials/unit5/Unit5_Teacher_Led_Student_Sheets.pdf' },
+        { title: 'Lesson 5.1 checks', href: 'materials/unit5/Lesson5.1_Teacher_Led_Checks.pdf' },
+        { title: 'Lesson 5.2 checks', href: 'materials/unit5/Lesson5.2_Teacher_Led_Checks.pdf' }
+      ]
+    };
+  }
   ['u51', 'u53'].forEach((KEY) => {   /* u51 = Lesson 5.1 Silent e (all vowels); u53 = Lesson 5.2 Tricky silent e (key kept so its audio and saved stars stay) */
   const ACTS = (() => {
     const N = window.IR_DATA_U5[KEY];
@@ -280,7 +293,7 @@
       const story = pick('story')[0];
       if (story) { story.title = N.storyTitle || story.title; story.note = 'Story Time'; story.img = IR.storyCovers[KEY === 'u51' ? '5.1' : '5.2']; story.alt = N.storyTitle || ''; story.big = true; }
       app.append(h('div', { class: 'screen trailscreen unitpage unitA u5menu stepage' },
-        h('header', { class: 'uA-top' }, IR.ui.pageNav('#/home'), h('h1', { class: 'uA-title' }, h('small', null, 'Unit 5 Lesson ' + IR.kidLesson(NUM)), N.name), IR.teacherBox({ pdf: 'materials/unit5/Island_Readers_Magic_e_Lesson.pdf', pdfLabel: 'Magic e Slideshow (PDF)' })),
+        h('header', { class: 'uA-top' }, IR.ui.pageNav('#/u5'), h('h1', { class: 'uA-title' }, h('small', null, 'Unit 5 Lesson ' + IR.kidLesson(NUM)), capName(N.name)), IR.teacherBox(u5Teach())),
         IR.modeBar({
           lesson: pick('lesson'),
           games: pick('activities').concat(pick('extra')),
@@ -657,7 +670,39 @@
   });
   /* the Unit 5 picker (same panel as Unit 4) uses IR.nkProgress for lesson progress */
   const prevProg = IR.nkProgress; IR.nkProgress = (id) => { const k = id === 'u5review' ? 'u53' : id; return U5PROG[k] ? U5PROG[k](id) : (prevProg ? prevProg(id) : null); };
-  IR.u5Route = (hash, app) => { if (hash === '#/u52' || hash.indexOf('#/u52/') === 0) { location.replace(hash.replace('#/u52', '#/u51')); return true; }   /* old 5.2 (a_e...) is now part of 5.1 */
+  function unitHub(app) {
+    IR.newScreen();
+    const lessons = (IR.u5Lessons || []).slice().sort((a, b) => String(a.n).localeCompare(String(b.n), undefined, { numeric: true }));
+    const lesson = lessons.map((L) => ({ title: 'Lesson ' + IR.kidLesson(L.n) + ' · ' + capName(L.name), href: '#/' + L.key }));
+    const seen = {};
+    const games = [];
+    lessons.forEach((L) => {
+      (L.steps || []).forEach((s) => {
+        if (s.group !== 'activities' && s.group !== 'extra') return;
+        if (seen[s.title]) return;
+        seen[s.title] = 1;
+        games.push({ title: s.title, href: '#/' + L.key + '/' + s.id });
+      });
+    });
+    const stories = lessons.map((L) => {
+      const step = (L.steps || []).filter((s) => s.group === 'story')[0];
+      const data = window.IR_DATA_U5[L.key] || {};
+      return {
+        title: data.storyTitle || (step && step.title) || 'Story Time',
+        href: step ? ('#/' + L.key + '/' + step.id) : ('#/' + L.key),
+        img: IR.storyCovers[L.n] || '',
+        alt: data.storyTitle || '',
+        big: true,
+        note: 'Lesson ' + IR.kidLesson(L.n)
+      };
+    });
+    app.append(h('div', { class: 'screen trailscreen unitpage unitA u5menu stepage' },
+      h('header', { class: 'uA-top' }, IR.ui.pageNav('#/home'), h('h1', { class: 'uA-title' }, h('small', null, 'Unit 5'), 'Silent e'), IR.teacherBox(u5Teach())),
+      IR.modeBar({ lesson: lesson, games: games, stories: stories })));
+    if (IR.teach) IR.teach.sync();
+  }
+  IR.u5Route = (hash, app) => { if (hash === '#/u5' || hash === '#/u5/') { unitHub(app); return true; }
+    if (hash === '#/u52' || hash.indexOf('#/u52/') === 0) { location.replace(hash.replace('#/u52', '#/u51')); return true; }   /* old 5.2 (a_e...) is now part of 5.1 */
     for (const k in U5ROUTE) { if (U5ROUTE[k](hash, app)) return true; } return false; };
   const D = window.IR_DATA; if (D) { D.islands = D.islands || {}; D.islands.i5 = { units: [
     { id: 'u51', unitNo: 5, name: 'Silent e', href: '#/u51', img: ['zip'], ready: true, stars: 15 },
