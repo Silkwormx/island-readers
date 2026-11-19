@@ -2416,15 +2416,6 @@
           note: 'a · m · s · t',
           goLabel: 'Open lesson',
           go: () => { Snd.stop(); location.hash = base + '/flow/' + group.letters[0] + '/hear'; }
-        },
-        {
-          pick: true,
-          tone: 'teachled',
-          kicker: 'Teacher Led',
-          title: 'Team 1: m s a t',
-          note: '5-day slideshow',
-          goLabel: 'Open slideshow',
-          go: () => openSlides(group.id)
         }
       ]
       : group.letters.map((id) => ({
@@ -2862,7 +2853,7 @@
     const files = sheets[group.id]
       ? [{ title: 'Daily practice sheets', href: sheets[group.id] }]
       : [];
-    return { slides: deck ? '#/foundation/slides/' + group.id : '', files: files };
+    return { slides: deck ? '#/foundation/slides/' + group.id : '', files: files, days: (deck && deck.days) || [] };
   }
   function pdfLink(label, href) {
     return h('a', { class: 'drop-link', href: href, target: '_blank', rel: 'noopener' }, label);
