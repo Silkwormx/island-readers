@@ -602,7 +602,7 @@
       const href = (days.filter((day) => day && day.href)[0] || {}).href || '';
       deck = String(href).replace(/\/\d+\/?$/, '');
     }
-    const materials = h('button', { class: 'teachbox', type: 'button' }, 'Teacher Materials');
+    const materials = h('button', { class: 'teachbox', type: 'button' }, 'Slideshow');
     const wrap = h('div', { class: 'teachcorner' }, materials);
     if (deck) {
       materials.addEventListener('click', () => { Snd.stop(); location.hash = deck; });
