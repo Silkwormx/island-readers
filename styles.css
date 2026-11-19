@@ -3157,6 +3157,61 @@ html.teach .u5step .magebox{font-size:clamp(2.4rem,7vh,3.8rem)!important;min-wid
 .u5step .sentact .slot .tile.word{width:auto;height:auto;min-width:0;min-height:0;white-space:nowrap;line-height:1.05;font-size:clamp(1.7rem,4vh,2.4rem);padding:.28rem .85rem}
 html.teach .u5step .sentact .tile.word{font-size:clamp(1.7rem,4vh,2.4rem)!important;min-height:0!important;min-width:0!important;height:auto;padding:.28rem .85rem}
 
+/* Preview: the ng unit page, laid out like a calm path for a child. */
+.ngpreview{background:var(--cream);font-family:Andika,sans-serif;overflow:auto}
+.ngpreview .ngpath{width:min(100%,76rem);margin:0 auto;padding:.4rem 1.2rem 2.4rem;display:flex;flex-direction:column;gap:1.5rem;box-sizing:border-box}
+.ngpreview .ngshells{display:flex;justify-content:center;gap:1.6rem;padding:.2rem 0 .3rem}
+.ngpreview .ngshellwrap{display:flex;flex-direction:column;align-items:center;gap:.28rem;font-weight:700;font-size:1.05rem;color:#6A6256}
+.ngpreview .ngshell{width:2.8rem;height:2rem;border-radius:50% 50% 46% 46%;background:#F6E7CF;border:3px solid #C4A574;box-shadow:inset 0 -6px 0 rgba(196,165,116,.35)}
+.ngpreview .ngshell.on{background:#F28C00;border-color:#C95A10;box-shadow:inset 0 -6px 0 rgba(180,80,10,.35)}
+.ngpreview .ngshellwrap:has(.on){color:#C95A10}
+.ngpreview .stephead{gap:.7rem}
+.ngpreview .stepnum{width:3.1rem;height:3.1rem;font-size:1.55rem;border-radius:1rem}
+.ngpreview .steplab{font-size:1.7rem}
+.ngpreview .lessonrow{display:grid;grid-template-columns:1fr 1fr;gap:1rem;align-items:stretch}
+.ngpreview .lessontab{display:flex;flex-direction:column;justify-content:center;min-height:15rem;height:100%;border-radius:1.6rem;border:4px solid #E8731C;background:#FFF1E2;box-shadow:0 6px 0 rgba(43,37,64,.16);overflow:hidden;text-align:center;color:#2B2540;padding:0}
+.ngpreview .lessontab .uimg{display:flex;align-items:flex-end;justify-content:center;height:8.5rem;min-height:0;background:transparent}
+.ngpreview .lessontab .uimg img{height:100%;width:auto;max-width:86%;object-fit:contain}
+.ngpreview .lessontab .ubody{display:flex;flex-direction:column;align-items:center;gap:.15rem;padding:.2rem .7rem .8rem}
+.ngpreview .lessontab .uk{font-size:.85rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+.ngpreview .lessontab h2{margin:0;font-size:clamp(1.6rem,3vw,2.2rem);line-height:1.1}
+.ngpreview .lessontab .obtn{margin-top:.35rem;min-height:2.6rem;padding:0 1rem;border-radius:1rem;border:3px solid #B5510D;background:#F28C00;color:#fff;font:700 1.1rem Andika,sans-serif;box-shadow:0 3px 0 #B5510D;display:inline-flex;align-items:center;justify-content:center}
+.ngpreview .lessontab.teachled{background:#F28C00;border-color:#C95A10;color:#fff;box-shadow:0 6px 0 #B5510D}
+.ngpreview .lessontab.teachled .uimg{display:none}
+.ngpreview .lessontab.teachled .ubody{justify-content:center;flex:1}
+.ngpreview .lessontab.teachled .uk,.ngpreview .lessontab.teachled h2,.ngpreview .lessontab.teachled .umin{color:#fff}
+.ngpreview .lessontab.teachled .obtn{background:#fff;color:#C95A10;border-color:#fff;box-shadow:0 3px 0 #9A3E08}
+.ngpreview .gamerowlab{font-size:1.15rem;color:#6A6256;margin:0 0 .25rem}
+.ngpreview .gamerows{gap:.9rem}
+.ngpreview .gamerow > .gamegrid{grid-template-columns:repeat(4,minmax(0,1fr));grid-auto-rows:12.5rem;gap:.7rem}
+.ngpreview .gamegrid:not(.pics) .gamecard{height:12.5rem;min-height:12.5rem;max-height:12.5rem;padding:1.7rem .5rem .6rem;border-width:3px}
+.ngpreview .gamegrid:not(.pics) .gamepic{width:5.5rem;height:5.5rem;min-width:5.5rem;min-height:5.5rem;max-width:5.5rem;max-height:5.5rem}
+.ngpreview .gamegrid:not(.pics) .gametxt b{font-size:1.15rem}
+.ngpreview .gamecard.done{background:#E7F6EA;border-color:#2E9E6B;box-shadow:0 4px 0 #1F7A3A}
+.ngpreview .gamecard.done .gamedone{display:inline-flex;width:1.7rem;height:1.7rem;color:#E2A318;background:#fff;border-radius:50%;align-items:center;justify-content:center}
+.ngpreview .storycard{min-height:12rem;padding:1rem 1.2rem;gap:1.2rem;border-width:4px;border-radius:1.6rem}
+.ngpreview .storypic{width:16rem;height:10rem;object-fit:cover;border-radius:1rem}
+.ngpreview .storycard b{font-size:2rem}
+@media (max-width:800px){
+  .ngpreview .uA-top{row-gap:.4rem}
+  .ngpreview .teachcorner{order:1}
+  .ngpreview .pagenav{order:2}
+  .ngpreview .uA-title{order:3;flex:1 1 100%}
+  .ngpreview .lessonrow{grid-template-columns:1fr}
+  .ngpreview .gamerow > .gamegrid{grid-template-columns:1fr 1fr;grid-auto-rows:11rem}
+  .ngpreview .gamegrid:not(.pics) .gamecard{height:11rem;min-height:11rem;max-height:11rem}
+  .ngpreview .gamegrid:not(.pics) .gamepic{width:4rem;height:4rem;min-width:4rem;min-height:4rem;max-width:4rem;max-height:4rem}
+  .ngpreview .storycard{flex-direction:column;text-align:center}
+  .ngpreview .storypic{width:100%;height:9rem}
+}
+@media (min-width:1600px){
+  .ngpreview .ngpath{width:min(100%,92rem)}
+  .ngpreview .gamerow > .gamegrid{grid-auto-rows:14rem}
+  .ngpreview .gamegrid:not(.pics) .gamecard{height:14rem;min-height:14rem;max-height:14rem}
+  .ngpreview .gamegrid:not(.pics) .gamepic{width:6.5rem;height:6.5rem;min-width:6.5rem;min-height:6.5rem;max-width:6.5rem;max-height:6.5rem}
+  .ngpreview .steplab{font-size:2rem}
+}
+
 /* Menu game cards: one grid, equal boxes, icon and title in the same place on every card. */
 .stepage .gamerows{display:flex;flex-direction:column;align-items:stretch;width:100%;gap:.35rem}
 .stepage .gamerow{display:flex;flex-direction:column;align-items:stretch;width:100%;min-width:0;gap:.12rem}
@@ -3222,4 +3277,25 @@ html.teach .u5step .sentact .tile.word{font-size:clamp(1.7rem,4vh,2.4rem)!import
   .fsteam1.stepage .gamegrid:not(.pics) .gamepic,
   .fsteam1.stepage .gamegrid:not(.pics) .gameico,
   .fsteam1.stepage .gamegrid:not(.pics) .gamepair{width:3.5rem;height:3.5rem;min-width:3.5rem;min-height:3.5rem;max-width:3.5rem;max-height:3.5rem}
+}
+.ngpreview.stepage .gamerow > .gamegrid{grid-template-columns:repeat(4,minmax(0,1fr));grid-auto-rows:12.5rem}
+.ngpreview.stepage .gamegrid:not(.pics) .gamecard{height:12.5rem;min-height:12.5rem;max-height:12.5rem}
+.ngpreview.stepage .gamegrid:not(.pics) .gamepic,
+.ngpreview.stepage .gamegrid:not(.pics) .gameico,
+.ngpreview.stepage .gamegrid:not(.pics) .gamepair{width:5.5rem;height:5.5rem;min-width:5.5rem;min-height:5.5rem;max-width:5.5rem;max-height:5.5rem}
+.ngpreview.stepage .gamegrid:not(.pics) .gametxt{height:3.5em;min-height:3.5em;max-height:3.5em}
+.ngpreview.stepage .gamegrid:not(.pics) .gametxt b{font-size:1.15rem;-webkit-line-clamp:3}
+@media (max-width:800px){
+  .ngpreview.stepage .gamerow > .gamegrid{grid-template-columns:1fr 1fr;grid-auto-rows:11rem}
+  .ngpreview.stepage .gamegrid:not(.pics) .gamecard{height:11rem;min-height:11rem;max-height:11rem}
+  .ngpreview.stepage .gamegrid:not(.pics) .gamepic,
+  .ngpreview.stepage .gamegrid:not(.pics) .gameico,
+  .ngpreview.stepage .gamegrid:not(.pics) .gamepair{width:4rem;height:4rem;min-width:4rem;min-height:4rem;max-width:4rem;max-height:4rem}
+}
+@media (min-width:1600px){
+  .ngpreview.stepage .gamerow > .gamegrid{grid-auto-rows:14rem}
+  .ngpreview.stepage .gamegrid:not(.pics) .gamecard{height:14rem;min-height:14rem;max-height:14rem}
+  .ngpreview.stepage .gamegrid:not(.pics) .gamepic,
+  .ngpreview.stepage .gamegrid:not(.pics) .gameico,
+  .ngpreview.stepage .gamegrid:not(.pics) .gamepair{width:6.5rem;height:6.5rem;min-width:6.5rem;min-height:6.5rem;max-width:6.5rem;max-height:6.5rem}
 }

@@ -653,10 +653,28 @@
     const LK = 'ir_sess_ng'; const prevH = IR._ngHashWas || '';
     if (!/^#\/(island3|lesson\/|check)/.test(prevH)) try { sessionStorage.removeItem(LK); } catch (e) {}
     IR._ngHashWas = location.hash || '#/island3';
-    const pick = (group) => secs.filter((r) => r.group === group).map((r) => ({ id: r.id, title: r.title, href: r.href, note: TIPS[r.id], min: r.min }));
-    const story = pick('story')[0];
-    if (story) { story.title = D.storyTitle || story.title; story.note = 'Story Time'; story.img = IR.storyCovers['4.1']; story.alt = D.storyTitle || ''; story.big = true; }
-    app.append(h('div', { class: 'screen trailscreen unitpage unitA orangeunit stepage' },
+    const byId = {};
+    secs.forEach((row) => { byId[row.id] = row; });
+    function playItem(row) {
+      return { id: row.id, title: row.title, href: row.href, done: !!row.done, doneIcon: 'star', alt: row.title };
+    }
+    const gameGroups = [
+      ['Sounds', ['hear', 'bells']],
+      ['Words', ['build', 'chain', 'scramble', 'feed']],
+      ['Read', ['sentence', 'story', 'check']]
+    ];
+    let gameNo = 0;
+    const gameRows = gameGroups.map(([label, ids]) => ({
+      label: label,
+      items: ids.map((id) => byId[id]).filter(Boolean).map(playItem)
+    }));
+    const allGames = gameRows.reduce((list, row) => list.concat(row.items), []);
+    const lesson = byId.intro;
+    const listen = byId.listen;
+    const shell = (name, on) => h('div', { class: 'ngshellwrap' },
+      h('span', { class: 'ngshell' + (on ? ' on' : ''), 'aria-hidden': 'true' }),
+      h('span', null, name));
+    app.append(h('div', { class: 'screen trailscreen unitpage unitA orangeunit stepage ngpreview' },
       h('header', { class: 'uA-top' }, pageNav('#/home'), h('h1', { class: 'uA-title' }, h('small', null, 'Unit 4 Lesson 1'), 'ng'), teacherBox({
         slides: '#/teachers/slides/ng',
         files: [
@@ -664,16 +682,39 @@
           { title: 'Teacher pack', href: 'teachers/ng/Lesson3.1_ng_Teacher_Pack.pdf' }
         ]
       })),
-      modeBar({
-        lesson: pick('lesson'),
-        games: pick('activities'),
-        story: story,
-        slides: '#/teachers/slides/ng',
-        files: [
-          { title: 'Daily practice sheets', href: 'teachers/ng/Lesson3.1_ng_Daily_Practice_Sheets.pdf' },
-          { title: 'Teacher pack', href: 'teachers/ng/Lesson3.1_ng_Teacher_Pack.pdf' }
-        ]
-      })));
+      h('div', { class: 'ngpath' },
+        h('div', { class: 'ngshells', role: 'group', 'aria-label': 'Lesson, games, and story' },
+          shell('Lesson', !!(lesson && lesson.done)),
+          shell('Games', allGames.length > 0 && allGames.every((item) => item.done)),
+          shell('Story', !!(listen && listen.done))),
+        h('section', { class: 'ngstep' },
+          h('div', { class: 'stephead' }, h('span', { class: 'stepnum' }, '1'), h('span', { class: 'steplab' }, 'Lesson')),
+          h('div', { class: 'lessonrow' },
+            lessonTab({
+              pick: true, tone: 'student', kicker: 'Independent', title: lesson ? lesson.title : 'Meet ng',
+              img: 'img/lesson_zip_frill.webp', alt: 'Zip and Frill', goLabel: 'Open lesson',
+              go: () => { Snd.stop(); location.hash = lesson ? lesson.href : '#/lesson/1'; }
+            }),
+            lessonTab({
+              pick: true, tone: 'teachled', kicker: 'Teacher Led', title: 'ng',
+              note: 'Slideshow', goLabel: 'Open slideshow',
+              go: () => { Snd.stop(); location.hash = '#/teachers/slides/ng'; }
+            }))),
+        h('section', { class: 'ngstep' },
+          h('div', { class: 'stephead' }, h('span', { class: 'stepnum' }, '2'), h('span', { class: 'steplab' }, 'Games')),
+          h('div', { class: 'gamerows' }, ...gameRows.map((row) => h('div', { class: 'gamerow' },
+            h('p', { class: 'gamerowlab' }, row.label),
+            h('ol', { class: 'gamegrid' }, ...row.items.map((item) => {
+              gameNo += 1;
+              return h('li', null, itemCard(item, gameNo));
+            })))))),
+        h('section', { class: 'ngstep' },
+          h('div', { class: 'stephead' }, h('span', { class: 'stepnum' }, '3'), h('span', { class: 'steplab' }, 'Story')),
+          itemCard({
+            title: (D && D.storyTitle) || (listen && listen.title) || 'Story Time',
+            note: 'Story Time', big: true, img: IR.storyCovers['4.1'],
+            alt: (D && D.storyTitle) || 'Story', href: listen ? listen.href : '#/lesson/2', done: !!(listen && listen.done), doneIcon: 'star'
+          })))));
   }
 
   /* ---------- lesson shell ---------- */
