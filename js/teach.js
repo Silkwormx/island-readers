@@ -52,24 +52,8 @@
     if (gesture && v) requestFs();
     if (gesture && !v) exitFs();
   }
-  function here() {
-    const hash = location.hash || '';
-    return hash.indexOf('#/u5') === 0 || hash.indexOf('#/review5') === 0 || hash.indexOf('#/foundation') === 0;
-  }
   function ensureToggle() {
-    let b = document.querySelector('.teachtoggle');
-    if (!b) {
-      b = h('button', { class: 'teachtoggle', type: 'button' });
-      b.addEventListener('click', () => setOn(!on(), true));
-    }
-    const host = document.querySelector('.u5menu .uA-top, .u5step .lesson-top');
-    if (!here() || !host) { if (b.isConnected) b.remove(); return; }
-    const gear = host.querySelector('.gear');
-    if (b.parentElement !== host) {
-      if (gear) host.insertBefore(b, gear);
-      else host.append(b);
-    }
-    paintToggle();
+    document.querySelectorAll('.teachtoggle').forEach((el) => el.remove());
   }
 
   function teamButton(name, key) {
@@ -136,7 +120,11 @@
     }
   };
 
-  function boot() { applyClass(); ensureToggle(); }
+  function boot() {
+    if (on()) setOn(false, false);
+    else applyClass();
+    ensureToggle();
+  }
   if (document.body) boot();
   else document.addEventListener('DOMContentLoaded', boot);
   window.addEventListener('hashchange', () => setTimeout(ensureToggle, 0));
