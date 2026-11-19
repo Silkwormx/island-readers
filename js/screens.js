@@ -529,14 +529,42 @@
         stars && stars.total ? h('div', { class: 'uprog' }, stars.done + ' of ' + stars.total + ' stars') : null,
         h('span', { class: 'obtn' }, item.goLabel || 'Open lesson')));
   }
+  const GAME_ICON = {
+    hear: 'hear.svg', bells: 'bell.svg', build: 'build.svg', chain: 'chain.svg', scramble: 'scramble.svg',
+    feed: 'zip.svg', sentence: 'bridge.svg', story: 'read.svg', read: 'read.svg', check: 'check.svg',
+    fish: 'fish.svg', sort: 'shortlong.svg', mage: 'magic.svg', ngnk: 'choice.svg', rhyme: 'rhyme.svg',
+    comp: 'storycheck.svg', review: 'review.svg'
+  };
+  const GAME_ICON_TITLE = {
+    'Add the ending': 'ending.svg',
+    'Tap each word that has an ending': 'ending.svg',
+    'Match the word': 'matchword.svg',
+    'Short or Long': 'shortlong.svg',
+    'Magic e Boxes': 'magic.svg',
+    'e or no e?': 'choice.svg',
+    've or me?': 'choice.svg',
+    'Story Check': 'storycheck.svg',
+    'Rhyme Time': 'rhyme.svg',
+    'Rhyme Call': 'rhyme.svg',
+    'Letter review': 'review.svg',
+    'Ring every bell': 'bell.svg',
+    'Ring every bell and learn its sounds': 'bell.svg'
+  };
+  function gamePicture(item) {
+    const titled = GAME_ICON_TITLE[item.title];
+    if (titled) return 'foundation/img/games/icons/' + titled;
+    const id = item.id || String(item.href || '').split('/').filter(Boolean).pop() || '';
+    return GAME_ICON[id] ? 'foundation/img/games/icons/' + GAME_ICON[id] : '';
+  }
   function itemCard(item, num) {
     if (!num && item.pick) return lessonTab(item);
+    const pic = item.img || (num ? gamePicture(item) : '');
     const body = [
       num ? h('span', { class: 'gamenum' }, String(num)) : null,
       num ? h('span', { class: 'gameico', 'aria-hidden': 'true' }, icon('play')) : null,
       item.imgs && item.imgs.length
         ? h('span', { class: 'gamepair' }, ...item.imgs.map((src) => h('img', { class: num ? 'gamepic' : 'storypic', src: src, alt: '' })))
-        : (item.img ? h('img', { class: num ? 'gamepic' : 'storypic', src: item.img, alt: item.alt || '' }) : null),
+        : (pic ? h('img', { class: num ? 'gamepic' : 'storypic', src: pic, alt: item.alt || '' }) : null),
       h('span', { class: 'gametxt' }, h('b', null, item.title), item.note ? h('span', { class: 'gamenote' }, item.note) : null, item.min ? h('span', { class: 'gamemin' }, item.min + ' min') : null),
       item.done ? h('span', { class: 'gamedone', 'aria-hidden': 'true' }, icon(item.doneIcon || 'check')) : null
     ];
@@ -625,7 +653,7 @@
     const LK = 'ir_sess_ng'; const prevH = IR._ngHashWas || '';
     if (!/^#\/(island3|lesson\/|check)/.test(prevH)) try { sessionStorage.removeItem(LK); } catch (e) {}
     IR._ngHashWas = location.hash || '#/island3';
-    const pick = (group) => secs.filter((r) => r.group === group).map((r) => ({ title: r.title, href: r.href, note: TIPS[r.id], min: r.min }));
+    const pick = (group) => secs.filter((r) => r.group === group).map((r) => ({ id: r.id, title: r.title, href: r.href, note: TIPS[r.id], min: r.min }));
     const story = pick('story')[0];
     if (story) { story.title = D.storyTitle || story.title; story.note = 'Story Time'; story.img = IR.storyCovers['4.1']; story.alt = D.storyTitle || ''; story.big = true; }
     app.append(h('div', { class: 'screen trailscreen unitpage unitA orangeunit stepage' },

@@ -291,7 +291,7 @@
       const prev = IR['_u5Was_' + KEY] || '';
       if (!new RegExp('^#/' + KEY + '(/|$)').test(prev) && prev !== '#/review5') resetLights();
       IR.newScreen(); const all = sections();
-      const pick = (group) => all.filter((r) => r.group === group).map((r) => ({ title: r.title, href: r.href, note: TIPS[r.id], min: r.min }));
+      const pick = (group) => all.filter((r) => r.group === group).map((r) => ({ id: r.id, title: r.title, href: r.href, note: TIPS[r.id], min: r.min }));
       const story = pick('story')[0];
       if (story) { story.title = N.storyTitle || story.title; story.note = 'Story Time'; story.img = IR.storyCovers[KEY === 'u51' ? '5.1' : '5.2']; story.alt = N.storyTitle || ''; story.big = true; }
       const lesson = pick('lesson').map((item) => Object.assign(item, {

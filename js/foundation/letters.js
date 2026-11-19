@@ -739,11 +739,11 @@
   }
   const MOUTH = '<svg viewBox="0 0 88 64" aria-hidden="true"><ellipse cx="44" cy="34" rx="36" ry="22" fill="#FFE4D6" stroke="#E39A86" stroke-width="3"/><path d="M16 30 Q44 58 72 30 Q44 44 16 30Z" fill="#E23B4A" stroke="#8E1D2C" stroke-width="4" stroke-linejoin="round"/><path d="M24 33 Q44 50 64 33 Q44 41 24 33Z" fill="#4A1020"/><ellipse cx="44" cy="40" rx="11" ry="6" fill="#F08A98"/></svg>';
   const GAME_ART = {
-    find: 'foundation/img/games/hunt.jpg',
-    match: 'foundation/img/games/flash.jpg',
-    sound: 'foundation/img/games/sound.jpg',
-    feed: 'img/zipA.webp',
-    review: 'foundation/img/games/match.jpg'
+    find: 'foundation/img/games/icons/find.svg',
+    match: 'foundation/img/games/icons/case.svg',
+    sound: 'foundation/img/games/icons/first.svg',
+    feed: 'foundation/img/games/icons/zip.svg',
+    review: 'foundation/img/games/icons/review.svg'
   };
   const TEAM1_DAY_ICON = {
     pop: 'foundation/img/games/icons/pop.svg',

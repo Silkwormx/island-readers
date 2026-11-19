@@ -68,7 +68,7 @@
     const prev = IR._nkHashWas || '';
     if (!/^#\/nk(\/|$)/.test(prev) && prev !== '#/review3') resetLights();
     IR.newScreen(); const all = sections();
-    const pick = (group) => all.filter((r) => r.group === group).map((r) => ({ title: r.title, href: r.href, note: TIPS[r.id], min: r.min }));
+    const pick = (group) => all.filter((r) => r.group === group).map((r) => ({ id: r.id, title: r.title, href: r.href, note: TIPS[r.id], min: r.min }));
     const story = pick('story')[0];
     if (story) { story.title = N.storyTitle || story.title; story.note = 'Story Time'; story.img = IR.storyCovers['4.2']; story.alt = N.storyTitle || ''; story.big = true; }
     app.append(h('div', { class: 'screen trailscreen unitpage unitA nkunit stepage' },
