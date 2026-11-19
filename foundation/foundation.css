@@ -189,6 +189,14 @@ html.teach .llist .u5name,html.teach .llplay .u5name{font-size:32px}
 .fs-scene{margin:0;max-width:18rem;text-align:center}
 .fs-scene img{display:block;width:100%;height:auto;object-fit:contain}
 .fs-scene figcaption{margin:.35rem 0 0;font-family:Andika,sans-serif;font-size:1.6rem;font-weight:700}
+.llcount{width:min(100%,46rem);height:100%;max-height:100%;display:flex;flex-direction:column;min-height:0;overflow:hidden}
+.llcountlist{display:flex;flex-direction:column;gap:.4rem;flex:1;min-height:0;justify-content:center}
+.llcountrow{display:grid;grid-template-columns:minmax(5.5rem,8rem) minmax(0,1fr) 3rem;align-items:center;gap:.7rem;flex:1 1 0;min-height:0;max-height:4.2rem;padding:.15rem .8rem;border:3px solid #C95A10;border-radius:1rem;background:#fff;box-shadow:0 3px 0 #C95A10;font-family:Andika,sans-serif;text-align:left;cursor:pointer}
+.llcountword{font-size:clamp(1.8rem,4.4vh,2.7rem);line-height:1;font-weight:700;color:#2B2540}
+.llcountchips{display:flex;gap:.35rem;align-items:center;min-height:1.2rem}
+.llcountdot{width:1.15rem;height:1.15rem;border-radius:50%;background:#F28C00;border:2px solid #C95A10;display:block}
+.llcountnum{width:2.6rem;height:2.6rem;border-radius:.7rem;border:3px dashed #E4D6B4;display:flex;align-items:center;justify-content:center;font-family:Andika,sans-serif;font-size:1.7rem;font-weight:700;color:transparent}
+.llcountnum.on{border-style:solid;border-color:#C95A10;background:#FFF1E2;color:#2B2540}
 .ll-day1{background:#FFF8E7;overflow:hidden;font-family:Andika,sans-serif}
 .ll-day1 .ll1top{display:flex;align-items:center;gap:.4rem;padding:.4rem .6rem}
 .ll-day1 .ll1top h1{flex:1;margin:0;font-size:1.35rem;text-align:left}

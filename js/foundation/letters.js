@@ -727,7 +727,7 @@
       }
     };
   }
-  function teamGames(group) {
+  function teamGames(group, letter) {
     const older = gamesFor(group).map((game) => ({
       id: game.id,
       title: game.title,
@@ -744,7 +744,12 @@
       imgs: game.faces || null,
       alt: game.title,
       done: IR.isDone('ll_g1_d1_' + game.id),
-      go: () => { Snd.stop(); location.hash = '#/foundation/letters/g1/play/' + game.id; }
+      go: () => {
+        Snd.stop();
+        location.hash = game.id === 'count'
+          ? '#/foundation/letters/g1/play/count' + (letter ? '/' + letter : '')
+          : '#/foundation/letters/g1/play/' + game.id;
+      }
     }));
     return ten.concat(older);
   }
@@ -2239,7 +2244,7 @@
         goLabel: 'Open lesson',
         go: () => { Snd.stop(); location.hash = here + '/hear'; }
       }],
-      games: teamGames(group),
+      games: teamGames(group, id),
       story: {
         title: 'Read It',
         note: storyLine(group, id),
@@ -2826,6 +2831,14 @@
       if (!g || !groupOpen(g)) return false;
       introScreen(app, g);
       return true;
+    }
+    const countLetter = /^#\/foundation\/letters\/g1\/play\/count\/([amst])\/?$/.exec(hash);
+    if (countLetter && IR.day1Play) {
+      const g = groupById('g1');
+      if (!g || !groupOpen(g)) return false;
+      const pack = teamOnePack();
+      pack.countLetter = countLetter[1];
+      return IR.day1Play(app, 'count', pack, '#/foundation/letters/g1/lesson/' + countLetter[1]);
     }
     const play10 = /^#\/foundation\/letters\/g1\/play\/([a-z]+)\/?$/.exec(hash);
     if (play10 && IR.day1Play) {

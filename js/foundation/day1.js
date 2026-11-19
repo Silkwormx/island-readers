@@ -46,7 +46,8 @@
     { id: 'flash', title: 'Quick Flash', icon: 'foundation/img/games/flash.jpg' },
     { id: 'match', title: 'Read and Match', icon: 'foundation/img/games/match.jpg' },
     { id: 'sound', title: 'Sound Match', icon: 'foundation/img/games/sound.jpg' },
-    { id: 'sort', title: 'Sort the Sound', icon: 'foundation/img/games/sort.jpg' }
+    { id: 'sort', title: 'Sort the Sound', icon: 'foundation/img/games/sort.jpg' },
+    { id: 'count', title: 'Count the Sounds', icon: 'foundation/img/games/sound.jpg' }
   ];
 
   function say(text) {
@@ -540,6 +541,118 @@
     }, 'sound');
   }
 
+  const COUNT_WORDS = {
+    a: [
+      { w: 'at', n: 2, sounds: ['ah', 't'] },
+      { w: 'am', n: 2, sounds: ['ah', 'mmm'] },
+      { w: 'add', n: 2, sounds: ['ah', 'd'] },
+      { w: 'ant', n: 3, sounds: ['ah', 'nnn', 't'] },
+      { w: 'ask', n: 3, sounds: ['ah', 'sss', 'k'] }
+    ],
+    m: [
+      { w: 'me', n: 2, sounds: ['mmm', 'ee'] },
+      { w: 'map', n: 3, sounds: ['mmm', 'ah', 'p'] },
+      { w: 'mat', n: 3, sounds: ['mmm', 'ah', 't'] },
+      { w: 'mud', n: 3, sounds: ['mmm', 'uh', 'd'] },
+      { w: 'mask', n: 4, sounds: ['mmm', 'ah', 'sss', 'k'] }
+    ],
+    s: [
+      { w: 'so', n: 2, sounds: ['sss', 'oh'] },
+      { w: 'sun', n: 3, sounds: ['sss', 'uh', 'nnn'] },
+      { w: 'sit', n: 3, sounds: ['sss', 'ih', 't'] },
+      { w: 'sock', n: 3, sounds: ['sss', 'ah', 'k'] },
+      { w: 'sand', n: 4, sounds: ['sss', 'ah', 'nnn', 'd'] }
+    ],
+    t: [
+      { w: 'toe', n: 2, sounds: ['t', 'oh'] },
+      { w: 'tap', n: 3, sounds: ['t', 'ah', 'p'] },
+      { w: 'ten', n: 3, sounds: ['t', 'eh', 'nnn'] },
+      { w: 'top', n: 3, sounds: ['t', 'ah', 'p'] },
+      { w: 'tent', n: 4, sounds: ['t', 'eh', 'nnn', 't'] }
+    ]
+  };
+  function countScreens() {
+    const letter = PACK && PACK.countLetter;
+    if (letter && COUNT_WORDS[letter]) return [COUNT_WORDS[letter]];
+    const all = [];
+    for (let i = 0; i < 5; i++) ['a', 'm', 's', 't'].forEach((id) => all.push(COUNT_WORDS[id][i]));
+    const screens = [];
+    for (let i = 0; i < all.length; i += 5) screens.push(all.slice(i, i + 5));
+    return screens;
+  }
+  function countSay(text) {
+    return new Promise((resolve) => {
+      let done = false;
+      const fin = () => { if (done) return; done = true; resolve(); };
+      try {
+        const u = new SpeechSynthesisUtterance(text);
+        u.lang = 'en-US';
+        u.rate = 0.9;
+        u.onend = fin;
+        u.onerror = fin;
+        speechSynthesis.cancel();
+        speechSynthesis.speak(u);
+      } catch (e) { fin(); return; }
+      setTimeout(fin, Math.max(320, String(text).length * 80));
+    });
+  }
+  function countGame(ctx) {
+    const screens = countScreens();
+    let screen = 0;
+    let token = 0;
+    let revealed = new Set();
+    ctx.setInstr("Let's count the sounds together.");
+    function draw() {
+      token += 1;
+      revealed = new Set();
+      try { speechSynthesis.cancel(); } catch (e) { /* quiet */ }
+      ctx.stage.innerHTML = '';
+      if (ctx.roundTo && screens.length > 1) ctx.roundTo(screen + 1, screens.length);
+      ctx.progress(screen / screens.length);
+      const rows = screens[screen].map((item, i) => {
+        const chips = h('span', { class: 'llcountchips' });
+        const num = h('span', { class: 'llcountnum', 'aria-label': 'Number of sounds' });
+        const row = h('button', {
+          class: 'llcountrow',
+          type: 'button',
+          'aria-label': item.w,
+          onclick: () => play(i)
+        }, h('b', { class: 'llcountword' }, item.w), chips, num);
+        return { item: item, chips: chips, num: num, row: row };
+      });
+      ctx.stage.append(h('div', { class: 'llcount' }, h('div', { class: 'llcountlist' }, ...rows.map((row) => row.row))));
+      async function play(i) {
+        const my = ++token;
+        const row = rows[i];
+        row.chips.innerHTML = '';
+        row.num.textContent = '';
+        row.num.classList.remove('on');
+        revealed.delete(i);
+        await countSay(row.item.w);
+        if (my !== token) return;
+        for (let s = 0; s < row.item.sounds.length; s++) {
+          row.chips.append(h('i', { class: 'llcountdot' }));
+          await countSay(row.item.sounds[s]);
+          if (my !== token) return;
+        }
+        row.num.textContent = String(row.item.n);
+        row.num.classList.add('on');
+        revealed.add(i);
+        const done = screen * 5 + revealed.size;
+        const total = screens.length * 5;
+        ctx.progress(done / total);
+      }
+      ctx.setNext(() => {
+        const next = rows.findIndex((_, i) => !revealed.has(i));
+        if (next >= 0) { play(next); return true; }
+        if (screen < screens.length - 1) { screen += 1; draw(); return true; }
+        ctx.badge('Count the Sounds', 'count');
+        return true;
+      });
+    }
+    draw();
+  }
+
   function sortGame(ctx) {
     ctx.setInstr('Tap the first sound.');
     rounds(ctx, pictureCards(), (card, ok, again, i) => {
@@ -556,7 +669,7 @@
 
   const RUN = {
     team: team, meet: meet, link: link, done: lessonBadge, play: menu,
-    pop: pop, feed: feed, catch: catchSound, hunt: hunt, build: build, ears: ears, flash: flash, match: match, sound: soundMatch, sort: sortGame
+    pop: pop, feed: feed, catch: catchSound, hunt: hunt, build: build, ears: ears, flash: flash, match: match, sound: soundMatch, sort: sortGame, count: countGame
   };
 
   function day1Play(app, id, pack, back) {
