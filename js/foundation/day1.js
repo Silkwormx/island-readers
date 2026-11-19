@@ -50,10 +50,27 @@
     { id: 'count', title: 'Count the Sounds', icon: 'foundation/img/games/sound.jpg' }
   ];
 
+  function bareSound(text) {
+    const raw = String(text || '').trim().toLowerCase().replace(/[^a-z]/g, '');
+    const alias = {
+      mmm: 'm', em: 'm', sss: 's', ess: 's', tee: 't', ttt: 't', ay: 'a', ah: 'a',
+      nnn: 'n', en: 'n', fff: 'f', eff: 'f', lll: 'l', rrr: 'r', vvv: 'v', zzz: 'z',
+      pee: 'p', dee: 'd', kay: 'k', bee: 'b', eh: 'e', ih: 'i', uh: 'u', ee: 'ee', oh: 'oh'
+    };
+    if (alias[raw]) return alias[raw];
+    if (raw.length === 1) return raw;
+    if (/^(m{2,}|s{2,}|t{2,}|n{2,}|f{2,}|l{2,}|r{2,})$/.test(raw)) return raw.charAt(0);
+    return '';
+  }
   function say(text) {
+    const key = bareSound(text);
+    if (key) return playSound(key).then(() => {});
+    const words = String(text || '').trim().split(/\s+/).filter(Boolean);
+    const spoken = words.filter((word) => !bareSound(word)).join(' ');
+    if (!spoken) return Promise.resolve();
     return new Promise((resolve) => {
       try {
-        const u = new SpeechSynthesisUtterance(text);
+        const u = new SpeechSynthesisUtterance(spoken);
         u.lang = 'en-US';
         u.rate = 0.92;
         u.onend = () => resolve();
@@ -502,8 +519,16 @@
 
   function blendPick(ctx) {
     ctx.setInstr('Listen to the sounds. Tap the picture.');
+    let blendToken = 0;
     rounds(ctx, PACK.words, (word, ok, again) => {
-      const speak = () => word.parts.reduce((p, id) => p.then(() => playSound(id)).then(() => new Promise((r) => setTimeout(r, 180))), Promise.resolve());
+      const speak = () => {
+        const mine = ++blendToken;
+        Snd.stop();
+        return word.parts.reduce((p, id) => p.then(() => {
+          if (mine !== blendToken) return undefined;
+          return playSound(id).then(() => new Promise((r) => setTimeout(r, 180)));
+        }), Promise.resolve());
+      };
       speak();
       const others = PACK.words.filter((item) => item.src !== word.src);
       const pics = [word].concat(others.slice(0, 2));
@@ -604,9 +629,9 @@
     return screens;
   }
   function countSay(text) {
-    if (IR.playPhoneme && ['ah', 'mmm', 'sss', 't', 'd', 'nnn', 'k', 'p', 'ee', 'oh', 'uh', 'ih', 'eh'].indexOf(text) >= 0) {
-      return IR.playPhoneme(text);
-    }
+    const key = bareSound(text);
+    if (key) return playSound(key);
+    if (String(text || '').replace(/[^A-Za-z]/g, '').length < 2) return Promise.resolve();
     return new Promise((resolve) => {
       let done = false;
       const fin = () => { if (done) return; done = true; resolve(); };

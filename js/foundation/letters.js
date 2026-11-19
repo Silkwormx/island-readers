@@ -538,7 +538,20 @@
   function doneId(group, game) { return 'll_' + group.id + '_' + game; }
   function glyph(id, upper) { return upper ? id.toUpperCase() : id; }
 
-  function speak(text) {
+  function soundKey(word) {
+    const raw = String(word || '').toLowerCase().replace(/[^a-z]/g, '');
+    const alias = {
+      mmm: 'm', em: 'm', sss: 's', ess: 's', tee: 't', ttt: 't', ay: 'a', ah: 'a',
+      nnn: 'n', en: 'n', fff: 'f', eff: 'f', lll: 'l', ell: 'l', rrr: 'r',
+      vvv: 'v', vee: 'v', zzz: 'z', zee: 'z', pee: 'p', dee: 'd', kay: 'k', bee: 'b',
+      jee: 'j', eh: 'e', ih: 'i', uh: 'u', ee: 'ee', oh: 'oh'
+    };
+    if (alias[raw]) return alias[raw];
+    if (raw.length === 1) return raw;
+    if (/^(m{2,}|s{2,}|t{2,}|n{2,}|f{2,}|l{2,}|r{2,}|v{2,}|z{2,})$/.test(raw)) return raw.charAt(0);
+    return '';
+  }
+  function speakPlain(text) {
     return new Promise((resolve) => {
       try {
         if (!window.speechSynthesis || !text) { resolve(false); return; }
@@ -555,6 +568,16 @@
       } catch (e) { resolve(false); }
     });
   }
+  function speak(text) {
+    const words = String(text || '').trim().split(/\s+/).filter(Boolean);
+    if (!words.length) return Promise.resolve(false);
+    const keys = words.map((word) => soundKey(word));
+    const sounds = keys.filter(Boolean);
+    const spoken = words.filter((word, i) => !keys[i]).join(' ');
+    const playSounds = () => sounds.reduce((chain, key) => chain.then(() => (PHONEME_SRC[key] ? playPhoneme(key) : Promise.resolve(false))), Promise.resolve(false));
+    if (!spoken) return playSounds();
+    return playSounds().then(() => speakPlain(spoken));
+  }
   function speakLine(host, text) {
     const words = String(text || '').split(/\s+/).filter(Boolean);
     host.innerHTML = '';
@@ -567,7 +590,9 @@
     const mark = (n) => spans.forEach((span, i) => span.classList.toggle('on', i === n));
     return new Promise((resolve) => {
       if (!window.speechSynthesis || !words.length) { resolve(false); return; }
-      const u = new SpeechSynthesisUtterance(words.join(' '));
+      const said = words.filter((word) => !soundKey(word)).join(' ');
+      if (!said) { resolve(false); return; }
+      const u = new SpeechSynthesisUtterance(said);
       u.lang = 'en-US';
       u.rate = 0.82;
       let at = 0;
@@ -617,11 +642,9 @@
   }
   IR.playPhoneme = playPhoneme;
   function hear(L, kind) {
+    if (!L) return Promise.resolve(false);
     if (kind !== 'name' && PHONEME_SRC[L.id]) return playPhoneme(L.id);
-    if (kind === 'sound' && L.audio) {
-      return Snd.play(L.audio).then((ok) => (ok ? true : speak(L.soundSay)));
-    }
-    return speak(kind === 'name' ? L.nameSay : L.soundSay);
+    return Promise.resolve(false);
   }
   function formation(L) {
     const marks = L.strokes.map((s, i) => {
@@ -1288,11 +1311,12 @@
   }
 
   function soundBit(L) {
-    return String(L.soundSay || L.id).split(',')[0];
+    return L && L.id ? L.id : '';
   }
   async function sayBits(parts) {
     for (let n = 0; n < parts.length; n++) {
-      await speak(soundBit(BY[parts[n].id]));
+      const id = parts[n].id;
+      if (PHONEME_SRC[id]) await playPhoneme(id);
       await sleep(260);
     }
   }
@@ -1389,7 +1413,7 @@
           }
           b.classList.add('lit');
           at++;
-          await speak(soundBit(BY[part.id]));
+          if (PHONEME_SRC[part.id]) await playPhoneme(part.id);
           if (at < parts.length || my !== token) return;
           await Snd.play(A.sfx.ding);
           i++;
@@ -1862,7 +1886,7 @@
   }
   function hearPure(L) {
     if (L && PHONEME_SRC[L.id]) return playPhoneme(L.id);
-    return speak(pureSound(L));
+    return Promise.resolve(false);
   }
   function narrate(who, text) {
     const src = who === 'Zip' ? 'img/zipA.webp' : 'img/frill.webp';
@@ -2024,6 +2048,7 @@
     rounds.push({ answer: id, art: '' });
     let i = 0;
     function show() {
+      if (stage._hearWait) clearTimeout(stage._hearWait);
       stage.innerHTML = '';
       if (i >= rounds.length) { ready(); return; }
       const round = rounds[i];
@@ -2032,7 +2057,7 @@
         ? h('img', { class: 'llkidart sm', src: round.art, alt: '' })
         : h('button', { class: 'llkidsound', type: 'button', 'aria-label': 'Hear the sound', onclick: () => hearPure(BY[round.answer]) }, icon('speaker'));
       stage.append(prompt, kidChoices(picks, round.answer, () => { i += 1; setTimeout(show, 280); }));
-      setTimeout(() => { if (stage.querySelector('.llkidchoice')) hearPure(BY[round.answer]); }, 1600);
+      stage._hearWait = setTimeout(() => { if (stage.querySelector('.llkidchoice')) hearPure(BY[round.answer]); }, 1600);
     }
     show();
   }
@@ -2207,6 +2232,7 @@
     const host = h('div', { class: 'llkidcheck' });
     stage.append(ask, host);
     function show() {
+      if (host._hearWait) clearTimeout(host._hearWait);
       host.innerHTML = '';
       if (i >= rounds.length) { ready(); return; }
       ask.textContent = 'Question ' + (i + 1) + ' of ' + rounds.length;
@@ -2219,7 +2245,7 @@
       if (round.art) bits.unshift(h('img', { class: 'llkidart sm', src: round.art, alt: '' }));
       if (round.word) bits.unshift(h('b', { class: 'llkidbig' }, round.word));
       host.append(...bits);
-      if (!round.word) setTimeout(() => { if (host.querySelector('.llkidchoice')) hearPure(BY[id]); }, 1600);
+      if (!round.word) host._hearWait = setTimeout(() => { if (host.querySelector('.llkidchoice')) hearPure(BY[round.answer]); }, 1600);
     }
     show();
   }
