@@ -197,6 +197,16 @@ html.teach .llist .u5name,html.teach .llplay .u5name{font-size:32px}
 .llcountdot{width:1.15rem;height:1.15rem;border-radius:50%;background:#F28C00;border:2px solid #C95A10;display:block}
 .llcountnum{width:2.6rem;height:2.6rem;border-radius:.7rem;border:3px dashed #E4D6B4;display:flex;align-items:center;justify-content:center;font-family:Andika,sans-serif;font-size:1.7rem;font-weight:700;color:transparent}
 .llcountnum.on{border-style:solid;border-color:#C95A10;background:#FFF1E2;color:#2B2540}
+.llfirst,.llbuild{height:100%;max-height:100%;width:min(100%,46rem);display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:.7rem;overflow:hidden;padding-top:.2rem}
+.llfirst .ll1link{width:auto;max-width:70%;max-height:28vh;object-fit:contain}
+.llfirst .ll1friends{max-height:24vh;flex-wrap:nowrap;width:100%}
+.llfirst .ll1friend,.llfirst .ll1card{min-height:0;height:18vh;max-height:7.5rem;flex:1}
+.llfirst .ll1friend img{max-height:14vh;width:auto;object-fit:contain}
+.llbuildslots{display:flex;gap:.55rem;justify-content:center}
+.llbuildslot{width:4.4rem;height:4.4rem;border:4px dashed #C4A574;border-radius:1rem;background:#fff;display:flex;align-items:center;justify-content:center;font-family:Andika,sans-serif;font-size:2.4rem;font-weight:700;line-height:1;color:#2B2540}
+.llbuildslot.filled{border-style:solid;border-color:#2B2540}
+.llbuild .ll1friends{flex-wrap:nowrap}
+.llbuild .ll1card{min-height:0;height:16vh;max-height:6.5rem}
 .ll-day1{background:#FFF8E7;overflow:hidden;font-family:Andika,sans-serif}
 .ll-day1 .ll1top{display:flex;align-items:center;gap:.4rem;padding:.4rem .6rem}
 .ll-day1 .ll1top h1{flex:1;margin:0;font-size:1.35rem;text-align:left}

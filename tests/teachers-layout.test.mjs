@@ -21,7 +21,8 @@ test('every Teacher Materials section uses the Unit 4 lesson card', () => {
   assert.match(teachers, /u\.sounds\.map\(lessonCard\)/);
   assert.ok(teachers.includes("name: 'Unit 4 \\u00b7 Glued Sounds'"));
   assert.ok(teachers.includes("name: 'Unit 5 \\u00b7 Silent e'"));
-  assert.ok(teachers.includes("name: 'Learn the Letters'"));
+  assert.ok(teachers.includes("name: 'Meet the Teams'"));
+  assert.ok(teachers.includes("title: 'Team 1: m s a t'"));
   assert.ok(teachers.includes("class: 'tmunit'"));
   assert.ok(teachers.includes("class: 'tmgrid'"));
   assert.ok(teachers.includes("class: 'tmcard'"));

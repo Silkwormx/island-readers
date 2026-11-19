@@ -1783,10 +1783,10 @@ body.calm .ob-glow{animation:none;opacity:.85}
 .tmwrap{max-width:52rem;margin:0 auto;padding:1rem 1.2rem 3rem;font-family:Andika,sans-serif;line-height:1.6;letter-spacing:.02em}
 .tmwrap h1{font-size:2rem;margin:.6rem 0 .2rem}.tmlead{font-size:1.15rem;margin:0 0 1.2rem}
 .tmunit h2{font-size:1.4rem;margin:1rem 0 .6rem}
-.tmgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(16rem,1fr));gap:1rem}
-.tmcard{background:#fff;border:2px solid var(--line,#E3D9BC);border-radius:1.2rem;padding:1rem 1.2rem}
-.tmcard h3{font-size:1.3rem;margin:0 0 .7rem}.tmsound{display:inline-block;background:#E8731C;color:#fff;border-radius:.6rem;padding:0 .6rem;font-weight:700}
-.tmlink{display:flex;justify-content:center;text-decoration:none;margin-top:.5rem}.tmnote{margin:.2rem 0 .6rem;font-size:1rem;color:var(--ink2,#4a4a68)}
+.tmgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem;align-items:stretch}
+.tmcard{display:flex;flex-direction:column;height:100%;box-sizing:border-box;background:#fff;border:2px solid var(--line,#E3D9BC);border-radius:1.2rem;padding:1rem 1.2rem}
+.tmcard h3{display:flex;align-items:center;min-height:2.8rem;font-size:1.3rem;line-height:1.2;margin:0 0 .7rem}.tmsound{display:inline-block;background:#E8731C;color:#fff;border-radius:.6rem;padding:0 .6rem;font-weight:700}
+.tmlink{display:flex;width:100%;min-height:4rem;box-sizing:border-box;justify-content:center;text-align:center;text-decoration:none;margin-top:.5rem}.tmnote{margin:.2rem 0 .45rem;min-height:2.8rem;font-size:1rem;line-height:1.3;color:var(--ink2,#4a4a68)}
 span.tmlink.is-soon{opacity:.45;box-shadow:none;cursor:default}
 .tmlink,.tmlink:visited{color:var(--ink,#26324D)}
 .tmchecks{display:flex;flex-direction:column;align-items:stretch;gap:.75rem;max-width:40rem}
@@ -3010,6 +3010,36 @@ button,
 .ll-day1 .ll1card,.ll-day1 .ll1bubble,.ll-day1 .ll1hunt{display:inline-flex;align-items:center;justify-content:center;text-align:center;line-height:1}
 .llstep.u5step{display:flex;flex-direction:column;height:100%;overflow:hidden}
 .llstep.u5step .stage{flex:1 1 auto;min-height:0;overflow:hidden}
+.fsteam1 .lessonrow{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));width:100%;align-items:stretch;justify-content:stretch;gap:.55rem}
+.fsteam1 .lessonrow .lessontab{max-width:none;width:100%;height:9.1rem;max-height:9.1rem}
+.fsteam1 .lessontab.student .uimg{height:36%;min-height:0;background:transparent}
+.fsteam1 .lessontab.student .uimg img{max-width:94%;width:auto;height:100%;object-fit:contain;object-position:center bottom}
+.fsteam1 .lessontab h2{font-size:clamp(1.05rem,2vh,1.4rem)}
+.fsteam1 .lessontab .ubody{padding:0 .4rem .55rem}
+.fsteam1 .lessontab .uk,.fsteam1 .lessontab .umin{font-size:.7rem}
+.fsteam1 .lessontab .obtn{min-height:1.55rem;font-size:.88rem;padding:0 .7rem;margin-bottom:.2rem}
+.fsteam1 .lessontab.teachled{background:#F28C00;border-color:#C95A10;color:#fff;box-shadow:0 6px 0 #B5510D}
+.fsteam1 .lessontab.teachled .uimg{display:none}
+.fsteam1 .lessontab.teachled .uk,.fsteam1 .lessontab.teachled h2,.fsteam1 .lessontab.teachled .umin{color:#fff}
+.fsteam1 .lessontab.teachled .obtn{background:#fff;color:#C95A10;border-color:#fff;box-shadow:0 3px 0 #9A3E08}
+.fsmenu .teachbox,.fs-group .teachbox{background:#F28C00;border-color:#C95A10;color:#fff;box-shadow:0 2px 0 #B5510D}
+.fsmenu .teachbox.is-open,.fs-group .teachbox.is-open{background:#C95A10;color:#fff}
+.fsmenu .teachlink.teachled,.fs-group .teachlink.teachled{background:#F28C00;border-color:#C95A10;color:#fff}
+.fsteam1 .gamerows{flex:1 1 0;min-height:0;display:flex;flex-direction:column;gap:.16rem}
+.fsteam1 .gamerow{flex:1 1 0;min-height:0;display:flex;flex-direction:column;gap:.06rem}
+.fsteam1 .gamerowlab{margin:0;font-size:.78rem;line-height:1.05;font-weight:700;color:#6A6256}
+.fsteam1 .gamerow .gamegrid{flex:1 1 0;min-height:0;grid-template-columns:repeat(5,minmax(0,1fr));grid-template-rows:minmax(0,1fr);gap:.28rem}
+.fsteam1 .gamecard{flex-direction:row;justify-content:flex-start;align-items:center;text-align:left;padding:.15rem .35rem;gap:.28rem}
+.fsteam1 .gamecard .gamenum{position:static;width:1.15rem;height:1.15rem;font-size:.68rem;border-radius:.3rem}
+.fsteam1 .gamegrid .gameico,.fsteam1 .gamegrid .gamenote,.fsteam1 .gamegrid .gamemin,.fsteam1 .gamecard .gamepair{display:none}
+.fsteam1 .gamecard .gamepic{display:block;width:1.7rem;height:1.7rem;flex:none;object-fit:contain;border-radius:.4rem;background:#FFF6E8}
+.fsteam1 .gamegrid .gametxt{align-items:flex-start;text-align:left;min-width:0}
+.fsteam1 .gamegrid .gametxt b{font-size:clamp(.7rem,1.35vh,.9rem);line-height:1.1;text-align:left}
+.fsteam1 .gamecard.done{background:#E7F6EA;border-color:#2E9B4B;box-shadow:0 3px 0 #1F7A3A}
+.fsteam1 .gamecard.done .gamedone{display:inline-flex;width:1.05rem;height:1.05rem;flex:none;color:#E2A318}
+.fsteam1 .gamecard.done .gamedone .ico{width:100%;height:100%}
+.fsteam1 .storycard{min-height:0;padding:.22rem .5rem}
+.fsteam1 .storypic{width:3rem;height:2rem}
 }
 
 html.teach .u5step .lesson-nav .btn.next,

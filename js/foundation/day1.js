@@ -42,7 +42,7 @@
     { id: 'catch', title: 'Beginning Sound Catch', icon: 'foundation/img/games/catch.jpg' },
     { id: 'hunt', title: 'Letter Hunt', icon: 'foundation/img/games/hunt.jpg' },
     { id: 'build', title: 'Build It', icon: 'foundation/img/games/build.jpg' },
-    { id: 'ears', title: 'Ears Only Blend', icon: 'foundation/img/games/ears.jpg' },
+    { id: 'ears', title: 'Blend and Pick', icon: 'foundation/img/games/ears.jpg' },
     { id: 'flash', title: 'Quick Flash', icon: 'foundation/img/games/flash.jpg' },
     { id: 'match', title: 'Read and Match', icon: 'foundation/img/games/match.jpg' },
     { id: 'sound', title: 'Sound Match', icon: 'foundation/img/games/sound.jpg' },
@@ -62,6 +62,10 @@
         speechSynthesis.speak(u);
       } catch (e) { resolve(); }
     });
+  }
+  function playSound(key) {
+    if (IR.playPhoneme) return IR.playPhoneme(key);
+    return Promise.resolve(false);
   }
   function yes() { return Snd.play(A.sfx.ding); }
   function miss(el) {
@@ -142,7 +146,7 @@
         const done = IR.engage.endScreen({
           title: label,
           stars: ctx.mistakes ? 2 : 3,
-          backLabel: 'Back to lesson menu',
+          backLabel: 'Games',
           nextLabel: nxt ? 'Next activity' : ((PACK && PACK.nextLabel) || (team ? 'Back to Team ' + team[1] : 'More games')),
           onBack: () => { location.hash = back; },
           onHome: () => { location.hash = '#/home'; },
@@ -208,7 +212,7 @@
             if (e.currentTarget.classList.contains('lit')) return;
             e.currentTarget.classList.add('lit');
             need[id] += 1;
-            say(PACK.say[id]);
+            playSound(id);
             yes();
             bump();
           }
@@ -234,7 +238,7 @@
           if (e.currentTarget.classList.contains('lit')) return;
           e.currentTarget.classList.add('lit');
           taps += 1;
-          say(PACK.say[L.id]);
+          playSound(L.id);
           ctx.progress((i + taps / 3) / letters.length);
           if (taps < 3) return;
           yes();
@@ -262,7 +266,7 @@
       if (n !== at) { miss(e.currentTarget); return; }
       at += 1;
       built.textContent += id;
-      say(PACK.say[id]);
+      playSound(id);
       if (at < 2) return;
       ctx.stage.append(
         h('img', { class: 'll1link', src: LINK, alt: 'a and m link arms' }),
@@ -344,7 +348,11 @@
         else if (plan.length < 14) plan.push(item);
       }, i);
     }
-    if (ctx.setNext) ctx.setNext(() => { if (i < plan.length - 1) { i += 1; step(); return true; } return false; });
+    if (ctx.setNext) ctx.setNext(() => {
+      if (i < plan.length - 1) { i += 1; step(); return true; }
+      ctx.badge(GAMES.filter((g) => g.id === id)[0].title, id);
+      return true;
+    });
     if (ctx.setBack) ctx.setBack(() => { if (i > 0) { i -= 1; step(); return true; } return false; });
     step();
   }
@@ -355,7 +363,10 @@
   function pictureCards() {
     const out = [];
     PACK.ids.forEach((id) => {
-      (PACK.pics[id] || []).forEach((src) => out.push({ src: src, answer: id }));
+      (PACK.pics[id] || []).forEach((pic) => {
+        if (pic && typeof pic === 'object') out.push({ src: pic.src, answer: id, name: pic.name || '' });
+        else out.push({ src: pic, answer: id, name: '' });
+      });
     });
     return out;
   }
@@ -367,7 +378,7 @@
     ctx.setInstr('Hear the sound. Pop that bubble.');
     const ids = PACK.ids;
     rounds(ctx, ids, (id, ok, again, i) => {
-      say(PACK.say[id]);
+      playSound(id);
       const shown = choicesFor(id, i < 4 ? 1 : i < 8 ? 2 : Math.max(2, ids.length - 1));
       const bubbles = shuffle(shown).map((letter) => h('button', {
         class: 'll1bubble',
@@ -380,7 +391,9 @@
           ok();
         }
       }, letter));
-      ctx.stage.append(h('div', { class: 'll1bubbles' }, ...bubbles));
+      ctx.stage.append(
+        h('div', { class: 'row center' }, h('button', { class: 'btn big primary', type: 'button', onclick: () => playSound(id) }, 'Hear the sound')),
+        h('div', { class: 'll1bubbles' }, ...bubbles));
     }, 'pop');
   }
 
@@ -396,7 +409,7 @@
   function feed(ctx) {
     ctx.setInstr('Hear the sound. Tap that friend.');
     rounds(ctx, PACK.ids, (id, ok, again, i) => {
-      say(PACK.say[id]);
+      playSound(id);
       const shown = [id].concat(likeIds(id, PACK.ids, i < 4 ? 1 : Math.max(2, PACK.ids.length - 1)));
       const friends = shuffle(shown).map((letter) => h('button', {
         class: 'll1friend',
@@ -412,13 +425,16 @@
     ctx.setInstr('Tap the first sound.');
     rounds(ctx, pictureCards(), (pic, ok, again, i) => {
       const choices = [pic.answer].concat(likeIds(pic.answer, PACK.ids, i < 4 ? 1 : Math.max(2, PACK.ids.length - 1)));
-      ctx.stage.append(
-        h('img', { class: 'll1link', src: pic.src, alt: '' }),
+      const hear = () => { if (pic.name) say(pic.name); };
+      hear();
+      ctx.stage.append(h('div', { class: 'llfirst' },
+        h('button', { class: 'btn big primary', type: 'button', onclick: hear }, 'Hear it'),
+        h('img', { class: 'll1link', src: pic.src, alt: pic.name || '' }),
         h('div', { class: 'll1friends' }, ...shuffle(choices).map((letter) => {
           const b = big(letter, (e) => { if (letter === pic.answer) ok(); else again(e.currentTarget); });
           b.setAttribute('data-yes', letter === pic.answer ? '1' : '0');
           return b;
-        })));
+        }))));
     }, 'catch');
   }
 
@@ -426,7 +442,7 @@
     ctx.setInstr('Tap the letter you hear.');
     const spots = [[12, 18], [70, 14], [40, 42], [78, 58], [18, 66]];
     rounds(ctx, PACK.ids, (target, ok, again) => {
-      say(PACK.say[target]);
+      playSound(target);
       const others = choicesFor(target, 2).filter((ch) => ch !== target);
       const letters = [target, target].concat(others).slice(0, spots.length);
       let left = letters.filter((id) => id === target).length;
@@ -443,7 +459,7 @@
             if (id !== target) { again(e.currentTarget); return; }
             e.currentTarget.classList.add('lit');
             left -= 1;
-            say(PACK.say[target]);
+            playSound(target);
             if (left > 0) return;
             ok();
           }
@@ -457,43 +473,50 @@
     ctx.setInstr('Tap the letters to make the word.');
     rounds(ctx, PACK.words, (word, ok, again) => {
       let at = 0;
-      const built = h('p', { class: 'll1built' }, '');
+      const slots = word.parts.map(() => h('span', { class: 'llbuildslot' }));
       const extras = likeIds(word.parts[0], PACK.ids, 1);
       const tiles = shuffle(word.parts.concat(extras.filter((id) => word.parts.indexOf(id) < 0)));
-      ctx.stage.append(built, h('div', { class: 'll1friends' }, ...tiles.map((id) => {
-        const b = big(id, (e) => {
-          const btn = e.currentTarget;
-          if (btn.disabled) return;
-          if (word.parts[at] !== id) { again(btn); return; }
-          btn.disabled = true;
-          btn.classList.add('lit');
-          at += 1;
-          built.textContent += id;
-          say(PACK.say[id]);
-          if (at < word.parts.length) return;
-          ok();
-        });
-        return b;
-      })));
+      const hear = () => say(word.text);
+      hear();
+      ctx.stage.append(h('div', { class: 'llbuild' },
+        h('div', { class: 'llbuildslots' }, ...slots),
+        h('button', { class: 'btn big primary', type: 'button', onclick: hear }, 'Hear the word'),
+        h('div', { class: 'll1friends' }, ...tiles.map((id) => {
+          const b = big(id, (e) => {
+            const btn = e.currentTarget;
+            if (btn.disabled) return;
+            if (word.parts[at] !== id) { again(btn); return; }
+            btn.disabled = true;
+            btn.classList.add('lit');
+            slots[at].textContent = id;
+            slots[at].classList.add('filled');
+            at += 1;
+            playSound(id);
+            if (at < word.parts.length) return;
+            ok();
+          });
+          return b;
+        }))));
     }, 'build');
   }
 
-  function ears(ctx) {
-    ctx.setInstr('Listen. Then tap the picture.');
-    rounds(ctx, PACK.words, (word, ok, again, i) => {
-      const choices = h('div', { class: 'll1friends' });
-      ctx.stage.append(choices);
-      const pics = [{ src: word.src, good: true }];
-      const decoys = PACK.words.filter((item) => item.src !== word.src).slice(0, i < 4 ? 1 : 2);
-      decoys.forEach((item) => pics.push({ src: item.src, good: false }));
-      if (pics.length < 2) pics.push({ src: word.decoy || OBJ.apple, good: false });
-      const pick = (src, good) => h('button', {
-        class: 'll1friend', type: 'button', 'data-yes': good ? '1' : '0',
-        onclick: (e) => { if (!good) { again(e.currentTarget); return; } ok(); }
-      }, h('img', { src: src, alt: '' }));
-      word.parts.reduce((p, id) => p.then(() => say(PACK.say[id])), Promise.resolve()).then(() => {
-        shuffle(pics).forEach((item) => choices.append(pick(item.src, item.good)));
-      });
+  function blendPick(ctx) {
+    ctx.setInstr('Listen to the sounds. Tap the picture.');
+    rounds(ctx, PACK.words, (word, ok, again) => {
+      const speak = () => word.parts.reduce((p, id) => p.then(() => playSound(id)).then(() => new Promise((r) => setTimeout(r, 180))), Promise.resolve());
+      speak();
+      const others = PACK.words.filter((item) => item.src !== word.src);
+      const pics = [word].concat(others.slice(0, 2));
+      while (pics.length < 3) pics.push(word);
+      ctx.stage.append(h('div', { class: 'llfirst' },
+        h('button', { class: 'btn big primary', type: 'button', onclick: speak }, 'Hear the sounds'),
+        h('div', { class: 'll1friends' }, ...shuffle(pics).slice(0, 3).map((item) => {
+          const good = item === word;
+          return h('button', {
+            class: 'll1friend', type: 'button', 'data-yes': good ? '1' : '0',
+            onclick: (e) => { if (good) ok(); else again(e.currentTarget); }
+          }, h('img', { src: item.src, alt: '' }));
+        }))));
     }, 'ears');
   }
 
@@ -503,7 +526,7 @@
       ctx.stage.append(
         h('p', { class: 'll1flash' }, id),
         h('div', { class: 'll1pair' },
-          h('button', { class: 'btn big primary', type: 'button', 'data-yes': '1', onclick: () => { say(PACK.say[id]); ok(); } }, 'I said it'),
+          h('button', { class: 'btn big primary', type: 'button', 'data-yes': '1', onclick: () => { playSound(id); ok(); } }, 'I said it'),
           h('button', { class: 'btn big', type: 'button', onclick: () => again() }, 'Not yet')));
     }, 'flash');
   }
@@ -529,7 +552,7 @@
     ctx.setInstr('Hear the sound. Tap the picture.');
     const list = pictureCards().map((pic) => ({ sound: pic.answer, src: pic.src }));
     rounds(ctx, list, (item, ok, again, i) => {
-      say(PACK.say[item.sound]);
+      playSound(item.sound);
       const rest = pictureCards().filter((pic) => pic.src !== item.src);
       const decoys = rest.filter((pic) => likeIds(item.sound, PACK.ids, 3).indexOf(pic.answer) >= 0);
       const pool = (decoys.length ? decoys : rest).slice(0, i < 4 ? 1 : 2);
@@ -581,6 +604,9 @@
     return screens;
   }
   function countSay(text) {
+    if (IR.playPhoneme && ['ah', 'mmm', 'sss', 't', 'd', 'nnn', 'k', 'p', 'ee', 'oh', 'uh', 'ih', 'eh'].indexOf(text) >= 0) {
+      return IR.playPhoneme(text);
+    }
     return new Promise((resolve) => {
       let done = false;
       const fin = () => { if (done) return; done = true; resolve(); };
@@ -669,7 +695,7 @@
 
   const RUN = {
     team: team, meet: meet, link: link, done: lessonBadge, play: menu,
-    pop: pop, feed: feed, catch: catchSound, hunt: hunt, build: build, ears: ears, flash: flash, match: match, sound: soundMatch, sort: sortGame, count: countGame
+    pop: pop, feed: feed, catch: catchSound, hunt: hunt, build: build, ears: blendPick, flash: flash, match: match, sound: soundMatch, sort: sortGame, count: countGame
   };
 
   function day1Play(app, id, pack, back) {

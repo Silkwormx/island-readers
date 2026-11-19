@@ -515,7 +515,7 @@
     const pics = item.imgs && item.imgs.length ? item.imgs : (item.img ? [item.img] : []);
     const stars = item.stars;
     return h('button', {
-      class: 'tapcard ucard open lessontab',
+      class: 'tapcard ucard open lessontab' + (item.tone ? ' ' + item.tone : ''),
       type: 'button',
       'aria-label': (item.kicker || 'Lesson') + '. ' + item.title + '. Opens the lesson.',
       onclick: goItem(item)
@@ -533,12 +533,12 @@
     if (!num && item.pick) return lessonTab(item);
     const body = [
       num ? h('span', { class: 'gamenum' }, String(num)) : null,
-      num && !item.img && !(item.imgs && item.imgs.length) ? h('span', { class: 'gameico', 'aria-hidden': 'true' }, icon('play')) : null,
+      num ? h('span', { class: 'gameico', 'aria-hidden': 'true' }, icon('play')) : null,
       item.imgs && item.imgs.length
         ? h('span', { class: 'gamepair' }, ...item.imgs.map((src) => h('img', { class: num ? 'gamepic' : 'storypic', src: src, alt: '' })))
         : (item.img ? h('img', { class: num ? 'gamepic' : 'storypic', src: item.img, alt: item.alt || '' }) : null),
       h('span', { class: 'gametxt' }, h('b', null, item.title), item.note ? h('span', { class: 'gamenote' }, item.note) : null, item.min ? h('span', { class: 'gamemin' }, item.min + ' min') : null),
-      item.done ? h('span', { class: 'gamedone', 'aria-hidden': 'true' }, icon('check')) : null
+      item.done ? h('span', { class: 'gamedone', 'aria-hidden': 'true' }, icon(item.doneIcon || 'check')) : null
     ];
     const cls = (item.big ? 'storycard' : (num ? 'gamecard' : 'stepcard')) + (item.done ? ' done' : '');
     if (item.href && item.href.charAt(0) !== '#') return h('a', { class: cls, href: item.href, target: '_blank', rel: 'noopener' }, ...body);
@@ -546,6 +546,16 @@
   }
   function stepHead(n, label) {
     return h('div', { class: 'stephead' }, h('span', { class: 'stepnum' }, String(n)), h('span', { class: 'steplab' }, label));
+  }
+  function gameRowsBlock(n, label, rows) {
+    let n0 = 0;
+    return h('section', { class: 'stepblock gamerowsblock' },
+      stepHead(n, label),
+      h('div', { class: 'gamerows' }, ...rows.map((row) => {
+        const cards = h('ol', { class: 'gamegrid' }, ...row.items.map((item, i) => h('li', null, itemCard(item, n0 + i + 1))));
+        n0 += row.items.length;
+        return h('div', { class: 'gamerow' }, h('p', { class: 'gamerowlab' }, row.label), cards);
+      })));
   }
   function stepSection(n, label, items, numbered, extra) {
     const cards = !items || !items.length
@@ -563,8 +573,8 @@
       ? h('a', { class: 'teachlink', href: plan.pdf, target: '_blank', rel: 'noopener' }, plan.pdfLabel || 'Open the slideshow (PDF)')
       : null;
     const slides = days.length
-      ? days.map((day) => h('button', { class: 'teachlink', type: 'button', onclick: () => { Snd.stop(); location.hash = day.href; } }, day.label))
-      : [plan.slides ? h('button', { class: 'teachlink', type: 'button', onclick: () => { Snd.stop(); location.hash = plan.slides; } }, 'Open the slideshow') : (pdfLink || h('p', { class: 'teachsoon' }, 'Coming soon'))];
+      ? days.map((day) => h('button', { class: 'teachlink teachled', type: 'button', onclick: () => { Snd.stop(); location.hash = day.href; } }, day.label))
+      : [plan.slides ? h('button', { class: 'teachlink teachled', type: 'button', onclick: () => { Snd.stop(); location.hash = plan.slides; } }, 'Open on smartboard') : (pdfLink || h('p', { class: 'teachsoon' }, 'Coming soon'))];
     const panel = h('div', { class: 'teachpop', hidden: '' },
       h('p', { class: 'teachstep' }, h('span', null, '1'), 'Slideshow'),
       ...slides,
@@ -598,7 +608,7 @@
       plan.before || null,
       h('div', { class: 'stepflow' },
         plan.choose ? null : stepSection(1, labels[0], plan.lesson || []),
-        plan.choose ? null : stepSection(2, labels[1], plan.games || [], true, plan.gameClass || ''),
+        plan.choose ? null : (plan.gameRows ? gameRowsBlock(2, labels[1], plan.gameRows) : stepSection(2, labels[1], plan.games || [], true, plan.gameClass || '')),
         plan.choose || !storyItems ? null : stepSection(3, labels[2], storyItems),
         ...(plan.choose || []).map((item, i) => stepSection(i + 1, item.title, [item]))));
   }
@@ -961,7 +971,7 @@
     function lessonCard(lesson) {
       const kinds = [
         { key: 'board', primary: true, label: 'Open on smartboard', note: 'Full-screen slide show in the browser. No download needed.' },
-        { key: 'slides', download: true, label: 'Download slides' + (lesson.days ? (' \u00b7 ' + lesson.days + ' days (PPTX)') : ' (PPTX)'), note: 'One PowerPoint for the whole sound.' },
+        { key: 'slides', download: true, label: 'Download slides (PPTX)', note: 'One PowerPoint for the whole sound.' },
         { key: 'daily', label: 'Daily practice sheets (PDF)', note: lesson.days ? ('Worksheets for each day, labeled Day 1 to Day ' + lesson.days + '.') : 'Worksheets for each day.' },
         { key: 'pack', label: 'Teacher pack (PDF)', note: 'Slides with notes, worksheets and answer key.' }
       ];
@@ -979,36 +989,40 @@
         return [h('a', attrs, kind.label), h('p', { class: 'tmnote' }, kind.note)];
       });
       return h('div', { class: 'tmcard' },
-        h('h3', null, h('span', { class: 'tmsound' }, lesson.s), ' ' + lesson.lesson),
+        h('h3', null, lesson.title || h('span', null, h('span', { class: 'tmsound' }, lesson.s), ' ' + lesson.lesson)),
         ...rows.flat());
     }
-    function magicSlideshow() {
-      return h('div', { class: 'tmcard' },
-        h('h3', null, 'Magic e Slideshow'),
-        h('a', { class: 'btn big tmlink tmslide', href: 'materials/unit5/Island_Readers_Magic_e_Lesson.pdf', target: '_blank', rel: 'noopener' }, 'Magic e Slideshow (PDF)'),
-        h('a', { class: 'btn big tmlink tmslide', href: 'materials/unit5/Island_Readers_Magic_e_Lesson.pptx', download: '' }, 'Magic e Slideshow (PowerPoint)'));
-    }
     const UNITS = [
+      { name: 'Meet the Teams', sounds: [
+        { title: 'Meet the Teams', board: '#/foundation' },
+        { title: 'Team 1: m s a t', board: '#/foundation/slides/g1', daily: 'foundation/printables/Team1_Quick_Sounds.pdf' },
+        { title: 'Team 2: p f i n', board: '#/foundation/slides/g2', daily: 'foundation/printables/Team2_Quick_Sounds.pdf' },
+        { title: 'Team 3: o d c u' },
+        { title: 'Team 4: g b e k' },
+        { title: 'Team 5: h r l w' },
+        { title: 'Team 6: j y x q' },
+        { title: 'Team 7: v z' }
+      ] },
       { name: 'Unit 4 \u00b7 Glued Sounds', sounds: [
         { s: 'ng', lesson: 'Lesson 4.1', days: 3, board: '#/teachers/slides/ng', slides: 'teachers/ng/Lesson3.1_ng_Slide_Presentation.pptx', daily: 'teachers/ng/Lesson3.1_ng_Daily_Practice_Sheets.pdf', pack: 'teachers/ng/Lesson3.1_ng_Teacher_Pack.pdf' },
         { s: 'nk', lesson: 'Lesson 4.2', days: 3, board: '#/teachers/slides/nk', slides: 'teachers/nk/Lesson3.2_nk_Slide_Presentation.pptx', daily: 'teachers/nk/Lesson3.2_nk_Daily_Practice_Sheets.pdf', pack: 'teachers/nk/Lesson3.2_nk_Teacher_Pack.pdf' }
       ] },
       { name: 'Unit 5 \u00b7 Silent e', sounds: [
-        { s: 'a_e', lesson: 'Lesson 5.1', daily: 'materials/unit5/Unit5_Teacher_Led_Student_Sheets.pdf', pack: 'materials/unit5/Lesson5.1_Teacher_Led_Checks.pdf', bundle: 'materials/unit5/Unit5_Teacher_Led_Checks_Combined.pdf' },
-        { s: 'e', lesson: 'Lesson 5.2', daily: 'materials/unit5/Unit5_Teacher_Led_Student_Sheets.pdf', pack: 'materials/unit5/Lesson5.2_Teacher_Led_Checks.pdf', bundle: 'materials/unit5/Unit5_Teacher_Led_Checks_Combined.pdf' }
+        { s: 'a_e', lesson: 'Lesson 5.1', board: '#/teachers/slides/u5', slides: 'materials/unit5/Island_Readers_Magic_e_Lesson.pptx', daily: 'materials/unit5/Unit5_Teacher_Led_Student_Sheets.pdf', pack: 'materials/unit5/Lesson5.1_Teacher_Led_Checks.pdf' },
+        { s: 'e', lesson: 'Lesson 5.2', board: '#/teachers/slides/u5', slides: 'materials/unit5/Island_Readers_Magic_e_Lesson.pptx', daily: 'materials/unit5/Unit5_Teacher_Led_Student_Sheets.pdf', pack: 'materials/unit5/Lesson5.2_Teacher_Led_Checks.pdf' }
       ] },
-      { name: 'Learn the Letters', sounds: [
-        { s: 'amst', lesson: 'Team 1', board: '#/foundation/slides/g1' }
+      { name: 'Unit 6 \u00b7 Endings', sounds: [
+        { s: '-s -es', lesson: 'Lesson 6.1' },
+        { s: '-ed', lesson: 'Lesson 6.2' },
+        { s: '-ing', lesson: 'Lesson 6.3' }
       ] }
     ];
+    const cards = UNITS.flatMap((u) => u.sounds.map(lessonCard));
     app.append(h('div', { class: 'screen tmscreen' }, h('div', { class: 'tmwrap' },
       h('div', { class: 'abtop' }, pageNav('#/home')),
       h('h1', null, 'Teacher materials'),
       h('p', { class: 'tmlead' }, 'For teaching in class. Students practice on their own in the app.'),
-      ...UNITS.map((u) => h('section', { class: 'tmunit' },
-        h('h2', null, u.name),
-        h('div', { class: 'tmgrid' }, ...u.sounds.map(lessonCard)),
-        u.name.indexOf('Unit 5') === 0 ? magicSlideshow() : null)))));
+      h('section', { class: 'tmunit' }, h('div', { class: 'tmgrid' }, ...cards)))));
   }
   /* In-app week-deck slideshow for smartboard (ng / nk). Keeps PPTX download on the teachers page. */
   function slidesViewer(sound) {
@@ -1428,7 +1442,7 @@
     else if (hash.startsWith('#/about')) aboutScreen();
     else if (hash.startsWith('#/trail')) islandTrailPage();
     else if (hash.startsWith('#/find')) findScreen();
-    else if ((m = /^#\/teachers\/slides\/(ng|nk)$/.exec(hash))) slidesViewer(m[1]);
+    else if ((m = /^#\/teachers\/slides\/(ng|nk|u5)$/.exec(hash))) slidesViewer(m[1]);
     else if (hash.startsWith('#/teachers')) { if (IR._slideCleanup) { IR._slideCleanup(); IR._slideCleanup = null; } teachersScreen(); }
     else if (hash.startsWith('#/placement')) IR.placement.render(app, (n) => {
       const bell = (IR.placement.BELL || {})[n] || { unit: n, name: 'this bell' };
