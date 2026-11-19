@@ -2373,8 +2373,8 @@
         {
           pick: true,
           tone: 'teachled',
-          kicker: 'Teacher',
-          title: 'Teacher Led',
+          kicker: 'Teacher Led',
+          title: 'Team 1: m s a t',
           note: '5-day slideshow',
           goLabel: 'Open slideshow',
           go: () => openSlides(group.id)
@@ -2392,7 +2392,8 @@
       }));
     const phrase = storyLine(group);
     const games = teamGames(group);
-    menuScreen(app, group, '#/foundation', 'Team ' + group.n, 'Foundation Skills', {
+    const teamTitle = group.id === 'g1' ? 'Team 1: m s a t' : ('Team ' + group.n);
+    menuScreen(app, group, '#/foundation', teamTitle, 'Foundation Skills', {
       lesson: lessons,
       games: group.id === 'g1' ? null : games,
       gameRows: group.id === 'g1' ? team1GameRows(games) : null,

@@ -989,18 +989,18 @@
         return [h('a', attrs, kind.label), h('p', { class: 'tmnote' }, kind.note)];
       });
       return h('div', { class: 'tmcard' },
-        h('h3', null, h('span', { class: 'tmsound' }, lesson.s), ' ' + lesson.lesson),
+        h('h3', null, lesson.title || h('span', null, h('span', { class: 'tmsound' }, lesson.s), ' ' + lesson.lesson)),
         ...rows.flat());
     }
     const UNITS = [
-      { name: 'Learn the Letters', sounds: [
-        { s: 'a m s t', lesson: 'Team 1', board: '#/foundation/slides/g1', daily: 'foundation/printables/Team1_Quick_Sounds.pdf' },
-        { s: 'p f i n', lesson: 'Team 2', board: '#/foundation/slides/g2', daily: 'foundation/printables/Team2_Quick_Sounds.pdf' },
-        { s: 'o d c u', lesson: 'Team 3' },
-        { s: 'g b e k', lesson: 'Team 4' },
-        { s: 'h r l w', lesson: 'Team 5' },
-        { s: 'j y x q', lesson: 'Team 6' },
-        { s: 'v z', lesson: 'Team 7' }
+      { name: 'Meet the Teams', sounds: [
+        { title: 'Team 1: m s a t', board: '#/foundation/slides/g1', daily: 'foundation/printables/Team1_Quick_Sounds.pdf' },
+        { title: 'Team 2: p f i n', board: '#/foundation/slides/g2', daily: 'foundation/printables/Team2_Quick_Sounds.pdf' },
+        { title: 'Team 3: o d c u' },
+        { title: 'Team 4: g b e k' },
+        { title: 'Team 5: h r l w' },
+        { title: 'Team 6: j y x q' },
+        { title: 'Team 7: v z' }
       ] },
       { name: 'Unit 4 \u00b7 Glued Sounds', sounds: [
         { s: 'ng', lesson: 'Lesson 4.1', days: 3, board: '#/teachers/slides/ng', slides: 'teachers/ng/Lesson3.1_ng_Slide_Presentation.pptx', daily: 'teachers/ng/Lesson3.1_ng_Daily_Practice_Sheets.pdf', pack: 'teachers/ng/Lesson3.1_ng_Teacher_Pack.pdf' },
