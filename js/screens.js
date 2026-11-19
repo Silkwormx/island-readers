@@ -971,7 +971,7 @@
     function lessonCard(lesson) {
       const kinds = [
         { key: 'board', primary: true, label: 'Open on smartboard', note: 'Full-screen slide show in the browser. No download needed.' },
-        { key: 'slides', download: true, label: 'Download slides' + (lesson.days ? (' \u00b7 ' + lesson.days + ' days (PPTX)') : ' (PPTX)'), note: 'One PowerPoint for the whole sound.' },
+        { key: 'slides', download: true, label: 'Download slides (PPTX)', note: 'One PowerPoint for the whole sound.' },
         { key: 'daily', label: 'Daily practice sheets (PDF)', note: lesson.days ? ('Worksheets for each day, labeled Day 1 to Day ' + lesson.days + '.') : 'Worksheets for each day.' },
         { key: 'pack', label: 'Teacher pack (PDF)', note: 'Slides with notes, worksheets and answer key.' }
       ];
@@ -994,6 +994,7 @@
     }
     const UNITS = [
       { name: 'Meet the Teams', sounds: [
+        { title: 'Meet the Teams', board: '#/foundation' },
         { title: 'Team 1: m s a t', board: '#/foundation/slides/g1', daily: 'foundation/printables/Team1_Quick_Sounds.pdf' },
         { title: 'Team 2: p f i n', board: '#/foundation/slides/g2', daily: 'foundation/printables/Team2_Quick_Sounds.pdf' },
         { title: 'Team 3: o d c u' },
@@ -1016,14 +1017,12 @@
         { s: '-ing', lesson: 'Lesson 6.3' }
       ] }
     ];
-    const sections = UNITS.map((u) => h('section', { class: 'tmunit' },
-      h('h2', null, u.name),
-      h('div', { class: 'tmgrid' }, ...u.sounds.map(lessonCard))));
+    const cards = UNITS.flatMap((u) => u.sounds.map(lessonCard));
     app.append(h('div', { class: 'screen tmscreen' }, h('div', { class: 'tmwrap' },
       h('div', { class: 'abtop' }, pageNav('#/home')),
       h('h1', null, 'Teacher materials'),
       h('p', { class: 'tmlead' }, 'For teaching in class. Students practice on their own in the app.'),
-      ...sections)));
+      h('section', { class: 'tmunit' }, h('div', { class: 'tmgrid' }, ...cards)))));
   }
   /* In-app week-deck slideshow for smartboard (ng / nk). Keeps PPTX download on the teachers page. */
   function slidesViewer(sound) {
