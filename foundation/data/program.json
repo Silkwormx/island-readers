@@ -68,7 +68,7 @@
     "m",
     "n"
    ],
-   "tip": "Count the humps: m has two humps (the mangrove's two roots), n has one (Nobu bends once). Say the sound while tracing the humps."
+   "tip": "Count the humps: m has two humps (mangrove's two roots), n has one (Nobu bends once). Say the sound while tracing the humps."
   },
   "i/a": {
    "letters": [
@@ -183,7 +183,7 @@
    "action": "Open your mouth wide, like a bite of apple.",
    "formation": "Start just under the middle line. Curve back and around like a circle and close it. Go back up and pull straight down.",
    "art": "img/letters/a_apple.jpg",
-   "cue": "'Think of the apple' + open wide",
+   "cue": "a, apple, /a/",
    "capital": "A"
   },
   {
@@ -197,35 +197,35 @@
    "action": "Rub your tummy in a circle and hum /mmm/ with lips closed.",
    "formation": "Start at the middle line and pull down. Go back up, hump over and down. Back up again, hump over and down.",
    "art": "img/letters/m_manny_mangrove.jpg",
-   "cue": "'Think of the mangrove' + rub tummy, hum",
+   "cue": "m, mangrove, /m/",
    "capital": "M"
   },
   {
    "letter": "s",
    "group": "G1",
-   "sound": "/s/ as in sea snake",
-   "keyword": "sea snake",
-   "character": "sea snake",
-   "concept": "A friendly blue-and-white banded sea snake curled into an s, head at the top curve and paddle tail at the bottom.",
+   "sound": "/s/ as in snake",
+   "keyword": "snake",
+   "character": "snake",
+   "concept": "A friendly blue-and-white banded snake curled into an s, head at the top curve and paddle tail at the bottom.",
    "chant": "Snakes sell sandy socks. Silly seals sip soup.",
    "action": "Slide your hand like a snake in an s path while you hiss /sss/.",
-   "formation": "Start just under the middle line on the right. Curve back to the left, swing across to the right, then curve back at the bottom. Slide like the sea snake.",
+   "formation": "Start just under the middle line on the right. Curve back to the left, swing across to the right, then curve back at the bottom. Slide like snake.",
    "art": "img/letters/s_sami_sea_snake.jpg",
-   "cue": "'Think of the sea snake' + snake slide",
+   "cue": "s, snake, /s/",
    "capital": "S"
   },
   {
    "letter": "t",
    "group": "G1",
    "sound": "/t/ as in turtle",
-   "keyword": "sea turtle",
-   "character": "sea turtle",
-   "concept": "A young green sea turtle standing tall. Her body is the stick, her flippers stretch out as the cross line, and her tail hooks to the right at the bottom.",
+   "keyword": "turtle",
+   "character": "turtle",
+   "concept": "A young green turtle standing tall. Her body is the stick, her flippers stretch out as the cross line, and her tail hooks to the right at the bottom.",
    "chant": "Tigers tap ten toes. Tiny turtles tumble.",
    "action": "Hold arms out like flippers and tap two fingers on your palm for each /t/.",
    "formation": "Start at the top line and pull straight down, then hook to the right. Lift your pencil and cross at the middle line.",
    "art": "img/letters/t_tama_sea_turtle.jpg",
-   "cue": "'Think of the sea turtle' + flipper taps",
+   "cue": "t, turtle, /t/",
    "capital": "T"
   },
   {
@@ -374,7 +374,7 @@
    "sound": "/e/ as in egg",
    "keyword": "egg",
    "character": "Eto the turtle egg",
-   "concept": "A baby sea turtle hatching from a cracked egg. Her body curls around like an e and her flipper stretches straight across the middle as the line.",
+   "concept": "A baby turtle hatching from a cracked egg. Her body curls around like an e and her flipper stretches straight across the middle as the line.",
    "chant": "Eto the egg cracks: /e/ /e/ /e/!",
    "action": "Tap your fist on your palm like cracking an egg for each /e/.",
    "formation": "Start in the middle. Go straight across to the right, then curve up, back and around. Stop open.",
@@ -998,16 +998,16 @@
     },
     "scripts": {
      "a": {
-      "picture": "the apple beside the plain a: 'the apple makes an a shape. This is a. a says /a/.' Trace a over the apple, then trace the plain a.",
-      "outline": "Plain a over a faint the apple: 'Can you still see the apple? This is a.' Cover the apple: child says /a/ from the letter alone.",
+      "picture": "apple beside the plain a: 'apple makes an a shape. This is a. a says /a/.' Trace a over apple, then trace the plain a.",
+      "outline": "Plain a over a faint apple: 'Can you still see apple? This is a.' Cover apple: child says /a/ from the letter alone.",
       "plain": "Plain lowercase a only, in 2-3 fonts. 'Same letter, different clothes. What does it say?'",
-      "cue": "'Think of the apple' + open wide, peek-out hand"
+      "cue": "a, apple, /a/"
      },
      "m": {
-      "picture": "the mangrove beside the plain m: 'the mangrove makes an m shape. This is m. m says /m/.' Trace m over the mangrove, then trace the plain m.",
-      "outline": "Plain m over a faint the mangrove: 'Can you still see the mangrove? This is m.' Cover the mangrove: child says /m/ from the letter alone.",
+      "picture": "mangrove beside the plain m: 'mangrove makes an m shape. This is m. m says /m/.' Trace m over mangrove, then trace the plain m.",
+      "outline": "Plain m over a faint mangrove: 'Can you still see mangrove? This is m.' Cover mangrove: child says /m/ from the letter alone.",
       "plain": "Plain lowercase m only, in 2-3 fonts. 'Same letter, different clothes. What does it say?'",
-      "cue": "'Think of the mangrove' + rub tummy, hum"
+      "cue": "m, mangrove, /m/"
      }
     },
     "record": "After each flash, tick a box for every letter answered correctly in under 3 seconds. 3 ticks on 3 different lessons moves the letter one step.",
@@ -1032,13 +1032,13 @@
      "id": "flash",
      "step": "Review flash",
      "minutes": 2,
-     "what_to_do": "First lesson: no review yet. Show the apple and the mangrove and say: Today you will read a real word!"
+     "what_to_do": "First lesson: no review yet. Show apple and mangrove and say: Today you will read a real word!"
     },
     {
      "id": "meet",
      "step": "Meet the letter",
      "minutes": 3,
-     "what_to_do": "the apple beside the plain a: 'the apple makes an a shape. This is a. a says /a/.' Trace a over the apple, then trace the plain a. Chant and action. the mangrove beside the plain m: 'the mangrove makes an m shape. This is m. m says /m/.' Trace m over the mangrove, then trace the plain m. Chant and action."
+     "what_to_do": "apple beside the plain a: 'apple makes an a shape. This is a. a says /a/.' Trace a over apple, then trace the plain a. Chant and action. mangrove beside the plain m: 'mangrove makes an m shape. This is m. m says /m/.' Trace m over mangrove, then trace the plain m. Chant and action."
     },
     {
      "id": "trace",
@@ -1146,7 +1146,7 @@
    "word_scenes": [
     {
      "word": "at",
-     "scene": "the sea turtle waits at a little dock, pointing at the boat",
+     "scene": "turtle waits at a little dock, pointing at the boat",
      "caption": "At."
     },
     {
@@ -1192,28 +1192,28 @@
     },
     "scripts": {
      "a": {
-      "picture": "the apple beside the plain a: 'the apple makes an a shape. This is a. a says /a/.' Trace a over the apple, then trace the plain a.",
-      "outline": "Plain a over a faint the apple: 'Can you still see the apple? This is a.' Cover the apple: child says /a/ from the letter alone.",
+      "picture": "apple beside the plain a: 'apple makes an a shape. This is a. a says /a/.' Trace a over apple, then trace the plain a.",
+      "outline": "Plain a over a faint apple: 'Can you still see apple? This is a.' Cover apple: child says /a/ from the letter alone.",
       "plain": "Plain lowercase a only, in 2-3 fonts. 'Same letter, different clothes. What does it say?'",
-      "cue": "'Think of the apple' + open wide, peek-out hand"
+      "cue": "a, apple, /a/"
      },
      "m": {
-      "picture": "the mangrove beside the plain m: 'the mangrove makes an m shape. This is m. m says /m/.' Trace m over the mangrove, then trace the plain m.",
-      "outline": "Plain m over a faint the mangrove: 'Can you still see the mangrove? This is m.' Cover the mangrove: child says /m/ from the letter alone.",
+      "picture": "mangrove beside the plain m: 'mangrove makes an m shape. This is m. m says /m/.' Trace m over mangrove, then trace the plain m.",
+      "outline": "Plain m over a faint mangrove: 'Can you still see mangrove? This is m.' Cover mangrove: child says /m/ from the letter alone.",
       "plain": "Plain lowercase m only, in 2-3 fonts. 'Same letter, different clothes. What does it say?'",
-      "cue": "'Think of the mangrove' + rub tummy, hum"
+      "cue": "m, mangrove, /m/"
      },
      "s": {
-      "picture": "The sea snake beside the plain s: 'The sea snake makes an s shape. This is s. s says /s/.' Trace s over Sam, then trace the plain s.",
-      "outline": "Plain s over a faint sea snake: 'Can you still see the sea snake? This is s.' Cover the sea snake: child says /s/ from the letter alone.",
+      "picture": "Snake beside the plain s: 'Snake makes an s shape. This is s. s says /s/.' Trace s over Sam, then trace the plain s.",
+      "outline": "Plain s over a faint snake: 'Can you still see snake? This is s.' Cover snake: child says /s/ from the letter alone.",
       "plain": "Plain lowercase s only, in 2-3 fonts. 'Same letter, different clothes. What does it say?'",
-      "cue": "'Think of the sea snake' + snake slide"
+      "cue": "s, snake, /s/"
      },
      "t": {
-      "picture": "the sea turtle beside the plain t: 'the sea turtle makes a t shape. This is t. t says /t/.' Trace t over the sea turtle, then trace the plain t.",
-      "outline": "Plain t over a faint the sea turtle: 'Can you still see the sea turtle? This is t.' Cover the sea turtle: child says /t/ from the letter alone.",
+      "picture": "turtle beside the plain t: 'turtle makes a t shape. This is t. t says /t/.' Trace t over turtle, then trace the plain t.",
+      "outline": "Plain t over a faint turtle: 'Can you still see turtle? This is t.' Cover turtle: child says /t/ from the letter alone.",
       "plain": "Plain lowercase t only, in 2-3 fonts. 'Same letter, different clothes. What does it say?'",
-      "cue": "'Think of the sea turtle' + flipper taps"
+      "cue": "t, turtle, /t/"
      }
     },
     "record": "After each flash, tick a box for every letter answered correctly in under 3 seconds. 3 ticks on 3 different lessons moves the letter one step.",
@@ -1247,7 +1247,7 @@
      "id": "meet",
      "step": "Meet the letter",
      "minutes": 3,
-     "what_to_do": "The sea snake beside the plain s: 'The sea snake makes an s shape. This is s. s says /s/.' Trace s over Sam, then trace the plain s. Chant and action. the sea turtle beside the plain t: 'the sea turtle makes a t shape. This is t. t says /t/.' Trace t over the sea turtle, then trace the plain t. Chant and action."
+     "what_to_do": "Snake beside the plain s: 'Snake makes an s shape. This is s. s says /s/.' Trace s over Sam, then trace the plain s. Chant and action. turtle beside the plain t: 'turtle makes a t shape. This is t. t says /t/.' Trace t over turtle, then trace the plain t. Chant and action."
     },
     {
      "id": "trace",
@@ -1426,28 +1426,28 @@
     },
     "scripts": {
      "a": {
-      "picture": "the apple beside the plain a: 'the apple makes an a shape. This is a. a says /a/.' Trace a over the apple, then trace the plain a.",
-      "outline": "Plain a over a faint the apple: 'Can you still see the apple? This is a.' Cover the apple: child says /a/ from the letter alone.",
+      "picture": "apple beside the plain a: 'apple makes an a shape. This is a. a says /a/.' Trace a over apple, then trace the plain a.",
+      "outline": "Plain a over a faint apple: 'Can you still see apple? This is a.' Cover apple: child says /a/ from the letter alone.",
       "plain": "Plain lowercase a only, in 2-3 fonts. 'Same letter, different clothes. What does it say?'",
-      "cue": "'Think of the apple' + open wide, peek-out hand"
+      "cue": "a, apple, /a/"
      },
      "m": {
-      "picture": "the mangrove beside the plain m: 'the mangrove makes an m shape. This is m. m says /m/.' Trace m over the mangrove, then trace the plain m.",
-      "outline": "Plain m over a faint the mangrove: 'Can you still see the mangrove? This is m.' Cover the mangrove: child says /m/ from the letter alone.",
+      "picture": "mangrove beside the plain m: 'mangrove makes an m shape. This is m. m says /m/.' Trace m over mangrove, then trace the plain m.",
+      "outline": "Plain m over a faint mangrove: 'Can you still see mangrove? This is m.' Cover mangrove: child says /m/ from the letter alone.",
       "plain": "Plain lowercase m only, in 2-3 fonts. 'Same letter, different clothes. What does it say?'",
-      "cue": "'Think of the mangrove' + rub tummy, hum"
+      "cue": "m, mangrove, /m/"
      },
      "s": {
-      "picture": "The sea snake beside the plain s: 'The sea snake makes an s shape. This is s. s says /s/.' Trace s over Sam, then trace the plain s.",
-      "outline": "Plain s over a faint sea snake: 'Can you still see the sea snake? This is s.' Cover the sea snake: child says /s/ from the letter alone.",
+      "picture": "Snake beside the plain s: 'Snake makes an s shape. This is s. s says /s/.' Trace s over Sam, then trace the plain s.",
+      "outline": "Plain s over a faint snake: 'Can you still see snake? This is s.' Cover snake: child says /s/ from the letter alone.",
       "plain": "Plain lowercase s only, in 2-3 fonts. 'Same letter, different clothes. What does it say?'",
-      "cue": "'Think of the sea snake' + snake slide"
+      "cue": "s, snake, /s/"
      },
      "t": {
-      "picture": "the sea turtle beside the plain t: 'the sea turtle makes a t shape. This is t. t says /t/.' Trace t over the sea turtle, then trace the plain t.",
-      "outline": "Plain t over a faint the sea turtle: 'Can you still see the sea turtle? This is t.' Cover the sea turtle: child says /t/ from the letter alone.",
+      "picture": "turtle beside the plain t: 'turtle makes a t shape. This is t. t says /t/.' Trace t over turtle, then trace the plain t.",
+      "outline": "Plain t over a faint turtle: 'Can you still see turtle? This is t.' Cover turtle: child says /t/ from the letter alone.",
       "plain": "Plain lowercase t only, in 2-3 fonts. 'Same letter, different clothes. What does it say?'",
-      "cue": "'Think of the sea turtle' + flipper taps"
+      "cue": "t, turtle, /t/"
      }
     },
     "record": "After each flash, tick a box for every letter answered correctly in under 3 seconds. 3 ticks on 3 different lessons moves the letter one step.",
@@ -1656,28 +1656,28 @@
     },
     "scripts": {
      "a": {
-      "picture": "the apple beside the plain a: 'the apple makes an a shape. This is a. a says /a/.' Trace a over the apple, then trace the plain a.",
-      "outline": "Plain a over a faint the apple: 'Can you still see the apple? This is a.' Cover the apple: child says /a/ from the letter alone.",
+      "picture": "apple beside the plain a: 'apple makes an a shape. This is a. a says /a/.' Trace a over apple, then trace the plain a.",
+      "outline": "Plain a over a faint apple: 'Can you still see apple? This is a.' Cover apple: child says /a/ from the letter alone.",
       "plain": "Plain lowercase a only, in 2-3 fonts. 'Same letter, different clothes. What does it say?'",
-      "cue": "'Think of the apple' + open wide, peek-out hand"
+      "cue": "a, apple, /a/"
      },
      "m": {
-      "picture": "the mangrove beside the plain m: 'the mangrove makes an m shape. This is m. m says /m/.' Trace m over the mangrove, then trace the plain m.",
-      "outline": "Plain m over a faint the mangrove: 'Can you still see the mangrove? This is m.' Cover the mangrove: child says /m/ from the letter alone.",
+      "picture": "mangrove beside the plain m: 'mangrove makes an m shape. This is m. m says /m/.' Trace m over mangrove, then trace the plain m.",
+      "outline": "Plain m over a faint mangrove: 'Can you still see mangrove? This is m.' Cover mangrove: child says /m/ from the letter alone.",
       "plain": "Plain lowercase m only, in 2-3 fonts. 'Same letter, different clothes. What does it say?'",
-      "cue": "'Think of the mangrove' + rub tummy, hum"
+      "cue": "m, mangrove, /m/"
      },
      "s": {
-      "picture": "The sea snake beside the plain s: 'The sea snake makes an s shape. This is s. s says /s/.' Trace s over Sam, then trace the plain s.",
-      "outline": "Plain s over a faint sea snake: 'Can you still see the sea snake? This is s.' Cover the sea snake: child says /s/ from the letter alone.",
+      "picture": "Snake beside the plain s: 'Snake makes an s shape. This is s. s says /s/.' Trace s over Sam, then trace the plain s.",
+      "outline": "Plain s over a faint snake: 'Can you still see snake? This is s.' Cover snake: child says /s/ from the letter alone.",
       "plain": "Plain lowercase s only, in 2-3 fonts. 'Same letter, different clothes. What does it say?'",
-      "cue": "'Think of the sea snake' + snake slide"
+      "cue": "s, snake, /s/"
      },
      "t": {
-      "picture": "the sea turtle beside the plain t: 'the sea turtle makes a t shape. This is t. t says /t/.' Trace t over the sea turtle, then trace the plain t.",
-      "outline": "Plain t over a faint the sea turtle: 'Can you still see the sea turtle? This is t.' Cover the sea turtle: child says /t/ from the letter alone.",
+      "picture": "turtle beside the plain t: 'turtle makes a t shape. This is t. t says /t/.' Trace t over turtle, then trace the plain t.",
+      "outline": "Plain t over a faint turtle: 'Can you still see turtle? This is t.' Cover turtle: child says /t/ from the letter alone.",
       "plain": "Plain lowercase t only, in 2-3 fonts. 'Same letter, different clothes. What does it say?'",
-      "cue": "'Think of the sea turtle' + flipper taps"
+      "cue": "t, turtle, /t/"
      }
     },
     "record": "After each flash, tick a box for every letter answered correctly in under 3 seconds. 3 ticks on 3 different lessons moves the letter one step.",
@@ -1874,28 +1874,28 @@
     },
     "scripts": {
      "a": {
-      "picture": "the apple beside the plain a: 'the apple makes an a shape. This is a. a says /a/.' Trace a over the apple, then trace the plain a.",
-      "outline": "Plain a over a faint the apple: 'Can you still see the apple? This is a.' Cover the apple: child says /a/ from the letter alone.",
+      "picture": "apple beside the plain a: 'apple makes an a shape. This is a. a says /a/.' Trace a over apple, then trace the plain a.",
+      "outline": "Plain a over a faint apple: 'Can you still see apple? This is a.' Cover apple: child says /a/ from the letter alone.",
       "plain": "Plain lowercase a only, in 2-3 fonts. 'Same letter, different clothes. What does it say?'",
-      "cue": "'Think of the apple' + open wide, peek-out hand"
+      "cue": "a, apple, /a/"
      },
      "m": {
-      "picture": "the mangrove beside the plain m: 'the mangrove makes an m shape. This is m. m says /m/.' Trace m over the mangrove, then trace the plain m.",
-      "outline": "Plain m over a faint the mangrove: 'Can you still see the mangrove? This is m.' Cover the mangrove: child says /m/ from the letter alone.",
+      "picture": "mangrove beside the plain m: 'mangrove makes an m shape. This is m. m says /m/.' Trace m over mangrove, then trace the plain m.",
+      "outline": "Plain m over a faint mangrove: 'Can you still see mangrove? This is m.' Cover mangrove: child says /m/ from the letter alone.",
       "plain": "Plain lowercase m only, in 2-3 fonts. 'Same letter, different clothes. What does it say?'",
-      "cue": "'Think of the mangrove' + rub tummy, hum"
+      "cue": "m, mangrove, /m/"
      },
      "s": {
-      "picture": "The sea snake beside the plain s: 'The sea snake makes an s shape. This is s. s says /s/.' Trace s over Sam, then trace the plain s.",
-      "outline": "Plain s over a faint sea snake: 'Can you still see the sea snake? This is s.' Cover the sea snake: child says /s/ from the letter alone.",
+      "picture": "Snake beside the plain s: 'Snake makes an s shape. This is s. s says /s/.' Trace s over Sam, then trace the plain s.",
+      "outline": "Plain s over a faint snake: 'Can you still see snake? This is s.' Cover snake: child says /s/ from the letter alone.",
       "plain": "Plain lowercase s only, in 2-3 fonts. 'Same letter, different clothes. What does it say?'",
-      "cue": "'Think of the sea snake' + snake slide"
+      "cue": "s, snake, /s/"
      },
      "t": {
-      "picture": "the sea turtle beside the plain t: 'the sea turtle makes a t shape. This is t. t says /t/.' Trace t over the sea turtle, then trace the plain t.",
-      "outline": "Plain t over a faint the sea turtle: 'Can you still see the sea turtle? This is t.' Cover the sea turtle: child says /t/ from the letter alone.",
+      "picture": "turtle beside the plain t: 'turtle makes a t shape. This is t. t says /t/.' Trace t over turtle, then trace the plain t.",
+      "outline": "Plain t over a faint turtle: 'Can you still see turtle? This is t.' Cover turtle: child says /t/ from the letter alone.",
       "plain": "Plain lowercase t only, in 2-3 fonts. 'Same letter, different clothes. What does it say?'",
-      "cue": "'Think of the sea turtle' + flipper taps"
+      "cue": "t, turtle, /t/"
      }
     },
     "record": "After each flash, tick a box for every letter answered correctly in under 3 seconds. 3 ticks on 3 different lessons moves the letter one step.",
@@ -2401,7 +2401,7 @@
       "m",
       "n"
      ],
-     "tip": "Count the humps: m has two humps (the mangrove's two roots), n has one (Nobu bends once). Say the sound while tracing the humps.",
+     "tip": "Count the humps: m has two humps (mangrove's two roots), n has one (Nobu bends once). Say the sound while tracing the humps.",
      "minutes": 1,
      "new_today": true
     },
@@ -2503,7 +2503,7 @@
     },
     {
      "word": "tip",
-     "scene": "the sea turtle touches the tip of her nose",
+     "scene": "turtle touches the tip of her nose",
      "caption": "A tip."
     }
    ],
@@ -2659,7 +2659,7 @@
      "id": "meet",
      "step": "Meet the letter",
      "minutes": 3,
-     "what_to_do": "Iggy beside the plain i: 'Iggy makes an i shape. This is i. i says /i/.' Trace i over Iggy, then trace the plain i. Chant and action. Nobu beside the plain n: 'Nobu makes an n shape. This is n. n says /n/.' Trace n over Nobu, then trace the plain n. Chant and action. Look-alike sort (m/n, 1 min): Count the humps: m has two humps (the mangrove's two roots), n has one (Nobu bends once). Say the sound while tracing the humps. Look-alike sort (i/a, 1 min): Mouth shape: /i/ is a small smile, /a/ drops the jaw wide open. Child looks in a mirror and feels the jaw."
+     "what_to_do": "Iggy beside the plain i: 'Iggy makes an i shape. This is i. i says /i/.' Trace i over Iggy, then trace the plain i. Chant and action. Nobu beside the plain n: 'Nobu makes an n shape. This is n. n says /n/.' Trace n over Nobu, then trace the plain n. Chant and action. Look-alike sort (m/n, 1 min): Count the humps: m has two humps (mangrove's two roots), n has one (Nobu bends once). Say the sound while tracing the humps. Look-alike sort (i/a, 1 min): Mouth shape: /i/ is a small smile, /a/ drops the jaw wide open. Child looks in a mirror and feels the jaw."
     },
     {
      "id": "trace",
@@ -2768,7 +2768,7 @@
       "m",
       "n"
      ],
-     "tip": "Count the humps: m has two humps (the mangrove's two roots), n has one (Nobu bends once). Say the sound while tracing the humps.",
+     "tip": "Count the humps: m has two humps (mangrove's two roots), n has one (Nobu bends once). Say the sound while tracing the humps.",
      "minutes": 1,
      "new_today": false
     },
@@ -3156,7 +3156,7 @@
       "m",
       "n"
      ],
-     "tip": "Count the humps: m has two humps (the mangrove's two roots), n has one (Nobu bends once). Say the sound while tracing the humps.",
+     "tip": "Count the humps: m has two humps (mangrove's two roots), n has one (Nobu bends once). Say the sound while tracing the humps.",
      "minutes": 1,
      "new_today": false
     },
@@ -3583,7 +3583,7 @@
       "m",
       "n"
      ],
-     "tip": "Count the humps: m has two humps (the mangrove's two roots), n has one (Nobu bends once). Say the sound while tracing the humps.",
+     "tip": "Count the humps: m has two humps (mangrove's two roots), n has one (Nobu bends once). Say the sound while tracing the humps.",
      "minutes": 1,
      "new_today": false
     },
@@ -3688,7 +3688,7 @@
     },
     {
      "word": "top",
-     "scene": "the sea turtle stands on top of a rock",
+     "scene": "turtle stands on top of a rock",
      "caption": "The pot is on top."
     },
     {
@@ -3995,7 +3995,7 @@
       "m",
       "n"
      ],
-     "tip": "Count the humps: m has two humps (the mangrove's two roots), n has one (Nobu bends once). Say the sound while tracing the humps.",
+     "tip": "Count the humps: m has two humps (mangrove's two roots), n has one (Nobu bends once). Say the sound while tracing the humps.",
      "minutes": 1,
      "new_today": false
     },
@@ -4442,7 +4442,7 @@
       "m",
       "n"
      ],
-     "tip": "Count the humps: m has two humps (the mangrove's two roots), n has one (Nobu bends once). Say the sound while tracing the humps.",
+     "tip": "Count the humps: m has two humps (mangrove's two roots), n has one (Nobu bends once). Say the sound while tracing the humps.",
      "minutes": 1,
      "new_today": false
     },

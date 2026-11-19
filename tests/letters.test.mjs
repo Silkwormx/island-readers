@@ -93,7 +93,7 @@ test('reading words stay inside the letters taught so far', () => {
     assert.match(body, shape, word);
   });
   assert.match(letters, /Snakes sell sandy socks/);
-  assert.match(letters, /Slide your hand like the snake/);
+  assert.match(letters, /Slide your hand like a snake/);
   assert.match(letters, /llcast/);
   assert.match(letters, /hold hands/);
   assert.equal(/\bfree\b/i.test(letters), false);

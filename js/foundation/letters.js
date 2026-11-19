@@ -129,7 +129,7 @@
   const MEMORY = {
     a: { chant: 'Ants add apples. Alligators act angry.', action: 'Open wide, like a bite of apple.' },
     m: { chant: 'Moles make mighty mud mountains. Messy monkeys munch muffins.', action: 'Lips together. Hum.' },
-    s: { chant: 'Snakes sell sandy socks. Silly seals sip soup.', action: 'Slide your hand like the snake.' },
+    s: { chant: 'Snakes sell sandy socks. Silly seals sip soup.', action: 'Slide your hand like a snake.' },
     t: { chant: 'Tigers tap ten toes. Tiny turtles tumble.', action: 'Tap two fingers.' },
     p: { chant: 'Puff like a pig, /p/ /p/ /p/.', action: 'Puff your lips.' },
     f: { chant: 'Fan the fish, /f/ /f/ /f/.', action: 'Bite your lip and blow.' },
@@ -186,7 +186,7 @@
   };
   /* Placeholder island characters. Final art is still needed for every letter. */
   const WHO = {
-    a: 'apple', m: 'mangrove', s: 'sea snake', t: 'sea turtle',
+    a: 'apple', m: 'mangrove', s: 'snake', t: 'turtle',
     p: 'Puffer fish', f: 'Fan coral', i: 'Island sun', n: 'Fishing net',
     o: 'Round ox', d: 'Island dog', c: 'Crab claw', u: 'Uppy the umbrella',
     g: 'Hill goat', b: 'Beach bus', e: 'Reef eel', k: 'Reef kite',
@@ -2211,7 +2211,7 @@
     return readable(group).slice(0, 3).map((item) => item.w).join(' ');
   }
   function pictureWord(id) {
-    return ({ a: 'apple', m: 'mangrove', s: 'sea snake', t: 'sea turtle' })[id] || '';
+    return ({ a: 'apple', m: 'mangrove', s: 'snake', t: 'turtle' })[id] || '';
   }
   function shortName(id) {
     if (pictureWord(id)) return pictureWord(id);
