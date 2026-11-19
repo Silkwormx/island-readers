@@ -593,11 +593,34 @@
         : h('div', { class: 'lessonrow' }, ...items.map((item) => itemCard(item)));
     return h('section', { class: 'stepblock' }, stepHead(n, label), cards);
   }
+  function slideDays(plan) {
+    const days = plan.days || [];
+    const count = days.filter((day) => /^Day\s+\d+/i.test(String((day && (day.label || (day.day ? 'Day ' + day.day : ''))) || ''))).length;
+    if (count === 1) return '1 day';
+    if (count > 1) return count + ' days';
+    return 'Slideshow';
+  }
   function teacherBox(plan) {
     plan = plan || {};
     const files = plan.files || [];
-    if (!files.length) return null;
+    const deck = plan.slides || '';
+    if (!files.length && !deck && !plan.pdf) return null;
     const wrap = h('div', { class: 'teachcorner' });
+    if (deck || plan.pdf) {
+      const sub = h('span', { class: 'teachslides-sub' }, slideDays(plan));
+      const slides = h('button', {
+        class: 'teachbox teachslides',
+        type: 'button',
+        'aria-label': 'Teacher Slides. ' + sub.textContent
+      }, h('span', { class: 'teachslides-name' }, 'Teacher Slides'), sub);
+      slides.addEventListener('click', () => {
+        Snd.stop();
+        if (deck) location.hash = deck;
+        else window.open(plan.pdf, '_blank', 'noopener');
+      });
+      wrap.append(slides);
+    }
+    if (!files.length) return wrap;
     const list = h('div', { class: 'teachpop teachfiles', hidden: '' },
       ...files.map((file) => h('a', { class: 'teachlink', href: file.href, target: '_blank', rel: 'noopener' }, file.title)));
     const print = h('button', { class: 'teachbox teachprint', type: 'button', 'aria-expanded': 'false' }, 'Printables');
@@ -619,25 +642,11 @@
     return wrap;
   }
   IR.teacherBox = teacherBox;
-  function teacherLedCard(deck, title, note) {
-    return {
-      pick: true,
-      tone: 'teachled',
-      kicker: 'Teacher Led',
-      title: title || 'Slideshow',
-      note: note || 'Slideshow',
-      goLabel: 'Open slideshow',
-      go: () => { Snd.stop(); location.hash = deck; }
-    };
-  }
   function modeBar(plan) {
     plan = plan || {};
     const labels = plan.labels || ['Lesson', 'Games', 'Story'];
     const storyItems = (plan.stories && plan.stories.length) ? plan.stories : (plan.story ? [plan.story] : null);
-    const lessons = (plan.lesson || []).slice();
-    if (plan.slides && !lessons.some((item) => item && item.tone === 'teachled')) {
-      lessons.push(teacherLedCard(plan.slides, plan.slideTitle, plan.slideNote));
-    }
+    const lessons = (plan.lesson || []).filter((item) => !item || item.tone !== 'teachled');
     return h('div', { class: 'modebar' },
       plan.note === false ? null : h('p', { class: 'stepnote' }, plan.note || 'Watch the lesson, then play.'),
       plan.before || null,

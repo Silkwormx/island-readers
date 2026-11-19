@@ -75,6 +75,10 @@ p{margin:.4em 0}
 .stepcard:hover,.gamecard:hover,.storycard:hover{background:#FFF3DE}
 .teachcorner{position:relative;flex:none;margin-left:auto;display:flex;align-items:center;justify-content:flex-end;gap:.4rem;flex-wrap:wrap}
 .teachbox{display:inline-flex;align-items:center;justify-content:center;text-align:center;min-height:2.4rem;padding:.2rem .8rem;border:3px solid #C95A10;border-radius:.85rem;background:#F28C00;color:#fff;box-shadow:0 2px 0 #B5510D;font-family:Andika,sans-serif;font-weight:700;font-size:.9rem;line-height:1.1;cursor:pointer}
+.teachslides{flex-direction:column;gap:0;line-height:1.05;padding:.12rem .65rem;min-width:0}
+.teachslides-name,.teachslides-sub{display:block;white-space:nowrap;text-align:center}
+.teachslides-name{font-size:.86rem}
+.teachslides-sub{font-size:.7rem;font-weight:700;opacity:.95}
 .teachbox.is-open{background:#C95A10;color:#fff}
 .teachpop{position:absolute;top:100%;right:0;width:12.5rem;max-height:min(70vh,26rem);overflow:auto;margin-top:.35rem;padding:.55rem .6rem .65rem;background:#FFFDF8;border:2px solid #E4D6B4;border-radius:.85rem;z-index:50}
 .teachpop[hidden]{display:none!important}
@@ -83,7 +87,7 @@ p{margin:.4em 0}
 .teachlink{display:flex;align-items:center;justify-content:center;width:100%;min-height:2.5rem;margin-top:.3rem;padding:.4rem .55rem;border:2px solid #E7DFD0;border-radius:.65rem;background:#fff;color:#5c5648;font:inherit;font-weight:700;font-size:.92rem;line-height:1.2;text-align:center;text-wrap:balance;white-space:normal;text-decoration:none;cursor:pointer}
 .teachsoon{margin:.15rem 0 .2rem;color:#8A8175;font-size:.85rem;font-weight:700}
 .stepage{max-width:100%}
-@media (max-width:700px){.teachcorner{order:-1;flex:1 0 100%;display:flex;justify-content:flex-end;align-items:center;margin-left:0;width:100%;gap:.35rem}.teachbox{min-height:44px;min-width:44px}.teachpop{position:static;width:100%;max-width:none;margin-top:.15rem;right:auto}}
+@media (max-width:700px){.teachcorner{order:-1;flex:1 0 100%;display:flex;flex-wrap:nowrap;justify-content:flex-end;align-items:center;margin-left:0;width:100%;gap:.35rem}.teachbox{min-height:44px;min-width:44px}.teachslides{padding:.06rem .5rem}.teachslides-name{font-size:.78rem}.teachslides-sub{font-size:.64rem}.teachpop{position:static;width:100%;max-width:none;margin-top:.15rem;right:auto}}
 .stepage .uA-top{flex-wrap:wrap;width:100%;max-width:100%;box-sizing:border-box}
 .stepage.llpage{height:auto;min-height:100dvh;max-height:none;overflow:auto}
 .stepage.fs-group{overflow:visible;cursor:default;height:auto;background:var(--cream);border:0;border-radius:0;box-shadow:none;padding:0;align-items:stretch}
@@ -3031,7 +3035,7 @@ button,
 .ll-day1 .ll1card,.ll-day1 .ll1bubble,.ll-day1 .ll1hunt{display:inline-flex;align-items:center;justify-content:center;text-align:center;line-height:1}
 .llstep.u5step{display:flex;flex-direction:column;height:100%;overflow:hidden}
 .llstep.u5step .stage{flex:1 1 auto;min-height:0;overflow:hidden}
-.fsteam1 .lessonrow{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));width:100%;align-items:stretch;justify-content:stretch;gap:.55rem}
+.fsteam1 .lessonrow{display:grid;grid-template-columns:minmax(0,1fr);width:100%;align-items:stretch;justify-content:stretch;gap:.55rem}
 .fsteam1 .lessonrow .lessontab{max-width:none;width:100%;height:9.1rem;max-height:9.1rem}
 .fsteam1 .lessontab.student .uimg{height:36%;min-height:0;background:transparent}
 .fsteam1 .lessontab.student .uimg img{max-width:94%;width:auto;height:100%;object-fit:contain;object-position:center bottom}
