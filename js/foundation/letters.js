@@ -714,6 +714,25 @@
     feed: 'img/zipA.webp',
     review: 'foundation/img/games/match.jpg'
   };
+  const TEAM1_DAY_ICON = {
+    pop: 'foundation/img/games/icons/pop.svg',
+    feed: 'foundation/img/games/icons/feed.svg',
+    catch: 'foundation/img/games/icons/catch.svg',
+    hunt: 'foundation/img/games/icons/hunt.svg',
+    build: 'foundation/img/games/icons/build.svg',
+    ears: 'foundation/img/games/icons/blend.svg',
+    flash: 'foundation/img/games/icons/flash.svg',
+    match: 'foundation/img/games/icons/read.svg',
+    sound: 'foundation/img/games/icons/sound.svg',
+    sort: 'foundation/img/games/icons/sort.svg',
+    count: 'foundation/img/games/icons/count.svg'
+  };
+  const TEAM1_MORE_ICON = {
+    find: 'foundation/img/games/icons/find.svg',
+    match: 'foundation/img/games/icons/case.svg',
+    sound: 'foundation/img/games/icons/first.svg',
+    feed: 'foundation/img/games/icons/zip.svg'
+  };
   function teamOnePack() {
     const art = {
       a: 'foundation/img/letters/a_apple.jpg',
@@ -763,7 +782,7 @@
     const older = gamesFor(group).map((game) => ({
       id: game.id,
       title: game.title,
-      img: GAME_ART[game.id] || '',
+      img: (group.id === 'g1' && TEAM1_MORE_ICON[game.id]) || GAME_ART[game.id] || '',
       alt: game.title,
       done: IR.isDone(doneId(group, game.id)),
       href: '#/foundation/letters/' + group.id + '/' + game.id
@@ -772,8 +791,8 @@
     const ten = IR.day1Flow.GAMES.map((game) => ({
       id: game.id,
       title: game.title,
-      img: game.faces ? '' : game.icon,
-      imgs: game.faces || null,
+      img: TEAM1_DAY_ICON[game.id] || (game.faces ? '' : game.icon),
+      imgs: null,
       alt: game.title,
       done: IR.isDone('ll_g1_d1_' + game.id),
       go: () => {

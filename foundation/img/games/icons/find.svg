@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <rect width="64" height="64" rx="14" fill="#FFF1E2"/>
+  <g font-family="Andika,sans-serif" font-size="12" font-weight="700" fill="#2B2540" text-anchor="middle">
+    <text x="18" y="24">m</text><text x="32" y="24">s</text><text x="46" y="24">a</text>
+    <text x="18" y="40">t</text><text x="46" y="40">m</text>
+    <text x="18" y="54">s</text><text x="32" y="54">a</text><text x="46" y="54">t</text>
+  </g>
+  <circle cx="32" cy="36" r="9" fill="none" stroke="#F28C00" stroke-width="3"/>
+  <text x="32" y="40" text-anchor="middle" font-family="Andika,sans-serif" font-size="12" font-weight="700" fill="#C95A10">a</text>
+</svg>

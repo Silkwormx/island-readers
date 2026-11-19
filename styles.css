@@ -3018,12 +3018,11 @@ button,
 .fsteam1 .lessontab .obtn{min-height:1.65rem;font-size:.88rem;padding:0 .45rem}
 .fsteam1 .gamegrid{grid-template-columns:repeat(5,minmax(0,1fr));grid-template-rows:repeat(3,minmax(0,1fr));gap:.32rem}
 .fsteam1 .gamecard{flex-direction:row;justify-content:flex-start;align-items:center;text-align:left;padding:.2rem .4rem;gap:.3rem}
-.fsteam1 .gamecard .gamenum{position:static;width:1.35rem;height:1.35rem;font-size:.78rem;border-radius:.4rem}
-.fsteam1 .gamegrid .gameico{display:flex;width:1.05rem;height:1.05rem;color:#C95A10}
-.fsteam1 .gamegrid .gameico .ico{width:1rem;height:1rem}
-.fsteam1 .gamegrid .gamenote,.fsteam1 .gamegrid .gamemin,.fsteam1 .gamecard .gamepic,.fsteam1 .gamecard .gamepair{display:none}
-.fsteam1 .gamegrid .gametxt{align-items:flex-start;text-align:left}
-.fsteam1 .gamegrid .gametxt b{font-size:clamp(.78rem,1.55vh,.98rem);line-height:1.1;text-align:left}
+.fsteam1 .gamecard .gamenum{position:static;width:1.25rem;height:1.25rem;font-size:.72rem;border-radius:.35rem}
+.fsteam1 .gamegrid .gameico,.fsteam1 .gamegrid .gamenote,.fsteam1 .gamegrid .gamemin,.fsteam1 .gamecard .gamepair{display:none}
+.fsteam1 .gamecard .gamepic{display:block;width:2.05rem;height:2.05rem;flex:none;object-fit:contain;border-radius:.45rem;background:#FFF6E8}
+.fsteam1 .gamegrid .gametxt{align-items:flex-start;text-align:left;min-width:0}
+.fsteam1 .gamegrid .gametxt b{font-size:clamp(.72rem,1.4vh,.92rem);line-height:1.1;text-align:left}
 .fsteam1 .storycard{min-height:0;padding:.22rem .5rem}
 .fsteam1 .storypic{width:3rem;height:2rem}
 }
