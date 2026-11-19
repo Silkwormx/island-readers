@@ -73,9 +73,13 @@ p{margin:.4em 0}
 .storypic{width:9rem;height:6.6rem;object-fit:cover;border-radius:1rem;flex:none;background:#FFF6E3}
 .stepcard:focus-visible,.gamecard:focus-visible,.storycard:focus-visible{outline:3px solid #F28C00;outline-offset:3px}
 .stepcard:hover,.gamecard:hover,.storycard:hover{background:#FFF3DE}
-.teachcorner{position:relative;flex:none;margin-left:auto}
-.teachbox{display:inline-flex;align-items:center;justify-content:center;min-height:2.15rem;padding:.15rem .7rem;border:2px solid #E4D6B4;border-radius:.7rem;background:transparent;color:#7A7268;font-family:Andika,sans-serif;font-weight:700;font-size:.82rem;line-height:1.1;cursor:pointer}
-.teachbox.is-open{background:#F7F1E4}
+.teachcorner{position:relative;flex:none;margin-left:auto;display:flex;align-items:center;justify-content:flex-end;gap:.4rem;flex-wrap:wrap}
+.teachbox{display:inline-flex;align-items:center;justify-content:center;text-align:center;min-height:2.4rem;padding:.2rem .8rem;border:3px solid #C95A10;border-radius:.85rem;background:#F28C00;color:#fff;box-shadow:0 2px 0 #B5510D;font-family:Andika,sans-serif;font-weight:700;font-size:.9rem;line-height:1.1;cursor:pointer}
+.teachslides{flex-direction:column;gap:0;line-height:1.05;padding:.12rem .65rem;min-width:0}
+.teachslides-name,.teachslides-sub{display:block;white-space:nowrap;text-align:center}
+.teachslides-name{font-size:.86rem}
+.teachslides-sub{font-size:.7rem;font-weight:700;opacity:.95}
+.teachbox.is-open{background:#C95A10;color:#fff}
 .teachpop{position:absolute;top:100%;right:0;width:12.5rem;max-height:min(70vh,26rem);overflow:auto;margin-top:.35rem;padding:.55rem .6rem .65rem;background:#FFFDF8;border:2px solid #E4D6B4;border-radius:.85rem;z-index:50}
 .teachpop[hidden]{display:none!important}
 .teachstep{display:flex;align-items:center;gap:.45rem;margin:.45rem 0 .15rem;color:#6A6256;font-weight:700;font-size:.95rem}
@@ -83,7 +87,7 @@ p{margin:.4em 0}
 .teachlink{display:flex;align-items:center;justify-content:center;width:100%;min-height:2.5rem;margin-top:.3rem;padding:.4rem .55rem;border:2px solid #E7DFD0;border-radius:.65rem;background:#fff;color:#5c5648;font:inherit;font-weight:700;font-size:.92rem;line-height:1.2;text-align:center;text-wrap:balance;white-space:normal;text-decoration:none;cursor:pointer}
 .teachsoon{margin:.15rem 0 .2rem;color:#8A8175;font-size:.85rem;font-weight:700}
 .stepage{max-width:100%}
-@media (max-width:700px){.teachcorner{order:-1;flex:1 0 100%;display:flex;justify-content:flex-end;margin-left:0;width:100%}}
+@media (max-width:700px){.teachcorner{order:-1;flex:1 0 100%;display:flex;flex-wrap:nowrap;justify-content:flex-end;align-items:center;margin-left:0;width:100%;gap:.35rem}.teachbox{min-height:44px;min-width:44px}.teachslides{padding:.06rem .5rem}.teachslides-name{font-size:.78rem}.teachslides-sub{font-size:.64rem}.teachpop{position:static;width:100%;max-width:none;margin-top:.15rem;right:auto}}
 .stepage .uA-top{flex-wrap:wrap;width:100%;max-width:100%;box-sizing:border-box}
 .stepage.llpage{height:auto;min-height:100dvh;max-height:none;overflow:auto}
 .stepage.fs-group{overflow:visible;cursor:default;height:auto;background:var(--cream);border:0;border-radius:0;box-shadow:none;padding:0;align-items:stretch}
@@ -1786,9 +1790,13 @@ body.calm .ob-glow{animation:none;opacity:.85}
 .tmgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem;align-items:stretch}
 .tmcard{display:flex;flex-direction:column;height:100%;box-sizing:border-box;background:#fff;border:2px solid var(--line,#E3D9BC);border-radius:1.2rem;padding:1rem 1.2rem}
 .tmcard h3{display:flex;align-items:center;min-height:2.8rem;font-size:1.3rem;line-height:1.2;margin:0 0 .7rem}.tmsound{display:inline-block;background:#E8731C;color:#fff;border-radius:.6rem;padding:0 .6rem;font-weight:700}
-.tmlink{display:flex;width:100%;min-height:4rem;box-sizing:border-box;justify-content:center;text-align:center;text-decoration:none;margin-top:.5rem}.tmnote{margin:.2rem 0 .45rem;min-height:2.8rem;font-size:1rem;line-height:1.3;color:var(--ink2,#4a4a68)}
-span.tmlink.is-soon{opacity:.45;box-shadow:none;cursor:default}
-.tmlink,.tmlink:visited{color:var(--ink,#26324D)}
+.tmlink{display:flex;width:100%;min-height:44px;box-sizing:border-box;align-items:center;justify-content:center;text-align:center;text-decoration:none;margin-top:.45rem;background:#F28C00;border:3px solid #C95A10;border-radius:1rem;box-shadow:0 3px 0 #B5510D;color:#fff;font-weight:700}
+.tmnote{margin:.15rem 0 0;font-size:.95rem;line-height:1.2;color:#8A7A62;font-weight:700}
+span.tmlink.is-soon{opacity:1;background:#F3E6D0;color:#8A7A62;border-color:#E4D6B4;box-shadow:none;cursor:default}
+.tmlink,.tmlink:visited{color:#fff}
+.tmfiles{display:flex;flex-direction:column;gap:.35rem;margin-top:.35rem}
+.tmfile{display:flex;align-items:center;justify-content:center;text-align:center;min-height:44px;padding:.3rem .55rem;border:2px solid #C95A10;border-radius:.8rem;background:#fff;color:#C95A10;font-weight:700;text-decoration:none}
+@media (max-width:700px){.tmgrid{grid-template-columns:1fr}}
 .tmchecks{display:flex;flex-direction:column;align-items:stretch;gap:.75rem;max-width:40rem}
 .tmchecks h3{font-size:1.25rem;margin:.1rem 0 .15rem}
 a.btn.tmlink.tmcheck{margin:0;background:#F28C00;border-color:#C95A10;box-shadow:0 5px 0 #C95A10;color:#fff;text-align:center;white-space:normal;line-height:1.3}
@@ -3027,7 +3035,7 @@ button,
 .ll-day1 .ll1card,.ll-day1 .ll1bubble,.ll-day1 .ll1hunt{display:inline-flex;align-items:center;justify-content:center;text-align:center;line-height:1}
 .llstep.u5step{display:flex;flex-direction:column;height:100%;overflow:hidden}
 .llstep.u5step .stage{flex:1 1 auto;min-height:0;overflow:hidden}
-.fsteam1 .lessonrow{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));width:100%;align-items:stretch;justify-content:stretch;gap:.55rem}
+.fsteam1 .lessonrow{display:grid;grid-template-columns:minmax(0,1fr);width:100%;align-items:stretch;justify-content:stretch;gap:.55rem}
 .fsteam1 .lessonrow .lessontab{max-width:none;width:100%;height:9.1rem;max-height:9.1rem}
 .fsteam1 .lessontab.student .uimg{height:36%;min-height:0;background:transparent}
 .fsteam1 .lessontab.student .uimg img{max-width:94%;width:auto;height:100%;object-fit:contain;object-position:center bottom}
@@ -3152,3 +3160,91 @@ html.teach .u5step .magebox{font-size:clamp(2.4rem,7vh,3.8rem)!important;min-wid
 .u5step .sentact .slots.sent .slot{width:auto;min-width:0;height:auto;min-height:0;padding:.12rem}
 .u5step .sentact .slot .tile.word{width:auto;height:auto;min-width:0;min-height:0;white-space:nowrap;line-height:1.05;font-size:clamp(1.7rem,4vh,2.4rem);padding:.28rem .85rem}
 html.teach .u5step .sentact .tile.word{font-size:clamp(1.7rem,4vh,2.4rem)!important;min-height:0!important;min-width:0!important;height:auto;padding:.28rem .85rem}
+
+/* Menu game cards: one grid, equal boxes, icon and title in the same place on every card. */
+.stepage .gamerows{display:flex;flex-direction:column;align-items:stretch;width:100%;gap:.35rem}
+.stepage .gamerow{display:flex;flex-direction:column;align-items:stretch;width:100%;min-width:0;gap:.12rem}
+.stepage .gamerowlab{margin:0;padding:0;text-align:left;align-self:stretch;font-weight:700;color:#6A6256;line-height:1.1}
+.stepage .stepblock > .gamegrid:not(.pics),
+.stepage .gamerow > .gamegrid{
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:none;grid-auto-rows:9.6rem;
+  align-items:stretch;justify-items:stretch;width:100%;margin:0;padding:0;gap:.45rem;list-style:none
+}
+.stepage .gamegrid:not(.pics) > li{display:flex;min-width:0;min-height:0;height:100%}
+.stepage .gamegrid:not(.pics) .gamecard{
+  position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;
+  width:100%;height:9.6rem;min-height:9.6rem;max-height:9.6rem;box-sizing:border-box;
+  padding:1.35rem .45rem .45rem;gap:.28rem;overflow:hidden
+}
+.stepage .gamegrid:not(.pics) .gamenum{
+  position:absolute;top:.32rem;left:.32rem;width:1.45rem;height:1.45rem;margin:0;
+  font-size:.82rem;border-radius:.4rem
+}
+.stepage .gamegrid:not(.pics) .gamedone{
+  position:absolute;top:.32rem;right:.32rem;width:1.2rem;height:1.2rem;margin:0
+}
+.stepage .gamegrid:not(.pics) .gamepic,
+.stepage .gamegrid:not(.pics) .gameico,
+.stepage .gamegrid:not(.pics) .gamepair{
+  display:flex;align-items:center;justify-content:center;width:3rem;height:3rem;min-width:3rem;min-height:3rem;
+  max-width:3rem;max-height:3rem;flex:none;margin:0 auto;object-fit:contain;border-radius:.55rem;overflow:hidden;background:#FFF6E8
+}
+.stepage .gamegrid:not(.pics) .gamecard:has(.gamepic) .gameico,
+.stepage .gamegrid:not(.pics) .gamecard:has(.gamepair) .gameico{display:none}
+.stepage .gamegrid:not(.pics) .gamepair{display:grid;grid-template-columns:1fr 1fr;padding:.08rem;box-sizing:border-box;background:#FFF6E8}
+.stepage .gamegrid:not(.pics) .gamepair .gamepic{width:100%;height:100%;min-width:0;min-height:0;max-width:100%;max-height:100%;background:transparent}
+.stepage .gamegrid:not(.pics) .gametxt{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;
+  width:100%;height:2.5em;min-height:2.5em;max-height:2.5em;margin:0;overflow:hidden;gap:0
+}
+.stepage .gamegrid:not(.pics) .gametxt b{
+  display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;
+  width:100%;text-align:center;line-height:1.15;font-size:.92rem;white-space:normal;overflow-wrap:anywhere
+}
+.stepage .gamegrid:not(.pics) .gamenote,
+.stepage .gamegrid:not(.pics) .gamemin{display:none}
+@media (max-width:360px){
+  .stepage .stepblock > .gamegrid:not(.pics),
+  .stepage .gamerow > .gamegrid{grid-template-columns:1fr}
+}
+@media (min-width:1100px){
+  .stepage .stepblock > .gamegrid:not(.pics),
+  .stepage .gamerow > .gamegrid{
+    grid-template-columns:repeat(5,minmax(0,1fr));grid-auto-rows:10.6rem;gap:.55rem
+  }
+  .stepage .gamegrid:not(.pics) .gamecard{
+    height:10.6rem;min-height:10.6rem;max-height:10.6rem;padding:1.55rem .45rem .55rem;gap:.35rem
+  }
+  .stepage .gamegrid:not(.pics) .gamepic,
+  .stepage .gamegrid:not(.pics) .gameico,
+  .stepage .gamegrid:not(.pics) .gamepair{width:4rem;height:4rem;min-width:4rem;min-height:4rem;max-width:4rem;max-height:4rem}
+  .stepage .gamegrid:not(.pics) .gametxt{height:2.4em;min-height:2.4em;max-height:2.4em}
+  .stepage .gamegrid:not(.pics) .gametxt b{font-size:1rem}
+  .stepage .gamerowlab{font-size:.95rem}
+  .fsteam1 .gamerow > .gamegrid{grid-auto-rows:minmax(7.6rem,1fr)}
+  .fsteam1.stepage .gamegrid:not(.pics) .gamecard{height:100%;min-height:7.6rem;max-height:none;padding:1.15rem .35rem .4rem}
+  .fsteam1.stepage .gamegrid:not(.pics) .gamepic,
+  .fsteam1.stepage .gamegrid:not(.pics) .gameico,
+  .fsteam1.stepage .gamegrid:not(.pics) .gamepair{width:3.5rem;height:3.5rem;min-width:3.5rem;min-height:3.5rem;max-width:3.5rem;max-height:3.5rem}
+}
+.stepage .lessonrow:has(.lessontab.teachled){display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.7rem;align-items:stretch;width:100%}
+.stepage .lessonrow:has(.lessontab.teachled) .lessontab{min-height:12rem;height:100%}
+.stepage .lessonrow .lessontab .uimg{display:flex;align-items:center;justify-content:center;max-height:8rem;overflow:hidden}
+.stepage .lessonrow .lessontab .uimg img{max-height:7.5rem;max-width:100%;width:auto;height:auto;object-fit:contain}
+@media (max-width:800px){
+  .stepage .lessonrow:has(.lessontab.teachled){grid-template-columns:1fr}
+}
+@media (min-width:1100px){
+  .u5menu .lessonrow:has(.lessontab.teachled):has(.lessontab:nth-child(3)){grid-template-columns:repeat(3,minmax(0,1fr))}
+  .u5menu .lessonrow:has(.lessontab.teachled):has(.lessontab:nth-child(3)) .lessontab{height:clamp(7rem,16vh,8.2rem);min-height:0;max-height:8.2rem;padding-bottom:.2rem}
+  .u5menu .lessonrow:has(.lessontab:nth-child(3)) .uimg{max-height:2.4rem}
+  .u5menu .lessonrow:has(.lessontab:nth-child(3)) .uimg img{max-height:2.2rem}
+  .u5menu .lessonrow:has(.lessontab:nth-child(3)) h2{font-size:.98rem;line-height:1.05;margin:0}
+  .u5menu .lessonrow:has(.lessontab:nth-child(3)) .ubody{padding:0 .3rem .35rem;gap:0}
+  .u5menu .lessonrow:has(.lessontab:nth-child(3)) .obtn{min-height:1.7rem;font-size:.9rem;margin-top:.15rem;margin-bottom:.1rem}
+  .u5menu:not(.fsteam1) .stepblock > .gamegrid:not(.pics){grid-auto-rows:minmax(0,1fr);height:100%;min-height:0}
+  .u5menu:not(.fsteam1) .gamegrid:not(.pics) .gamecard{height:100%;min-height:0;max-height:none;padding:.7rem .3rem .3rem}
+  .u5menu:not(.fsteam1) .gamegrid:not(.pics) .gamepic,
+  .u5menu:not(.fsteam1) .gamegrid:not(.pics) .gameico,
+  .u5menu:not(.fsteam1) .gamegrid:not(.pics) .gamepair{width:3rem;height:3rem;min-width:3rem;min-height:3rem;max-width:3rem;max-height:3rem}
+}

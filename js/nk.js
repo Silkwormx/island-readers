@@ -68,7 +68,13 @@
     const prev = IR._nkHashWas || '';
     if (!/^#\/nk(\/|$)/.test(prev) && prev !== '#/review3') resetLights();
     IR.newScreen(); const all = sections();
-    const pick = (group) => all.filter((r) => r.group === group).map((r) => ({ title: r.title, href: r.href, note: TIPS[r.id], min: r.min }));
+    const pick = (group) => all.filter((r) => r.group === group).map((r) => ({
+      id: r.id, title: r.title, href: r.href, note: TIPS[r.id], min: r.min,
+      pick: group === 'lesson', kicker: group === 'lesson' ? 'Student' : '',
+      img: group === 'lesson' ? 'img/lesson_zip_frill.webp' : '',
+      alt: group === 'lesson' ? 'Zip and Frill' : '',
+      goLabel: group === 'lesson' ? 'Open lesson' : ''
+    }));
     const story = pick('story')[0];
     if (story) { story.title = N.storyTitle || story.title; story.note = 'Story Time'; story.img = IR.storyCovers['4.2']; story.alt = N.storyTitle || ''; story.big = true; }
     app.append(h('div', { class: 'screen trailscreen unitpage unitA nkunit stepage' },
@@ -84,6 +90,8 @@
         games: pick('activities').concat(pick('extra')),
         story: story,
         slides: '#/teachers/slides/nk',
+        slideTitle: 'nk',
+        slideNote: 'Slideshow',
         files: [
           { title: 'Daily practice sheets', href: 'teachers/nk/Lesson3.2_nk_Daily_Practice_Sheets.pdf' },
           { title: 'Teacher pack', href: 'teachers/nk/Lesson3.2_nk_Teacher_Pack.pdf' }

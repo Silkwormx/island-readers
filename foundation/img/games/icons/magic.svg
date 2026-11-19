@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <rect width="64" height="64" rx="14" fill="#FFF1E2"/>
+  <rect x="8" y="22" width="14" height="20" rx="3" fill="#fff" stroke="#F28C00" stroke-width="2"/>
+  <rect x="25" y="22" width="14" height="20" rx="3" fill="#fff" stroke="#1FA6A6" stroke-width="2"/>
+  <rect x="42" y="22" width="14" height="20" rx="3" fill="none" stroke="#C95A10" stroke-width="2" stroke-dasharray="3 2"/>
+  <text x="15" y="36" text-anchor="middle" font-family="Andika,sans-serif" font-size="12" font-weight="700" fill="#2B2540">a</text>
+  <text x="32" y="36" text-anchor="middle" font-family="Andika,sans-serif" font-size="12" font-weight="700" fill="#2B2540">k</text>
+  <text x="49" y="36" text-anchor="middle" font-family="Andika,sans-serif" font-size="12" font-weight="700" fill="#C95A10">e</text>
+</svg>

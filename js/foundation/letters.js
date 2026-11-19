@@ -739,11 +739,11 @@
   }
   const MOUTH = '<svg viewBox="0 0 88 64" aria-hidden="true"><ellipse cx="44" cy="34" rx="36" ry="22" fill="#FFE4D6" stroke="#E39A86" stroke-width="3"/><path d="M16 30 Q44 58 72 30 Q44 44 16 30Z" fill="#E23B4A" stroke="#8E1D2C" stroke-width="4" stroke-linejoin="round"/><path d="M24 33 Q44 50 64 33 Q44 41 24 33Z" fill="#4A1020"/><ellipse cx="44" cy="40" rx="11" ry="6" fill="#F08A98"/></svg>';
   const GAME_ART = {
-    find: 'foundation/img/games/hunt.jpg',
-    match: 'foundation/img/games/flash.jpg',
-    sound: 'foundation/img/games/sound.jpg',
-    feed: 'img/zipA.webp',
-    review: 'foundation/img/games/match.jpg'
+    find: 'foundation/img/games/icons/find.svg',
+    match: 'foundation/img/games/icons/case.svg',
+    sound: 'foundation/img/games/icons/first.svg',
+    feed: 'foundation/img/games/icons/zip.svg',
+    review: 'foundation/img/games/icons/review.svg'
   };
   const TEAM1_DAY_ICON = {
     pop: 'foundation/img/games/icons/pop.svg',
@@ -2416,15 +2416,6 @@
           note: 'a · m · s · t',
           goLabel: 'Open lesson',
           go: () => { Snd.stop(); location.hash = base + '/flow/' + group.letters[0] + '/hear'; }
-        },
-        {
-          pick: true,
-          tone: 'teachled',
-          kicker: 'Teacher Led',
-          title: 'Team 1: m s a t',
-          note: '5-day slideshow',
-          goLabel: 'Open slideshow',
-          go: () => openSlides(group.id)
         }
       ]
       : group.letters.map((id) => ({
@@ -2440,8 +2431,12 @@
     const phrase = storyLine(group);
     const games = teamGames(group);
     const teamTitle = group.id === 'g1' ? 'Team 1: m s a t' : ('Team ' + group.n);
+    const deck = group.id === 'g1' ? '' : ((teamTeacher(group) || {}).slides || '');
     menuScreen(app, group, '#/foundation', teamTitle, 'Foundation Skills', {
       lesson: lessons,
+      slides: deck,
+      slideTitle: teamTitle,
+      slideNote: 'Slideshow',
       games: group.id === 'g1' ? null : games,
       gameRows: group.id === 'g1' ? team1GameRows(games) : null,
       story: {
@@ -2858,7 +2853,7 @@
     const files = sheets[group.id]
       ? [{ title: 'Daily practice sheets', href: sheets[group.id] }]
       : [];
-    return { slides: deck ? '#/foundation/slides/' + group.id : '', files: files };
+    return { slides: deck ? '#/foundation/slides/' + group.id : '', files: files, days: (deck && deck.days) || [] };
   }
   function pdfLink(label, href) {
     return h('a', { class: 'drop-link', href: href, target: '_blank', rel: 'noopener' }, label);

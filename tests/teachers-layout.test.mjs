@@ -11,14 +11,10 @@ function count(hay, needle) {
 
 test('every Teacher Materials section uses the Unit 4 lesson card', () => {
   assert.equal(count(teachers, 'function lessonCard'), 1);
-  assert.equal(count(teachers, 'Open on smartboard'), 1);
-  assert.equal(count(teachers, 'Download slides'), 1);
-  assert.equal(count(teachers, 'Daily practice sheets (PDF)'), 1);
-  assert.equal(count(teachers, 'Teacher pack (PDF)'), 1);
-  assert.equal(count(teachers, 'Full-screen slide show in the browser. No download needed.'), 1);
-  assert.equal(count(teachers, 'One PowerPoint for the whole sound.'), 1);
-  assert.equal(count(teachers, 'Slides with notes, worksheets and answer key.'), 1);
-  assert.match(teachers, /u\.sounds\.map\(lessonCard\)/);
+  assert.equal(count(screens, 'Open on smartboard'), 0);
+  assert.equal(count(teachers, "'Slideshow'"), 2);
+  assert.equal(count(teachers, "'Printables'"), 3);
+  assert.match(teachers, /unit\.sounds\.map\(lessonCard\)/);
   assert.ok(teachers.includes("name: 'Unit 4 \\u00b7 Glued Sounds'"));
   assert.ok(teachers.includes("name: 'Unit 5 \\u00b7 Silent e'"));
   assert.ok(teachers.includes("name: 'Meet the Teams'"));

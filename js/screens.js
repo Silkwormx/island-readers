@@ -529,14 +529,42 @@
         stars && stars.total ? h('div', { class: 'uprog' }, stars.done + ' of ' + stars.total + ' stars') : null,
         h('span', { class: 'obtn' }, item.goLabel || 'Open lesson')));
   }
+  const GAME_ICON = {
+    hear: 'hear.svg', bells: 'bell.svg', build: 'build.svg', chain: 'chain.svg', scramble: 'scramble.svg',
+    feed: 'zip.svg', sentence: 'bridge.svg', story: 'read.svg', read: 'read.svg', check: 'check.svg',
+    fish: 'fish.svg', sort: 'shortlong.svg', mage: 'magic.svg', ngnk: 'choice.svg', rhyme: 'rhyme.svg',
+    comp: 'storycheck.svg', review: 'review.svg'
+  };
+  const GAME_ICON_TITLE = {
+    'Add the ending': 'ending.svg',
+    'Tap each word that has an ending': 'ending.svg',
+    'Match the word': 'matchword.svg',
+    'Short or Long': 'shortlong.svg',
+    'Magic e Boxes': 'magic.svg',
+    'e or no e?': 'choice.svg',
+    've or me?': 'choice.svg',
+    'Story Check': 'storycheck.svg',
+    'Rhyme Time': 'rhyme.svg',
+    'Rhyme Call': 'rhyme.svg',
+    'Letter review': 'review.svg',
+    'Ring every bell': 'bell.svg',
+    'Ring every bell and learn its sounds': 'bell.svg'
+  };
+  function gamePicture(item) {
+    const titled = GAME_ICON_TITLE[item.title];
+    if (titled) return 'foundation/img/games/icons/' + titled;
+    const id = item.id || String(item.href || '').split('/').filter(Boolean).pop() || '';
+    return GAME_ICON[id] ? 'foundation/img/games/icons/' + GAME_ICON[id] : '';
+  }
   function itemCard(item, num) {
     if (!num && item.pick) return lessonTab(item);
+    const pic = item.img || (num ? gamePicture(item) : '');
     const body = [
       num ? h('span', { class: 'gamenum' }, String(num)) : null,
       num ? h('span', { class: 'gameico', 'aria-hidden': 'true' }, icon('play')) : null,
       item.imgs && item.imgs.length
         ? h('span', { class: 'gamepair' }, ...item.imgs.map((src) => h('img', { class: num ? 'gamepic' : 'storypic', src: src, alt: '' })))
-        : (item.img ? h('img', { class: num ? 'gamepic' : 'storypic', src: item.img, alt: item.alt || '' }) : null),
+        : (pic ? h('img', { class: num ? 'gamepic' : 'storypic', src: pic, alt: item.alt || '' }) : null),
       h('span', { class: 'gametxt' }, h('b', null, item.title), item.note ? h('span', { class: 'gamenote' }, item.note) : null, item.min ? h('span', { class: 'gamemin' }, item.min + ' min') : null),
       item.done ? h('span', { class: 'gamedone', 'aria-hidden': 'true' }, icon(item.doneIcon || 'check')) : null
     ];
@@ -565,29 +593,43 @@
         : h('div', { class: 'lessonrow' }, ...items.map((item) => itemCard(item)));
     return h('section', { class: 'stepblock' }, stepHead(n, label), cards);
   }
+  function slideDays(plan) {
+    const days = plan.days || [];
+    const count = days.filter((day) => /^Day\s+\d+/i.test(String((day && (day.label || (day.day ? 'Day ' + day.day : ''))) || ''))).length;
+    if (count === 1) return '1 day';
+    if (count > 1) return count + ' days';
+    return 'Slideshow';
+  }
   function teacherBox(plan) {
     plan = plan || {};
     const files = plan.files || [];
-    const days = plan.days || [];
-    const pdfLink = plan.pdf
-      ? h('a', { class: 'teachlink', href: plan.pdf, target: '_blank', rel: 'noopener' }, plan.pdfLabel || 'Open the slideshow (PDF)')
-      : null;
-    const slides = days.length
-      ? days.map((day) => h('button', { class: 'teachlink teachled', type: 'button', onclick: () => { Snd.stop(); location.hash = day.href; } }, day.label))
-      : [plan.slides ? h('button', { class: 'teachlink teachled', type: 'button', onclick: () => { Snd.stop(); location.hash = plan.slides; } }, 'Open on smartboard') : (pdfLink || h('p', { class: 'teachsoon' }, 'Coming soon'))];
-    const panel = h('div', { class: 'teachpop', hidden: '' },
-      h('p', { class: 'teachstep' }, h('span', null, '1'), 'Slideshow'),
-      ...slides,
-      h('p', { class: 'teachstep' }, h('span', null, '2'), 'Printables'),
-      files.length ? h('div', null, ...files.map((file) => h('a', { class: 'teachlink', href: file.href, target: '_blank', rel: 'noopener' }, file.title))) : h('p', { class: 'teachsoon' }, 'Coming soon'));
-    const btn = h('button', { class: 'teachbox', type: 'button', 'aria-expanded': 'false' }, 'Teacher Materials');
-    const wrap = h('div', { class: 'teachcorner' }, btn, panel);
+    const deck = plan.slides || '';
+    if (!files.length && !deck && !plan.pdf) return null;
+    const wrap = h('div', { class: 'teachcorner' });
+    if (deck || plan.pdf) {
+      const sub = h('span', { class: 'teachslides-sub' }, slideDays(plan));
+      const slides = h('button', {
+        class: 'teachbox teachslides',
+        type: 'button',
+        'aria-label': 'Teacher Slides. ' + sub.textContent
+      }, h('span', { class: 'teachslides-name' }, 'Teacher Slides'), sub);
+      slides.addEventListener('click', () => {
+        Snd.stop();
+        if (deck) location.hash = deck;
+        else window.open(plan.pdf, '_blank', 'noopener');
+      });
+      wrap.append(slides);
+    }
+    if (!files.length) return wrap;
+    const list = h('div', { class: 'teachpop teachfiles', hidden: '' },
+      ...files.map((file) => h('a', { class: 'teachlink', href: file.href, target: '_blank', rel: 'noopener' }, file.title)));
+    const print = h('button', { class: 'teachbox teachprint', type: 'button', 'aria-expanded': 'false' }, 'Printables');
     function onDoc(e) { if (!wrap.contains(e.target)) setOpen(false); }
     function onKey(e) { if (e.key === 'Escape') setOpen(false); }
     function setOpen(open) {
-      panel.hidden = !open;
-      btn.setAttribute('aria-expanded', open ? 'true' : 'false');
-      btn.classList.toggle('is-open', open);
+      list.hidden = !open;
+      print.setAttribute('aria-expanded', open ? 'true' : 'false');
+      print.classList.toggle('is-open', open);
       document.removeEventListener('click', onDoc);
       document.removeEventListener('keydown', onKey);
       if (open) {
@@ -595,7 +637,8 @@
         document.addEventListener('keydown', onKey);
       }
     }
-    btn.addEventListener('click', (e) => { e.stopPropagation(); setOpen(panel.hidden); });
+    print.addEventListener('click', (e) => { e.stopPropagation(); setOpen(list.hidden); });
+    wrap.append(print, list);
     return wrap;
   }
   IR.teacherBox = teacherBox;
@@ -603,11 +646,12 @@
     plan = plan || {};
     const labels = plan.labels || ['Lesson', 'Games', 'Story'];
     const storyItems = (plan.stories && plan.stories.length) ? plan.stories : (plan.story ? [plan.story] : null);
+    const lessons = (plan.lesson || []).filter((item) => !item || item.tone !== 'teachled');
     return h('div', { class: 'modebar' },
       plan.note === false ? null : h('p', { class: 'stepnote' }, plan.note || 'Watch the lesson, then play.'),
       plan.before || null,
       h('div', { class: 'stepflow' },
-        plan.choose ? null : stepSection(1, labels[0], plan.lesson || []),
+        plan.choose ? null : stepSection(1, labels[0], lessons),
         plan.choose ? null : (plan.gameRows ? gameRowsBlock(2, labels[1], plan.gameRows) : stepSection(2, labels[1], plan.games || [], true, plan.gameClass || '')),
         plan.choose || !storyItems ? null : stepSection(3, labels[2], storyItems),
         ...(plan.choose || []).map((item, i) => stepSection(i + 1, item.title, [item]))));
@@ -619,7 +663,13 @@
     const LK = 'ir_sess_ng'; const prevH = IR._ngHashWas || '';
     if (!/^#\/(island3|lesson\/|check)/.test(prevH)) try { sessionStorage.removeItem(LK); } catch (e) {}
     IR._ngHashWas = location.hash || '#/island3';
-    const pick = (group) => secs.filter((r) => r.group === group).map((r) => ({ title: r.title, href: r.href, note: TIPS[r.id], min: r.min }));
+    const pick = (group) => secs.filter((r) => r.group === group).map((r) => ({
+      id: r.id, title: r.title, href: r.href, note: TIPS[r.id], min: r.min,
+      pick: group === 'lesson', kicker: group === 'lesson' ? 'Student' : '',
+      img: group === 'lesson' ? 'img/lesson_zip_frill.webp' : '',
+      alt: group === 'lesson' ? 'Zip and Frill' : '',
+      goLabel: group === 'lesson' ? 'Open lesson' : ''
+    }));
     const story = pick('story')[0];
     if (story) { story.title = D.storyTitle || story.title; story.note = 'Story Time'; story.img = IR.storyCovers['4.1']; story.alt = D.storyTitle || ''; story.big = true; }
     app.append(h('div', { class: 'screen trailscreen unitpage unitA orangeunit stepage' },
@@ -635,6 +685,8 @@
         games: pick('activities'),
         story: story,
         slides: '#/teachers/slides/ng',
+        slideTitle: 'ng',
+        slideNote: 'Slideshow',
         files: [
           { title: 'Daily practice sheets', href: 'teachers/ng/Lesson3.1_ng_Daily_Practice_Sheets.pdf' },
           { title: 'Teacher pack', href: 'teachers/ng/Lesson3.1_ng_Teacher_Pack.pdf' }
@@ -967,30 +1019,31 @@
   /* ---------- Teacher materials (grown-up corner): by unit, then sound ---------- */
   function teachersScreen() {
     IR.newScreen();
-    /* One card for every lesson. Item types stay in this order, with the same labels. */
+    /* One box per lesson, in course order. Slideshow opens the deck. Printables lists the files. */
     function lessonCard(lesson) {
-      const kinds = [
-        { key: 'board', primary: true, label: 'Open on smartboard', note: 'Full-screen slide show in the browser. No download needed.' },
-        { key: 'slides', download: true, label: 'Download slides (PPTX)', note: 'One PowerPoint for the whole sound.' },
-        { key: 'daily', label: 'Daily practice sheets (PDF)', note: lesson.days ? ('Worksheets for each day, labeled Day 1 to Day ' + lesson.days + '.') : 'Worksheets for each day.' },
-        { key: 'pack', label: 'Teacher pack (PDF)', note: 'Slides with notes, worksheets and answer key.' }
-      ];
-      const rows = kinds.map((kind) => {
-        const href = lesson[kind.key];
-        if (!href) {
-          return [
-            h('span', { class: 'btn big tmlink is-soon' + (kind.primary ? ' primary' : ''), 'aria-disabled': 'true' }, kind.label),
-            h('p', { class: 'tmnote' }, 'Coming soon.')
-          ];
-        }
-        const attrs = { class: 'btn big tmlink' + (kind.primary ? ' primary' : ''), href: href };
-        if (kind.download) attrs.download = '';
-        else if (!href.startsWith('#')) { attrs.target = '_blank'; attrs.rel = 'noopener'; }
-        return [h('a', attrs, kind.label), h('p', { class: 'tmnote' }, kind.note)];
-      });
+      const files = [];
+      if (lesson.daily) files.push({ title: 'Daily practice sheets', href: lesson.daily });
+      if (lesson.pack) files.push({ title: 'Teacher pack', href: lesson.pack });
+      const title = lesson.title
+        ? h('h3', null, lesson.title)
+        : h('h3', null, h('span', { class: 'tmsound' }, lesson.s), ' ' + lesson.lesson);
+      const slide = lesson.board
+        ? h('button', { class: 'btn big tmlink tmslide', type: 'button', onclick: () => { Snd.stop(); location.hash = lesson.board; } }, 'Slideshow')
+        : h('span', { class: 'btn big tmlink is-soon', 'aria-disabled': 'true' }, 'Slideshow');
+      let print = h('span', { class: 'btn big tmlink is-soon', 'aria-disabled': 'true' }, 'Printables');
+      let list = null;
+      if (files.length === 1) {
+        print = h('a', { class: 'btn big tmlink tmprint', href: files[0].href, target: '_blank', rel: 'noopener' }, 'Printables');
+      } else if (files.length) {
+        list = h('div', { class: 'tmfiles', hidden: '' }, ...files.map((file) => h('a', { class: 'tmfile', href: file.href, target: '_blank', rel: 'noopener' }, file.title)));
+        print = h('button', { class: 'btn big tmlink tmprint', type: 'button', onclick: () => { list.hidden = !list.hidden; } }, 'Printables');
+      }
       return h('div', { class: 'tmcard' },
-        h('h3', null, lesson.title || h('span', null, h('span', { class: 'tmsound' }, lesson.s), ' ' + lesson.lesson)),
-        ...rows.flat());
+        title,
+        slide,
+        print,
+        list,
+        (!lesson.board || !files.length) ? h('p', { class: 'tmnote' }, 'Coming soon') : null);
     }
     const UNITS = [
       { name: 'Meet the Teams', sounds: [
@@ -1017,12 +1070,14 @@
         { s: '-ing', lesson: 'Lesson 6.3' }
       ] }
     ];
-    const cards = UNITS.flatMap((u) => u.sounds.map(lessonCard));
+    const sections = UNITS.map((unit) => h('section', { class: 'tmunit' },
+      h('h2', null, unit.name),
+      h('div', { class: 'tmgrid' }, ...unit.sounds.map(lessonCard))));
     app.append(h('div', { class: 'screen tmscreen' }, h('div', { class: 'tmwrap' },
       h('div', { class: 'abtop' }, pageNav('#/home')),
-      h('h1', null, 'Teacher materials'),
-      h('p', { class: 'tmlead' }, 'For teaching in class. Students practice on their own in the app.'),
-      h('section', { class: 'tmunit' }, h('div', { class: 'tmgrid' }, ...cards)))));
+      h('h1', null, 'Parent and Teacher Materials'),
+      h('p', { class: 'tmlead' }, 'In course order. Slideshow opens the deck. Printables opens the files.'),
+      ...sections)));
   }
   /* In-app week-deck slideshow for smartboard (ng / nk). Keeps PPTX download on the teachers page. */
   function slidesViewer(sound) {

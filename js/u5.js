@@ -291,7 +291,7 @@
       const prev = IR['_u5Was_' + KEY] || '';
       if (!new RegExp('^#/' + KEY + '(/|$)').test(prev) && prev !== '#/review5') resetLights();
       IR.newScreen(); const all = sections();
-      const pick = (group) => all.filter((r) => r.group === group).map((r) => ({ title: r.title, href: r.href, note: TIPS[r.id], min: r.min }));
+      const pick = (group) => all.filter((r) => r.group === group).map((r) => ({ id: r.id, title: r.title, href: r.href, note: TIPS[r.id], min: r.min }));
       const story = pick('story')[0];
       if (story) { story.title = N.storyTitle || story.title; story.note = 'Story Time'; story.img = IR.storyCovers[KEY === 'u51' ? '5.1' : '5.2']; story.alt = N.storyTitle || ''; story.big = true; }
       const lesson = pick('lesson').map((item) => Object.assign(item, {
@@ -305,7 +305,10 @@
         IR.modeBar({
           lesson: lesson,
           games: pick('activities').concat(pick('extra')),
-          story: story
+          story: story,
+          slides: '#/teachers/slides/u5',
+          slideTitle: capName(N.name),
+          slideNote: 'Slideshow'
         })));
       if (IR.teach) IR.teach.sync();
     }
@@ -723,7 +726,14 @@
     });
     app.append(h('div', { class: 'screen trailscreen unitpage unitA u5menu stepage' },
       h('header', { class: 'uA-top' }, IR.ui.pageNav('#/home'), h('h1', { class: 'uA-title' }, h('small', null, 'Unit 5'), 'Silent e'), IR.teacherBox(u5Teach('hub'))),
-      IR.modeBar({ lesson: lesson, games: games, stories: stories })));
+      IR.modeBar({
+        lesson: lesson,
+        games: games,
+        stories: stories,
+        slides: '#/teachers/slides/u5',
+        slideTitle: 'Silent e',
+        slideNote: 'Slideshow'
+      })));
     if (IR.teach) IR.teach.sync();
   }
   IR.u5Route = (hash, app) => { if (hash === '#/u5' || hash === '#/u5/') { unitHub(app); return true; }

@@ -477,7 +477,7 @@
       h('header', { class: 'uA-top' }, IR.ui.pageNav('#/u6'), h('h1', { class: 'uA-title' }, h('small', null, 'Unit 6 Lesson ' + IR.kidLesson(L.n)), L.name), IR.teacherBox({})),
       IR.modeBar({
         lesson: items.filter((r) => r.group === 'lesson').map((r) => ({ title: r.title, href: r.href, min: r.min })),
-        games: items.filter((r) => r.group === 'activities').map((r) => ({ title: r.title, href: r.href, note: TIPS[r.id], min: r.min })),
+        games: items.filter((r) => r.group === 'activities').map((r) => ({ id: r.id, title: r.title, href: r.href, note: TIPS[r.id], min: r.min })),
         story: story
       })));
   }
