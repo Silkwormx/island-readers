@@ -301,8 +301,8 @@
         setInstr(text, p) { instrBox.innerHTML = ''; instrBox.style.display = text ? '' : 'none'; if (text) instrBox.append(speakerBtn(() => Snd.play(AU.p(p)), 'Hear the directions'), h('span', { class: 'itext' }, text)); },
         setBack(fn) { backH = fn; }, setNext(fn) { nextH = fn; },
         goBack() { Snd.stop(); if (backH && backH()) return; location.hash = idx > 0 ? BASE + '/' + STEPS[idx - 1].id : BASE; },
-        goNext() { Snd.stop(); if (nextH && nextH()) return; location.hash = idx < STEPS.length - 1 ? BASE + '/' + STEPS[idx + 1].id : BASE; },
-        setNextLabel(t) { navApi.label(t); }, showNav(on) { nav.classList.toggle('nonext', on === false); if (on === false) nextBtn.hidden = true; },
+        goNext() { Snd.stop(); if (nextH && nextH()) return; ctx.finish(); },
+        setNextLabel(t) { navApi.label(t); }, showNav() { nav.classList.remove('nonext'); nextBtn.hidden = false; },
         finish(starsOverride) {
           const stars = starsOverride || ((S0.id === 'meet' || S0.id === 'listen') ? 3 : mistakes <= 1 ? 3 : mistakes <= 3 ? 2 : 1);
           markLight(S0.id); IR.recordActivity(S0.rec || pid(S0), stars); IR.touchStreak(); IR.save(); ctx.progress(1);
@@ -312,6 +312,7 @@
             stars: stars,
             nextLabel: OV ? 'See the sky map' : last ? 'Back to the lesson' : 'Next: ' + nx.title,
             onBack: () => { location.hash = BASE; },
+            onHome: () => { location.hash = '#/home'; },
             onNext: () => { location.hash = OV ? '#/home' : last ? BASE : BASE + '/' + nx.id; }
           });
           app.append(ov); Snd.play(IR.A.sfx.done);
@@ -320,6 +321,12 @@
       const nextBtn = h('button', { class: 'btn big next', type: 'button', 'aria-label': 'Next', onclick: () => ctx.goNext() }, 'Next', icon('next'));
       const nav = h('div', { class: 'lesson-nav' }, nextBtn);
       const navApi = IR.simpleNav(nav, nextBtn, () => { Snd.stop(); location.hash = BASE; });
+      const keepNext = navApi.label;
+      navApi.label = function (t) {
+        keepNext(t && String(t).trim() ? t : 'Next');
+        nextBtn.hidden = false;
+      };
+      navApi.label('Next');
       const screen = h('div', { class: 'screen lessonscreen nkstep u5step nk-' + S0.id + (S0.group === 'lesson' ? ' is-lesson' : ''), style: '--c:' + S0.color }, h('header', { class: 'lesson-top' }, IR.ui.pageNav(BASE), bar), instrBox, stage, nav);
       app.append(screen);
       if (S0.group === 'activities') IR.attachGameRules(ctx, screen, S0.title);
@@ -596,7 +603,7 @@
         body.append(status); st.append(body);
         if (ctx.armReveal) ctx.armReveal(it.word || it.answer || ''); };
       let inQ = false;
-      ctx.setNext(() => { if (!inQ) { inQ = true; step(); return true; } tok++; if (q < items.length - 1) { q++; step(); return true; } if (items.every((_, k) => recs[k] !== undefined)) { finish(); return true; } return false; });
+      ctx.setNext(() => { if (!inQ) { inQ = true; step(); return true; } tok++; if (q < items.length - 1) { q++; step(); return true; } finish(); return true; });
       ctx.setBack(() => { if (!inQ) return false; tok++; if (q > 0) { q--; step(); } else { inQ = false; intro(); } return true; });
       const intro = () => { st.innerHTML = ''; ctx.progress(0); st.append(h('div', { class: 'activity' }, h('p', { class: 'bigprompt' }, 'Zip\u2019s Check'), h('p', null, '10 quick questions. There is no rush!'),
         h('button', { class: 'btn big primary', type: 'button', onclick: () => { inQ = true; step(); } }, 'Start the check', icon('next')))); };
