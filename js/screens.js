@@ -651,8 +651,8 @@
       plan.note === false ? null : h('p', { class: 'stepnote' }, plan.note || 'Watch the lesson, then play.'),
       plan.before || null,
       h('div', { class: 'stepflow' },
-        plan.choose ? null : stepSection(1, labels[0], lessons),
-        plan.choose ? null : (plan.gameRows ? gameRowsBlock(2, labels[1], plan.gameRows) : stepSection(2, labels[1], plan.games || [], true, plan.gameClass || '')),
+        plan.choose || plan.lesson === false ? null : stepSection(1, labels[0], lessons),
+        plan.choose || plan.games === false ? null : (plan.gameRows ? gameRowsBlock(plan.lesson === false ? 1 : 2, labels[1], plan.gameRows) : stepSection(plan.lesson === false ? 1 : 2, labels[1], plan.games || [], true, plan.gameClass || '')),
         plan.choose || !storyItems ? null : stepSection(3, labels[2], storyItems),
         ...(plan.choose || []).map((item, i) => stepSection(i + 1, item.title, [item]))));
   }

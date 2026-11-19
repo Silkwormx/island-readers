@@ -689,58 +689,60 @@
   function unitHub(app) {
     IR.newScreen();
     const lessons = (IR.u5Lessons || []).slice().sort((a, b) => String(a.n).localeCompare(String(b.n), undefined, { numeric: true }));
-    const lesson = lessons.map((L) => {
+    const pattern = { u51: 'a_e · e_e · i_e · o_e · u_e', u53: 've · come · some · done' };
+    const cards = lessons.map((L) => {
       const prog = IR.nkProgress ? IR.nkProgress(L.key) : null;
+      const data = window.IR_DATA_U5[L.key] || {};
       return {
         pick: true,
         kicker: 'Lesson ' + IR.kidLesson(L.n),
         title: capName(L.name),
         href: '#/' + L.key,
         img: L.key === 'u53' ? 'img/frill.webp' : 'img/zipA.webp',
-        note: prog && prog.min ? 'About ' + prog.min + ' min' : '',
+        alt: capName(L.name),
+        note: (pattern[L.key] || '') + (data.storyTitle ? ' · ' + data.storyTitle : ''),
         stars: prog ? { done: prog.done, total: prog.total } : null,
         goLabel: 'Open lesson'
       };
     });
-    const seen = {};
-    const games = [];
-    lessons.forEach((L) => {
-      (L.steps || []).forEach((s) => {
-        if (s.group !== 'activities' && s.group !== 'extra') return;
-        if (seen[s.title]) return;
-        seen[s.title] = 1;
-        games.push({ title: s.title, href: '#/' + L.key + '/' + s.id });
-      });
+    cards.push({
+      pick: true,
+      kicker: 'Unit Review',
+      title: 'Mixed games',
+      href: '#/u5/review',
+      img: 'img/lesson_zip_frill.webp',
+      alt: 'Zip and Frill',
+      note: 'Words from every lesson',
+      goLabel: 'Open review'
     });
-    const stories = lessons.map((L) => {
-      const step = (L.steps || []).filter((s) => s.group === 'story')[0];
-      const data = window.IR_DATA_U5[L.key] || {};
-      return {
-        title: data.storyTitle || (step && step.title) || 'Story Time',
-        href: step ? ('#/' + L.key + '/' + step.id) : ('#/' + L.key),
-        img: IR.storyCovers[L.n] || '',
-        alt: data.storyTitle || '',
-        big: true,
-        note: 'Lesson ' + IR.kidLesson(L.n)
-      };
-    });
-    app.append(h('div', { class: 'screen trailscreen unitpage unitA u5menu stepage' },
+    app.append(h('div', { class: 'screen trailscreen unitpage unitA u5menu stepage u5lessons' },
       h('header', { class: 'uA-top' }, IR.ui.pageNav('#/home'), h('h1', { class: 'uA-title' }, h('small', null, 'Unit 5'), 'Silent e'), IR.teacherBox(u5Teach('hub'))),
       IR.modeBar({
-        lesson: lesson,
-        games: games,
-        stories: stories,
-        slides: '#/teachers/slides/u5',
-        slideTitle: 'Silent e',
-        slideNote: 'Slideshow'
+        note: 'Pick a lesson.',
+        lesson: cards,
+        games: false
+      })));
+    if (IR.teach) IR.teach.sync();
+  }
+  function reviewMenu(app) {
+    IR.newScreen();
+    app.append(h('div', { class: 'screen trailscreen unitpage unitA u5menu stepage' },
+      h('header', { class: 'uA-top' }, IR.ui.pageNav('#/u5'), h('h1', { class: 'uA-title' }, h('small', null, 'Unit 5'), 'Unit Review'), IR.teacherBox(u5Teach('hub'))),
+      IR.modeBar({
+        note: 'Mixed practice. Words come from every Unit 5 lesson.',
+        lesson: false,
+        games: [
+          { id: 'review', title: 'Silent e review', note: 'Lesson 5.1 and Lesson 5.2 words', href: '#/review5' }
+        ]
       })));
     if (IR.teach) IR.teach.sync();
   }
   IR.u5Route = (hash, app) => { if (hash === '#/u5' || hash === '#/u5/') { unitHub(app); return true; }
+    if (hash === '#/u5/review' || hash === '#/u5/review/') { reviewMenu(app); return true; }
     if (hash === '#/u52' || hash.indexOf('#/u52/') === 0) { location.replace(hash.replace('#/u52', '#/u51')); return true; }   /* old 5.2 (a_e...) is now part of 5.1 */
     for (const k in U5ROUTE) { if (U5ROUTE[k](hash, app)) return true; } return false; };
   const D = window.IR_DATA; if (D) { D.islands = D.islands || {}; D.islands.i5 = { units: [
     { id: 'u51', unitNo: 5, name: 'Silent e', href: '#/u51', img: ['zip'], ready: true, stars: 15 },
     { id: 'u53', unitNo: 5, name: 'Tricky silent e', href: '#/u53', img: ['frill'], ready: true, stars: 14 }],
-    review: { id: 'u5review', name: 'Review', href: '#/review5', desc: 'Mixed review: silent e', img: ['zip', 'frill'], ready: true, stars: 1, minutes: 6 } }; }
+    review: { id: 'u5review', name: 'Unit Review', href: '#/u5/review', desc: 'Mixed games from every Unit 5 lesson', img: ['zip', 'frill'], ready: true, stars: 1, minutes: 6 } }; }
 })();
