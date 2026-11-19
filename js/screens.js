@@ -328,7 +328,7 @@
     const cards = [foundations];
     for (let n = 1; n <= 22; n++) cards.push(unit(n));
     const bellFlag = (new URLSearchParams(location.search).get('bells') || '').toLowerCase();
-    const bellMode = bellFlag === '6' ? 'bells6' : bellFlag === 'peek' ? 'bellspeek' : '';
+    const bellMode = bellFlag === '4peek' ? 'bells4peek' : bellFlag === '6' ? 'bells6' : bellFlag === 'peek' ? 'bellspeek' : '';
     const grid = h('div', { class: 'bellpath', id: 'skymap' }, h('div', { class: 'bellgrid' }, ...cards));
     const tab = (href, name, icoName) => h('a', { class: 'hometab', href: href, 'aria-label': name },
       h('span', { class: 'hometab-ico', 'aria-hidden': 'true' }, icon(icoName)),
@@ -391,20 +391,20 @@
         h('div', { class: 'zfhead' }, h('h2', { class: 'zfline' }, 'Learn to read with Zip and Frill'), readAloudBtn()),
         h('p', { class: 'zfsub' }, 'Ring every bell by learning its sounds.'),
         continueButton()));
-    app.append(h('div', { class: 'screen home mapscreen gridhome' + (bellMode ? ' ' + bellMode : '') }, h('div', { class: 'mwrap' }, banner, h('div', { class: 'homelay' }, h('div', { class: 'homeside' }, aboutDrop, hero, tabs), h('div', { class: 'bellslot' }, grid)))));
+    app.append(h('div', { class: 'screen home mapscreen gridhome' + (bellMode ? ' bellfit ' + bellMode : '') }, h('div', { class: 'mwrap' }, banner, h('div', { class: 'homelay' }, h('div', { class: 'homeside' }, aboutDrop, hero, tabs), h('div', { class: 'bellslot' }, grid)))));
     let fitBells = function () {};
     if (bellMode) {
       fitBells = () => {
         const root = app.querySelector('.gridhome.' + bellMode);
         const bells = root && root.querySelector('.bellgrid');
         if (!root || !bells || !root.isConnected) return;
-        const peek = bellMode === 'bellspeek';
-        const cols = !peek && window.innerWidth < 760 ? 2 : 3;
-        const rows = peek ? 1.5 : 6 / cols;
+        const wide = window.innerWidth >= 1024;
+        const cols = bellMode === 'bells4peek' ? (wide ? 4 : 2) : bellMode === 'bells6' && !wide && window.innerWidth < 760 ? 2 : 3;
+        const rows = bellMode === 'bells6' ? 6 / cols : 1.5;
         bells.style.gridTemplateColumns = 'repeat(' + cols + ',minmax(0,1fr))';
         const pics = [...bells.querySelectorAll('.tpic')];
         pics.forEach((pic) => { pic.style.aspectRatio = 'auto'; });
-        const bodies = [...bells.querySelectorAll('.tcard')].slice(0, 6).map((card) => {
+        const bodies = [...bells.querySelectorAll('.tcard')].slice(0, cols * 2).map((card) => {
           const body = card.querySelector('.tbody');
           return body ? body.offsetHeight : 0;
         });
