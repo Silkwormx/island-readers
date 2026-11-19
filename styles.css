@@ -2950,11 +2950,13 @@ button,
 }
 
 @media (min-width:1100px){
-  .u5menu{display:flex;flex-direction:column;height:100%;max-height:100dvh;overflow:hidden}
+  html:has(.u5menu),body:has(.u5menu){height:100%!important;min-height:0!important;overflow:hidden!important}
+  body:has(.u5menu) #app{height:100%!important;min-height:0!important;overflow:hidden!important}
+  .u5menu.unitpage.unitA{display:flex!important;flex-direction:column;position:absolute!important;inset:0!important;height:100%!important;min-height:0!important;overflow:hidden!important}
   .u5menu .uA-top{flex:none;padding-top:.2rem;padding-bottom:.2rem}
-  .u5menu .modebar{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;padding-right:0!important;overflow:hidden}
+  .u5menu .modebar{flex:1 1 0;min-height:0;display:flex;flex-direction:column;padding-right:0!important;overflow:hidden}
   .u5menu .stepnote{flex:none;margin:.1rem auto;font-size:.95rem}
-  .u5menu .stepflow{flex:1 1 auto;min-height:0;width:100%;max-width:none;margin:0;gap:.28rem;padding:0 .55rem .35rem;display:grid;grid-template-rows:auto minmax(0,1fr) auto;overflow:hidden}
+  .u5menu .stepflow{flex:1 1 0;min-height:0;width:100%;max-width:none;margin:0;gap:.35rem;padding:0 .6rem .45rem;display:grid;grid-template-rows:auto minmax(0,1fr) auto;overflow:hidden}
   .u5menu .stepblock{gap:.2rem;min-height:0;overflow:hidden}
   .u5menu .stephead{gap:.35rem}
   .u5menu .stepnum{width:1.55rem;height:1.55rem;font-size:.9rem;border-radius:.45rem}
@@ -2965,30 +2967,37 @@ button,
   .u5menu .storycard{min-height:0;padding:.28rem .55rem;gap:.5rem}
   .u5menu .storypic{width:3.4rem;height:2.2rem}
   .u5menu .storycard b{font-size:1.05rem}
-  .u5menu .gamegrid{height:100%;min-height:0;grid-template-columns:repeat(7,minmax(0,1fr));grid-auto-rows:minmax(0,1fr);gap:.3rem;align-content:stretch}
+  .u5menu .stepblock:has(.gamegrid){display:flex;flex-direction:column;height:100%;overflow:hidden}
+  .u5menu .gamegrid{flex:1 1 0;height:auto;min-height:0;grid-template-columns:repeat(5,minmax(0,1fr));grid-template-rows:repeat(3,minmax(0,1fr));gap:.45rem;align-content:stretch}
   .u5menu .gamegrid li{display:flex;min-height:0;height:100%}
-  .u5menu .gamecard{flex-direction:column;justify-content:center;align-items:center;text-align:center;width:100%;height:100%;min-height:0;padding:.2rem .28rem;gap:.08rem;overflow:visible}
-  .u5menu .gamecard .gamenum{position:static;width:1.2rem;height:1.2rem;font-size:.75rem;border-radius:.35rem}
-  .u5menu .gameico{width:1rem;height:1rem}
-  .u5menu .gameico .ico{width:.9rem;height:.9rem}
-  .u5menu .gametxt{align-items:center;min-height:0;gap:0}
-  .u5menu .gametxt b{font-size:clamp(.72rem,1.35vh,.95rem);line-height:1.12;text-align:center}
-  .u5menu .gamenote,.u5menu .gamemin{font-size:clamp(.62rem,1.05vh,.75rem);line-height:1.15;text-align:center}
+  .u5menu .gamecard{position:relative;flex-direction:column;justify-content:center;align-items:center;text-align:center;width:100%;height:100%;min-height:0;padding:2.15rem .7rem .55rem;gap:.15rem;overflow:hidden}
+  .u5menu .gamecard .gamenum{position:absolute;top:.35rem;left:.35rem;width:1.8rem;height:1.8rem;font-size:1.05rem;border-radius:.5rem}
+  .u5menu .gamegrid .gameico,.u5menu .gamegrid .gamenote,.u5menu .gamegrid .gamemin{display:none}
+  .u5menu .gamegrid .gametxt{align-items:center;justify-content:center;min-height:0;gap:0;width:100%}
+  .u5menu .gamegrid .gametxt b{font-size:clamp(1.7rem,3.8vh,2.3rem);line-height:1.12;text-align:center}
 }
 
+html.teach .u5step .lesson-nav .btn.next,
+html.teach .u5step.lessonscreen:has(.hearts) .lesson-nav .btn.next,
+html.teach .u5step.lessonscreen:has(.listenmode) .lesson-nav .btn.next{display:none!important}
+html.teach .u5step .teachbar .teachnext{background:#F28C00;border-color:#C95A10;box-shadow:0 3px 0 #C95A10;color:#fff;justify-content:center;text-align:center}
 html.teach .u5step{height:100%;max-height:100dvh;overflow:hidden}
 html.teach .u5step .teachbar{flex:none;flex-wrap:nowrap;gap:8px;padding:6px 10px;overflow:hidden}
 html.teach .u5step .teachbar .btn,html.teach .u5step .teampip{min-height:46px;font-size:20px;padding:4px 10px}
 html.teach .u5step .teachclear{font-size:16px;min-height:40px;white-space:nowrap}
 html.teach .u5step .stage{flex:1 1 auto;min-height:0;overflow:hidden}
-html.teach .nk-refresh .vrefresh[data-phase="teach"]{height:100%;max-height:100%;display:grid;grid-template-rows:repeat(5,minmax(0,1fr)) auto auto;gap:4px;overflow:hidden;justify-items:stretch}
-html.teach .u5step.nk-refresh .vcard{min-height:0;min-width:0;height:100%;padding:1px 6px;box-shadow:0 2px 0 var(--ink)}
-html.teach .u5step.nk-refresh .vcard b{font-size:clamp(16px,2.6vh,32px);line-height:1}
-html.teach .u5step.nk-refresh .vcard small{font-size:clamp(11px,1.4vh,14px)}
-html.teach .u5step.nk-refresh .vcard img{width:1.5rem;height:1.5rem}
-html.teach .nk-refresh .efocusbox{min-height:0;padding:2px 6px;gap:2px;overflow:hidden}
-html.teach .u5step.nk-refresh .echip{font-size:clamp(14px,2vh,24px);min-height:0;min-width:0;padding:1px 6px;line-height:1.1}
-html.teach .nk-refresh .vrefresh[data-phase="teach"] .btn.big{min-height:36px;padding:2px 12px;font-size:18px}
+html.teach .nk-refresh .stage{justify-content:center}
+html.teach .nk-refresh .vrefresh{width:min(100%,54rem);max-width:54rem;margin-left:auto;margin-right:auto;align-self:center}
+html.teach .nk-refresh .vrefresh[data-phase="teach"]{height:100%;max-height:100%;display:grid;grid-template-rows:repeat(5,minmax(0,1fr)) auto auto;gap:.35rem;overflow:hidden;justify-items:center;align-content:center}
+html.teach .nk-refresh .vrefresh[data-phase="teach"] .vrow{width:min(100%,46rem);grid-template-columns:3.2rem minmax(0,1fr) minmax(0,1fr);gap:.7rem}
+html.teach .u5step.nk-refresh .vcard{min-height:0;min-width:0;height:100%;padding:.15rem .7rem;box-shadow:0 2px 0 var(--ink)}
+html.teach .u5step.nk-refresh .vcard b{font-size:clamp(28px,4.2vh,46px);line-height:1}
+html.teach .u5step.nk-refresh .vcard small{font-size:clamp(14px,1.8vh,20px)}
+html.teach .u5step.nk-refresh .vlet{font-size:clamp(28px,4vh,42px)}
+html.teach .u5step.nk-refresh .vcard img{width:2.6rem;height:2.6rem}
+html.teach .nk-refresh .efocusbox{width:min(100%,46rem);min-height:0;padding:.35rem .7rem;gap:.25rem;overflow:hidden}
+html.teach .u5step.nk-refresh .echip{font-size:clamp(22px,3vh,34px);min-height:2.5rem;min-width:0;padding:.15rem .85rem;line-height:1.1}
+html.teach .nk-refresh .vrefresh[data-phase="teach"] .btn.big{min-height:3.1rem;padding:.3rem 1.4rem;font-size:1.45rem;width:min(100%,20rem)}
 html.teach .u5step .activity:has(.hearts){height:100%;max-height:100%;justify-content:center;gap:6px;overflow:hidden}
 html.teach .u5step .hearts{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px;width:min(100%,62rem);margin:0}
 html.teach .u5step .hearts .heartchip{font-size:clamp(18px,2.6vh,36px);min-height:0;min-width:0;width:100%;padding:2px 6px;box-shadow:0 2px 0 var(--ink);line-height:1.05;box-sizing:border-box}
