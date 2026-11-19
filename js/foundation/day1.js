@@ -641,16 +641,12 @@
       return { w: word, sounds: sounds, n: sounds.length };
     }).filter((item) => item.n > 0);
   }
-  function countScreens() {
+  function countList() {
     const all = countItems((window.IRPhonemes && IRPhonemes.countWords) || []);
     const letter = PACK && PACK.countLetter;
-    const list = letter
-      ? all.filter((item) => item.sounds[0] === letter || item.w.toLowerCase().charAt(0) === letter)
-      : all;
-    const use = list.length ? list : all;
-    const screens = [];
-    for (let i = 0; i < use.length; i += 5) screens.push(use.slice(i, i + 5));
-    return screens.length ? screens : [[]];
+    if (!letter) return all;
+    const list = all.filter((item) => item.sounds[0] === letter || item.w.toLowerCase().charAt(0) === letter);
+    return list.length ? list : all;
   }
   function countSay(text, phoneme) {
     const key = phoneme ? (PHONEME_KEY[text] || '') : bareSound(text);
@@ -672,61 +668,79 @@
       setTimeout(fin, Math.max(320, String(text).length * 80));
     });
   }
+  function playRecordedWord(word) {
+    try { speechSynthesis.cancel(); } catch (e) { /* quiet */ }
+    const src = 'audio/w_' + String(word || '').toLowerCase() + '.mp3';
+    return Snd.play(src).then((ok) => (ok ? true : say(word)));
+  }
   function countGame(ctx) {
-    const screens = countScreens();
-    let screen = 0;
+    const items = countList();
+    let i = 0;
     let token = 0;
-    let revealed = new Set();
-    ctx.setInstr("Let's count the sounds together.");
-    function draw() {
-      token += 1;
-      revealed = new Set();
+    ctx.setInstr('Listen. Tap a dot for each sound.');
+    function show() {
+      const roundToken = ++token;
+      const item = items[i];
+      if (!item) { ctx.badge('Count the Sounds', 'count'); return; }
       try { speechSynthesis.cancel(); } catch (e) { /* quiet */ }
       ctx.stage.innerHTML = '';
-      if (ctx.roundTo && screens.length > 1) ctx.roundTo(screen + 1, screens.length);
-      ctx.progress(screen / screens.length);
-      const rows = screens[screen].map((item, i) => {
-        const chips = h('span', { class: 'llcountchips' });
-        const num = h('span', { class: 'llcountnum', 'aria-label': 'Number of sounds' });
-        const row = h('button', {
-          class: 'llcountrow',
-          type: 'button',
-          'aria-label': item.w,
-          onclick: () => play(i)
-        }, h('b', { class: 'llcountword' }, item.w), chips, num);
-        return { item: item, chips: chips, num: num, row: row };
-      });
-      ctx.stage.append(h('div', { class: 'llcount' }, h('div', { class: 'llcountlist' }, ...rows.map((row) => row.row))));
-      async function play(i) {
-        const my = ++token;
-        const row = rows[i];
-        row.chips.innerHTML = '';
-        row.num.textContent = '';
-        row.num.classList.remove('on');
-        revealed.delete(i);
-        row.item.sounds.forEach(() => row.chips.append(h('i', { class: 'llcountdot' })));
-        await countSay(row.item.w, false);
-        if (my !== token) return;
-        for (let s = 0; s < row.item.sounds.length; s++) {
-          await countSay(row.item.sounds[s], true);
-          if (my !== token) return;
+      if (ctx.roundTo) ctx.roundTo(i + 1, items.length);
+      ctx.progress(i / items.length);
+      let picked = 0;
+      let checked = false;
+      const taps = h('div', { class: 'llcounttaps' });
+      const answer = h('div', { class: 'llcountanswer' });
+      const check = h('button', { class: 'btn big', type: 'button' }, 'Check');
+      function paintTaps() {
+        taps.innerHTML = '';
+        if (checked) return;
+        for (let n = 0; n < 4; n++) {
+          taps.append(h('button', {
+            class: 'llcounttap' + (n < picked ? ' on' : ''),
+            type: 'button',
+            'aria-label': 'Sound ' + (n + 1),
+            onclick: () => {
+              if (checked) return;
+              picked = n < picked ? n : n + 1;
+              paintTaps();
+            }
+          }));
         }
-        while (row.chips.children.length < row.item.sounds.length) row.chips.append(h('i', { class: 'llcountdot' }));
-        row.num.textContent = String(row.item.sounds.length);
-        row.num.classList.add('on');
-        revealed.add(i);
-        const done = screen * 5 + revealed.size;
-        const total = screens.length * 5;
-        ctx.progress(done / total);
       }
-      ctx.setNext(() => {
-        token += 1;
-        if (screen < screens.length - 1) { screen += 1; draw(); return true; }
-        ctx.badge('Count the Sounds', 'count');
-        return true;
+      check.addEventListener('click', async () => {
+        if (checked || roundToken !== token) return;
+        checked = true;
+        paintTaps();
+        answer.innerHTML = '';
+        const dots = item.sounds.map(() => {
+          const dot = h('i', { class: 'llcountdot' });
+          answer.append(dot);
+          return dot;
+        });
+        for (let s = 0; s < item.sounds.length; s++) {
+          if (roundToken !== token) return;
+          dots[s].classList.add('lit');
+          await countSay(item.sounds[s], true);
+        }
+        ctx.progress((i + 1) / items.length);
       });
+      ctx.stage.append(h('div', { class: 'llcountplay' },
+        h('p', { class: 'llcountword llcountbig' }, item.w),
+        h('button', { class: 'btn big primary', type: 'button', onclick: () => playRecordedWord(item.w) }, 'Hear the word'),
+        taps,
+        check,
+        answer));
+      paintTaps();
+      playRecordedWord(item.w);
     }
-    draw();
+    ctx.setNext(() => {
+      token += 1;
+      try { speechSynthesis.cancel(); } catch (e) { /* quiet */ }
+      if (i < items.length - 1) { i += 1; show(); return true; }
+      ctx.badge('Count the Sounds', 'count');
+      return true;
+    });
+    show();
   }
 
   function sortGame(ctx) {
