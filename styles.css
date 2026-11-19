@@ -1786,9 +1786,13 @@ body.calm .ob-glow{animation:none;opacity:.85}
 .tmgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem;align-items:stretch}
 .tmcard{display:flex;flex-direction:column;height:100%;box-sizing:border-box;background:#fff;border:2px solid var(--line,#E3D9BC);border-radius:1.2rem;padding:1rem 1.2rem}
 .tmcard h3{display:flex;align-items:center;min-height:2.8rem;font-size:1.3rem;line-height:1.2;margin:0 0 .7rem}.tmsound{display:inline-block;background:#E8731C;color:#fff;border-radius:.6rem;padding:0 .6rem;font-weight:700}
-.tmlink{display:flex;width:100%;min-height:4rem;box-sizing:border-box;justify-content:center;text-align:center;text-decoration:none;margin-top:.5rem}.tmnote{margin:.2rem 0 .45rem;min-height:2.8rem;font-size:1rem;line-height:1.3;color:var(--ink2,#4a4a68)}
-span.tmlink.is-soon{opacity:.45;box-shadow:none;cursor:default}
-.tmlink,.tmlink:visited{color:var(--ink,#26324D)}
+.tmlink{display:flex;width:100%;min-height:44px;box-sizing:border-box;align-items:center;justify-content:center;text-align:center;text-decoration:none;margin-top:.45rem;background:#F28C00;border:3px solid #C95A10;border-radius:1rem;box-shadow:0 3px 0 #B5510D;color:#fff;font-weight:700}
+.tmnote{margin:.15rem 0 0;font-size:.95rem;line-height:1.2;color:#8A7A62;font-weight:700}
+span.tmlink.is-soon{opacity:1;background:#F3E6D0;color:#8A7A62;border-color:#E4D6B4;box-shadow:none;cursor:default}
+.tmlink,.tmlink:visited{color:#fff}
+.tmfiles{display:flex;flex-direction:column;gap:.35rem;margin-top:.35rem}
+.tmfile{display:flex;align-items:center;justify-content:center;text-align:center;min-height:44px;padding:.3rem .55rem;border:2px solid #C95A10;border-radius:.8rem;background:#fff;color:#C95A10;font-weight:700;text-decoration:none}
+@media (max-width:700px){.tmgrid{grid-template-columns:1fr}}
 .tmchecks{display:flex;flex-direction:column;align-items:stretch;gap:.75rem;max-width:40rem}
 .tmchecks h3{font-size:1.25rem;margin:.1rem 0 .15rem}
 a.btn.tmlink.tmcheck{margin:0;background:#F28C00;border-color:#C95A10;box-shadow:0 5px 0 #C95A10;color:#fff;text-align:center;white-space:normal;line-height:1.3}

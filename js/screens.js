@@ -1001,30 +1001,31 @@
   /* ---------- Teacher materials (grown-up corner): by unit, then sound ---------- */
   function teachersScreen() {
     IR.newScreen();
-    /* One card for every lesson. Item types stay in this order, with the same labels. */
+    /* One box per lesson, in course order. Slideshow opens the deck. Printables lists the files. */
     function lessonCard(lesson) {
-      const kinds = [
-        { key: 'board', primary: true, label: 'Open slideshow', note: 'Slideshow in the browser. No download needed.' },
-        { key: 'slides', download: true, label: 'Download slides (PPTX)', note: 'One PowerPoint for the whole sound.' },
-        { key: 'daily', label: 'Daily practice sheets (PDF)', note: lesson.days ? ('Worksheets for each day, labeled Day 1 to Day ' + lesson.days + '.') : 'Worksheets for each day.' },
-        { key: 'pack', label: 'Teacher pack (PDF)', note: 'Slides with notes, worksheets and answer key.' }
-      ];
-      const rows = kinds.map((kind) => {
-        const href = lesson[kind.key];
-        if (!href) {
-          return [
-            h('span', { class: 'btn big tmlink is-soon' + (kind.primary ? ' primary' : ''), 'aria-disabled': 'true' }, kind.label),
-            h('p', { class: 'tmnote' }, 'Coming soon.')
-          ];
-        }
-        const attrs = { class: 'btn big tmlink' + (kind.primary ? ' primary' : ''), href: href };
-        if (kind.download) attrs.download = '';
-        else if (!href.startsWith('#')) { attrs.target = '_blank'; attrs.rel = 'noopener'; }
-        return [h('a', attrs, kind.label), h('p', { class: 'tmnote' }, kind.note)];
-      });
+      const files = [];
+      if (lesson.daily) files.push({ title: 'Daily practice sheets', href: lesson.daily });
+      if (lesson.pack) files.push({ title: 'Teacher pack', href: lesson.pack });
+      const title = lesson.title
+        ? h('h3', null, lesson.title)
+        : h('h3', null, h('span', { class: 'tmsound' }, lesson.s), ' ' + lesson.lesson);
+      const slide = lesson.board
+        ? h('button', { class: 'btn big tmlink tmslide', type: 'button', onclick: () => { Snd.stop(); location.hash = lesson.board; } }, 'Slideshow')
+        : h('span', { class: 'btn big tmlink is-soon', 'aria-disabled': 'true' }, 'Slideshow');
+      let print = h('span', { class: 'btn big tmlink is-soon', 'aria-disabled': 'true' }, 'Printables');
+      let list = null;
+      if (files.length === 1) {
+        print = h('a', { class: 'btn big tmlink tmprint', href: files[0].href, target: '_blank', rel: 'noopener' }, 'Printables');
+      } else if (files.length) {
+        list = h('div', { class: 'tmfiles', hidden: '' }, ...files.map((file) => h('a', { class: 'tmfile', href: file.href, target: '_blank', rel: 'noopener' }, file.title)));
+        print = h('button', { class: 'btn big tmlink tmprint', type: 'button', onclick: () => { list.hidden = !list.hidden; } }, 'Printables');
+      }
       return h('div', { class: 'tmcard' },
-        h('h3', null, lesson.title || h('span', null, h('span', { class: 'tmsound' }, lesson.s), ' ' + lesson.lesson)),
-        ...rows.flat());
+        title,
+        slide,
+        print,
+        list,
+        (!lesson.board || !files.length) ? h('p', { class: 'tmnote' }, 'Coming soon') : null);
     }
     const UNITS = [
       { name: 'Meet the Teams', sounds: [
@@ -1051,12 +1052,14 @@
         { s: '-ing', lesson: 'Lesson 6.3' }
       ] }
     ];
-    const cards = UNITS.flatMap((u) => u.sounds.map(lessonCard));
+    const sections = UNITS.map((unit) => h('section', { class: 'tmunit' },
+      h('h2', null, unit.name),
+      h('div', { class: 'tmgrid' }, ...unit.sounds.map(lessonCard))));
     app.append(h('div', { class: 'screen tmscreen' }, h('div', { class: 'tmwrap' },
       h('div', { class: 'abtop' }, pageNav('#/home')),
-      h('h1', null, 'Teacher materials'),
-      h('p', { class: 'tmlead' }, 'For teaching in class. Students practice on their own in the app.'),
-      h('section', { class: 'tmunit' }, h('div', { class: 'tmgrid' }, ...cards)))));
+      h('h1', null, 'Parent and Teacher Materials'),
+      h('p', { class: 'tmlead' }, 'In course order. Slideshow opens the deck. Printables opens the files.'),
+      ...sections)));
   }
   /* In-app week-deck slideshow for smartboard (ng / nk). Keeps PPTX download on the teachers page. */
   function slidesViewer(sound) {
