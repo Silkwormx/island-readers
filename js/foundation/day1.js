@@ -50,10 +50,27 @@
     { id: 'count', title: 'Count the Sounds', icon: 'foundation/img/games/sound.jpg' }
   ];
 
+  function bareSound(text) {
+    const raw = String(text || '').trim().toLowerCase().replace(/[^a-z]/g, '');
+    const alias = {
+      mmm: 'm', em: 'm', sss: 's', ess: 's', tee: 't', ttt: 't', ay: 'a', ah: 'a',
+      nnn: 'n', en: 'n', fff: 'f', eff: 'f', lll: 'l', rrr: 'r', vvv: 'v', zzz: 'z',
+      pee: 'p', dee: 'd', kay: 'k', bee: 'b', eh: 'e', ih: 'i', uh: 'u', ee: 'ee', oh: 'oh'
+    };
+    if (alias[raw]) return alias[raw];
+    if (raw.length === 1) return raw;
+    if (/^(m{2,}|s{2,}|t{2,}|n{2,}|f{2,}|l{2,}|r{2,})$/.test(raw)) return raw.charAt(0);
+    return '';
+  }
   function say(text) {
+    const key = bareSound(text);
+    if (key) return playSound(key).then(() => {});
+    const words = String(text || '').trim().split(/\s+/).filter(Boolean);
+    const spoken = words.filter((word) => !bareSound(word)).join(' ');
+    if (!spoken) return Promise.resolve();
     return new Promise((resolve) => {
       try {
-        const u = new SpeechSynthesisUtterance(text);
+        const u = new SpeechSynthesisUtterance(spoken);
         u.lang = 'en-US';
         u.rate = 0.92;
         u.onend = () => resolve();
@@ -76,7 +93,18 @@
     el.classList.add('ll1miss');
   }
   function clearWait() {
+    (IR._day1Waits || []).forEach((id) => clearTimeout(id));
+    IR._day1Waits = [];
     if (IR._day1Wait) { clearTimeout(IR._day1Wait); IR._day1Wait = 0; }
+  }
+  function later(fn, ms) {
+    const id = setTimeout(() => {
+      IR._day1Waits = (IR._day1Waits || []).filter((item) => item !== id);
+      fn();
+    }, ms);
+    IR._day1Waits = IR._day1Waits || [];
+    IR._day1Waits.push(id);
+    return id;
   }
   function go(id) { clearWait(); Snd.stop(); location.hash = '#/foundation/sample/' + id; }
 
@@ -324,6 +352,20 @@
     }
     return out;
   }
+  /* 3 choices on the early rounds, 4 once the set is familiar. Never a blank or a placeholder. */
+  function soundChoices(answer, total) {
+    const want = total >= 4 ? 4 : 3;
+    const ids = (PACK.ids || []).filter((id) => id && id !== answer);
+    const out = [answer];
+    likeIds(answer, (PACK.ids || []).concat(PACK.foils || []), want - 1).forEach((id) => {
+      if (out.indexOf(id) < 0) out.push(id);
+    });
+    ids.forEach((id) => { if (out.length < want && out.indexOf(id) < 0) out.push(id); });
+    (LIKE[answer] || '').split('').forEach((id) => {
+      if (out.length < want && id && out.indexOf(id) < 0) out.push(id);
+    });
+    return out.slice(0, want);
+  }
   function choicesFor(id, n) {
     const pool = (PACK.ids || []).concat(PACK.foils || []);
     const out = [id];
@@ -340,7 +382,18 @@
       ctx.stage.innerHTML = '';
       if (streak >= 3 && streak % 3 === 0) ctx.stage.append(h('p', { class: 'llpraise', role: 'status' }, streak + ' in a row!'));
       const item = plan[i];
-      draw(item, () => { streak += 1; i += 1; yes(); setTimeout(step, 280); }, (el) => {
+      draw(item, () => {
+        streak += 1;
+        const here = i;
+        const move = () => {
+          if (i !== here || !ctx.stage.isConnected) return;
+          i += 1;
+          yes();
+          later(step, 200);
+        };
+        later(move, 280);
+        later(move, 1200);
+      }, (el) => {
         streak = 0;
         miss(el);
         const at = i + 3;
@@ -422,14 +475,14 @@
   }
 
   function catchSound(ctx) {
-    ctx.setInstr('Tap the first sound.');
+    ctx.setInstr('Hear the word. Tap its first sound.');
     rounds(ctx, pictureCards(), (pic, ok, again, i) => {
-      const choices = [pic.answer].concat(likeIds(pic.answer, PACK.ids, i < 4 ? 1 : Math.max(2, PACK.ids.length - 1)));
-      const hear = () => { if (pic.name) say(pic.name); };
+      const choices = soundChoices(pic.answer, i < 6 ? 3 : 4);
+      const hear = () => { if (pic.name && pic.name !== 'any') say(pic.name); };
       hear();
-      ctx.stage.append(h('div', { class: 'llfirst' },
-        h('button', { class: 'btn big primary', type: 'button', onclick: hear }, 'Hear it'),
-        h('img', { class: 'll1link', src: pic.src, alt: pic.name || '' }),
+      ctx.stage.append(h('div', { class: 'llfirst llhear' },
+        h('button', { class: 'btn big primary', type: 'button', onclick: hear }, 'Hear the word'),
+        h('img', { class: 'll1link', src: pic.src, alt: '' }),
         h('div', { class: 'll1friends' }, ...shuffle(choices).map((letter) => {
           const b = big(letter, (e) => { if (letter === pic.answer) ok(); else again(e.currentTarget); });
           b.setAttribute('data-yes', letter === pic.answer ? '1' : '0');
@@ -502,8 +555,16 @@
 
   function blendPick(ctx) {
     ctx.setInstr('Listen to the sounds. Tap the picture.');
+    let blendToken = 0;
     rounds(ctx, PACK.words, (word, ok, again) => {
-      const speak = () => word.parts.reduce((p, id) => p.then(() => playSound(id)).then(() => new Promise((r) => setTimeout(r, 180))), Promise.resolve());
+      const speak = () => {
+        const mine = ++blendToken;
+        Snd.stop();
+        return word.parts.reduce((p, id) => p.then(() => {
+          if (mine !== blendToken) return undefined;
+          return playSound(id).then(() => new Promise((r) => setTimeout(r, 180)));
+        }), Promise.resolve());
+      };
       speak();
       const others = PACK.words.filter((item) => item.src !== word.src);
       const pics = [word].concat(others.slice(0, 2));
@@ -549,64 +610,53 @@
   }
 
   function soundMatch(ctx) {
-    ctx.setInstr('Hear the sound. Tap the picture.');
-    const list = pictureCards().map((pic) => ({ sound: pic.answer, src: pic.src }));
-    rounds(ctx, list, (item, ok, again, i) => {
-      playSound(item.sound);
-      const rest = pictureCards().filter((pic) => pic.src !== item.src);
-      const decoys = rest.filter((pic) => likeIds(item.sound, PACK.ids, 3).indexOf(pic.answer) >= 0);
-      const pool = (decoys.length ? decoys : rest).slice(0, i < 4 ? 1 : 2);
-      const options = shuffle([{ src: item.src, good: true }].concat(pool.map((pic) => ({ src: pic.src, good: false }))));
-      ctx.stage.append(h('div', { class: 'll1trio' }, ...options.map((opt) => h('button', {
-        class: 'll1friend', type: 'button', 'data-yes': opt.good ? '1' : '0',
-        onclick: (e) => { if (opt.good) ok(); else again(e.currentTarget); }
-      }, h('img', { src: opt.src, alt: '' })))));
+    ctx.setInstr('Hear the word. Tap the picture.');
+    const cards = pictureCards().filter((pic) => pic && pic.src);
+    rounds(ctx, cards, (item, ok, again, i) => {
+      const hear = () => { if (item.name && item.name !== 'any') say(item.name); };
+      hear();
+      const rest = shuffle(cards.filter((pic) => pic.src !== item.src));
+      const seen = {};
+      const decoys = [];
+      rest.forEach((pic) => {
+        if (seen[pic.src] || decoys.length >= (i < 6 ? 2 : 3)) return;
+        seen[pic.src] = 1;
+        decoys.push(pic);
+      });
+      const options = shuffle([item].concat(decoys));
+      ctx.stage.append(h('div', { class: 'llfirst llhear' },
+        h('button', { class: 'btn big primary', type: 'button', onclick: hear }, 'Hear the word'),
+        h('div', { class: 'll1trio' }, ...options.map((opt) => h('button', {
+          class: 'll1friend', type: 'button', 'data-yes': opt.src === item.src ? '1' : '0',
+          'aria-label': opt.name && opt.name !== 'any' ? opt.name : 'picture',
+          onclick: (e) => { if (opt.src === item.src) ok(); else again(e.currentTarget); }
+        }, h('img', { src: opt.src, alt: '' }))))));
     }, 'sound');
   }
 
-  const COUNT_WORDS = {
-    a: [
-      { w: 'at', n: 2, sounds: ['ah', 't'] },
-      { w: 'am', n: 2, sounds: ['ah', 'mmm'] },
-      { w: 'add', n: 2, sounds: ['ah', 'd'] },
-      { w: 'ant', n: 3, sounds: ['ah', 'nnn', 't'] },
-      { w: 'ask', n: 3, sounds: ['ah', 'sss', 'k'] }
-    ],
-    m: [
-      { w: 'me', n: 2, sounds: ['mmm', 'ee'] },
-      { w: 'map', n: 3, sounds: ['mmm', 'ah', 'p'] },
-      { w: 'mat', n: 3, sounds: ['mmm', 'ah', 't'] },
-      { w: 'mud', n: 3, sounds: ['mmm', 'uh', 'd'] },
-      { w: 'mask', n: 4, sounds: ['mmm', 'ah', 'sss', 'k'] }
-    ],
-    s: [
-      { w: 'so', n: 2, sounds: ['sss', 'oh'] },
-      { w: 'sun', n: 3, sounds: ['sss', 'uh', 'nnn'] },
-      { w: 'sit', n: 3, sounds: ['sss', 'ih', 't'] },
-      { w: 'sock', n: 3, sounds: ['sss', 'ah', 'k'] },
-      { w: 'sand', n: 4, sounds: ['sss', 'ah', 'nnn', 'd'] }
-    ],
-    t: [
-      { w: 'toe', n: 2, sounds: ['t', 'oh'] },
-      { w: 'tap', n: 3, sounds: ['t', 'ah', 'p'] },
-      { w: 'ten', n: 3, sounds: ['t', 'eh', 'nnn'] },
-      { w: 'top', n: 3, sounds: ['t', 'ah', 'p'] },
-      { w: 'tent', n: 4, sounds: ['t', 'eh', 'nnn', 't'] }
-    ]
-  };
-  function countScreens() {
-    const letter = PACK && PACK.countLetter;
-    if (letter && COUNT_WORDS[letter]) return [COUNT_WORDS[letter]];
-    const all = [];
-    for (let i = 0; i < 5; i++) ['a', 'm', 's', 't'].forEach((id) => all.push(COUNT_WORDS[id][i]));
-    const screens = [];
-    for (let i = 0; i < all.length; i += 5) screens.push(all.slice(i, i + 5));
-    return screens;
+  const PHONEME_KEY = { a: 'a', m: 'm', s: 's', t: 't', ee: 'ee', uh: 'u' };
+  function countItems(words) {
+    return words.map((word) => {
+      const sounds = (window.IRPhonemes && IRPhonemes.of(word)) || [];
+      return { w: word, sounds: sounds, n: sounds.length };
+    }).filter((item) => item.n > 0);
   }
-  function countSay(text) {
-    if (IR.playPhoneme && ['ah', 'mmm', 'sss', 't', 'd', 'nnn', 'k', 'p', 'ee', 'oh', 'uh', 'ih', 'eh'].indexOf(text) >= 0) {
-      return IR.playPhoneme(text);
+  function countList() {
+    const all = countItems((window.IRPhonemes && IRPhonemes.countWords) || []);
+    const letter = PACK && PACK.countLetter;
+    if (letter) {
+      const list = all.filter((item) => item.sounds[0] === letter || item.w.toLowerCase().charAt(0) === letter);
+      return list.length ? list : all;
     }
+    const rounds = [];
+    while (all.length && rounds.length < 12) rounds.push(all[rounds.length % all.length]);
+    return rounds;
+  }
+  function countSay(text, phoneme) {
+    const key = phoneme ? (PHONEME_KEY[text] || '') : bareSound(text);
+    if (key) return Promise.race([Promise.resolve(playSound(key)).catch(() => {}), new Promise((r) => setTimeout(r, 700))]);
+    if (phoneme) return Promise.resolve();
+    if (String(text || '').replace(/[^A-Za-z]/g, '').length < 2) return Promise.resolve();
     return new Promise((resolve) => {
       let done = false;
       const fin = () => { if (done) return; done = true; resolve(); };
@@ -622,74 +672,95 @@
       setTimeout(fin, Math.max(320, String(text).length * 80));
     });
   }
+  function playRecordedWord(word) {
+    try { speechSynthesis.cancel(); } catch (e) { /* quiet */ }
+    const src = 'audio/w_' + String(word || '').toLowerCase() + '.mp3';
+    return Snd.play(src).then((ok) => (ok ? true : say(word)));
+  }
   function countGame(ctx) {
-    const screens = countScreens();
-    let screen = 0;
+    const items = countList();
+    let i = 0;
     let token = 0;
-    let revealed = new Set();
-    ctx.setInstr("Let's count the sounds together.");
-    function draw() {
-      token += 1;
-      revealed = new Set();
+    ctx.setInstr('Listen. Tap a dot for each sound.');
+    function show() {
+      const roundToken = ++token;
+      const item = items[i];
+      if (!item) { ctx.badge('Count the Sounds', 'count'); return; }
       try { speechSynthesis.cancel(); } catch (e) { /* quiet */ }
       ctx.stage.innerHTML = '';
-      if (ctx.roundTo && screens.length > 1) ctx.roundTo(screen + 1, screens.length);
-      ctx.progress(screen / screens.length);
-      const rows = screens[screen].map((item, i) => {
-        const chips = h('span', { class: 'llcountchips' });
-        const num = h('span', { class: 'llcountnum', 'aria-label': 'Number of sounds' });
-        const row = h('button', {
-          class: 'llcountrow',
-          type: 'button',
-          'aria-label': item.w,
-          onclick: () => play(i)
-        }, h('b', { class: 'llcountword' }, item.w), chips, num);
-        return { item: item, chips: chips, num: num, row: row };
-      });
-      ctx.stage.append(h('div', { class: 'llcount' }, h('div', { class: 'llcountlist' }, ...rows.map((row) => row.row))));
-      async function play(i) {
-        const my = ++token;
-        const row = rows[i];
-        row.chips.innerHTML = '';
-        row.num.textContent = '';
-        row.num.classList.remove('on');
-        revealed.delete(i);
-        await countSay(row.item.w);
-        if (my !== token) return;
-        for (let s = 0; s < row.item.sounds.length; s++) {
-          row.chips.append(h('i', { class: 'llcountdot' }));
-          await countSay(row.item.sounds[s]);
-          if (my !== token) return;
+      if (ctx.roundTo) ctx.roundTo(i + 1, items.length);
+      ctx.progress(i / items.length);
+      let picked = 0;
+      let checked = false;
+      const taps = h('div', { class: 'llcounttaps' });
+      const answer = h('div', { class: 'llcountanswer' });
+      const check = h('button', { class: 'btn big', type: 'button' }, 'Check');
+      function paintTaps() {
+        taps.innerHTML = '';
+        if (checked) return;
+        for (let n = 0; n < 4; n++) {
+          taps.append(h('button', {
+            class: 'llcounttap' + (n < picked ? ' on' : ''),
+            type: 'button',
+            'aria-label': 'Sound ' + (n + 1),
+            onclick: () => {
+              if (checked) return;
+              picked = n < picked ? n : n + 1;
+              paintTaps();
+            }
+          }));
         }
-        row.num.textContent = String(row.item.n);
-        row.num.classList.add('on');
-        revealed.add(i);
-        const done = screen * 5 + revealed.size;
-        const total = screens.length * 5;
-        ctx.progress(done / total);
       }
-      ctx.setNext(() => {
-        const next = rows.findIndex((_, i) => !revealed.has(i));
-        if (next >= 0) { play(next); return true; }
-        if (screen < screens.length - 1) { screen += 1; draw(); return true; }
-        ctx.badge('Count the Sounds', 'count');
-        return true;
+      check.addEventListener('click', async () => {
+        if (checked || roundToken !== token) return;
+        checked = true;
+        paintTaps();
+        answer.innerHTML = '';
+        const dots = item.sounds.map(() => {
+          const dot = h('i', { class: 'llcountdot' });
+          answer.append(dot);
+          return dot;
+        });
+        for (let s = 0; s < item.sounds.length; s++) {
+          if (roundToken !== token) return;
+          dots[s].classList.add('lit');
+          await countSay(item.sounds[s], true);
+        }
+        ctx.progress((i + 1) / items.length);
       });
+      ctx.stage.append(h('div', { class: 'llcountplay' },
+        h('p', { class: 'llcountword llcountbig' }, item.w),
+        h('button', { class: 'btn big primary', type: 'button', onclick: () => playRecordedWord(item.w) }, 'Hear the word'),
+        taps,
+        check,
+        answer));
+      paintTaps();
+      playRecordedWord(item.w);
     }
-    draw();
+    ctx.setNext(() => {
+      token += 1;
+      try { speechSynthesis.cancel(); } catch (e) { /* quiet */ }
+      if (i < items.length - 1) { i += 1; show(); return true; }
+      ctx.badge('Count the Sounds', 'count');
+      return true;
+    });
+    show();
   }
 
   function sortGame(ctx) {
-    ctx.setInstr('Tap the first sound.');
+    ctx.setInstr('Hear the word. Tap its first sound.');
     rounds(ctx, pictureCards(), (card, ok, again, i) => {
-      const choices = [card.answer].concat(likeIds(card.answer, PACK.ids, i < 4 ? 1 : Math.max(2, PACK.ids.length - 1)));
-      ctx.stage.append(
+      const choices = soundChoices(card.answer, i < 6 ? 3 : 4);
+      const hear = () => { if (card.name && card.name !== 'any') say(card.name); };
+      hear();
+      ctx.stage.append(h('div', { class: 'llfirst llhear' },
+        h('button', { class: 'btn big primary', type: 'button', onclick: hear }, 'Hear the word'),
         h('img', { class: 'll1link', src: card.src, alt: '' }),
         h('div', { class: 'll1friends' }, ...shuffle(choices).map((letter) => {
           const b = big(letter, (e) => { if (letter === card.answer) ok(); else again(e.currentTarget); });
           b.setAttribute('data-yes', letter === card.answer ? '1' : '0');
           return b;
-        })));
+        }))));
     }, 'sort');
   }
 
@@ -700,6 +771,7 @@
 
   function day1Play(app, id, pack, back) {
     if (!RUN[id] || !GAMES.some((item) => item.id === id)) return false;
+    clearWait();
     PACK = pack || samplePack();
     app.innerHTML = '';
     const step = GAMES.filter((item) => item.id === id)[0];

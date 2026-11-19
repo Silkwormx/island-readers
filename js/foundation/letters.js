@@ -517,6 +517,14 @@
     return shuffle(fresh.slice(0, 6).concat(old.slice(0, 2)));
   }
   function graphemes(word) {
+    const known = window.IRPhonemes && IRPhonemes.of(word);
+    if (known) {
+      const written = String(word).replace(/[^A-Za-z]/g, '');
+      if (known.join('') === written.toLowerCase()) {
+        return known.map((id, i) => ({ g: written.charAt(i), id: id }));
+      }
+      return known.map((id) => ({ g: id, id: id }));
+    }
     const out = [];
     let i = 0;
     if (word.toLowerCase().indexOf('qu') === 0) {
@@ -538,7 +546,20 @@
   function doneId(group, game) { return 'll_' + group.id + '_' + game; }
   function glyph(id, upper) { return upper ? id.toUpperCase() : id; }
 
-  function speak(text) {
+  function soundKey(word) {
+    const raw = String(word || '').toLowerCase().replace(/[^a-z]/g, '');
+    const alias = {
+      mmm: 'm', em: 'm', sss: 's', ess: 's', tee: 't', ttt: 't', ay: 'a', ah: 'a',
+      nnn: 'n', en: 'n', fff: 'f', eff: 'f', lll: 'l', ell: 'l', rrr: 'r',
+      vvv: 'v', vee: 'v', zzz: 'z', zee: 'z', pee: 'p', dee: 'd', kay: 'k', bee: 'b',
+      jee: 'j', eh: 'e', ih: 'i', uh: 'u', ee: 'ee', oh: 'oh'
+    };
+    if (alias[raw]) return alias[raw];
+    if (raw.length === 1) return raw;
+    if (/^(m{2,}|s{2,}|t{2,}|n{2,}|f{2,}|l{2,}|r{2,}|v{2,}|z{2,})$/.test(raw)) return raw.charAt(0);
+    return '';
+  }
+  function speakPlain(text) {
     return new Promise((resolve) => {
       try {
         if (!window.speechSynthesis || !text) { resolve(false); return; }
@@ -555,6 +576,16 @@
       } catch (e) { resolve(false); }
     });
   }
+  function speak(text) {
+    const words = String(text || '').trim().split(/\s+/).filter(Boolean);
+    if (!words.length) return Promise.resolve(false);
+    const keys = words.map((word) => soundKey(word));
+    const sounds = keys.filter(Boolean);
+    const spoken = words.filter((word, i) => !keys[i]).join(' ');
+    const playSounds = () => sounds.reduce((chain, key) => chain.then(() => (PHONEME_SRC[key] ? playPhoneme(key) : Promise.resolve(false))), Promise.resolve(false));
+    if (!spoken) return playSounds();
+    return playSounds().then(() => speakPlain(spoken));
+  }
   function speakLine(host, text) {
     const words = String(text || '').split(/\s+/).filter(Boolean);
     host.innerHTML = '';
@@ -567,7 +598,9 @@
     const mark = (n) => spans.forEach((span, i) => span.classList.toggle('on', i === n));
     return new Promise((resolve) => {
       if (!window.speechSynthesis || !words.length) { resolve(false); return; }
-      const u = new SpeechSynthesisUtterance(words.join(' '));
+      const said = words.filter((word) => !soundKey(word)).join(' ');
+      if (!said) { resolve(false); return; }
+      const u = new SpeechSynthesisUtterance(said);
       u.lang = 'en-US';
       u.rate = 0.82;
       let at = 0;
@@ -617,11 +650,9 @@
   }
   IR.playPhoneme = playPhoneme;
   function hear(L, kind) {
+    if (!L) return Promise.resolve(false);
     if (kind !== 'name' && PHONEME_SRC[L.id]) return playPhoneme(L.id);
-    if (kind === 'sound' && L.audio) {
-      return Snd.play(L.audio).then((ok) => (ok ? true : speak(L.soundSay)));
-    }
-    return speak(kind === 'name' ? L.nameSay : L.soundSay);
+    return Promise.resolve(false);
   }
   function formation(L) {
     const marks = L.strokes.map((s, i) => {
@@ -764,12 +795,12 @@
         ]
       },
       words: [
-        { text: 'am', src: 'foundation/img/scenes/am.jpg', parts: ['a', 'm'], decoy: 'foundation/img/objects/apple.jpg' },
-        { text: 'at', src: art.a, parts: ['a', 't'], decoy: 'foundation/img/objects/mango.jpg' },
-        { text: 'mat', src: 'foundation/img/scenes/mat.jpg', parts: ['m', 'a', 't'], decoy: art.s },
-        { text: 'sat', src: 'foundation/img/scenes/sat.jpg', parts: ['s', 'a', 't'], decoy: art.m },
-        { text: 'Sam', src: art.s, parts: ['s', 'a', 'm'], decoy: 'foundation/img/objects/apple.jpg' },
-        { text: 'Tam', src: 'foundation/img/scenes/tam.jpg', parts: ['t', 'a', 'm'], decoy: art.a }
+        { text: 'am', src: 'foundation/img/scenes/am.jpg', parts: IRPhonemes.of('am'), decoy: 'foundation/img/objects/apple.jpg' },
+        { text: 'at', src: art.a, parts: IRPhonemes.of('at'), decoy: 'foundation/img/objects/mango.jpg' },
+        { text: 'mat', src: 'foundation/img/scenes/mat.jpg', parts: IRPhonemes.of('mat'), decoy: art.s },
+        { text: 'sat', src: 'foundation/img/scenes/sat.jpg', parts: IRPhonemes.of('sat'), decoy: art.m },
+        { text: 'Sam', src: art.s, parts: IRPhonemes.of('Sam'), decoy: 'foundation/img/objects/apple.jpg' },
+        { text: 'Tam', src: 'foundation/img/scenes/tam.jpg', parts: IRPhonemes.of('Tam'), decoy: art.a }
       ],
       onDone(id) {
         IR.recordActivity('ll_g1_d1_' + id, 3);
@@ -1288,11 +1319,12 @@
   }
 
   function soundBit(L) {
-    return String(L.soundSay || L.id).split(',')[0];
+    return L && L.id ? L.id : '';
   }
   async function sayBits(parts) {
     for (let n = 0; n < parts.length; n++) {
-      await speak(soundBit(BY[parts[n].id]));
+      const id = parts[n].id;
+      if (PHONEME_SRC[id]) await playPhoneme(id);
       await sleep(260);
     }
   }
@@ -1389,7 +1421,7 @@
           }
           b.classList.add('lit');
           at++;
-          await speak(soundBit(BY[part.id]));
+          if (PHONEME_SRC[part.id]) await playPhoneme(part.id);
           if (at < parts.length || my !== token) return;
           await Snd.play(A.sfx.ding);
           i++;
@@ -1521,16 +1553,26 @@
         streak += 1;
         btn.classList.add('right');
         status.textContent = streak >= 3 && streak % 3 === 0 ? streak + ' in a row!' : 'Yes.';
-        await Snd.play(A.sfx.ding);
+        const here = i;
+        const advance = () => {
+          if (my !== token || i !== here || !ctx.stage.isConnected) return;
+          i++;
+          show();
+        };
+        setTimeout(advance, 1100);
+        await Promise.race([Snd.play(A.sfx.ding), sleep(700)]);
         if (!ctx.scr.ok() || my !== token) return;
-        i++;
-        await sleep(420);
-        if (ctx.scr.ok() && my === token) show();
+        setTimeout(advance, 200);
       });
       if (round.letter) host.append(hintButton([round.letter.id]));
       host.append(status);
     }
-    ctx.setNext(() => { if (i < rounds.length - 1) { i++; show(); return true; } return false; });
+    ctx.setNext(() => {
+      token += 1;
+      if (i < rounds.length - 1) { i++; show(); return true; }
+      ctx.finish();
+      return true;
+    });
     ctx.setBack(() => { if (i > 0) { i--; show(); return true; } return false; });
     show();
   }
@@ -1572,22 +1614,25 @@
   }
 
   function runSound(ctx, pool) {
-    ctx.setInstr('Look at the picture. Tap the letter.');
-    const rounds = plan12(pool).map((L, i) => ({ letter: L, reveal: L.id, nChoices: i < 4 ? 2 : i < 8 ? 3 : Math.min(4, pool.length) }));
+    ctx.setInstr('Hear the word. Tap its first sound.');
+    const rounds = plan12(pool).map((L, i) => ({ letter: L, reveal: L.id, nChoices: i < 6 ? 3 : Math.min(4, Math.max(3, pool.length)) }));
     runRounds(ctx, rounds, (round, host, pick) => {
       const L = round.letter;
       const end = L.where === 'end';
+      const word = L.word && L.word !== 'any' ? L.word : '';
       const opts = options(L, pool, round.nChoices || Math.min(4, pool.length)).map((item) => ({
         letter: item,
         yes: item.id === L.id,
         label: glyph(item.id, false)
       }));
+      const hearWord = () => { if (word) sayRead(word); };
       host.append(
-        h('div', { class: 'llpic big', html: PICS[L.word] || '' }),
-        h('p', { class: 'llword' }, L.word),
+        h('div', { class: 'llpic big', html: PICS[word] || '' }),
+        word ? h('p', { class: 'llword' }, word) : null,
+        h('button', { class: 'btn big primary', type: 'button', onclick: hearWord }, 'Hear the word'),
         h('p', { class: 'llask' }, end ? 'Which letter is at the end?' : 'Which letter is at the start?'),
         choiceGrid(opts, (it, btn) => pick(it.yes, btn)));
-      hear(L, 'sound');
+      hearWord();
     });
   }
 
@@ -1862,7 +1907,7 @@
   }
   function hearPure(L) {
     if (L && PHONEME_SRC[L.id]) return playPhoneme(L.id);
-    return speak(pureSound(L));
+    return Promise.resolve(false);
   }
   function narrate(who, text) {
     const src = who === 'Zip' ? 'img/zipA.webp' : 'img/frill.webp';
@@ -2024,6 +2069,7 @@
     rounds.push({ answer: id, art: '' });
     let i = 0;
     function show() {
+      if (stage._hearWait) clearTimeout(stage._hearWait);
       stage.innerHTML = '';
       if (i >= rounds.length) { ready(); return; }
       const round = rounds[i];
@@ -2032,7 +2078,7 @@
         ? h('img', { class: 'llkidart sm', src: round.art, alt: '' })
         : h('button', { class: 'llkidsound', type: 'button', 'aria-label': 'Hear the sound', onclick: () => hearPure(BY[round.answer]) }, icon('speaker'));
       stage.append(prompt, kidChoices(picks, round.answer, () => { i += 1; setTimeout(show, 280); }));
-      setTimeout(() => { if (stage.querySelector('.llkidchoice')) hearPure(BY[round.answer]); }, 1600);
+      stage._hearWait = setTimeout(() => { if (stage.querySelector('.llkidchoice')) hearPure(BY[round.answer]); }, 1600);
     }
     show();
   }
@@ -2207,6 +2253,7 @@
     const host = h('div', { class: 'llkidcheck' });
     stage.append(ask, host);
     function show() {
+      if (host._hearWait) clearTimeout(host._hearWait);
       host.innerHTML = '';
       if (i >= rounds.length) { ready(); return; }
       ask.textContent = 'Question ' + (i + 1) + ' of ' + rounds.length;
@@ -2219,7 +2266,7 @@
       if (round.art) bits.unshift(h('img', { class: 'llkidart sm', src: round.art, alt: '' }));
       if (round.word) bits.unshift(h('b', { class: 'llkidbig' }, round.word));
       host.append(...bits);
-      if (!round.word) setTimeout(() => { if (host.querySelector('.llkidchoice')) hearPure(BY[id]); }, 1600);
+      if (!round.word) host._hearWait = setTimeout(() => { if (host.querySelector('.llkidchoice')) hearPure(BY[round.answer]); }, 1600);
     }
     show();
   }
@@ -2781,14 +2828,13 @@
 
   const SLIDES = {
     g1: {
-      file: 'foundation/slides/Learn_the_Letters_Team1.pdf',
+      images: 'materials/team1/slides/',
       days: [
-        { label: 'Day 1', page: 3 },
-        { label: 'Day 2', page: 21 },
-        { label: 'Day 3', page: 44 },
-        { label: 'Day 4', page: 79 },
-        { label: 'Day 5', page: 110 },
-        { label: 'Team check', page: 110 }
+        { label: 'Day 1', page: 1 },
+        { label: 'Day 2', page: 34 },
+        { label: 'Day 3', page: 91 },
+        { label: 'Day 4', page: 125 },
+        { label: 'Day 5', page: 157 }
       ]
     },
     g2: {
@@ -2885,22 +2931,159 @@
     });
   }
   function slidesScreen(app, team, page) {
-    IR.newScreen();
     const deck = SLIDES[team];
-    const day = deck.days.filter((item) => String(item.page) === String(page))[0];
-    const title = day ? ('Team ' + team.slice(1) + ', ' + day.label) : ('Team ' + team.slice(1) + ' slideshow');
-    const view = h('div', { class: 'screen fs-slideview' });
-    const goFull = () => {
-      const el = document.querySelector('.fs-slideview');
-      if (el && el.requestFullscreen) el.requestFullscreen();
-    };
-    view.append(
+    if (deck && deck.images) { imageSlides(app, team, page, deck); return; }
+    IR.newScreen();
+    const start = Math.max(1, parseInt(page, 10) || 1);
+    const named = team === 'g1' ? 'Team 1: m s a t' : ('Team ' + team.slice(1) + ' slideshow');
+    const counter = h('p', { class: 'fs-slidecount', 'aria-live': 'polite' }, 'Opening…');
+    const canvas = h('canvas', { class: 'fs-slidecanvas' });
+    const prev = h('button', { class: 'btn big', type: 'button' }, 'Back');
+    const next = h('button', { class: 'btn big next', type: 'button' }, 'Next');
+    const stage = h('div', { class: 'fs-slidestage' }, canvas);
+    const view = h('div', { class: 'screen fs-slideview' },
       h('header', { class: 'uA-top' },
         IR.ui.pageNav('#/foundation/letters/' + team),
-        h('h1', { class: 'uA-title' }, title),
-        h('button', { class: 'btn big primary fs-slidebtn', type: 'button', onclick: goFull }, 'Full screen')),
-      h('iframe', { class: 'fs-pdf', src: deck.file + (page ? '#page=' + page : ''), title: title }));
+        h('h1', { class: 'uA-title' }, named),
+        counter),
+      stage,
+      h('div', { class: 'lesson-nav fs-slidenav' }, prev, next));
     app.append(view);
+    let pdfDoc = null;
+    let pageNum = start;
+    let wanted = start;
+    let rendering = false;
+    function paint() {
+      if (!pdfDoc || rendering) return;
+      rendering = true;
+      const num = Math.max(1, Math.min(pdfDoc.numPages, wanted));
+      pdfDoc.getPage(num).then((pg) => {
+        const maxW = Math.max(240, stage.clientWidth - 12);
+        const maxH = Math.max(180, stage.clientHeight - 12);
+        const base = pg.getViewport({ scale: 1 });
+        const scale = Math.min(maxW / base.width, maxH / base.height);
+        const vp = pg.getViewport({ scale: scale });
+        const ctx = canvas.getContext('2d');
+        canvas.width = Math.floor(vp.width);
+        canvas.height = Math.floor(vp.height);
+        return pg.render({ canvasContext: ctx, viewport: vp }).promise.then(() => num);
+      }).then((num) => {
+        pageNum = num;
+        counter.textContent = pageNum + ' / ' + pdfDoc.numPages;
+        prev.disabled = pageNum <= 1;
+        next.disabled = pageNum >= pdfDoc.numPages;
+        rendering = false;
+        if (wanted !== pageNum) paint();
+      }).catch(() => {
+        counter.textContent = 'Could not open this slide';
+        rendering = false;
+      });
+    }
+    function go(delta) {
+      if (!pdfDoc) return;
+      wanted = Math.max(1, Math.min(pdfDoc.numPages, pageNum + delta));
+      paint();
+    }
+    prev.addEventListener('click', () => go(-1));
+    next.addEventListener('click', () => go(1));
+    const onKey = (e) => {
+      if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); go(-1); }
+      else if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') { e.preventDefault(); go(1); }
+    };
+    window.addEventListener('keydown', onKey);
+    const old = IR._slideCleanup;
+    if (typeof old === 'function') old();
+    IR._slideCleanup = () => window.removeEventListener('keydown', onKey);
+    window.addEventListener('resize', () => { if (pdfDoc) { wanted = pageNum; paint(); } });
+    function loadLib() {
+      if (window.pdfjsLib) return Promise.resolve(window.pdfjsLib);
+      return new Promise((resolve, reject) => {
+        const tag = document.createElement('script');
+        tag.src = 'js/vendor/pdf.min.js';
+        tag.onload = () => resolve(window.pdfjsLib);
+        tag.onerror = reject;
+        document.head.append(tag);
+      });
+    }
+    loadLib().then((lib) => {
+      lib.GlobalWorkerOptions.workerSrc = 'js/vendor/pdf.worker.min.js';
+      return lib.getDocument(deck.file).promise;
+    }).then((doc) => {
+      pdfDoc = doc;
+      wanted = Math.min(start, doc.numPages);
+      paint();
+    }).catch(() => { counter.textContent = 'Could not open the slideshow'; });
+    if (IR.teach) IR.teach.sync();
+  }
+  function imageSlides(app, team, page, deck) {
+    IR.newScreen();
+    const start = Math.max(1, parseInt(page, 10) || 1);
+    const named = team === 'g1' ? 'Team 1: m s a t' : ('Team ' + team.slice(1) + ' slideshow');
+    const counter = h('p', { class: 'fs-slidecount', 'aria-live': 'polite' }, 'Opening…');
+    const dayEl = h('p', { class: 'fs-slideday' }, '');
+    const img = h('img', { class: 'fs-slideimg', alt: '' });
+    const prev = h('button', { class: 'btn big', type: 'button' }, 'Back');
+    const next = h('button', { class: 'btn big next', type: 'button' }, 'Next');
+    const jumps = h('div', { class: 'fs-dayjumps' });
+    const view = h('div', { class: 'screen fs-slideview' },
+      h('header', { class: 'uA-top' },
+        IR.ui.pageNav('#/foundation/letters/' + team),
+        h('div', { class: 'fs-slidehead' }, h('h1', { class: 'uA-title' }, named), dayEl, counter)),
+      jumps,
+      h('div', { class: 'fs-slidestage' }, img),
+      h('div', { class: 'lesson-nav fs-slidenav' }, prev, next));
+    app.append(view);
+    let total = deck.days.length ? deck.days[deck.days.length - 1].page : 1;
+    let days = deck.days.map((day, i) => ({ day: i + 1, start: day.page, end: day.page, label: day.label }));
+    let pageNum = start;
+    function dayFor(n) {
+      return days.filter((day) => n >= day.start && n <= day.end)[0] || days[0];
+    }
+    function show(n) {
+      pageNum = Math.max(1, Math.min(total, n));
+      const file = 'slide-' + String(pageNum).padStart(3, '0') + '.jpg';
+      img.src = deck.images + file;
+      img.alt = 'Slide ' + pageNum;
+      const day = dayFor(pageNum);
+      counter.textContent = pageNum + ' / ' + total;
+      dayEl.textContent = day ? day.label : '';
+      prev.disabled = pageNum <= 1;
+      next.disabled = pageNum >= total;
+      jumps.querySelectorAll('button').forEach((button) => {
+        button.classList.toggle('on', day && button.dataset.day === String(day.day));
+      });
+    }
+    function paintDays() {
+      jumps.innerHTML = '';
+      days.forEach((day) => {
+        jumps.append(h('button', {
+          class: 'btn fs-dayjump',
+          type: 'button',
+          'data-day': String(day.day),
+          onclick: () => show(day.start)
+        }, day.label));
+      });
+    }
+    prev.addEventListener('click', () => show(pageNum - 1));
+    next.addEventListener('click', () => show(pageNum + 1));
+    const onKey = (e) => {
+      if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); show(pageNum - 1); }
+      else if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') { e.preventDefault(); show(pageNum + 1); }
+    };
+    window.addEventListener('keydown', onKey);
+    const old = IR._slideCleanup;
+    if (typeof old === 'function') old();
+    IR._slideCleanup = () => window.removeEventListener('keydown', onKey);
+    fetch(deck.images + 'manifest.json').then((res) => res.json()).then((data) => {
+      if (data && data.count) total = data.count;
+      if (data && data.days && data.days.length) {
+        days = data.days.map((day) => ({ day: day.day, start: day.start, end: day.end, label: 'Day ' + day.day }));
+        paintDays();
+      }
+      show(Math.min(start, total));
+    }).catch(() => { paintDays(); show(Math.min(start, total)); });
+    paintDays();
+    show(start);
     if (IR.teach) IR.teach.sync();
   }
   IR.letters = { GROUPS: GROUPS, LETTERS: LETTERS, artNeeded: ART_NEEDED, who: WHO };
