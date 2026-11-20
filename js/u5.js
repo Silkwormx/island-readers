@@ -30,6 +30,7 @@
         : 'materials/unit5/Lesson5.1_Teacher_Led_Checks.pdf';
     return {
       slides: key === 'u53' ? '#/teachers/slides/tricky' : '#/teachers/slides/u5',
+      days: key === 'u53' ? [1, 2, 3].map((n) => ({ label: 'Day ' + n })) : [],
       files: [
         { title: 'Daily practice sheets', href: 'materials/unit5/Unit5_Teacher_Led_Student_Sheets.pdf' },
         { title: 'Teacher pack', href: pack }

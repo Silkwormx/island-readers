@@ -1107,7 +1107,7 @@
       ] },
       { name: 'Unit 5 \u00b7 Silent e', sounds: [
         { s: 'a_e', lesson: 'Lesson 5.1', board: '#/teachers/slides/u5', slides: 'materials/unit5/Island_Readers_Magic_e_Lesson.pptx', daily: 'materials/unit5/Unit5_Teacher_Led_Student_Sheets.pdf', pack: 'materials/unit5/Lesson5.1_Teacher_Led_Checks.pdf' },
-        { s: 'e', lesson: 'Lesson 5.2', board: '#/teachers/slides/tricky', slides: 'materials/unit5/Island_Readers_Tricky_e_Endings.pptx', daily: 'materials/unit5/Unit5_Teacher_Led_Student_Sheets.pdf', pack: 'materials/unit5/Lesson5.2_Teacher_Led_Checks.pdf' }
+        { s: 'e', lesson: 'Lesson 5.2', days: [1, 2, 3].map((n) => ({ label: 'Day ' + n })), board: '#/teachers/slides/tricky', slides: 'materials/unit5/Island_Readers_Tricky_e_Endings.pptx', daily: 'materials/unit5/Unit5_Teacher_Led_Student_Sheets.pdf', pack: 'materials/unit5/Lesson5.2_Teacher_Led_Checks.pdf' }
       ] },
       { name: 'Unit 6 \u00b7 Endings', sounds: [
         { s: '-s -es', lesson: 'Lesson 6.1' },
@@ -1137,14 +1137,15 @@
     const counter = h('div', { class: 'slide-count', 'aria-live': 'polite' }, '');
     const prev = h('button', { class: 'slide-nav slide-prev', type: 'button', 'aria-label': 'Previous slide' }, '\u25C0');
     const next = h('button', { class: 'slide-nav slide-next', type: 'button', 'aria-label': 'Next slide' }, '\u25B6');
+    const jumps = h('div', { class: 'fs-dayjumps slide-days', hidden: '' });
     const top = h('div', { class: 'slide-top' },
       pageNav('#/teachers'),
       h('h1', { class: 'slide-title' }, sound + ' week slides'),
       counter);
     stage.append(prev, img, videoBox, next);
-    root.append(top, stage);
+    root.append(top, jumps, stage);
     app.append(root);
-    let slides = []; let i = 0; let keyHandler = null;
+    let slides = []; let days = []; let i = 0; let keyHandler = null;
     let videoStop = null;
     function clearVideo() {
       if (videoStop) videoStop();
@@ -1176,6 +1177,12 @@
       else { clearVideo(); img.src = slides[i]; }
       counter.textContent = (i + 1) + ' / ' + slides.length;
       prev.disabled = i <= 0; next.disabled = i >= slides.length - 1;
+      const n = i + 1;
+      let here = null;
+      days.forEach((day) => { if (n >= day.start) here = day; });
+      jumps.querySelectorAll('button').forEach((button) => {
+        button.classList.toggle('on', !!(here && button.dataset.day === String(here.day) && n > 1));
+      });
       root.focus({ preventScroll: true });
     }
     function go(d) { if (!slides.length) return; i = Math.max(0, Math.min(slides.length - 1, i + d)); show(); }
@@ -1192,7 +1199,19 @@
     const oldCleanup = IR._slideCleanup; if (typeof oldCleanup === 'function') oldCleanup();
     IR._slideCleanup = () => { window.removeEventListener('keydown', keyHandler); };
     fetch('teachers/' + sound + '/slides.json').then((r) => r.json()).then((man) => {
-      slides = man.slides || []; i = 0; show();
+      slides = man.slides || [];
+      days = man.days || [];
+      jumps.innerHTML = '';
+      jumps.hidden = !days.length;
+      days.forEach((day) => {
+        jumps.append(h('button', {
+          class: 'btn fs-dayjump',
+          type: 'button',
+          'data-day': String(day.day),
+          onclick: () => { i = Math.max(0, (day.start || 1) - 1); show(); }
+        }, day.label || ('Day ' + day.day)));
+      });
+      i = 0; show();
       if (man.title) top.querySelector('.slide-title').textContent = man.title;
     }).catch(() => { counter.textContent = 'Could not load slides'; });
     show();

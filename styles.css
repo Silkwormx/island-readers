@@ -2112,6 +2112,7 @@ a.btn.tmlink.tmslide:visited{color:#fff}
 
 /* Teacher smartboard slideshow viewer */
 .slidescreen{position:fixed;inset:0;z-index:40;background:#111;color:#fff;display:flex;flex-direction:column;outline:none}
+.slide-days{background:#1b1b1b;padding:.35rem .5rem .45rem}
 .slide-top{display:flex;align-items:center;gap:.75rem;padding:.55rem 1rem;background:rgba(0,0,0,.72);flex:none}
 .slide-top .slide-back{color:#fff;border-color:rgba(255,255,255,.35)}
 .slide-title{font-size:1.15rem;margin:0;flex:1;font-weight:700;letter-spacing:.01em}
