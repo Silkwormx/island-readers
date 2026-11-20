@@ -790,6 +790,102 @@
     sound: 'foundation/img/games/icons/first.svg',
     feed: 'foundation/img/games/icons/zip.svg'
   };
+  const TEAM_TILE_WORDS = {
+    g3: { two: 'on', three: 'dot' },
+    g4: { two: 'bed', three: 'bag' },
+    g5: { two: 'log', three: 'hat' }
+  };
+  function tileSvg(inner) {
+    return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(
+      '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="#FFF1E2"/>' + inner + '</svg>'
+    );
+  }
+  function tileText(x, y, size, text, fill) {
+    return '<text x="' + x + '" y="' + y + '" text-anchor="middle" font-family="Andika,sans-serif" font-size="' + size + '" font-weight="700" fill="' + (fill || '#2B2540') + '">' + text + '</text>';
+  }
+  function teamGameIcon(group, id) {
+    const words = TEAM_TILE_WORDS[group.id];
+    if (!words) return '';
+    const L = group.letters;
+    const a = L[0];
+    const b = L[1];
+    const c = L[2];
+    const d = L[3];
+    if (id === 'pop') {
+      return tileSvg('<circle cx="24" cy="28" r="14" fill="#D7F4FF" stroke="#7EC8E3" stroke-width="3"/>' +
+        '<circle cx="40" cy="40" r="11" fill="#FFE7A8" stroke="#F28C00" stroke-width="3"/>' +
+        '<circle cx="48" cy="18" r="5" fill="#fff" stroke="#F28C00" stroke-width="2"/>' +
+        tileText(24, 33, 16, a));
+    }
+    if (id === 'feed' || id === 'zip') {
+      return tileSvg('<circle cx="32" cy="28" r="14" fill="#7ED0A0"/>' +
+        '<circle cx="27" cy="26" r="2" fill="#2B2540"/><circle cx="37" cy="26" r="2" fill="#2B2540"/>' +
+        '<path d="M27 33 Q32 37 37 33" fill="none" stroke="#2B2540" stroke-width="2"/>' +
+        '<rect x="18" y="44" width="28" height="12" rx="6" fill="#F28C00"/>' +
+        tileText(32, 53, 9, c, '#fff'));
+    }
+    if (id === 'hunt') {
+      return tileSvg('<circle cx="32" cy="34" r="16" fill="none" stroke="#F28C00" stroke-width="3"/>' +
+        '<path d="M44 46 L54 56" stroke="#C95A10" stroke-width="4" stroke-linecap="round"/>' +
+        tileText(32, 39, 16, d));
+    }
+    if (id === 'build') {
+      return tileSvg('<rect x="8" y="34" width="20" height="20" rx="4" fill="#fff" stroke="#C4A574" stroke-width="3" stroke-dasharray="4 3"/>' +
+        '<rect x="34" y="34" width="20" height="20" rx="4" fill="#fff" stroke="#C4A574" stroke-width="3" stroke-dasharray="4 3"/>' +
+        '<rect x="22" y="8" width="18" height="18" rx="4" fill="#F28C00"/>' +
+        tileText(31, 21, 13, a, '#fff'));
+    }
+    if (id === 'flash') {
+      return tileSvg('<rect x="14" y="12" width="36" height="40" rx="6" fill="#fff" stroke="#F28C00" stroke-width="3"/>' +
+        tileText(32, 38, 18, b));
+    }
+    if (id === 'match') {
+      return tileSvg('<rect x="8" y="12" width="22" height="22" rx="4" fill="#fff" stroke="#E4D6B4" stroke-width="2"/>' +
+        '<circle cx="19" cy="23" r="6" fill="#F28C00"/>' +
+        '<rect x="34" y="16" width="22" height="14" rx="4" fill="#fff" stroke="#F28C00" stroke-width="2"/>' +
+        tileText(45, 27, words.two.length > 2 ? 9 : 11, words.two) +
+        '<path d="M16 44 H48" stroke="#C4A574" stroke-width="3" stroke-linecap="round"/>' +
+        '<path d="M20 52 H44" stroke="#C4A574" stroke-width="3" stroke-linecap="round"/>');
+    }
+    if (id === 'sort') {
+      return tileSvg('<path d="M8 28 H28 L24 50 H12 Z" fill="#D7F4FF" stroke="#4C8DFF" stroke-width="2"/>' +
+        '<path d="M36 28 H56 L52 50 H40 Z" fill="#FFE7A8" stroke="#F28C00" stroke-width="2"/>' +
+        tileText(18, 44, 12, a) +
+        '<circle cx="46" cy="16" r="7" fill="#fff" stroke="#E8731C" stroke-width="2"/>' +
+        tileText(46, 20, 10, b));
+    }
+    if (id === 'count') {
+      return tileSvg(tileText(32, 24, 14, words.three) +
+        '<circle cx="16" cy="44" r="7" fill="#F28C00"/><circle cx="32" cy="44" r="7" fill="#F28C00"/>' +
+        '<circle cx="48" cy="44" r="7" fill="#fff" stroke="#F28C00" stroke-width="3"/>' +
+        tileText(16, 48, 10, '1', '#fff') + tileText(32, 48, 10, '2', '#fff') + tileText(48, 48, 10, '3', '#C95A10'));
+    }
+    if (id === 'find') {
+      return tileSvg('<g font-family="Andika,sans-serif" font-size="12" font-weight="700" fill="#2B2540" text-anchor="middle">' +
+        '<text x="18" y="24">' + a + '</text><text x="32" y="24">' + b + '</text><text x="46" y="24">' + c + '</text>' +
+        '<text x="18" y="40">' + d + '</text><text x="46" y="40">' + a + '</text>' +
+        '<text x="18" y="54">' + b + '</text><text x="32" y="54">' + c + '</text><text x="46" y="54">' + d + '</text></g>' +
+        '<circle cx="32" cy="36" r="9" fill="none" stroke="#F28C00" stroke-width="3"/>' +
+        tileText(32, 40, 12, a, '#C95A10'));
+    }
+    if (id === 'case') {
+      return tileSvg('<rect x="8" y="14" width="22" height="36" rx="6" fill="#F28C00"/>' +
+        '<rect x="34" y="14" width="22" height="36" rx="6" fill="#fff" stroke="#E8731C" stroke-width="3"/>' +
+        tileText(19, 40, 22, a.toUpperCase(), '#fff') + tileText(45, 40, 22, a));
+    }
+    if (id === 'first') {
+      return tileSvg('<circle cx="36" cy="36" r="16" fill="#F28C00"/>' +
+        '<circle cx="16" cy="18" r="10" fill="#C95A10"/>' +
+        tileText(16, 22, 12, a, '#fff'));
+    }
+    if (id === 'review') {
+      return tileSvg('<circle cx="16" cy="32" r="8" fill="#D7F4FF" stroke="#1FA6A6" stroke-width="2"/>' +
+        '<circle cx="32" cy="32" r="8" fill="#FFE7A8" stroke="#F28C00" stroke-width="2"/>' +
+        '<circle cx="48" cy="32" r="8" fill="#fff" stroke="#C95A10" stroke-width="2"/>' +
+        tileText(16, 36, 11, a) + tileText(32, 36, 11, b) + tileText(48, 36, 11, c));
+    }
+    return '';
+  }
   function teamOnePack() {
     const art = {
       a: 'foundation/img/letters/a_apple.jpg',
@@ -871,7 +967,7 @@
       id: game.id,
       key: 'll-' + game.id,
       title: game.title,
-      img: (group.id === 'g1' && TEAM1_MORE_ICON[game.id]) || GAME_ART[game.id] || '',
+      img: teamGameIcon(group, game.id === 'match' ? 'case' : (game.id === 'sound' ? 'first' : (game.id === 'feed' ? 'zip' : game.id))) || (group.id === 'g1' && TEAM1_MORE_ICON[game.id]) || GAME_ART[game.id] || '',
       alt: game.title,
       done: IR.isDone(doneId(group, game.id)),
       doneIcon: 'star',
@@ -882,7 +978,7 @@
       id: game.id,
       key: 'd1-' + game.id,
       title: game.title,
-      img: TEAM1_DAY_ICON[game.id] || (game.faces ? '' : game.icon),
+      img: teamGameIcon(group, game.id) || TEAM1_DAY_ICON[game.id] || (game.faces ? '' : game.icon),
       imgs: null,
       alt: game.title,
       done: IR.isDone('ll_' + group.id + '_d1_' + game.id),
