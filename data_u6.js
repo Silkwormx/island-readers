@@ -227,19 +227,28 @@ window.IR_DATA_U6 = {
         { "type": "pick", "word": "swinging", "choices": ["swinging", "swing", "swings"] },
         { "type": "pick", "word": "ringing", "choices": ["ringing", "ring", "rings"] }
       ],
+      "heart": [
+        { "w": "the" },
+        { "w": "a" },
+        { "w": "is" },
+        { "w": "said" },
+        { "w": "and" },
+        { "w": "by" },
+        { "w": "orange" }
+      ],
       "story": [
-        { "text": "The orange bell is hanging on the branch.", "voice": "Zip", "img": "img/ng_p01.webp" },
-        { "text": "Zip and Frill hike up the path.", "voice": "Zip", "img": "img/ng_p02.webp" },
-        { "text": "A long stick is hanging by the bell.", "voice": "Zip", "img": "img/ng_p07.webp" },
-        { "text": "The stick is bumping the bell. Clunk.", "voice": "Zip", "img": "img/ng_p09.webp" },
-        { "text": "Zip tugs the rope. The bell will not ring.", "voice": "Zip", "img": "img/ng_p03.webp" },
-        { "text": "\"The stick is bumping it,\" said Frill.", "voice": "Frill", "img": "img/ng_p08.webp" },
-        { "text": "Zip is lifting the long stick up.", "voice": "Zip", "img": "img/ng_p05.webp" },
-        { "text": "The stick is swinging back. It hits the bell.", "voice": "Zip", "img": "img/ng_p06.webp" },
-        { "text": "Frill is helping Zip lift the stick.", "voice": "Zip", "img": "img/ng_p10.webp" },
-        { "text": "Frill is shifting the stick off the path.", "voice": "Zip", "img": "img/ng_p11.webp" },
-        { "text": "The stick is resting on the path.", "voice": "Zip", "img": "img/u6_p2.webp" },
-        { "text": "Zip is ringing the bell. Ding! It rings.", "voice": "Zip", "img": "img/u6_p3.webp" }
+        { "text": "The orange bell is hanging on the branch.", "voice": "Zip", "img": "img/u63_p01.webp" },
+        { "text": "Zip and Frill hike up the path.", "voice": "Zip", "img": "img/u63_p02.webp" },
+        { "text": "A long stick is hanging by the bell.", "voice": "Zip", "img": "img/u63_p03.webp" },
+        { "text": "The stick is bumping the bell. Clunk.", "voice": "Zip", "img": "img/u63_p04.webp" },
+        { "text": "Zip tugs the rope. The bell will not ring.", "voice": "Zip", "img": "img/u63_p05.webp" },
+        { "text": "\"The stick is bumping it,\" said Frill.", "voice": "Frill", "img": "img/u63_p06.webp" },
+        { "text": "Zip is lifting the long stick up.", "voice": "Zip", "img": "img/u63_p07.webp" },
+        { "text": "The stick is swinging back. It hits the bell.", "voice": "Zip", "img": "img/u63_p08.webp" },
+        { "text": "Frill is helping Zip lift the stick.", "voice": "Zip", "img": "img/u63_p09.webp" },
+        { "text": "Frill is shifting the stick off the path.", "voice": "Zip", "img": "img/u63_p10.webp" },
+        { "text": "The stick is resting on the path.", "voice": "Zip", "img": "img/u63_p11.webp" },
+        { "text": "Zip is ringing the bell. Ding! It rings.", "voice": "Zip", "img": "img/u63_p12.webp" }
       ]
     }
   ]
