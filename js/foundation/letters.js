@@ -2929,13 +2929,25 @@
     const deck = SLIDES[team];
     if (deck && deck.images) { imageSlides(app, team, page, deck); return; }
     IR.newScreen();
-    const start = Math.max(1, parseInt(page, 10) || 1);
+    const requested = parseInt(page, 10);
+    const start = Math.max(1, requested || 1);
+    let onMenu = !requested;
     const named = team === 'g1' ? 'Team 1: m s a t' : ('Team ' + team.slice(1) + ' slideshow');
     const counter = h('p', { class: 'fs-slidecount', 'aria-live': 'polite' }, 'Opening…');
     const canvas = h('canvas', { class: 'fs-slidecanvas' });
     const prev = h('button', { class: 'btn big', type: 'button' }, 'Back');
     const next = h('button', { class: 'btn big next', type: 'button' }, 'Next');
-    const stage = h('div', { class: 'fs-slidestage' }, canvas);
+    const menu = IR.dayMenu && IR.dayMenu(deck.days, (pageNo) => {
+      onMenu = false;
+      if (menu) menu.hidden = true;
+      canvas.hidden = false;
+      wanted = pageNo;
+      paint();
+    });
+    if (!menu) onMenu = false;
+    const stage = h('div', { class: 'fs-slidestage' }, menu, canvas);
+    if (menu) menu.hidden = !onMenu;
+    canvas.hidden = onMenu;
     const view = h('div', { class: 'screen fs-slideview' },
       h('header', { class: 'uA-top' },
         IR.ui.pageNav('#/foundation/letters/' + team),
@@ -2949,7 +2961,7 @@
     let wanted = start;
     let rendering = false;
     function paint() {
-      if (!pdfDoc || rendering) return;
+      if (onMenu || !pdfDoc || rendering) return;
       rendering = true;
       const num = Math.max(1, Math.min(pdfDoc.numPages, wanted));
       pdfDoc.getPage(num).then((pg) => {
@@ -3012,7 +3024,9 @@
   }
   function imageSlides(app, team, page, deck) {
     IR.newScreen();
-    const start = Math.max(1, parseInt(page, 10) || 1);
+    const requested = parseInt(page, 10);
+    const start = Math.max(1, requested || 1);
+    let onMenu = !requested;
     const named = team === 'g1' ? 'Team 1: m s a t' : ('Team ' + team.slice(1) + ' slideshow');
     const counter = h('p', { class: 'fs-slidecount', 'aria-live': 'polite' }, 'Opening…');
     const dayEl = h('p', { class: 'fs-slideday' }, '');
@@ -3020,12 +3034,13 @@
     const prev = h('button', { class: 'btn big', type: 'button' }, 'Back');
     const next = h('button', { class: 'btn big next', type: 'button' }, 'Next');
     const jumps = h('div', { class: 'fs-dayjumps' });
+    const menuHold = h('div');
     const view = h('div', { class: 'screen fs-slideview' },
       h('header', { class: 'uA-top' },
         IR.ui.pageNav('#/foundation/letters/' + team),
         h('div', { class: 'fs-slidehead' }, h('h1', { class: 'uA-title' }, named), dayEl, counter)),
       jumps,
-      h('div', { class: 'fs-slidestage' }, img),
+      h('div', { class: 'fs-slidestage' }, menuHold, img),
       h('div', { class: 'lesson-nav fs-slidenav' }, prev, next));
     app.append(view);
     let total = deck.days.length ? deck.days[deck.days.length - 1].page : 1;
@@ -3034,7 +3049,31 @@
     function dayFor(n) {
       return days.filter((day) => n >= day.start && n <= day.end)[0] || days[0];
     }
+    function mountMenu() {
+      const built = IR.dayMenu && IR.dayMenu(days.map((day) => ({ label: day.label, page: day.start })), (pageNo) => {
+        onMenu = false;
+        menuHold.hidden = true;
+        img.hidden = false;
+        show(pageNo);
+      });
+      menuHold.replaceChildren(built || h('span'));
+      menuHold.hidden = !onMenu || !built;
+      if (!built) onMenu = false;
+    }
     function show(n) {
+      if (onMenu) {
+        menuHold.hidden = false;
+        img.hidden = true;
+        jumps.hidden = true;
+        counter.textContent = '';
+        dayEl.textContent = '';
+        prev.disabled = true;
+        next.disabled = true;
+        return;
+      }
+      menuHold.hidden = true;
+      img.hidden = false;
+      jumps.hidden = false;
       pageNum = Math.max(1, Math.min(total, n));
       const file = 'slide-' + String(pageNum).padStart(3, '0') + '.jpg';
       img.src = deck.images + file;
@@ -3074,10 +3113,12 @@
       if (data && data.days && data.days.length) {
         days = data.days.map((day) => ({ day: day.day, start: day.start, end: day.end, label: 'Day ' + day.day }));
         paintDays();
+        mountMenu();
       }
-      show(Math.min(start, total));
-    }).catch(() => { paintDays(); show(Math.min(start, total)); });
+      show(onMenu ? start : Math.min(start, total));
+    }).catch(() => { paintDays(); mountMenu(); show(onMenu ? start : Math.min(start, total)); });
     paintDays();
+    mountMenu();
     show(start);
     if (IR.teach) IR.teach.sync();
   }
