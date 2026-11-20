@@ -245,28 +245,28 @@
   {
    "letter": "f",
    "group": "G2",
-   "sound": "/f/ as in fern",
-   "keyword": "fern",
-   "character": "Fumi the fern",
-   "concept": "A curly tree fern from the island forest. The top of the frond curls over like the hook of an f and a leafy band crosses the middle.",
-   "chant": "Fumi the fern fans the air: /fff/!",
-   "action": "Gently bite your bottom lip and blow /fff/ while your fingers flutter like fern leaves.",
+   "sound": "/f/ as in fish",
+   "keyword": "fish",
+   "character": "Fumi the fish",
+   "concept": "A friendly fish curled like an f. The top fin hooks over and a side fin crosses the middle.",
+   "chant": "Fumi the fish fans the air: /fff/!",
+   "action": "Gently bite your bottom lip and blow /fff/ while your fingers flutter like fish fins.",
    "formation": "Start a little below the top line. Curve up and over to the left, then pull straight down. Lift and cross at the middle line.",
-   "art": "img/letters/f_fumi_fern.jpg",
-   "cue": "'Think of Fumi' + bite lip, fern fingers",
+   "art": "img/letters/f_fumi_fish.jpg",
+   "cue": "'Think of Fumi' + bite lip, fish fins",
    "capital": "F"
   },
   {
    "letter": "i",
    "group": "G2",
-   "sound": "/i/ as in inchworm",
-   "keyword": "inchworm",
-   "character": "Iggy the inchworm",
-   "concept": "A little green inchworm standing straight up on a twig with a shiny dewdrop floating above his head.",
-   "chant": "Iggy the inchworm inches up: /i/ /i/ /i/!",
+   "sound": "/i/ as in insect",
+   "keyword": "insect",
+   "character": "Iggy the insect",
+   "concept": "A little green insect standing straight up, with one shiny drop floating above his head like the dot on i.",
+   "chant": "Iggy the insect says /i/ /i/ /i/!",
    "action": "Inch one finger up your arm, saying /i/ with each step.",
    "formation": "Start at the middle line and pull straight down. Lift and add the dot above.",
-   "art": "img/letters/i_iggy_inchworm.jpg",
+   "art": "img/letters/i_iggy_insect.jpg",
    "cue": "'Think of Iggy' + inch up the arm",
    "capital": "I"
   },
@@ -357,14 +357,14 @@
   {
    "letter": "b",
    "group": "G4",
-   "sound": "/b/ as in banyan",
-   "keyword": "banyan",
-   "character": "Bani the banyan",
-   "concept": "A tall banyan tree. The trunk is the tall stick and the round root ball sits at the bottom right. Bat first, then ball.",
-   "chant": "Bani the banyan bounces: /b/ /b/ /b/!",
+   "sound": "/b/ as in ball",
+   "keyword": "ball",
+   "character": "Bani the ball",
+   "concept": "A round ball beside a tall stick. The stick comes first, then the ball.",
+   "chant": "Bani the ball bounces: /b/ /b/ /b/!",
    "action": "Bounce two fists for each /b/, lips together then pop.",
    "formation": "Start at the top line and pull straight down. Go back up to the middle and curve around to close at the bottom. (Stick first, then ball.)",
-   "art": "img/letters/b_bani_banyan.jpg",
+   "art": "img/letters/b_bani_ball.jpg",
    "cue": "'Think of Bani' + bounce fists",
    "capital": "B"
   },
@@ -385,28 +385,28 @@
   {
    "letter": "k",
    "group": "G4",
-   "sound": "/k/ as in kingfisher",
-   "keyword": "kingfisher",
-   "character": "Kiko the kingfisher",
-   "concept": "A red Ryukyu kingfisher standing tall. Her long body is the stick, and her wing and tail kick out from the middle like the two slants of a k.",
-   "chant": "Kiko the kingfisher kicks: /k/ /k/ /k/!",
+   "sound": "/k/ as in kite",
+   "keyword": "kite",
+   "character": "Kiko the kite",
+   "concept": "A bright kite. The tall stick is on the left, and two corners kick out like a k.",
+   "chant": "Kiko the kite kicks: /k/ /k/ /k/!",
    "action": "Do a tiny kick for each /k/.",
    "formation": "Start at the top line and pull straight down. Lift. Start at the middle line on the right, slant in to touch the stick, then slant out to the bottom line.",
-   "art": "img/letters/k_kiko_kingfisher.jpg",
+   "art": "img/letters/k_kiko_kite.jpg",
    "cue": "'Think of Kiko' + tiny kick",
    "capital": "K"
   },
   {
    "letter": "h",
    "group": "G5",
-   "sound": "/h/ as in hibiscus",
-   "keyword": "hibiscus",
-   "character": "Hana the hibiscus",
-   "concept": "A hibiscus plant with a red flower on top of a very tall straight stem. Lower down, one short stem arches over and down like the hump of an h. The tall stem rises high above the hump.",
-   "chant": "Hana the hibiscus huffs: /h/ /h/ /h/!",
+   "sound": "/h/ as in hat",
+   "keyword": "hat",
+   "character": "Hana the hat",
+   "concept": "A sun hat. The tall crown is the stick, and the brim humps over and down.",
+   "chant": "Hana the hat huffs: /h/ /h/ /h/!",
    "action": "Hold your hand in front of your mouth and feel the warm /h/ breath.",
    "formation": "Start at the top line and pull straight down. Go back up, hump over and down.",
-   "art": "img/letters/h_hana_hibiscus.jpg",
+   "art": "img/letters/h_hana_hat.jpg",
    "cue": "'Think of Hana' + hand in front of mouth",
    "capital": "H"
   },
@@ -2247,7 +2247,7 @@
       "picture": "Fumi beside the plain f: 'Fumi makes an f shape. This is f. f says /f/.' Trace f over Fumi, then trace the plain f.",
       "outline": "Plain f over a faint Fumi: 'Can you still see Fumi? This is f.' Cover Fumi: child says /f/ from the letter alone.",
       "plain": "Plain lowercase f only, in 2-3 fonts. 'Same letter, different clothes. What does it say?'",
-      "cue": "'Think of Fumi' + bite lip, fern fingers"
+      "cue": "'Think of Fumi' + bite lip, fish fins"
      }
     },
     "record": "After each flash, tick a box for every letter answered correctly in under 3 seconds. 3 ticks on 3 different lessons moves the letter one step.",
@@ -2473,7 +2473,7 @@
     },
     {
      "word": "in",
-     "scene": "Iggy the inchworm crawls in a cup",
+     "scene": "Iggy the insect sits in a cup",
      "caption": "In."
     },
     {
@@ -2592,7 +2592,7 @@
       "picture": "Fumi beside the plain f: 'Fumi makes an f shape. This is f. f says /f/.' Trace f over Fumi, then trace the plain f.",
       "outline": "Plain f over a faint Fumi: 'Can you still see Fumi? This is f.' Cover Fumi: child says /f/ from the letter alone.",
       "plain": "Plain lowercase f only, in 2-3 fonts. 'Same letter, different clothes. What does it say?'",
-      "cue": "'Think of Fumi' + bite lip, fern fingers"
+      "cue": "'Think of Fumi' + bite lip, fish fins"
      },
      "i": {
       "picture": "Iggy beside the plain i: 'Iggy makes an i shape. This is i. i says /i/.' Trace i over Iggy, then trace the plain i.",
@@ -2978,7 +2978,7 @@
       "picture": "Fumi beside the plain f: 'Fumi makes an f shape. This is f. f says /f/.' Trace f over Fumi, then trace the plain f.",
       "outline": "Plain f over a faint Fumi: 'Can you still see Fumi? This is f.' Cover Fumi: child says /f/ from the letter alone.",
       "plain": "Plain lowercase f only, in 2-3 fonts. 'Same letter, different clothes. What does it say?'",
-      "cue": "'Think of Fumi' + bite lip, fern fingers"
+      "cue": "'Think of Fumi' + bite lip, fish fins"
      },
      "i": {
       "picture": "Iggy beside the plain i: 'Iggy makes an i shape. This is i. i says /i/.' Trace i over Iggy, then trace the plain i.",
@@ -3326,7 +3326,7 @@
       "picture": "Fumi beside the plain f: 'Fumi makes an f shape. This is f. f says /f/.' Trace f over Fumi, then trace the plain f.",
       "outline": "Plain f over a faint Fumi: 'Can you still see Fumi? This is f.' Cover Fumi: child says /f/ from the letter alone.",
       "plain": "Plain lowercase f only, in 2-3 fonts. 'Same letter, different clothes. What does it say?'",
-      "cue": "'Think of Fumi' + bite lip, fern fingers"
+      "cue": "'Think of Fumi' + bite lip, fish fins"
      },
      "i": {
       "picture": "Iggy beside the plain i: 'Iggy makes an i shape. This is i. i says /i/.' Trace i over Iggy, then trace the plain i.",
