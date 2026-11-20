@@ -1091,7 +1091,7 @@
       ] },
       { name: 'Unit 5 \u00b7 Silent e', sounds: [
         { s: 'a_e', lesson: 'Lesson 5.1', board: '#/teachers/slides/u5', slides: 'materials/unit5/Island_Readers_Magic_e_Lesson.pptx', daily: 'materials/unit5/Unit5_Teacher_Led_Student_Sheets.pdf', pack: 'materials/unit5/Lesson5.1_Teacher_Led_Checks.pdf' },
-        { s: 'e', lesson: 'Lesson 5.2', board: '#/teachers/slides/u5', slides: 'materials/unit5/Island_Readers_Magic_e_Lesson.pptx', daily: 'materials/unit5/Unit5_Teacher_Led_Student_Sheets.pdf', pack: 'materials/unit5/Lesson5.2_Teacher_Led_Checks.pdf' }
+        { s: 'e', lesson: 'Lesson 5.2', daily: 'materials/unit5/Unit5_Teacher_Led_Student_Sheets.pdf', pack: 'materials/unit5/Lesson5.2_Teacher_Led_Checks.pdf' }
       ] },
       { name: 'Unit 6 \u00b7 Endings', sounds: [
         { s: '-s -es', lesson: 'Lesson 6.1' },

@@ -29,7 +29,7 @@
         ? 'materials/unit5/Unit5_Teacher_Led_Checks_Combined.pdf'
         : 'materials/unit5/Lesson5.1_Teacher_Led_Checks.pdf';
     return {
-      slides: '#/teachers/slides/u5',
+      slides: key === 'u51' ? '#/teachers/slides/u5' : '',
       files: [
         { title: 'Daily practice sheets', href: 'materials/unit5/Unit5_Teacher_Led_Student_Sheets.pdf' },
         { title: 'Teacher pack', href: pack }
@@ -307,8 +307,8 @@
           lesson: lesson,
           games: pick('activities').concat(pick('extra')),
           story: story,
-          slides: '#/teachers/slides/u5',
-          slideTitle: capName(N.name),
+          slides: KEY === 'u51' ? '#/teachers/slides/u5' : '',
+          slideTitle: pageName,
           slideNote: 'Slideshow'
         })));
       if (IR.teach) IR.teach.sync();
