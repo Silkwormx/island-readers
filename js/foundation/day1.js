@@ -442,8 +442,9 @@
     ctx.setInstr('Hear the sound. Pop that bubble.');
     const ids = PACK.ids;
     rounds(ctx, ids, (id, ok, again, i) => {
-      ctx._coachReplay = () => playSound(id);
-      playSound(id);
+      const hear = h('button', { class: 'btn big primary', type: 'button', onclick: () => playSound(id, hear) }, 'Hear the sound');
+      ctx._coachReplay = () => playSound(id, hear);
+      playSound(id, hear);
       const shown = choicesFor(id, i < 4 ? 1 : i < 8 ? 2 : Math.max(2, ids.length - 1));
       const bubbles = shuffle(shown).map((letter) => h('button', {
         class: 'll1bubble',
@@ -457,7 +458,7 @@
         }
       }, letter));
       ctx.stage.append(
-        h('div', { class: 'row center' }, h('button', { class: 'btn big primary', type: 'button', onclick: () => playSound(id) }, 'Hear the sound')),
+        h('div', { class: 'row center' }, hear),
         h('div', { class: 'll1bubbles' }, ...bubbles));
     }, 'pop');
   }

@@ -128,7 +128,7 @@ test('home opens Foundation Skills from the first bell, not a sidebar tab', () =
   assert.match(html, /js\/foundation\/letters\.js/);
   assert.match(html, /foundation\/foundation\.css/);
   assert.match(sw, /js\/foundation\/letters\.js/);
-  assert.match(sw, /ir-20261124a/);
+  assert.match(sw, /ir-20261124b/);
   assert.match(sw, /foundation\/img\/foundations_sidebar\.jpg/);
   assert.match(teach, /#\/foundation/);
   assert.match(letters, /Teacher Slideshows/);
@@ -151,7 +151,7 @@ test('home opens Foundation Skills from the first bell, not a sidebar tab', () =
   assert.match(letters, /Team 1 Quick Sounds/);
   assert.match(letters, /Team 2 Quick Sounds/);
   assert.match(letters, /const SCORE_TRACKER = ''/);
-  assert.match(letters, /Teams 3-7 coming soon/);
+  assert.match(letters, /Teams 6-7 coming soon/);
   assert.equal(letters.includes('Learn_the_Letters_Group1'), false);
   assert.equal(letters.includes(' free'), false);
   assert.equal(sw.includes('Learn_the_Letters_Group1.pdf'), false);

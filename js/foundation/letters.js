@@ -835,6 +835,37 @@
       }
     };
   }
+  function teamPack(group) {
+    if (!group || group.id === 'g1') return teamOnePack();
+    const ids = group.letters.slice();
+    const art = {};
+    const pics = {};
+    ids.forEach((id) => {
+      art[id] = letterArt(id);
+      const word = pictureWord(id) || id;
+      pics[id] = art[id] ? [{ src: art[id], name: word }] : [];
+    });
+    const foils = [];
+    GROUPS.forEach((g) => { if (g.n < group.n) foils.push.apply(foils, g.letters); });
+    const words = BANK.filter((item) => item.g <= group.n).slice(0, 8).map((item) => ({
+      text: item.w,
+      src: art[lettersIn(item.w)[0]] || '',
+      parts: (typeof IRPhonemes !== 'undefined' && IRPhonemes.of) ? IRPhonemes.of(item.w) : lettersIn(item.w),
+      decoy: art[ids[0]] || ''
+    }));
+    return {
+      ids: ids,
+      art: art,
+      pics: pics,
+      words: words,
+      foils: foils,
+      onDone(id) {
+        IR.recordActivity('ll_' + group.id + '_d1_' + id, 3);
+        IR.touchStreak();
+        IR.save();
+      }
+    };
+  }
   function teamGames(group, letter) {
     const older = gamesFor(group).map((game) => ({
       id: game.id,
@@ -846,7 +877,7 @@
       doneIcon: 'star',
       href: '#/foundation/letters/' + group.id + '/' + game.id
     }));
-    if (group.id !== 'g1' || !IR.day1Flow) return older;
+    if (!/^(g1|g3|g4|g5)$/.test(group.id) || !IR.day1Flow) return older;
     const ten = IR.day1Flow.GAMES.map((game) => ({
       id: game.id,
       key: 'd1-' + game.id,
@@ -854,13 +885,13 @@
       img: TEAM1_DAY_ICON[game.id] || (game.faces ? '' : game.icon),
       imgs: null,
       alt: game.title,
-      done: IR.isDone('ll_g1_d1_' + game.id),
+      done: IR.isDone('ll_' + group.id + '_d1_' + game.id),
       doneIcon: 'star',
       go: () => {
         Snd.stop();
         location.hash = game.id === 'count'
-          ? '#/foundation/letters/g1/play/count' + (letter ? '/' + letter : '')
-          : '#/foundation/letters/g1/play/' + game.id;
+          ? '#/foundation/letters/' + group.id + '/play/count' + (letter ? '/' + letter : '')
+          : '#/foundation/letters/' + group.id + '/play/' + game.id;
       }
     }));
     return ten.concat(older);
@@ -2423,18 +2454,19 @@
   function groupPage(app, group) {
     const base = '#/foundation/letters/' + group.id;
     const nextId = group.letters.filter((id) => !letterDone(group, id))[0];
-    const lessons = group.id === 'g1'
+    const sameAsTeam1 = /^(g1|g3|g4|g5)$/.test(group.id);
+    const lessons = sameAsTeam1
       ? [
         {
           pick: true,
           tone: 'student',
           kicker: 'Student',
           title: 'Independent Lesson',
-          img: 'foundation/img/letters/team1_together.png',
-          alt: 'apple, mangrove, snake, and turtle',
-          note: 'a · m · s · t',
+          img: group.id === 'g1' ? 'foundation/img/letters/team1_together.png' : ('foundation/img/letters/team' + group.n + '_together.jpg'),
+          alt: group.letters.join(', '),
+          note: group.letters.join(' · '),
           goLabel: 'Open lesson',
-          go: () => { Snd.stop(); location.hash = base + '/flow/' + group.letters[0] + '/hear'; }
+          go: () => { Snd.stop(); location.hash = group.id === 'g1' ? base + '/flow/' + group.letters[0] + '/hear' : base + '/intro'; }
         }
       ]
       : group.letters.map((id) => ({
@@ -2456,11 +2488,13 @@
       slides: deck,
       slideTitle: teamTitle,
       slideNote: 'Slideshow',
-      games: group.id === 'g1' ? null : games,
-      gameRows: group.id === 'g1' ? team1GameRows(games) : null,
+      games: sameAsTeam1 ? null : games,
+      gameRows: sameAsTeam1 ? team1GameRows(games) : null,
       story: {
         title: 'Read It',
-        note: phrase,
+        note: (sameAsTeam1 && group.id !== 'g1' && program && program.lessons)
+          ? (((program.lessons.filter((row) => String(row.group).toLowerCase() === group.id)[0] || {}).sentences_today || [])[0] || phrase)
+          : phrase,
         big: true,
         img: group.id === 'g1' ? 'foundation/img/scenes/mat.jpg' : letterArt(group.letters[0]),
         alt: 'Read it',
@@ -2855,7 +2889,44 @@
         { label: 'Day 4', page: 93 },
         { label: 'Team check', page: 93 }
       ]
+    },
+    g3: {
+      images: 'materials/team3/slides/',
+      days: [
+        { label: 'Day 1', page: 1 },
+        { label: 'Day 2', page: 7 },
+        { label: 'Day 3', page: 13 },
+        { label: 'Day 4', page: 19 },
+        { label: 'Day 5', page: 25 }
+      ]
+    },
+    g4: {
+      images: 'materials/team4/slides/',
+      days: [
+        { label: 'Day 1', page: 1 },
+        { label: 'Day 2', page: 7 },
+        { label: 'Day 3', page: 13 },
+        { label: 'Day 4', page: 19 },
+        { label: 'Day 5', page: 25 }
+      ]
+    },
+    g5: {
+      images: 'materials/team5/slides/',
+      days: [
+        { label: 'Day 1', page: 1 },
+        { label: 'Day 2', page: 7 },
+        { label: 'Day 3', page: 13 },
+        { label: 'Day 4', page: 19 },
+        { label: 'Day 5', page: 25 }
+      ]
     }
+  };
+  const TEAM_NAME = {
+    g1: 'Team 1: m s a t',
+    g2: 'Team 2: p f i n',
+    g3: 'Team 3: o d c u',
+    g4: 'Team 4: g b e k',
+    g5: 'Team 5: h r l w'
   };
   function openSlides(team, page) {
     Snd.stop();
@@ -2863,7 +2934,13 @@
   }
   function teamTeacher(group) {
     const deck = SLIDES[group.id];
-    const sheets = { g1: 'foundation/printables/Team1_Quick_Sounds.pdf', g2: 'foundation/printables/Team2_Quick_Sounds.pdf' };
+    const sheets = {
+      g1: 'foundation/printables/Team1_Quick_Sounds.pdf',
+      g2: 'foundation/printables/Team2_Quick_Sounds.pdf',
+      g3: 'foundation/printables/Team3_Quick_Sounds.pdf',
+      g4: 'foundation/printables/Team4_Quick_Sounds.pdf',
+      g5: 'foundation/printables/Team5_Quick_Sounds.pdf'
+    };
     const files = sheets[group.id]
       ? [{ title: 'Daily practice sheets', href: sheets[group.id] }]
       : [];
@@ -2881,7 +2958,7 @@
       extraClass: 'fs-slidepanel',
       fill(body) {
         const cols = h('div', { class: 'fs-slidecols' });
-        [1, 2].forEach((n) => {
+        [1, 2, 3, 4, 5].forEach((n) => {
           const id = 'g' + n;
           const deck = SLIDES[id];
           const col = h('div', { class: 'fs-slidecol' });
@@ -2889,7 +2966,7 @@
           deck.days.forEach((day) => col.append(h('button', { class: 'drop-link fs-daylink', type: 'button', onclick: () => openSlides(id, day.page) }, day.label)));
           cols.append(col);
         });
-        body.append(cols, h('p', { class: 'drop-soon' }, 'Teams 3-7 coming soon'));
+        body.append(cols, h('p', { class: 'drop-soon' }, 'Teams 6-7 coming soon'));
       }
     });
   }
@@ -2918,7 +2995,10 @@
       fill(body) {
         body.append(
           pdfLink('Team 1 Quick Sounds', 'foundation/printables/Team1_Quick_Sounds.pdf'),
-          pdfLink('Team 2 Quick Sounds', 'foundation/printables/Team2_Quick_Sounds.pdf'));
+          pdfLink('Team 2 Quick Sounds', 'foundation/printables/Team2_Quick_Sounds.pdf'),
+          pdfLink('Team 3 Quick Sounds', 'foundation/printables/Team3_Quick_Sounds.pdf'),
+          pdfLink('Team 4 Quick Sounds', 'foundation/printables/Team4_Quick_Sounds.pdf'),
+          pdfLink('Team 5 Quick Sounds', 'foundation/printables/Team5_Quick_Sounds.pdf'));
         if (SCORE_TRACKER) body.append(h('a', { class: 'drop-link', href: SCORE_TRACKER, target: '_blank', rel: 'noopener' }, 'Score Tracker'));
         body.append(
           pdfLink('ng daily practice sheets', 'teachers/ng/Lesson3.1_ng_Daily_Practice_Sheets.pdf'),
@@ -2946,7 +3026,7 @@
     const requested = parseInt(page, 10);
     const start = Math.max(1, requested || 1);
     let onMenu = false;
-    const named = team === 'g1' ? 'Team 1: m s a t' : ('Team ' + team.slice(1) + ' slideshow');
+    const named = TEAM_NAME[team] || ('Team ' + team.slice(1) + ' slideshow');
     const counter = h('p', { class: 'fs-slidecount', 'aria-live': 'polite' }, 'Opening…');
     const canvas = h('canvas', { class: 'fs-slidecanvas' });
     const prev = h('button', { class: 'btn big', type: 'button' }, 'Back');
@@ -3055,7 +3135,7 @@
     const requested = parseInt(page, 10);
     const start = Math.max(1, requested || 1);
     let onMenu = false;
-    const named = team === 'g1' ? 'Team 1: m s a t' : ('Team ' + team.slice(1) + ' slideshow');
+    const named = TEAM_NAME[team] || ('Team ' + team.slice(1) + ' slideshow');
     const counter = h('p', { class: 'fs-slidecount', 'aria-live': 'polite' }, 'Opening…');
     const dayEl = h('p', { class: 'fs-slideday' }, '');
     const img = h('img', { class: 'fs-slideimg', alt: '' });
@@ -3152,7 +3232,7 @@
   }
   IR.letters = { GROUPS: GROUPS, LETTERS: LETTERS, artNeeded: ART_NEEDED, who: WHO };
   IR.lettersRoute = function (hash, app) {
-    const deck = hash.match(/^#\/foundation\/slides\/(g[12])(?:\/(\d+))?\/?$/);
+    const deck = hash.match(/^#\/foundation\/slides\/(g[1-5])(?:\/(\d+))?\/?$/);
     if (deck && SLIDES[deck[1]]) { slidesScreen(app, deck[1], deck[2]); return true; }
     if (/^#\/foundation\/letters\/?$/.test(hash)) { foundationPage(app); return true; }
     const lesson = /^#\/foundation\/letters\/(g[1-7])\/l\/(\d+)(?:\/([a-z0-9-]+))?\/?$/.exec(hash);
@@ -3189,19 +3269,19 @@
       introScreen(app, g);
       return true;
     }
-    const countLetter = /^#\/foundation\/letters\/g1\/play\/count\/([amst])\/?$/.exec(hash);
+    const countLetter = /^#\/foundation\/letters\/(g[1345])\/play\/count\/([a-z])\/?$/.exec(hash);
     if (countLetter && IR.day1Play) {
-      const g = groupById('g1');
-      if (!g || !groupOpen(g)) return false;
-      const pack = teamOnePack();
-      pack.countLetter = countLetter[1];
-      return IR.day1Play(app, 'count', pack, '#/foundation/letters/g1/lesson/' + countLetter[1]);
+      const g = groupById(countLetter[1]);
+      if (!g || !groupOpen(g) || g.letters.indexOf(countLetter[2]) < 0) return false;
+      const pack = teamPack(g);
+      pack.countLetter = countLetter[2];
+      return IR.day1Play(app, 'count', pack, '#/foundation/letters/' + g.id + '/lesson/' + countLetter[2]);
     }
-    const play10 = /^#\/foundation\/letters\/g1\/play\/([a-z]+)\/?$/.exec(hash);
+    const play10 = /^#\/foundation\/letters\/(g[1345])\/play\/([a-z]+)\/?$/.exec(hash);
     if (play10 && IR.day1Play) {
-      const g = groupById('g1');
+      const g = groupById(play10[1]);
       if (!g || !groupOpen(g)) return false;
-      return IR.day1Play(app, play10[1], teamOnePack(), '#/foundation/letters/g1');
+      return IR.day1Play(app, play10[2], teamPack(g), '#/foundation/letters/' + g.id);
     }
     const group = /^#\/foundation\/letters\/(g[1-7])\/?$/.exec(hash);
     if (group) {
