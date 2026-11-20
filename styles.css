@@ -2462,7 +2462,8 @@ button.tapcard:focus-visible{outline:4px solid #1F6FEB;outline-offset:3px}
 .skilllesson{margin:.35rem 0 0;font-family:Andika,sans-serif;font-size:1.15rem;font-weight:700}
 /* Sidebar: the Zip and Frill picture fills the card, and the column uses the open space. */
 @media (max-width:999px){
-  .gridhome .homefeature{padding:0 0 .95rem;overflow:hidden;gap:.7rem}
+  .gridhome .homefeature{padding:0 0 1.05rem;overflow:hidden;gap:.7rem}
+  .gridhome .homefeature .zfstart2{min-height:3.7rem;padding:.5rem .85rem .55rem;box-sizing:border-box}
   .gridhome .homefeature .zfpics{display:block;width:100%;margin:0;padding:0;background:transparent;border-radius:0}
   .gridhome .homefeature .homeart,.gridhome .homefeature .zfpics img.homeart{display:block;width:100%!important;max-width:100%!important;height:auto!important;max-height:none!important;aspect-ratio:16/9;object-fit:contain!important;object-position:center!important}
   .gridhome .homefeature .hfbody{padding:.15rem .9rem 0;gap:.55rem}
@@ -2471,13 +2472,13 @@ button.tapcard:focus-visible{outline:4px solid #1F6FEB;outline-offset:3px}
   .gridhome .homeside{position:sticky!important;top:var(--side-top,46px)!important;align-self:start;box-sizing:border-box;display:flex!important;flex-direction:column;justify-content:space-between;gap:16px;height:calc(100dvh - var(--side-top,46px) - 10px);max-height:calc(100dvh - var(--side-top,46px) - 10px)!important;overflow:hidden!important;padding-bottom:2px}
   .gridhome .homeside > .aboutbtn,.gridhome .homeside > .about-drop .aboutbtn{flex:none;margin-bottom:0!important;min-height:2.55rem!important;padding:.2rem .7rem!important;font-size:.95rem!important}
   .gridhome .homeside:has(.sidedrop.is-open){overflow-y:auto!important;justify-content:flex-start!important}
-  .gridhome .homeside .homefeature{flex:0 1 auto;min-height:0;display:flex;flex-direction:column;justify-content:flex-start;gap:.6rem;margin:0;padding:0 0 .7rem;overflow:hidden}
-  .gridhome .homeside .homefeature .zfpics{flex:0 0 auto;display:block;width:100%;margin:0;padding:0;background:transparent;border-radius:1.45rem 1.45rem 0 0;overflow:hidden}
-  .gridhome .homeside .homefeature .homeart,.gridhome .homeside .homefeature .zfpics img.homeart{display:block;width:100%!important;max-width:100%!important;height:auto!important;max-height:none!important;aspect-ratio:16/9;object-fit:contain!important;object-position:center!important;border-radius:0}
-  .gridhome .homeside .homefeature .hfbody{flex:none;padding:0 .75rem;gap:.5rem}
+  .gridhome .homeside .homefeature{flex:0 1 auto;min-height:0;display:flex;flex-direction:column;justify-content:flex-start;gap:.6rem;margin:0;padding:0 0 .85rem;overflow:hidden}
+  .gridhome .homeside .homefeature .zfpics{flex:0 1 auto;min-height:7.25rem;display:block;width:100%;margin:0;padding:0;background:transparent;border-radius:1.45rem 1.45rem 0 0;overflow:hidden;aspect-ratio:16/9}
+  .gridhome .homeside .homefeature .homeart,.gridhome .homeside .homefeature .zfpics img.homeart{display:block;width:100%!important;max-width:100%!important;height:100%!important;max-height:none!important;aspect-ratio:auto!important;object-fit:contain!important;object-position:center!important;border-radius:0}
+  .gridhome .homeside .homefeature .hfbody{flex:none;padding:0 .75rem .15rem;gap:.5rem}
   .gridhome .homeside .homefeature .zfline{font-size:clamp(.82rem,1.7vh,1.05rem);line-height:1.15;white-space:nowrap}
   .gridhome .homeside .homefeature .zfsub{font-size:clamp(.78rem,1.5vh,.95rem);line-height:1.25}
-  .gridhome .homeside .homefeature .zfstart2{min-height:2.7rem;padding:.28rem .6rem;box-shadow:0 4px 0 #085E5C}
+  .gridhome .homeside .homefeature .zfstart2{flex:none;height:auto;min-height:3.55rem;padding:.42rem .7rem .5rem;box-sizing:border-box;box-shadow:0 4px 0 #085E5C}
   .gridhome .homeside .hometabs{flex:none;width:100%;margin-top:0;gap:16px}
   .gridhome .homeside .hometabs .hometab{box-sizing:border-box;height:60px;min-height:60px;max-height:60px;padding:0 .65rem;gap:.45rem;font-size:.92rem}
   .gridhome .homeside .hometabs .hometab-name{font-size:.92rem;white-space:nowrap;line-height:1.1}
@@ -2485,8 +2486,8 @@ button.tapcard:focus-visible{outline:4px solid #1F6FEB;outline-offset:3px}
 }
 @media (min-width:1000px) and (max-height:680px){
   .gridhome .homeside{gap:14px}
-  .gridhome .homeside .homefeature{gap:.4rem;padding-bottom:.35rem}
-  .gridhome .homeside .homefeature .zfstart2{min-height:2.35rem;padding:.14rem .5rem}
+  .gridhome .homeside .homefeature{gap:.4rem;padding-bottom:.7rem}
+  .gridhome .homeside .homefeature .zfstart2{min-height:3.55rem;padding:.42rem .7rem .5rem}
   .gridhome .homeside .hometabs{gap:14px}
 }
 
