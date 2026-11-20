@@ -138,9 +138,16 @@
             if (!ctx.scr.ok()) return; await sleep(500); if (!ctx.scr.ok()) return;
             r++; if (r < SOR.spell.length) round(); else resolve();
           } else {
-            misses++; ctx.miss(); slotsEl.classList.add('almost'); status.textContent = 'Almost. Say it slowly and try again.';
-            await IR.tryAgain(A.word(R.word)); if (!ctx.scr.ok()) return;
-            slotsEl.classList.remove('almost'); b.slots.fill(null); if (misses >= 2) b.hint = 'l0'; b.locked = false; b.render();
+            ctx.miss();
+            await IR.coachTiles({
+              key: 'sor-spell-' + r, statusEl: status, list: SOR.spell, index: r,
+              replay: () => sayWord(R.word),
+              correctEl: () => {
+                const tile = tiles.find((t) => t.text === R.word.charAt(0));
+                return bankEl.querySelector('[data-id="' + (tile ? tile.id : '') + '"]');
+              },
+              clear: () => { slotsEl.classList.remove('almost'); b.hint = null; b.slots.fill(null); b.locked = false; b.render(); }
+            });
           }
         } });
         stage.append(h('div', { class: 'activity' }, h('div', { class: 'sor-head' }, h('span', { class: 'sor-tag' }, 'Hear it, spell it')), spk, slotsEl, bankEl, status));

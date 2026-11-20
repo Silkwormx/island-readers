@@ -143,7 +143,11 @@
       const grid = choiceGrid(shuffle(R.choices), async (w, b) => {
         if (locked || b.classList.contains('tried')) return;
         if (w === R.word) { locked = true; b.classList.add('right'); status.textContent = 'Yes! ' + w; await ding(w); if (!ctx.scr.ok()) return; r++; if (r >= rounds.length) ctx.finish(); else round(); }
-        else { ctx.miss(); b.classList.add('tried'); status.textContent = 'Listen again.'; await Snd.seq([P('listenagain'), W(R.word), SND(soundFor(R.word))], 180); }
+        else {
+          ctx.miss();
+          const stepName = await IR.coachMiss({ key: 'u6-hear-' + r, wrongEl: b, correctEl: () => grid.querySelector('[data-w="' + R.word + '"]'), statusEl: status, replay: () => say(R.word) });
+          if (stepName === 'model') IR.againLater(rounds, r);
+        }
       });
       st.append(h('div', { class: 'activity' }, spk, grid, status));
       IR.sayItem(ctx, P('tapword'), W(R.word));
@@ -188,7 +192,12 @@
           const ok = (id === 'yes') === it.yes;
           reveal();
           if (ok) { locked = true; b.classList.add('right'); status.textContent = 'Yes. ' + it.w + '.'; await ding(it.w); if (!ctx.scr.ok()) return; r++; if (r >= items.length) ctx.finish(); else round(); }
-          else { ctx.miss(); b.classList.add('tried'); status.textContent = 'Not this time. The word is ' + it.w + '.'; await Snd.seq([P('listenagain'), W(it.w)], 160); }
+          else {
+            ctx.miss();
+            const yesBtn = grid.querySelector('[data-w="' + (it.yes ? 'yes' : 'no') + '"]');
+            const stepName = await IR.coachMiss({ key: 'u6-bell-' + r, wrongEl: b, correctEl: yesBtn, statusEl: status, replay: () => say(it.w) });
+            if (stepName === 'model') IR.againLater(items, r);
+          }
         });
         grid.append(b);
       });
@@ -209,7 +218,7 @@
       st.append(h('div', { class: 'activity' },
         h('div', { class: 'chainwho' }, h('img', { src: 'img/frill.webp', alt: '' }), h('b', null, 'Frill')),
         h('p', { class: 'bigprompt' }, 'This is ' + ex.base + '. Listen: ' + ex.word + '.'),
-        h('p', { class: 'bigword' }, colorEnd(ex.base), ' + ', h('span', { class: 'chunk', style: 'color:' + ENDCOL[ex.end] }, LAB[ex.end]), ' = ', colorEnd(ex.word)),
+        h('p', { class: 'bigword' }, colorEnd(ex.base), ' + ?'),
         h('button', { class: 'btn big primary', type: 'button', onclick: () => round() }, 'Your turn', icon('next'))));
       Snd.seq([W(ex.base), W(ex.word)], 280);
     }
@@ -228,9 +237,13 @@
             await Snd.seq([A.sfx.ding, W(R.word), SND(R.sound)], 140);
             if (!ctx.scr.ok()) return; r++; if (r >= rounds.length) ctx.finish(); else round();
           } else {
-            misses++; ctx.miss(); b.classList.add('tried');
-            if (misses < 2) { status.textContent = 'Listen again.'; await Snd.seq([P('listenagain'), W(R.word), SND(R.sound)], 160); }
-            else { status.textContent = 'The ending is ' + LAB[R.end] + '. ' + R.base + ' makes ' + R.word + '.'; await Snd.seq([W(R.word), SND(R.sound)], 160); }
+            ctx.miss();
+            await IR.coachTiles({
+              key: 'u6-build-' + r, wrongEl: b, statusEl: status, list: rounds, index: r,
+              replay: () => say(R.word),
+              model: () => say(R.word),
+              correctEl: () => grid.querySelector('[data-w="' + R.end + '"]')
+            });
           }
         });
         grid.append(b);

@@ -258,6 +258,72 @@
   const ding = (w) => Snd.seq(w ? [A.sfx.ding, A.word(w)] : [A.sfx.ding], 90);
   const tryAgain = (w) => Snd.seq(w ? [A.sfx.tryagain, w] : [A.sfx.tryagain], 150);
 
+  /* One calm miss path for every game. 1 try again, 2 a hint, 3 Zip models and the child taps the answer. */
+  const coachCounts = new Map();
+  function coachReduce() {
+    try { return window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) { return false; }
+  }
+  function coachCorrect(el) {
+    if (!el) return null;
+    return typeof el === 'function' ? el() : el;
+  }
+  function coachMiss(opts) {
+    opts = opts || {};
+    const key = opts.key || 'round';
+    const wrong = opts.wrongEl;
+    const n = (coachCounts.get(key) || 0) + 1;
+    coachCounts.set(key, n);
+    const correct = coachCorrect(opts.correctEl);
+    const status = opts.statusEl;
+    if (wrong && wrong.classList) wrong.classList.add('tried', 'coach-grey', 'coach-off');
+    const reduce = coachReduce();
+    function glow(hold) {
+      if (!correct || !correct.classList) return;
+      correct.classList.add(hold ? 'coach-model' : 'coach-glow');
+      if (!hold && !reduce) setTimeout(() => { if (correct.classList) correct.classList.remove('coach-glow'); }, 900);
+      if (!hold && reduce) correct.classList.remove('coach-glow');
+    }
+    if (n === 1) {
+      if (status) status.textContent = 'Try again.';
+      return Snd.play(A.sfx.tryagain).then(() => 'retry');
+    }
+    if (n === 2) {
+      if (status) status.textContent = 'Try again.';
+      glow(false);
+      return Snd.play(A.sfx.tryagain).then(() => (opts.replay ? opts.replay() : null)).then(() => 'hint');
+    }
+    if (correct && correct.classList) correct.classList.add('coach-model');
+    if (status) status.textContent = 'My turn.';
+    const play = opts.model || opts.replay;
+    return Snd.play(A.sfx.tryagain).then(() => (play ? play() : null)).then(() => {
+      if (status) status.textContent = 'Your turn.';
+      return 'model';
+    });
+  }
+  function coachReset(key) { if (key) coachCounts.delete(key); }
+  async function coachTiles(opts) {
+    opts = opts || {};
+    if (opts.clear) opts.clear();
+    const step = await coachMiss({
+      key: opts.key,
+      wrongEl: opts.wrongEl,
+      correctEl: opts.correctEl,
+      statusEl: opts.statusEl,
+      replay: opts.replay,
+      model: opts.model || opts.replay
+    });
+    if (step === 'model' && opts.list) againLater(opts.list, opts.index);
+    return step;
+  }
+  function againLater(list, index) {
+    if (!list || index < 0 || index >= list.length) return;
+    const item = list[index];
+    const copy = item && typeof item === 'object' ? Object.assign({ _later: 1 }, item) : item;
+    if (index >= list.length - 1) { list.push(copy); return; }
+    const gap = 2 + (index % 2);
+    list.splice(Math.min(list.length, index + 1 + gap), 0, copy);
+  }
+
   /* screen token so async flows stop when the child leaves */
   let screenId = 0;
   function newScreen() { screenId++; Snd.stop(); const id = screenId; return { ok: () => id === screenId }; }
@@ -273,7 +339,7 @@
     return b;
   }
 
-  window.IR = { celebration, ding, tryAgain, D, S: () => S, save, resetAll, load, h, $, $$, sleep, shuffle, pick, colorWord, icon, ICON, CHUNK_COLORS, kidLesson,
+  window.IR = { celebration, ding, tryAgain, coachMiss, coachTiles, coachReset, againLater, D, S: () => S, save, resetAll, load, h, $, $$, sleep, shuffle, pick, colorWord, icon, ICON, CHUNK_COLORS, kidLesson,
     touchStreak, streakInfo, recordActivity, isDone, activityStars, progressRecord, totalStars, applySettings, Snd, A, sayWord, newScreen, speakerBtn, hasPhoneme, playPhoneme,
     DEMO_UNLOCK_ALL: true };
 })();

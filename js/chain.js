@@ -74,9 +74,8 @@
       await sleep(200);
       if (my !== token || !ctx.scr.ok()) return;
       const next = boxes[idx] || boxes[boxes.length - 1];
-      if (next) { next.textContent = b[idx] || b[b.length - 1]; next.classList.add('glow'); next.classList.remove('empty'); }
-      sayLine.textContent = 'Listen: ' + model.to + '. What changed?';
-      if (model.audioB) await Snd.play(model.audioB);
+      if (next) next.classList.add('coach-glow');
+      sayLine.textContent = 'Your turn. What changed?';
     }
 
     function round() {
@@ -142,26 +141,17 @@
           await sleep(500);
           if (ctx.scr.ok() && my === token) round();
         } else {
-          misses++;
           if (ctx.miss) ctx.miss();
-          btn.classList.add('tried');
-          if (misses < 2) {
-            status.textContent = 'Not yet. Look at the highlighted box.';
-            if (opts.tryAgain) await opts.tryAgain(to);
-            btn.dataset.hit = '';
-          } else {
-            pool.dataset.lock = '1';
-            slotEls[idx].textContent = need;
-            slotEls[idx].classList.remove('empty');
-            slotEls[idx].classList.add('right');
-            status.textContent = from + ' makes ' + to + '.';
-            [...pool.children].forEach((el) => { if (el.dataset.t === need) el.classList.add('hint'); });
-            await say(to);
-            if (!ctx.scr.ok() || my !== token) return;
-            r++;
-            await sleep(900);
-            if (ctx.scr.ok() && my === token) round();
-          }
+          const correct = [...pool.children].find((el) => el.dataset.t === need);
+          const stepName = await IR.coachMiss({
+            key: 'chain-' + r,
+            wrongEl: btn,
+            correctEl: correct,
+            statusEl: status,
+            replay: () => (opts.tryAgain ? opts.tryAgain(to) : say(to))
+          });
+          btn.dataset.hit = '';
+          if (stepName === 'model') IR.againLater(words, r);
         }
       }
     }

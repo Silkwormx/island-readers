@@ -220,7 +220,12 @@
         if (ok) { locked = true; el.classList.add('right'); buttons.forEach((b) => { if (b.el !== el) b.el.classList.add('fade'); }); status.textContent = 'Yes! ' + R.word;
           await IR.ding(); await say(R.word); if (!ctx.scr.ok()) return; await sleep(400); if (!ctx.scr.ok()) return;
           got.add(r); if (got.size >= rounds.length) { onAll ? onAll() : ctx.finish(); } else { r = (r + 1) % rounds.length; while (got.has(r)) r = (r + 1) % rounds.length; round(); } }
-        else { misses++; ctx.miss(); el.classList.add('tried'); status.textContent = 'Not that one. Listen again.'; await IR.tryAgain(AU.w(R.word)); if (misses >= 2) buttons.forEach((b) => { if (b.ok) b.el.classList.add('hint'); }); }
+        else {
+          ctx.miss();
+          const correct = buttons.find((b) => b.ok);
+          const stepName = await IR.coachMiss({ key: 'nk-pick-' + r, wrongEl: el, correctEl: correct && correct.el, statusEl: status, replay: () => say(R.word) });
+          if (stepName === 'model') IR.againLater(rounds, r);
+        }
       }));
       const spk = speakerBtn(() => say(R.word), 'Hear the word'); spk.classList.add('huge');
       st.append(h('div', { class: 'activity' }, spk, body, status)); say(R.word); };

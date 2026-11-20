@@ -1538,15 +1538,17 @@
       draw(round, host, async (ok, btn) => {
         if (locked || my !== token) return;
         if (!ok) {
-          btn.classList.add('tried');
           streak = 0;
           ctx.miss();
-          status.textContent = 'Try again.';
-          const at = i + 3;
-          if (at < rounds.length) rounds[at] = round;
-          else if (rounds.length < 14) rounds.push(round);
-          await Snd.play(A.sfx.tryagain);
-          if (round.replay && ctx.scr.ok() && my === token) round.replay();
+          const correct = host.querySelector('.llchoice[data-yes="1"]');
+          const stepName = await IR.coachMiss({
+            key: 'll-' + i,
+            wrongEl: btn,
+            correctEl: correct,
+            statusEl: status,
+            replay: () => (round.replay ? round.replay() : null)
+          });
+          if (stepName === 'model') IR.againLater(rounds, i);
           return;
         }
         locked = true;
