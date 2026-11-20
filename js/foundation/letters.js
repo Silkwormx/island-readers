@@ -2935,12 +2935,14 @@
     const canvas = h('canvas', { class: 'fs-slidecanvas' });
     const prev = h('button', { class: 'btn big', type: 'button' }, 'Back');
     const next = h('button', { class: 'btn big next', type: 'button' }, 'Next');
+    const jumps = h('div', { class: 'fs-dayjumps' });
     const stage = h('div', { class: 'fs-slidestage' }, canvas);
     const view = h('div', { class: 'screen fs-slideview' },
       h('header', { class: 'uA-top' },
         IR.ui.pageNav('#/foundation/letters/' + team),
         h('h1', { class: 'uA-title' }, named),
         counter),
+      jumps,
       stage,
       h('div', { class: 'lesson-nav fs-slidenav' }, prev, next));
     app.append(view);
@@ -2948,6 +2950,27 @@
     let pageNum = start;
     let wanted = start;
     let rendering = false;
+    const dayList = (deck.days || []).slice();
+    dayList.forEach((day) => {
+      jumps.append(h('button', {
+        class: 'btn fs-dayjump',
+        type: 'button',
+        'data-page': String(day.page),
+        'data-label': day.label,
+        onclick: () => { wanted = day.page; paint(); }
+      }, day.label));
+    });
+    function markDay() {
+      const numbered = dayList.filter((day) => /^Day\s+\d+/i.test(day.label));
+      let active = null;
+      numbered.forEach((day) => {
+        if (day.page <= pageNum && (!active || day.page >= active.page)) active = day;
+      });
+      jumps.querySelectorAll('button').forEach((button) => {
+        const same = active && button.dataset.page === String(active.page) && (/^Day\s+\d+/i.test(button.dataset.label) ? button.dataset.label === active.label : pageNum === Number(button.dataset.page));
+        button.classList.toggle('on', !!same);
+      });
+    }
     function paint() {
       if (!pdfDoc || rendering) return;
       rendering = true;
@@ -2967,6 +2990,7 @@
         counter.textContent = pageNum + ' / ' + pdfDoc.numPages;
         prev.disabled = pageNum <= 1;
         next.disabled = pageNum >= pdfDoc.numPages;
+        markDay();
         rendering = false;
         if (wanted !== pageNum) paint();
       }).catch(() => {

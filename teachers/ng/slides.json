@@ -2,6 +2,13 @@
  "id": "ng",
  "title": "Lesson 4.1 \u00b7 ng week slides",
  "count": 74,
+ "days": [
+  {"day": 1, "label": "Day 1", "start": 1, "end": 21},
+  {"day": 2, "label": "Day 2", "start": 22, "end": 41},
+  {"day": 3, "label": "Day 3", "start": 42, "end": 54},
+  {"day": 4, "label": "Day 4", "start": 55, "end": 64},
+  {"day": 5, "label": "Day 5", "start": 65, "end": 74}
+ ],
  "slides": [
   "teachers/ng/slides/01.jpg",
   "teachers/ng/slides/02.jpg",

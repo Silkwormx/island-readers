@@ -721,6 +721,13 @@
     app.append(h('div', { class: 'screen trailscreen unitpage unitA orangeunit stepage ngpreview' },
       h('header', { class: 'uA-top' }, pageNav('#/home'), h('h1', { class: 'uA-title' }, h('small', null, 'Unit 4 Lesson 1'), 'ng'), teacherBox({
         slides: '#/teachers/slides/ng',
+        days: [
+          { label: 'Day 1', start: 1, end: 21 },
+          { label: 'Day 2', start: 22, end: 41 },
+          { label: 'Day 3', start: 42, end: 54 },
+          { label: 'Day 4', start: 55, end: 64 },
+          { label: 'Day 5', start: 65, end: 74 }
+        ],
         files: [
           { title: 'Daily practice sheets', href: 'teachers/ng/Lesson3.1_ng_Daily_Practice_Sheets.pdf' },
           { title: 'Teacher pack', href: 'teachers/ng/Lesson3.1_ng_Teacher_Pack.pdf' }
@@ -1081,8 +1088,9 @@
       const title = lesson.title
         ? h('h3', null, lesson.title)
         : h('h3', null, h('span', { class: 'tmsound' }, lesson.s), ' ' + lesson.lesson);
+      const dayNote = lesson.days ? (lesson.days === 1 ? '1 day' : lesson.days + ' days') : '';
       const slide = lesson.board
-        ? h('button', { class: 'btn big tmlink tmslide', type: 'button', onclick: () => { Snd.stop(); location.hash = lesson.board; } }, 'Slideshow')
+        ? h('button', { class: 'btn big tmlink tmslide', type: 'button', onclick: () => { Snd.stop(); location.hash = lesson.board; } }, 'Slideshow', dayNote ? h('span', { class: 'tmday' }, dayNote) : null)
         : h('span', { class: 'btn big tmlink is-soon', 'aria-disabled': 'true' }, 'Slideshow');
       let print = h('span', { class: 'btn big tmlink is-soon', 'aria-disabled': 'true' }, 'Printables');
       let list = null;
@@ -1102,8 +1110,8 @@
     const UNITS = [
       { name: 'Meet the Teams', sounds: [
         { title: 'Meet the Teams', board: '#/foundation' },
-        { title: 'Team 1: m s a t', board: '#/foundation/slides/g1', daily: 'foundation/printables/Team1_Quick_Sounds.pdf' },
-        { title: 'Team 2: p f i n', board: '#/foundation/slides/g2', daily: 'foundation/printables/Team2_Quick_Sounds.pdf' },
+        { title: 'Team 1: m s a t', board: '#/foundation/slides/g1', days: 5, daily: 'foundation/printables/Team1_Quick_Sounds.pdf' },
+        { title: 'Team 2: p f i n', board: '#/foundation/slides/g2', days: 4, daily: 'foundation/printables/Team2_Quick_Sounds.pdf' },
         { title: 'Team 3: o d c u' },
         { title: 'Team 4: g b e k' },
         { title: 'Team 5: h r l w' },
@@ -1111,12 +1119,12 @@
         { title: 'Team 7: v z' }
       ] },
       { name: 'Unit 4 \u00b7 Glued Sounds', sounds: [
-        { s: 'ng', lesson: 'Lesson 4.1', days: 3, board: '#/teachers/slides/ng', slides: 'teachers/ng/Lesson3.1_ng_Slide_Presentation.pptx', daily: 'teachers/ng/Lesson3.1_ng_Daily_Practice_Sheets.pdf', pack: 'teachers/ng/Lesson3.1_ng_Teacher_Pack.pdf' },
+        { s: 'ng', lesson: 'Lesson 4.1', days: 5, board: '#/teachers/slides/ng', slides: 'teachers/ng/Lesson3.1_ng_Slide_Presentation.pptx', daily: 'teachers/ng/Lesson3.1_ng_Daily_Practice_Sheets.pdf', pack: 'teachers/ng/Lesson3.1_ng_Teacher_Pack.pdf' },
         { s: 'nk', lesson: 'Lesson 4.2', days: 3, board: '#/teachers/slides/nk', slides: 'teachers/nk/Lesson3.2_nk_Slide_Presentation.pptx', daily: 'teachers/nk/Lesson3.2_nk_Daily_Practice_Sheets.pdf', pack: 'teachers/nk/Lesson3.2_nk_Teacher_Pack.pdf' }
       ] },
       { name: 'Unit 5 \u00b7 Silent e', sounds: [
-        { s: 'a_e', lesson: 'Lesson 5.1', board: '#/teachers/slides/u5', slides: 'materials/unit5/Island_Readers_Magic_e_Lesson.pptx', daily: 'materials/unit5/Unit5_Teacher_Led_Student_Sheets.pdf', pack: 'materials/unit5/Lesson5.1_Teacher_Led_Checks.pdf' },
-        { s: 'e', lesson: 'Lesson 5.2', board: '#/teachers/slides/u5', slides: 'materials/unit5/Island_Readers_Magic_e_Lesson.pptx', daily: 'materials/unit5/Unit5_Teacher_Led_Student_Sheets.pdf', pack: 'materials/unit5/Lesson5.2_Teacher_Led_Checks.pdf' }
+        { s: 'a_e', lesson: 'Lesson 5.1', days: 1, board: '#/teachers/slides/u5', slides: 'materials/unit5/Island_Readers_Magic_e_Lesson.pptx', daily: 'materials/unit5/Unit5_Teacher_Led_Student_Sheets.pdf', pack: 'materials/unit5/Lesson5.1_Teacher_Led_Checks.pdf' },
+        { s: 'e', lesson: 'Lesson 5.2', days: 1, board: '#/teachers/slides/u5', slides: 'materials/unit5/Island_Readers_Magic_e_Lesson.pptx', daily: 'materials/unit5/Unit5_Teacher_Led_Student_Sheets.pdf', pack: 'materials/unit5/Lesson5.2_Teacher_Led_Checks.pdf' }
       ] },
       { name: 'Unit 6 \u00b7 Endings', sounds: [
         { s: '-s -es', lesson: 'Lesson 6.1' },
@@ -1133,7 +1141,25 @@
       h('p', { class: 'tmlead' }, 'In course order. Slideshow opens the deck. Printables opens the files.'),
       ...sections)));
   }
-  /* In-app week-deck slideshow for smartboard (ng / nk). Keeps PPTX download on the teachers page. */
+  /* Day jumps for the in-app decks. Same ranges as teachers/<id>/slides.json. */
+  IR.deckDays = {
+    ng: [
+      { label: 'Day 1', start: 1, end: 21 },
+      { label: 'Day 2', start: 22, end: 41 },
+      { label: 'Day 3', start: 42, end: 54 },
+      { label: 'Day 4', start: 55, end: 64 },
+      { label: 'Day 5', start: 65, end: 74 }
+    ],
+    nk: [
+      { label: 'Day 1', start: 1, end: 20 },
+      { label: 'Day 2', start: 21, end: 42 },
+      { label: 'Day 3', start: 43, end: 60 }
+    ],
+    u5: [
+      { label: 'Day 1', start: 1, end: 20 }
+    ]
+  };
+  /* In-app week-deck slideshow for smartboard (ng / nk / unit 5). Keeps PPTX download on the teachers page. */
   function slidesViewer(sound) {
     IR.newScreen();
     const root = h('div', { class: 'screen slidescreen', tabindex: '0' });
@@ -1142,19 +1168,36 @@
     const counter = h('div', { class: 'slide-count', 'aria-live': 'polite' }, '');
     const prev = h('button', { class: 'slide-nav slide-prev', type: 'button', 'aria-label': 'Previous slide' }, '\u25C0');
     const next = h('button', { class: 'slide-nav slide-next', type: 'button', 'aria-label': 'Next slide' }, '\u25B6');
+    const jumps = h('div', { class: 'slide-days' });
     const top = h('div', { class: 'slide-top' },
       pageNav('#/teachers'),
       h('h1', { class: 'slide-title' }, sound + ' week slides'),
       counter);
     stage.append(prev, img, next);
-    root.append(top, stage);
+    root.append(top, jumps, stage);
     app.append(root);
-    let slides = []; let i = 0; let keyHandler = null;
+    let slides = []; let i = 0; let days = (IR.deckDays && IR.deckDays[sound]) || []; let keyHandler = null;
+    function paintDays() {
+      jumps.innerHTML = '';
+      days.forEach((day) => {
+        jumps.append(h('button', {
+          class: 'slide-day',
+          type: 'button',
+          'data-start': String(day.start),
+          onclick: () => { i = Math.max(0, day.start - 1); show(); }
+        }, day.label));
+      });
+    }
     function show() {
       if (!slides.length) { img.removeAttribute('src'); counter.textContent = 'No slides'; prev.disabled = true; next.disabled = true; return; }
       img.src = slides[i];
-      counter.textContent = (i + 1) + ' / ' + slides.length;
+      const n = i + 1;
+      const day = days.filter((item) => n >= item.start && n <= item.end)[0];
+      counter.textContent = n + ' / ' + slides.length;
       prev.disabled = i <= 0; next.disabled = i >= slides.length - 1;
+      jumps.querySelectorAll('button').forEach((button) => {
+        button.classList.toggle('on', !!(day && button.dataset.start === String(day.start)));
+      });
       root.focus({ preventScroll: true });
     }
     function go(d) { if (!slides.length) return; i = Math.max(0, Math.min(slides.length - 1, i + d)); show(); }
@@ -1171,9 +1214,20 @@
     const oldCleanup = IR._slideCleanup; if (typeof oldCleanup === 'function') oldCleanup();
     IR._slideCleanup = () => { window.removeEventListener('keydown', keyHandler); };
     fetch('teachers/' + sound + '/slides.json').then((r) => r.json()).then((man) => {
-      slides = man.slides || []; i = 0; show();
+      slides = man.slides || [];
+      if (man.days && man.days.length) {
+        days = man.days.map((day) => ({
+          label: day.label || ('Day ' + day.day),
+          start: day.start,
+          end: day.end
+        }));
+      }
+      i = 0;
+      paintDays();
+      show();
       if (man.title) top.querySelector('.slide-title').textContent = man.title;
     }).catch(() => { counter.textContent = 'Could not load slides'; });
+    paintDays();
     show();
   }
   /* Same color names as the home bell cards (TILES). Hex values match the card swatches. */

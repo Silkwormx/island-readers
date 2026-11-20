@@ -30,6 +30,7 @@
         : 'materials/unit5/Lesson5.1_Teacher_Led_Checks.pdf';
     return {
       slides: '#/teachers/slides/u5',
+      days: (IR.deckDays && IR.deckDays.u5) || [{ label: 'Day 1' }],
       files: [
         { title: 'Daily practice sheets', href: 'materials/unit5/Unit5_Teacher_Led_Student_Sheets.pdf' },
         { title: 'Teacher pack', href: pack }

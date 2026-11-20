@@ -2116,6 +2116,9 @@ a.btn.tmlink.tmslide:visited{color:#fff}
 .slide-top .slide-back{color:#fff;border-color:rgba(255,255,255,.35)}
 .slide-title{font-size:1.15rem;margin:0;flex:1;font-weight:700;letter-spacing:.01em}
 .slide-count{font-size:1.2rem;font-weight:700;min-width:5.5rem;text-align:right}
+.slide-days{display:flex;flex-wrap:wrap;justify-content:center;gap:.4rem;padding:.45rem .7rem .55rem;background:#1a1a1a;flex:none}
+.slide-day{min-height:44px;padding:.2rem .9rem;border-radius:999px;border:3px solid #F28C00;background:#fff;color:#C95A10;font:700 1rem Andika,sans-serif;cursor:pointer}
+.slide-day.on{background:#F28C00;color:#fff;border-color:#C95A10}
 .slide-top .gear{margin-left:.25rem;background:#fff}
 .slide-stage{position:relative;flex:1;min-height:0;display:flex;align-items:center;justify-content:center;padding:0 4.5rem}
 .slide-img{max-width:100%;max-height:100%;object-fit:contain;background:#000;border-radius:.4rem;box-shadow:0 8px 40px rgba(0,0,0,.45)}
