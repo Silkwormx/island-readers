@@ -628,11 +628,19 @@
     if (count > 1) return count + ' days';
     return 'Slideshow';
   }
+  function soonBox(name) {
+    return h('button', {
+      class: 'teachbox teachslides is-soon',
+      type: 'button',
+      disabled: true,
+      'aria-disabled': 'true',
+      'aria-label': name + '. Coming soon'
+    }, h('span', { class: 'teachslides-name' }, name), h('span', { class: 'teachslides-sub' }, 'Coming soon'));
+  }
   function teacherBox(plan) {
     plan = plan || {};
     const files = plan.files || [];
     const deck = plan.slides || '';
-    if (!files.length && !deck && !plan.pdf) return null;
     const wrap = h('div', { class: 'teachcorner' });
     if (deck || plan.pdf) {
       const sub = h('span', { class: 'teachslides-sub' }, slideDays(plan));
@@ -647,8 +655,11 @@
         else window.open(plan.pdf, '_blank', 'noopener');
       });
       wrap.append(slides);
+    } else wrap.append(soonBox('Teacher Slides'));
+    if (!files.length) {
+      wrap.append(soonBox('Printables'));
+      return wrap;
     }
-    if (!files.length) return wrap;
     const list = h('div', { class: 'teachpop teachfiles', hidden: '' },
       ...files.map((file) => h('a', { class: 'teachlink', href: file.href, target: '_blank', rel: 'noopener' }, file.title)));
     const print = h('button', { class: 'teachbox teachprint', type: 'button', 'aria-expanded': 'false' }, 'Printables');
