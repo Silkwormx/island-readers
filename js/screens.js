@@ -658,16 +658,11 @@
   function prepGame(item) {
     return Object.assign({ doneIcon: 'star' }, item);
   }
-  function gameBucket(item) {
-    const blob = (String(item.id || '') + ' ' + String(item.key || '') + ' ' + String(item.title || '')).toLowerCase();
-    if (/\b(sentence|fish|check|bridge)\b/.test(blob) || /\bread\b/.test(blob)) return 'Read';
-    if (/\b(build|chain|scramble|spell|sort|flash|ears|rhyme|feed|ending|word)\b/.test(blob)) return 'Words';
-    return 'Sounds';
-  }
-  function bucketGames(games) {
-    const rows = { Sounds: [], Words: [], Read: [] };
-    games.forEach((item) => { rows[gameBucket(item)].push(item); });
-    return ['Sounds', 'Words', 'Read'].filter((label) => rows[label].length).map((label) => ({ label: label, items: rows[label] }));
+  function gamesOf(plan) {
+    const listed = plan.gameRows
+      ? plan.gameRows.reduce((list, row) => list.concat(row.items || []), [])
+      : (plan.games || []);
+    return listed.map(prepGame);
   }
   function kidShell(name, on) {
     return h('div', { class: 'ngshellwrap' },
@@ -679,14 +674,10 @@
     const labels = plan.labels || ['Lesson', 'Games', 'Story'];
     let lessons = (plan.lesson || []).filter((item) => item && item.tone !== 'teachled').map(prepLesson);
     if (!lessons.length && plan.choose) lessons = plan.choose.map(prepLesson);
-    const rows = plan.gameRows
-      ? plan.gameRows.map((row) => ({ label: row.label, items: (row.items || []).map(prepGame) })).filter((row) => row.items.length)
-      : bucketGames((plan.games || []).map(prepGame));
+    const games = gamesOf(plan);
     const stories = ((plan.stories && plan.stories.length) ? plan.stories : (plan.story ? [plan.story] : []))
       .filter(Boolean)
       .map((item) => Object.assign({ big: true, doneIcon: 'star', note: item.note || 'Story Time' }, item));
-    const games = rows.reduce((list, row) => list.concat(row.items), []);
-    let gameNo = 0;
     return h('div', { class: 'ngpath' },
       plan.before || null,
       h('div', { class: 'ngshells', role: 'group', 'aria-label': labels.join(', ') },
@@ -696,14 +687,10 @@
       lessons.length ? h('section', { class: 'ngstep' },
         stepHead(1, labels[0]),
         h('div', { class: 'lessonrow' }, ...lessons.map((item) => lessonTab(item)))) : null,
-      rows.length ? h('section', { class: 'ngstep' },
+      games.length ? h('section', { class: 'ngstep' },
         stepHead(2, labels[1]),
-        h('div', { class: 'gamerows' }, ...rows.map((row) => h('div', { class: 'gamerow' },
-          h('p', { class: 'gamerowlab' }, row.label),
-          h('ol', { class: 'gamegrid' + (plan.gameClass || '') }, ...row.items.map((item) => {
-            gameNo += 1;
-            return h('li', null, itemCard(item, gameNo));
-          })))))) : null,
+        h('div', { class: 'gamerows' }, h('div', { class: 'gamerow' },
+          h('ol', { class: 'gamegrid' + (plan.gameClass || '') }, ...games.map((item, i) => h('li', null, itemCard(item, i + 1))))))) : null,
       stories.length ? h('section', { class: 'ngstep' },
         stepHead(3, labels[2]),
         h('div', { class: 'ngstories' }, ...stories.map((item) => itemCard(item)))) : null);
