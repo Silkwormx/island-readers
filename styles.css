@@ -3248,3 +3248,183 @@ html.teach .u5step .sentact .tile.word{font-size:clamp(1.7rem,4vh,2.4rem)!import
   .u5menu:not(.fsteam1) .gamegrid:not(.pics) .gameico,
   .u5menu:not(.fsteam1) .gamegrid:not(.pics) .gamepair{width:3rem;height:3rem;min-width:3rem;min-height:3rem;max-width:3rem;max-height:3rem}
 }
+
+/* Team 1 desktop: the page scrolls. Cards keep a real height so rows cannot overlap. */
+@media (min-width:1100px){
+  html:has(.fsteam1),
+  body:has(.fsteam1),
+  body:has(.fsteam1) #app{
+    height:auto!important;
+    min-height:100%;
+    overflow:auto!important;
+  }
+  .fsteam1.u5menu.unitpage.unitA{
+    position:relative!important;
+    inset:auto!important;
+    height:auto!important;
+    min-height:100%;
+    overflow:visible!important;
+  }
+  .fsteam1.u5menu .modebar,
+  .fsteam1.u5menu .stepflow,
+  .fsteam1.u5menu .stepblock,
+  .fsteam1.u5menu .stepblock:has(.gamegrid),
+  .fsteam1 .gamerows,
+  .fsteam1 .gamerow{
+    flex:none;
+    height:auto;
+    min-height:0;
+    max-height:none;
+    overflow:visible;
+  }
+  .fsteam1.u5menu .stepflow{
+    display:flex;
+    flex-direction:column;
+    grid-template-rows:none;
+    gap:.75rem;
+  }
+  .fsteam1 .gamerows{display:flex;flex-direction:column;gap:.85rem}
+  .fsteam1 .gamerow{display:flex;flex-direction:column;gap:.4rem}
+  .fsteam1 .gamerowlab{display:block;flex:none;margin:0;font-size:.95rem;line-height:1.2;font-weight:700;color:#6A6256}
+  .fsteam1.stepage .gamerow .gamegrid{
+    display:grid;
+    flex:none;
+    height:auto;
+    min-height:0;
+    grid-template-columns:repeat(5,minmax(0,1fr));
+    grid-template-rows:none;
+    grid-auto-rows:minmax(10.6rem,auto);
+    align-content:start;
+    gap:.55rem;
+  }
+  .fsteam1.stepage .gamegrid:not(.pics) > li{height:auto;min-height:10.6rem}
+  .fsteam1.stepage .gamegrid:not(.pics) .gamecard{
+    height:auto;
+    min-height:10.6rem;
+    max-height:none;
+    overflow:visible;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+  }
+  .fsteam1.stepage .gamegrid:not(.pics) .gamepic,
+  .fsteam1.stepage .gamegrid:not(.pics) .gameico,
+  .fsteam1.stepage .gamegrid:not(.pics) .gamepair{
+    display:flex;
+    width:3.5rem;
+    height:3.5rem;
+    min-width:3.5rem;
+    min-height:3.5rem;
+    max-width:3.5rem;
+    max-height:3.5rem;
+    object-fit:contain;
+  }
+  .fsteam1.stepage .gamegrid:not(.pics) .gametxt{
+    height:auto;
+    min-height:2.4em;
+    max-height:none;
+    overflow:visible;
+  }
+  .fsteam1.stepage .gamegrid:not(.pics) .gametxt b{
+    display:block;
+    overflow:visible;
+    -webkit-line-clamp:unset;
+    white-space:normal;
+  }
+  .fsteam1.stepage .lessonrow .lessontab.student{
+    height:auto;
+    max-height:none;
+    overflow:hidden;
+  }
+  .fsteam1.stepage .lessonrow .lessontab.student .uimg{
+    height:auto;
+    min-height:0;
+    max-height:none;
+    overflow:visible;
+    align-items:center;
+    justify-content:center;
+    padding:.45rem .6rem 0;
+  }
+  .fsteam1.stepage .lessonrow .lessontab.student .uimg img{
+    display:block;
+    width:100%;
+    max-width:100%;
+    height:auto;
+    max-height:none;
+    object-fit:contain;
+    object-position:center;
+  }
+  html:has(.u5menu.stepage),
+  body:has(.u5menu.stepage),
+  body:has(.u5menu.stepage) #app{
+    height:auto!important;
+    min-height:100%;
+    overflow:auto!important;
+  }
+  .u5menu.stepage.unitpage.unitA:not(.fsteam1){
+    position:relative!important;
+    inset:auto!important;
+    height:auto!important;
+    min-height:100%;
+    overflow:visible!important;
+  }
+  .u5menu.stepage:not(.fsteam1) .modebar,
+  .u5menu.stepage:not(.fsteam1) .stepflow,
+  .u5menu.stepage:not(.fsteam1) .stepblock,
+  .u5menu.stepage:not(.fsteam1) .stepblock:has(.gamegrid){
+    flex:none;
+    height:auto;
+    min-height:0;
+    max-height:none;
+    overflow:visible;
+  }
+  .u5menu.stepage:not(.fsteam1) .stepflow{
+    display:flex;
+    flex-direction:column;
+    grid-template-rows:none;
+    gap:.75rem;
+  }
+  .u5menu.stepage:not(.fsteam1) .stepblock > .gamegrid:not(.pics){
+    flex:none;
+    height:auto;
+    min-height:0;
+    grid-template-columns:repeat(5,minmax(0,1fr));
+    grid-template-rows:none;
+    grid-auto-rows:minmax(10.6rem,auto);
+    gap:.55rem;
+    align-content:start;
+  }
+  .u5menu.stepage:not(.fsteam1) .gamegrid:not(.pics) > li{height:auto;min-height:10.6rem}
+  .u5menu.stepage:not(.fsteam1) .gamegrid:not(.pics) .gamecard{
+    height:auto;
+    min-height:10.6rem;
+    max-height:none;
+    overflow:visible;
+    padding:1.55rem .45rem .55rem;
+  }
+  .u5menu.stepage:not(.fsteam1) .gamegrid:not(.pics) .gamepic,
+  .u5menu.stepage:not(.fsteam1) .gamegrid:not(.pics) .gamepair{
+    display:flex;
+    width:3.5rem;
+    height:3.5rem;
+    min-width:3.5rem;
+    min-height:3.5rem;
+    max-width:3.5rem;
+    max-height:3.5rem;
+    object-fit:contain;
+  }
+  .u5menu.stepage:not(.fsteam1) .gamegrid:not(.pics) .gamecard:has(.gamepic) .gameico,
+  .u5menu.stepage:not(.fsteam1) .gamegrid:not(.pics) .gamecard:has(.gamepair) .gameico{display:none}
+  .u5menu.stepage:not(.fsteam1) .gamegrid:not(.pics) .gametxt{
+    height:auto;
+    min-height:2.4em;
+    max-height:none;
+    overflow:visible;
+  }
+  .u5menu.stepage:not(.fsteam1) .gamegrid:not(.pics) .gametxt b{
+    display:block;
+    overflow:visible;
+    -webkit-line-clamp:unset;
+  }
+}
