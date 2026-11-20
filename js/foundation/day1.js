@@ -80,9 +80,12 @@
       } catch (e) { resolve(); }
     });
   }
-  function playSound(key) {
-    if (IR.playPhoneme) return IR.playPhoneme(key);
-    return Promise.resolve(false);
+  function playSound(key, el) {
+    const played = IR.playPhoneme ? IR.playPhoneme(key) : Promise.resolve(false);
+    return Promise.resolve(played).then((ok) => {
+      if (ok === false && el && IR.soundSoon) IR.soundSoon(el, key);
+      return ok;
+    });
   }
   function yes() { return Snd.play(A.sfx.ding); }
   function miss(el) {
@@ -222,16 +225,17 @@
 
   function team(ctx) {
     ctx.progress(0.05);
-    ctx.setInstr('Tap the name. Then tap the sound three times.');
+    ctx.setInstr('Tap the sound three times.');
     const need = { a: 0, m: 0 };
     const named = { a: false, m: false };
     function bump() {
       ctx.progress((need.a + need.m + (named.a ? 1 : 0) + (named.m ? 1 : 0)) / 8);
       if (named.a && named.m && need.a >= 3 && need.m >= 3) setTimeout(() => go('meet'), 400);
     }
-    const one = (id, sound, nameSay) => h('div', { class: 'll1letter' },
-      h('button', { class: 'll1name', type: 'button', onclick: (e) => { e.currentTarget.classList.add('lit'); named[id] = true; say(nameSay); bump(); } },
-        h('span', null, 'My name is: ' + id)),
+    const one = (id, sound) => {
+      named[id] = true;
+      return h('div', { class: 'll1letter' },
+      h('span', { class: 'll1name is-quiet' }, h('span', null, 'My name is: ' + id)),
       h('div', { class: 'll1sound' },
         h('p', null, 'My sound is ' + sound),
         h('div', { class: 'll1taps' }, ...[1, 2, 3].map(() => h('button', {
@@ -240,12 +244,13 @@
             if (e.currentTarget.classList.contains('lit')) return;
             e.currentTarget.classList.add('lit');
             need[id] += 1;
-            playSound(id);
+            playSound(id, e.currentTarget);
             yes();
             bump();
           }
         }, id)))));
-    ctx.stage.append(h('div', { class: 'll1pair' }, one('a', '/a/', 'ay'), one('m', '/m/', 'em')));
+    };
+    ctx.stage.append(h('div', { class: 'll1pair' }, one('a', '/a/'), one('m', '/m/')));
   }
 
   function meet(ctx, which) {
@@ -259,14 +264,14 @@
       const L = letters[i];
       let taps = 0;
       ctx.progress((i + 0.15) / letters.length);
-      ctx.setInstr('Tap the name. Then tap each sound.');
+      ctx.setInstr('Tap each sound.');
       const circles = [0, 1, 2].map(() => h('button', {
         class: 'll1circle', type: 'button',
         onclick: (e) => {
           if (e.currentTarget.classList.contains('lit')) return;
           e.currentTarget.classList.add('lit');
           taps += 1;
-          playSound(L.id);
+          playSound(L.id, e.currentTarget);
           ctx.progress((i + taps / 3) / letters.length);
           if (taps < 3) return;
           yes();
@@ -276,7 +281,7 @@
       }, L.id));
       ctx.stage.innerHTML = '';
       ctx.stage.append(h('div', { class: 'll1meet' },
-        h('button', { class: 'll1name', type: 'button', onclick: () => say(L.name) }, h('span', null, 'My name is: ' + L.id)),
+        h('span', { class: 'll1name is-quiet' }, h('span', null, 'My name is: ' + L.id)),
         h('div', { class: 'll1mouth' },
           h('span', { class: 'll1mouthico', html: MOUTH }),
           h('p', null, 'My sound is ' + L.sound),

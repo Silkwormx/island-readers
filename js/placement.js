@@ -19,8 +19,13 @@
     10: { unit: 8, name: 'Tricky Sounds' }
   };
   /* [word, madeUp?] Each group uses only its pattern plus earlier ones. */
+  const LETTERS = [
+    { id: 'm', team: 1 }, { id: 'a', team: 1 }, { id: 'p', team: 2 }, { id: 'f', team: 2 }
+  ];
+  const CVC = [
+    { w: 'mat', team: 1 }, { w: 'sat', team: 1 }, { w: 'map', team: 2 }, { w: 'pin', team: 2 }
+  ];
   const GROUPS = [
-    { n: 0, name: 'short vowels', words: [['map'], ['sit'], ['hug'], ['jop', 1], ['ved', 1]] },
     { n: 1, name: SKILL[1], words: [['stop'], ['frog'], ['plum'], ['blim', 1], ['snad', 1]] },
     { n: 2, name: SKILL[2], words: [['shop'], ['chin'], ['math'], ['thib', 1], ['shem', 1]] },
     { n: 3, name: SKILL[3], words: [['ring'], ['sunk'], ['long'], ['pank', 1], ['drung', 1]] },
@@ -70,36 +75,68 @@
           prev ? h('button', { class: 'btn big', type: 'button', onclick: () => result(prev, null) }, 'See last result: Unit ' + prev) : null));
     }
 
+    function marks(label, onYes, onNo) {
+      return h('div', { class: 'plc-marks' },
+        h('button', { class: 'btn big plc-no', type: 'button', 'aria-label': 'Not yet: ' + label, onclick: onNo }, h('span', { 'aria-hidden': 'true' }, '\u2717'), h('span', null, 'Not yet')),
+        h('button', { class: 'btn big primary plc-yes', type: 'button', 'aria-label': 'Read right: ' + label, onclick: onYes }, h('span', { 'aria-hidden': 'true' }, '\u2713'), h('span', null, 'Read right')));
+    }
+    function teamFor(misses) {
+      return misses.some((item) => item.team === 1) ? 1 : 2;
+    }
     function run() {
       stopSpeech();
-      let g = 0, i = 0, right = 0, wrong = 0; const passed = [];
+      let phase = 'letters', i = 0, right = 0, wrong = 0;
+      const missed = [];
+      let g = 0; const passed = [];
       const next = () => {
+        if (phase === 'letters' || phase === 'cvc') {
+          const list = phase === 'letters' ? LETTERS : CVC;
+          if (i === list.length || wrong >= 2) {
+            if (wrong >= 2) return teamResult(teamFor(missed));
+            phase = phase === 'letters' ? 'cvc' : 'bells';
+            i = 0; right = 0; wrong = 0; missed.length = 0;
+            return next();
+          }
+          const item = list[i];
+          const label = phase === 'letters' ? item.id : item.w;
+          const mark = (ok) => { if (ok) right++; else { wrong++; missed.push(item); } i++; next(); };
+          show(h('p', { class: 'plc-prog' }, (phase === 'letters' ? 'Letter sounds' : 'Read the word') + ' \u00b7 ' + (i + 1) + ' of ' + list.length),
+            h('div', { class: 'plc-word', lang: 'en' }, label),
+            h('p', { class: 'plc-small plc-made' }, phase === 'letters' ? 'Say the sound. Not the letter name.' : '\u00a0'),
+            marks(label, () => mark(true), () => mark(false)));
+          return;
+        }
         const G = GROUPS[g];
         if (i === 5 || wrong >= 2) {
           if (right >= 4) { passed.push(G); g++; i = 0; right = 0; wrong = 0; if (g === GROUPS.length) return result(10, passed, true); }
-          else return result(Math.max(G.n, 1), passed, false, G.n === 0);
+          else return result(Math.max(G.n, 1), passed, false);
         }
         const H = GROUPS[g]; const [w, made] = H.words[i];
         const mark = (ok) => { if (ok) right++; else wrong++; i++; next(); };
-        show(h('p', { class: 'plc-prog' }, (H.n === 0 ? 'Warm-up: ' + H.name : 'Bell ' + H.n + ': ' + H.name) + ' \u00b7 word ' + (i + 1) + ' of 5'),
+        show(h('p', { class: 'plc-prog' }, 'Bell ' + H.n + ': ' + H.name + ' \u00b7 word ' + (i + 1) + ' of 5'),
           h('div', { class: 'plc-dots', 'aria-hidden': 'true' }, ...GROUPS.map((x, k) => h('span', { class: k < g ? 'on' : k === g ? 'cur' : '' }))),
           h('div', { class: 'plc-word', lang: 'en' }, w),
           h('p', { class: 'plc-small plc-made' }, made ? 'Made-up word: check the sounds, not the meaning.' : '\u00a0'),
-          h('div', { class: 'plc-marks' },
-            h('button', { class: 'btn big plc-no', type: 'button', 'aria-label': 'Not yet: ' + w, onclick: () => mark(false) }, h('span', { 'aria-hidden': 'true' }, '\u2717'), h('span', null, 'Not yet')),
-            h('button', { class: 'btn big primary plc-yes', type: 'button', 'aria-label': 'Read right: ' + w, onclick: () => mark(true) }, h('span', { 'aria-hidden': 'true' }, '\u2713'), h('span', null, 'Read right'))));
+          marks(w, () => mark(true), () => mark(false)));
       };
       next();
     }
+    function teamResult(team) {
+      try { localStorage.setItem('ir_start_team', String(team)); } catch (e) { /* storage blocked */ }
+      show(h('h1', null, 'Start with Team ' + team),
+        h('p', { class: 'plc-summary' }, h('b', null, 'For the grown-up: '), 'Letter sounds and short words come first. Team ' + team + ' is the right place to start.'),
+        h('div', { class: 'plc-actions' },
+          h('button', { class: 'btn big primary', type: 'button', onclick: () => { stopSpeech(); location.hash = '#/foundation/letters/g' + team; } }, 'Go to Team ' + team),
+          h('button', { class: 'btn big', type: 'button', onclick: () => run() }, 'Retake the check')));
+    }
 
-    function result(start, passed, all, cvc) {
+    function result(start, passed, all) {
       try { localStorage.setItem(KEY, String(start)); } catch (e) { /* storage blocked */ }
       let summary = '';
       if (passed) {
         const known = passed.map((x) => x.name);
         const startBell = all ? { unit: 22, name: 'Big Endings' } : (BELL[start] || { unit: start, name: SKILL[start] });
-        summary = cvc ? 'Short vowel words need more practice first. Start with short-vowel review, then the Blends bell.'
-          : all ? 'Read every group. Start at Big Endings to review, or pick any bell.'
+        summary = all ? 'Read every group. Start at Big Endings to review, or pick any bell.'
           : (known.length ? 'Knows ' + list(known) + '. ' : '') + 'Start at ' + startBell.name + '.';
       }
       const bells = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((n) => {
@@ -111,12 +148,11 @@
             st === 'rung' ? h('span', { class: 'plc-rung' }, '\u2713 rung') : null),
           h('span', { class: 'plc-bname' }, bell.name));
       });
-      show(h('h1', null, cvc ? 'Let\u2019s warm up first' : 'Your first bell'),
+      show(h('h1', null, 'Your first bell'),
         summary ? h('p', { class: 'plc-summary' }, h('b', null, 'For the grown-up: '), summary) : null,
-        cvc ? h('p', { class: 'plc-small' }, 'Island Readers starts with blends, so it expects short vowel words like map and hug to be easy. A short-vowel review is not built into the app yet. Practise reading short words together, then start Unit 1 and retake this check.') : null,
         h('div', { class: 'plc-map' }, ...bells),
         h('div', { class: 'plc-actions' },
-          h('button', { class: 'btn big primary', type: 'button', onclick: () => { stopSpeech(); openUnit(start); } }, h('span', { 'aria-hidden': 'true' }, '\u{1F514}'), h('span', null, cvc ? 'Go to Unit 1' : 'Go to this bell')),
+          h('button', { class: 'btn big primary', type: 'button', onclick: () => { stopSpeech(); openUnit(start); } }, h('span', { 'aria-hidden': 'true' }, '\u{1F514}'), h('span', null, 'Go to this bell')),
           h('button', { class: 'btn big', type: 'button', onclick: () => run() }, 'Retake the check')));
     }
     intro();

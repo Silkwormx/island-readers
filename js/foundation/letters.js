@@ -559,6 +559,16 @@
     if (/^(m{2,}|s{2,}|t{2,}|n{2,}|f{2,}|l{2,}|r{2,}|v{2,}|z{2,})$/.test(raw)) return raw.charAt(0);
     return '';
   }
+  /* a and I are words. Other one-letter tokens are sounds and stay out of the spoken line. */
+  function speakLinePlan(text) {
+    const words = String(text || '').split(/\s+/).filter(Boolean);
+    const spoken = [];
+    words.forEach((word, i) => {
+      const raw = String(word).replace(/[^A-Za-z]/g, '');
+      if (/^(a|A|I)$/.test(raw) || !soundKey(word)) spoken.push(i);
+    });
+    return { words: words, spoken: spoken };
+  }
   function speakPlain(text) {
     return new Promise((resolve) => {
       try {
@@ -587,7 +597,8 @@
     return playSounds().then(() => speakPlain(spoken));
   }
   function speakLine(host, text) {
-    const words = String(text || '').split(/\s+/).filter(Boolean);
+    const plan = speakLinePlan(text);
+    const words = plan.words;
     host.innerHTML = '';
     const spans = words.map((word, i) => {
       if (i) host.append(document.createTextNode(' '));
@@ -598,7 +609,7 @@
     const mark = (n) => spans.forEach((span, i) => span.classList.toggle('on', i === n));
     return new Promise((resolve) => {
       if (!window.speechSynthesis || !words.length) { resolve(false); return; }
-      const said = words.filter((word) => !soundKey(word)).join(' ');
+      const said = plan.spoken.map((i) => words[i]).join(' ');
       if (!said) { resolve(false); return; }
       const u = new SpeechSynthesisUtterance(said);
       u.lang = 'en-US';
@@ -608,7 +619,7 @@
       u.onboundary = (ev) => {
         if (ev.name && ev.name !== 'word') return;
         edged = true;
-        mark(Math.min(at, spans.length - 1));
+        mark(plan.spoken[Math.min(at, plan.spoken.length - 1)]);
         at += 1;
       };
       let done = false;
@@ -621,11 +632,11 @@
       setTimeout(() => {
         if (edged || done) return;
         let i = 0;
-        mark(0);
+        mark(plan.spoken[0]);
         const timer = setInterval(() => {
           i += 1;
-          if (done || i >= spans.length) { clearInterval(timer); return; }
-          mark(i);
+          if (done || i >= plan.spoken.length) { clearInterval(timer); return; }
+          mark(plan.spoken[i]);
         }, slice);
       }, 70);
       setTimeout(fin, Math.max(1600, words.length * slice + 500));
@@ -648,11 +659,26 @@
     if (!src) return Promise.resolve(false);
     return Snd.play(src);
   }
+  function soundSoon(el, letter) {
+    const root = el && el.closest ? (el.closest('.activity, .fs-kidintro, .fs-intro, .fs-chip, .ll1letter') || el) : el;
+    const card = root && root.querySelector ? root.querySelector('.llcard, .llplain, .fs-kidart, b') : null;
+    [card, el].forEach((node) => { if (node && node.classList) node.classList.add('sound-soon'); });
+    const host = el && el.append ? el : card;
+    if (host && host.append && !host.querySelector('.sound-soon-note')) host.append(h('small', { class: 'sound-soon-note' }, 'sound coming soon'));
+    if (el && el.setAttribute) el.setAttribute('aria-label', (letter || 'This letter') + ', sound coming soon');
+  }
   IR.playPhoneme = playPhoneme;
-  function hear(L, kind) {
+  IR.soundSoon = soundSoon;
+  IR.speakLinePlan = speakLinePlan;
+  function hear(L, kind, el) {
     if (!L) return Promise.resolve(false);
-    if (kind !== 'name' && PHONEME_SRC[L.id]) return playPhoneme(L.id);
+    if (kind === 'name') return Promise.resolve(false);
+    if (PHONEME_SRC[L.id]) return playPhoneme(L.id);
+    soundSoon(el, L.id);
     return Promise.resolve(false);
+  }
+  function nameTag(id) {
+    return h('span', { class: 'fs-nametag is-quiet' }, h('span', { class: 'fs-nametext' }, 'My name is: ' + id));
   }
   function formation(L) {
     const marks = L.strokes.map((s, i) => {
@@ -863,12 +889,7 @@
       stage.innerHTML = '';
       stage.append(h('div', { class: 'fs-kidintro' },
         src ? h('img', { class: 'fs-kidart', src: src, alt: '' }) : letterCardStep(L, 'picture'),
-        h('button', {
-          class: 'fs-nametag',
-          type: 'button',
-          'aria-label': 'My name is: ' + L.id,
-          onclick: () => hear(L, 'name')
-        }, h('span', { class: 'fs-nametext' }, 'My name is: ' + L.id)),
+        nameTag(L.id),
         h('div', { class: 'll1mouth' },
           h('span', { class: 'll1mouthico', html: MOUTH }),
           h('p', null, 'My sound is ' + L.sound))));
@@ -896,12 +917,7 @@
     const src = artUrl(id);
     return h('div', { class: 'fs-chip' },
       src ? h('img', { class: 'fs-kidart', src: src, alt: '' }) : letterCardStep(L, 'picture'),
-      h('button', {
-        class: 'fs-nametag',
-        type: 'button',
-        'aria-label': 'My name is: ' + id,
-        onclick: () => hear(L, 'name')
-      }, h('span', { class: 'fs-nametext' }, 'My name is: ' + id)),
+      nameTag(id),
       h('div', { class: 'll1mouth' },
         h('span', { class: 'll1mouthico', html: MOUTH }),
         h('p', null, 'My sound is ' + (L ? L.sound : ''))));
@@ -1118,7 +1134,7 @@
           h('p', { class: 'llwho' }, (info && info.character) || WHO[L.id] || ''),
           h('p', { class: 'llchant' }, (info && info.chant) || mem.chant),
           h('p', { class: 'llaction' }, 'Action: ' + ((info && info.action) || mem.action)),
-          h('button', { class: 'btn primary', type: 'button', onclick: () => hear(L, 'sound') }, icon('speaker'), 'Hear the sound'))));
+          h('button', { class: 'btn primary', type: 'button', onclick: (e) => hear(L, 'sound', e.currentTarget) }, icon('speaker'), 'Hear the sound'))));
       ctx.setNextLabel(i < letters.length - 1 ? 'Next letter' : 'Done');
       if (ctx.armReveal) ctx.armReveal(L.id);
       hear(L, 'sound');
@@ -1213,7 +1229,7 @@
       ctx.stage.append(h('div', { class: 'activity llgame llsay' },
         h('p', { class: 'llsayprompt' }, 'Say it from the letter.'),
         h('b', { class: 'llplain ' + look.className }, look.text),
-        h('button', { class: 'btn primary', type: 'button', onclick: () => hear(L, 'sound') }, icon('speaker'), 'Hear the sound')));
+        h('button', { class: 'btn primary', type: 'button', onclick: (e) => hear(L, 'sound', e.currentTarget) }, icon('speaker'), 'Hear the sound')));
       ctx.setNextLabel(i < letters.length - 1 ? 'Next letter' : 'Done');
       if (ctx.armReveal) ctx.armReveal(L.id);
     }
@@ -2649,7 +2665,7 @@
       h('div', { class: 'llrow' }, ...ids.map((id) => {
         const letter = BY[id];
         if (!letter) return null;
-        return h('button', { class: 'lltap', type: 'button', onclick: () => hear(letter, 'sound') }, letterCardStep(letter, 'plain'));
+        return h('button', { class: 'lltap', type: 'button', onclick: (e) => hear(letter, 'sound', e.currentTarget) }, letterCardStep(letter, 'plain'));
       })));
     if (words.length) stage.append(h('div', { class: 'llrow' }, ...words.map((word) => h('button', {
       class: 'lltap llprint',
@@ -2671,12 +2687,7 @@
     }, String(n)));
     return h('div', { class: 'fs-intro' },
       letter ? letterCardStep(letter, 'picture') : h('b', { class: 'llplain' }, id),
-      h('button', {
-        class: 'fs-nametag',
-        type: 'button',
-        'aria-label': 'My name is: ' + id,
-        onclick: () => { if (letter) hear(letter, 'name'); }
-      },
+      h('span', { class: 'fs-nametag is-quiet' },
         h('span', { class: 'fs-nameband', 'aria-hidden': 'true' }),
         h('span', { class: 'fs-nametext' }, 'My name is: ' + id)),
       h('div', { class: 'fs-soundbubble' },

@@ -127,7 +127,9 @@
     open.addEventListener('change', () => { S.settings.openAll = open.checked; IR.save(); });
     const timerOff = h('input', { type: 'checkbox', id: 'opt-sort-timer' }); timerOff.checked = !!S.settings.sortTimerOff;
     timerOff.addEventListener('change', () => { S.settings.sortTimerOff = timerOff.checked; IR.save(); });
-    const reset = h('button', { class: 'btn small warn', type: 'button' }, 'Reset all progress');
+    const kidsBtn = h('button', { class: 'btn small', type: 'button' }, 'Student progress');
+    kidsBtn.addEventListener('click', () => openKidReport());
+    const reset = h('button', { class: 'btn small warn', type: 'button' }, 'Reset this child');
     reset.addEventListener('click', () => {
       if (reset.dataset.sure) { IR.resetAll(); modalRoot.innerHTML = ''; location.hash = '#/home'; route(); toast('Progress cleared.'); }
       else { reset.dataset.sure = 1; reset.textContent = 'Tap again to clear everything'; }
@@ -145,7 +147,7 @@
       h('label', { class: 'opt' }, calm, ' Calm motion (fish hold still, no wiggles)'),
       h('label', { class: 'opt' }, open, ' Open every lesson and the check (for testing)'),
       h('label', { class: 'opt' }, timerOff, ' Turn off the sorting timer'),
-      h('div', { class: 'row' }, hearNg, inst, reset),
+      h('div', { class: 'row' }, kidsBtn, hearNg, inst, reset),
       IR.chest && IR.chest.checklist ? IR.chest.checklist() : null,
       h('p', { class: 'small' }, 'The app cannot listen to a child read. Reading aloud stays with a grown-up. Check the isolated ng sound by ear before sharing.')));
   }
@@ -266,6 +268,47 @@
     return h('button', { class: 'zfstart2', type: 'button', 'aria-label': 'Continue. ' + go.sub, onclick: () => { Snd.stop(); location.hash = go.href; } },
       h('span', { class: 'zfst' }, h('b', null, 'Continue'), h('small', null, go.sub)));
   }
+  function openKidPicker() {
+    const pics = IR.KID_PICS || {};
+    let pic = 'zip';
+    const name = h('input', { class: 'kidname', type: 'text', maxlength: '16', placeholder: 'First name', 'aria-label': 'First name' });
+    const choices = h('div', { class: 'kidpics' }, ...Object.keys(pics).map((key) => {
+      const b = h('button', { class: 'kidpic' + (key === pic ? ' on' : ''), type: 'button', 'aria-label': key }, h('img', { src: IR.kidPic(key), alt: '' }));
+      b.addEventListener('click', () => {
+        pic = key;
+        [...choices.children].forEach((el) => el.classList.toggle('on', el === b));
+      });
+      return b;
+    }));
+    const add = h('button', { class: 'btn big primary', type: 'button' }, 'Add this child');
+    add.addEventListener('click', () => {
+      if (!IR.addKid(name.value, pic)) { toast('Type a first name.'); return; }
+      modalRoot.innerHTML = '';
+      location.hash = '#/home';
+      route();
+    });
+    const list = IR.kidList().map((kid) => h('button', {
+      class: 'btn big' + (kid.active ? ' primary' : ''),
+      type: 'button',
+      onclick: () => { IR.useKid(kid.id); modalRoot.innerHTML = ''; location.hash = '#/home'; route(); }
+    }, h('img', { src: IR.kidPic(kid.pic), alt: '', width: 36, height: 36 }), ' ' + kid.name));
+    openModal(h('div', { class: 'kidpick' }, h('h2', null, 'Who is reading?'), ...list, h('h3', null, 'Add a child'), name, choices, add));
+  }
+  function kidChip() {
+    const cur = IR.kidList().filter((kid) => kid.active)[0] || { name: 'My reader', pic: 'zip' };
+    return h('button', { class: 'kidchip', type: 'button', 'aria-label': 'Switch child. ' + cur.name, onclick: openKidPicker },
+      h('img', { src: IR.kidPic(cur.pic), alt: '' }), h('span', null, cur.name));
+  }
+  function openKidReport() {
+    const rows = IR.kidList().map((kid) => h('p', null, kid.name + ': ' + IR.kidActivityCount(kid.id) + ' done'));
+    const dl = h('button', { class: 'btn big', type: 'button' }, 'Download CSV');
+    dl.addEventListener('click', () => {
+      const blob = new Blob([IR.progressCsv()], { type: 'text/csv' });
+      const a = h('a', { href: URL.createObjectURL(blob), download: 'island-readers-progress.csv' });
+      document.body.append(a); a.click(); a.remove();
+    });
+    openModal(h('div', null, h('h2', null, 'Student progress'), ...rows, dl));
+  }
   function homeScreen() {
     const S = IR.S(); IR.newScreen();
     const complete = islandDone('i3'); const earned = gemsEarned(); const nEarned = earned.filter(Boolean).length; const nx = gemNext();
@@ -360,7 +403,7 @@
     const tabs = h('nav', { class: 'hometabs', 'aria-label': 'More places' },
       trailBtn, sightDrop, tab('#/find', 'Find It', 'search'));
     /* Nov 6 2026: full-width home feature (approved banyan scene), then About + the hero beside the unit grid */
-    const banner = h('header', { class: 'hbanner' }, h('h1', null, 'Island Readers'),
+    const banner = h('header', { class: 'hbanner' }, h('h1', null, 'Island Readers'), kidChip(),
       h('div', { class: 'grownwrap' }, h('span', { class: 'grownlab' }, 'Parent and Teacher Materials'), IR.ui.gearButton()));
     /* Read-aloud for the hero text: HOME_INTRO_AUDIO recording if set, else speechSynthesis. Tap again to stop. */
     function readAloudBtn() {
@@ -675,6 +718,7 @@
     app.append(h('div', { class: 'screen trailscreen unitpage unitA orangeunit stepage' },
       h('header', { class: 'uA-top' }, pageNav('#/home'), h('h1', { class: 'uA-title' }, h('small', null, 'Unit 4 Lesson 1'), 'ng'), teacherBox({
         slides: '#/teachers/slides/ng',
+        days: [1, 2, 3, 4, 5].map((n) => ({ label: 'Day ' + n })),
         files: [
           { title: 'Daily practice sheets', href: 'teachers/ng/Lesson3.1_ng_Daily_Practice_Sheets.pdf' },
           { title: 'Teacher pack', href: 'teachers/ng/Lesson3.1_ng_Teacher_Pack.pdf' }
@@ -1027,8 +1071,9 @@
       const title = lesson.title
         ? h('h3', null, lesson.title)
         : h('h3', null, h('span', { class: 'tmsound' }, lesson.s), ' ' + lesson.lesson);
+      const dayText = lesson.days ? slideDays({ days: lesson.days }) : '';
       const slide = lesson.board
-        ? h('button', { class: 'btn big tmlink tmslide', type: 'button', onclick: () => { Snd.stop(); location.hash = lesson.board; } }, 'Slideshow')
+        ? h('button', { class: 'btn big tmlink tmslide', type: 'button', onclick: () => { Snd.stop(); location.hash = lesson.board; } }, 'Slideshow', dayText ? h('span', { class: 'tmdays' }, dayText) : null)
         : h('span', { class: 'btn big tmlink is-soon', 'aria-disabled': 'true' }, 'Slideshow');
       let print = h('span', { class: 'btn big tmlink is-soon', 'aria-disabled': 'true' }, 'Printables');
       let list = null;
@@ -1057,12 +1102,12 @@
         { title: 'Team 7: v z' }
       ] },
       { name: 'Unit 4 \u00b7 Glued Sounds', sounds: [
-        { s: 'ng', lesson: 'Lesson 4.1', days: 3, board: '#/teachers/slides/ng', slides: 'teachers/ng/Lesson3.1_ng_Slide_Presentation.pptx', daily: 'teachers/ng/Lesson3.1_ng_Daily_Practice_Sheets.pdf', pack: 'teachers/ng/Lesson3.1_ng_Teacher_Pack.pdf' },
-        { s: 'nk', lesson: 'Lesson 4.2', days: 3, board: '#/teachers/slides/nk', slides: 'teachers/nk/Lesson3.2_nk_Slide_Presentation.pptx', daily: 'teachers/nk/Lesson3.2_nk_Daily_Practice_Sheets.pdf', pack: 'teachers/nk/Lesson3.2_nk_Teacher_Pack.pdf' }
+        { s: 'ng', lesson: 'Lesson 4.1', days: [1, 2, 3, 4, 5].map((n) => ({ label: 'Day ' + n })), board: '#/teachers/slides/ng', slides: 'teachers/ng/Lesson3.1_ng_Week_Slides_v2.pptx', daily: 'teachers/ng/Lesson3.1_ng_Daily_Practice_Sheets.pdf', pack: 'teachers/ng/Lesson3.1_ng_Teacher_Pack.pdf' },
+        { s: 'nk', lesson: 'Lesson 4.2', days: [1, 2, 3].map((n) => ({ label: 'Day ' + n })), board: '#/teachers/slides/nk', slides: 'teachers/nk/Lesson3.2_nk_Slide_Presentation.pptx', daily: 'teachers/nk/Lesson3.2_nk_Daily_Practice_Sheets.pdf', pack: 'teachers/nk/Lesson3.2_nk_Teacher_Pack.pdf' }
       ] },
       { name: 'Unit 5 \u00b7 Silent e', sounds: [
         { s: 'a_e', lesson: 'Lesson 5.1', board: '#/teachers/slides/u5', slides: 'materials/unit5/Island_Readers_Magic_e_Lesson.pptx', daily: 'materials/unit5/Unit5_Teacher_Led_Student_Sheets.pdf', pack: 'materials/unit5/Lesson5.1_Teacher_Led_Checks.pdf' },
-        { s: 'e', lesson: 'Lesson 5.2', board: '#/teachers/slides/u5', slides: 'materials/unit5/Island_Readers_Magic_e_Lesson.pptx', daily: 'materials/unit5/Unit5_Teacher_Led_Student_Sheets.pdf', pack: 'materials/unit5/Lesson5.2_Teacher_Led_Checks.pdf' }
+        { s: 'e', lesson: 'Lesson 5.2', board: '#/teachers/slides/tricky', slides: 'materials/unit5/Island_Readers_Tricky_e_Endings.pptx', daily: 'materials/unit5/Unit5_Teacher_Led_Student_Sheets.pdf', pack: 'materials/unit5/Lesson5.2_Teacher_Led_Checks.pdf' }
       ] },
       { name: 'Unit 6 \u00b7 Endings', sounds: [
         { s: '-s -es', lesson: 'Lesson 6.1' },
@@ -1085,6 +1130,10 @@
     const root = h('div', { class: 'screen slidescreen', tabindex: '0' });
     const stage = h('div', { class: 'slide-stage' });
     const img = h('img', { class: 'slide-img', alt: sound + ' week slide' });
+    const videoBox = h('div', { class: 'slide-video', hidden: '' });
+    const SLIDE_VIDEO = {
+      ng: { file: 'teachers/ng/slides/04.jpg', src: 'video/ng_cartoon_small.mp4', captions: 'video/ng_cartoon_captions.json', title: 'Zip and Frill: The Nose Hum' }
+    };
     const counter = h('div', { class: 'slide-count', 'aria-live': 'polite' }, '');
     const prev = h('button', { class: 'slide-nav slide-prev', type: 'button', 'aria-label': 'Previous slide' }, '\u25C0');
     const next = h('button', { class: 'slide-nav slide-next', type: 'button', 'aria-label': 'Next slide' }, '\u25B6');
@@ -1092,13 +1141,39 @@
       pageNav('#/teachers'),
       h('h1', { class: 'slide-title' }, sound + ' week slides'),
       counter);
-    stage.append(prev, img, next);
+    stage.append(prev, img, videoBox, next);
     root.append(top, stage);
     app.append(root);
     let slides = []; let i = 0; let keyHandler = null;
+    let videoStop = null;
+    function clearVideo() {
+      if (videoStop) videoStop();
+      videoStop = null;
+      videoBox.innerHTML = '';
+      videoBox.hidden = true;
+      img.hidden = false;
+    }
+    function showVideo(spec) {
+      clearVideo();
+      img.hidden = true;
+      videoBox.hidden = false;
+      const v = h('video', { class: 'slide-img', controls: true, playsinline: true, preload: 'metadata', 'aria-label': spec.title }, h('source', { src: spec.src, type: 'video/mp4' }));
+      const wrap = h('div', { class: 'vwrap slide-vwrap' }, v);
+      const bar = h('div', { class: 'row center cc-row' });
+      videoBox.append(wrap, bar);
+      loadCaptions().then((cues) => {
+        if (!cues || !cues.length || !videoBox.isConnected) return;
+        const cp = captionPlayer(v, wrap, cues);
+        videoStop = cp.stop;
+        wrap.append(cp.overlay);
+        bar.append(cp.toggle);
+      });
+    }
     function show() {
-      if (!slides.length) { img.removeAttribute('src'); counter.textContent = 'No slides'; prev.disabled = true; next.disabled = true; return; }
-      img.src = slides[i];
+      if (!slides.length) { clearVideo(); img.removeAttribute('src'); counter.textContent = 'No slides'; prev.disabled = true; next.disabled = true; return; }
+      const spec = SLIDE_VIDEO[sound];
+      if (spec && slides[i] === spec.file) showVideo(spec);
+      else { clearVideo(); img.src = slides[i]; }
       counter.textContent = (i + 1) + ' / ' + slides.length;
       prev.disabled = i <= 0; next.disabled = i >= slides.length - 1;
       root.focus({ preventScroll: true });
@@ -1497,7 +1572,7 @@
     else if (hash.startsWith('#/about')) aboutScreen();
     else if (hash.startsWith('#/trail')) islandTrailPage();
     else if (hash.startsWith('#/find')) findScreen();
-    else if ((m = /^#\/teachers\/slides\/(ng|nk|u5)$/.exec(hash))) slidesViewer(m[1]);
+    else if ((m = /^#\/teachers\/slides\/(ng|nk|u5|tricky)$/.exec(hash))) slidesViewer(m[1]);
     else if (hash.startsWith('#/teachers')) { if (IR._slideCleanup) { IR._slideCleanup(); IR._slideCleanup = null; } teachersScreen(); }
     else if (hash.startsWith('#/placement')) IR.placement.render(app, (n) => {
       const bell = (IR.placement.BELL || {})[n] || { unit: n, name: 'this bell' };
