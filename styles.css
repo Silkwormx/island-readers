@@ -1848,15 +1848,18 @@ a.btn.tmlink.tmslide:visited{color:#fff}
 @container bells (min-width:520px){.bellgrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @container bells (min-width:700px){.bellgrid{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media (min-width:1000px){.gridhome .bellgrid{grid-template-columns:repeat(3,minmax(0,1fr))}}
-/* Home previews: ?bells=4peek (leading), ?bells=6, and ?bells=peek. */
+/* Home bells: three across, with the next row half visible. */
 .gridhome.bellfit .bellpath{padding-bottom:.35rem}
 .gridhome.bellfit .bellgrid{align-items:start}
-.gridhome.bells6 .bellgrid,
 .gridhome.bellspeek .bellgrid{grid-template-columns:repeat(3,minmax(0,1fr))}
-.gridhome.bells4peek .bellgrid{grid-template-columns:repeat(2,minmax(0,1fr))}
-@media (min-width:1024px){.gridhome.bells4peek .bellgrid{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media (max-width:999px){
+  .gridhome.bellspeek .mwrap{padding-top:.35rem;padding-bottom:.6rem}
+  .gridhome.bellspeek .homelay{display:flex;flex-direction:column;gap:.55rem;margin-top:.25rem}
+  .gridhome.bellspeek .bellslot{order:-1;height:calc(100dvh - 4.4rem);overflow:auto}
+}
 .gridhome.bellfit .bellpath .tpic{aspect-ratio:auto;width:100%;flex:none}
-.gridhome.bellfit .bellpath .tpic img{width:100%;height:100%;object-fit:contain;object-position:center}
+.gridhome.bellfit .bellpath .tcard{justify-content:flex-start;align-items:stretch}
+.gridhome.bellfit .bellpath .tpic img{width:100%;height:100%;object-fit:cover;object-position:center}
 .gridhome.bellfit .bellpath .tbody{flex:none;min-height:0;justify-content:flex-start;gap:.12rem;padding:.45rem .5rem .6rem}
 @media (max-width:759px){
   .gridhome.bellfit .mwrap{padding-left:.4rem;padding-right:.4rem}
