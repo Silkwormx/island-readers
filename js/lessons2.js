@@ -47,11 +47,14 @@
               if (!ctx.scr.ok()) return; await sleep(500); if (!ctx.scr.ok()) return;
               r++; if (r < rounds.length) round(); else { ctx.progress(1); ctx.finish(); }
             } else {
-              misses++; ctx.miss(); status.textContent = 'Almost! Listen again and try again.'; slotsEl.classList.add('almost');
-              await IR.tryAgain(audio);
-              if (!ctx.scr.ok()) return; slotsEl.classList.remove('almost'); b.slots.fill(null);
-              if (misses >= 2) b.hint = tiles.find((t) => t.text === R.words[0]).id;
-              b.locked = false; b.render();
+              ctx.miss();
+              const first = tiles.find((t) => t.text === R.words[0]);
+              await IR.coachTiles({
+                key: 'ng-sent-' + r, statusEl: status, list: rounds, index: r,
+                replay: () => Snd.play(audio),
+                correctEl: () => bankEl.querySelector('[data-id="' + (first ? first.id : '') + '"]'),
+                clear: () => { slotsEl.classList.remove('almost'); b.hint = null; b.slots.fill(null); b.locked = false; b.render(); }
+              });
             }
           }
         });

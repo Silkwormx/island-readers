@@ -74,9 +74,8 @@
       await sleep(200);
       if (my !== token || !ctx.scr.ok()) return;
       const next = boxes[idx] || boxes[boxes.length - 1];
-      if (next) { next.textContent = b[idx] || b[b.length - 1]; next.classList.add('glow'); next.classList.remove('empty'); }
-      sayLine.textContent = 'Listen: ' + model.to + '. What changed?';
-      if (model.audioB) await Snd.play(model.audioB);
+      if (next) next.classList.add('coach-glow');
+      sayLine.textContent = 'Your turn. What changed?';
     }
 
     function round() {

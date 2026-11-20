@@ -83,7 +83,15 @@
       IR.TileBoard({ tiles, nSlots: 2, slotsEl, bankEl, onFull: async (texts, b) => {
         b.locked = true;
         if (texts.join('') === R.word) { status.textContent = 'Yes! ' + R.word; slotsEl.classList.add('right'); await ding(R.word); if (!ctx.scr.ok()) return; await sleep(500); if (!ctx.scr.ok()) return; r++; if (r < rounds.length) round(); else { ctx.progress(1); ctx.finish(); } }
-        else { misses++; ctx.miss(); status.textContent = 'Almost! Listen again and try again.'; slotsEl.classList.add('almost'); await tryAgain(W(R.word)); if (!ctx.scr.ok()) return; slotsEl.classList.remove('almost'); b.slots.fill(null); if (misses >= 2) b.hint = 'o1'; b.locked = false; b.render(); }
+        else {
+          ctx.miss();
+          await IR.coachTiles({
+            key: 'nk-build-' + r, statusEl: status, list: rounds, index: r,
+            replay: () => say(R.word),
+            correctEl: () => bankEl.querySelector('[data-id="o1"]'),
+            clear: () => { slotsEl.classList.remove('almost'); b.hint = null; b.slots.fill(null); b.locked = false; b.render(); }
+          });
+        }
       } });
       stage.append(h('div', { class: 'activity' }, spk, slotsEl, bankEl, status)); IR.sayItem(ctx, 'audio/nk_p_build.mp3', W(R.word));
     }
@@ -120,7 +128,15 @@
     }
     async function put(m, b) {
       const k = got.length;
-      if (m.t !== parts[k]) { ctx.miss(); b.classList.add('nudge'); setTimeout(() => b.classList.remove('nudge'), 500); status.textContent = 'Try another tile. Say the word slowly.'; await tryAgain(W(order[r])); return; }
+      if (m.t !== parts[k]) {
+        ctx.miss();
+        await IR.coachTiles({
+          key: 'nk-scram-' + r, wrongEl: b, statusEl: status, list: order, index: r,
+          replay: () => say(order[r]),
+          correctEl: () => [...pool.children].find((el) => el.textContent === parts[k] && !el.classList.contains('used'))
+        });
+        return;
+      }
       got.push(m); draw();
       if (got.length === parts.length) { status.textContent = order[r] + '!'; await ding(order[r]); if (!ctx.scr.ok()) return; r++;
         if (r >= order.length) { ctx.progress(1); status.textContent = 'All the words are spelled!'; await sleep(400); if (ctx.scr.ok()) ctx.finish(); return; }
@@ -144,7 +160,16 @@
         onFull: async (texts, b) => {
           b.locked = true;
           if (texts.join(' ') === R.text) { status.textContent = 'Yes! The bridge is built.'; slotsEl.classList.add('right'); bridge.classList.add('lit'); await Snd.seq([A.sfx.ding, audio], 200); if (!ctx.scr.ok()) return; await sleep(500); if (!ctx.scr.ok()) return; r++; if (r < rounds.length) round(); else { ctx.progress(1); ctx.finish(); } }
-          else { misses++; ctx.miss(); status.textContent = 'Almost! Listen again and try again.'; slotsEl.classList.add('almost'); await tryAgain(audio); if (!ctx.scr.ok()) return; slotsEl.classList.remove('almost'); b.slots.fill(null); if (misses >= 2) b.hint = tiles.find((t) => t.text === R.words[0]).id; b.locked = false; b.render(); }
+          else {
+            ctx.miss();
+            const first = tiles.find((t) => t.text === R.words[0]);
+            await IR.coachTiles({
+              key: 'nk-sent-' + r, statusEl: status, list: rounds, index: r,
+              replay: () => Snd.play(audio),
+              correctEl: () => bankEl.querySelector('[data-id="' + (first ? first.id : '') + '"]'),
+              clear: () => { slotsEl.classList.remove('almost'); b.hint = null; b.slots.fill(null); b.locked = false; b.render(); }
+            });
+          }
         } });
       stage.append(h('div', { class: 'activity sentact' }, h('div', { class: 'pic' }, h('img', { src: R.img, alt: 'A picture from the story' })), h('div', { class: 'row center' }, spk), slotsEl, bridge, bankEl, status));
       if (r === 0) IR.sayItem(ctx, 'audio/nk_p_sent.mp3', audio); else Snd.play(audio);

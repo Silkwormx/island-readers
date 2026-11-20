@@ -47,7 +47,15 @@
       }
       async function put(m, b) {
         const k = got.length;
-        if (m.t !== parts[k]) { ctx.miss(); b.classList.add('nudge'); setTimeout(() => b.classList.remove('nudge'), 500); status.textContent = 'Try another tile. Say the word slowly.'; await IR.tryAgain(A.word(order[r])); return; }
+        if (m.t !== parts[k]) {
+          ctx.miss();
+          await IR.coachTiles({
+            key: 'ng-scram-' + r, wrongEl: b, statusEl: status, list: order, index: r,
+            replay: () => sayWord(order[r]),
+            correctEl: () => [...pool.children].find((el) => el.textContent === parts[k] && !el.classList.contains('used'))
+          });
+          return;
+        }
         got.push(m); draw();
         if (got.length === parts.length) { status.textContent = order[r] + '!'; await IR.ding(order[r]); if (!ctx.scr.ok()) return; r++;
           if (r >= order.length) { ctx.progress(1); status.textContent = 'All the words are spelled!'; await sleep(400); if (ctx.scr.ok()) ctx.finish(); return; }

@@ -301,6 +301,20 @@
     });
   }
   function coachReset(key) { if (key) coachCounts.delete(key); }
+  async function coachTiles(opts) {
+    opts = opts || {};
+    if (opts.clear) opts.clear();
+    const step = await coachMiss({
+      key: opts.key,
+      wrongEl: opts.wrongEl,
+      correctEl: opts.correctEl,
+      statusEl: opts.statusEl,
+      replay: opts.replay,
+      model: opts.model || opts.replay
+    });
+    if (step === 'model' && opts.list) againLater(opts.list, opts.index);
+    return step;
+  }
   function againLater(list, index) {
     if (!list || index < 0 || index >= list.length) return;
     const item = list[index];
@@ -325,7 +339,7 @@
     return b;
   }
 
-  window.IR = { celebration, ding, tryAgain, coachMiss, coachReset, againLater, D, S: () => S, save, resetAll, load, h, $, $$, sleep, shuffle, pick, colorWord, icon, ICON, CHUNK_COLORS, kidLesson,
+  window.IR = { celebration, ding, tryAgain, coachMiss, coachTiles, coachReset, againLater, D, S: () => S, save, resetAll, load, h, $, $$, sleep, shuffle, pick, colorWord, icon, ICON, CHUNK_COLORS, kidLesson,
     touchStreak, streakInfo, recordActivity, isDone, activityStars, progressRecord, totalStars, applySettings, Snd, A, sayWord, newScreen, speakerBtn, hasPhoneme, playPhoneme,
     DEMO_UNLOCK_ALL: true };
 })();

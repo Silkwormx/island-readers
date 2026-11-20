@@ -709,6 +709,7 @@
       let checked = false;
       const taps = h('div', { class: 'llcounttaps' });
       const answer = h('div', { class: 'llcountanswer' });
+      const status = h('p', { class: 'status', 'aria-live': 'polite' }, '\u00a0');
       const check = h('button', { class: 'btn big', type: 'button' }, 'Check');
       function paintTaps() {
         taps.innerHTML = '';
@@ -727,27 +728,34 @@
         }
       }
       check.addEventListener('click', async () => {
-        if (checked || roundToken !== token) return;
-        checked = true;
-        paintTaps();
-        answer.innerHTML = '';
-        const dots = item.sounds.map(() => {
-          const dot = h('i', { class: 'llcountdot' });
-          answer.append(dot);
-          return dot;
-        });
-        for (let s = 0; s < item.sounds.length; s++) {
-          if (roundToken !== token) return;
-          dots[s].classList.add('lit');
-          await countSay(item.sounds[s], true);
+        if (roundToken !== token || check.classList.contains('coach-off')) return;
+        if (picked === item.n) {
+          checked = true;
+          paintTaps();
+          status.textContent = 'Yes.';
+          ctx.progress((i + 1) / items.length);
+          i += 1;
+          setTimeout(() => { if (roundToken === token) show(); }, 500);
+          return;
         }
-        ctx.progress((i + 1) / items.length);
+        const stepName = await IR.coachTiles({
+          key: 'count-' + i,
+          wrongEl: check,
+          statusEl: status,
+          list: items,
+          index: i,
+          replay: () => playRecordedWord(item.w),
+          correctEl: () => taps.children[Math.max(0, item.n - 1)]
+        });
+        check.classList.remove('coach-off', 'coach-grey', 'tried');
+        if (stepName === 'model' && taps.children[item.n - 1]) taps.children[item.n - 1].classList.add('coach-model');
       });
       ctx.stage.append(h('div', { class: 'llcountplay' },
         h('p', { class: 'llcountword llcountbig' }, item.w),
         h('button', { class: 'btn big primary', type: 'button', onclick: () => playRecordedWord(item.w) }, 'Hear the word'),
         taps,
         check,
+        status,
         answer));
       paintTaps();
       playRecordedWord(item.w);
