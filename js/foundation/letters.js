@@ -2989,31 +2989,31 @@
     g3: {
       images: 'materials/team3/slides/',
       days: [
-        { label: 'Day 1', page: 1 },
-        { label: 'Day 2', page: 7 },
-        { label: 'Day 3', page: 13 },
-        { label: 'Day 4', page: 19 },
-        { label: 'Day 5', page: 25 }
+        { label: 'Day 1', page: 5 },
+        { label: 'Day 2', page: 40 },
+        { label: 'Day 3', page: 74 },
+        { label: 'Day 4', page: 110 },
+        { label: 'Day 5', page: 143 }
       ]
     },
     g4: {
       images: 'materials/team4/slides/',
       days: [
-        { label: 'Day 1', page: 1 },
-        { label: 'Day 2', page: 7 },
-        { label: 'Day 3', page: 13 },
-        { label: 'Day 4', page: 19 },
-        { label: 'Day 5', page: 25 }
+        { label: 'Day 1', page: 5 },
+        { label: 'Day 2', page: 41 },
+        { label: 'Day 3', page: 75 },
+        { label: 'Day 4', page: 111 },
+        { label: 'Day 5', page: 144 }
       ]
     },
     g5: {
       images: 'materials/team5/slides/',
       days: [
-        { label: 'Day 1', page: 1 },
-        { label: 'Day 2', page: 7 },
-        { label: 'Day 3', page: 13 },
-        { label: 'Day 4', page: 19 },
-        { label: 'Day 5', page: 25 }
+        { label: 'Day 1', page: 5 },
+        { label: 'Day 2', page: 41 },
+        { label: 'Day 3', page: 74 },
+        { label: 'Day 4', page: 112 },
+        { label: 'Day 5', page: 145 }
       ]
     }
   };

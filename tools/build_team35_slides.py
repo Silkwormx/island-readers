@@ -1,5 +1,11 @@
 #!/usr/bin/env python3
-"""Build Team 3, 4, and 5 teacher slide decks in the Team 1 layout."""
+"""Earlier 30-slide stand-ins for Teams 3-5.
+
+The live decks are the illustrated PDFs in foundation/slides/, rasterized
+into materials/team3|4|5/slides/. Running this script would replace them.
+"""
+import sys
+sys.exit('Team 3-5 decks come from foundation/slides/Learn_the_Letters_Team3.pdf, Learn_the_Letters_Team4.pdf, and Learn_the_Letters_Team5.pdf.')
 import os
 from PIL import Image, ImageDraw, ImageFont
 

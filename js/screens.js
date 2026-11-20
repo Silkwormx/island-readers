@@ -1196,6 +1196,7 @@
     function lessonCard(lesson) {
       const files = [];
       if (lesson.daily) files.push({ title: 'Daily practice sheets', href: lesson.daily });
+      if (lesson.deck) files.push({ title: 'Slideshow PDF', href: lesson.deck });
       if (lesson.pack) files.push({ title: 'Teacher pack', href: lesson.pack });
       const title = lesson.title
         ? h('h3', null, lesson.title)
@@ -1224,9 +1225,9 @@
         { title: 'Meet the Teams', board: '#/foundation' },
         { title: 'Team 1: m s a t', board: '#/foundation/slides/g1', days: 5, daily: 'foundation/printables/Team1_Quick_Sounds.pdf' },
         { title: 'Team 2: p f i n', board: '#/foundation/slides/g2', days: 4, daily: 'foundation/printables/Team2_Quick_Sounds.pdf' },
-        { title: 'Team 3: o d c u', board: '#/foundation/slides/g3', days: 5, daily: 'foundation/printables/Team3_Quick_Sounds.pdf' },
-        { title: 'Team 4: g b e k', board: '#/foundation/slides/g4', days: 5, daily: 'foundation/printables/Team4_Quick_Sounds.pdf' },
-        { title: 'Team 5: h r l w', board: '#/foundation/slides/g5', days: 5, daily: 'foundation/printables/Team5_Quick_Sounds.pdf' },
+        { title: 'Team 3: o d c u', board: '#/foundation/slides/g3', days: 5, daily: 'foundation/printables/Team3_Quick_Sounds.pdf', deck: 'foundation/slides/Learn_the_Letters_Team3.pdf' },
+        { title: 'Team 4: g b e k', board: '#/foundation/slides/g4', days: 5, daily: 'foundation/printables/Team4_Quick_Sounds.pdf', deck: 'foundation/slides/Learn_the_Letters_Team4.pdf' },
+        { title: 'Team 5: h r l w', board: '#/foundation/slides/g5', days: 5, daily: 'foundation/printables/Team5_Quick_Sounds.pdf', deck: 'foundation/slides/Learn_the_Letters_Team5.pdf' },
         { title: 'Team 6: j y x q' },
         { title: 'Team 7: v z' }
       ] },
