@@ -2,6 +2,11 @@
  "id": "nk",
  "title": "Lesson 4.2 \u00b7 nk week slides",
  "count": 60,
+ "days": [
+  { "label": "Day 1", "page": 1 },
+  { "label": "Day 2", "page": 21 },
+  { "label": "Day 3", "page": 43 }
+ ],
  "slides": [
   "teachers/nk/slides/01.jpg",
   "teachers/nk/slides/02.jpg",

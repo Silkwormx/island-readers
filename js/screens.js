@@ -39,6 +39,34 @@
   function pageNav(up) {
     return h('div', { class: 'pagenav' }, backButton(up), homeButton());
   }
+  /* Day starts are the title slides in each image deck. Unit 5 has no day slides. */
+  const WEEK_DAYS = {
+    ng: [
+      { label: 'Day 1', page: 1 },
+      { label: 'Day 2', page: 22 },
+      { label: 'Day 3', page: 42 },
+      { label: 'Day 4', page: 55 },
+      { label: 'Day 5', page: 65 }
+    ],
+    nk: [
+      { label: 'Day 1', page: 1 },
+      { label: 'Day 2', page: 21 },
+      { label: 'Day 3', page: 43 }
+    ]
+  };
+  IR.weekDays = WEEK_DAYS;
+  function dayMenu(days, onPick) {
+    const list = (days || []).filter((day) => /^Day\s+\d+/i.test(String((day && (day.label || (day.day ? 'Day ' + day.day : ''))) || '')));
+    if (!list.length) return null;
+    return h('div', { class: 'slidedays' },
+      h('p', { class: 'slidedays-title' }, 'Pick a day'),
+      ...list.map((day) => h('button', {
+        class: 'btn big slideday',
+        type: 'button',
+        onclick: () => onPick(day.page || day.start)
+      }, day.label || ('Day ' + day.day))));
+  }
+  IR.dayMenu = dayMenu;
   function gearButton() {
     const b = h('button', { class: 'gear', type: 'button', 'aria-label': 'Parent and Teacher Materials. Press and hold to open.' }, icon('gear'));
     let t = null;
@@ -600,11 +628,19 @@
     if (count > 1) return count + ' days';
     return 'Slideshow';
   }
+  function soonBox(name) {
+    return h('button', {
+      class: 'teachbox teachslides is-soon',
+      type: 'button',
+      disabled: true,
+      'aria-disabled': 'true',
+      'aria-label': name + '. Coming soon'
+    }, h('span', { class: 'teachslides-name' }, name), h('span', { class: 'teachslides-sub' }, 'Coming soon'));
+  }
   function teacherBox(plan) {
     plan = plan || {};
     const files = plan.files || [];
     const deck = plan.slides || '';
-    if (!files.length && !deck && !plan.pdf) return null;
     const wrap = h('div', { class: 'teachcorner' });
     if (deck || plan.pdf) {
       const sub = h('span', { class: 'teachslides-sub' }, slideDays(plan));
@@ -619,8 +655,11 @@
         else window.open(plan.pdf, '_blank', 'noopener');
       });
       wrap.append(slides);
+    } else wrap.append(soonBox('Teacher Slides'));
+    if (!files.length) {
+      wrap.append(soonBox('Printables'));
+      return wrap;
     }
-    if (!files.length) return wrap;
     const list = h('div', { class: 'teachpop teachfiles', hidden: '' },
       ...files.map((file) => h('a', { class: 'teachlink', href: file.href, target: '_blank', rel: 'noopener' }, file.title)));
     const print = h('button', { class: 'teachbox teachprint', type: 'button', 'aria-expanded': 'false' }, 'Printables');
@@ -651,8 +690,8 @@
       plan.note === false ? null : h('p', { class: 'stepnote' }, plan.note || 'Watch the lesson, then play.'),
       plan.before || null,
       h('div', { class: 'stepflow' },
-        plan.choose ? null : stepSection(1, labels[0], lessons),
-        plan.choose ? null : (plan.gameRows ? gameRowsBlock(2, labels[1], plan.gameRows) : stepSection(2, labels[1], plan.games || [], true, plan.gameClass || '')),
+        plan.choose || plan.lesson === false ? null : stepSection(1, labels[0], lessons),
+        plan.choose || plan.games === false ? null : (plan.gameRows ? gameRowsBlock(plan.lesson === false ? 1 : 2, labels[1], plan.gameRows) : stepSection(plan.lesson === false ? 1 : 2, labels[1], plan.games || [], true, plan.gameClass || '')),
         plan.choose || !storyItems ? null : stepSection(3, labels[2], storyItems),
         ...(plan.choose || []).map((item, i) => stepSection(i + 1, item.title, [item]))));
   }
@@ -675,6 +714,7 @@
     app.append(h('div', { class: 'screen trailscreen unitpage unitA orangeunit stepage' },
       h('header', { class: 'uA-top' }, pageNav('#/home'), h('h1', { class: 'uA-title' }, h('small', null, 'Unit 4 Lesson 1'), 'ng'), teacherBox({
         slides: '#/teachers/slides/ng',
+        days: WEEK_DAYS.ng,
         files: [
           { title: 'Daily practice sheets', href: 'teachers/ng/Lesson3.1_ng_Daily_Practice_Sheets.pdf' },
           { title: 'Teacher pack', href: 'teachers/ng/Lesson3.1_ng_Teacher_Pack.pdf' }
@@ -1062,7 +1102,7 @@
       ] },
       { name: 'Unit 5 \u00b7 Silent e', sounds: [
         { s: 'a_e', lesson: 'Lesson 5.1', board: '#/teachers/slides/u5', slides: 'materials/unit5/Island_Readers_Magic_e_Lesson.pptx', daily: 'materials/unit5/Unit5_Teacher_Led_Student_Sheets.pdf', pack: 'materials/unit5/Lesson5.1_Teacher_Led_Checks.pdf' },
-        { s: 'e', lesson: 'Lesson 5.2', board: '#/teachers/slides/u5', slides: 'materials/unit5/Island_Readers_Magic_e_Lesson.pptx', daily: 'materials/unit5/Unit5_Teacher_Led_Student_Sheets.pdf', pack: 'materials/unit5/Lesson5.2_Teacher_Led_Checks.pdf' }
+        { s: 'e', lesson: 'Lesson 5.2', daily: 'materials/unit5/Unit5_Teacher_Led_Student_Sheets.pdf', pack: 'materials/unit5/Lesson5.2_Teacher_Led_Checks.pdf' }
       ] },
       { name: 'Unit 6 \u00b7 Endings', sounds: [
         { s: '-s -es', lesson: 'Lesson 6.1' },
@@ -1088,22 +1128,38 @@
     const counter = h('div', { class: 'slide-count', 'aria-live': 'polite' }, '');
     const prev = h('button', { class: 'slide-nav slide-prev', type: 'button', 'aria-label': 'Previous slide' }, '\u25C0');
     const next = h('button', { class: 'slide-nav slide-next', type: 'button', 'aria-label': 'Next slide' }, '\u25B6');
+    let days = (WEEK_DAYS[sound] || []).slice();
+    let onMenu = days.length > 0;
+    const menu = dayMenu(days, (page) => { onMenu = false; menu.hidden = true; i = Math.max(0, page - 1); show(); });
+    if (menu) menu.hidden = !onMenu;
     const top = h('div', { class: 'slide-top' },
       pageNav('#/teachers'),
       h('h1', { class: 'slide-title' }, sound + ' week slides'),
       counter);
+    if (menu) stage.append(menu);
     stage.append(prev, img, next);
     root.append(top, stage);
     app.append(root);
     let slides = []; let i = 0; let keyHandler = null;
     function show() {
+      if (onMenu) {
+        if (menu) menu.hidden = false;
+        img.hidden = true;
+        prev.disabled = true;
+        next.disabled = true;
+        counter.textContent = days.length ? (days.length + (days.length === 1 ? ' day' : ' days')) : '';
+        root.focus({ preventScroll: true });
+        return;
+      }
+      if (menu) menu.hidden = true;
+      img.hidden = false;
       if (!slides.length) { img.removeAttribute('src'); counter.textContent = 'No slides'; prev.disabled = true; next.disabled = true; return; }
       img.src = slides[i];
       counter.textContent = (i + 1) + ' / ' + slides.length;
       prev.disabled = i <= 0; next.disabled = i >= slides.length - 1;
       root.focus({ preventScroll: true });
     }
-    function go(d) { if (!slides.length) return; i = Math.max(0, Math.min(slides.length - 1, i + d)); show(); }
+    function go(d) { if (onMenu || !slides.length) return; i = Math.max(0, Math.min(slides.length - 1, i + d)); show(); }
     prev.addEventListener('click', () => go(-1));
     next.addEventListener('click', () => go(1));
     keyHandler = (e) => {
@@ -1117,8 +1173,10 @@
     const oldCleanup = IR._slideCleanup; if (typeof oldCleanup === 'function') oldCleanup();
     IR._slideCleanup = () => { window.removeEventListener('keydown', keyHandler); };
     fetch('teachers/' + sound + '/slides.json').then((r) => r.json()).then((man) => {
-      slides = man.slides || []; i = 0; show();
+      slides = man.slides || [];
+      if (man.days && man.days.length) days = man.days;
       if (man.title) top.querySelector('.slide-title').textContent = man.title;
+      show();
     }).catch(() => { counter.textContent = 'Could not load slides'; });
     show();
   }

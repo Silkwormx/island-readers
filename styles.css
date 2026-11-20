@@ -2114,6 +2114,8 @@ a.btn.tmlink.tmslide:visited{color:#fff}
 .slidescreen{position:fixed;inset:0;z-index:40;background:#111;color:#fff;display:flex;flex-direction:column;outline:none}
 .slide-top{display:flex;align-items:center;gap:.75rem;padding:.55rem 1rem;background:rgba(0,0,0,.72);flex:none}
 .slide-top .slide-back{color:#fff;border-color:rgba(255,255,255,.35)}
+.slide-top .pagenav .homebtn{background:#F28C00;color:#fff;border:3px solid #C95A10;box-shadow:0 2px 0 #B5510D}
+.slide-top .pagenav .homebtn .ico{color:#fff}
 .slide-title{font-size:1.15rem;margin:0;flex:1;font-weight:700;letter-spacing:.01em}
 .slide-count{font-size:1.2rem;font-weight:700;min-width:5.5rem;text-align:right}
 .slide-top .gear{margin-left:.25rem;background:#fff}
@@ -2123,6 +2125,11 @@ a.btn.tmlink.tmslide:visited{color:#fff}
 .slide-nav:disabled{opacity:.25;cursor:default}
 .slide-prev{left:.7rem}.slide-next{right:.7rem}
 .slide-nav:not(:disabled):hover{background:rgba(232,115,28,.9);border-color:#fff}
+.slidedays{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.85rem;width:100%;min-height:16rem;padding:1.4rem 1rem;box-sizing:border-box}
+.slidedays-title{margin:0;font-size:1.6rem;font-weight:700;color:#2B2540}
+.slidescreen .slidedays-title{color:#fff}
+.btn.big.slideday{min-width:11rem;min-height:3.4rem;padding:.35rem 1.4rem;border-radius:1rem;border:3px solid #C95A10;background:#F28C00;color:#fff;box-shadow:0 4px 0 #B5510D;font-family:Andika,sans-serif;font-size:1.35rem;font-weight:700}
+.btn.big.slideday:focus-visible{outline:4px solid #1FA6A6;outline-offset:3px}
 @media (max-width:700px){
   .slide-stage{padding:0 3.2rem}
   .slide-nav{width:3.2rem;height:3.2rem;font-size:1.35rem}
@@ -3049,6 +3056,7 @@ button,
 .fsteam1 .lessontab.teachled .obtn{background:#fff;color:#C95A10;border-color:#fff;box-shadow:0 3px 0 #9A3E08}
 .fsmenu .teachbox,.fs-group .teachbox{background:#F28C00;border-color:#C95A10;color:#fff;box-shadow:0 2px 0 #B5510D}
 .fsmenu .teachbox.is-open,.fs-group .teachbox.is-open{background:#C95A10;color:#fff}
+.teachbox.is-soon,.fsmenu .teachbox.is-soon,.fs-group .teachbox.is-soon{background:#E7DFD0;border-color:#C9C0B0;color:#8A8175;box-shadow:none;cursor:default;opacity:1}
 .fsmenu .teachlink.teachled,.fs-group .teachlink.teachled{background:#F28C00;border-color:#C95A10;color:#fff}
 .fsteam1 .gamerows{flex:1 1 0;min-height:0;display:flex;flex-direction:column;gap:.16rem}
 .fsteam1 .gamerow{flex:1 1 0;min-height:0;display:flex;flex-direction:column;gap:.06rem}

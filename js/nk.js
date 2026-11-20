@@ -80,6 +80,7 @@
     app.append(h('div', { class: 'screen trailscreen unitpage unitA nkunit stepage' },
       h('header', { class: 'uA-top' }, IR.ui.pageNav('#/home'), h('h1', { class: 'uA-title' }, h('small', null, 'Unit 4 Lesson 2'), 'nk'), IR.teacherBox({
         slides: '#/teachers/slides/nk',
+        days: (IR.weekDays && IR.weekDays.nk) || [],
         files: [
           { title: 'Daily practice sheets', href: 'teachers/nk/Lesson3.2_nk_Daily_Practice_Sheets.pdf' },
           { title: 'Teacher pack', href: 'teachers/nk/Lesson3.2_nk_Teacher_Pack.pdf' }
