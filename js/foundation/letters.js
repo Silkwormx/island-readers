@@ -928,7 +928,7 @@
     const teach = teamTeacher(group) || {};
     const base = '#/foundation/letters/' + group.id;
     const letters = lettersOf(group);
-    app.append(h('div', { class: 'screen trailscreen unitpage u5menu llpage fs-group stepage' },
+    app.append(h('div', { class: 'screen trailscreen unitpage u5menu llpage fs-group stepage ngpreview' },
       h('header', { class: 'uA-top' },
         IR.ui.pageNav('#/foundation'),
         h('h1', { class: 'uA-title' }, h('small', null, 'Team ' + group.n), 'Meet the Team'),
@@ -2366,7 +2366,7 @@
     IR.newScreen();
     const teach = teamTeacher(group) || {};
     const board = group.id === 'g1' && String(title).indexOf('Team ') === 0 ? ' fsteam1' : '';
-    app.append(h('div', { class: 'screen trailscreen unitpage unitA u5menu stepage fsmenu' + board },
+    app.append(h('div', { class: 'screen trailscreen unitpage unitA u5menu stepage fsmenu ngpreview' + board },
       h('header', { class: 'uA-top' },
         IR.ui.pageNav(up),
         h('h1', { class: 'uA-title' }, small ? h('small', null, small) : null, title),
@@ -2945,28 +2945,20 @@
     IR.newScreen();
     const requested = parseInt(page, 10);
     const start = Math.max(1, requested || 1);
-    let onMenu = !requested;
+    let onMenu = false;
     const named = team === 'g1' ? 'Team 1: m s a t' : ('Team ' + team.slice(1) + ' slideshow');
     const counter = h('p', { class: 'fs-slidecount', 'aria-live': 'polite' }, 'Opening…');
     const canvas = h('canvas', { class: 'fs-slidecanvas' });
     const prev = h('button', { class: 'btn big', type: 'button' }, 'Back');
     const next = h('button', { class: 'btn big next', type: 'button' }, 'Next');
-    const menu = IR.dayMenu && IR.dayMenu(deck.days, (pageNo) => {
-      onMenu = false;
-      if (menu) menu.hidden = true;
-      canvas.hidden = false;
-      wanted = pageNo;
-      paint();
-    });
-    if (!menu) onMenu = false;
-    const stage = h('div', { class: 'fs-slidestage' }, menu, canvas);
-    if (menu) menu.hidden = !onMenu;
-    canvas.hidden = onMenu;
+    const jumps = h('div', { class: 'fs-dayjumps' });
+    const stage = h('div', { class: 'fs-slidestage' }, canvas);
     const view = h('div', { class: 'screen fs-slideview' },
       h('header', { class: 'uA-top' },
         IR.ui.pageNav('#/foundation/letters/' + team),
         h('h1', { class: 'uA-title' }, named),
         counter),
+      jumps,
       stage,
       h('div', { class: 'lesson-nav fs-slidenav' }, prev, next));
     app.append(view);
@@ -2974,6 +2966,27 @@
     let pageNum = start;
     let wanted = start;
     let rendering = false;
+    const dayList = (deck.days || []).slice();
+    dayList.forEach((day) => {
+      jumps.append(h('button', {
+        class: 'btn fs-dayjump',
+        type: 'button',
+        'data-page': String(day.page),
+        'data-label': day.label,
+        onclick: () => { wanted = day.page; paint(); }
+      }, day.label));
+    });
+    function markDay() {
+      const numbered = dayList.filter((day) => /^Day\s+\d+/i.test(day.label));
+      let active = null;
+      numbered.forEach((day) => {
+        if (day.page <= pageNum && (!active || day.page >= active.page)) active = day;
+      });
+      jumps.querySelectorAll('button').forEach((button) => {
+        const same = active && button.dataset.page === String(active.page) && (/^Day\s+\d+/i.test(button.dataset.label) ? button.dataset.label === active.label : pageNum === Number(button.dataset.page));
+        button.classList.toggle('on', !!same);
+      });
+    }
     function paint() {
       if (onMenu || !pdfDoc || rendering) return;
       rendering = true;
@@ -2993,6 +3006,7 @@
         counter.textContent = pageNum + ' / ' + pdfDoc.numPages;
         prev.disabled = pageNum <= 1;
         next.disabled = pageNum >= pdfDoc.numPages;
+        markDay();
         rendering = false;
         if (wanted !== pageNum) paint();
       }).catch(() => {
@@ -3040,7 +3054,7 @@
     IR.newScreen();
     const requested = parseInt(page, 10);
     const start = Math.max(1, requested || 1);
-    let onMenu = !requested;
+    let onMenu = false;
     const named = team === 'g1' ? 'Team 1: m s a t' : ('Team ' + team.slice(1) + ' slideshow');
     const counter = h('p', { class: 'fs-slidecount', 'aria-live': 'polite' }, 'Opening…');
     const dayEl = h('p', { class: 'fs-slideday' }, '');

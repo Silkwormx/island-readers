@@ -2,6 +2,9 @@
  "id": "u5",
  "title": "Unit 5 \u00b7 Magic e slides",
  "count": 20,
+ "days": [
+  {"day": 1, "label": "Day 1", "start": 1, "end": 20}
+ ],
  "slides": [
   "teachers/u5/slides/01.jpg",
   "teachers/u5/slides/02.jpg",

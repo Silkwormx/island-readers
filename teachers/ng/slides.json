@@ -3,11 +3,11 @@
  "title": "Lesson 4.1 \u00b7 ng week slides",
  "count": 74,
  "days": [
-  { "label": "Day 1", "page": 1 },
-  { "label": "Day 2", "page": 22 },
-  { "label": "Day 3", "page": 42 },
-  { "label": "Day 4", "page": 55 },
-  { "label": "Day 5", "page": 65 }
+  {"day": 1, "label": "Day 1", "page": 1, "start": 1, "end": 21},
+  {"day": 2, "label": "Day 2", "page": 22, "start": 22, "end": 41},
+  {"day": 3, "label": "Day 3", "page": 42, "start": 42, "end": 54},
+  {"day": 4, "label": "Day 4", "page": 55, "start": 55, "end": 64},
+  {"day": 5, "label": "Day 5", "page": 65, "start": 65, "end": 74}
  ],
  "slides": [
   "teachers/ng/slides/01.jpg",

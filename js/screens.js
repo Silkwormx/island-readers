@@ -699,7 +699,9 @@
     return h('section', { class: 'stepblock' }, stepHead(n, label), cards);
   }
   function slideDays(plan) {
-    const days = plan.days || [];
+    const raw = plan.days;
+    if (typeof raw === 'number') return raw === 1 ? '1 day' : raw + ' days';
+    const days = raw || [];
     const count = days.filter((day) => /^Day\s+\d+/i.test(String((day && (day.label || (day.day ? 'Day ' + day.day : ''))) || ''))).length;
     if (count === 1) return '1 day';
     if (count > 1) return count + ' days';
@@ -758,19 +760,58 @@
     return wrap;
   }
   IR.teacherBox = teacherBox;
+  function prepLesson(item) {
+    const kick = String(item.kicker || '');
+    const generic = !kick || kick === 'Student' || kick === 'Lesson';
+    const next = Object.assign({}, item, {
+      pick: true,
+      tone: 'student',
+      kicker: generic ? 'Independent' : kick,
+      goLabel: item.goLabel || 'Open lesson'
+    });
+    if (!next.img && !(next.imgs && next.imgs.length)) next.img = 'img/lesson_zip_frill.webp';
+    next.stars = null;
+    return next;
+  }
+  function prepGame(item) {
+    return Object.assign({ doneIcon: 'star' }, item);
+  }
+  function gamesOf(plan) {
+    const listed = plan.gameRows
+      ? plan.gameRows.reduce((list, row) => list.concat(row.items || []), [])
+      : (plan.games || []);
+    return listed.map(prepGame);
+  }
+  function kidShell(name, on) {
+    return h('div', { class: 'ngshellwrap' },
+      h('span', { class: 'ngshell' + (on ? ' on' : ''), 'aria-hidden': 'true' }),
+      h('span', null, name));
+  }
   function modeBar(plan) {
     plan = plan || {};
     const labels = plan.labels || ['Lesson', 'Games', 'Story'];
-    const storyItems = (plan.stories && plan.stories.length) ? plan.stories : (plan.story ? [plan.story] : null);
-    const lessons = (plan.lesson || []).filter((item) => !item || item.tone !== 'teachled');
-    return h('div', { class: 'modebar' },
-      plan.note === false ? null : h('p', { class: 'stepnote' }, plan.note || 'Watch the lesson, then play.'),
+    let lessons = (plan.lesson || []).filter((item) => item && item.tone !== 'teachled').map(prepLesson);
+    if (!lessons.length && plan.choose) lessons = plan.choose.map(prepLesson);
+    const games = gamesOf(plan);
+    const stories = ((plan.stories && plan.stories.length) ? plan.stories : (plan.story ? [plan.story] : []))
+      .filter(Boolean)
+      .map((item) => Object.assign({ big: true, doneIcon: 'star', note: item.note || 'Story Time' }, item));
+    return h('div', { class: 'ngpath' },
       plan.before || null,
-      h('div', { class: 'stepflow' },
-        plan.choose || plan.lesson === false ? null : stepSection(1, labels[0], lessons),
-        plan.choose || plan.games === false ? null : (plan.gameRows ? gameRowsBlock(plan.lesson === false ? 1 : 2, labels[1], plan.gameRows) : stepSection(plan.lesson === false ? 1 : 2, labels[1], plan.games || [], true, plan.gameClass || '')),
-        plan.choose || !storyItems ? null : stepSection(3, labels[2], storyItems),
-        ...(plan.choose || []).map((item, i) => stepSection(i + 1, item.title, [item]))));
+      h('div', { class: 'ngshells', role: 'group', 'aria-label': labels.join(', ') },
+        kidShell(labels[0], lessons.length > 0 && lessons.every((item) => item.done)),
+        kidShell(labels[1], games.length > 0 && games.every((item) => item.done)),
+        kidShell(labels[2], stories.length > 0 && stories.every((item) => item.done))),
+      lessons.length ? h('section', { class: 'ngstep' },
+        stepHead(1, labels[0]),
+        h('div', { class: 'lessonrow' }, ...lessons.map((item) => lessonTab(item)))) : null,
+      games.length ? h('section', { class: 'ngstep' },
+        stepHead(2, labels[1]),
+        h('div', { class: 'gamerows' }, h('div', { class: 'gamerow' },
+          h('ol', { class: 'gamegrid' + (plan.gameClass || '') }, ...games.map((item, i) => h('li', null, itemCard(item, i + 1))))))) : null,
+      stories.length ? h('section', { class: 'ngstep' },
+        stepHead(3, labels[2]),
+        h('div', { class: 'ngstories' }, ...stories.map((item) => itemCard(item)))) : null);
   }
   IR.modeBar = modeBar;
   function trailScreen() {
@@ -789,17 +830,12 @@
       ['Words', ['build', 'chain', 'scramble', 'feed']],
       ['Read', ['sentence', 'story', 'check']]
     ];
-    let gameNo = 0;
     const gameRows = gameGroups.map(([label, ids]) => ({
       label: label,
       items: ids.map((id) => byId[id]).filter(Boolean).map(playItem)
     }));
-    const allGames = gameRows.reduce((list, row) => list.concat(row.items), []);
     const lesson = byId.intro;
     const listen = byId.listen;
-    const shell = (name, on) => h('div', { class: 'ngshellwrap' },
-      h('span', { class: 'ngshell' + (on ? ' on' : ''), 'aria-hidden': 'true' }),
-      h('span', null, name));
     app.append(h('div', { class: 'screen trailscreen unitpage unitA orangeunit stepage ngpreview' },
       h('header', { class: 'uA-top' }, pageNav('#/home'), h('h1', { class: 'uA-title' }, h('small', null, 'Unit 4 Lesson 1'), 'ng'), teacherBox({
         slides: '#/teachers/slides/ng',
@@ -809,34 +845,26 @@
           { title: 'Teacher pack', href: 'teachers/ng/Lesson3.1_ng_Teacher_Pack.pdf' }
         ]
       })),
-      h('div', { class: 'ngpath' },
-        h('div', { class: 'ngshells', role: 'group', 'aria-label': 'Lesson, games, and story' },
-          shell('Lesson', !!(lesson && lesson.done)),
-          shell('Games', allGames.length > 0 && allGames.every((item) => item.done)),
-          shell('Story', !!(listen && listen.done))),
-        h('section', { class: 'ngstep' },
-          h('div', { class: 'stephead' }, h('span', { class: 'stepnum' }, '1'), h('span', { class: 'steplab' }, 'Lesson')),
-          h('div', { class: 'lessonrow' },
-            lessonTab({
-              pick: true, tone: 'student', kicker: 'Independent', title: lesson ? lesson.title : 'Meet ng',
-              img: 'img/lesson_zip_frill.webp', alt: 'Zip and Frill', goLabel: 'Open lesson',
-              go: () => { Snd.stop(); location.hash = lesson ? lesson.href : '#/lesson/1'; }
-            }))),
-        h('section', { class: 'ngstep' },
-          h('div', { class: 'stephead' }, h('span', { class: 'stepnum' }, '2'), h('span', { class: 'steplab' }, 'Games')),
-          h('div', { class: 'gamerows' }, ...gameRows.map((row) => h('div', { class: 'gamerow' },
-            h('p', { class: 'gamerowlab' }, row.label),
-            h('ol', { class: 'gamegrid' }, ...row.items.map((item) => {
-              gameNo += 1;
-              return h('li', null, itemCard(item, gameNo));
-            })))))),
-        h('section', { class: 'ngstep' },
-          h('div', { class: 'stephead' }, h('span', { class: 'stepnum' }, '3'), h('span', { class: 'steplab' }, 'Story')),
-          itemCard({
-            title: (D && D.storyTitle) || (listen && listen.title) || 'Story Time',
-            note: 'Story Time', big: true, img: IR.storyCovers['4.1'],
-            alt: (D && D.storyTitle) || 'Story', href: listen ? listen.href : '#/lesson/2', done: !!(listen && listen.done), doneIcon: 'star'
-          })))));
+      modeBar({
+        lesson: [{
+          kicker: 'Independent',
+          title: lesson ? lesson.title : 'Meet ng',
+          img: 'img/lesson_zip_frill.webp',
+          alt: 'Zip and Frill',
+          done: !!(lesson && lesson.done),
+          go: () => { Snd.stop(); location.hash = lesson ? lesson.href : '#/lesson/1'; }
+        }],
+        gameRows: gameRows,
+        story: {
+          title: (D && D.storyTitle) || (listen && listen.title) || 'Story Time',
+          note: 'Story Time',
+          big: true,
+          img: IR.storyCovers['4.1'],
+          alt: (D && D.storyTitle) || 'Story',
+          href: listen ? listen.href : '#/lesson/2',
+          done: !!(listen && listen.done)
+        }
+      })));
   }
 
   /* ---------- lesson shell ---------- */
@@ -1174,7 +1202,7 @@
         : h('h3', null, h('span', { class: 'tmsound' }, lesson.s), ' ' + lesson.lesson);
       const dayText = lesson.days ? slideDays({ days: lesson.days }) : '';
       const slide = lesson.board
-        ? h('button', { class: 'btn big tmlink tmslide', type: 'button', onclick: () => { Snd.stop(); location.hash = lesson.board; } }, 'Slideshow', dayText ? h('span', { class: 'tmdays' }, dayText) : null)
+        ? h('button', { class: 'btn big tmlink tmslide', type: 'button', onclick: () => { Snd.stop(); location.hash = lesson.board; } }, 'Slideshow', dayText && dayText !== 'Slideshow' ? h('span', { class: 'tmdays' }, dayText) : null)
         : h('span', { class: 'btn big tmlink is-soon', 'aria-disabled': 'true' }, 'Slideshow');
       let print = h('span', { class: 'btn big tmlink is-soon', 'aria-disabled': 'true' }, 'Printables');
       let list = null;
@@ -1194,8 +1222,8 @@
     const UNITS = [
       { name: 'Meet the Teams', sounds: [
         { title: 'Meet the Teams', board: '#/foundation' },
-        { title: 'Team 1: m s a t', board: '#/foundation/slides/g1', daily: 'foundation/printables/Team1_Quick_Sounds.pdf' },
-        { title: 'Team 2: p f i n', board: '#/foundation/slides/g2', daily: 'foundation/printables/Team2_Quick_Sounds.pdf' },
+        { title: 'Team 1: m s a t', board: '#/foundation/slides/g1', days: 5, daily: 'foundation/printables/Team1_Quick_Sounds.pdf' },
+        { title: 'Team 2: p f i n', board: '#/foundation/slides/g2', days: 4, daily: 'foundation/printables/Team2_Quick_Sounds.pdf' },
         { title: 'Team 3: o d c u' },
         { title: 'Team 4: g b e k' },
         { title: 'Team 5: h r l w' },
@@ -1207,7 +1235,7 @@
         { s: 'nk', lesson: 'Lesson 4.2', days: [1, 2, 3].map((n) => ({ label: 'Day ' + n })), board: '#/teachers/slides/nk', slides: 'teachers/nk/Lesson3.2_nk_Slide_Presentation.pptx', daily: 'teachers/nk/Lesson3.2_nk_Daily_Practice_Sheets.pdf', pack: 'teachers/nk/Lesson3.2_nk_Teacher_Pack.pdf' }
       ] },
       { name: 'Unit 5 \u00b7 Silent e', sounds: [
-        { s: 'a_e', lesson: 'Lesson 5.1', board: '#/teachers/slides/u5', slides: 'materials/unit5/Island_Readers_Magic_e_Lesson.pptx', daily: 'materials/unit5/Unit5_Teacher_Led_Student_Sheets.pdf', pack: 'materials/unit5/Lesson5.1_Teacher_Led_Checks.pdf' },
+        { s: 'a_e', lesson: 'Lesson 5.1', days: [{ label: 'Day 1' }], board: '#/teachers/slides/u5', slides: 'materials/unit5/Island_Readers_Magic_e_Lesson.pptx', daily: 'materials/unit5/Unit5_Teacher_Led_Student_Sheets.pdf', pack: 'materials/unit5/Lesson5.1_Teacher_Led_Checks.pdf' },
         { s: 'e', lesson: 'Lesson 5.2', days: [1, 2, 3].map((n) => ({ label: 'Day ' + n })), board: '#/teachers/slides/tricky', slides: 'materials/unit5/Island_Readers_Tricky_e_Endings.pptx', daily: 'materials/unit5/Unit5_Teacher_Led_Student_Sheets.pdf', pack: 'materials/unit5/Lesson5.2_Teacher_Led_Checks.pdf' }
       ] },
       { name: 'Unit 6 \u00b7 Endings', sounds: [
@@ -1225,7 +1253,25 @@
       h('p', { class: 'tmlead' }, 'In course order. Slideshow opens the deck. Printables opens the files.'),
       ...sections)));
   }
-  /* In-app week-deck slideshow for smartboard (ng / nk). Keeps PPTX download on the teachers page. */
+  /* Day jumps for the in-app decks. Same ranges as teachers/<id>/slides.json. */
+  IR.deckDays = {
+    ng: [
+      { label: 'Day 1', start: 1, end: 21 },
+      { label: 'Day 2', start: 22, end: 41 },
+      { label: 'Day 3', start: 42, end: 54 },
+      { label: 'Day 4', start: 55, end: 64 },
+      { label: 'Day 5', start: 65, end: 74 }
+    ],
+    nk: [
+      { label: 'Day 1', start: 1, end: 20 },
+      { label: 'Day 2', start: 21, end: 42 },
+      { label: 'Day 3', start: 43, end: 60 }
+    ],
+    u5: [
+      { label: 'Day 1', start: 1, end: 20 }
+    ]
+  };
+  /* In-app week-deck slideshow for smartboard (ng / nk / unit 5). Keeps PPTX download on the teachers page. */
   function slidesViewer(sound) {
     IR.newScreen();
     const root = h('div', { class: 'screen slidescreen', tabindex: '0' });
@@ -1307,7 +1353,7 @@
       days.forEach((day, index) => {
         day.day = day.day || index + 1;
         jumps.append(h('button', {
-          class: 'btn fs-dayjump',
+          class: 'btn fs-dayjump slide-day',
           type: 'button',
           'data-day': String(day.day),
           onclick: () => { i = Math.max(0, dayStart(day) - 1); show(); }

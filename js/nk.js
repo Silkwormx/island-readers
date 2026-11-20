@@ -77,7 +77,7 @@
     }));
     const story = pick('story')[0];
     if (story) { story.title = N.storyTitle || story.title; story.note = 'Story Time'; story.img = IR.storyCovers['4.2']; story.alt = N.storyTitle || ''; story.big = true; }
-    app.append(h('div', { class: 'screen trailscreen unitpage unitA nkunit stepage' },
+    app.append(h('div', { class: 'screen trailscreen unitpage unitA nkunit stepage ngpreview' },
       h('header', { class: 'uA-top' }, IR.ui.pageNav('#/home'), h('h1', { class: 'uA-title' }, h('small', null, 'Unit 4 Lesson 2'), 'nk'), IR.teacherBox({
         slides: '#/teachers/slides/nk',
         days: (IR.weekDays && IR.weekDays.nk) || [],
