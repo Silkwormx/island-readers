@@ -29,7 +29,8 @@
         ? 'materials/unit5/Unit5_Teacher_Led_Checks_Combined.pdf'
         : 'materials/unit5/Lesson5.1_Teacher_Led_Checks.pdf';
     return {
-      slides: key === 'u51' ? '#/teachers/slides/u5' : '',
+      slides: key === 'u53' ? '#/teachers/slides/tricky' : '#/teachers/slides/u5',
+      days: key === 'u53' ? [1, 2, 3].map((n) => ({ label: 'Day ' + n })) : [],
       files: [
         { title: 'Daily practice sheets', href: 'materials/unit5/Unit5_Teacher_Led_Student_Sheets.pdf' },
         { title: 'Teacher pack', href: pack }
@@ -336,7 +337,7 @@
           lesson: lesson,
           games: pick('activities').concat(pick('extra')),
           story: story,
-          slides: KEY === 'u51' ? '#/teachers/slides/u5' : '',
+          slides: KEY === 'u53' ? '#/teachers/slides/tricky' : '#/teachers/slides/u5',
           slideTitle: pageName,
           slideNote: 'Slideshow'
         })));
@@ -693,7 +694,7 @@
       wrap.prepend(IR.engage.faces(), h('div', { class: 'badgeart', html: IR.ICON.badge }));
       if (score >= 9) wrap.append(h('h1', null, N.name + ' sticker!'), h('p', { class: 'lead' }, 'Your ' + N.name + ' sticker is on the map.'), h('p', null, 'You got ' + score + ' out of 10.'), h('div', { class: 'row' }, home, trail));
       else if (score >= 7) wrap.append(h('h1', null, 'Review islet'), h('p', { class: 'lead' }, 'Good work! Let\u2019s practice a little more, then try again.'), h('p', null, 'You got ' + score + ' out of 10. Replay Hear and Pick or ' + N.pairT + ', then take the check again.'), h('div', { class: 'row' }, trail, again));
-      else wrap.append(h('h1', null, 'Re-teach islet'), h('p', { class: 'lead' }, 'Thank you for trying! Let\u2019s learn ' + N.name + ' again with a grown-up.'), h('p', null, 'You got ' + score + ' out of 10. A grown-up can teach ' + N.name + ' again with you, then try the check again.'), h('div', { class: 'row' }, trail, again));
+      else wrap.append(h('h1', null, 'Let\u2019s practice this one more time'), h('p', { class: 'lead' }, 'Thank you for trying! Let\u2019s learn ' + N.name + ' again with a grown-up.'), h('p', null, 'You got ' + score + ' out of 10. A grown-up can teach ' + N.name + ' again with you, then try the check again.'), h('div', { class: 'row' }, trail, again));
       app.append(h('div', { class: 'screen resultscreen' }, h('div', { class: 'unitbar' }, IR.ui.pageNav(BASE)), wrap)); Snd.play(score >= 9 ? IR.A.sfx.gong : IR.A.sfx.done);
     }
     /* Island 3 Review: ng and nk mixed */

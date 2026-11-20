@@ -155,7 +155,9 @@
     open.addEventListener('change', () => { S.settings.openAll = open.checked; IR.save(); });
     const timerOff = h('input', { type: 'checkbox', id: 'opt-sort-timer' }); timerOff.checked = !!S.settings.sortTimerOff;
     timerOff.addEventListener('change', () => { S.settings.sortTimerOff = timerOff.checked; IR.save(); });
-    const reset = h('button', { class: 'btn small warn', type: 'button' }, 'Reset all progress');
+    const kidsBtn = h('button', { class: 'btn small', type: 'button' }, 'Student progress');
+    kidsBtn.addEventListener('click', () => openKidReport());
+    const reset = h('button', { class: 'btn small warn', type: 'button' }, 'Reset this child');
     reset.addEventListener('click', () => {
       if (reset.dataset.sure) { IR.resetAll(); modalRoot.innerHTML = ''; location.hash = '#/home'; route(); toast('Progress cleared.'); }
       else { reset.dataset.sure = 1; reset.textContent = 'Tap again to clear everything'; }
@@ -173,7 +175,7 @@
       h('label', { class: 'opt' }, calm, ' Calm motion (fish hold still, no wiggles)'),
       h('label', { class: 'opt' }, open, ' Open every lesson and the check (for testing)'),
       h('label', { class: 'opt' }, timerOff, ' Turn off the sorting timer'),
-      h('div', { class: 'row' }, hearNg, inst, reset),
+      h('div', { class: 'row' }, kidsBtn, hearNg, inst, reset),
       IR.chest && IR.chest.checklist ? IR.chest.checklist() : null,
       h('p', { class: 'small' }, 'The app cannot listen to a child read. Reading aloud stays with a grown-up. Check the isolated ng sound by ear before sharing.')));
   }
@@ -294,6 +296,47 @@
     return h('button', { class: 'zfstart2', type: 'button', 'aria-label': 'Continue. ' + go.sub, onclick: () => { Snd.stop(); location.hash = go.href; } },
       h('span', { class: 'zfst' }, h('b', null, 'Continue'), h('small', null, go.sub)));
   }
+  function openKidPicker() {
+    const pics = IR.KID_PICS || {};
+    let pic = 'zip';
+    const name = h('input', { class: 'kidname', type: 'text', maxlength: '16', placeholder: 'First name', 'aria-label': 'First name' });
+    const choices = h('div', { class: 'kidpics' }, ...Object.keys(pics).map((key) => {
+      const b = h('button', { class: 'kidpic' + (key === pic ? ' on' : ''), type: 'button', 'aria-label': key }, h('img', { src: IR.kidPic(key), alt: '' }));
+      b.addEventListener('click', () => {
+        pic = key;
+        [...choices.children].forEach((el) => el.classList.toggle('on', el === b));
+      });
+      return b;
+    }));
+    const add = h('button', { class: 'btn big primary', type: 'button' }, 'Add this child');
+    add.addEventListener('click', () => {
+      if (!IR.addKid(name.value, pic)) { toast('Type a first name.'); return; }
+      modalRoot.innerHTML = '';
+      location.hash = '#/home';
+      route();
+    });
+    const list = IR.kidList().map((kid) => h('button', {
+      class: 'btn big' + (kid.active ? ' primary' : ''),
+      type: 'button',
+      onclick: () => { IR.useKid(kid.id); modalRoot.innerHTML = ''; location.hash = '#/home'; route(); }
+    }, h('img', { src: IR.kidPic(kid.pic), alt: '', width: 36, height: 36 }), ' ' + kid.name));
+    openModal(h('div', { class: 'kidpick' }, h('h2', null, 'Who is reading?'), ...list, h('h3', null, 'Add a child'), name, choices, add));
+  }
+  function kidChip() {
+    const cur = IR.kidList().filter((kid) => kid.active)[0] || { name: 'My reader', pic: 'zip' };
+    return h('button', { class: 'kidchip', type: 'button', 'aria-label': 'Switch child. ' + cur.name, onclick: openKidPicker },
+      h('img', { src: IR.kidPic(cur.pic), alt: '' }), h('span', null, cur.name));
+  }
+  function openKidReport() {
+    const rows = IR.kidList().map((kid) => h('p', null, kid.name + ': ' + IR.kidActivityCount(kid.id) + ' done'));
+    const dl = h('button', { class: 'btn big', type: 'button' }, 'Download CSV');
+    dl.addEventListener('click', () => {
+      const blob = new Blob([IR.progressCsv()], { type: 'text/csv' });
+      const a = h('a', { href: URL.createObjectURL(blob), download: 'island-readers-progress.csv' });
+      document.body.append(a); a.click(); a.remove();
+    });
+    openModal(h('div', null, h('h2', null, 'Student progress'), ...rows, dl));
+  }
   function homeScreen() {
     const S = IR.S(); IR.newScreen();
     const complete = islandDone('i3'); const earned = gemsEarned(); const nEarned = earned.filter(Boolean).length; const nx = gemNext();
@@ -388,7 +431,7 @@
     const tabs = h('nav', { class: 'hometabs', 'aria-label': 'More places' },
       trailBtn, sightDrop, tab('#/find', 'Find It', 'search'));
     /* Nov 6 2026: full-width home feature (approved banyan scene), then About + the hero beside the unit grid */
-    const banner = h('header', { class: 'hbanner' }, h('h1', null, 'Island Readers'),
+    const banner = h('header', { class: 'hbanner' }, h('h1', null, 'Island Readers'), kidChip(),
       h('div', { class: 'grownwrap' }, h('span', { class: 'grownlab' }, 'Parent and Teacher Materials'), IR.ui.gearButton()));
     /* Read-aloud for the hero text: HOME_INTRO_AUDIO recording if set, else speechSynthesis. Tap again to stop. */
     function readAloudBtn() {
@@ -1101,8 +1144,9 @@
       const title = lesson.title
         ? h('h3', null, lesson.title)
         : h('h3', null, h('span', { class: 'tmsound' }, lesson.s), ' ' + lesson.lesson);
+      const dayText = lesson.days ? slideDays({ days: lesson.days }) : '';
       const slide = lesson.board
-        ? h('button', { class: 'btn big tmlink tmslide', type: 'button', onclick: () => { Snd.stop(); location.hash = lesson.board; } }, 'Slideshow')
+        ? h('button', { class: 'btn big tmlink tmslide', type: 'button', onclick: () => { Snd.stop(); location.hash = lesson.board; } }, 'Slideshow', dayText ? h('span', { class: 'tmdays' }, dayText) : null)
         : h('span', { class: 'btn big tmlink is-soon', 'aria-disabled': 'true' }, 'Slideshow');
       let print = h('span', { class: 'btn big tmlink is-soon', 'aria-disabled': 'true' }, 'Printables');
       let list = null;
@@ -1131,12 +1175,12 @@
         { title: 'Team 7: v z' }
       ] },
       { name: 'Unit 4 \u00b7 Glued Sounds', sounds: [
-        { s: 'ng', lesson: 'Lesson 4.1', days: 3, board: '#/teachers/slides/ng', slides: 'teachers/ng/Lesson3.1_ng_Slide_Presentation.pptx', daily: 'teachers/ng/Lesson3.1_ng_Daily_Practice_Sheets.pdf', pack: 'teachers/ng/Lesson3.1_ng_Teacher_Pack.pdf' },
-        { s: 'nk', lesson: 'Lesson 4.2', days: 3, board: '#/teachers/slides/nk', slides: 'teachers/nk/Lesson3.2_nk_Slide_Presentation.pptx', daily: 'teachers/nk/Lesson3.2_nk_Daily_Practice_Sheets.pdf', pack: 'teachers/nk/Lesson3.2_nk_Teacher_Pack.pdf' }
+        { s: 'ng', lesson: 'Lesson 4.1', days: [1, 2, 3, 4, 5].map((n) => ({ label: 'Day ' + n })), board: '#/teachers/slides/ng', slides: 'teachers/ng/Lesson3.1_ng_Week_Slides_v2.pptx', daily: 'teachers/ng/Lesson3.1_ng_Daily_Practice_Sheets.pdf', pack: 'teachers/ng/Lesson3.1_ng_Teacher_Pack.pdf' },
+        { s: 'nk', lesson: 'Lesson 4.2', days: [1, 2, 3].map((n) => ({ label: 'Day ' + n })), board: '#/teachers/slides/nk', slides: 'teachers/nk/Lesson3.2_nk_Slide_Presentation.pptx', daily: 'teachers/nk/Lesson3.2_nk_Daily_Practice_Sheets.pdf', pack: 'teachers/nk/Lesson3.2_nk_Teacher_Pack.pdf' }
       ] },
       { name: 'Unit 5 \u00b7 Silent e', sounds: [
         { s: 'a_e', lesson: 'Lesson 5.1', board: '#/teachers/slides/u5', slides: 'materials/unit5/Island_Readers_Magic_e_Lesson.pptx', daily: 'materials/unit5/Unit5_Teacher_Led_Student_Sheets.pdf', pack: 'materials/unit5/Lesson5.1_Teacher_Led_Checks.pdf' },
-        { s: 'e', lesson: 'Lesson 5.2', daily: 'materials/unit5/Unit5_Teacher_Led_Student_Sheets.pdf', pack: 'materials/unit5/Lesson5.2_Teacher_Led_Checks.pdf' }
+        { s: 'e', lesson: 'Lesson 5.2', days: [1, 2, 3].map((n) => ({ label: 'Day ' + n })), board: '#/teachers/slides/tricky', slides: 'materials/unit5/Island_Readers_Tricky_e_Endings.pptx', daily: 'materials/unit5/Unit5_Teacher_Led_Student_Sheets.pdf', pack: 'materials/unit5/Lesson5.2_Teacher_Led_Checks.pdf' }
       ] },
       { name: 'Unit 6 \u00b7 Endings', sounds: [
         { s: '-s -es', lesson: 'Lesson 6.1' },
@@ -1159,41 +1203,63 @@
     const root = h('div', { class: 'screen slidescreen', tabindex: '0' });
     const stage = h('div', { class: 'slide-stage' });
     const img = h('img', { class: 'slide-img', alt: sound + ' week slide' });
+    const videoBox = h('div', { class: 'slide-video', hidden: '' });
+    const SLIDE_VIDEO = {
+      ng: { file: 'teachers/ng/slides/04.jpg', src: 'video/ng_cartoon_small.mp4', captions: 'video/ng_cartoon_captions.json', title: 'Zip and Frill: The Nose Hum' }
+    };
     const counter = h('div', { class: 'slide-count', 'aria-live': 'polite' }, '');
     const prev = h('button', { class: 'slide-nav slide-prev', type: 'button', 'aria-label': 'Previous slide' }, '\u25C0');
     const next = h('button', { class: 'slide-nav slide-next', type: 'button', 'aria-label': 'Next slide' }, '\u25B6');
-    let days = (WEEK_DAYS[sound] || []).slice();
-    let onMenu = days.length > 0;
-    const menu = dayMenu(days, (page) => { onMenu = false; menu.hidden = true; i = Math.max(0, page - 1); show(); });
-    if (menu) menu.hidden = !onMenu;
+    const jumps = h('div', { class: 'fs-dayjumps slide-days' });
     const top = h('div', { class: 'slide-top' },
       pageNav('#/teachers'),
       h('h1', { class: 'slide-title' }, sound + ' week slides'),
       counter);
-    if (menu) stage.append(menu);
-    stage.append(prev, img, next);
-    root.append(top, stage);
+    stage.append(prev, img, videoBox, next);
+    root.append(top, jumps, stage);
     app.append(root);
-    let slides = []; let i = 0; let keyHandler = null;
-    function show() {
-      if (onMenu) {
-        if (menu) menu.hidden = false;
-        img.hidden = true;
-        prev.disabled = true;
-        next.disabled = true;
-        counter.textContent = days.length ? (days.length + (days.length === 1 ? ' day' : ' days')) : '';
-        root.focus({ preventScroll: true });
-        return;
-      }
-      if (menu) menu.hidden = true;
+    let slides = []; let days = []; let i = 0; let keyHandler = null;
+    let videoStop = null;
+    function dayStart(day) { return day.start || day.page || 1; }
+    function clearVideo() {
+      if (videoStop) videoStop();
+      videoStop = null;
+      videoBox.innerHTML = '';
+      videoBox.hidden = true;
       img.hidden = false;
-      if (!slides.length) { img.removeAttribute('src'); counter.textContent = 'No slides'; prev.disabled = true; next.disabled = true; return; }
-      img.src = slides[i];
+    }
+    function showVideo(spec) {
+      clearVideo();
+      img.hidden = true;
+      videoBox.hidden = false;
+      const v = h('video', { class: 'slide-img', controls: true, playsinline: true, preload: 'metadata', 'aria-label': spec.title }, h('source', { src: spec.src, type: 'video/mp4' }));
+      const wrap = h('div', { class: 'vwrap slide-vwrap' }, v);
+      const bar = h('div', { class: 'row center cc-row' });
+      videoBox.append(wrap, bar);
+      loadCaptions().then((cues) => {
+        if (!cues || !cues.length || !videoBox.isConnected) return;
+        const cp = captionPlayer(v, wrap, cues);
+        videoStop = cp.stop;
+        wrap.append(cp.overlay);
+        bar.append(cp.toggle);
+      });
+    }
+    function show() {
+      if (!slides.length) { clearVideo(); img.removeAttribute('src'); counter.textContent = 'No slides'; prev.disabled = true; next.disabled = true; return; }
+      const spec = SLIDE_VIDEO[sound];
+      if (spec && slides[i] === spec.file) showVideo(spec);
+      else { clearVideo(); img.src = slides[i]; }
       counter.textContent = (i + 1) + ' / ' + slides.length;
       prev.disabled = i <= 0; next.disabled = i >= slides.length - 1;
+      const n = i + 1;
+      let here = null;
+      days.forEach((day) => { if (n >= dayStart(day)) here = day; });
+      jumps.querySelectorAll('button').forEach((button) => {
+        button.classList.toggle('on', !!(here && button.dataset.day === String(here.day)));
+      });
       root.focus({ preventScroll: true });
     }
-    function go(d) { if (onMenu || !slides.length) return; i = Math.max(0, Math.min(slides.length - 1, i + d)); show(); }
+    function go(d) { if (!slides.length) return; i = Math.max(0, Math.min(slides.length - 1, i + d)); show(); }
     prev.addEventListener('click', () => go(-1));
     next.addEventListener('click', () => go(1));
     keyHandler = (e) => {
@@ -1208,12 +1274,24 @@
     IR._slideCleanup = () => { window.removeEventListener('keydown', keyHandler); };
     fetch('teachers/' + sound + '/slides.json').then((r) => r.json()).then((man) => {
       slides = man.slides || [];
-      if (man.days && man.days.length) days = man.days;
-      if (man.title) top.querySelector('.slide-title').textContent = man.title;
+      days = (man.days && man.days.length) ? man.days : ((WEEK_DAYS[sound] || []).slice());
+      jumps.innerHTML = '';
+      days.forEach((day, index) => {
+        day.day = day.day || index + 1;
+        jumps.append(h('button', {
+          class: 'btn fs-dayjump',
+          type: 'button',
+          'data-day': String(day.day),
+          onclick: () => { i = Math.max(0, dayStart(day) - 1); show(); }
+        }, day.label || ('Day ' + day.day)));
+      });
+      i = 0;
       show();
+      if (man.title) top.querySelector('.slide-title').textContent = man.title;
     }).catch(() => { counter.textContent = 'Could not load slides'; });
     show();
   }
+
   /* Same color names as the home bell cards (TILES). Hex values match the card swatches. */
   const UNIT_BELL = [null, 'gong', 'red', 'coral', 'orange', 'yellow', 'green', 'lblue', 'dblue', 'purple', 'pink', 'silver', 'red', 'coral', 'orange', 'yellow', 'green', 'lblue', 'dblue', 'purple', 'pink', 'rainbow', 'gold'];
   const BELL_HEX = { gong: '#CD7F32', red: '#d93a2b', coral: '#f2765a', orange: '#f08a1c', yellow: '#f2c21b', green: '#2fa84f', lblue: '#5fb4ec', dblue: '#1f3f8f', purple: '#8e3fc9', pink: '#e8609a', silver: '#c0c4cc', gold: '#d4a017' };
@@ -1589,7 +1667,7 @@
     else if (hash.startsWith('#/about')) aboutScreen();
     else if (hash.startsWith('#/trail')) islandTrailPage();
     else if (hash.startsWith('#/find')) findScreen();
-    else if ((m = /^#\/teachers\/slides\/(ng|nk|u5)$/.exec(hash))) slidesViewer(m[1]);
+    else if ((m = /^#\/teachers\/slides\/(ng|nk|u5|tricky)$/.exec(hash))) slidesViewer(m[1]);
     else if (hash.startsWith('#/teachers')) { if (IR._slideCleanup) { IR._slideCleanup(); IR._slideCleanup = null; } teachersScreen(); }
     else if (hash.startsWith('#/placement')) IR.placement.render(app, (n) => {
       const bell = (IR.placement.BELL || {})[n] || { unit: n, name: 'this bell' };

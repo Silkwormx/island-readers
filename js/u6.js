@@ -58,7 +58,7 @@
     fish: 'Catch only the fish whose word has the ending.',
     check: 'Let your child work alone. Just cheer.'
   };
-  const GROWN = 'First miss: Listen again, then play the ending sound. Second miss: read the base, then play the ending sound. Never say the letter names. About 10 to 12 minutes for the skill, then the story. 9 or 10: move on. 7 or 8: review. 6 or below: re-teach.';
+  const GROWN = 'First miss: Listen again, then play the ending sound. Second miss: read the base, then play the ending sound. Never say the letter names. About 10 to 12 minutes for the skill, then the story. 9 or 10: move on. 7 or 8: review. 6 or below: Re-teach.';
 
   function stepsFor(L) {
     return [
@@ -467,7 +467,7 @@
     const home = h('button', { class: 'btn big primary', type: 'button', onclick: () => { location.hash = '#/home'; } }, 'See the sky map');
     if (score >= 9) wrap.append(h('h1', null, 'Move on'), h('p', { class: 'lead' }, 'You got ' + score + ' out of 10.'));
     else if (score >= 7) wrap.append(h('h1', null, 'Review'), h('p', { class: 'lead' }, 'You got ' + score + ' out of 10. Practice Hear and Pick or Fish Pond, then try the check again.'));
-    else wrap.append(h('img', { class: 'char zip big', src: 'img/zipA.webp', alt: 'Zip' }), h('h1', null, 'Re-teach'), h('p', { class: 'lead' }, 'You got ' + score + ' out of 10. A grown-up can teach this ending again, then try the check again.'));
+    else wrap.append(h('img', { class: 'char zip big', src: 'img/zipA.webp', alt: 'Zip' }), h('h1', null, 'Let\u2019s practice this one more time'), h('p', { class: 'lead' }, 'You got ' + score + ' out of 10. A grown-up can re-teach this ending, then try the check again.'));
     wrap.append(h('div', { class: 'row' }, score >= 9 ? home : again, back));
     if (score >= 7) wrap.prepend(IR.celebration(score >= 9));
     app.append(h('div', { class: 'screen resultscreen' }, h('div', { class: 'unitbar' }, IR.ui.pageNav('#/u6')), wrap));

@@ -1,0 +1,54 @@
+{
+ "id": "tricky",
+ "title": "Unit 5 \u00b7 Lesson 2 \u00b7 Tricky e",
+ "count": 30,
+ "days": [
+  {
+   "day": 1,
+   "start": 2,
+   "label": "Day 1"
+  },
+  {
+   "day": 2,
+   "start": 10,
+   "label": "Day 2"
+  },
+  {
+   "day": 3,
+   "start": 19,
+   "label": "Day 3"
+  }
+ ],
+ "slides": [
+  "teachers/tricky/slides/slide-01.jpg",
+  "teachers/tricky/slides/slide-02.jpg",
+  "teachers/tricky/slides/slide-03.jpg",
+  "teachers/tricky/slides/slide-04.jpg",
+  "teachers/tricky/slides/slide-05.jpg",
+  "teachers/tricky/slides/slide-06.jpg",
+  "teachers/tricky/slides/slide-07.jpg",
+  "teachers/tricky/slides/slide-08.jpg",
+  "teachers/tricky/slides/slide-09.jpg",
+  "teachers/tricky/slides/slide-10.jpg",
+  "teachers/tricky/slides/slide-11.jpg",
+  "teachers/tricky/slides/slide-12.jpg",
+  "teachers/tricky/slides/slide-13.jpg",
+  "teachers/tricky/slides/slide-14.jpg",
+  "teachers/tricky/slides/slide-15.jpg",
+  "teachers/tricky/slides/slide-16.jpg",
+  "teachers/tricky/slides/slide-17.jpg",
+  "teachers/tricky/slides/slide-18.jpg",
+  "teachers/tricky/slides/slide-19.jpg",
+  "teachers/tricky/slides/slide-20.jpg",
+  "teachers/tricky/slides/slide-21.jpg",
+  "teachers/tricky/slides/slide-22.jpg",
+  "teachers/tricky/slides/slide-23.jpg",
+  "teachers/tricky/slides/slide-24.jpg",
+  "teachers/tricky/slides/slide-25.jpg",
+  "teachers/tricky/slides/slide-26.jpg",
+  "teachers/tricky/slides/slide-27.jpg",
+  "teachers/tricky/slides/slide-28.jpg",
+  "teachers/tricky/slides/slide-29.jpg",
+  "teachers/tricky/slides/slide-30.jpg"
+ ]
+}

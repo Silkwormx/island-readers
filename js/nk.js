@@ -418,7 +418,7 @@
     if (score < 7) wrap.append(h('img', { class: 'char zip big', src: 'img/zip.webp', alt: 'Zip' }));
     if (score >= 9) wrap.append(h('div', { class: 'badgeart', html: IR.ICON.badge }), h('h1', null, 'nk sticker!'), h('p', { class: 'lead' }, 'Your nk sticker is on the map.'), h('p', null, 'You got ' + score + ' out of 10.'), h('div', { class: 'row' }, home, trail));
     else if (score >= 7) wrap.append(h('h1', null, 'Review islet'), h('p', { class: 'lead' }, 'Good work! Let\u2019s practice a little more, then try again.'), h('p', null, 'You got ' + score + ' out of 10. Replay Hear and Pick or ng or nk?, then take the check again.'), h('div', { class: 'row' }, trail, again));
-    else wrap.append(h('h1', null, 'Re-teach islet'), h('p', { class: 'lead' }, 'Thank you for trying! Let\u2019s learn nk again with a grown-up.'), h('p', null, 'You got ' + score + ' out of 10. A grown-up can teach the nk sound again with you, then try the check again.'), h('div', { class: 'row' }, trail, again));
+    else wrap.append(h('h1', null, 'Let\u2019s practice this one more time'), h('p', { class: 'lead' }, 'Thank you for trying! Let\u2019s learn nk again with a grown-up.'), h('p', null, 'You got ' + score + ' out of 10. A grown-up can teach the nk sound again with you, then try the check again.'), h('div', { class: 'row' }, trail, again));
     if (score >= 7) wrap.prepend(IR.celebration(score >= 9));
     app.append(h('div', { class: 'screen resultscreen' }, h('div', { class: 'unitbar' }, IR.ui.pageNav('#/nk')), wrap)); Snd.play(score >= 9 ? IR.A.sfx.gong : IR.A.sfx.done);
   }

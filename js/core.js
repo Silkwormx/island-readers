@@ -3,6 +3,8 @@
   'use strict';
   const D = window.IR_DATA;
   const KEY = 'ir_sample_ng_v1';
+  const KIDS_KEY = 'ir_kids_v1';
+  const KID_PICS = { zip: 'img/zipA.webp', frill: 'img/frill.webp', apple: 'foundation/img/letters/a_apple.jpg', turtle: 'foundation/img/letters/t_tama_sea_turtle.jpg' };
   const CHUNK_COLORS = { ang: '#D9502B', ing: '#0E8584', ong: '#6B45B8', ung: '#A06A00' };
 
   /* ---------- small DOM helpers ---------- */
@@ -93,14 +95,34 @@
     progress: { v: 1, studentId: null, unit: 'island3-ng', activities: {}, updatedAt: null }
   });
   let mem = null;
+  let kidsBook = null;
+  function readBook() {
+    try {
+      const raw = localStorage.getItem(KIDS_KEY);
+      if (!raw) return null;
+      const book = JSON.parse(raw);
+      if (!book || !book.kids || !book.active || !book.kids[book.active]) return null;
+      return book;
+    } catch (e) { return null; }
+  }
+  function writeBook() {
+    if (!kidsBook) return;
+    try { localStorage.setItem(KIDS_KEY, JSON.stringify(kidsBook)); } catch (e) { /* storage blocked */ }
+  }
   function load() {
     try {
-      const r = localStorage.getItem(KEY);
-      if (r) {
-        const s = migrate(Object.assign(blank(), JSON.parse(r)));
+      kidsBook = readBook();
+      if (kidsBook) {
+        const s = migrate(Object.assign(blank(), kidsBook.kids[kidsBook.active].state || {}));
         if (s._migratedAutoplay) { delete s._migratedAutoplay; try { localStorage.setItem(KEY, JSON.stringify(s)); } catch (e2) { /* ignore */ } }
         return s;
       }
+      const r = localStorage.getItem(KEY);
+      const s = migrate(Object.assign(blank(), r ? JSON.parse(r) : {}));
+      kidsBook = { v: 1, active: 'default', kids: { default: { id: 'default', name: 'My reader', pic: 'zip', state: s } } };
+      writeBook();
+      if (s._migratedAutoplay) { delete s._migratedAutoplay; try { localStorage.setItem(KEY, JSON.stringify(s)); } catch (e2) { /* ignore */ } }
+      return s;
     } catch (e) { /* ignore */ }
     return mem || blank();
   }
@@ -119,6 +141,61 @@
   function save() {
     mem = S;
     try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) { /* storage blocked: keep in memory */ }
+    if (kidsBook && kidsBook.kids[kidsBook.active]) {
+      kidsBook.kids[kidsBook.active].state = S;
+      writeBook();
+    }
+  }
+  function kidList() {
+    if (!kidsBook) return [];
+    return Object.keys(kidsBook.kids).map((id) => {
+      const kid = kidsBook.kids[id];
+      return { id: id, name: kid.name, pic: kid.pic || 'zip', active: id === kidsBook.active };
+    });
+  }
+  function kidPic(pic) { return KID_PICS[pic] || KID_PICS.zip; }
+  function useKid(id) {
+    if (!kidsBook || !kidsBook.kids[id] || id === kidsBook.active) return false;
+    kidsBook.kids[kidsBook.active].state = S;
+    kidsBook.active = id;
+    S = migrate(Object.assign(blank(), kidsBook.kids[id].state || {}));
+    save();
+    applySettings();
+    return true;
+  }
+  function addKid(name, pic) {
+    const clean = String(name || '').replace(/[^A-Za-z' -]/g, '').trim().slice(0, 16);
+    if (!clean || !kidsBook) return null;
+    const id = 'k' + Date.now().toString(36);
+    kidsBook.kids[kidsBook.active].state = S;
+    kidsBook.kids[id] = { id: id, name: clean, pic: KID_PICS[pic] ? pic : 'zip', state: blank() };
+    kidsBook.active = id;
+    S = kidsBook.kids[id].state;
+    save();
+    applySettings();
+    return id;
+  }
+  function kidActivityCount(id) {
+    const kid = kidsBook && kidsBook.kids[id];
+    if (!kid) return 0;
+    const st = id === kidsBook.active ? S : (kid.state || {});
+    const acts = (st.progress && st.progress.activities) || {};
+    return Object.keys(acts).filter((key) => acts[key] && acts[key].completed).length;
+  }
+  function progressCsv() {
+    const cell = (v) => '"' + String(v == null ? '' : v).replace(/"/g, '""') + '"';
+    const rows = [['child', 'picture', 'activity', 'stars', 'completed', 'first_completed', 'last_completed', 'attempts']];
+    kidList().forEach((kid) => {
+      const st = kid.id === kidsBook.active ? S : (kidsBook.kids[kid.id].state || {});
+      const acts = (st.progress && st.progress.activities) || {};
+      const keys = Object.keys(acts);
+      if (!keys.length) rows.push([kid.name, kid.pic, '', '', '', '', '', '']);
+      keys.forEach((aid) => {
+        const a = acts[aid] || {};
+        rows.push([kid.name, kid.pic, aid, a.stars || 0, a.completed ? 'yes' : 'no', a.firstCompletedAt || '', a.lastCompletedAt || '', a.attempts || 0]);
+      });
+    });
+    return rows.map((row) => row.map(cell).join(',')).join('\n');
   }
   /* One call records a completed activity (a skipped or unfinished one is never recorded). */
   function recordActivity(id, stars) {
@@ -340,6 +417,7 @@
   }
 
   window.IR = { celebration, ding, tryAgain, coachMiss, coachTiles, coachReset, againLater, D, S: () => S, save, resetAll, load, h, $, $$, sleep, shuffle, pick, colorWord, icon, ICON, CHUNK_COLORS, kidLesson,
+    kidList, kidPic, useKid, addKid, kidActivityCount, progressCsv, KID_PICS,
     touchStreak, streakInfo, recordActivity, isDone, activityStars, progressRecord, totalStars, applySettings, Snd, A, sayWord, newScreen, speakerBtn, hasPhoneme, playPhoneme,
     DEMO_UNLOCK_ALL: true };
 })();
