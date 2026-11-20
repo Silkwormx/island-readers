@@ -358,7 +358,7 @@
    "letter": "b",
    "group": "G4",
    "sound": "/b/ as in banyan",
-   "keyword": "banyan tree",
+   "keyword": "banyan",
    "character": "Bani the banyan",
    "concept": "A tall banyan tree. The trunk is the tall stick and the round root ball sits at the bottom right. Bat first, then ball.",
    "chant": "Bani the banyan bounces: /b/ /b/ /b/!",
@@ -373,12 +373,12 @@
    "group": "G4",
    "sound": "/e/ as in egg",
    "keyword": "egg",
-   "character": "Eto the turtle egg",
-   "concept": "A baby turtle hatching from a cracked egg. Her body curls around like an e and her flipper stretches straight across the middle as the line.",
+   "character": "the egg",
+   "concept": "A plain egg in a nest. The egg is the picture for /e/.",
    "chant": "Eto the egg cracks: /e/ /e/ /e/!",
    "action": "Tap your fist on your palm like cracking an egg for each /e/.",
    "formation": "Start in the middle. Go straight across to the right, then curve up, back and around. Stop open.",
-   "art": "img/letters/e_eto_turtle_egg.jpg",
+   "art": "img/letters/e_egg.jpg",
    "cue": "'Think of Eto' + crack the egg",
    "capital": "E"
   },
@@ -485,12 +485,12 @@
    "group": "G6",
    "sound": "/ks/ as in box",
    "keyword": "box",
-   "character": "Tix the sugar cane",
-   "concept": "Two island sugar cane stalks crossed and tied in an x on top of a little gift box.",
-   "chant": "Tix ties the box: /ks/ /ks/!",
+   "character": "the box",
+   "concept": "A gift box. The /ks/ sound is at the end of box.",
+   "chant": "Cross the box: /ks/ /ks/!",
    "action": "Cross your arms in an x and say /ks/.",
    "formation": "Start at the middle line on the left and slant down to the right. Lift. Start at the middle line on the right and slant down to the left.",
-   "art": "img/letters/x_tix_sugar_cane.jpg",
+   "art": "img/letters/x_box.jpg",
    "cue": "'Think of Tix' + cross arms",
    "capital": "X"
   },
@@ -526,7 +526,7 @@
    "letter": "z",
    "group": "G7",
    "sound": "/z/ as in zigzag",
-   "keyword": "zigzag lightning",
+   "keyword": "zigzag",
    "character": "Zuzu the zigzag cloud",
    "concept": "A smiling little cloud sitting on a glowing golden lightning bolt that goes across, slants down and goes across again like a z.",
    "chant": "Zuzu zigzags: /zzz/!",
@@ -4393,7 +4393,7 @@
     "I am Tom.",
     "I sat in the mud.",
     "Mom is not mad.",
-    "I can dip a cup in the pond."
+    "I can dip a cup in the pot."
    ],
    "ears_warmup": {
     "minutes": 2,
@@ -4818,7 +4818,7 @@
      "id": "fluency",
      "step": "Fluency",
      "minutes": 2,
-     "what_to_do": "30-second word sprint against the child's own best, then read the story twice: I am Tom. I sat in the mud. Mom is not mad. I can dip a cup in the pond."
+     "what_to_do": "30-second word sprint against the child's own best, then read the story twice: I am Tom. I sat in the mud. Mom is not mad. I can dip a cup in the pot."
     },
     {
      "id": "celebrate",
@@ -5776,11 +5776,11 @@
    "heart_words_today": [],
    "sentences_today": [
     "a big pig",
-    "The dog digs."
+    "The dog can dig."
    ],
    "story": [
     "A big pig is in the mud.",
-    "A dog digs in the sand.",
+    "A dog can dig in the mud.",
     "The bug sat on the dog.",
     "The pig and the dog nap."
    ],
@@ -5969,7 +5969,7 @@
     {
      "word": "dog",
      "scene": "A happy dog runs",
-     "caption": "The dog digs."
+     "caption": "The dog can dig."
     }
    ],
    "dictation": {
@@ -5978,7 +5978,7 @@
      "bib",
      "dog"
     ],
-    "sentence": "The dog digs.",
+    "sentence": "The dog can dig.",
     "routine": "Say the word. Child repeats it, taps the sounds on fingers, writes it on paper, then checks against the model and fixes any letter."
    },
    "sprint": {
@@ -6206,19 +6206,19 @@
      "id": "read",
      "step": "Blend and read: Word comes alive",
      "minutes": 5,
-     "what_to_do": "Word comes alive for bag, big, bug: each letter character says its sound, they hop together and link arms, a quick scene shows the meaning, then the plain word with no pictures. Then read the mixed list (each word 2-3 times): bib big bug bat big bag bug dog bag pig dig bat bug pig dog bib dig bat dig pig bag bib big dog. Review: dim, mom, cot, cat, can, cap, it, in, if, pot, top, mop. Sentences: a big pig / The dog digs."
+     "what_to_do": "Word comes alive for bag, big, bug: each letter character says its sound, they hop together and link arms, a quick scene shows the meaning, then the plain word with no pictures. Then read the mixed list (each word 2-3 times): bib big bug bat big bag bug dog bag pig dig bat bug pig dog bib dig bat dig pig bag bib big dog. Review: dim, mom, cot, cat, can, cap, it, in, if, pot, top, mop. Sentences: a big pig / The dog can dig."
     },
     {
      "id": "spell",
      "step": "Spell and dictation",
      "minutes": 3,
-     "what_to_do": "Build with tiles: big, bug, dog. Dictation on paper: pig, bib, dog, and the sentence: The dog digs. Say, tap, write, check against the model."
+     "what_to_do": "Build with tiles: big, bug, dog. Dictation on paper: pig, bib, dog, and the sentence: The dog can dig. Say, tap, write, check against the model."
     },
     {
      "id": "fluency",
      "step": "Fluency",
      "minutes": 2,
-     "what_to_do": "30-second word sprint against the child's own best, then read the story twice: A big pig is in the mud. A dog digs in the sand. The bug sat on the dog. The pig and the dog nap."
+     "what_to_do": "30-second word sprint against the child's own best, then read the story twice: A big pig is in the mud. A dog can dig in the mud. The bug sat on the dog. The pig and the dog nap."
     },
     {
      "id": "celebrate",
@@ -7248,7 +7248,7 @@
     "Gus is a big dog.",
     "Gus can beg.",
     "Meg can tug the bag.",
-    "Gus dug a pit in the sand."
+    "Gus dug a pit in the mud."
    ],
    "ears_warmup": {
     "minutes": 2,
@@ -7717,7 +7717,7 @@
      "id": "fluency",
      "step": "Fluency",
      "minutes": 2,
-     "what_to_do": "30-second word sprint against the child's own best, then read the story twice: Gus is a big dog. Gus can beg. Meg can tug the bag. Gus dug a pit in the sand."
+     "what_to_do": "30-second word sprint against the child's own best, then read the story twice: Gus is a big dog. Gus can beg. Meg can tug the bag. Gus dug a pit in the mud."
     },
     {
      "id": "celebrate",
@@ -7745,8 +7745,8 @@
     "Meg and Ken dig."
    ],
    "story": [
-    "Meg and Ben get ten pens.",
-    "Meg sets the pens in a big mug.",
+    "Meg and Ben get a pen.",
+    "Meg sets the pen in a big mug.",
     "Ben sits in the den.",
     "It is fun to sit in the den."
    ],
@@ -8248,7 +8248,7 @@
      "id": "fluency",
      "step": "Fluency",
      "minutes": 2,
-     "what_to_do": "30-second word sprint against the child's own best, then read the story twice: Meg and Ben get ten pens. Meg sets the pens in a big mug. Ben sits in the den. It is fun to sit in the den."
+     "what_to_do": "30-second word sprint against the child's own best, then read the story twice: Meg and Ben get a pen. Meg sets the pen in a big mug. Ben sits in the den. It is fun to sit in the den."
     },
     {
      "id": "celebrate",
@@ -8284,7 +8284,7 @@
    ],
    "story": [
     "The red hen hops.",
-    "A rat runs to the hen.",
+    "A rat ran to the hen.",
     "The hen and the rat hug.",
     "Run, rat, run!"
    ],
@@ -8792,7 +8792,7 @@
      "id": "fluency",
      "step": "Fluency",
      "minutes": 2,
-     "what_to_do": "30-second word sprint against the child's own best, then read the story twice: The red hen hops. A rat runs to the hen. The hen and the rat hug. Run, rat, run!"
+     "what_to_do": "30-second word sprint against the child's own best, then read the story twice: The red hen hops. A rat ran to the hen. The hen and the rat hug. Run, rat, run!"
     },
     {
      "id": "celebrate",
@@ -9358,13 +9358,13 @@
    ],
    "sentences_today": [
     "His hat is wet.",
-    "Pam has a lot of hens."
+    "Pam has a hen."
    ],
    "story": [
     "Ken has a hut.",
     "His hut is hot.",
-    "A lot of hens hid in the hut.",
-    "Ken hums to the hens."
+    "A hen hid in the hut.",
+    "Ken hums to the hen."
    ],
    "ears_warmup": {
     "minutes": 2,
@@ -9531,7 +9531,7 @@
      "hid",
      "him"
     ],
-    "sentence": "Pam has a lot of hens.",
+    "sentence": "Pam has a hen.",
     "routine": "Say the word. Child repeats it, taps the sounds on fingers, writes it on paper, then checks against the model and fixes any letter."
    },
    "sprint": {
@@ -9852,19 +9852,19 @@
      "id": "read",
      "step": "Blend and read: Word comes alive",
      "minutes": 5,
-     "what_to_do": "Word comes alive for hit, hot, hut: each letter character says its sound, they hop together and link arms, a quick scene shows the meaning, then the plain word with no pictures. Then read the mixed list (each word 2-3 times): hut hit hut hip hid him hot him rib him hot hit hum rib hid hip rib hum hit hip hum hot hid hut. Review: lap, lid, lip, hat, hen, hug, tug, dug, gap, pat, tap, map. Sentences: His hat is wet. / Pam has a lot of hens."
+     "what_to_do": "Word comes alive for hit, hot, hut: each letter character says its sound, they hop together and link arms, a quick scene shows the meaning, then the plain word with no pictures. Then read the mixed list (each word 2-3 times): hut hit hut hip hid him hot him rib him hot hit hum rib hid hip rib hum hit hip hum hot hid hut. Review: lap, lid, lip, hat, hen, hug, tug, dug, gap, pat, tap, map. Sentences: His hat is wet. / Pam has a hen."
     },
     {
      "id": "spell",
      "step": "Spell and dictation",
      "minutes": 3,
-     "what_to_do": "Build with tiles: hat, hen, rug. Dictation on paper: wet, hid, him, and the sentence: Pam has a lot of hens. Say, tap, write, check against the model."
+     "what_to_do": "Build with tiles: hat, hen, rug. Dictation on paper: wet, hid, him, and the sentence: Pam has a hen. Say, tap, write, check against the model."
     },
     {
      "id": "fluency",
      "step": "Fluency",
      "minutes": 2,
-     "what_to_do": "30-second word sprint against the child's own best, then read the story twice: Ken has a hut. His hut is hot. A lot of hens hid in the hut. Ken hums to the hens."
+     "what_to_do": "30-second word sprint against the child's own best, then read the story twice: Ken has a hut. His hut is hot. A hen hid in the hut. Ken hums to the hen."
     },
     {
      "id": "celebrate",
@@ -9899,7 +9899,7 @@
     "Pam ran to the log.",
     "Pam has a rod and a net.",
     "Pam got a big cod!",
-    "Pam wins."
+    "Pam can win."
    ],
    "ears_warmup": {
     "minutes": 2,
@@ -10407,7 +10407,7 @@
      "id": "fluency",
      "step": "Fluency",
      "minutes": 2,
-     "what_to_do": "30-second word sprint against the child's own best, then read the story twice: Pam ran to the log. Pam has a rod and a net. Pam got a big cod! Pam wins."
+     "what_to_do": "30-second word sprint against the child's own best, then read the story twice: Pam ran to the log. Pam has a rod and a net. Pam got a big cod! Pam can win."
     },
     {
      "id": "celebrate",
@@ -10433,7 +10433,7 @@
    ],
    "story": [
     "The dog has a red rag.",
-    "The dog runs and wags.",
+    "The dog can wag.",
     "His leg is wet.",
     "It is a fun dog."
    ],
@@ -10947,7 +10947,7 @@
      "id": "fluency",
      "step": "Fluency",
      "minutes": 2,
-     "what_to_do": "30-second word sprint against the child's own best, then read the story twice: The dog has a red rag. The dog runs and wags. His leg is wet. It is a fun dog."
+     "what_to_do": "30-second word sprint against the child's own best, then read the story twice: The dog has a red rag. The dog can wag. His leg is wet. It is a fun dog."
     },
     {
      "id": "celebrate",
@@ -10984,7 +10984,7 @@
    "story": [
     "Jen has jam.",
     "Yum, yum!",
-    "Jen jogs to the jet.",
+    "Jen can jog to the jet.",
     "Yes, the jet is red."
    ],
    "ears_warmup": {
@@ -11518,7 +11518,7 @@
      "id": "fluency",
      "step": "Fluency",
      "minutes": 2,
-     "what_to_do": "30-second word sprint against the child's own best, then read the story twice: Jen has jam. Yum, yum! Jen jogs to the jet. Yes, the jet is red."
+     "what_to_do": "30-second word sprint against the child's own best, then read the story twice: Jen has jam. Yum, yum! Jen can jog to the jet. Yes, the jet is red."
     },
     {
      "id": "celebrate",
@@ -11553,7 +11553,7 @@
    ],
    "story": [
     "A fox sat in a box.",
-    "The fox has six figs.",
+    "The fox has a fig.",
     "An ox can fix the box.",
     "The fox did not quit."
    ],
@@ -12076,7 +12076,7 @@
      "id": "fluency",
      "step": "Fluency",
      "minutes": 2,
-     "what_to_do": "30-second word sprint against the child's own best, then read the story twice: A fox sat in a box. The fox has six figs. An ox can fix the box. The fox did not quit."
+     "what_to_do": "30-second word sprint against the child's own best, then read the story twice: A fox sat in a box. The fox has a fig. An ox can fix the box. The fox did not quit."
     },
     {
      "id": "celebrate",
@@ -12687,7 +12687,7 @@
    "story": [
     "Max is a big ox.",
     "Rex is a fox.",
-    "Max and Rex jog up the hill.",
+    "Max and Rex jog to the hut.",
     "Yes, you can jog, Max!"
    ],
    "ears_warmup": {
@@ -13238,7 +13238,7 @@
      "id": "fluency",
      "step": "Fluency",
      "minutes": 2,
-     "what_to_do": "30-second word sprint against the child's own best, then read the story twice: Max is a big ox. Rex is a fox. Max and Rex jog up the hill. Yes, you can jog, Max!"
+     "what_to_do": "30-second word sprint against the child's own best, then read the story twice: Max is a big ox. Rex is a fox. Max and Rex jog to the hut. Yes, you can jog, Max!"
     },
     {
      "id": "celebrate",
@@ -14953,7 +14953,7 @@
     "Liz said, \"I can zip the bag.\"",
     "The bag was big.",
     "Zed and Liz got in the van.",
-    "The van went up the hill.",
+    "The van got to the hut.",
     "It was fun!"
    ],
    "ears_warmup": {
@@ -15501,7 +15501,7 @@
      "id": "fluency",
      "step": "Fluency",
      "minutes": 2,
-     "what_to_do": "30-second word sprint against the child's own best, then read the story twice: Liz said, \"I can zip the bag.\" The bag was big. Zed and Liz got in the van. The van went up the hill. It was fun!"
+     "what_to_do": "30-second word sprint against the child's own best, then read the story twice: Liz said, \"I can zip the bag.\" The bag was big. Zed and Liz got in the van. The van got to the hut. It was fun!"
     },
     {
      "id": "celebrate",

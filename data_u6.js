@@ -68,17 +68,17 @@ window.IR_DATA_U6 = {
         { "w": "from" },
         { "w": "are" }
       ],
-      "newWords": ["gone"],
+      "newWords": [],
       "story": [
         { "text": "Zip and Frill pack lunches in boxes.", "voice": "Zip", "img": "img/u61_p01.webp" },
         { "text": "Zip sets the boxes on a rock and naps.", "voice": "Zip", "img": "img/u61_p02.webp" },
         { "text": "Six crabs pop up from the sand!", "voice": "Zip", "img": "img/u61_p03.webp" },
         { "text": "The crabs grab the boxes and run.", "voice": "Zip", "img": "img/u61_p04.webp" },
-        { "text": "Zip wakes up. The lunches are gone!", "voice": "Zip", "img": "img/u61_p05.webp" },
+        { "text": "Zip wakes up. No lunch is in the box!", "voice": "Zip", "img": "img/u61_p05.webp" },
         { "text": "Zip and Frill dash past the shells and rocks.", "voice": "Zip", "img": "img/u61_p06.webp" },
-        { "text": "Frill spots six red claws in a log.", "voice": "Zip", "img": "img/u61_p07.webp" },
+        { "text": "Frill spots six red crabs in a log.", "voice": "Zip", "img": "img/u61_p07.webp" },
         { "text": "Zip pokes the log. The crabs pinch Zip! Zip yelps.", "voice": "Zip", "img": "img/u61_p08.webp" },
-        { "text": "Frill has a plan. Frill sets out snacks for the crabs.", "voice": "Zip", "img": "img/u61_p09.webp" },
+        { "text": "Frill has a plan. Frill sets snacks for the crabs.", "voice": "Zip", "img": "img/u61_p09.webp" },
         { "text": "The crabs and the pals munch lunch on the rocks.", "voice": "Zip", "img": "img/u61_p10.webp" }
       ]
     },
@@ -159,12 +159,12 @@ window.IR_DATA_U6 = {
         { "text": "Zip and Frill made a red kite.", "voice": "Zip", "img": "img/u62_p01.webp" },
         { "text": "Zip tugged the string. The kite lifted up!", "voice": "Zip", "img": "img/u62_p02.webp" },
         { "text": "The wind huffed and puffed.", "voice": "Zip", "img": "img/u62_p03.webp" },
-        { "text": "The kite zipped and flipped past the green bell.", "voice": "Zip", "img": "img/u62_p04.webp" },
+        { "text": "The kite zipped and flipped past the big bell.", "voice": "Zip", "img": "img/u62_p04.webp" },
         { "text": "Snap! The string popped.", "voice": "Zip", "img": "img/u62_p05.webp" },
         { "text": "The kite drifted and landed on the sand.", "voice": "Zip", "img": "img/u62_p06.webp" },
         { "text": "A crab grabbed the kite and hid in a hole.", "voice": "Zip", "img": "img/u62_p07.webp" },
         { "text": "Zip and Frill hunted and hunted.", "voice": "Zip", "img": "img/u62_p08.webp" },
-        { "text": "Frill spotted a red tip by a rock. The crab had it!", "voice": "Zip", "img": "img/u62_p09.webp" },
+        { "text": "Frill spotted a red tip on a rock. The crab had it!", "voice": "Zip", "img": "img/u62_p09.webp" },
         { "text": "Frill swapped the crab a snack for the kite. Zip fixed the string, and the pals yelled as it lifted up!", "voice": "Zip", "img": "img/u62_p10.webp" }
       ]
     },
@@ -227,19 +227,29 @@ window.IR_DATA_U6 = {
         { "type": "pick", "word": "swinging", "choices": ["swinging", "swing", "swings"] },
         { "type": "pick", "word": "ringing", "choices": ["ringing", "ring", "rings"] }
       ],
+      "heart": [
+        { "w": "the" },
+        { "w": "a" },
+        { "w": "is" },
+        { "w": "said" },
+        { "w": "and" },
+        { "w": "to" },
+        { "w": "of" },
+        { "w": "I" }
+      ],
       "story": [
-        { "text": "The orange bell is hanging on the branch.", "voice": "Zip", "img": "img/ng_p01.webp" },
-        { "text": "Zip and Frill hike up the path.", "voice": "Zip", "img": "img/ng_p02.webp" },
-        { "text": "A long stick is hanging by the bell.", "voice": "Zip", "img": "img/ng_p07.webp" },
-        { "text": "The stick is bumping the bell. Clunk.", "voice": "Zip", "img": "img/ng_p09.webp" },
-        { "text": "Zip tugs the rope. The bell will not ring.", "voice": "Zip", "img": "img/ng_p03.webp" },
-        { "text": "\"The stick is bumping it,\" said Frill.", "voice": "Frill", "img": "img/ng_p08.webp" },
-        { "text": "Zip is lifting the long stick up.", "voice": "Zip", "img": "img/ng_p05.webp" },
-        { "text": "The stick is swinging back. It hits the bell.", "voice": "Zip", "img": "img/ng_p06.webp" },
-        { "text": "Frill is helping Zip lift the stick.", "voice": "Zip", "img": "img/ng_p10.webp" },
-        { "text": "Frill is shifting the stick off the path.", "voice": "Zip", "img": "img/ng_p11.webp" },
-        { "text": "The stick is resting on the path.", "voice": "Zip", "img": "img/u6_p2.webp" },
-        { "text": "Zip is ringing the bell. Ding! It rings.", "voice": "Zip", "img": "img/u6_p3.webp" }
+        { "text": "The orange bell is hanging on the branch.", "voice": "Zip", "img": "img/u63_p01.webp" },
+        { "text": "Zip and Frill hike up the path.", "voice": "Zip", "img": "img/u63_p02.webp" },
+        { "text": "A long stick is hanging at the bell.", "voice": "Zip", "img": "img/u63_p03.webp" },
+        { "text": "The stick is bumping the bell. Clunk.", "voice": "Zip", "img": "img/u63_p04.webp" },
+        { "text": "Zip tugs the rope. The bell will not ring.", "voice": "Zip", "img": "img/u63_p05.webp" },
+        { "text": "\"The stick is bumping it,\" said Frill.", "voice": "Frill", "img": "img/u63_p06.webp" },
+        { "text": "Zip is lifting the long stick up.", "voice": "Zip", "img": "img/u63_p07.webp" },
+        { "text": "The stick is swinging back. It hits the bell.", "voice": "Zip", "img": "img/u63_p08.webp" },
+        { "text": "Frill is helping Zip lift the stick.", "voice": "Zip", "img": "img/u63_p09.webp" },
+        { "text": "Frill is shifting the stick off the path.", "voice": "Zip", "img": "img/u63_p10.webp" },
+        { "text": "The stick is resting on the path.", "voice": "Zip", "img": "img/u63_p11.webp" },
+        { "text": "Zip is ringing the bell. Ding! It rings.", "voice": "Zip", "img": "img/u63_p12.webp" }
       ]
     }
   ]

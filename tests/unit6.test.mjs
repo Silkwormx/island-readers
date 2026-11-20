@@ -46,9 +46,9 @@ test('stories are Lunch Crabs, Kite That Zipped, and Stick by the Bell', () => {
   assert.match(data, /The Kite That Zipped/);
   assert.match(data, /The Stick by the Bell/);
   assert.match(data, /Six crabs pop up from the sand/);
-  assert.match(data, /The kite zipped and flipped past the green bell/);
+  assert.match(data, /The kite zipped and flipped past the big bell/);
   assert.match(data, /Zip is ringing the bell/);
-  assert.match(data, /"newWords": \["gone"\]/);
+  assert.match(data, /No lunch is in the box/);
   assert.match(data, /"w": "from"/);
   assert.match(data, /"w": "are"/);
   assert.match(data, /"newWords": \["wind", "hole", "snack"\]/);
@@ -59,7 +59,7 @@ test('stories are Lunch Crabs, Kite That Zipped, and Stick by the Bell', () => {
   assert.doesNotMatch(data, /A thick branch landed on the bell/);
   assert.doesNotMatch(data, /Zip packs the cups and the hats/);
   assert.doesNotMatch(u6 + data, /\u2014|—/);
-  assert.match(sw, /ir-20261122r/);
+  assert.match(sw, /ir-20261122s/);
   const rules = fs.readFileSync(new URL('../js/gamerules.js', import.meta.url), 'utf8');
   assert.match(rules, /IR\.pairCard/);
   assert.match(rules, /lesson \? 'Learn' : 'Read'/);

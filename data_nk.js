@@ -125,14 +125,14 @@ window.IR_DATA_NK = {
   {
    "n": 2,
    "img": "img/nk_p2.webp",
-   "text": "Zip yanks the lid. Clunk! Pew, the trunk stinks!",
+   "text": "Zip yanks the lid. Clunk! Yuck, the trunk stinks!",
    "words": [
     "Zip",
     "yanks",
     "the",
     "lid.",
     "Clunk!",
-    "Pew,",
+    "Yuck,",
     "the",
     "trunk",
     "stinks!"
@@ -220,11 +220,11 @@ window.IR_DATA_NK = {
   {
    "n": 4,
    "img": "img/nk_p4.webp",
-   "text": "Zip digs out a pen with no ink. Junk!",
+   "text": "Zip digs up a pen with no ink. Junk!",
    "words": [
     "Zip",
     "digs",
-    "out",
+    "up",
     "a",
     "pen",
     "with",
@@ -275,11 +275,11 @@ window.IR_DATA_NK = {
   {
    "n": 5,
    "img": "img/nk_p5.webp",
-   "text": "Frill digs out a duck. Honk, honk! Junk!",
+   "text": "Frill digs up a duck. Honk, honk! Junk!",
    "words": [
     "Frill",
     "digs",
-    "out",
+    "up",
     "a",
     "duck.",
     "Honk,",
@@ -425,9 +425,9 @@ window.IR_DATA_NK = {
   {
    "n": 8,
    "img": "img/nk_p8.webp",
-   "text": "Out hops a skunk! Zip and Frill jump back.",
+   "text": "Up hops a skunk! Zip and Frill jump back.",
    "words": [
-    "Out",
+    "Up",
     "hops",
     "a",
     "skunk!",
@@ -790,6 +790,14 @@ window.IR_DATA_NK = {
  ],
  "heart": [
   {
+   "w": "yuck",
+   "ex": "Yuck, the trunk stinks."
+  },
+  {
+   "w": "eyes",
+   "ex": "Then eyes blink."
+  },
+  {
    "w": "the",
    "ex": "The trunk stinks."
   },
@@ -924,7 +932,7 @@ window.IR_DATA_NK = {
  ],
  "comp": [
   {
-   "q": "What did Frill pull out of the trunk?",
+   "q": "What did Frill pull up of the trunk?",
    "kind": "recall",
    "answer": "duck",
    "page": 5,
@@ -964,7 +972,7 @@ window.IR_DATA_NK = {
    ]
   },
   {
-   "q": "What came out of the trunk first?",
+   "q": "What came up of the trunk first?",
    "kind": "sequence",
    "answer": "pen",
    "page": 4,
@@ -1269,11 +1277,11 @@ window.IR_DATA_NK = {
   },
   "q1": {
    "voice": "Frill",
-   "text": "What did Frill pull out of the trunk?"
+   "text": "What did Frill pull up of the trunk?"
   },
   "qh1": {
    "voice": "Frill",
-   "text": "Look at this page again. Who pulls out what?"
+   "text": "Look at this page again. Who pulls up what?"
   },
   "q2": {
    "voice": "Frill",
@@ -1281,15 +1289,15 @@ window.IR_DATA_NK = {
   },
   "qh2": {
    "voice": "Frill",
-   "text": "Look at this page again. What hops out of the trunk?"
+   "text": "Look at this page again. What hops up of the trunk?"
   },
   "q3": {
    "voice": "Frill",
-   "text": "What came out of the trunk first?"
+   "text": "What came up of the trunk first?"
   },
   "qh3": {
    "voice": "Frill",
-   "text": "Look at this page again. This came out first."
+   "text": "Look at this page again. This came up first."
   },
   "q4": {
    "voice": "Frill",

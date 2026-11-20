@@ -42,57 +42,57 @@
 
   /* Stroke numbers sit at the start. The arrow is the end of the stroke. */
   const LETTERS = [
-    { id: 'a', name: 'a', nameSay: 'ay', sound: '/a/', soundSay: 'ah, apple', word: 'ant', cue: 'a as in apple', where: 'start',
+    { id: 'a', name: 'a', nameSay: 'ay', sound: '/a/', soundSay: 'ah, apple', word: 'apple', cue: 'a as in apple', where: 'start',
       strokes: [{ d: 'M68 78 C68 48 28 46 28 76 C28 106 70 108 70 78', nx: 96, ny: 70 }, { d: 'M70 58 L70 112', nx: 96, ny: 44 }] },
-    { id: 'm', name: 'm', nameSay: 'em', sound: '/m/', soundSay: 'mmm, map', word: 'map', audio: 'audio/w_map.mp3', cue: 'm as in map', where: 'start',
+    { id: 'm', name: 'm', nameSay: 'em', sound: '/m/', soundSay: 'mmm, mango', word: 'mango', cue: 'm as in mango', where: 'start',
       strokes: [{ d: 'M24 112 L24 52', nx: 12, ny: 40 }, { d: 'M24 70 C24 48 52 48 52 74 L52 112', nx: 36, ny: 40 }, { d: 'M52 70 C52 48 82 48 82 74 L82 112', nx: 70, ny: 40 }] },
-    { id: 's', name: 's', nameSay: 'ess', sound: '/s/', soundSay: 'sss, sun', word: 'sun', audio: 'audio/w_sun.mp3', cue: 's as in sun', where: 'start',
+    { id: 's', name: 's', nameSay: 'ess', sound: '/s/', soundSay: 'sss, snake', word: 'snake', cue: 's as in snake', where: 'start',
       strokes: [{ d: 'M78 52 C78 34 30 36 32 58 C34 78 86 72 78 96 C70 118 28 112 30 92', nx: 90, ny: 40 }] },
-    { id: 't', name: 't', nameSay: 'tee', sound: '/t/', soundSay: 't, tent', word: 'tent', cue: 't as in tent', where: 'start',
+    { id: 't', name: 't', nameSay: 'tee', sound: '/t/', soundSay: 't, turtle', word: 'turtle', cue: 't as in turtle', where: 'start',
       strokes: [{ d: 'M58 30 L58 116', nx: 72, ny: 24 }, { d: 'M34 64 L82 64', nx: 22, ny: 50 }] },
-    { id: 'p', name: 'p', nameSay: 'pee', sound: '/p/', soundSay: 'p, pig', word: 'pig', audio: 'audio/w_pig.mp3', cue: 'p as in pig', where: 'start',
+    { id: 'p', name: 'p', nameSay: 'pee', sound: '/p/', soundSay: 'p, pufferfish', word: 'pufferfish', cue: 'p as in pufferfish', where: 'start',
       strokes: [{ d: 'M36 36 L36 132', nx: 18, ny: 28 }, { d: 'M36 48 C36 34 84 34 84 64 C84 94 36 94 36 74', nx: 48, ny: 28 }] },
-    { id: 'f', name: 'f', nameSay: 'eff', sound: '/f/', soundSay: 'fff, fan', word: 'fan', audio: 'audio/u53_w_fan.mp3', cue: 'f as in fan', where: 'start',
+    { id: 'f', name: 'f', nameSay: 'eff', sound: '/f/', soundSay: 'fff, fern', word: 'fern', cue: 'f as in fern', where: 'start',
       strokes: [{ d: 'M74 40 C74 18 34 16 34 42 L34 122', nx: 84, ny: 28 }, { d: 'M20 70 L62 70', nx: 12, ny: 54 }] },
-    { id: 'i', name: 'i', nameSay: 'eye', sound: '/i/', soundSay: 'ih, ink', word: 'ink', audio: 'audio/nk_w_ink.mp3', cue: 'i as in ink', where: 'start',
+    { id: 'i', name: 'i', nameSay: 'eye', sound: '/i/', soundSay: 'ih, inchworm', word: 'inchworm', cue: 'i as in inchworm', where: 'start',
       strokes: [{ d: 'M58 62 L58 116', nx: 74, ny: 56 }, { d: 'M58 36 m -5 0 a 5 5 0 1 0 10 0 a 5 5 0 1 0 -10 0', nx: 78, ny: 28, dot: true }] },
-    { id: 'n', name: 'n', nameSay: 'en', sound: '/n/', soundSay: 'nnn, nest', word: 'nest', cue: 'n as in nest', where: 'start',
+    { id: 'n', name: 'n', nameSay: 'en', sound: '/n/', soundSay: 'nnn, noodle', word: 'noodle', cue: 'n as in noodle', where: 'start',
       strokes: [{ d: 'M32 112 L32 52', nx: 16, ny: 44 }, { d: 'M32 68 C32 46 84 46 84 74 L84 112', nx: 48, ny: 38 }] },
-    { id: 'o', name: 'o', nameSay: 'oh', sound: '/o/', soundSay: 'o, ox', word: 'ox', cue: 'o as in ox', where: 'start',
+    { id: 'o', name: 'o', nameSay: 'oh', sound: '/o/', soundSay: 'o, octopus', word: 'octopus', cue: 'o as in octopus', where: 'start',
       strokes: [{ d: 'M78 78 C78 46 28 46 28 78 C28 110 78 110 78 78', nx: 90, ny: 58 }] },
-    { id: 'd', name: 'd', nameSay: 'dee', sound: '/d/', soundSay: 'd, dog', word: 'dog', cue: 'd as in dog', where: 'start',
+    { id: 'd', name: 'd', nameSay: 'dee', sound: '/d/', soundSay: 'd, dugong', word: 'dugong', cue: 'd as in dugong', where: 'start',
       strokes: [{ d: 'M78 28 L78 116', nx: 92, ny: 22 }, { d: 'M78 70 C78 46 26 46 26 76 C26 106 78 108 78 78', nx: 58, ny: 40 }] },
-    { id: 'c', name: 'c', nameSay: 'see', sound: '/k/', soundSay: 'k, cat', word: 'cat', audio: 'audio/u6_w_cat.mp3', cue: 'c as in cat', where: 'start',
+    { id: 'c', name: 'c', nameSay: 'see', sound: '/k/', soundSay: 'k, crab', word: 'crab', cue: 'c as in crab', where: 'start',
       strokes: [{ d: 'M82 54 C64 34 26 40 26 76 C26 112 66 120 84 100', nx: 92, ny: 42 }] },
-    { id: 'u', name: 'u', nameSay: 'you', sound: '/u/', soundSay: 'uh, umbrella', word: 'up', cue: 'u as in umbrella', where: 'start',
+    { id: 'u', name: 'u', nameSay: 'you', sound: '/u/', soundSay: 'uh, umbrella', word: 'umbrella', cue: 'u as in umbrella', where: 'start',
       strokes: [{ d: 'M30 48 L30 90 C30 114 78 114 78 90', nx: 14, ny: 38 }, { d: 'M78 48 L78 112', nx: 92, ny: 40 }] },
     { id: 'g', name: 'g', nameSay: 'jee', sound: '/g/', soundSay: 'g, goat', word: 'goat', cue: 'g as in goat', where: 'start',
       strokes: [{ d: 'M72 78 C72 50 26 48 26 76 C26 104 72 106 72 78', nx: 84, ny: 58 }, { d: 'M72 62 L72 124 C72 140 36 140 32 122', nx: 90, ny: 50 }] },
-    { id: 'b', name: 'b', nameSay: 'bee', sound: '/b/', soundSay: 'b, bus', word: 'bus', audio: 'audio/u6_w_bus.mp3', cue: 'b as in bus', where: 'start',
+    { id: 'b', name: 'b', nameSay: 'bee', sound: '/b/', soundSay: 'b, banyan', word: 'banyan', cue: 'b as in banyan', where: 'start',
       strokes: [{ d: 'M34 26 L34 116', nx: 16, ny: 20 }, { d: 'M34 62 C34 44 86 44 86 76 C86 108 34 108 34 80', nx: 52, ny: 38 }] },
     { id: 'e', name: 'e', nameSay: 'ee', sound: '/e/', soundSay: 'eh, egg', word: 'egg', cue: 'e as in egg', where: 'start',
       strokes: [{ d: 'M30 74 L80 74', nx: 16, ny: 60 }, { d: 'M78 74 C78 46 24 44 24 76 C24 108 76 114 82 94', nx: 90, ny: 62 }] },
-    { id: 'k', name: 'k', nameSay: 'kay', sound: '/k/', soundSay: 'k, kite', word: 'kite', audio: 'audio/u51_w_kite.mp3', cue: 'k as in kite', where: 'start',
+    { id: 'k', name: 'k', nameSay: 'kay', sound: '/k/', soundSay: 'k, kingfisher', word: 'kingfisher', cue: 'k as in kingfisher', where: 'start',
       strokes: [{ d: 'M36 26 L36 116', nx: 18, ny: 20 }, { d: 'M78 48 L42 76 L80 116', nx: 90, ny: 38 }] },
-    { id: 'h', name: 'h', nameSay: 'aitch', sound: '/h/', soundSay: 'h, hat', word: 'hat', audio: 'audio/u6_w_hat.mp3', cue: 'h as in hat', where: 'start',
+    { id: 'h', name: 'h', nameSay: 'aitch', sound: '/h/', soundSay: 'h, hibiscus', word: 'hibiscus', cue: 'h as in hibiscus', where: 'start',
       strokes: [{ d: 'M30 26 L30 116', nx: 14, ny: 20 }, { d: 'M30 70 C30 46 82 46 82 74 L82 116', nx: 46, ny: 40 }] },
-    { id: 'r', name: 'r', nameSay: 'are', sound: '/r/', soundSay: 'rrr, rat', word: 'rat', cue: 'r as in rat', where: 'start',
+    { id: 'r', name: 'r', nameSay: 'are', sound: '/r/', soundSay: 'rrr, robin', word: 'robin', cue: 'r as in robin', where: 'start',
       strokes: [{ d: 'M34 116 L34 52', nx: 16, ny: 42 }, { d: 'M34 70 C34 48 72 46 80 64', nx: 48, ny: 40 }] },
-    { id: 'l', name: 'l', nameSay: 'ell', sound: '/l/', soundSay: 'lll, lamp', word: 'lamp', cue: 'l as in lamp', where: 'start',
+    { id: 'l', name: 'l', nameSay: 'ell', sound: '/l/', soundSay: 'lll, lily', word: 'lily', cue: 'l as in lily', where: 'start',
       strokes: [{ d: 'M58 24 L58 116', nx: 74, ny: 18 }] },
-    { id: 'w', name: 'w', nameSay: 'double you', sound: '/w/', soundSay: 'w, web', word: 'web', cue: 'w as in web', where: 'start',
+    { id: 'w', name: 'w', nameSay: 'double you', sound: '/w/', soundSay: 'w, wave', word: 'wave', cue: 'w as in wave', where: 'start',
       strokes: [{ d: 'M16 48 L34 116 L52 62 L70 116 L90 48', nx: 8, ny: 34 }] },
-    { id: 'j', name: 'j', nameSay: 'jay', sound: '/j/', soundSay: 'j, jam', word: 'jam', cue: 'j as in jam', where: 'start',
+    { id: 'j', name: 'j', nameSay: 'jay', sound: '/j/', soundSay: 'j, jellyfish', word: 'jellyfish', cue: 'j as in jellyfish', where: 'start',
       strokes: [{ d: 'M64 60 L64 118 C64 136 30 136 28 116', nx: 80, ny: 52 }, { d: 'M64 34 m -5 0 a 5 5 0 1 0 10 0 a 5 5 0 1 0 -10 0', nx: 84, ny: 26, dot: true }] },
-    { id: 'y', name: 'y', nameSay: 'why', sound: '/y/', soundSay: 'y, yarn', word: 'yarn', cue: 'y as in yarn', where: 'start',
+    { id: 'y', name: 'y', nameSay: 'why', sound: '/y/', soundSay: 'y, yam', word: 'yam', cue: 'y as in yam', where: 'start',
       strokes: [{ d: 'M24 48 L52 92', nx: 12, ny: 36 }, { d: 'M84 48 L46 122', nx: 96, ny: 36 }] },
     { id: 'x', name: 'x', nameSay: 'ex', sound: '/ks/', soundSay: 'ks, box', word: 'box', audio: 'audio/u6_w_box.mp3', cue: 'x at the end of box', where: 'end',
       strokes: [{ d: 'M28 48 L78 116', nx: 16, ny: 36 }, { d: 'M78 48 L28 116', nx: 90, ny: 36 }] },
-    { id: 'q', name: 'q', nameSay: 'cue', sound: '/kw/', soundSay: 'kw, quilt', word: 'quilt', cue: 'q as in quilt', where: 'start',
+    { id: 'q', name: 'q', nameSay: 'cue', sound: '/kw/', soundSay: 'kw, quail', word: 'quail', cue: 'q as in quail', where: 'start',
       strokes: [{ d: 'M70 74 C70 48 26 48 26 76 C26 104 70 106 70 78', nx: 82, ny: 56 }, { d: 'M70 70 L70 126 L88 112', nx: 88, ny: 60 }] },
-    { id: 'v', name: 'v', nameSay: 'vee', sound: '/v/', soundSay: 'vvv, van', word: 'van', cue: 'v as in van', where: 'start',
+    { id: 'v', name: 'v', nameSay: 'vee', sound: '/v/', soundSay: 'vvv, vine', word: 'vine', cue: 'v as in vine', where: 'start',
       strokes: [{ d: 'M22 46 L52 116 L84 46', nx: 10, ny: 34 }] },
-    { id: 'z', name: 'z', nameSay: 'zee', sound: '/z/', soundSay: 'zzz, zip', word: 'zip', audio: 'audio/u6_w_zip.mp3', cue: 'z as in zip', where: 'start',
+    { id: 'z', name: 'z', nameSay: 'zee', sound: '/z/', soundSay: 'zzz, zigzag', word: 'zigzag', cue: 'z as in zigzag', where: 'start',
       strokes: [{ d: 'M26 48 L80 48 L26 116 L80 116', nx: 14, ny: 34 }] }
   ];
   const BY = {};
@@ -1882,11 +1882,11 @@
     o: 'foundation/img/letters/o_ollie_octopus.jpg', d: 'foundation/img/letters/d_dai_dugong.jpg',
     c: 'foundation/img/letters/c_coco_crab.jpg', u: 'foundation/img/letters/u_umbrella.jpg',
     g: 'foundation/img/letters/g_gogo_goat.jpg', b: 'foundation/img/letters/b_bani_banyan.jpg',
-    e: 'foundation/img/letters/e_eto_turtle_egg.jpg', k: 'foundation/img/letters/k_kiko_kingfisher.jpg',
+    e: 'foundation/img/letters/e_egg.jpg', k: 'foundation/img/letters/k_kiko_kingfisher.jpg',
     h: 'foundation/img/letters/h_hana_hibiscus.jpg', r: 'foundation/img/letters/r_ruri_robin.jpg',
     l: 'foundation/img/letters/l_lili_lily.jpg', w: 'foundation/img/letters/w_wawa_wave.jpg',
     j: 'foundation/img/letters/j_jojo_jellyfish.jpg', y: 'foundation/img/letters/y_yumi_purple_yam.jpg',
-    x: 'foundation/img/letters/x_tix_sugar_cane.jpg', q: 'foundation/img/letters/q_quinn_quail.jpg',
+    x: 'foundation/img/letters/x_box.jpg', q: 'foundation/img/letters/q_quinn_quail.jpg',
     v: 'foundation/img/letters/v_vida_vine.jpg', z: 'foundation/img/letters/z_zuzu_zigzag_cloud.jpg'
   };
   const KID_STEPS = [
@@ -2335,7 +2335,8 @@
     return readable(group).slice(0, 3).map((item) => item.w).join(' ');
   }
   function pictureWord(id) {
-    return ({ a: 'apple', m: 'mangrove', s: 'snake', t: 'turtle' })[id] || '';
+    const L = BY[id];
+    return L && L.word ? L.word : '';
   }
   function shortName(id) {
     if (pictureWord(id)) return pictureWord(id);
