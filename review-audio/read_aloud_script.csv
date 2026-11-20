@@ -1,11 +1,1045 @@
-area,page/screen,id/key,speaker,current text spoken,notes
-Foundations,Hear,lesson-hear,Frill,Tap the sound.,Lesson step 1. Device TTS placeholder. No new audio file. Frill picture beside the line.
-Foundations,Find,lesson-find,Frill,Tap the letter.,Lesson step 2. Device TTS placeholder. No new audio file. Frill picture beside the line.
-Foundations,Play,lesson-play,Frill,Pick a game.,Lesson step 3. Device TTS placeholder. No new audio file. Frill picture beside the line.
-Foundations,Sound Pop,lesson-pop,Frill,Hear the sound. Pop that bubble.,Short game inside the lesson. Device TTS placeholder. No new audio file. Frill picture beside the line.
-Foundations,Letter Hunt,lesson-hunt,Frill,Tap the letter you hear.,Short game inside the lesson. Device TTS placeholder. No new audio file. Frill picture beside the line.
-Foundations,Blend,lesson-blend,Frill,Tap the letters.,Lesson step 4. Device TTS placeholder. No new audio file. Frill picture beside the line.
-Foundations,Trace,lesson-trace,Frill,Trace the letter.,Lesson step 5. Device TTS placeholder. No new audio file. Frill picture beside the line.
-Foundations,Read,lesson-read,Frill,Tap a word.,Lesson step 6. Device TTS placeholder. No new audio file. Frill picture beside the line.
-Foundations,Quick Check,lesson-check,Frill,Tap the letter.,Lesson step 7. Same words as Find. Device TTS placeholder. No new audio file. Frill picture beside the line.
-Foundations,Celebrate,lesson-done,Zip,You did it.,Praise at the end of the lesson. Device TTS placeholder. No new audio file. Zip picture beside the line.
+area,page/screen,id/key,current text spoken,notes
+Home,Home,home_intro,Learn to read with Zip and Frill. Ring every bell by learning its sounds. Start here to find your first bell.,recorded clip audio/home_intro.mp3; Zip voice today; device TTS only if the file fails
+Home,Placement check,place_kid,"Read each word out loud. Some are made-up words, so just sound them out. Try your best!","recorded clip audio/place_kid.mp3; device TTS only if the file fails. The check words themselves are read by the child, not by the app."
+Foundations,Meet the Team,meet-each,Meet each letter.,device TTS; spoken when a team page or Introduction opens
+Foundations,Team 1 Introduction,a-name,ay,"letter name, intended; name tap; device TTS"
+Foundations,Team 1 Introduction,a-sound,"ah, apple",isolated phoneme; device TTS often says the letter name; device TTS
+Foundations,Team 1 Introduction,m-name,em,"letter name, intended; name tap; device TTS"
+Foundations,Team 1 Introduction,m-sound,map,"plays the word recording audio/w_map.mp3 instead of the sound; TTS fallback: mmm, map; isolated phoneme intended"
+Foundations,Team 1 Introduction,s-name,ess,"letter name, intended; name tap; device TTS"
+Foundations,Team 1 Introduction,s-sound,sun,"plays the word recording audio/w_sun.mp3 instead of the sound; TTS fallback: sss, sun; isolated phoneme intended"
+Foundations,Team 1 Introduction,t-name,tee,"letter name, intended; name tap; device TTS"
+Foundations,Team 1 Introduction,t-sound,"t, tent",isolated phoneme; uses letter name; device TTS
+Foundations,Team 2 Introduction,p-name,pee,"letter name, intended; name tap; device TTS"
+Foundations,Team 2 Introduction,p-sound,pig,"plays the word recording audio/w_pig.mp3 instead of the sound; TTS fallback: p, pig; isolated phoneme intended"
+Foundations,Team 2 Introduction,p-sound-fallback,"p, pig",isolated phoneme; uses letter name; device TTS; spoken only if the word file fails
+Foundations,Team 2 Introduction,f-name,eff,"letter name, intended; name tap; device TTS"
+Foundations,Team 2 Introduction,f-sound,fan,"plays the word recording audio/u53_w_fan.mp3 instead of the sound; TTS fallback: fff, fan; isolated phoneme intended"
+Foundations,Team 2 Introduction,i-name,eye,"letter name, intended; name tap; device TTS"
+Foundations,Team 2 Introduction,i-sound,ink,"plays the word recording audio/nk_w_ink.mp3 instead of the sound; TTS fallback: ih, ink; isolated phoneme intended"
+Foundations,Team 2 Introduction,i-sound-fallback,"ih, ink",isolated phoneme; device TTS often says the letter name; device TTS; spoken only if the word file fails
+Foundations,Team 2 Introduction,n-name,en,"letter name, intended; name tap; device TTS"
+Foundations,Team 2 Introduction,n-sound,"nnn, nest",isolated phoneme; device TTS
+Foundations,Team 3 Introduction,o-name,oh,"letter name, intended; name tap; device TTS"
+Foundations,Team 3 Introduction,o-sound,"o, ox",isolated phoneme; uses letter name; device TTS
+Foundations,Team 3 Introduction,d-name,dee,"letter name, intended; name tap; device TTS"
+Foundations,Team 3 Introduction,d-sound,"d, dog",isolated phoneme; uses letter name; device TTS
+Foundations,Team 3 Introduction,c-name,see,"letter name, intended; name tap; device TTS"
+Foundations,Team 3 Introduction,c-sound,cat,"plays the word recording audio/u6_w_cat.mp3 instead of the sound; TTS fallback: k, cat; isolated phoneme intended"
+Foundations,Team 3 Introduction,c-sound-fallback,"k, cat",isolated phoneme; uses letter name; device TTS; spoken only if the word file fails
+Foundations,Team 3 Introduction,u-name,you,"letter name, intended; name tap; device TTS"
+Foundations,Team 3 Introduction,u-sound,"uh, umbrella",isolated phoneme; device TTS often says the letter name; device TTS
+Foundations,Team 4 Introduction,g-name,jee,"letter name, intended; name tap; device TTS"
+Foundations,Team 4 Introduction,g-sound,"g, goat",isolated phoneme; uses letter name; device TTS
+Foundations,Team 4 Introduction,b-name,bee,"letter name, intended; name tap; device TTS"
+Foundations,Team 4 Introduction,b-sound,bus,"plays the word recording audio/u6_w_bus.mp3 instead of the sound; TTS fallback: b, bus; isolated phoneme intended"
+Foundations,Team 4 Introduction,b-sound-fallback,"b, bus",isolated phoneme; uses letter name; device TTS; spoken only if the word file fails
+Foundations,Team 4 Introduction,e-name,ee,"letter name, intended; name tap; device TTS"
+Foundations,Team 4 Introduction,e-sound,"eh, egg",isolated phoneme; device TTS often says the letter name; device TTS
+Foundations,Team 4 Introduction,k-name,kay,"letter name, intended; name tap; device TTS"
+Foundations,Team 4 Introduction,k-sound,kite,"plays the word recording audio/u51_w_kite.mp3 instead of the sound; TTS fallback: k, kite; isolated phoneme intended"
+Foundations,Team 4 Introduction,k-sound-fallback,"k, kite",isolated phoneme; uses letter name; device TTS; spoken only if the word file fails
+Foundations,Team 5 Introduction,h-name,aitch,"letter name, intended; name tap; device TTS"
+Foundations,Team 5 Introduction,h-sound,hat,"plays the word recording audio/u6_w_hat.mp3 instead of the sound; TTS fallback: h, hat; isolated phoneme intended"
+Foundations,Team 5 Introduction,h-sound-fallback,"h, hat",isolated phoneme; uses letter name; device TTS; spoken only if the word file fails
+Foundations,Team 5 Introduction,r-name,are,"letter name, intended; name tap; device TTS"
+Foundations,Team 5 Introduction,r-sound,"rrr, rat",isolated phoneme; device TTS
+Foundations,Team 5 Introduction,l-name,ell,"letter name, intended; name tap; device TTS"
+Foundations,Team 5 Introduction,l-sound,"lll, lamp",isolated phoneme; device TTS
+Foundations,Team 5 Introduction,w-name,double you,"letter name, intended; name tap; device TTS"
+Foundations,Team 5 Introduction,w-sound,"w, web",isolated phoneme; uses letter name; device TTS
+Foundations,Team 6 Introduction,j-name,jay,"letter name, intended; name tap; device TTS"
+Foundations,Team 6 Introduction,j-sound,"j, jam",isolated phoneme; uses letter name; device TTS
+Foundations,Team 6 Introduction,y-name,why,"letter name, intended; name tap; device TTS"
+Foundations,Team 6 Introduction,y-sound,"y, yarn",isolated phoneme; uses letter name; device TTS
+Foundations,Team 6 Introduction,x-name,ex,"letter name, intended; name tap; device TTS"
+Foundations,Team 6 Introduction,x-sound,box,"plays the word recording audio/u6_w_box.mp3 instead of the sound; TTS fallback: ks, box; isolated phoneme intended"
+Foundations,Team 6 Introduction,q-name,cue,"letter name, intended; name tap; device TTS"
+Foundations,Team 6 Introduction,q-sound,"kw, quilt",isolated phoneme; device TTS
+Foundations,Team 7 Introduction,v-name,vee,"letter name, intended; name tap; device TTS"
+Foundations,Team 7 Introduction,v-sound,"vvv, van",isolated phoneme; device TTS
+Foundations,Team 7 Introduction,z-name,zee,"letter name, intended; name tap; device TTS"
+Foundations,Team 7 Introduction,z-sound,zip,"plays the word recording audio/u6_w_zip.mp3 instead of the sound; TTS fallback: zzz, zip; isolated phoneme intended"
+Foundations,Team 1 games,day1-a,ah,isolated phoneme; device TTS; short a as in apple is intended
+Foundations,Team 1 games,day1-m,mmm,isolated phoneme; device TTS
+Foundations,Team 1 games,day1-s,sss,isolated phoneme; device TTS
+Foundations,Team 1 games,day1-t,t,isolated phoneme; uses letter name; device TTS
+Foundations,Team 1 Meet the Letter,day1-name-a,ay,"letter name, intended"
+Foundations,Team 1 Meet the Letter,day1-name-m,em,"letter name, intended"
+Foundations,Review flash,ll-flash,Say the sound. Then tap the letter.,device TTS
+Foundations,Review the letters,ll-meetgame,"Look, chant, and do the action.",device TTS
+Foundations,Say it from the letter,ll-say,Say it from the letter. No picture.,device TTS
+Foundations,Read it,ll-read,"Tap each letter. They step in, hold hands, and say the word.",device TTS
+Foundations,Sound play,ll-ears-first,Listen to the word. Tap the first sound.,device TTS
+Foundations,Sound play,ll-ears-blend,Listen to the sounds. Tap the word.,device TTS
+Foundations,Sound play,ll-ears-seg,Listen. Then tap each sound.,device TTS
+Foundations,Spell it,ll-spell,Listen. Tap the letters to build the word.,device TTS
+Foundations,Match upper and lower,ll-match,Tap the letter that matches.,device TTS
+Foundations,First sound,ll-sound,Look at the picture. Tap the letter.,device TTS
+Foundations,Letter review,ll-review,These letters are from this group and the groups before it.,device TTS
+Foundations,Find the letter,ll-find,Hear the sound. Tap that letter.,device TTS
+Foundations,Team 1 Meet the Team,d1-team,Tap the name. Then tap the sound three times.,device TTS
+Foundations,Team 1 Meet the Letter,d1-meet,Tap the name. Then tap each sound.,device TTS
+Foundations,Team 1 Link Arms,d1-link,"Tap a, then m. They link arms.",device TTS
+Foundations,Team 1 games,d1-menu,Pick a game.,device TTS
+Foundations,Sound Pop,d1-pop,Hear the sound. Pop that bubble.,device TTS
+Foundations,Feed the Friend,d1-feed,Hear the sound. Tap that friend.,device TTS
+Foundations,Beginning Sound Catch,d1-catch,Tap the first sound.,device TTS
+Foundations,Letter Hunt,d1-hunt,Tap the letter you hear.,device TTS
+Foundations,Build It,d1-build,Tap the letters to make the word.,device TTS
+Foundations,Ears Only Blend,d1-ears,Listen. Then tap the picture.,device TTS
+Foundations,Quick Flash,d1-flash,Say the sound. Tap I said it.,device TTS
+Foundations,Read and Match,d1-match,Tap the word for the picture.,device TTS
+Foundations,Sound Match,d1-sound,Hear the sound. Tap the picture.,device TTS
+Foundations,Read it / blend,word-am,am,"word; device TTS, no clip"
+Foundations,Read it / blend,word-at,at,"word; device TTS, no clip"
+Foundations,Read it / blend,word-sam,sam,"word; device TTS, no clip"
+Foundations,Read it / blend,word-sat,sat,"word; device TTS, no clip"
+Foundations,Read it / blend,word-mat,mat,word; recorded clip audio/w_mat.mp3
+Foundations,Read it / blend,word-tam,tam,"word; device TTS, no clip"
+Foundations,Read it / blend,word-mats,mats,"word; device TTS, no clip"
+Foundations,Read it / blend,word-pat,pat,"word; device TTS, no clip"
+Foundations,Read it / blend,word-tap,tap,word; recorded clip audio/u51_w_tap.mp3
+Foundations,Read it / blend,word-map,map,word; recorded clip audio/w_map.mp3
+Foundations,Read it / blend,word-sap,sap,"word; device TTS, no clip"
+Foundations,Read it / blend,word-pam,pam,"word; device TTS, no clip"
+Foundations,Read it / blend,word-fat,fat,"word; device TTS, no clip"
+Foundations,Read it / blend,word-taps,taps,"word; device TTS, no clip"
+Foundations,Read it / blend,word-maps,maps,word; recorded clip audio/u6_w_maps.mp3
+Foundations,Read it / blend,word-it,it,word; recorded clip audio/w_it.mp3
+Foundations,Read it / blend,word-in,in,word; recorded clip audio/w_in.mp3
+Foundations,Read it / blend,word-if,if,word; recorded clip audio/w_if.mp3
+Foundations,Read it / blend,word-an,an,word; recorded clip audio/w_an.mp3
+Foundations,Read it / blend,word-pin,pin,word; recorded clip audio/u51_w_pin.mp3
+Foundations,Read it / blend,word-fin,fin,word; recorded clip audio/w_fin.mp3
+Foundations,Read it / blend,word-sit,sit,word; recorded clip audio/w_sit.mp3
+Foundations,Read it / blend,word-tip,tip,"word; device TTS, no clip"
+Foundations,Read it / blend,word-tin,tin,"word; device TTS, no clip"
+Foundations,Read it / blend,word-fit,fit,"word; device TTS, no clip"
+Foundations,Read it / blend,word-pit,pit,"word; device TTS, no clip"
+Foundations,Read it / blend,word-sip,sip,"word; device TTS, no clip"
+Foundations,Read it / blend,word-man,man,word; recorded clip audio/w_man.mp3
+Foundations,Read it / blend,word-pan,pan,"word; device TTS, no clip"
+Foundations,Read it / blend,word-fan,fan,word; recorded clip audio/u53_w_fan.mp3
+Foundations,Read it / blend,word-tan,tan,"word; device TTS, no clip"
+Foundations,Read it / blend,word-nap,nap,"word; device TTS, no clip"
+Foundations,Read it / blend,word-tim,tim,"word; device TTS, no clip"
+Foundations,Read it / blend,word-nan,nan,"word; device TTS, no clip"
+Foundations,Read it / blend,word-on,on,word; recorded clip audio/u6_w_on.mp3
+Foundations,Read it / blend,word-not,not,word; recorded clip audio/w_not.mp3
+Foundations,Read it / blend,word-dot,dot,word; recorded clip audio/u53_w_dot.mp3
+Foundations,Read it / blend,word-pot,pot,"word; device TTS, no clip"
+Foundations,Read it / blend,word-top,top,"word; device TTS, no clip"
+Foundations,Read it / blend,word-mop,mop,word; recorded clip audio/u51_w_mop.mp3
+Foundations,Read it / blend,word-dad,dad,"word; device TTS, no clip"
+Foundations,Read it / blend,word-sad,sad,word; recorded clip audio/nk_w_sad.mp3
+Foundations,Read it / blend,word-cat,cat,word; recorded clip audio/u6_w_cat.mp3
+Foundations,Read it / blend,word-can,can,word; recorded clip audio/w_can.mp3
+Foundations,Read it / blend,word-cap,cap,word; recorded clip audio/u51_w_cap.mp3
+Foundations,Read it / blend,word-cup,cup,word; recorded clip audio/u51_w_cup.mp3
+Foundations,Read it / blend,word-cut,cut,"word; device TTS, no clip"
+Foundations,Read it / blend,word-up,up,"word; device TTS, no clip"
+Foundations,Read it / blend,word-mud,mud,word; recorded clip audio/u51_w_mud.mp3
+Foundations,Read it / blend,word-sun,sun,word; recorded clip audio/w_sun.mp3
+Foundations,Read it / blend,word-pop,pop,"word; device TTS, no clip"
+Foundations,Read it / blend,word-tom,tom,"word; device TTS, no clip"
+Foundations,Read it / blend,word-don,don,"word; device TTS, no clip"
+Foundations,Read it / blend,word-nod,nod,"word; device TTS, no clip"
+Foundations,Read it / blend,word-mad,mad,word; recorded clip audio/nk_w_mad.mp3
+Foundations,Read it / blend,word-pad,pad,"word; device TTS, no clip"
+Foundations,Read it / blend,word-did,did,"word; device TTS, no clip"
+Foundations,Read it / blend,word-dip,dip,word; recorded clip audio/u53_w_dip.mp3
+Foundations,Read it / blend,word-dim,dim,"word; device TTS, no clip"
+Foundations,Read it / blend,word-mom,mom,"word; device TTS, no clip"
+Foundations,Read it / blend,word-cot,cot,"word; device TTS, no clip"
+Foundations,Read it / blend,word-cod,cod,"word; device TTS, no clip"
+Foundations,Read it / blend,word-us,us,word; recorded clip audio/w_us.mp3
+Foundations,Read it / blend,word-nut,nut,"word; device TTS, no clip"
+Foundations,Read it / blend,word-fun,fun,"word; device TTS, no clip"
+Foundations,Read it / blend,word-pup,pup,"word; device TTS, no clip"
+Foundations,Read it / blend,word-bag,bag,word; recorded clip audio/w_bag.mp3
+Foundations,Read it / blend,word-big,big,word; recorded clip audio/w_big.mp3
+Foundations,Read it / blend,word-bug,bug,word; recorded clip audio/w_bug.mp3
+Foundations,Read it / blend,word-bat,bat,"word; device TTS, no clip"
+Foundations,Read it / blend,word-bib,bib,"word; device TTS, no clip"
+Foundations,Read it / blend,word-dig,dig,"word; device TTS, no clip"
+Foundations,Read it / blend,word-pig,pig,word; recorded clip audio/w_pig.mp3
+Foundations,Read it / blend,word-dog,dog,"word; device TTS, no clip"
+Foundations,Read it / blend,word-bed,bed,word; recorded clip audio/u51_rf_bed.mp3
+Foundations,Read it / blend,word-pet,pet,word; recorded clip audio/u51_w_pet.mp3
+Foundations,Read it / blend,word-net,net,"word; device TTS, no clip"
+Foundations,Read it / blend,word-ten,ten,"word; device TTS, no clip"
+Foundations,Read it / blend,word-get,get,"word; device TTS, no clip"
+Foundations,Read it / blend,word-kid,kid,word; recorded clip audio/w_kid.mp3
+Foundations,Read it / blend,word-kit,kit,word; recorded clip audio/w_kit.mp3
+Foundations,Read it / blend,word-ken,ken,"word; device TTS, no clip"
+Foundations,Read it / blend,word-bit,bit,word; recorded clip audio/u51_w_bit.mp3
+Foundations,Read it / blend,word-bud,bud,"word; device TTS, no clip"
+Foundations,Read it / blend,word-bun,bun,word; recorded clip audio/u51_w_bun.mp3
+Foundations,Read it / blend,word-bus,bus,word; recorded clip audio/u6_w_bus.mp3
+Foundations,Read it / blend,word-fig,fig,word; recorded clip audio/w_fig.mp3
+Foundations,Read it / blend,word-fog,fog,"word; device TTS, no clip"
+Foundations,Read it / blend,word-gum,gum,word; recorded clip audio/u53_w_gum.mp3
+Foundations,Read it / blend,word-mug,mug,word; recorded clip audio/w_mug.mp3
+Foundations,Read it / blend,word-tug,tug,"word; device TTS, no clip"
+Foundations,Read it / blend,word-dug,dug,"word; device TTS, no clip"
+Foundations,Read it / blend,word-gap,gap,"word; device TTS, no clip"
+Foundations,Read it / blend,word-gus,gus,"word; device TTS, no clip"
+Foundations,Read it / blend,word-beg,beg,"word; device TTS, no clip"
+Foundations,Read it / blend,word-bet,bet,"word; device TTS, no clip"
+Foundations,Read it / blend,word-peg,peg,"word; device TTS, no clip"
+Foundations,Read it / blend,word-set,set,word; recorded clip audio/w_set.mp3
+Foundations,Read it / blend,word-men,men,word; recorded clip audio/w_men.mp3
+Foundations,Read it / blend,word-pen,pen,word; recorded clip audio/nk_w_pen.mp3
+Foundations,Read it / blend,word-den,den,"word; device TTS, no clip"
+Foundations,Read it / blend,word-meg,meg,"word; device TTS, no clip"
+Foundations,Read it / blend,word-ben,ben,"word; device TTS, no clip"
+Foundations,Read it / blend,word-hat,hat,word; recorded clip audio/u53_w_hat.mp3
+Foundations,Read it / blend,word-hen,hen,"word; device TTS, no clip"
+Foundations,Read it / blend,word-hug,hug,word; recorded clip audio/w_hug.mp3
+Foundations,Read it / blend,word-hop,hop,word; recorded clip audio/u51_w_hop.mp3
+Foundations,Read it / blend,word-rat,rat,"word; device TTS, no clip"
+Foundations,Read it / blend,word-red,red,word; recorded clip audio/w_red.mp3
+Foundations,Read it / blend,word-rug,rug,word; recorded clip audio/w_rug.mp3
+Foundations,Read it / blend,word-run,run,word; recorded clip audio/w_run.mp3
+Foundations,Read it / blend,word-lap,lap,"word; device TTS, no clip"
+Foundations,Read it / blend,word-lid,lid,"word; device TTS, no clip"
+Foundations,Read it / blend,word-lip,lip,"word; device TTS, no clip"
+Foundations,Read it / blend,word-log,log,word; recorded clip audio/w_log.mp3
+Foundations,Read it / blend,word-leg,leg,"word; device TTS, no clip"
+Foundations,Read it / blend,word-wet,wet,"word; device TTS, no clip"
+Foundations,Read it / blend,word-web,web,"word; device TTS, no clip"
+Foundations,Read it / blend,word-wig,wig,word; recorded clip audio/w_wig.mp3
+Foundations,Read it / blend,word-hit,hit,"word; device TTS, no clip"
+Foundations,Read it / blend,word-hot,hot,"word; device TTS, no clip"
+Foundations,Read it / blend,word-hut,hut,"word; device TTS, no clip"
+Foundations,Read it / blend,word-him,him,word; recorded clip audio/w_him.mp3
+Foundations,Read it / blend,word-hum,hum,word; recorded clip audio/u51_w_hum.mp3
+Foundations,Read it / blend,word-hip,hip,word; recorded clip audio/u51_w_hip.mp3
+Foundations,Read it / blend,word-hid,hid,"word; device TTS, no clip"
+Foundations,Read it / blend,word-rib,rib,"word; device TTS, no clip"
+Foundations,Read it / blend,word-rip,rip,word; recorded clip audio/w_rip.mp3
+Foundations,Read it / blend,word-rod,rod,"word; device TTS, no clip"
+Foundations,Read it / blend,word-rag,rag,"word; device TTS, no clip"
+Foundations,Read it / blend,word-ran,ran,"word; device TTS, no clip"
+Foundations,Read it / blend,word-let,let,word; recorded clip audio/w_let.mp3
+Foundations,Read it / blend,word-lot,lot,"word; device TTS, no clip"
+Foundations,Read it / blend,word-lit,lit,"word; device TTS, no clip"
+Foundations,Read it / blend,word-win,win,word; recorded clip audio/w_win.mp3
+Foundations,Read it / blend,word-wag,wag,word; recorded clip audio/w_wag.mp3
+Foundations,Read it / blend,word-wit,wit,"word; device TTS, no clip"
+Foundations,Read it / blend,word-jam,jam,"word; device TTS, no clip"
+Foundations,Read it / blend,word-jet,jet,"word; device TTS, no clip"
+Foundations,Read it / blend,word-jog,jog,"word; device TTS, no clip"
+Foundations,Read it / blend,word-jug,jug,"word; device TTS, no clip"
+Foundations,Read it / blend,word-yes,yes,"word; device TTS, no clip"
+Foundations,Read it / blend,word-yet,yet,"word; device TTS, no clip"
+Foundations,Read it / blend,word-yum,yum,"word; device TTS, no clip"
+Foundations,Read it / blend,word-yak,yak,"word; device TTS, no clip"
+Foundations,Read it / blend,word-box,box,word; recorded clip audio/u6_w_box.mp3
+Foundations,Read it / blend,word-fox,fox,word; recorded clip audio/u6_w_fox.mp3
+Foundations,Read it / blend,word-six,six,"word; device TTS, no clip"
+Foundations,Read it / blend,word-mix,mix,"word; device TTS, no clip"
+Foundations,Read it / blend,word-fix,fix,"word; device TTS, no clip"
+Foundations,Read it / blend,word-ox,ox,"word; device TTS, no clip"
+Foundations,Read it / blend,word-quit,quit,"word; device TTS, no clip"
+Foundations,Read it / blend,word-job,job,"word; device TTS, no clip"
+Foundations,Read it / blend,word-jab,jab,"word; device TTS, no clip"
+Foundations,Read it / blend,word-jig,jig,"word; device TTS, no clip"
+Foundations,Read it / blend,word-jim,jim,"word; device TTS, no clip"
+Foundations,Read it / blend,word-jen,jen,"word; device TTS, no clip"
+Foundations,Read it / blend,word-yap,yap,"word; device TTS, no clip"
+Foundations,Read it / blend,word-wax,wax,"word; device TTS, no clip"
+Foundations,Read it / blend,word-tax,tax,"word; device TTS, no clip"
+Foundations,Read it / blend,word-max,max,"word; device TTS, no clip"
+Foundations,Read it / blend,word-rex,rex,"word; device TTS, no clip"
+Foundations,Read it / blend,word-van,van,"word; device TTS, no clip"
+Foundations,Read it / blend,word-vet,vet,"word; device TTS, no clip"
+Foundations,Read it / blend,word-vat,vat,"word; device TTS, no clip"
+Foundations,Read it / blend,word-viv,viv,"word; device TTS, no clip"
+Foundations,Read it / blend,word-val,val,"word; device TTS, no clip"
+Foundations,Read it / blend,word-vin,vin,"word; device TTS, no clip"
+Foundations,Read it / blend,word-zip,zip,word; recorded clip audio/u6_w_zip.mp3
+Foundations,Read it / blend,word-zap,zap,word; recorded clip audio/nk_w_zap.mp3
+Foundations,Read it / blend,word-zig,zig,"word; device TTS, no clip"
+Foundations,Read it / blend,word-zag,zag,word; recorded clip audio/w_zag.mp3
+Foundations,Read it / blend,word-zed,zed,"word; device TTS, no clip"
+Foundations,Read it / blend,word-liz,liz,"word; device TTS, no clip"
+Foundations,Read it / blend,word-quiz,quiz,"word; device TTS, no clip"
+Units,Unit 4 ng,ng:i1,Today we learn a glued sound.,Zip voice on the current clip; recorded clip
+Units,Unit 4 ng,ng:i2,A glued sound? Like with glue?,Frill voice on the current clip; recorded clip
+Units,Unit 4 ng,ng:i3,Yes! The letters n and g stick together. They make one sound.,Zip voice on the current clip; recorded clip
+Units,Unit 4 ng,ng:i4,Say it with me!,Frill voice on the current clip; recorded clip
+Units,Unit 4 ng,ng:i5,Put a finger on your nose. Hum the sound. Feel the buzz?,Zip voice on the current clip; recorded clip
+Units,Unit 4 ng,ng:i5b,"Feel your tongue. The back of it lifts up, and the sound hums out of your nose.",Zip voice on the current clip; recorded clip
+Units,Unit 4 ng,ng:v1,"When you put a vowel in front of ng, it makes another glued sound. Tap each tile to hear it!",Frill voice on the current clip; recorded clip
+Units,Unit 4 ng,ng:s1,Now add an S in front! S plus ang makes sang. Tap each tile to read a new word!,Frill voice on the current clip; recorded clip
+Units,Unit 4 ng,ng:i6,Here are more words with ng. Tap each one to hear it!,Frill voice on the current clip; recorded clip
+Units,Unit 4 ng,ng:i7,Now let's listen to a story together.,Zip voice on the current clip; recorded clip
+Units,Unit 4 ng,ng:p_hear,Listen. Tap the word you hear.,Frill voice on the current clip; recorded clip
+Units,Unit 4 ng,ng:p_fish,Tap the fish that have the ng hum. Listen to each word.,Frill voice on the current clip; recorded clip
+Units,Unit 4 ng,ng:p_build,Listen. Build the word with the tiles.,Frill voice on the current clip; recorded clip
+Units,Unit 4 ng,ng:p_trace,Trace the N and the G. Start at the green dot.,Frill voice on the current clip; recorded clip
+Units,Unit 4 ng,ng:p_watch,Watch me first!,Frill voice on the current clip; recorded clip
+Units,Unit 4 ng,ng:p_sent,Listen. Put the words in order to make a sentence.,Frill voice on the current clip; recorded clip
+Units,Unit 4 ng,ng:p_story,Tap a speaker to hear a sentence. Then you read it!,Frill voice on the current clip; recorded clip
+Units,Unit 4 ng,ng:p_listen1,Here are heart words from our story. Tap each one to hear it.,Frill voice on the current clip; recorded clip
+Units,Unit 4 ng,ng:p_listen2,Now listen to the story. Follow along with your eyes.,Frill voice on the current clip; recorded clip
+Units,Unit 4 ng,ng:p_bells,Read the word out loud. Then tap the bell with the same word.,Frill voice on the current clip; recorded clip
+Units,Unit 4 ng,ng:sor_ears,Ears only. Listen to the sounds. Which word do they make?,Frill voice on the current clip; recorded clip
+Units,Unit 4 ng,ng:sor_seg,Listen to the word. Tap one box for each sound you hear.,Frill voice on the current clip; recorded clip
+Units,Unit 4 ng,ng:sor_review,"Quick review. Say the sound out loud, then tap the card to check.",Frill voice on the current clip; recorded clip
+Units,Unit 4 ng,ng:sor_spell,"Hear it, spell it. Listen, then tap the letters in order.",Frill voice on the current clip; recorded clip
+Units,Unit 4 ng,ng:sor_break,Quick break. Breathe in slowly. Now breathe out. Let's do it again.,Frill voice on the current clip; recorded clip
+Units,Unit 4 ng,ng:sor_q1,Who swung up to the bell on a string?,Frill voice on the current clip; recorded clip
+Units,Unit 4 ng,ng:sor_q2,What was stuck in the bell?,Frill voice on the current clip; recorded clip
+Units,Unit 4 ng,ng:p_check,Time for Zip's check! Do your best. Take your time.,Zip voice on the current clip; recorded clip
+Units,Unit 4 ng,ng:p_which,Tap the word that has the ng hum.,Frill voice on the current clip; recorded clip
+Units,Unit 4 ng,ng:p_chunk,Listen. Tap the glued sound that finishes the word.,Frill voice on the current clip; recorded clip
+Units,Unit 4 ng,ng:p_silly,This is one of my silly words!,Zip voice on the current clip; recorded clip
+Units,Unit 4 ng,ng:humprompt,Hum it again!,Frill voice on the current clip; recorded clip
+Units,Unit 4 nk,nk:m1,"Hi, friends! Here is a new glued sound. N and K stick together.",Zip voice on the current clip; recorded clip
+Units,Unit 4 nk,nk:m2,N and K are glued together. You hear them at the end of sink.,Frill voice on the current clip; recorded clip
+Units,Unit 4 nk,nk:m3,"Feel the hum in your nose, then a little K pop at the end.",Zip voice on the current clip; recorded clip
+Units,Unit 4 nk,nk:ido,"Watch me. I say each sound, then I blend them.",Zip voice on the current clip; recorded clip
+Units,Unit 4 nk,nk:wedo,"Your turn. Tap each letter, then tap blend it.",Frill voice on the current clip; recorded clip
+Units,Unit 4 nk,nk:youdo,Listen. Tap the picture of the word you hear.,Frill voice on the current clip; recorded clip
+Games,Unit 4 nk games,nk:ngnk,Listen. Does the word end with ng or nk? Tap the ending.,Frill voice on the current clip; recorded clip
+Games,Unit 4 nk games,nk:heart,"Heart words. Tap each one to hear it. Some letters do not follow the rules, so we learn them by heart.",Frill voice on the current clip; recorded clip
+Games,Unit 4 nk games,nk:listen,Listen to the story and follow along.,Frill voice on the current clip; recorded clip
+Games,Unit 4 nk games,nk:read,Tap a speaker to hear a sentence. Then you read it!,Frill voice on the current clip; recorded clip
+Games,Unit 4 nk games,nk:comp,"Let us think about the story. Listen to the question, then tap the answer.",Frill voice on the current clip; recorded clip
+Games,Unit 4 nk games,nk:rhyme,Rhyme time! Listen to each line. Tap the word that rhymes.,Zip voice on the current clip; recorded clip
+Games,Unit 4 nk games,nk:rhyme_end,You did it! Now listen to the whole poem and read along.,Zip voice on the current clip; recorded clip
+Games,Unit 4 nk games,nk:check,Time for Zip's check! Do your best. Take your time.,Zip voice on the current clip; recorded clip
+Games,Unit 4 nk games,nk:which,Tap the word that has nk.,Frill voice on the current clip; recorded clip
+Games,Unit 4 nk games,nk:end,Listen. Tap the ending that finishes the word.,Frill voice on the current clip; recorded clip
+Games,Unit 4 nk games,nk:review,Island review! Listen to the word. Is it ng or nk? Tap the word you hear.,Zip voice on the current clip; recorded clip
+Units,Unit 4 nk,nk:yay_z,Yes! That rhymes!,Zip voice on the current clip; recorded clip
+Units,Unit 4 nk,nk:yay_f,You got it! Nice rhyme!,Frill voice on the current clip; recorded clip
+Games,Unit 4 nk games,nk:hint,"Not quite. Look at the story page, then try again.",Frill voice on the current clip; recorded clip
+Units,Unit 4 nk,nk:q1,What did Frill pull out of the trunk?,Frill voice on the current clip; recorded clip
+Units,Unit 4 nk,nk:qh1,Look at this page again. Who pulls out what?,Frill voice on the current clip; recorded clip
+Units,Unit 4 nk,nk:q2,What made the stink?,Frill voice on the current clip; recorded clip
+Units,Unit 4 nk,nk:qh2,Look at this page again. What hops out of the trunk?,Frill voice on the current clip; recorded clip
+Units,Unit 4 nk,nk:q3,What came out of the trunk first?,Frill voice on the current clip; recorded clip
+Units,Unit 4 nk,nk:qh3,Look at this page again. This came out first.,Frill voice on the current clip; recorded clip
+Units,Unit 4 nk,nk:q4,How did the skunk feel at the end?,Frill voice on the current clip; recorded clip
+Units,Unit 4 nk,nk:qh4,"Look at this page again. Is the skunk glad, sad, or mad?",Frill voice on the current clip; recorded clip
+Units,Unit 4 nk,nk:r1,"A skunk sat in a trunk, on top of a pile of ...",Zip voice on the current clip; recorded clip
+Units,Unit 4 nk,nk:rf1,"A skunk sat in a trunk, on top of a pile of junk.",Zip voice on the current clip; recorded clip
+Units,Unit 4 nk,nk:rl1,"A skunk sat in a trunk,",Zip voice on the current clip; recorded clip
+Units,Unit 4 nk,nk:rl2,on top of a pile of junk.,Zip voice on the current clip; recorded clip
+Units,Unit 4 nk,nk:r2,He had a sock that was pink. He gave it a wash in the ...,Zip voice on the current clip; recorded clip
+Units,Unit 4 nk,nk:rf2,He had a sock that was pink. He gave it a wash in the sink.,Zip voice on the current clip; recorded clip
+Units,Unit 4 nk,nk:rl3,He had a sock that was pink.,Zip voice on the current clip; recorded clip
+Units,Unit 4 nk,nk:rl4,He gave it a wash in the sink.,Zip voice on the current clip; recorded clip
+Units,Unit 4 nk,nk:r3,He hung it up with a wink. Now my sock will not ...,Zip voice on the current clip; recorded clip
+Units,Unit 4 nk,nk:rf3,He hung it up with a wink. Now my sock will not stink!,Zip voice on the current clip; recorded clip
+Units,Unit 4 nk,nk:rl5,He hung it up with a wink.,Zip voice on the current clip; recorded clip
+Units,Unit 4 nk,nk:rl6,Now my sock will not stink!,Zip voice on the current clip; recorded clip
+Units,Unit 5.1 silent e,u51:ido,"Watch me. I say each sound, then I blend them.",Zip voice on the current clip; recorded clip
+Units,Unit 5.1 silent e,u51:ido2,"I do. Watch me. I look at each letter, then I read the whole word.",Zip voice on the current clip; recorded clip
+Units,Unit 5.1 silent e,u51:wedo,"Your turn. Tap each letter, then tap blend it.",Frill voice on the current clip; recorded clip
+Units,Unit 5.1 silent e,u51:wedo2,We do. Tap each letter and say its sound. Then tap blend it.,Frill voice on the current clip; recorded clip
+Units,Unit 5.1 silent e,u51:youdo,You do. Listen. Tap the picture of the word you hear.,Frill voice on the current clip; recorded clip
+Games,Unit 5.1 silent e games,u51:ngnk,Listen. Does the word end with a silent e? Tap no e or e.,Frill voice on the current clip; recorded clip
+Games,Unit 5.1 silent e games,u51:heart,Tap each heart word and each new word before the story.,Frill voice on the current clip; recorded clip
+Games,Unit 5.1 silent e games,u51:listen,Listen to the story and follow along.,Frill voice on the current clip; recorded clip
+Games,Unit 5.1 silent e games,u51:read,Tap a speaker to hear a sentence. Then you read it!,Frill voice on the current clip; recorded clip
+Games,Unit 5.1 silent e games,u51:comp,"Let us think about the story. Listen to the question, then tap the answer.",Frill voice on the current clip; recorded clip
+Games,Unit 5.1 silent e games,u51:rhyme,Rhyme time! Listen to each line. Tap the word that rhymes.,Zip voice on the current clip; recorded clip
+Games,Unit 5.1 silent e games,u51:rhyme_end,You did it! Now listen to the whole poem and read along.,Zip voice on the current clip; recorded clip
+Games,Unit 5.1 silent e games,u51:check,Time for Zip's check! Do your best. Take your time.,Zip voice on the current clip; recorded clip
+Games,Unit 5.1 silent e games,u51:which,Tap the word with a silent e.,Frill voice on the current clip; recorded clip
+Games,Unit 5.1 silent e games,u51:end,Listen. Tap the ending that finishes the word.,Frill voice on the current clip; recorded clip
+Games,Unit 5.1 silent e games,u51:review,Unit review! Listen to the word. Does it have a silent e? Tap the word you hear.,Zip voice on the current clip; recorded clip
+Units,Unit 5.1 silent e,u51:yay_z,Yes! That rhymes!,Zip voice on the current clip; recorded clip
+Units,Unit 5.1 silent e,u51:yay_f,You got it! Nice rhyme!,Frill voice on the current clip; recorded clip
+Games,Unit 5.1 silent e games,u51:hint,"Not quite. Look at the story page, then try again.",Frill voice on the current clip; recorded clip
+Games,Unit 5.1 silent e games,u51:hear,Listen. Tap the word you hear.,Frill voice on the current clip; recorded clip
+Games,Unit 5.1 silent e games,u51:bells,Read the word out loud. Then tap the bell with the same word.,Frill voice on the current clip; recorded clip
+Games,Unit 5.1 silent e games,u51:build,Listen. Build the word with the tiles.,Frill voice on the current clip; recorded clip
+Games,Unit 5.1 silent e games,u51:chain,"Listen to the new word. Change one letter, or add one, to make it.",Frill voice on the current clip; recorded clip
+Games,Unit 5.1 silent e games,u51:scramble,Listen to the word. Tap the tiles in order to spell it.,Frill voice on the current clip; recorded clip
+Games,Unit 5.1 silent e games,u51:sent,Listen. Put the words in order to make a sentence.,Frill voice on the current clip; recorded clip
+Games,Unit 5.1 silent e games,u51:trace,"Trace a and e, like in cake.",Frill voice on the current clip; recorded clip
+Units,Unit 5.1 silent e,u51:m1,"Here is one big rule. An e at the end of a word is silent, but it makes the vowel say its name.","Zip voice on the current clip; recorded clip; letter name, intended (silent e rule)"
+Units,Unit 5.1 silent e,u51:m2,"Cap, cape. Pet, Pete. Kit, kite. Hop, hope. Cub, cube.",Frill voice on the current clip; recorded clip
+Units,Unit 5.1 silent e,u51:m3,"Look at the end first. If you see a silent e, the vowel before it says its name.","Zip voice on the current clip; recorded clip; letter name, intended (silent e rule)"
+Units,Unit 5.1 silent e,u51:q1,What is on the rope?,Frill voice on the current clip; recorded clip
+Units,Unit 5.1 silent e,u51:qh1,"Look at this page again, then try.",Frill voice on the current clip; recorded clip
+Units,Unit 5.1 silent e,u51:q2,What is cut?,Frill voice on the current clip; recorded clip
+Units,Unit 5.1 silent e,u51:qh2,"Look at this page again, then try.",Frill voice on the current clip; recorded clip
+Units,Unit 5.1 silent e,u51:q3,How do Zip and Frill feel at the end?,Frill voice on the current clip; recorded clip
+Units,Unit 5.1 silent e,u51:qh3,"Look at this page again, then try.",Frill voice on the current clip; recorded clip
+Units,Unit 5.1 silent e,u51:r1,"A snake sat on a cake, and gave it a big ...",Zip voice on the current clip; recorded clip
+Units,Unit 5.1 silent e,u51:rf1,"A snake sat on a cake, and gave it a big shake.",Zip voice on the current clip; recorded clip
+Units,Unit 5.1 silent e,u51:rl1,"A snake sat on a cake,",Zip voice on the current clip; recorded clip
+Units,Unit 5.1 silent e,u51:rl2,and gave it a big shake.,Zip voice on the current clip; recorded clip
+Units,Unit 5.1 silent e,u51:r2,"Zip has a kite, it is red and ...",Zip voice on the current clip; recorded clip
+Units,Unit 5.1 silent e,u51:rf2,"Zip has a kite, it is red and white.",Zip voice on the current clip; recorded clip
+Units,Unit 5.1 silent e,u51:rl3,"Zip has a kite,",Zip voice on the current clip; recorded clip
+Units,Unit 5.1 silent e,u51:rl4,it is red and white.,Zip voice on the current clip; recorded clip
+Units,Unit 5.2 tricky silent e,u53:ido,"Watch me. I say each sound, then I blend them.",Zip voice on the current clip; recorded clip
+Units,Unit 5.2 tricky silent e,u53:ido2,"I do. Watch me. I look at each letter, then I read the whole word.",Zip voice on the current clip; recorded clip
+Units,Unit 5.2 tricky silent e,u53:wedo,"Your turn. Tap each letter, then tap blend it.",Frill voice on the current clip; recorded clip
+Units,Unit 5.2 tricky silent e,u53:wedo2,We do. Tap each letter and say its sound. Then tap blend it.,Frill voice on the current clip; recorded clip
+Units,Unit 5.2 tricky silent e,u53:youdo,You do. Listen. Tap the picture of the word you hear.,Frill voice on the current clip; recorded clip
+Games,Unit 5.2 tricky silent e games,u53:ngnk,Listen. Does the word end with ve or me? Tap the ending.,Frill voice on the current clip; recorded clip
+Games,Unit 5.2 tricky silent e games,u53:heart,Tap each heart word and each new word before the story.,Frill voice on the current clip; recorded clip
+Games,Unit 5.2 tricky silent e games,u53:listen,Listen to the story and follow along.,Frill voice on the current clip; recorded clip
+Games,Unit 5.2 tricky silent e games,u53:read,Tap a speaker to hear a sentence. Then you read it!,Frill voice on the current clip; recorded clip
+Games,Unit 5.2 tricky silent e games,u53:comp,"Let us think about the story. Listen to the question, then tap the answer.",Frill voice on the current clip; recorded clip
+Games,Unit 5.2 tricky silent e games,u53:rhyme,Rhyme time! Listen to each line. Tap the word that rhymes.,Zip voice on the current clip; recorded clip
+Games,Unit 5.2 tricky silent e games,u53:rhyme_end,You did it! Now listen to the whole poem and read along.,Zip voice on the current clip; recorded clip
+Games,Unit 5.2 tricky silent e games,u53:check,Time for Zip's check! Do your best. Take your time.,Zip voice on the current clip; recorded clip
+Games,Unit 5.2 tricky silent e games,u53:which,Tap the tricky word.,Frill voice on the current clip; recorded clip
+Games,Unit 5.2 tricky silent e games,u53:end,Listen. Tap the ending that finishes the word.,Frill voice on the current clip; recorded clip
+Games,Unit 5.2 tricky silent e games,u53:review,Unit review! Listen to the word. Does it have a silent e? Tap the word you hear.,Zip voice on the current clip; recorded clip
+Units,Unit 5.2 tricky silent e,u53:yay_z,Yes! That rhymes!,Zip voice on the current clip; recorded clip
+Units,Unit 5.2 tricky silent e,u53:yay_f,You got it! Nice rhyme!,Frill voice on the current clip; recorded clip
+Games,Unit 5.2 tricky silent e games,u53:hint,"Not quite. Look at the story page, then try again.",Frill voice on the current clip; recorded clip
+Games,Unit 5.2 tricky silent e games,u53:hear,Listen. Tap the word you hear.,Frill voice on the current clip; recorded clip
+Games,Unit 5.2 tricky silent e games,u53:bells,Read the word out loud. Then tap the bell with the same word.,Frill voice on the current clip; recorded clip
+Games,Unit 5.2 tricky silent e games,u53:build,Listen. Build the word with the tiles.,Frill voice on the current clip; recorded clip
+Games,Unit 5.2 tricky silent e games,u53:chain,"Listen to the new word. Change one letter, or add one, to make it.",Frill voice on the current clip; recorded clip
+Games,Unit 5.2 tricky silent e games,u53:scramble,Listen to the word. Tap the tiles in order to spell it.,Frill voice on the current clip; recorded clip
+Games,Unit 5.2 tricky silent e games,u53:sent,Listen. Put the words in order to make a sentence.,Frill voice on the current clip; recorded clip
+Games,Unit 5.2 tricky silent e games,u53:trace,"Trace v and e, like in have.",Frill voice on the current clip; recorded clip
+Units,Unit 5.2 tricky silent e,u53:m1,"Some silent e words are tricky! English words do not end in v, so an e comes after it.",Zip voice on the current clip; recorded clip
+Units,Unit 5.2 tricky silent e,u53:m2,"Have, give, live. The e is there, but the vowel stays short.",Frill voice on the current clip; recorded clip
+Units,Unit 5.2 tricky silent e,u53:m3,"In come, some and done, the o says u. Let us learn these by heart.",Zip voice on the current clip; recorded clip
+Units,Unit 5.2 tricky silent e,u53:q1,What is in the bell?,Frill voice on the current clip; recorded clip
+Units,Unit 5.2 tricky silent e,u53:qh1,"Look at this page again, then try.",Frill voice on the current clip; recorded clip
+Units,Unit 5.2 tricky silent e,u53:q2,Who tugs the rope?,Frill voice on the current clip; recorded clip
+Units,Unit 5.2 tricky silent e,u53:qh2,"Look at this page again, then try.",Frill voice on the current clip; recorded clip
+Units,Unit 5.2 tricky silent e,u53:q3,How do Zip and Frill feel at the end?,Frill voice on the current clip; recorded clip
+Units,Unit 5.2 tricky silent e,u53:qh3,"Look at this page again, then try.",Frill voice on the current clip; recorded clip
+Units,Unit 6.1 -s and -es,u61-meet-1,We add s to a word. Cat becomes cats. The ending sound is the hiss in cats.,zip voice on the current clip; recorded clip audio/u6_p_u61_m1.mp3
+Units,Unit 6.1 -s and -es,u61-meet-2,"When the word already hisses, like box or dish, we use the extra ending. Box becomes boxes. Dish becomes dishes. You hear an extra beat, like in boxes.",frill voice on the current clip; recorded clip audio/u6_p_u61_m2.mp3
+Units,Unit 6.1 -s and -es,u61-meet-3,"Bug becomes bugs. That ending buzzes, like in bugs. Listen to the sound, not the letter name.",zip voice on the current clip; recorded clip audio/u6_p_u61_m3.mp3
+Units,Unit 6.2 -ed,u62-meet-1,Letters e and d make three sounds when they end a word.,zip voice on the current clip; recorded clip audio/u6_p_u62_m1.mp3; uses letter name
+Units,Unit 6.2 -ed,u62-meet-2,This sound is the extra beat at the end of landed. Landed. Rested. Melted.,frill voice on the current clip; recorded clip audio/u6_p_u62_ed.mp3
+Units,Unit 6.2 -ed,u62-meet-3,"This sound is short. Filled, hugged, and banged.",zip voice on the current clip; recorded clip audio/u6_p_u62_d.mp3
+Units,Unit 6.2 -ed,u62-meet-4,This sound is the end of jumped. Jumped. Helped. Kissed.,frill voice on the current clip; recorded clip audio/u6_p_u62_t.mp3
+Units,Unit 6.2 ending sounds,u62-sound-ed,/ed/,isolated phoneme; clip audio/u6_snd_ed_cut.mp3
+Units,Unit 6.2 ending sounds,u62-sound-d,/d/,isolated phoneme; clip audio/u6_snd_d_cut.mp3
+Units,Unit 6.2 ending sounds,u62-sound-t,/t/,isolated phoneme; clip audio/u6_snd_t_cut.mp3
+Units,Unit 6.3 -ing,u63-meet-1,We add ing to a base word. Hang becomes hanging. It is happening now.,frill voice on the current clip; recorded clip audio/u6_p_u63_m1.mp3
+Units,Unit 6.3 -ing,u63-meet-2,"Lift becomes lifting. The ending sound is ing, like in ringing.",zip voice on the current clip; recorded clip audio/u6_p_u63_m2.mp3
+Units,Unit 6.3 -ing,u63-meet-3,Hangs and hanging do different jobs. Listen for the ending.,frill voice on the current clip; recorded clip audio/u6_p_u63_m3.mp3
+Games,Unit 6,u6:tapword,Tap the word you hear.,recorded clip audio/u6_p_tapword.mp3 where that file exists; on-screen direction
+Games,Unit 6,u6:yesno,"Does this word have the ending? Listen first. Answer 1 for yes, 2 for no.",recorded clip audio/u6_p_yesno.mp3 where that file exists; on-screen direction
+Games,Unit 6,u6:finish,Listen. Pick the ending that makes this word.,recorded clip audio/u6_p_finish.mp3 where that file exists; on-screen direction
+Games,Unit 6,u6:sentence,Tap each word that has an ending.,recorded clip audio/u6_p_sentence.mp3 where that file exists; on-screen direction
+Games,Unit 6,u6:heart,Tap each new or heart word to hear it before the story.,recorded clip audio/u6_p_heart.mp3 where that file exists; on-screen direction
+Games,Unit 6,u6:listen,Read the story. One page at a time.,recorded clip audio/u6_p_listen.mp3 where that file exists; on-screen direction
+Games,Unit 6,u6:rhymewhich,Which word rhymes with this?,recorded clip audio/u6_p_rhymewhich.mp3 where that file exists; on-screen direction
+Games,Unit 6,u6:fish,Tap the fish whose word has the ending.,recorded clip audio/u6_p_fish.mp3 where that file exists; on-screen direction
+Games,Unit 6,u6:whichending,Which word has this ending?,recorded clip audio/u6_p_whichending.mp3 where that file exists; on-screen direction
+Games,Unit 6,u6:listenagain,Listen again.,recorded clip audio/u6_p_listenagain.mp3 where that file exists; on-screen direction
+Units,Unit 4 ng,chunk-ang,ang,isolated phoneme; glued sound; recorded clip audio/ang.mp3
+Units,Unit 4 ng,chunk-ing,ing,isolated phoneme; glued sound; recorded clip audio/ing.mp3
+Units,Unit 4 ng,chunk-ong,ong,isolated phoneme; glued sound; recorded clip audio/ong.mp3
+Units,Unit 4 ng,chunk-ung,ung,isolated phoneme; glued sound; recorded clip audio/ung.mp3
+Games,Spelling,spell:gap,Hear the word. Tap the missing sound.,recorded clip audio/spell_p_gap.mp3
+Games,Spelling,spell:boxes,Tap a box to hear its sound. Then fill each box.,recorded clip audio/spell_p_boxes.mp3
+Games,Spelling,spell:tiles,Hear the word. Tap the tiles in order.,recorded clip audio/spell_p_tiles.mp3
+Games,Spelling,spell:chain,Change one sound to make the next word.,recorded clip audio/spell_p_chain.mp3
+Games,Spelling,spell:pattern,Spell the words. Then tap the part that is the same.,recorded clip audio/spell_p_pattern.mp3
+Games,Spelling tip,spell-tip:ng,n and g stick together. They make one sound.,zip voice on the current clip; recorded clip audio/spell_tip_ng.mp3
+Games,Spelling tip,spell-tip:nk,n and k stick together. You hear the k at the end.,frill voice on the current clip; recorded clip audio/spell_tip_nk.mp3
+Games,Spelling tip,spell-tip:u51,The e at the end makes the vowel say its name.,"zip voice on the current clip; recorded clip audio/spell_tip_u51.mp3; letter name, intended (silent e rule)"
+Games,Spelling tip,spell-tip:u53,"In come, some, and done, o says /u/. The e is silent.",frill voice on the current clip; recorded clip audio/spell_tip_u53.mp3; isolated phoneme named inside a sentence
+Games,Spelling tip,spell-tip:u61,"When a word already hisses, add es. You hear an extra beat.",zip voice on the current clip; recorded clip audio/spell_tip_u61.mp3
+Games,Spelling tip,spell-tip:u62,ed says /t/ in jumped.,frill voice on the current clip; recorded clip audio/spell_tip_u62.mp3; isolated phoneme named inside a sentence
+Games,Spelling tip,spell-tip:u63,ing at the end keeps one sound.,zip voice on the current clip; recorded clip audio/spell_tip_u63.mp3
+Units,Unit 4 ng words,word-a,a,word; recorded clip audio/w_a.mp3
+Units,Unit 4 ng words,word-bang,bang,word; recorded clip audio/w_bang.mp3
+Units,Unit 4 ng words,word-branch,branch,word; recorded clip audio/w_branch.mp3
+Units,Unit 4 ng words,word-fing,fing,word; recorded clip audio/w_fing.mp3
+Units,Unit 4 ng words,word-fling,fling,word; recorded clip audio/w_fling.mp3
+Units,Unit 4 ng words,word-hung,hung,word; recorded clip audio/w_hung.mp3
+Units,Unit 4 ng words,word-is,is,word; recorded clip audio/w_is.mp3
+Units,Unit 4 ng words,word-king,king,word; recorded clip audio/w_king.mp3
+Units,Unit 4 ng words,word-long,long,word; recorded clip audio/w_long.mp3
+Units,Unit 4 ng words,word-moss,moss,word; recorded clip audio/w_moss.mp3
+Units,Unit 4 ng words,word-orange,orange,word; recorded clip audio/w_orange.mp3
+Units,Unit 4 ng words,word-rang,rang,word; recorded clip audio/w_rang.mp3
+Units,Unit 4 ng words,word-ring,ring,word; recorded clip audio/w_ring.mp3
+Units,Unit 4 ng words,word-sang,sang,word; recorded clip audio/w_sang.mp3
+Units,Unit 4 ng words,word-sing,sing,word; recorded clip audio/w_sing.mp3
+Units,Unit 4 ng words,word-sings,sings,word; recorded clip audio/w_sings.mp3
+Units,Unit 4 ng words,word-song,song,word; recorded clip audio/w_song.mp3
+Units,Unit 4 ng words,word-string,string,word; recorded clip audio/w_string.mp3
+Units,Unit 4 ng words,word-strong,strong,word; recorded clip audio/w_strong.mp3
+Units,Unit 4 ng words,word-stuck,stuck,word; recorded clip audio/w_stuck.mp3
+Units,Unit 4 ng words,word-sung,sung,word; recorded clip audio/w_sung.mp3
+Units,Unit 4 ng words,word-the,the,word; recorded clip audio/w_the.mp3
+Units,Unit 4 ng words,word-to,to,word; recorded clip audio/w_to.mp3
+Units,Unit 4 ng words,word-twigs,twigs,word; recorded clip audio/w_twigs.mp3
+Units,Unit 4 ng words,word-what,what,word; recorded clip audio/w_what.mp3
+Units,Unit 4 ng words,word-wing,wing,word; recorded clip audio/w_wing.mp3
+Units,Unit 4 ng words,word-zang,zang,word; recorded clip audio/w_zang.mp3
+Units,Unit 4 nk words,word-a,a,word; recorded clip audio/w_a.mp3
+Units,Unit 4 nk words,word-bank,bank,word; recorded clip audio/nk_w_bank.mp3
+Units,Unit 4 nk words,word-blunk,blunk,word; recorded clip audio/nk_w_blunk.mp3
+Units,Unit 4 nk words,word-bonks,bonks,word; no clip found
+Units,Unit 4 nk words,word-grins,grins,word; no clip found
+Units,Unit 4 nk words,word-honk,honk,word; recorded clip audio/nk_w_honk.mp3
+Units,Unit 4 nk words,word-hunk,hunk,word; recorded clip audio/nk_w_hunk.mp3
+Units,Unit 4 nk words,word-i,i,word; recorded clip audio/u6_w_i.mp3
+Units,Unit 4 nk words,word-is,is,word; recorded clip audio/w_is.mp3
+Units,Unit 4 nk words,word-junk,junk,word; recorded clip audio/nk_w_junk.mp3
+Units,Unit 4 nk words,word-orange,orange,word; recorded clip audio/w_orange.mp3
+Units,Unit 4 nk words,word-pink,pink,word; recorded clip audio/nk_w_pink.mp3
+Units,Unit 4 nk words,word-rang,rang,word; recorded clip audio/w_rang.mp3
+Units,Unit 4 nk words,word-rings,rings,word; recorded clip audio/u6_w_rings.mp3
+Units,Unit 4 nk words,word-says,says,word; recorded clip audio/nk_w_says.mp3
+Units,Unit 4 nk words,word-sink,sink,word; recorded clip audio/nk_w_sink.mp3
+Units,Unit 4 nk words,word-skunk,skunk,word; recorded clip audio/nk_w_skunk.mp3
+Units,Unit 4 nk words,word-stink,stink,word; recorded clip audio/nk_w_stink.mp3
+Units,Unit 4 nk words,word-sunk,sunk,word; recorded clip audio/nk_w_sunk.mp3
+Units,Unit 4 nk words,word-the,the,word; recorded clip audio/w_the.mp3
+Units,Unit 4 nk words,word-thing,thing,word; recorded clip audio/w_thing.mp3
+Units,Unit 4 nk words,word-think,think,word; recorded clip audio/w_think.mp3
+Units,Unit 4 nk words,word-thunk,thunk,word; no clip found
+Units,Unit 4 nk words,word-to,to,word; recorded clip audio/w_to.mp3
+Units,Unit 4 nk words,word-trunk,trunk,word; recorded clip audio/nk_w_trunk.mp3
+Units,Unit 4 nk words,word-was,was,word; recorded clip audio/nk_w_was.mp3
+Units,Unit 4 nk words,word-what,what,word; recorded clip audio/w_what.mp3
+Units,Unit 4 nk words,word-wing,wing,word; recorded clip audio/w_wing.mp3
+Units,Unit 4 nk words,word-wink,wink,word; recorded clip audio/nk_w_wink.mp3
+Units,Unit 4 nk words,word-you,you,word; recorded clip audio/w_you.mp3
+Units,Unit 4 nk words,word-zonk,zonk,word; recorded clip audio/nk_w_zonk.mp3
+Units,Unit 5.1 words,word-a,a,word; recorded clip audio/w_a.mp3
+Units,Unit 5.1 words,word-bone,bone,word; recorded clip audio/u51_w_bone.mp3
+Units,Unit 5.1 words,word-cake,cake,word; recorded clip audio/u51_w_cake.mp3
+Units,Unit 5.1 words,word-cape,cape,word; recorded clip audio/u51_w_cape.mp3
+Units,Unit 5.1 words,word-cub,cub,word; recorded clip audio/u51_w_cub.mp3
+Units,Unit 5.1 words,word-cube,cube,word; recorded clip audio/u51_w_cube.mp3
+Units,Unit 5.1 words,word-cute,cute,word; recorded clip audio/u51_w_cute.mp3
+Units,Unit 5.1 words,word-fine,fine,word; recorded clip audio/u51_w_fine.mp3
+Units,Unit 5.1 words,word-hike,hike,word; recorded clip audio/u51_w_hike.mp3
+Units,Unit 5.1 words,word-home,home,word; recorded clip audio/w_home.mp3
+Units,Unit 5.1 words,word-hope,hope,word; recorded clip audio/u51_w_hope.mp3
+Units,Unit 5.1 words,word-i,i,word; recorded clip audio/u6_w_i.mp3
+Units,Unit 5.1 words,word-is,is,word; recorded clip audio/w_is.mp3
+Units,Unit 5.1 words,word-kit,kit,word; recorded clip audio/w_kit.mp3
+Units,Unit 5.1 words,word-kite,kite,word; recorded clip audio/u51_w_kite.mp3
+Units,Unit 5.1 words,word-make,make,word; recorded clip audio/u51_w_make.mp3
+Units,Unit 5.1 words,word-mule,mule,word; recorded clip audio/u51_w_mule.mp3
+Units,Unit 5.1 words,word-note,note,word; recorded clip audio/u51_w_note.mp3
+Units,Unit 5.1 words,word-orange,orange,word; recorded clip audio/w_orange.mp3
+Units,Unit 5.1 words,word-pete,pete,word; no clip found
+Units,Unit 5.1 words,word-pin,pin,word; recorded clip audio/u51_w_pin.mp3
+Units,Unit 5.1 words,word-pine,pine,word; recorded clip audio/u51_w_pine.mp3
+Units,Unit 5.1 words,word-rope,rope,word; recorded clip audio/u51_w_rope.mp3
+Units,Unit 5.1 words,word-safe,safe,word; recorded clip audio/u51_w_safe.mp3
+Units,Unit 5.1 words,word-said,said,word; recorded clip audio/u51_w_said.mp3
+Units,Unit 5.1 words,word-snake,snake,word; recorded clip audio/u51_w_snake.mp3
+Units,Unit 5.1 words,word-take,take,word; recorded clip audio/w_take.mp3
+Units,Unit 5.1 words,word-tape,tape,word; recorded clip audio/u51_w_tape.mp3
+Units,Unit 5.1 words,word-the,the,word; recorded clip audio/w_the.mp3
+Units,Unit 5.1 words,word-these,these,word; recorded clip audio/w_these.mp3
+Units,Unit 5.1 words,word-to,to,word; recorded clip audio/w_to.mp3
+Units,Unit 5.1 words,word-vines,vines,word; recorded clip audio/u51_w_vines.mp3
+Units,Unit 5.1 words,word-zake,zake,word; recorded clip audio/u51_w_zake.mp3
+Units,Unit 5.2 words,word-a,a,word; recorded clip audio/w_a.mp3
+Units,Unit 5.2 words,word-cape,cape,word; recorded clip audio/u51_w_cape.mp3
+Units,Unit 5.2 words,word-come,come,word; recorded clip audio/w_come.mp3
+Units,Unit 5.2 words,word-cub,cub,word; recorded clip audio/u51_w_cub.mp3
+Units,Unit 5.2 words,word-done,done,word; recorded clip audio/u53_w_done.mp3
+Units,Unit 5.2 words,word-dove,dove,word; recorded clip audio/u53_w_dove.mp3
+Units,Unit 5.2 words,word-five,five,word; recorded clip audio/w_five.mp3
+Units,Unit 5.2 words,word-give,give,word; recorded clip audio/w_give.mp3
+Units,Unit 5.2 words,word-glove,glove,word; recorded clip audio/u53_w_glove.mp3
+Units,Unit 5.2 words,word-have,have,word; recorded clip audio/u53_w_have.mp3
+Units,Unit 5.2 words,word-hive,hive,word; recorded clip audio/u53_w_hive.mp3
+Units,Unit 5.2 words,word-home,home,word; recorded clip audio/w_home.mp3
+Units,Unit 5.2 words,word-hope,hope,word; recorded clip audio/u51_w_hope.mp3
+Units,Unit 5.2 words,word-i,i,word; recorded clip audio/u6_w_i.mp3
+Units,Unit 5.2 words,word-is,is,word; recorded clip audio/w_is.mp3
+Units,Unit 5.2 words,word-kit,kit,word; recorded clip audio/w_kit.mp3
+Units,Unit 5.2 words,word-live,live,word; recorded clip audio/w_live.mp3
+Units,Unit 5.2 words,word-love,love,word; recorded clip audio/u53_w_love.mp3
+Units,Unit 5.2 words,word-orange,orange,word; recorded clip audio/w_orange.mp3
+Units,Unit 5.2 words,word-pete,pete,word; no clip found
+Units,Unit 5.2 words,word-said,said,word; recorded clip audio/u51_w_said.mp3
+Units,Unit 5.2 words,word-some,some,word; recorded clip audio/w_some.mp3
+Units,Unit 5.2 words,word-the,the,word; recorded clip audio/w_the.mp3
+Units,Unit 5.2 words,word-theme,theme,word; recorded clip audio/u53_w_theme.mp3
+Units,Unit 5.2 words,word-time,time,word; recorded clip audio/w_time.mp3
+Units,Unit 5.2 words,word-to,to,word; recorded clip audio/w_to.mp3
+Units,Unit 6.1 words,word-a,a,word; recorded clip audio/w_a.mp3
+Units,Unit 6.1 words,word-and,and,word; recorded clip audio/w_and.mp3
+Units,Unit 6.1 words,word-are,are,word; recorded clip audio/u6_w_are.mp3
+Units,Unit 6.1 words,word-box,box,word; recorded clip audio/u6_w_box.mp3
+Units,Unit 6.1 words,word-boxes,boxes,word; recorded clip audio/u6_w_boxes.mp3
+Units,Unit 6.1 words,word-bug,bug,word; recorded clip audio/w_bug.mp3
+Units,Unit 6.1 words,word-bugs,bugs,word; recorded clip audio/u6_w_bugs.mp3
+Units,Unit 6.1 words,word-cat,cat,word; recorded clip audio/u6_w_cat.mp3
+Units,Unit 6.1 words,word-cats,cats,word; recorded clip audio/u6_w_cats.mp3
+Units,Unit 6.1 words,word-cups,cups,word; recorded clip audio/u6_w_cups.mp3
+Units,Unit 6.1 words,word-dish,dish,word; recorded clip audio/u6_w_dish.mp3
+Units,Unit 6.1 words,word-dishes,dishes,word; recorded clip audio/u6_w_dishes.mp3
+Units,Unit 6.1 words,word-for,for,word; recorded clip audio/w_for.mp3
+Units,Unit 6.1 words,word-fox,fox,word; recorded clip audio/u6_w_fox.mp3
+Units,Unit 6.1 words,word-foxes,foxes,word; recorded clip audio/u6_w_foxes.mp3
+Units,Unit 6.1 words,word-from,from,word; recorded clip audio/w_from.mp3
+Units,Unit 6.1 words,word-gone,gone,word; recorded clip audio/u6_w_gone.mp3
+Units,Unit 6.1 words,word-hang,hang,word; recorded clip audio/w_hang.mp3
+Units,Unit 6.1 words,word-hangs,hangs,word; recorded clip audio/u6_w_hangs.mp3
+Units,Unit 6.1 words,word-hat,hat,word; recorded clip audio/u53_w_hat.mp3
+Units,Unit 6.1 words,word-hats,hats,word; recorded clip audio/u6_w_hats.mp3
+Units,Unit 6.1 words,word-map,map,word; recorded clip audio/w_map.mp3
+Units,Unit 6.1 words,word-maps,maps,word; recorded clip audio/u6_w_maps.mp3
+Units,Unit 6.1 words,word-pack,pack,word; recorded clip audio/u6_w_pack.mp3
+Units,Unit 6.1 words,word-packs,packs,word; recorded clip audio/u6_w_packs.mp3
+Units,Unit 6.1 words,word-ring,ring,word; recorded clip audio/w_ring.mp3
+Units,Unit 6.1 words,word-rings,rings,word; recorded clip audio/u6_w_rings.mp3
+Units,Unit 6.1 words,word-spot,spot,word; recorded clip audio/u6_w_spot.mp3
+Units,Unit 6.1 words,word-spots,spots,word; recorded clip audio/u6_w_spots.mp3
+Units,Unit 6.1 words,word-the,the,word; recorded clip audio/w_the.mp3
+Units,Unit 6.1 words,word-wishes,wishes,word; recorded clip audio/u6_w_wishes.mp3
+Units,Unit 6.2 words,word-a,a,word; recorded clip audio/w_a.mp3
+Units,Unit 6.2 words,word-and,and,word; recorded clip audio/w_and.mp3
+Units,Unit 6.2 words,word-as,as,word; recorded clip audio/w_as.mp3
+Units,Unit 6.2 words,word-fill,fill,word; recorded clip audio/u6_w_fill.mp3
+Units,Unit 6.2 words,word-filled,filled,word; recorded clip audio/u6_w_filled.mp3
+Units,Unit 6.2 words,word-for,for,word; recorded clip audio/w_for.mp3
+Units,Unit 6.2 words,word-hand,hand,word; recorded clip audio/w_hand.mp3
+Units,Unit 6.2 words,word-handed,handed,word; recorded clip audio/u6_w_handed.mp3
+Units,Unit 6.2 words,word-help,help,word; recorded clip audio/w_help.mp3
+Units,Unit 6.2 words,word-helped,helped,word; recorded clip audio/u6_w_helped.mp3
+Units,Unit 6.2 words,word-hole,hole,word; recorded clip audio/u6_w_hole.mp3
+Units,Unit 6.2 words,word-jump,jump,word; recorded clip audio/w_jump.mp3
+Units,Unit 6.2 words,word-jumped,jumped,word; recorded clip audio/u6_w_jumped.mp3
+Units,Unit 6.2 words,word-land,land,word; recorded clip audio/w_land.mp3
+Units,Unit 6.2 words,word-landed,landed,word; recorded clip audio/u6_w_landed.mp3
+Units,Unit 6.2 words,word-miss,miss,word; recorded clip audio/u6_w_miss.mp3
+Units,Unit 6.2 words,word-missed,missed,word; recorded clip audio/u6_w_missed.mp3
+Units,Unit 6.2 words,word-pack,pack,word; recorded clip audio/u6_w_pack.mp3
+Units,Unit 6.2 words,word-packed,packed,word; recorded clip audio/u6_w_packed.mp3
+Units,Unit 6.2 words,word-rest,rest,word; recorded clip audio/u6_w_rest.mp3
+Units,Unit 6.2 words,word-rested,rested,word; recorded clip audio/u6_w_rested.mp3
+Units,Unit 6.2 words,word-snack,snack,word; recorded clip audio/u51_w_snack.mp3
+Units,Unit 6.2 words,word-the,the,word; recorded clip audio/w_the.mp3
+Units,Unit 6.2 words,word-wind,wind,word; recorded clip audio/u6_w_wind.mp3
+Units,Unit 6.3 words,word-bump,bump,word; recorded clip audio/u6_w_bump.mp3
+Units,Unit 6.3 words,word-bumping,bumping,word; recorded clip audio/u6_w_bumping.mp3
+Units,Unit 6.3 words,word-hang,hang,word; recorded clip audio/w_hang.mp3
+Units,Unit 6.3 words,word-hanging,hanging,word; recorded clip audio/u6_w_hanging.mp3
+Units,Unit 6.3 words,word-help,help,word; recorded clip audio/w_help.mp3
+Units,Unit 6.3 words,word-helping,helping,word; recorded clip audio/u6_w_helping.mp3
+Units,Unit 6.3 words,word-jump,jump,word; recorded clip audio/w_jump.mp3
+Units,Unit 6.3 words,word-jumping,jumping,word; recorded clip audio/u6_w_jumping.mp3
+Units,Unit 6.3 words,word-lift,lift,word; recorded clip audio/u6_w_lift.mp3
+Units,Unit 6.3 words,word-lifting,lifting,word; recorded clip audio/u6_w_lifting.mp3
+Units,Unit 6.3 words,word-rest,rest,word; recorded clip audio/u6_w_rest.mp3
+Units,Unit 6.3 words,word-resting,resting,word; recorded clip audio/u6_w_resting.mp3
+Units,Unit 6.3 words,word-ring,ring,word; recorded clip audio/w_ring.mp3
+Units,Unit 6.3 words,word-ringing,ringing,word; recorded clip audio/u6_w_ringing.mp3
+Units,Unit 6.3 words,word-shift,shift,word; recorded clip audio/u6_w_shift.mp3
+Units,Unit 6.3 words,word-shifting,shifting,word; recorded clip audio/u6_w_shifting.mp3
+Units,Unit 6.3 words,word-swinging,swinging,word; recorded clip audio/u6_w_swinging.mp3
+Units,Unit 4 Sentence Bridge,ng-sent-1,The orange bell hung on a branch.,recorded clip audio/b_1.mp3
+Units,Unit 4 Sentence Bridge,ng-sent-2,Frill swings up on a long string.,recorded clip audio/b_2.mp3
+Units,Unit 4 Sentence Bridge,ng-sent-3,Zip and Frill sing a long song.,recorded clip audio/b_3.mp3
+Units,Unit 4 nk sentences,nk-sent-1,The skunk is in the trunk.,recorded clip audio/b_1.mp3
+Units,Unit 4 nk sentences,nk-sent-2,I think the sock is pink.,recorded clip audio/b_2.mp3
+Units,Unit 4 nk sentences,nk-sent-3,Frill winks at Zip.,recorded clip audio/b_3.mp3
+Units,Unit 5.1 sentences,u51-sent-1,The rope is cut!,recorded clip audio/b_1.mp3
+Units,Unit 5.1 sentences,u51-sent-2,Frill takes the vines off.,recorded clip audio/b_2.mp3
+Units,Unit 5.1 sentences,u51-sent-3,The orange bell rings.,recorded clip audio/b_3.mp3
+Units,Unit 5.2 sentences,u53-sent-1,Frill spots a dove.,recorded clip audio/b_1.mp3
+Units,Unit 5.2 sentences,u53-sent-2,The job is done.,recorded clip audio/b_2.mp3
+Units,Unit 5.2 sentences,u53-sent-3,I love this bell.,recorded clip audio/b_3.mp3
+Units,Unit 6.1 sentences,u61-sent-1,Zip packs the cups.,spoken from word clips or a sentence clip
+Units,Unit 6.1 sentences,u61-sent-2,The bugs hop in the boxes.,spoken from word clips or a sentence clip
+Units,Unit 6.1 sentences,u61-sent-3,Frill shifts the dishes.,spoken from word clips or a sentence clip
+Units,Unit 6.1 sentences,u61-sent-4,The orange bell hangs and rings.,spoken from word clips or a sentence clip
+Units,Unit 6.2 sentences,u62-sent-1,Zip jumped and packed the stick.,spoken from word clips or a sentence clip
+Units,Unit 6.2 sentences,u62-sent-2,The branch landed on the bell.,spoken from word clips or a sentence clip
+Units,Unit 6.2 sentences,u62-sent-3,Frill helped. Zip lifted it.,spoken from word clips or a sentence clip
+Units,Unit 6.2 sentences,u62-sent-4,The stick filled the gap. The branch rested.,spoken from word clips or a sentence clip
+Units,Unit 6.3 sentences,u63-sent-1,The orange bell is hanging on the branch.,spoken from word clips or a sentence clip
+Units,Unit 6.3 sentences,u63-sent-2,The stick is bumping the bell.,spoken from word clips or a sentence clip
+Units,Unit 6.3 sentences,u63-sent-3,Zip is lifting the stick. Frill is helping.,spoken from word clips or a sentence clip
+Units,Unit 6.3 sentences,u63-sent-4,Zip is ringing the bell.,spoken from word clips or a sentence clip
+Stories,Unit 4 ng story,ng-s-1,The big orange bell hung on a long branch. It did not ring.,story sentence; recorded clip audio/s_1.mp3
+Stories,Unit 4 ng story,ng-s-2,Zip and Frill ran up the path to the bell.,story sentence; recorded clip audio/s_2.mp3
+Stories,Unit 4 ng story,ng-s-3,Frill swings up on a long string.,story sentence; recorded clip audio/s_3.mp3
+Stories,Unit 4 ng story,ng-s-4,Twigs and moss sit in the bell. Yuck!,story sentence; recorded clip audio/s_4.mp3
+Stories,Unit 4 ng story,ng-s-5,Zip and Frill fling the twigs off.,story sentence; recorded clip audio/s_5.mp3
+Stories,Unit 4 ng story,ng-s-6,Still no ding. The bell is stuck.,story sentence; recorded clip audio/s_6.mp3
+Stories,Unit 4 ng story,ng-s-7,Zip brings a strong stick.,story sentence; recorded clip audio/s_7.mp3
+Stories,Unit 4 ng story,ng-s-8,Frill sings a long song.,story sentence; recorded clip audio/s_8.mp3
+Stories,Unit 4 ng story,ng-s-9,Zip hits the bell. Ding!,story sentence; recorded clip audio/s_9.mp3
+Stories,Unit 4 ng story,ng-s-10,"Ding, dong! The orange bell rings strong!",story sentence; recorded clip audio/s_10.mp3
+Stories,Unit 4 ng story,ng-s-11,Zip and Frill sing. The bell will ring and ring!,story sentence; recorded clip audio/s_11.mp3
+Stories,Unit 4 nk story,nk-s-1,"Zip and Frill must ring the orange bell, but it will not ring! Then Zip spots a big trunk on the bank.",story sentence; recorded clip audio/nk_s_1.mp3
+Stories,Unit 4 nk story,nk-s-2,"Zip yanks the lid. Clunk! Pew, the trunk stinks!",story sentence; recorded clip audio/nk_s_2.mp3
+Stories,Unit 4 nk story,nk-s-3,"""What is that stink?"" Zip thinks.",story sentence; recorded clip audio/nk_s_3.mp3
+Stories,Unit 4 nk story,nk-s-4,Zip digs out a pen with no ink. Junk!,story sentence; recorded clip audio/nk_s_4.mp3
+Stories,Unit 4 nk story,nk-s-5,"Frill digs out a duck. Honk, honk! Junk!",story sentence; recorded clip audio/nk_s_5.mp3
+Stories,Unit 4 nk story,nk-s-6,Zip grabs a pink sock. Sniff. Not the stink!,story sentence; recorded clip audio/nk_s_6.mp3
+Stories,Unit 4 nk story,nk-s-7,Then eyes blink in the trunk. Gulp!,story sentence; recorded clip audio/nk_s_7.mp3
+Stories,Unit 4 nk story,nk-s-8,Out hops a skunk! Zip and Frill jump back.,story sentence; recorded clip audio/nk_s_8.mp3
+Stories,Unit 4 nk story,nk-s-9,"""Thank you!"" says the skunk. ""I was stuck in that junk. Can I help you?""",story sentence; recorded clip audio/nk_s_9.mp3
+Stories,Unit 4 nk story,nk-s-10,"""The orange bell will not ring,"" Frill says. The skunk winks. ""I can fix that!""",story sentence; recorded clip audio/nk_s_10.mp3
+Stories,Unit 4 nk story,nk-s-11,The skunk hops up and bonks the bell with a thunk. Bong! Clang!,story sentence; recorded clip audio/nk_s_11.mp3
+Stories,Unit 4 nk story,nk-s-12,"The orange bell rings! Frill grins. ""That skunk is a champ!""",story sentence; recorded clip audio/nk_s_12.mp3
+Stories,Unit 5.1 story,u51-s-1,Zip and Frill hike up the path to the bell.,story sentence; recorded clip audio/u51_s_1.mp3
+Stories,Unit 5.1 story,u51-s-2,The orange bell hangs on a rope on a branch.,story sentence; recorded clip audio/u51_s_2.mp3
+Stories,Unit 5.1 story,u51-s-3,Frill taps it. Clunk. It will not ring.,story sentence; recorded clip audio/u51_s_3.mp3
+Stories,Unit 5.1 story,u51-s-4,Zip spots these vines on the rope.,story sentence; recorded clip audio/u51_s_4.mp3
+Stories,Unit 5.1 story,u51-s-5,"""I can take these vines,"" said Frill.",story sentence; recorded clip audio/u51_s_5.mp3
+Stories,Unit 5.1 story,u51-s-6,Frill takes the vines off. Still no ding.,story sentence; recorded clip audio/u51_s_6.mp3
+Stories,Unit 5.1 story,u51-s-7,Zip spots the rope. The rope is cut!,story sentence; recorded clip audio/u51_s_7.mp3
+Stories,Unit 5.1 story,u51-s-8,"""These cuts are not safe,"" said Zip.",story sentence; recorded clip audio/u51_s_8.mp3
+Stories,Unit 5.1 story,u51-s-9,"Zip grabs a fine rope. ""I can use this,"" said Zip.",story sentence; recorded clip audio/u51_s_9.mp3
+Stories,Unit 5.1 story,u51-s-10,Zip and Frill make the rope safe on the bell.,story sentence; recorded clip audio/u51_s_10.mp3
+Stories,Unit 5.1 story,u51-s-11,Zip taps the bell. Ding! The orange bell rings.,story sentence; recorded clip audio/u51_s_11.mp3
+Stories,Unit 5.1 story,u51-s-12,Zip and Frill smile and hike the path home.,story sentence; recorded clip audio/u51_s_12.mp3
+Stories,Unit 5.2 story,u53-s-1,Zip and Frill hike to the orange bell.,story sentence; recorded clip audio/u53_s_1.mp3
+Stories,Unit 5.2 story,u53-s-2,Zip tugs the rope. The bell will not come.,story sentence; recorded clip audio/u53_s_2.mp3
+Stories,Unit 5.2 story,u53-s-3,Frill spots a dove in the bell.,story sentence; recorded clip audio/u53_s_3.mp3
+Stories,Unit 5.2 story,u53-s-4,"""A dove lives in it,"" said Frill.",story sentence; recorded clip audio/u53_s_4.mp3
+Stories,Unit 5.2 story,u53-s-5,"""Come, dove. I have a safe spot,"" said Zip.",story sentence; recorded clip audio/u53_s_5.mp3
+Stories,Unit 5.2 story,u53-s-6,"The dove will not come. ""Give it time,"" said Zip.",story sentence; recorded clip audio/u53_s_6.mp3
+Stories,Unit 5.2 story,u53-s-7,The dove comes. It sits on the branch.,story sentence; recorded clip audio/u53_s_7.mp3
+Stories,Unit 5.2 story,u53-s-8,Zip spots some nest in the bell.,story sentence; recorded clip audio/u53_s_8.mp3
+Stories,Unit 5.2 story,u53-s-9,Zip grabs a glove. Frill gets the nest off.,story sentence; recorded clip audio/u53_s_9.mp3
+Stories,Unit 5.2 story,u53-s-10,"""Give the rope a tug,"" said Frill.",story sentence; recorded clip audio/u53_s_10.mp3
+Stories,Unit 5.2 story,u53-s-11,Zip tugs. Ding! The orange bell rings.,story sentence; recorded clip audio/u53_s_11.mp3
+Stories,Unit 5.2 story,u53-s-12,"The job is done. ""I love this bell,"" said Zip.",story sentence; recorded clip audio/u53_s_12.mp3
+Stories,Unit 6.1 story,u61-s-1,Zip and Frill pack lunches in boxes.,story sentence; Zip on the current clip; recorded clip audio/u61_s_1.mp3
+Stories,Unit 6.1 story,u61-s-2,Zip sets the boxes on a rock and naps.,story sentence; Zip on the current clip; recorded clip audio/u61_s_2.mp3
+Stories,Unit 6.1 story,u61-s-3,Six crabs pop up from the sand!,story sentence; Zip on the current clip; recorded clip audio/u61_s_3.mp3
+Stories,Unit 6.1 story,u61-s-4,The crabs grab the boxes and run.,story sentence; Zip on the current clip; recorded clip audio/u61_s_4.mp3
+Stories,Unit 6.1 story,u61-s-5,Zip wakes up. The lunches are gone!,story sentence; Zip on the current clip; recorded clip audio/u61_s_5.mp3
+Stories,Unit 6.1 story,u61-s-6,Zip and Frill dash past the shells and rocks.,story sentence; Zip on the current clip; recorded clip audio/u61_s_6.mp3
+Stories,Unit 6.1 story,u61-s-7,Frill spots six red claws in a log.,story sentence; Zip on the current clip; recorded clip audio/u61_s_7.mp3
+Stories,Unit 6.1 story,u61-s-8,Zip pokes the log. The crabs pinch Zip! Zip yelps.,story sentence; Zip on the current clip; recorded clip audio/u61_s_8.mp3
+Stories,Unit 6.1 story,u61-s-9,Frill has a plan. Frill sets out snacks for the crabs.,story sentence; Zip on the current clip; recorded clip audio/u61_s_9.mp3
+Stories,Unit 6.1 story,u61-s-10,The crabs and the pals munch lunch on the rocks.,story sentence; Zip on the current clip; recorded clip audio/u61_s_10.mp3
+Stories,Unit 6.2 story,u62-s-1,Zip and Frill made a red kite.,story sentence; Zip on the current clip; recorded clip audio/u62_s_1.mp3
+Stories,Unit 6.2 story,u62-s-2,Zip tugged the string. The kite lifted up!,story sentence; Zip on the current clip; recorded clip audio/u62_s_2.mp3
+Stories,Unit 6.2 story,u62-s-3,The wind huffed and puffed.,story sentence; Zip on the current clip; recorded clip audio/u62_s_3.mp3
+Stories,Unit 6.2 story,u62-s-4,The kite zipped and flipped past the green bell.,story sentence; Zip on the current clip; recorded clip audio/u62_s_4.mp3
+Stories,Unit 6.2 story,u62-s-5,Snap! The string popped.,story sentence; Zip on the current clip; recorded clip audio/u62_s_5.mp3
+Stories,Unit 6.2 story,u62-s-6,The kite drifted and landed on the sand.,story sentence; Zip on the current clip; recorded clip audio/u62_s_6.mp3
+Stories,Unit 6.2 story,u62-s-7,A crab grabbed the kite and hid in a hole.,story sentence; Zip on the current clip; recorded clip audio/u62_s_7.mp3
+Stories,Unit 6.2 story,u62-s-8,Zip and Frill hunted and hunted.,story sentence; Zip on the current clip; recorded clip audio/u62_s_8.mp3
+Stories,Unit 6.2 story,u62-s-9,Frill spotted a red tip by a rock. The crab had it!,story sentence; Zip on the current clip; recorded clip audio/u62_s_9.mp3
+Stories,Unit 6.2 story,u62-s-10,"Frill swapped the crab a snack for the kite. Zip fixed the string, and the pals yelled as it lifted up!",story sentence; Zip on the current clip; recorded clip audio/u62_s_10.mp3
+Stories,Unit 6.3 story,u63-s-1,The orange bell is hanging on the branch.,story sentence; Zip on the current clip; recorded clip audio/u63_s_1.mp3
+Stories,Unit 6.3 story,u63-s-2,Zip and Frill hike up the path.,story sentence; Zip on the current clip; recorded clip audio/u63_s_2.mp3
+Stories,Unit 6.3 story,u63-s-3,A long stick is hanging by the bell.,story sentence; Zip on the current clip; recorded clip audio/u63_s_3.mp3
+Stories,Unit 6.3 story,u63-s-4,The stick is bumping the bell. Clunk.,story sentence; Zip on the current clip; recorded clip audio/u63_s_4.mp3
+Stories,Unit 6.3 story,u63-s-5,Zip tugs the rope. The bell will not ring.,story sentence; Zip on the current clip; recorded clip audio/u63_s_5.mp3
+Stories,Unit 6.3 story,u63-s-6,"""The stick is bumping it,"" said Frill.",story sentence; Frill on the current clip; recorded clip audio/u63_s_6.mp3
+Stories,Unit 6.3 story,u63-s-7,Zip is lifting the long stick up.,story sentence; Zip on the current clip; recorded clip audio/u63_s_7.mp3
+Stories,Unit 6.3 story,u63-s-8,The stick is swinging back. It hits the bell.,story sentence; Zip on the current clip; recorded clip audio/u63_s_8.mp3
+Stories,Unit 6.3 story,u63-s-9,Frill is helping Zip lift the stick.,story sentence; Zip on the current clip; recorded clip audio/u63_s_9.mp3
+Stories,Unit 6.3 story,u63-s-10,Frill is shifting the stick off the path.,story sentence; Zip on the current clip; recorded clip audio/u63_s_10.mp3
+Stories,Unit 6.3 story,u63-s-11,The stick is resting on the path.,story sentence; Zip on the current clip; recorded clip audio/u63_s_11.mp3
+Stories,Unit 6.3 story,u63-s-12,Zip is ringing the bell. Ding! It rings.,story sentence; Zip on the current clip; recorded clip audio/u63_s_12.mp3
+Sight words,Treasure box 1,box1-about,about,word; recorded clip audio/w_about.mp3
+Sight words,Treasure box 1,box1-after,after,word; recorded clip audio/w_after.mp3
+Sight words,Treasure box 1,box1-an,an,word; recorded clip audio/w_an.mp3
+Sight words,Treasure box 1,box1-as,as,word; recorded clip audio/w_as.mp3
+Sight words,Treasure box 1,box1-ask,ask,word; recorded clip audio/w_ask.mp3
+Sight words,Treasure box 1,box1-by,by,word; recorded clip audio/w_by.mp3
+Sight words,Treasure box 1,box1-day,day,word; recorded clip audio/w_day.mp3
+Sight words,Treasure box 1,box1-each,each,word; recorded clip audio/w_each.mp3
+Sight words,Treasure box 1,box1-from,from,word; recorded clip audio/w_from.mp3
+Sight words,Treasure box 1,box1-give,give,word; recorded clip audio/w_give.mp3
+Sight words,Treasure box 1,box1-going,going,word; recorded clip audio/w_going.mp3
+Sight words,Treasure box 1,box1-had,had,word; recorded clip audio/w_had.mp3
+Sight words,Treasure box 1,box1-has,has,word; recorded clip audio/w_has.mp3
+Sight words,Treasure box 1,box1-her,her,word; recorded clip audio/w_her.mp3
+Sight words,Treasure box 1,box1-him,him,word; recorded clip audio/w_him.mp3
+Sight words,Treasure box 1,box1-his,his,word; recorded clip audio/w_his.mp3
+Sight words,Treasure box 1,box1-how,how,word; recorded clip audio/w_how.mp3
+Sight words,Treasure box 1,box1-if,if,word; recorded clip audio/w_if.mp3
+Sight words,Treasure box 1,box1-just,just,word; recorded clip audio/w_just.mp3
+Sight words,Treasure box 1,box1-know,know,word; recorded clip audio/w_know.mp3
+Sight words,Treasure box 1,box1-let,let,word; recorded clip audio/w_let.mp3
+Sight words,Treasure box 1,box1-live,live,word; recorded clip audio/w_live.mp3
+Sight words,Treasure box 1,box1-long,long,word; recorded clip audio/w_long.mp3
+Sight words,Treasure box 1,box1-may,may,word; recorded clip audio/w_may.mp3
+Sight words,Treasure box 1,box1-more,more,word; recorded clip audio/w_more.mp3
+Sight words,Treasure box 1,box1-number,number,word; recorded clip audio/w_number.mp3
+Sight words,Treasure box 1,box1-of,of,word; recorded clip audio/w_of.mp3
+Sight words,Treasure box 1,box1-oil,oil,word; recorded clip audio/w_oil.mp3
+Sight words,Treasure box 1,box1-old,old,word; recorded clip audio/w_old.mp3
+Sight words,Treasure box 1,box1-open,open,word; recorded clip audio/w_open.mp3
+Sight words,Treasure box 1,box1-other,other,word; recorded clip audio/w_other.mp3
+Sight words,Treasure box 1,box1-over,over,word; recorded clip audio/w_over.mp3
+Sight words,Treasure box 1,box1-part,part,word; recorded clip audio/w_part.mp3
+Sight words,Treasure box 1,box1-people,people,word; recorded clip audio/w_people.mp3
+Sight words,Treasure box 1,box1-put,put,word; recorded clip audio/w_put.mp3
+Sight words,Treasure box 1,box1-some,some,word; recorded clip audio/w_some.mp3
+Sight words,Treasure box 1,box1-stop,stop,word; recorded clip audio/w_stop.mp3
+Sight words,Treasure box 1,box1-take,take,word; recorded clip audio/w_take.mp3
+Sight words,Treasure box 1,box1-than,than,word; recorded clip audio/w_than.mp3
+Sight words,Treasure box 1,box1-thank,thank,word; recorded clip audio/w_thank.mp3
+Sight words,Treasure box 1,box1-them,them,word; recorded clip audio/w_them.mp3
+Sight words,Treasure box 1,box1-then,then,word; recorded clip audio/w_then.mp3
+Sight words,Treasure box 1,box1-think,think,word; recorded clip audio/w_think.mp3
+Sight words,Treasure box 1,box1-time,time,word; recorded clip audio/w_time.mp3
+Sight words,Treasure box 1,box1-walk,walk,word; recorded clip audio/w_walk.mp3
+Sight words,Treasure box 1,box1-water,water,word; recorded clip audio/w_water.mp3
+Sight words,Treasure box 1,box1-way,way,word; recorded clip audio/w_way.mp3
+Sight words,Treasure box 1,box1-were,were,word; recorded clip audio/w_were.mp3
+Sight words,Treasure box 1,box1-when,when,word; recorded clip audio/w_when.mp3
+Sight words,Treasure box 1,box1-word,word,word; recorded clip audio/w_word.mp3
+Sight words,Treasure box 2,box2-again,again,word; recorded clip audio/w_again.mp3
+Sight words,Treasure box 2,box2-also,also,word; recorded clip audio/w_also.mp3
+Sight words,Treasure box 2,box2-another,another,word; recorded clip audio/w_another.mp3
+Sight words,Treasure box 2,box2-any,any,word; recorded clip audio/w_any.mp3
+Sight words,Treasure box 2,box2-best,best,word; recorded clip audio/w_best.mp3
+Sight words,Treasure box 2,box2-both,both,word; recorded clip audio/w_both.mp3
+Sight words,Treasure box 2,box2-boy,boy,word; recorded clip audio/w_boy.mp3
+Sight words,Treasure box 2,box2-call,call,word; recorded clip audio/w_call.mp3
+Sight words,Treasure box 2,box2-cold,cold,word; recorded clip audio/w_cold.mp3
+Sight words,Treasure box 2,box2-could,could,word; recorded clip audio/w_could.mp3
+Sight words,Treasure box 2,box2-end,end,word; recorded clip audio/w_end.mp3
+Sight words,Treasure box 2,box2-even,even,word; recorded clip audio/w_even.mp3
+Sight words,Treasure box 2,box2-every,every,word; recorded clip audio/w_every.mp3
+Sight words,Treasure box 2,box2-fast,fast,word; recorded clip audio/w_fast.mp3
+Sight words,Treasure box 2,box2-first,first,word; recorded clip audio/w_first.mp3
+Sight words,Treasure box 2,box2-five,five,word; recorded clip audio/w_five.mp3
+Sight words,Treasure box 2,box2-fly,fly,word; recorded clip audio/w_fly.mp3
+Sight words,Treasure box 2,box2-following,following,word; recorded clip audio/w_following.mp3
+Sight words,Treasure box 2,box2-form,form,word; recorded clip audio/w_form.mp3
+Sight words,Treasure box 2,box2-gave,gave,word; recorded clip audio/w_gave.mp3
+Sight words,Treasure box 2,box2-goes,goes,word; recorded clip audio/w_goes.mp3
+Sight words,Treasure box 2,box2-great,great,word; recorded clip audio/w_great.mp3
+Sight words,Treasure box 2,box2-green,green,word; recorded clip audio/w_green.mp3
+Sight words,Treasure box 2,box2-its,its,word; recorded clip audio/w_its.mp3
+Sight words,Treasure box 2,box2-large,large,word; recorded clip audio/w_large.mp3
+Sight words,Treasure box 2,box2-made,made,word; recorded clip audio/w_made.mp3
+Sight words,Treasure box 2,box2-man,man,word; recorded clip audio/w_man.mp3
+Sight words,Treasure box 2,box2-means,means,word; recorded clip audio/w_means.mp3
+Sight words,Treasure box 2,box2-men,men,word; recorded clip audio/w_men.mp3
+Sight words,Treasure box 2,box2-most,most,word; recorded clip audio/w_most.mp3
+Sight words,Treasure box 2,box2-much,much,word; recorded clip audio/w_much.mp3
+Sight words,Treasure box 2,box2-need,need,word; recorded clip audio/w_need.mp3
+Sight words,Treasure box 2,box2-off,off,word; recorded clip audio/w_off.mp3
+Sight words,Treasure box 2,box2-once,once,word; recorded clip audio/w_once.mp3
+Sight words,Treasure box 2,box2-or,or,word; recorded clip audio/w_or.mp3
+Sight words,Treasure box 2,box2-place,place,word; recorded clip audio/w_place.mp3
+Sight words,Treasure box 2,box2-read,read,word; recorded clip audio/w_read.mp3
+Sight words,Treasure box 2,box2-round,round,word; recorded clip audio/w_round.mp3
+Sight words,Treasure box 2,box2-same,same,word; recorded clip audio/w_same.mp3
+Sight words,Treasure box 2,box2-sentence,sentence,word; recorded clip audio/w_sentence.mp3
+Sight words,Treasure box 2,box2-set,set,word; recorded clip audio/w_set.mp3
+Sight words,Treasure box 2,box2-show,show,word; recorded clip audio/w_show.mp3
+Sight words,Treasure box 2,box2-sing,sing,word; recorded clip audio/w_sing.mp3
+Sight words,Treasure box 2,box2-sit,sit,word; recorded clip audio/w_sit.mp3
+Sight words,Treasure box 2,box2-such,such,word; recorded clip audio/w_such.mp3
+Sight words,Treasure box 2,box2-things,things,word; recorded clip audio/w_things.mp3
+Sight words,Treasure box 2,box2-through,through,word; recorded clip audio/w_through.mp3
+Sight words,Treasure box 2,box2-turn,turn,word; recorded clip audio/w_turn.mp3
+Sight words,Treasure box 2,box2-us,us,word; recorded clip audio/w_us.mp3
+Sight words,Treasure box 2,box2-years,years,word; recorded clip audio/w_years.mp3
+Sight words,Treasure box 3,box3-add,add,word; recorded clip audio/w_add.mp3
+Sight words,Treasure box 3,box3-air,air,word; recorded clip audio/w_air.mp3
+Sight words,Treasure box 3,box3-animal,animal,word; recorded clip audio/w_animal.mp3
+Sight words,Treasure box 3,box3-answer,answer,word; recorded clip audio/w_answer.mp3
+Sight words,Treasure box 3,box3-back,back,word; recorded clip audio/w_back.mp3
+Sight words,Treasure box 3,box3-below,below,word; recorded clip audio/w_below.mp3
+Sight words,Treasure box 3,box3-between,between,word; recorded clip audio/w_between.mp3
+Sight words,Treasure box 3,box3-buy,buy,word; recorded clip audio/w_buy.mp3
+Sight words,Treasure box 3,box3-change,change,word; recorded clip audio/w_change.mp3
+Sight words,Treasure box 3,box3-country,country,word; recorded clip audio/w_country.mp3
+Sight words,Treasure box 3,box3-different,different,word; recorded clip audio/w_different.mp3
+Sight words,Treasure box 3,box3-food,food,word; recorded clip audio/w_food.mp3
+Sight words,Treasure box 3,box3-found,found,word; recorded clip audio/w_found.mp3
+Sight words,Treasure box 3,box3-hand,hand,word; recorded clip audio/w_hand.mp3
+Sight words,Treasure box 3,box3-high,high,word; recorded clip audio/w_high.mp3
+Sight words,Treasure box 3,box3-home,home,word; recorded clip audio/w_home.mp3
+Sight words,Treasure box 3,box3-house,house,word; recorded clip audio/w_house.mp3
+Sight words,Treasure box 3,box3-kind,kind,word; recorded clip audio/w_kind.mp3
+Sight words,Treasure box 3,box3-land,land,word; recorded clip audio/w_land.mp3
+Sight words,Treasure box 3,box3-last,last,word; recorded clip audio/w_last.mp3
+Sight words,Treasure box 3,box3-learn,learn,word; recorded clip audio/w_learn.mp3
+Sight words,Treasure box 3,box3-letter,letter,word; recorded clip audio/w_letter.mp3
+Sight words,Treasure box 3,box3-line,line,word; recorded clip audio/w_line.mp3
+Sight words,Treasure box 3,box3-mother,mother,word; recorded clip audio/w_mother.mp3
+Sight words,Treasure box 3,box3-move,move,word; recorded clip audio/w_move.mp3
+Sight words,Treasure box 3,box3-near,near,word; recorded clip audio/w_near.mp3
+Sight words,Treasure box 3,box3-own,own,word; recorded clip audio/w_own.mp3
+Sight words,Treasure box 3,box3-page,page,word; recorded clip audio/w_page.mp3
+Sight words,Treasure box 3,box3-picture,picture,word; recorded clip audio/w_picture.mp3
+Sight words,Treasure box 3,box3-plant,plant,word; recorded clip audio/w_plant.mp3
+Sight words,Treasure box 3,box3-point,point,word; recorded clip audio/w_point.mp3
+Sight words,Treasure box 3,box3-pull,pull,word; recorded clip audio/w_pull.mp3
+Sight words,Treasure box 3,box3-right,right,word; recorded clip audio/w_right.mp3
+Sight words,Treasure box 3,box3-school,school,word; recorded clip audio/w_school.mp3
+Sight words,Treasure box 3,box3-should,should,word; recorded clip audio/w_should.mp3
+Sight words,Treasure box 3,box3-sleep,sleep,word; recorded clip audio/w_sleep.mp3
+Sight words,Treasure box 3,box3-spell,spell,word; recorded clip audio/w_spell.mp3
+Sight words,Treasure box 3,box3-still,still,word; recorded clip audio/w_still.mp3
+Sight words,Treasure box 3,box3-study,study,word; recorded clip audio/w_study.mp3
+Sight words,Treasure box 3,box3-tell,tell,word; recorded clip audio/w_tell.mp3
+Sight words,Treasure box 3,box3-try,try,word; recorded clip audio/w_try.mp3
+Sight words,Treasure box 3,box3-upon,upon,word; recorded clip audio/w_upon.mp3
+Sight words,Treasure box 3,box3-use,use,word; recorded clip audio/w_use.mp3
+Sight words,Treasure box 3,box3-very,very,word; recorded clip audio/w_very.mp3
+Sight words,Treasure box 3,box3-wash,wash,word; recorded clip audio/w_wash.mp3
+Sight words,Treasure box 3,box3-which,which,word; recorded clip audio/w_which.mp3
+Sight words,Treasure box 3,box3-why,why,word; recorded clip audio/w_why.mp3
+Sight words,Treasure box 3,box3-wish,wish,word; recorded clip audio/w_wish.mp3
+Sight words,Treasure box 3,box3-work,work,word; recorded clip audio/w_work.mp3
+Sight words,Treasure box 3,box3-world,world,word; recorded clip audio/w_world.mp3
+Sight words,Treasure box 4,box4-along,along,word; recorded clip audio/w_along.mp3
+Sight words,Treasure box 4,box4-always,always,word; recorded clip audio/w_always.mp3
+Sight words,Treasure box 4,box4-around,around,word; recorded clip audio/w_around.mp3
+Sight words,Treasure box 4,box4-because,because,word; recorded clip audio/w_because.mp3
+Sight words,Treasure box 4,box4-been,been,word; recorded clip audio/w_been.mp3
+Sight words,Treasure box 4,box4-before,before,word; recorded clip audio/w_before.mp3
+Sight words,Treasure box 4,box4-begin,begin,word; recorded clip audio/w_begin.mp3
+Sight words,Treasure box 4,box4-car,car,word; recorded clip audio/w_car.mp3
+Sight words,Treasure box 4,box4-children,children,word; recorded clip audio/w_children.mp3
+Sight words,Treasure box 4,box4-city,city,word; recorded clip audio/w_city.mp3
+Sight words,Treasure box 4,box4-close,close,word; recorded clip audio/w_close.mp3
+Sight words,Treasure box 4,box4-does,does,word; recorded clip audio/w_does.mp3
+Sight words,Treasure box 4,box4-don't,don't,word; no clip found
+Sight words,Treasure box 4,box4-earth,earth,word; recorded clip audio/w_earth.mp3
+Sight words,Treasure box 4,box4-example,example,word; recorded clip audio/w_example.mp3
+Sight words,Treasure box 4,box4-eyes,eyes,word; recorded clip audio/w_eyes.mp3
+Sight words,Treasure box 4,box4-father,father,word; recorded clip audio/w_father.mp3
+Sight words,Treasure box 4,box4-feet,feet,word; recorded clip audio/w_feet.mp3
+Sight words,Treasure box 4,box4-few,few,word; recorded clip audio/w_few.mp3
+Sight words,Treasure box 4,box4-got,got,word; recorded clip audio/w_got.mp3
+Sight words,Treasure box 4,box4-group,group,word; recorded clip audio/w_group.mp3
+Sight words,Treasure box 4,box4-hard,hard,word; recorded clip audio/w_hard.mp3
+Sight words,Treasure box 4,box4-head,head,word; recorded clip audio/w_head.mp3
+Sight words,Treasure box 4,box4-important,important,word; recorded clip audio/w_important.mp3
+Sight words,Treasure box 4,box4-keep,keep,word; recorded clip audio/w_keep.mp3
+Sight words,Treasure box 4,box4-left,left,word; recorded clip audio/w_left.mp3
+Sight words,Treasure box 4,box4-life,life,word; recorded clip audio/w_life.mp3
+Sight words,Treasure box 4,box4-light,light,word; recorded clip audio/w_light.mp3
+Sight words,Treasure box 4,box4-many,many,word; recorded clip audio/w_many.mp3
+Sight words,Treasure box 4,box4-might,might,word; recorded clip audio/w_might.mp3
+Sight words,Treasure box 4,box4-never,never,word; recorded clip audio/w_never.mp3
+Sight words,Treasure box 4,box4-next,next,word; recorded clip audio/w_next.mp3
+Sight words,Treasure box 4,box4-often,often,word; recorded clip audio/w_often.mp3
+Sight words,Treasure box 4,box4-paper,paper,word; recorded clip audio/w_paper.mp3
+Sight words,Treasure box 4,box4-seem,seem,word; recorded clip audio/w_seem.mp3
+Sight words,Treasure box 4,box4-side,side,word; recorded clip audio/w_side.mp3
+Sight words,Treasure box 4,box4-something,something,word; recorded clip audio/w_something.mp3
+Sight words,Treasure box 4,box4-start,start,word; recorded clip audio/w_start.mp3
+Sight words,Treasure box 4,box4-story,story,word; recorded clip audio/w_story.mp3
+Sight words,Treasure box 4,box4-their,their,word; recorded clip audio/w_their.mp3
+Sight words,Treasure box 4,box4-these,these,word; recorded clip audio/w_these.mp3
+Sight words,Treasure box 4,box4-those,those,word; recorded clip audio/w_those.mp3
+Sight words,Treasure box 4,box4-thought,thought,word; recorded clip audio/w_thought.mp3
+Sight words,Treasure box 4,box4-together,together,word; recorded clip audio/w_together.mp3
+Sight words,Treasure box 4,box4-tree,tree,word; recorded clip audio/w_tree.mp3
+Sight words,Treasure box 4,box4-until,until,word; recorded clip audio/w_until.mp3
+Sight words,Treasure box 4,box4-while,while,word; recorded clip audio/w_while.mp3
+Sight words,Treasure box 4,box4-would,would,word; recorded clip audio/w_would.mp3
+Sight words,Treasure box 4,box4-write,write,word; recorded clip audio/w_write.mp3
+Sight words,Treasure box 4,box4-your,your,word; recorded clip audio/w_your.mp3
+Sight words,Sentence fill-in box 1,fill-1,Can I ask you?,recorded clips audio/sq_1.mp3 (the sentence) and audio/sf_1.mp3 (the finished sentence)
+Sight words,Sentence fill-in box 1,fill-2,Look at him run!,recorded clips audio/sq_2.mp3 (the sentence) and audio/sf_2.mp3 (the finished sentence)
+Sight words,Sentence fill-in box 1,fill-3,She has it.,recorded clips audio/sq_3.mp3 (the sentence) and audio/sf_3.mp3 (the finished sentence)
+Sight words,Sentence fill-in box 1,fill-4,He had it.,recorded clips audio/sq_4.mp3 (the sentence) and audio/sf_4.mp3 (the finished sentence)
+Sight words,Sentence fill-in box 1,fill-5,I know you.,recorded clips audio/sq_5.mp3 (the sentence) and audio/sf_5.mp3 (the finished sentence)
+Sight words,Sentence fill-in box 1,fill-6,Please stop!,recorded clips audio/sq_6.mp3 (the sentence) and audio/sf_6.mp3 (the finished sentence)
+Sight words,Sentence fill-in box 1,fill-7,Thank you!,recorded clips audio/sq_7.mp3 (the sentence) and audio/sf_7.mp3 (the finished sentence)
+Sight words,Sentence fill-in box 1,fill-8,We can walk to it.,recorded clips audio/sq_8.mp3 (the sentence) and audio/sf_8.mp3 (the finished sentence)
+Sight words,Sentence fill-in box 1,fill-9,Come over here!,recorded clips audio/sq_9.mp3 (the sentence) and audio/sf_9.mp3 (the finished sentence)
+Sight words,Sentence fill-in box 1,fill-10,Let them play.,recorded clips audio/sq_10.mp3 (the sentence) and audio/sf_10.mp3 (the finished sentence)
+Sight words,Sentence fill-in box 1,fill-11,It is time to go.,recorded clips audio/sq_11.mp3 (the sentence) and audio/sf_11.mp3 (the finished sentence)
+Sight words,Sentence fill-in box 1,fill-12,Is it his?,recorded clips audio/sq_12.mp3 (the sentence) and audio/sf_12.mp3 (the finished sentence)
+Sight words,Sentence fill-in box 1,fill-13,When can we go?,recorded clips audio/sq_13.mp3 (the sentence) and audio/sf_13.mp3 (the finished sentence)
+Sight words,Sentence fill-in box 1,fill-14,I think so.,recorded clips audio/sq_14.mp3 (the sentence) and audio/sf_14.mp3 (the finished sentence)
+Sight words,Sentence fill-in box 1,fill-15,Can you give it to me?,recorded clips audio/sq_15.mp3 (the sentence) and audio/sf_15.mp3 (the finished sentence)
+Sight words,Sentence fill-in box 1,fill-16,Is it open?,recorded clips audio/sq_16.mp3 (the sentence) and audio/sf_16.mp3 (the finished sentence)
+Sight words,Sentence fill-in box 1,fill-17,We live here.,recorded clips audio/sq_17.mp3 (the sentence) and audio/sf_17.mp3 (the finished sentence)
+Sight words,Sentence fill-in box 1,fill-18,How are you?,recorded clips audio/sq_18.mp3 (the sentence) and audio/sf_18.mp3 (the finished sentence)
+Sight words,Sentence fill-in box 1,fill-19,I want some.,recorded clips audio/sq_19.mp3 (the sentence) and audio/sf_19.mp3 (the finished sentence)
+Sight words,Sentence fill-in box 1,fill-20,Put it down.,recorded clips audio/sq_20.mp3 (the sentence) and audio/sf_20.mp3 (the finished sentence)
+Sight words,Sentence fill-in box 1,fill-21,It is old.,recorded clips audio/sq_21.mp3 (the sentence) and audio/sf_21.mp3 (the finished sentence)
+Sight words,Sentence fill-in box 1,fill-22,I can see water.,recorded clips audio/sq_22.mp3 (the sentence) and audio/sf_22.mp3 (the finished sentence)
+Sight words,Sentence fill-in box 1,fill-23,We were here.,recorded clips audio/sq_23.mp3 (the sentence) and audio/sf_23.mp3 (the finished sentence)
+Sight words,Sentence fill-in box 1,fill-24,I am going out.,recorded clips audio/sq_24.mp3 (the sentence) and audio/sf_24.mp3 (the finished sentence)
+Sight words,Sentence fill-in box 2,fill-201,Say it again.,recorded clips audio/sq_201.mp3 (the sentence) and audio/sf_201.mp3 (the finished sentence)
+Sight words,Sentence fill-in box 2,fill-202,I can fly!,recorded clips audio/sq_202.mp3 (the sentence) and audio/sf_202.mp3 (the finished sentence)
+Sight words,Sentence fill-in box 2,fill-203,Can you read it?,recorded clips audio/sq_203.mp3 (the sentence) and audio/sf_203.mp3 (the finished sentence)
+Sight words,Sentence fill-in box 2,fill-204,Let us sing!,recorded clips audio/sq_204.mp3 (the sentence) and audio/sf_204.mp3 (the finished sentence)
+Sight words,Sentence fill-in box 2,fill-205,It is cold.,recorded clips audio/sq_205.mp3 (the sentence) and audio/sf_205.mp3 (the finished sentence)
+Sight words,Sentence fill-in box 2,fill-206,He can run fast.,recorded clips audio/sq_206.mp3 (the sentence) and audio/sf_206.mp3 (the finished sentence)
+Sight words,Sentence fill-in box 2,fill-207,Help us!,recorded clips audio/sq_207.mp3 (the sentence) and audio/sf_207.mp3 (the finished sentence)
+Sight words,Sentence fill-in box 2,fill-208,I like green.,recorded clips audio/sq_208.mp3 (the sentence) and audio/sf_208.mp3 (the finished sentence)
+Sight words,Sentence fill-in box 2,fill-209,"Sit down, please.",recorded clips audio/sq_209.mp3 (the sentence) and audio/sf_209.mp3 (the finished sentence)
+Sight words,Sentence fill-in box 2,fill-210,Turn it off.,recorded clips audio/sq_210.mp3 (the sentence) and audio/sf_210.mp3 (the finished sentence)
+Sight words,Sentence fill-in box 2,fill-211,Is it red or blue?,recorded clips audio/sq_211.mp3 (the sentence) and audio/sf_211.mp3 (the finished sentence)
+Sight words,Sentence fill-in box 2,fill-212,Look at the boy!,recorded clips audio/sq_212.mp3 (the sentence) and audio/sf_212.mp3 (the finished sentence)
+Sight words,Sentence fill-in box 2,fill-213,I was first!,recorded clips audio/sq_213.mp3 (the sentence) and audio/sf_213.mp3 (the finished sentence)
+Sight words,Sentence fill-in box 2,fill-214,We have five.,recorded clips audio/sq_214.mp3 (the sentence) and audio/sf_214.mp3 (the finished sentence)
+Sight words,Sentence fill-in box 2,fill-215,This is the end.,recorded clips audio/sq_215.mp3 (the sentence) and audio/sf_215.mp3 (the finished sentence)
+Sight words,Sentence fill-in box 2,fill-216,She gave it to me.,recorded clips audio/sq_216.mp3 (the sentence) and audio/sf_216.mp3 (the finished sentence)
+Sight words,Sentence fill-in box 2,fill-217,He goes out.,recorded clips audio/sq_217.mp3 (the sentence) and audio/sf_217.mp3 (the finished sentence)
+Sight words,Sentence fill-in box 2,fill-218,I made it!,recorded clips audio/sq_218.mp3 (the sentence) and audio/sf_218.mp3 (the finished sentence)
+Sight words,Sentence fill-in box 2,fill-219,Can you show me?,recorded clips audio/sq_219.mp3 (the sentence) and audio/sf_219.mp3 (the finished sentence)
+Sight words,Sentence fill-in box 2,fill-220,Call me!,recorded clips audio/sq_220.mp3 (the sentence) and audio/sf_220.mp3 (the finished sentence)
+Sight words,Sentence fill-in box 2,fill-221,You are great!,recorded clips audio/sq_221.mp3 (the sentence) and audio/sf_221.mp3 (the finished sentence)
+Sight words,Sentence fill-in box 2,fill-222,We need help.,recorded clips audio/sq_222.mp3 (the sentence) and audio/sf_222.mp3 (the finished sentence)
+Sight words,Sentence fill-in box 2,fill-223,It is the same.,recorded clips audio/sq_223.mp3 (the sentence) and audio/sf_223.mp3 (the finished sentence)
+Sight words,Sentence fill-in box 2,fill-224,I could see it.,recorded clips audio/sq_224.mp3 (the sentence) and audio/sf_224.mp3 (the finished sentence)
+Sight words,Sentence fill-in box 3,fill-301,Can you add it?,recorded clips audio/sq_301.mp3 (the sentence) and audio/sf_301.mp3 (the finished sentence)
+Sight words,Sentence fill-in box 3,fill-302,I like my home.,recorded clips audio/sq_302.mp3 (the sentence) and audio/sf_302.mp3 (the finished sentence)
+Sight words,Sentence fill-in box 3,fill-303,Look at the animal!,recorded clips audio/sq_303.mp3 (the sentence) and audio/sf_303.mp3 (the finished sentence)
+Sight words,Sentence fill-in box 3,fill-304,Come back here!,recorded clips audio/sq_304.mp3 (the sentence) and audio/sf_304.mp3 (the finished sentence)
+Sight words,Sentence fill-in box 3,fill-305,I want to buy it.,recorded clips audio/sq_305.mp3 (the sentence) and audio/sf_305.mp3 (the finished sentence)
+Sight words,Sentence fill-in box 3,fill-306,I like this food.,recorded clips audio/sq_306.mp3 (the sentence) and audio/sf_306.mp3 (the finished sentence)
+Sight words,Sentence fill-in box 3,fill-307,I found it!,recorded clips audio/sq_307.mp3 (the sentence) and audio/sf_307.mp3 (the finished sentence)
+Sight words,Sentence fill-in box 3,fill-308,Look at my hand!,recorded clips audio/sq_308.mp3 (the sentence) and audio/sf_308.mp3 (the finished sentence)
+Sight words,Sentence fill-in box 3,fill-309,It is up high.,recorded clips audio/sq_309.mp3 (the sentence) and audio/sf_309.mp3 (the finished sentence)
+Sight words,Sentence fill-in box 3,fill-310,Look at my house!,recorded clips audio/sq_310.mp3 (the sentence) and audio/sf_310.mp3 (the finished sentence)
+Sight words,Sentence fill-in box 3,fill-311,You are so kind.,recorded clips audio/sq_311.mp3 (the sentence) and audio/sf_311.mp3 (the finished sentence)
+Sight words,Sentence fill-in box 3,fill-312,I was last.,recorded clips audio/sq_312.mp3 (the sentence) and audio/sf_312.mp3 (the finished sentence)
+Sight words,Sentence fill-in box 3,fill-313,We can learn!,recorded clips audio/sq_313.mp3 (the sentence) and audio/sf_313.mp3 (the finished sentence)
+Sight words,Sentence fill-in box 3,fill-314,Look at my picture!,recorded clips audio/sq_314.mp3 (the sentence) and audio/sf_314.mp3 (the finished sentence)
+Sight words,Sentence fill-in box 3,fill-315,Can you pull it?,recorded clips audio/sq_315.mp3 (the sentence) and audio/sf_315.mp3 (the finished sentence)
+Sight words,Sentence fill-in box 3,fill-316,That is right!,recorded clips audio/sq_316.mp3 (the sentence) and audio/sf_316.mp3 (the finished sentence)
+Sight words,Sentence fill-in box 3,fill-317,We go to school.,recorded clips audio/sq_317.mp3 (the sentence) and audio/sf_317.mp3 (the finished sentence)
+Sight words,Sentence fill-in box 3,fill-318,I want to sleep.,recorded clips audio/sq_318.mp3 (the sentence) and audio/sf_318.mp3 (the finished sentence)
+Sight words,Sentence fill-in box 3,fill-319,Can you spell it?,recorded clips audio/sq_319.mp3 (the sentence) and audio/sf_319.mp3 (the finished sentence)
+Sight words,Sentence fill-in box 3,fill-320,Please tell me.,recorded clips audio/sq_320.mp3 (the sentence) and audio/sf_320.mp3 (the finished sentence)
+Sight words,Sentence fill-in box 3,fill-321,I will try.,recorded clips audio/sq_321.mp3 (the sentence) and audio/sf_321.mp3 (the finished sentence)
+Sight words,Sentence fill-in box 3,fill-322,It is very big!,recorded clips audio/sq_322.mp3 (the sentence) and audio/sf_322.mp3 (the finished sentence)
+Sight words,Sentence fill-in box 3,fill-323,"Wash it, please.",recorded clips audio/sq_323.mp3 (the sentence) and audio/sf_323.mp3 (the finished sentence)
+Sight words,Sentence fill-in box 3,fill-324,Why is it red?,recorded clips audio/sq_324.mp3 (the sentence) and audio/sf_324.mp3 (the finished sentence)
+Sight words,Sentence fill-in box 4,fill-401,Come along!,recorded clips audio/sq_401.mp3 (the sentence) and audio/sf_401.mp3 (the finished sentence)
+Sight words,Sentence fill-in box 4,fill-402,I always help.,recorded clips audio/sq_402.mp3 (the sentence) and audio/sf_402.mp3 (the finished sentence)
+Sight words,Sentence fill-in box 4,fill-403,Look around!,recorded clips audio/sq_403.mp3 (the sentence) and audio/sf_403.mp3 (the finished sentence)
+Sight words,Sentence fill-in box 4,fill-404,I have been here.,recorded clips audio/sq_404.mp3 (the sentence) and audio/sf_404.mp3 (the finished sentence)
+Sight words,Sentence fill-in box 4,fill-405,We can begin!,recorded clips audio/sq_405.mp3 (the sentence) and audio/sf_405.mp3 (the finished sentence)
+Sight words,Sentence fill-in box 4,fill-406,Look at the car!,recorded clips audio/sq_406.mp3 (the sentence) and audio/sf_406.mp3 (the finished sentence)
+Sight words,Sentence fill-in box 4,fill-407,Please close it.,recorded clips audio/sq_407.mp3 (the sentence) and audio/sf_407.mp3 (the finished sentence)
+Sight words,Sentence fill-in box 4,fill-408,Don't go!,recorded clips audio/sq_408.mp3 (the sentence) and audio/sf_408.mp3 (the finished sentence)
+Sight words,Sentence fill-in box 4,fill-409,Look at my father.,recorded clips audio/sq_409.mp3 (the sentence) and audio/sf_409.mp3 (the finished sentence)
+Sight words,Sentence fill-in box 4,fill-410,Look at my feet!,recorded clips audio/sq_410.mp3 (the sentence) and audio/sf_410.mp3 (the finished sentence)
+Sight words,Sentence fill-in box 4,fill-411,I got it!,recorded clips audio/sq_411.mp3 (the sentence) and audio/sf_411.mp3 (the finished sentence)
+Sight words,Sentence fill-in box 4,fill-412,It is hard.,recorded clips audio/sq_412.mp3 (the sentence) and audio/sf_412.mp3 (the finished sentence)
+Sight words,Sentence fill-in box 4,fill-413,Put it on your head.,recorded clips audio/sq_413.mp3 (the sentence) and audio/sf_413.mp3 (the finished sentence)
+Sight words,Sentence fill-in box 4,fill-414,Can I keep it?,recorded clips audio/sq_414.mp3 (the sentence) and audio/sf_414.mp3 (the finished sentence)
+Sight words,Sentence fill-in box 4,fill-415,Turn on the light.,recorded clips audio/sq_415.mp3 (the sentence) and audio/sf_415.mp3 (the finished sentence)
+Sight words,Sentence fill-in box 4,fill-416,I have so many!,recorded clips audio/sq_416.mp3 (the sentence) and audio/sf_416.mp3 (the finished sentence)
+Sight words,Sentence fill-in box 4,fill-417,Never give up!,recorded clips audio/sq_417.mp3 (the sentence) and audio/sf_417.mp3 (the finished sentence)
+Sight words,Sentence fill-in box 4,fill-418,You are next.,recorded clips audio/sq_418.mp3 (the sentence) and audio/sf_418.mp3 (the finished sentence)
+Sight words,Sentence fill-in box 4,fill-419,Can I have paper?,recorded clips audio/sq_419.mp3 (the sentence) and audio/sf_419.mp3 (the finished sentence)
+Sight words,Sentence fill-in box 4,fill-420,I like this story.,recorded clips audio/sq_420.mp3 (the sentence) and audio/sf_420.mp3 (the finished sentence)
+Sight words,Sentence fill-in box 4,fill-421,Look at the tree!,recorded clips audio/sq_421.mp3 (the sentence) and audio/sf_421.mp3 (the finished sentence)
+Sight words,Sentence fill-in box 4,fill-422,We play together.,recorded clips audio/sq_422.mp3 (the sentence) and audio/sf_422.mp3 (the finished sentence)
+Sight words,Sentence fill-in box 4,fill-423,Can you write it?,recorded clips audio/sq_423.mp3 (the sentence) and audio/sf_423.mp3 (the finished sentence)
+Sight words,Sentence fill-in box 4,fill-424,Is this your house?,recorded clips audio/sq_424.mp3 (the sentence) and audio/sf_424.mp3 (the finished sentence)
