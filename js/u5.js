@@ -300,7 +300,7 @@
         goLabel: 'Open lesson',
         img: /refresh/i.test(item.href) ? 'img/lesson_zip_frill.webp' : (KEY === 'u53' ? 'img/frill.webp' : 'img/zipA.webp')
       }));
-      app.append(h('div', { class: 'screen trailscreen unitpage unitA u5menu stepage' },
+      app.append(h('div', { class: 'screen trailscreen unitpage unitA u5menu stepage ngpreview' },
         h('header', { class: 'uA-top' }, IR.ui.pageNav('#/u5'), h('h1', { class: 'uA-title' }, h('small', null, 'Unit 5 Lesson ' + IR.kidLesson(NUM)), capName(N.name)), IR.teacherBox(u5Teach(KEY))),
         IR.modeBar({
           lesson: lesson,
@@ -724,7 +724,7 @@
         note: 'Lesson ' + IR.kidLesson(L.n)
       };
     });
-    app.append(h('div', { class: 'screen trailscreen unitpage unitA u5menu stepage' },
+    app.append(h('div', { class: 'screen trailscreen unitpage unitA u5menu stepage ngpreview' },
       h('header', { class: 'uA-top' }, IR.ui.pageNav('#/home'), h('h1', { class: 'uA-title' }, h('small', null, 'Unit 5'), 'Silent e'), IR.teacherBox(u5Teach('hub'))),
       IR.modeBar({
         lesson: lesson,

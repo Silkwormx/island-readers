@@ -473,7 +473,7 @@
     const items = STEPS.map((s) => ({ id: s.id, title: s.title, group: s.group, href: '#/u6/' + L.key + '/' + s.id, done: !!(lights(L.key)[s.id]), min: s.id === 'read' ? 6 : s.id === 'check' ? 4 : s.id === 'meet' ? 4 : 3 }));
     items.filter((r) => r.group === 'activities').forEach((r, k) => { r.act = k + 1; });
     const story = { title: L.storyTitle, href: '#/u6/' + L.key + '/read', min: 6, img: IR.storyCovers[L.n], alt: L.storyTitle, big: true };
-    app.append(h('div', { class: 'screen trailscreen unitpage unitA stepage' },
+    app.append(h('div', { class: 'screen trailscreen unitpage unitA stepage ngpreview' },
       h('header', { class: 'uA-top' }, IR.ui.pageNav('#/u6'), h('h1', { class: 'uA-title' }, h('small', null, 'Unit 6 Lesson ' + IR.kidLesson(L.n)), L.name), IR.teacherBox({})),
       IR.modeBar({
         lesson: items.filter((r) => r.group === 'lesson').map((r) => ({ title: r.title, href: r.href, min: r.min })),
@@ -484,13 +484,24 @@
 
   function picker(app) {
     IR.newScreen();
-    app.append(h('div', { class: 'screen trailscreen unitpage unitA stepage' },
+    app.append(h('div', { class: 'screen trailscreen unitpage unitA stepage ngpreview' },
       h('header', { class: 'uA-top' }, IR.ui.pageNav('#/home'), h('h1', { class: 'uA-title' }, h('small', null, 'Unit 6'), 'Endings'), IR.teacherBox({})),
       IR.modeBar({
-        choose: PACK.lessons.flatMap((L) => [
-          { title: 'Lesson ' + IR.kidLesson(L.n) + ' ' + L.name, href: '#/u6/' + L.key },
-          { title: L.storyTitle, href: '#/u6/' + L.key + '/read' }
-        ])
+        lesson: PACK.lessons.map((L) => ({
+          kicker: 'Lesson ' + IR.kidLesson(L.n),
+          title: L.name,
+          href: '#/u6/' + L.key,
+          img: 'img/lesson_zip_frill.webp',
+          alt: L.name
+        })),
+        stories: PACK.lessons.map((L) => ({
+          title: L.storyTitle,
+          href: '#/u6/' + L.key + '/read',
+          img: IR.storyCovers[L.n],
+          alt: L.storyTitle,
+          big: true,
+          note: 'Lesson ' + IR.kidLesson(L.n)
+        }))
       })));
   }
 

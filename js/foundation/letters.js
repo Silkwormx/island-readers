@@ -912,7 +912,7 @@
     const teach = teamTeacher(group) || {};
     const base = '#/foundation/letters/' + group.id;
     const letters = lettersOf(group);
-    app.append(h('div', { class: 'screen trailscreen unitpage u5menu llpage fs-group stepage' },
+    app.append(h('div', { class: 'screen trailscreen unitpage u5menu llpage fs-group stepage ngpreview' },
       h('header', { class: 'uA-top' },
         IR.ui.pageNav('#/foundation'),
         h('h1', { class: 'uA-title' }, h('small', null, 'Team ' + group.n), 'Meet the Team'),
@@ -2347,7 +2347,7 @@
     IR.newScreen();
     const teach = teamTeacher(group) || {};
     const board = group.id === 'g1' && String(title).indexOf('Team ') === 0 ? ' fsteam1' : '';
-    app.append(h('div', { class: 'screen trailscreen unitpage unitA u5menu stepage fsmenu' + board },
+    app.append(h('div', { class: 'screen trailscreen unitpage unitA u5menu stepage fsmenu ngpreview' + board },
       h('header', { class: 'uA-top' },
         IR.ui.pageNav(up),
         h('h1', { class: 'uA-title' }, small ? h('small', null, small) : null, title),

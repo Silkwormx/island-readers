@@ -642,19 +642,71 @@
     return wrap;
   }
   IR.teacherBox = teacherBox;
+  function prepLesson(item) {
+    const kick = String(item.kicker || '');
+    const generic = !kick || kick === 'Student' || kick === 'Lesson';
+    const next = Object.assign({}, item, {
+      pick: true,
+      tone: 'student',
+      kicker: generic ? 'Independent' : kick,
+      goLabel: item.goLabel || 'Open lesson'
+    });
+    if (!next.img && !(next.imgs && next.imgs.length)) next.img = 'img/lesson_zip_frill.webp';
+    next.stars = null;
+    return next;
+  }
+  function prepGame(item) {
+    return Object.assign({ doneIcon: 'star' }, item);
+  }
+  function gameBucket(item) {
+    const blob = (String(item.id || '') + ' ' + String(item.key || '') + ' ' + String(item.title || '')).toLowerCase();
+    if (/\b(sentence|fish|check|bridge)\b/.test(blob) || /\bread\b/.test(blob)) return 'Read';
+    if (/\b(build|chain|scramble|spell|sort|flash|ears|rhyme|feed|ending|word)\b/.test(blob)) return 'Words';
+    return 'Sounds';
+  }
+  function bucketGames(games) {
+    const rows = { Sounds: [], Words: [], Read: [] };
+    games.forEach((item) => { rows[gameBucket(item)].push(item); });
+    return ['Sounds', 'Words', 'Read'].filter((label) => rows[label].length).map((label) => ({ label: label, items: rows[label] }));
+  }
+  function kidShell(name, on) {
+    return h('div', { class: 'ngshellwrap' },
+      h('span', { class: 'ngshell' + (on ? ' on' : ''), 'aria-hidden': 'true' }),
+      h('span', null, name));
+  }
   function modeBar(plan) {
     plan = plan || {};
     const labels = plan.labels || ['Lesson', 'Games', 'Story'];
-    const storyItems = (plan.stories && plan.stories.length) ? plan.stories : (plan.story ? [plan.story] : null);
-    const lessons = (plan.lesson || []).filter((item) => !item || item.tone !== 'teachled');
-    return h('div', { class: 'modebar' },
-      plan.note === false ? null : h('p', { class: 'stepnote' }, plan.note || 'Watch the lesson, then play.'),
+    let lessons = (plan.lesson || []).filter((item) => item && item.tone !== 'teachled').map(prepLesson);
+    if (!lessons.length && plan.choose) lessons = plan.choose.map(prepLesson);
+    const rows = plan.gameRows
+      ? plan.gameRows.map((row) => ({ label: row.label, items: (row.items || []).map(prepGame) })).filter((row) => row.items.length)
+      : bucketGames((plan.games || []).map(prepGame));
+    const stories = ((plan.stories && plan.stories.length) ? plan.stories : (plan.story ? [plan.story] : []))
+      .filter(Boolean)
+      .map((item) => Object.assign({ big: true, doneIcon: 'star', note: item.note || 'Story Time' }, item));
+    const games = rows.reduce((list, row) => list.concat(row.items), []);
+    let gameNo = 0;
+    return h('div', { class: 'ngpath' },
       plan.before || null,
-      h('div', { class: 'stepflow' },
-        plan.choose ? null : stepSection(1, labels[0], lessons),
-        plan.choose ? null : (plan.gameRows ? gameRowsBlock(2, labels[1], plan.gameRows) : stepSection(2, labels[1], plan.games || [], true, plan.gameClass || '')),
-        plan.choose || !storyItems ? null : stepSection(3, labels[2], storyItems),
-        ...(plan.choose || []).map((item, i) => stepSection(i + 1, item.title, [item]))));
+      h('div', { class: 'ngshells', role: 'group', 'aria-label': labels.join(', ') },
+        kidShell(labels[0], lessons.length > 0 && lessons.every((item) => item.done)),
+        kidShell(labels[1], games.length > 0 && games.every((item) => item.done)),
+        kidShell(labels[2], stories.length > 0 && stories.every((item) => item.done))),
+      lessons.length ? h('section', { class: 'ngstep' },
+        stepHead(1, labels[0]),
+        h('div', { class: 'lessonrow' }, ...lessons.map((item) => lessonTab(item)))) : null,
+      rows.length ? h('section', { class: 'ngstep' },
+        stepHead(2, labels[1]),
+        h('div', { class: 'gamerows' }, ...rows.map((row) => h('div', { class: 'gamerow' },
+          h('p', { class: 'gamerowlab' }, row.label),
+          h('ol', { class: 'gamegrid' + (plan.gameClass || '') }, ...row.items.map((item) => {
+            gameNo += 1;
+            return h('li', null, itemCard(item, gameNo));
+          })))))) : null,
+      stories.length ? h('section', { class: 'ngstep' },
+        stepHead(3, labels[2]),
+        h('div', { class: 'ngstories' }, ...stories.map((item) => itemCard(item)))) : null);
   }
   IR.modeBar = modeBar;
   function trailScreen() {
@@ -673,17 +725,12 @@
       ['Words', ['build', 'chain', 'scramble', 'feed']],
       ['Read', ['sentence', 'story', 'check']]
     ];
-    let gameNo = 0;
     const gameRows = gameGroups.map(([label, ids]) => ({
       label: label,
       items: ids.map((id) => byId[id]).filter(Boolean).map(playItem)
     }));
-    const allGames = gameRows.reduce((list, row) => list.concat(row.items), []);
     const lesson = byId.intro;
     const listen = byId.listen;
-    const shell = (name, on) => h('div', { class: 'ngshellwrap' },
-      h('span', { class: 'ngshell' + (on ? ' on' : ''), 'aria-hidden': 'true' }),
-      h('span', null, name));
     app.append(h('div', { class: 'screen trailscreen unitpage unitA orangeunit stepage ngpreview' },
       h('header', { class: 'uA-top' }, pageNav('#/home'), h('h1', { class: 'uA-title' }, h('small', null, 'Unit 4 Lesson 1'), 'ng'), teacherBox({
         slides: '#/teachers/slides/ng',
@@ -692,34 +739,26 @@
           { title: 'Teacher pack', href: 'teachers/ng/Lesson3.1_ng_Teacher_Pack.pdf' }
         ]
       })),
-      h('div', { class: 'ngpath' },
-        h('div', { class: 'ngshells', role: 'group', 'aria-label': 'Lesson, games, and story' },
-          shell('Lesson', !!(lesson && lesson.done)),
-          shell('Games', allGames.length > 0 && allGames.every((item) => item.done)),
-          shell('Story', !!(listen && listen.done))),
-        h('section', { class: 'ngstep' },
-          h('div', { class: 'stephead' }, h('span', { class: 'stepnum' }, '1'), h('span', { class: 'steplab' }, 'Lesson')),
-          h('div', { class: 'lessonrow' },
-            lessonTab({
-              pick: true, tone: 'student', kicker: 'Independent', title: lesson ? lesson.title : 'Meet ng',
-              img: 'img/lesson_zip_frill.webp', alt: 'Zip and Frill', goLabel: 'Open lesson',
-              go: () => { Snd.stop(); location.hash = lesson ? lesson.href : '#/lesson/1'; }
-            }))),
-        h('section', { class: 'ngstep' },
-          h('div', { class: 'stephead' }, h('span', { class: 'stepnum' }, '2'), h('span', { class: 'steplab' }, 'Games')),
-          h('div', { class: 'gamerows' }, ...gameRows.map((row) => h('div', { class: 'gamerow' },
-            h('p', { class: 'gamerowlab' }, row.label),
-            h('ol', { class: 'gamegrid' }, ...row.items.map((item) => {
-              gameNo += 1;
-              return h('li', null, itemCard(item, gameNo));
-            })))))),
-        h('section', { class: 'ngstep' },
-          h('div', { class: 'stephead' }, h('span', { class: 'stepnum' }, '3'), h('span', { class: 'steplab' }, 'Story')),
-          itemCard({
-            title: (D && D.storyTitle) || (listen && listen.title) || 'Story Time',
-            note: 'Story Time', big: true, img: IR.storyCovers['4.1'],
-            alt: (D && D.storyTitle) || 'Story', href: listen ? listen.href : '#/lesson/2', done: !!(listen && listen.done), doneIcon: 'star'
-          })))));
+      modeBar({
+        lesson: [{
+          kicker: 'Independent',
+          title: lesson ? lesson.title : 'Meet ng',
+          img: 'img/lesson_zip_frill.webp',
+          alt: 'Zip and Frill',
+          done: !!(lesson && lesson.done),
+          go: () => { Snd.stop(); location.hash = lesson ? lesson.href : '#/lesson/1'; }
+        }],
+        gameRows: gameRows,
+        story: {
+          title: (D && D.storyTitle) || (listen && listen.title) || 'Story Time',
+          note: 'Story Time',
+          big: true,
+          img: IR.storyCovers['4.1'],
+          alt: (D && D.storyTitle) || 'Story',
+          href: listen ? listen.href : '#/lesson/2',
+          done: !!(listen && listen.done)
+        }
+      })));
   }
 
   /* ---------- lesson shell ---------- */
