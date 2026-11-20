@@ -65,7 +65,11 @@
             if (w === R.word) { locked = true; b.classList.add('right'); b.innerHTML = ''; b.append(colorNk(w), icon('check')); $$('.choice', grid).forEach((o) => { if (o !== b) o.classList.add('fade'); });
               status.textContent = 'Yes! ' + w; await ding(w); if (!ctx.scr.ok()) return; await sleep(500); if (!ctx.scr.ok()) return;
               got.add(r); const nx = got.size >= rounds.length ? -1 : nextOpen(); if (nx < 0) { ctx.progress(1); ctx.finish(); } else { r = nx; round(); } }
-            else { misses++; ctx.miss(); b.classList.add('tried'); status.textContent = 'Not that one. Listen again.'; await tryAgain(W(R.word)); if (misses >= 2) $$('.choice', grid).forEach((o) => { if (o.dataset.w === R.word) o.classList.add('hint'); }); }
+            else {
+              ctx.miss();
+              const stepName = await IR.coachMiss({ key: 'u5-hear-' + r, wrongEl: b, correctEl: () => grid.querySelector('[data-w="' + R.word + '"]'), statusEl: status, replay: () => say(R.word) });
+              if (stepName === 'model') IR.againLater(rounds, r);
+            }
           }); grid.append(b); });
         stage.append(h('div', { class: 'activity' }, spk, grid, status)); if (ctx.armReveal) ctx.armReveal(R.word); say(R.word);
       }
@@ -450,7 +454,12 @@
           if (ok) { locked = true; el.classList.add('right'); buttons.forEach((b) => { if (b.el !== el) b.el.classList.add('fade'); }); status.textContent = 'Yes! ' + R.word;
             await IR.ding(); await say(R.word); if (!ctx.scr.ok()) return; await sleep(400); if (!ctx.scr.ok()) return;
             got.add(r); if (got.size >= rounds.length) { onAll ? onAll() : ctx.finish(); } else { r = (r + 1) % rounds.length; while (got.has(r)) r = (r + 1) % rounds.length; round(); } }
-          else { misses++; ctx.miss(); el.classList.add('tried'); status.textContent = 'Not that one. Listen again.'; await IR.tryAgain(AU.w(R.word)); if (misses >= 2) buttons.forEach((b) => { if (b.ok) b.el.classList.add('hint'); }); }
+          else {
+            ctx.miss();
+            const correct = buttons.find((b) => b.ok);
+            const stepName = await IR.coachMiss({ key: 'u5-pick-' + r, wrongEl: el, correctEl: correct && correct.el, statusEl: status, replay: () => say(R.word) });
+            if (stepName === 'model') IR.againLater(rounds, r);
+          }
         }));
         const spk = speakerBtn(() => say(R.word), 'Hear the word'); spk.classList.add('huge');
         st.append(h('div', { class: 'activity' }, spk, body, status)); if (ctx.armReveal) ctx.armReveal(R.word); say(R.word); };

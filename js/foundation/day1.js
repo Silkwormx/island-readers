@@ -382,6 +382,7 @@
       ctx.stage.innerHTML = '';
       if (streak >= 3 && streak % 3 === 0) ctx.stage.append(h('p', { class: 'llpraise', role: 'status' }, streak + ' in a row!'));
       const item = plan[i];
+      const status = h('p', { class: 'status', 'aria-live': 'polite' }, '\u00a0');
       draw(item, () => {
         streak += 1;
         const here = i;
@@ -395,11 +396,16 @@
         later(move, 1200);
       }, (el) => {
         streak = 0;
-        miss(el);
-        const at = i + 3;
-        if (at < plan.length) plan[at] = item;
-        else if (plan.length < 14) plan.push(item);
+        const correct = ctx.stage.querySelector('[data-yes="1"]');
+        return IR.coachMiss({
+          key: 'day1-' + id + '-' + i,
+          wrongEl: el,
+          correctEl: correct,
+          statusEl: status,
+          replay: ctx._coachReplay || null
+        }).then((stepName) => { if (stepName === 'model') IR.againLater(plan, i); });
       }, i);
+      ctx.stage.append(status);
     }
     if (ctx.setNext) ctx.setNext(() => {
       if (i < plan.length - 1) { i += 1; step(); return true; }
@@ -431,6 +437,7 @@
     ctx.setInstr('Hear the sound. Pop that bubble.');
     const ids = PACK.ids;
     rounds(ctx, ids, (id, ok, again, i) => {
+      ctx._coachReplay = () => playSound(id);
       playSound(id);
       const shown = choicesFor(id, i < 4 ? 1 : i < 8 ? 2 : Math.max(2, ids.length - 1));
       const bubbles = shuffle(shown).map((letter) => h('button', {
@@ -462,6 +469,7 @@
   function feed(ctx) {
     ctx.setInstr('Hear the sound. Tap that friend.');
     rounds(ctx, PACK.ids, (id, ok, again, i) => {
+      ctx._coachReplay = () => playSound(id);
       playSound(id);
       const shown = [id].concat(likeIds(id, PACK.ids, i < 4 ? 1 : Math.max(2, PACK.ids.length - 1)));
       const friends = shuffle(shown).map((letter) => h('button', {
@@ -479,6 +487,7 @@
     rounds(ctx, pictureCards(), (pic, ok, again, i) => {
       const choices = soundChoices(pic.answer, i < 6 ? 3 : 4);
       const hear = () => { if (pic.name && pic.name !== 'any') say(pic.name); };
+      ctx._coachReplay = hear;
       hear();
       ctx.stage.append(h('div', { class: 'llfirst llhear' },
         h('button', { class: 'btn big primary', type: 'button', onclick: hear }, 'Hear the word'),
@@ -495,6 +504,7 @@
     ctx.setInstr('Tap the letter you hear.');
     const spots = [[12, 18], [70, 14], [40, 42], [78, 58], [18, 66]];
     rounds(ctx, PACK.ids, (target, ok, again) => {
+      ctx._coachReplay = () => playSound(target);
       playSound(target);
       const others = choicesFor(target, 2).filter((ch) => ch !== target);
       const letters = [target, target].concat(others).slice(0, spots.length);
@@ -530,6 +540,7 @@
       const extras = likeIds(word.parts[0], PACK.ids, 1);
       const tiles = shuffle(word.parts.concat(extras.filter((id) => word.parts.indexOf(id) < 0)));
       const hear = () => say(word.text);
+      ctx._coachReplay = hear;
       hear();
       ctx.stage.append(h('div', { class: 'llbuild' },
         h('div', { class: 'llbuildslots' }, ...slots),
@@ -565,6 +576,7 @@
           return playSound(id).then(() => new Promise((r) => setTimeout(r, 180)));
         }), Promise.resolve());
       };
+      ctx._coachReplay = speak;
       speak();
       const others = PACK.words.filter((item) => item.src !== word.src);
       const pics = [word].concat(others.slice(0, 2));
@@ -584,6 +596,7 @@
   function flash(ctx) {
     ctx.setInstr('Say the sound. Tap I said it.');
     rounds(ctx, PACK.ids, (id, ok, again) => {
+      ctx._coachReplay = () => playSound(id);
       ctx.stage.append(
         h('p', { class: 'll1flash' }, id),
         h('div', { class: 'll1pair' },
@@ -595,6 +608,7 @@
   function match(ctx) {
     ctx.setInstr('Tap the word for the picture.');
     rounds(ctx, PACK.words, (word, ok, again, i) => {
+      ctx._coachReplay = () => say(word.text);
       const others = PACK.words.filter((item) => item.text !== word.text).slice(0, i < 6 ? 1 : 2);
       const choices = shuffle([{ text: word.text, good: true }].concat(others.map((item) => ({ text: item.text, good: false }))));
       ctx.stage.append(
@@ -614,6 +628,7 @@
     const cards = pictureCards().filter((pic) => pic && pic.src);
     rounds(ctx, cards, (item, ok, again, i) => {
       const hear = () => { if (item.name && item.name !== 'any') say(item.name); };
+      ctx._coachReplay = hear;
       hear();
       const rest = shuffle(cards.filter((pic) => pic.src !== item.src));
       const seen = {};
@@ -752,6 +767,7 @@
     rounds(ctx, pictureCards(), (card, ok, again, i) => {
       const choices = soundChoices(card.answer, i < 6 ? 3 : 4);
       const hear = () => { if (card.name && card.name !== 'any') say(card.name); };
+      ctx._coachReplay = hear;
       hear();
       ctx.stage.append(h('div', { class: 'llfirst llhear' },
         h('button', { class: 'btn big primary', type: 'button', onclick: hear }, 'Hear the word'),

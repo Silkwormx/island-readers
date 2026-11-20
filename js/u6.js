@@ -143,7 +143,11 @@
       const grid = choiceGrid(shuffle(R.choices), async (w, b) => {
         if (locked || b.classList.contains('tried')) return;
         if (w === R.word) { locked = true; b.classList.add('right'); status.textContent = 'Yes! ' + w; await ding(w); if (!ctx.scr.ok()) return; r++; if (r >= rounds.length) ctx.finish(); else round(); }
-        else { ctx.miss(); b.classList.add('tried'); status.textContent = 'Listen again.'; await Snd.seq([P('listenagain'), W(R.word), SND(soundFor(R.word))], 180); }
+        else {
+          ctx.miss();
+          const stepName = await IR.coachMiss({ key: 'u6-hear-' + r, wrongEl: b, correctEl: () => grid.querySelector('[data-w="' + R.word + '"]'), statusEl: status, replay: () => say(R.word) });
+          if (stepName === 'model') IR.againLater(rounds, r);
+        }
       });
       st.append(h('div', { class: 'activity' }, spk, grid, status));
       IR.sayItem(ctx, P('tapword'), W(R.word));
@@ -188,7 +192,12 @@
           const ok = (id === 'yes') === it.yes;
           reveal();
           if (ok) { locked = true; b.classList.add('right'); status.textContent = 'Yes. ' + it.w + '.'; await ding(it.w); if (!ctx.scr.ok()) return; r++; if (r >= items.length) ctx.finish(); else round(); }
-          else { ctx.miss(); b.classList.add('tried'); status.textContent = 'Not this time. The word is ' + it.w + '.'; await Snd.seq([P('listenagain'), W(it.w)], 160); }
+          else {
+            ctx.miss();
+            const yesBtn = grid.querySelector('[data-w="' + (it.yes ? 'yes' : 'no') + '"]');
+            const stepName = await IR.coachMiss({ key: 'u6-bell-' + r, wrongEl: b, correctEl: yesBtn, statusEl: status, replay: () => say(it.w) });
+            if (stepName === 'model') IR.againLater(items, r);
+          }
         });
         grid.append(b);
       });

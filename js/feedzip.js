@@ -133,14 +133,10 @@
           if (!ctx.scr.ok() || my !== token) return;
           setTimeout(advance, 200);
         } else {
-          b.classList.add('tried');
           row = 0;
-          streak.textContent = 'In a row: 0';
-          status.textContent = "Zip isn't hungry for that one, listen again.";
           if (ctx.miss) ctx.miss();
-          if (r + 3 < targets.length) targets[r + 3] = w;
-          await Snd.play(A.sfx.tryagain);
-          if (ctx.scr.ok() && my === token) say(w);
+          const stepName = await IR.coachMiss({ key: 'feed-' + r, wrongEl: b, correctEl: () => field.querySelector('[data-yes="1"], [data-w="' + w + '"]'), statusEl: status, replay: () => say(w) });
+          if (stepName === 'model') IR.againLater(targets, r);
         }
       }
       function $$fade() {

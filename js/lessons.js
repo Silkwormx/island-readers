@@ -221,9 +221,9 @@
               await sleep(500); if (!ctx.scr.ok()) return;
               got.add(r); const nx = got.size >= rounds.length ? -1 : nextOpen(); if (nx < 0) { ctx.progress(1); ctx.finish(); } else { r = nx; round(); }
             } else {
-              misses++; ctx.miss(); b.classList.add('tried'); status.textContent = 'Not that one. Listen again.';
-              await IR.tryAgain(A.word(R.word));
-              if (misses >= 2) $$('.choice', grid).forEach((o) => { if (o.dataset.w === R.word) o.classList.add('hint'); });
+              ctx.miss();
+              const stepName = await IR.coachMiss({ key: 'ng-hear-' + r, wrongEl: b, correctEl: () => grid.querySelector('[data-w="' + R.word + '"]'), statusEl: status, replay: () => sayWord(R.word) });
+              if (stepName === 'model') IR.againLater(rounds, r);
             }
           });
           grid.append(b);

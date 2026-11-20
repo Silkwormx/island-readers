@@ -32,7 +32,11 @@
           if (w === R.word) { locked = true; b.classList.add('right'); b.innerHTML = ''; b.append(colorNk(w), icon('check')); $$('.choice', grid).forEach((o) => { if (o !== b) o.classList.add('fade'); });
             status.textContent = 'Yes! ' + w; await ding(w); if (!ctx.scr.ok()) return; await sleep(500); if (!ctx.scr.ok()) return;
             got.add(r); const nx = got.size >= rounds.length ? -1 : nextOpen(); if (nx < 0) { ctx.progress(1); ctx.finish(); } else { r = nx; round(); } }
-          else { misses++; ctx.miss(); b.classList.add('tried'); status.textContent = 'Not that one. Listen again.'; await tryAgain(W(R.word)); if (misses >= 2) $$('.choice', grid).forEach((o) => { if (o.dataset.w === R.word) o.classList.add('hint'); }); }
+          else {
+            ctx.miss();
+            const stepName = await IR.coachMiss({ key: 'nk-hear-' + r, wrongEl: b, correctEl: () => grid.querySelector('[data-w="' + R.word + '"]'), statusEl: status, replay: () => say(R.word), model: () => say(R.word) });
+            if (stepName === 'model') IR.againLater(rounds, r);
+          }
         }); grid.append(b); });
       stage.append(h('div', { class: 'activity' }, spk, grid, status)); IR.sayItem(ctx, 'audio/nk_p_hear.mp3', W(R.word));
     }
@@ -51,7 +55,12 @@
     const show = () => { ctx.progress(lit.size / words.length); if (ctx.count) ctx.count(r + 1, words.length); card.innerHTML = ''; card.append(h('span', { class: 'bigword' }, colorNk(order[r]))); status.textContent = '\u00a0'; };
     async function tapBell(w, b) {
       if (lit.has(w)) { say(w); return; }
-      if (w !== order[r]) { ctx.miss(); b.classList.add('nudge'); setTimeout(() => b.classList.remove('nudge'), 500); status.textContent = 'Look again. Find the bell that says ' + order[r] + '.'; await tryAgain(); return; }
+      if (w !== order[r]) {
+        ctx.miss();
+        const stepName = await IR.coachMiss({ key: 'nk-bell-' + r, wrongEl: b, correctEl: () => row.querySelector('[aria-label="Bell: ' + order[r] + '"]'), statusEl: status, replay: () => say(order[r]) });
+        if (stepName === 'model') IR.againLater(order, r);
+        return;
+      }
       lit.add(w); b.classList.add('lit'); b.querySelector('img').src = 'img/bell_lit.png'; status.textContent = w + '! The bell lights up.';
       await ding(w); if (!ctx.scr.ok()) return; r++;
       if (r >= order.length) { ctx.progress(1); status.textContent = 'All the bells are lit!'; await Snd.play(A.sfx.gong); if (ctx.scr.ok()) ctx.finish(); return; }

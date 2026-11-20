@@ -9,6 +9,11 @@
 html{font-size:clamp(17px,2.35vmin,24px)}
 html,body{margin:0;height:100%}
 body{font-family:"Andika","Comic Sans MS","Trebuchet MS",Verdana,sans-serif;background:var(--cream);color:var(--ink);line-height:1.55;letter-spacing:.035em;word-spacing:.14em;overflow:hidden;text-align:left;-webkit-font-smoothing:antialiased}
+.coach-grey,.coach-off{opacity:.42;filter:grayscale(.7)}
+.coach-glow{box-shadow:0 0 0 4px #F28C00;animation:coachwiggle .7s ease}
+.coach-model{box-shadow:0 0 0 4px #0E7C7C;background:#E4F6F6}
+@keyframes coachwiggle{0%,100%{transform:none}30%{transform:translateX(-3px)}60%{transform:translateX(3px)}}
+@media (prefers-reduced-motion:reduce){.coach-glow{animation:none}}
 #app{height:100%;position:relative}
 button{font:inherit;letter-spacing:inherit;color:inherit;cursor:pointer;touch-action:manipulation}
 button:focus-visible,input:focus-visible{outline:4px solid #1F6FEB;outline-offset:3px}
