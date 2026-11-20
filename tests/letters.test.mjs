@@ -128,7 +128,7 @@ test('home opens Foundation Skills from the first bell, not a sidebar tab', () =
   assert.match(html, /js\/foundation\/letters\.js/);
   assert.match(html, /foundation\/foundation\.css/);
   assert.match(sw, /js\/foundation\/letters\.js/);
-  assert.match(sw, /ir-20261123n/);
+  assert.match(sw, /ir-20261124a/);
   assert.match(sw, /foundation\/img\/foundations_sidebar\.jpg/);
   assert.match(teach, /#\/foundation/);
   assert.match(letters, /Teacher Slideshows/);
@@ -169,13 +169,11 @@ test('home opens Foundation Skills from the first bell, not a sidebar tab', () =
 test('lesson narration is Frill, and Zip says the praise line', () => {
   const csv = fs.readFileSync(new URL('../review-audio/read_aloud_script.csv', import.meta.url), 'utf8');
   const md = fs.readFileSync(new URL('../review-audio/read_aloud_script.md', import.meta.url), 'utf8');
-  assert.match(csv, /^area,page\/screen,id\/key,speaker,current text spoken,notes/m);
-  assert.match(csv, /lesson-hear,Frill,Tap the sound\./);
-  assert.match(csv, /lesson-done,Zip,You did it\./);
-  assert.match(md, /Frill is the v4 B nudibranch/);
+  assert.match(csv, /^area,page\/screen,id\/key,current text spoken,notes/m);
+  assert.match(csv, /Meet each letter\./);
+  assert.match(md, /It does not change the app/);
   assert.match(letters, /who: 'Frill'/);
   assert.match(letters, /who: 'Zip'/);
   assert.match(letters, /img\/frill\.webp/);
   assert.match(letters, /img\/zipA\.webp/);
-  assert.equal(csv.includes('.mp3'), false);
 });

@@ -1202,7 +1202,7 @@
         : h('h3', null, h('span', { class: 'tmsound' }, lesson.s), ' ' + lesson.lesson);
       const dayText = lesson.days ? slideDays({ days: lesson.days }) : '';
       const slide = lesson.board
-        ? h('button', { class: 'btn big tmlink tmslide', type: 'button', onclick: () => { Snd.stop(); location.hash = lesson.board; } }, 'Slideshow', dayText && dayText !== 'Slideshow' ? h('span', { class: 'tmdays' }, dayText) : null)
+        ? h('button', { class: 'btn big tmlink tmslide', type: 'button', onclick: () => { Snd.stop(); location.hash = lesson.board; } }, 'Slideshow', dayText && dayText !== slideDays({}) ? h('span', { class: 'tmdays' }, dayText) : null)
         : h('span', { class: 'btn big tmlink is-soon', 'aria-disabled': 'true' }, 'Slideshow');
       let print = h('span', { class: 'btn big tmlink is-soon', 'aria-disabled': 'true' }, 'Printables');
       let list = null;
