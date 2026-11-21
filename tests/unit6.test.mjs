@@ -59,7 +59,7 @@ test('stories are Lunch Crabs, Kite That Zipped, and Stick by the Bell', () => {
   assert.doesNotMatch(data, /A thick branch landed on the bell/);
   assert.doesNotMatch(data, /Zip packs the cups and the hats/);
   assert.doesNotMatch(u6 + data, /\u2014|—/);
-  assert.match(sw, /ir-20261124e/);
+  assert.match(sw, /ir-20261124f/);
   const rules = fs.readFileSync(new URL('../js/gamerules.js', import.meta.url), 'utf8');
   assert.match(rules, /IR\.pairCard/);
   assert.match(rules, /lesson \? 'Learn' : 'Read'/);
@@ -111,6 +111,12 @@ test('Unit 6 review mixes every lesson and the printables are linked', () => {
   assert.match(screens, /addend\.svg/);
   assert.match(screens, /tapend\.svg/);
   assert.match(screens, /chain-end\.svg/);
+  assert.match(screens, /#\/teachers\/slides\/u61/);
+  assert.match(screens, /#\/teachers\/slides\/u63/);
+  assert.match(screens, /Lesson6.1_WordList_s_es\.pdf/);
+  assert.match(screens, /Lesson6.3_WordList_ing\.pdf/);
+  assert.match(u6, /title: 'Word List'/);
+  assert.match(screens, /u61\|u62\|u63/);
   for (const file of [
     'materials/unit6/Lesson6.1_Teacher_Led_Checks.pdf',
     'materials/unit6/Lesson6.2_Teacher_Led_Checks.pdf',

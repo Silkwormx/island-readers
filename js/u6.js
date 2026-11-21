@@ -503,11 +503,22 @@
         : which === 'u63'
           ? 'materials/unit6/Lesson6.3_Teacher_Led_Checks.pdf'
           : 'materials/unit6/Unit6_Teacher_Led_Checks_Combined.pdf';
+    const decks = {
+      u61: { slides: '#/teachers/slides/u61', days: 3, word: 'materials/unit6/Lesson6.1_WordList_s_es.pdf' },
+      u62: { slides: '#/teachers/slides/u62', days: 3, word: 'materials/unit6/Lesson6.2_WordList_ed.pdf' },
+      u63: { slides: '#/teachers/slides/u63', days: 2, word: 'materials/unit6/Lesson6.3_WordList_ing.pdf' }
+    };
+    const spec = decks[which];
+    const files = [
+      { title: 'Daily practice sheets', href: 'materials/unit6/Unit6_Teacher_Led_Student_Sheets.pdf' },
+      { title: 'Teacher pack', href: pack }
+    ];
+    if (!spec) return { files: files };
+    files.push({ title: 'Word List', href: spec.word });
     return {
-      files: [
-        { title: 'Daily practice sheets', href: 'materials/unit6/Unit6_Teacher_Led_Student_Sheets.pdf' },
-        { title: 'Teacher pack', href: pack }
-      ]
+      slides: spec.slides,
+      days: Array.from({ length: spec.days }, (_, i) => ({ label: 'Day ' + (i + 1) })),
+      files: files
     };
   }
   function fromEach(key, n) {

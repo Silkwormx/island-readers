@@ -1199,6 +1199,7 @@
       const files = [];
       if (lesson.daily) files.push({ title: 'Daily practice sheets', href: lesson.daily });
       if (lesson.deck) files.push({ title: 'Slideshow PDF', href: lesson.deck });
+      if (lesson.wordlist) files.push({ title: 'Word List', href: lesson.wordlist });
       if (lesson.pack) files.push({ title: 'Teacher pack', href: lesson.pack });
       const title = lesson.title
         ? h('h3', null, lesson.title)
@@ -1242,9 +1243,9 @@
         { s: 'e', lesson: 'Lesson 5.2', days: [1, 2, 3].map((n) => ({ label: 'Day ' + n })), board: '#/teachers/slides/tricky', slides: 'materials/unit5/Island_Readers_Tricky_e_Endings.pptx', daily: 'materials/unit5/Unit5_Teacher_Led_Student_Sheets.pdf', pack: 'materials/unit5/Lesson5.2_Teacher_Led_Checks.pdf' }
       ] },
       { name: 'Unit 6 \u00b7 Endings', sounds: [
-        { s: '-s -es', lesson: 'Lesson 6.1', daily: 'materials/unit6/Unit6_Teacher_Led_Student_Sheets.pdf', pack: 'materials/unit6/Lesson6.1_Teacher_Led_Checks.pdf' },
-        { s: '-ed', lesson: 'Lesson 6.2', daily: 'materials/unit6/Unit6_Teacher_Led_Student_Sheets.pdf', pack: 'materials/unit6/Lesson6.2_Teacher_Led_Checks.pdf' },
-        { s: '-ing', lesson: 'Lesson 6.3', daily: 'materials/unit6/Unit6_Teacher_Led_Student_Sheets.pdf', pack: 'materials/unit6/Lesson6.3_Teacher_Led_Checks.pdf' }
+        { s: '-s -es', lesson: 'Lesson 6.1', days: [1, 2, 3].map((n) => ({ label: 'Day ' + n })), board: '#/teachers/slides/u61', daily: 'materials/unit6/Unit6_Teacher_Led_Student_Sheets.pdf', deck: 'foundation/slides/Lesson6.1_Endings_s_es.pdf', wordlist: 'materials/unit6/Lesson6.1_WordList_s_es.pdf', pack: 'materials/unit6/Lesson6.1_Teacher_Led_Checks.pdf' },
+        { s: '-ed', lesson: 'Lesson 6.2', days: [1, 2, 3].map((n) => ({ label: 'Day ' + n })), board: '#/teachers/slides/u62', daily: 'materials/unit6/Unit6_Teacher_Led_Student_Sheets.pdf', deck: 'foundation/slides/Lesson6.2_Endings_ed.pdf', wordlist: 'materials/unit6/Lesson6.2_WordList_ed.pdf', pack: 'materials/unit6/Lesson6.2_Teacher_Led_Checks.pdf' },
+        { s: '-ing', lesson: 'Lesson 6.3', days: [1, 2].map((n) => ({ label: 'Day ' + n })), board: '#/teachers/slides/u63', daily: 'materials/unit6/Unit6_Teacher_Led_Student_Sheets.pdf', deck: 'foundation/slides/Lesson6.3_Endings_ing.pdf', wordlist: 'materials/unit6/Lesson6.3_WordList_ing.pdf', pack: 'materials/unit6/Lesson6.3_Teacher_Led_Checks.pdf' }
       ] }
     ];
     const sections = UNITS.map((unit) => h('section', { class: 'tmunit' },
@@ -1272,6 +1273,20 @@
     ],
     u5: [
       { label: 'Day 1', start: 1, end: 20 }
+    ],
+    u61: [
+      { label: 'Day 1', start: 1, end: 24 },
+      { label: 'Day 2', start: 25, end: 48 },
+      { label: 'Day 3', start: 49, end: 77 }
+    ],
+    u62: [
+      { label: 'Day 1', start: 1, end: 21 },
+      { label: 'Day 2', start: 22, end: 43 },
+      { label: 'Day 3', start: 44, end: 74 }
+    ],
+    u63: [
+      { label: 'Day 1', start: 1, end: 20 },
+      { label: 'Day 2', start: 21, end: 43 }
     ]
   };
   /* In-app week-deck slideshow for smartboard (ng / nk / unit 5). Keeps PPTX download on the teachers page. */
@@ -1349,8 +1364,9 @@
     window.addEventListener('keydown', keyHandler);
     const oldCleanup = IR._slideCleanup; if (typeof oldCleanup === 'function') oldCleanup();
     IR._slideCleanup = () => { window.removeEventListener('keydown', keyHandler); };
-    fetch('teachers/' + sound + '/slides.json').then((r) => r.json()).then((man) => {
-      slides = man.slides || [];
+    const slideRoot = { u61: 'materials/unit6/slides/u61/', u62: 'materials/unit6/slides/u62/', u63: 'materials/unit6/slides/u63/' }[sound];
+    fetch(slideRoot ? slideRoot + 'manifest.json' : 'teachers/' + sound + '/slides.json').then((r) => r.json()).then((man) => {
+      slides = (man.slides || []).map((name) => (slideRoot && name.indexOf('/') < 0) ? slideRoot + name : name);
       days = (man.days && man.days.length) ? man.days : ((WEEK_DAYS[sound] || []).slice());
       jumps.innerHTML = '';
       days.forEach((day, index) => {
@@ -1744,7 +1760,7 @@
     else if (hash.startsWith('#/about')) aboutScreen();
     else if (hash.startsWith('#/trail')) islandTrailPage();
     else if (hash.startsWith('#/find')) findScreen();
-    else if ((m = /^#\/teachers\/slides\/(ng|nk|u5|tricky)$/.exec(hash))) slidesViewer(m[1]);
+    else if ((m = /^#\/teachers\/slides\/(ng|nk|u5|tricky|u61|u62|u63)$/.exec(hash))) slidesViewer(m[1]);
     else if (hash.startsWith('#/teachers')) { if (IR._slideCleanup) { IR._slideCleanup(); IR._slideCleanup = null; } teachersScreen(); }
     else if (hash.startsWith('#/placement')) IR.placement.render(app, (n) => {
       const bell = (IR.placement.BELL || {})[n] || { unit: n, name: 'this bell' };
