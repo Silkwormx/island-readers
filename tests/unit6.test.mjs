@@ -59,7 +59,7 @@ test('stories are Lunch Crabs, Kite That Zipped, and Stick by the Bell', () => {
   assert.doesNotMatch(data, /A thick branch landed on the bell/);
   assert.doesNotMatch(data, /Zip packs the cups and the hats/);
   assert.doesNotMatch(u6 + data, /\u2014|—/);
-  assert.match(sw, /ir-20261124d/);
+  assert.match(sw, /ir-20261124e/);
   const rules = fs.readFileSync(new URL('../js/gamerules.js', import.meta.url), 'utf8');
   assert.match(rules, /IR\.pairCard/);
   assert.match(rules, /lesson \? 'Learn' : 'Read'/);
@@ -92,4 +92,29 @@ test('every Unit 6 speaker line is tagged, and Frill is not Zip', () => {
   assert.match(u6, /from: 'jump', to: 'jumped'/);
   assert.match(u6, /from: 'hang', to: 'hanging'/);
   assert.doesNotMatch(u6, /from: 'cap'/);
+});
+
+test('Unit 6 review mixes every lesson and the printables are linked', () => {
+  assert.match(u6, /#\/u6\/review/);
+  assert.match(u6, /kicker: 'Unit Review'/);
+  assert.match(u6, /title: 'Mixed games'/);
+  assert.match(u6, /fromEach\('hear', 2\)/);
+  assert.match(u6, /fromEach\('build', 2\)/);
+  assert.match(u6, /fromEach\('sentences', 1\)/);
+  assert.match(u6, /step.id !== 'read' && step.id !== 'check'/);
+  assert.doesNotMatch(u6, /SPARK/);
+  assert.match(screens, /Lesson6.1_Teacher_Led_Checks.pdf/);
+  assert.match(screens, /Lesson6.2_Teacher_Led_Checks.pdf/);
+  assert.match(screens, /Lesson6.3_Teacher_Led_Checks.pdf/);
+  assert.match(screens, /Unit6_Teacher_Led_Student_Sheets.pdf/);
+  assert.match(u6, /Unit6_Teacher_Led_Checks_Combined.pdf/);
+  for (const file of [
+    'materials/unit6/Lesson6.1_Teacher_Led_Checks.pdf',
+    'materials/unit6/Lesson6.2_Teacher_Led_Checks.pdf',
+    'materials/unit6/Lesson6.3_Teacher_Led_Checks.pdf',
+    'materials/unit6/Unit6_Teacher_Led_Checks_Combined.pdf',
+    'materials/unit6/Unit6_Teacher_Led_Student_Sheets.pdf'
+  ]) {
+    assert.ok(fs.existsSync(new URL('../' + file, import.meta.url)), file);
+  }
 });
