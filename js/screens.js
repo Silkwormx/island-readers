@@ -641,8 +641,8 @@
     comp: 'storycheck.svg', review: 'review.svg'
   };
   const GAME_ICON_TITLE = {
-    'Add the ending': 'ending.svg',
-    'Tap each word that has an ending': 'ending.svg',
+    'Add the ending': 'addend.svg',
+    'Tap each word that has an ending': 'tapend.svg',
     'Match the word': 'matchword.svg',
     'Short or Long': 'shortlong.svg',
     'Magic e Boxes': 'magic.svg',
@@ -656,6 +656,8 @@
     'Ring every bell and learn its sounds': 'bell.svg'
   };
   function gamePicture(item) {
+    const href = String(item.href || '');
+    if (item.title === 'Word Chains' && href.indexOf('#/u6/') === 0) return 'foundation/img/games/icons/chain-end.svg';
     const titled = GAME_ICON_TITLE[item.title];
     if (titled) return 'foundation/img/games/icons/' + titled;
     const id = item.id || String(item.href || '').split('/').filter(Boolean).pop() || '';

@@ -9,6 +9,7 @@ from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfgen import canvas
 from reportlab.lib.utils import ImageReader
+from PIL import Image
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT = os.path.join(ROOT, 'materials', 'unit6')
@@ -89,11 +90,12 @@ def footer_for(kind, lesson=None):
 
 def cover(doc, kicker, title, subtitle, blurb, footer):
     c = doc.page(footer)
-    try:
-        c.drawImage(ImageReader('/tmp/zipA.png'), 78, 560, 120, 120, mask='auto', preserveAspectRatio=True)
-        c.drawImage(ImageReader('/tmp/frill.png'), 414, 560, 120, 120, mask='auto', preserveAspectRatio=True)
-    except Exception:
-        pass
+    zip_png = '/tmp/zipA-u6.png'
+    if not os.path.exists(zip_png):
+        Image.open(os.path.join(ROOT, 'img/zipA.webp')).save(zip_png)
+    frill = os.path.join(ROOT, 'materials/unit6/frill-v4b.png')
+    c.drawImage(ImageReader(zip_png), 64, 530, 140, 170, mask='auto', preserveAspectRatio=True, anchor='s')
+    c.drawImage(ImageReader(frill), 408, 515, 150, 190, mask='auto', preserveAspectRatio=True, anchor='s')
     c.setStrokeColorRGB(*ORANGE)
     c.setFillColorRGB(*CREAM2)
     c.setLineWidth(3)

@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <rect width="64" height="64" rx="14" fill="#FFF1E2"/>
+  <rect x="8" y="6" width="48" height="14" rx="4" fill="#fff" stroke="#C4A574" stroke-width="1.5"/>
+  <text x="32" y="16" text-anchor="middle" font-family="Andika,sans-serif" font-size="9" font-weight="700" fill="#2B2540">hop</text>
+  <path d="M32 21v3" stroke="#C95A10" stroke-width="2" stroke-linecap="round"/>
+  <rect x="6" y="25" width="52" height="14" rx="4" fill="#fff" stroke="#F28C00" stroke-width="1.5"/>
+  <text x="32" y="35" text-anchor="middle" font-family="Andika,sans-serif" font-size="9" font-weight="700" fill="#2B2540">hop<tspan fill="#F28C00">s</tspan></text>
+  <path d="M32 40v3" stroke="#C95A10" stroke-width="2" stroke-linecap="round"/>
+  <rect x="4" y="44" width="56" height="14" rx="4" fill="#fff" stroke="#1FA6A6" stroke-width="1.5"/>
+  <text x="32" y="54" text-anchor="middle" font-family="Andika,sans-serif" font-size="8" font-weight="700" fill="#2B2540">hop<tspan fill="#1FA6A6">ped</tspan></text>
+</svg>

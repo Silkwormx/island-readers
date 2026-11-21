@@ -108,6 +108,9 @@ test('Unit 6 review mixes every lesson and the printables are linked', () => {
   assert.match(screens, /Lesson6.3_Teacher_Led_Checks.pdf/);
   assert.match(screens, /Unit6_Teacher_Led_Student_Sheets.pdf/);
   assert.match(u6, /Unit6_Teacher_Led_Checks_Combined.pdf/);
+  assert.match(screens, /addend\.svg/);
+  assert.match(screens, /tapend\.svg/);
+  assert.match(screens, /chain-end\.svg/);
   for (const file of [
     'materials/unit6/Lesson6.1_Teacher_Led_Checks.pdf',
     'materials/unit6/Lesson6.2_Teacher_Led_Checks.pdf',
