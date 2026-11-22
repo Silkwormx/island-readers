@@ -275,7 +275,7 @@
       tryAgain: (w) => tryAgain(W(w)),
       promptAudio: 'audio/p_chain_rule.mp3',
       promptKey: null,
-      model: MODELS[L.key]
+      model: L.model || MODELS[L.key]
     };
     function start() {
       ctx.finish = () => { c++; if (c < L.chains.length) start(); else done(); };
@@ -487,7 +487,7 @@
     items.filter((r) => r.group === 'activities').forEach((r, k) => { r.act = k + 1; });
     const story = { title: L.storyTitle, href: '#/u6/' + L.key + '/read', min: 6, img: IR.storyCovers[L.n], alt: L.storyTitle, big: true };
     app.append(h('div', { class: 'screen trailscreen unitpage unitA stepage ngpreview' },
-      h('header', { class: 'uA-top' }, IR.ui.pageNav('#/u6'), h('h1', { class: 'uA-title' }, h('small', null, 'Unit 6 Lesson ' + IR.kidLesson(L.n)), L.name), IR.teacherBox({})),
+      h('header', { class: 'uA-top' }, IR.ui.pageNav('#/u6'), h('h1', { class: 'uA-title' }, h('small', null, 'Unit 6 Lesson ' + IR.kidLesson(L.n)), L.name), IR.teacherBox(u6Teach(L.key))),
       IR.modeBar({
         lesson: items.filter((r) => r.group === 'lesson').map((r) => ({ title: r.title, href: r.href, min: r.min })),
         games: items.filter((r) => r.group === 'activities').map((r) => ({ id: r.id, title: r.title, href: r.href, note: TIPS[r.id], min: r.min })),
@@ -495,18 +495,93 @@
       })));
   }
 
+  function u6Teach(which) {
+    const pack = which === 'u61'
+      ? 'materials/unit6/Lesson6.1_Teacher_Led_Checks.pdf'
+      : which === 'u62'
+        ? 'materials/unit6/Lesson6.2_Teacher_Led_Checks.pdf'
+        : which === 'u63'
+          ? 'materials/unit6/Lesson6.3_Teacher_Led_Checks.pdf'
+          : 'materials/unit6/Unit6_Teacher_Led_Checks_Combined.pdf';
+    const decks = {
+      u61: { slides: '#/teachers/slides/u61', days: 3, word: 'materials/unit6/Lesson6.1_WordList_s_es.pdf' },
+      u62: { slides: '#/teachers/slides/u62', days: 3, word: 'materials/unit6/Lesson6.2_WordList_ed.pdf' },
+      u63: { slides: '#/teachers/slides/u63', days: 2, word: 'materials/unit6/Lesson6.3_WordList_ing.pdf' }
+    };
+    const spec = decks[which];
+    const files = [
+      { title: 'Daily practice sheets', href: 'materials/unit6/Unit6_Teacher_Led_Student_Sheets.pdf' },
+      { title: 'Teacher pack', href: pack }
+    ];
+    if (!spec) return { files: files };
+    files.push({ title: 'Word List', href: spec.word });
+    return {
+      slides: spec.slides,
+      days: Array.from({ length: spec.days }, (_, i) => ({ label: 'Day ' + (i + 1) })),
+      files: files
+    };
+  }
+  function fromEach(key, n) {
+    return PACK.lessons.reduce((list, L) => list.concat((L[key] || []).slice(0, n)), []);
+  }
+  function mixedLesson() {
+    return {
+      key: 'review',
+      n: '6',
+      name: 'Unit Review',
+      endings: ['s', 'es', 'ed', 'ing'],
+      example: { base: 'cat', end: 's', word: 'cats' },
+      hear: fromEach('hear', 2),
+      bells: {
+        yes: PACK.lessons.reduce((list, L) => list.concat(L.bells.yes.slice(0, 2)), []),
+        no: PACK.lessons.reduce((list, L) => list.concat(L.bells.no.slice(0, 2)), [])
+      },
+      build: fromEach('build', 2),
+      chains: PACK.lessons.map((L) => L.chains[0]),
+      feedYes: PACK.lessons.reduce((list, L) => list.concat(L.feedYes.slice(0, 2)), []),
+      feedNo: PACK.lessons.reduce((list, L) => list.concat(L.feedNo.slice(0, 2)), []),
+      sentences: fromEach('sentences', 1),
+      rhyme: fromEach('rhyme', 2),
+      fishYes: PACK.lessons.reduce((list, L) => list.concat(L.fishYes.slice(0, 2)), []),
+      fishNo: PACK.lessons.reduce((list, L) => list.concat(L.fishNo.slice(0, 2)), []),
+      check: [],
+      model: { from: 'cat', to: 'cats', audioA: 'audio/u6_chain_u61_a.mp3', audioB: 'audio/u6_chain_u61_b.mp3' }
+    };
+  }
+  function reviewGames() {
+    return stepsFor(mixedLesson()).filter((step) => step.group === 'activities' && step.id !== 'read' && step.id !== 'check');
+  }
+  function reviewCards() {
+    return reviewGames().map((step) => ({
+      id: step.id,
+      title: step.title,
+      href: '#/u6/review/' + step.id,
+      note: 'Words from every lesson'
+    }));
+  }
   function picker(app) {
     IR.newScreen();
+    const lessons = PACK.lessons.map((L) => ({
+      kicker: 'Lesson ' + IR.kidLesson(L.n),
+      title: L.name,
+      href: '#/u6/' + L.key,
+      img: 'img/lesson_zip_frill.webp',
+      alt: L.name
+    }));
+    lessons.push({
+      kicker: 'Unit Review',
+      title: 'Mixed games',
+      href: '#/u6/review',
+      img: 'img/lesson_zip_frill.webp',
+      alt: 'Zip and Frill',
+      note: 'Words from every lesson',
+      goLabel: 'Open review'
+    });
     app.append(h('div', { class: 'screen trailscreen unitpage unitA stepage ngpreview' },
-      h('header', { class: 'uA-top' }, IR.ui.pageNav('#/home'), h('h1', { class: 'uA-title' }, h('small', null, 'Unit 6'), 'Endings'), IR.teacherBox({})),
+      h('header', { class: 'uA-top' }, IR.ui.pageNav('#/home'), h('h1', { class: 'uA-title' }, h('small', null, 'Unit 6'), 'Endings'), IR.teacherBox(u6Teach('hub'))),
       IR.modeBar({
-        lesson: PACK.lessons.map((L) => ({
-          kicker: 'Lesson ' + IR.kidLesson(L.n),
-          title: L.name,
-          href: '#/u6/' + L.key,
-          img: 'img/lesson_zip_frill.webp',
-          alt: L.name
-        })),
+        lesson: lessons,
+        games: reviewCards(),
         stories: PACK.lessons.map((L) => ({
           title: L.storyTitle,
           href: '#/u6/' + L.key + '/read',
@@ -515,6 +590,15 @@
           big: true,
           note: 'Lesson ' + IR.kidLesson(L.n)
         }))
+      })));
+  }
+  function reviewMenu(app) {
+    IR.newScreen();
+    app.append(h('div', { class: 'screen trailscreen unitpage unitA stepage ngpreview' },
+      h('header', { class: 'uA-top' }, IR.ui.pageNav('#/u6'), h('h1', { class: 'uA-title' }, h('small', null, 'Unit 6'), 'Unit Review'), IR.teacherBox(u6Teach('hub'))),
+      IR.modeBar({
+        lesson: false,
+        games: reviewCards()
       })));
   }
 
@@ -538,7 +622,7 @@
     };
     const nextBtn = h('button', { class: 'btn big next', type: 'button', onclick: () => ctx.goNext() }, 'Next', icon('next'));
     const nav = h('div', { class: 'lesson-nav' }, nextBtn);
-    const navApi = IR.simpleNav(nav, nextBtn, () => { Snd.stop(); location.hash = base; });
+    const navApi = IR.simpleNav(nav, nextBtn, () => { Snd.stop(); location.hash = base; }, L.key === 'review' ? 'Back' : undefined);
     const screen = h('div', { class: 'screen lessonscreen u6step' + (S0.group === 'lesson' ? ' is-lesson' : ''), style: '--c:' + S0.color }, h('header', { class: 'lesson-top' }, IR.ui.pageNav(base), bar), instrBox, stage, nav);
     app.append(screen);
     if (S0.group === 'activities') IR.attachGameRules(ctx, screen, S0.title);
@@ -551,6 +635,16 @@
   IR.u6Route = function (hash, app) {
     IR._u6HashWas = hash;
     if (hash === '#/u6' || hash === '#/u6/') { picker(app); return true; }
+    if (hash === '#/u6/review' || hash === '#/u6/review/') { reviewMenu(app); return true; }
+    const review = /^#\/u6\/review\/([a-z]+)$/.exec(hash);
+    if (review) {
+      const mix = mixedLesson();
+      const steps = stepsFor(mix);
+      const i = steps.findIndex((step) => step.id === review[1] && step.group === 'activities' && step.id !== 'read' && step.id !== 'check');
+      if (i < 0) return false;
+      stepScreen(app, mix, i);
+      return true;
+    }
     const lesson = /^#\/u6\/(u61|u62|u63)(?:\/(.*))?$/.exec(hash);
     if (!lesson) return false;
     const L = PACK.lessons.filter((x) => x.key === lesson[1])[0];
