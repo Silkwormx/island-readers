@@ -17,12 +17,12 @@ test('Unit 6 is the Endings tile and opens from home', () => {
   assert.match(html, /js\/u6\.js/);
 });
 
-test('three lessons, nine activities, Fish Pond is 8, Zip\'s Check is last', () => {
+test('three lessons, ten activities, Fish Pond is 9, Zip\'s Check is last', () => {
   assert.match(data, /"n": "6.1"/);
   assert.match(data, /"n": "6.2"/);
   assert.match(data, /"n": "6.3"/);
   const ids = [...u6.matchAll(/id: '(\w+)', title: '([^']+)', group: 'activities'/g)].map((m) => m[1]);
-  assert.deepEqual(ids, ['hear', 'build', 'chain', 'feed', 'sentence', 'read', 'rhyme', 'fish', 'check']);
+  assert.deepEqual(ids, ['hear', 'bells', 'build', 'chain', 'feed', 'sentence', 'read', 'rhyme', 'fish', 'check']);
   assert.match(u6, /title: 'Fish Pond'/);
   assert.match(u6, /title: 'Zip\\u2019s Check'/);
   assert.match(u6, /title: 'Rhyme Call'/);
@@ -59,7 +59,7 @@ test('stories are Lunch Crabs, Kite That Zipped, and Stick by the Bell', () => {
   assert.doesNotMatch(data, /A thick branch landed on the bell/);
   assert.doesNotMatch(data, /Zip packs the cups and the hats/);
   assert.doesNotMatch(u6 + data, /\u2014|—/);
-  assert.match(sw, /ir-20261124i/);
+  assert.match(sw, /ir-20261124h/);
   const rules = fs.readFileSync(new URL('../js/gamerules.js', import.meta.url), 'utf8');
   assert.match(rules, /IR\.pairCard/);
   assert.match(rules, /lesson \? 'Learn' : 'Read'/);
@@ -86,7 +86,8 @@ test('every Unit 6 speaker line is tagged, and Frill is not Zip', () => {
   assert.match(data, /"say": "\/t\/"/);
   assert.match(u6, /class: 'edsay'/);
   assert.match(u6, /class: 'edmark'/);
-  assert.doesNotMatch(u6, /title: 'Ring every bell'/);
+  assert.match(u6, /Answer 1 for yes, 2 for no/);
+  assert.match(u6, /yn-secret/);
   assert.match(u6, /from: 'cat', to: 'cats'/);
   assert.match(u6, /from: 'jump', to: 'jumped'/);
   assert.match(u6, /from: 'hang', to: 'hanging'/);

@@ -27,6 +27,7 @@
     { id: 'meet', title: 'Meet nk', group: 'lesson', run: runMeet, color: '#1FA6A6' },
     { id: 'listen', title: 'Story Time', group: 'story', run: runListen, color: '#8E5BD6' },
     { id: 'hear', title: 'Hear and Pick', group: 'activities', run: ACT.hear, color: '#7E57C2' },
+    { id: 'bells', title: 'Ring every bell and learn its sounds', group: 'activities', run: ACT.bells, color: '#E8731C' },
     { id: 'build', title: 'Build-a-Word', group: 'activities', run: ACT.build, color: '#E8603C' },
     { id: 'chain', title: 'Word Chains', group: 'activities', run: ACT.chain, color: '#C95A10' },
     { id: 'scramble', title: 'Scrambled Letters', group: 'activities', run: ACT.scramble, color: '#D9631A' },
@@ -39,7 +40,7 @@
     { id: 'rhyme', title: 'Rhyme Time', group: 'extra', run: runRhyme, color: '#C2408A' }
   ];
   /* one-line tips for grown-ups, in the same style as the ng unit */
-  const TIPS = { hear: 'Let your child listen first, then point.', build: 'Say the word slowly together.', chain: 'Only one letter changes each time.', scramble: 'Say the word slowly, then find each part.', feed: 'Ask your child to read the word out loud, then feed Zip.', sentence: 'Read the sentence together at the end.', read: 'Reading it 3 times builds fluency.', ngnk: 'Say the word slowly. Listen for the k at the end.', check: 'Let your child work alone. Just cheer.', comp: 'Optional extra. Look back at the story page together.', rhyme: 'Optional extra. Read the poem together for fun.' };
+  const TIPS = { hear: 'Let your child listen first, then point.', bells: 'Ask your child to read the word out loud first.', build: 'Say the word slowly together.', chain: 'Only one letter changes each time.', scramble: 'Say the word slowly, then find each part.', feed: 'Ask your child to read the word out loud, then feed Zip.', sentence: 'Read the sentence together at the end.', read: 'Reading it 3 times builds fluency.', ngnk: 'Say the word slowly. Listen for the k at the end.', check: 'Let your child work alone. Just cheer.', comp: 'Optional extra. Look back at the story page together.', rhyme: 'Optional extra. Read the poem together for fun.' };
   IR.nkTips = TIPS;
   const pid = (s) => 'nk_' + s.id;
   function sections() {

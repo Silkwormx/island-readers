@@ -1,5 +1,5 @@
 /* Unit 6 Endings: three lessons (6.1 -s/-es, 6.2 -ed, 6.3 -ing). Data: data_u6.js.
-   Nine activities each. Fish Pond is 8. Zip's Check is last.
+   Ten activities each. Fish Pond is 9. Zip's Check is last.
    Voices match Unit 4 ng/nk. Zip: en-US-RogerNeural, rate +0%, pitch +0Hz.
    Frill: en-US-AriaNeural, rate -10%, pitch +0Hz. Meet `who` and story `voice` pick the speaker.
    Narration and game prompts use Zip's voice. Sounds are real ending sounds, never letter names. */
@@ -48,6 +48,7 @@
   const TIPS = {
     meet: 'Model the ending sound. Never say the letter names.',
     hear: 'Let your child listen first, then call the number.',
+    bells: '1 means the word has the ending. 2 means it does not.',
     build: 'Hear the word. Pick the ending that was added.',
     chain: 'The glowing letter is the one that changes.',
     feed: 'Listen, then call the number of the word.',
@@ -63,6 +64,7 @@
     return [
       { id: 'meet', title: 'Meet the ending', group: 'lesson', run: (c) => runMeet(c, L), color: '#2E9E6B' },
       { id: 'hear', title: 'Hear and Pick', group: 'activities', run: (c) => runHear(c, L), color: '#7E57C2' },
+      { id: 'bells', title: 'Ring every bell', group: 'activities', run: (c) => runBells(c, L), color: '#E8731C' },
       { id: 'build', title: 'Add the ending', group: 'activities', run: (c) => runBuild(c, L), color: '#E8603C' },
       { id: 'chain', title: 'Word Chains', group: 'activities', run: (c) => runChain(c, L), color: '#C95A10' },
       { id: 'feed', title: 'Feed Zip', group: 'activities', run: (c) => runFeed(c, L), color: '#D98E00' },
@@ -170,6 +172,41 @@
     if (/ed$/.test(word)) return 'ed_id';
     if (/s$/.test(word)) return 's';
     return 's';
+  }
+
+  function runBells(ctx, L) {
+    const items = shuffle(L.bells.yes.map((w) => ({ w, yes: true })).concat(L.bells.no.map((w) => ({ w, yes: false }))));
+    let r = 0; const st = ctx.stage;
+    ctx.setInstr('Does this word have the ending? Listen first. Answer 1 for yes, 2 for no.', 'yesno');
+    function round() {
+      const it = items[r]; ctx.progress(r / items.length); if (ctx.count) ctx.count(r + 1, items.length); st.innerHTML = '';
+      let locked = false;
+      const status = h('p', { class: 'status' }, 'Listen.');
+      const word = h('p', { class: 'bigword yn-secret' }, '\u00a0');
+      const reveal = () => { word.classList.remove('yn-secret'); word.textContent = ''; word.append(colorEnd(it.w)); };
+      const grid = h('div', { class: 'choices two yn-row' });
+      [['yes', 'Yes', 'yn yn-yes'], ['no', 'No', 'yn yn-no']].forEach(([id, lab, cls]) => {
+        const b = h('button', { class: 'choice ' + cls, type: 'button', 'data-w': id }, lab);
+        b.addEventListener('click', async () => {
+          if (locked) return;
+          const ok = (id === 'yes') === it.yes;
+          reveal();
+          if (ok) { locked = true; b.classList.add('right'); status.textContent = 'Yes. ' + it.w + '.'; await ding(it.w); if (!ctx.scr.ok()) return; r++; if (r >= items.length) ctx.finish(); else round(); }
+          else {
+            ctx.miss();
+            const yesBtn = grid.querySelector('[data-w="' + (it.yes ? 'yes' : 'no') + '"]');
+            const stepName = await IR.coachMiss({ key: 'u6-bell-' + r, wrongEl: b, correctEl: yesBtn, statusEl: status, replay: () => say(it.w) });
+            if (stepName === 'model') IR.againLater(items, r);
+          }
+        });
+        grid.append(b);
+      });
+      st.append(h('div', { class: 'activity' }, word, speakerBtn(() => say(it.w), 'Hear the word'), grid, status));
+      IR.sayItem(ctx, P('yesno'), W(it.w));
+    }
+    ctx.setNext(() => { if (r < items.length - 1) { r++; round(); return true; } return false; });
+    ctx.setBack(() => { if (r > 0) { r--; round(); return true; } return false; });
+    round();
   }
 
   function runBuild(ctx, L) {
@@ -495,6 +532,10 @@
       endings: ['s', 'es', 'ed', 'ing'],
       example: { base: 'cat', end: 's', word: 'cats' },
       hear: fromEach('hear', 2),
+      bells: {
+        yes: PACK.lessons.reduce((list, L) => list.concat(L.bells.yes.slice(0, 2)), []),
+        no: PACK.lessons.reduce((list, L) => list.concat(L.bells.no.slice(0, 2)), [])
+      },
       build: fromEach('build', 2),
       chains: PACK.lessons.map((L) => L.chains[0]),
       feedYes: PACK.lessons.reduce((list, L) => list.concat(L.feedYes.slice(0, 2)), []),

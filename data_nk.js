@@ -1361,6 +1361,7 @@ window.IR_DATA_NK = {
   "rhyme": 4,
   "check": 4,
   "hear": 3,
+  "bells": 3,
   "build": 3,
   "chain": 3,
   "scramble": 3,

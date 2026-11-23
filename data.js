@@ -684,6 +684,7 @@ window.IR_DATA = {
   "intro": 6,
   "listen": 6,
   "hear": 2,
+  "bells": 2,
   "build": 4,
   "feed": 3,
   "sentence": 3,
