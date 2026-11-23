@@ -973,7 +973,7 @@
       doneIcon: 'star',
       href: '#/foundation/letters/' + group.id + '/' + game.id
     }));
-    if (!/^(g1|g3|g4|g5)$/.test(group.id) || !IR.day1Flow) return older;
+    if (!/^(g1|g2|g3|g4|g5)$/.test(group.id) || !IR.day1Flow) return older;
     const ten = IR.day1Flow.GAMES.map((game) => ({
       id: game.id,
       key: 'd1-' + game.id,
@@ -1049,17 +1049,21 @@
         h('span', { class: 'll1mouthico', html: MOUTH }),
         h('p', null, 'My sound is ' + (L ? L.sound : ''))));
   }
+  function teacherCorner(group) {
+    if (!group || group.n >= 6) return null;
+    const teach = teamTeacher(group) || {};
+    return IR.teacherBox({ slides: teach.slides, files: teach.files, days: teach.days });
+  }
   /* Teacher shelf. The student page is groupPage. */
   function teamShelf(app, group) {
     IR.newScreen();
-    const teach = teamTeacher(group) || {};
     const base = '#/foundation/letters/' + group.id;
     const letters = lettersOf(group);
     app.append(h('div', { class: 'screen trailscreen unitpage u5menu llpage fs-group stepage ngpreview' },
       h('header', { class: 'uA-top' },
         IR.ui.pageNav('#/foundation'),
         h('h1', { class: 'uA-title' }, h('small', null, 'Team ' + group.n), 'Meet the Team'),
-        IR.teacherBox({ slides: teach.slides, files: teach.files, days: teach.days })),
+        teacherCorner(group)),
       IR.modeBar({
         note: false,
         labels: ['Introduction', 'Games', 'Read It'],
@@ -2491,13 +2495,12 @@
   }
   function menuScreen(app, group, up, title, small, plan) {
     IR.newScreen();
-    const teach = teamTeacher(group) || {};
     const board = group.id === 'g1' && String(title).indexOf('Team ') === 0 ? ' fsteam1' : '';
     app.append(h('div', { class: 'screen trailscreen unitpage unitA u5menu stepage fsmenu ngpreview' + board },
       h('header', { class: 'uA-top' },
         IR.ui.pageNav(up),
         h('h1', { class: 'uA-title' }, small ? h('small', null, small) : null, title),
-        IR.teacherBox({ slides: teach.slides, files: teach.files, days: teach.days })),
+        teacherCorner(group)),
       IR.modeBar(plan)));
     if (IR.teach) IR.teach.sync();
   }
@@ -2550,8 +2553,21 @@
   function groupPage(app, group) {
     const base = '#/foundation/letters/' + group.id;
     const nextId = group.letters.filter((id) => !letterDone(group, id))[0];
-    const sameAsTeam1 = /^(g1|g3|g4|g5)$/.test(group.id);
-    const lessons = sameAsTeam1
+    const sameAsTeam1 = /^(g1|g2|g3|g4|g5)$/.test(group.id);
+    const soonTeam = group.n >= 6;
+    const lessons = soonTeam
+      ? [
+        {
+          pick: true,
+          tone: 'student',
+          kicker: 'Student',
+          title: 'Independent Lesson',
+          note: 'Coming soon',
+          goLabel: 'Coming soon',
+          go: () => { Snd.stop(); }
+        }
+      ]
+      : (sameAsTeam1
       ? [
         {
           pick: true,
@@ -2574,19 +2590,19 @@
         note: letterDone(group, id) ? 'Done' : (id === nextId ? 'Up next' : ''),
         goLabel: 'Open lesson',
         go: () => { Snd.stop(); location.hash = base + '/lesson/' + id; }
-      }));
+      })));
     const phrase = storyLine(group);
     const games = teamGames(group);
-    const teamTitle = group.id === 'g1' ? 'Team 1: m s a t' : ('Team ' + group.n);
+    const teamTitle = TEAM_NAME[group.id] || ('Team ' + group.n);
     const deck = group.id === 'g1' ? '' : ((teamTeacher(group) || {}).slides || '');
     menuScreen(app, group, '#/foundation', teamTitle, 'Foundation Skills', {
       lesson: lessons,
       slides: deck,
       slideTitle: teamTitle,
       slideNote: 'Slideshow',
-      games: sameAsTeam1 ? null : games,
+      games: (sameAsTeam1 || soonTeam) ? null : games,
       gameRows: sameAsTeam1 ? team1GameRows(games) : null,
-      story: {
+      story: soonTeam ? null : {
         title: 'Read It',
         note: (sameAsTeam1 && group.id !== 'g1' && program && program.lessons)
           ? (((program.lessons.filter((row) => String(row.group).toLowerCase() === group.id)[0] || {}).sentences_today || [])[0] || phrase)
@@ -2970,20 +2986,21 @@
       images: 'materials/team1/slides/',
       days: [
         { label: 'Day 1', page: 1 },
-        { label: 'Day 2', page: 34 },
-        { label: 'Day 3', page: 91 },
-        { label: 'Day 4', page: 125 },
-        { label: 'Day 5', page: 157 }
+        { label: 'Day 2', page: 33 },
+        { label: 'Day 3', page: 88 },
+        { label: 'Day 4', page: 122 },
+        { label: 'Day 5', page: 152 }
       ]
     },
     g2: {
-      file: 'foundation/slides/Learn_the_Letters_Team2.pdf',
+      images: 'materials/team2/slides/',
+      pdf: 'foundation/slides/Learn_the_Letters_Team2.pdf',
       days: [
         { label: 'Day 1', page: 3 },
-        { label: 'Day 2', page: 28 },
-        { label: 'Day 3', page: 53 },
-        { label: 'Day 4', page: 93 },
-        { label: 'Team check', page: 93 }
+        { label: 'Day 2', page: 31 },
+        { label: 'Day 3', page: 59 },
+        { label: 'Day 4', page: 101 },
+        { label: 'Day 5', page: 137 }
       ]
     },
     g3: {
@@ -3022,7 +3039,9 @@
     g2: 'Team 2: p f i n',
     g3: 'Team 3: o d c u',
     g4: 'Team 4: g b e k',
-    g5: 'Team 5: h r l w'
+    g5: 'Team 5: h r l w',
+    g6: 'Team 6: j y x q',
+    g7: 'Team 7: v z'
   };
   function openSlides(team, page) {
     Snd.stop();
@@ -3040,6 +3059,7 @@
     const files = sheets[group.id]
       ? [{ title: 'Daily practice sheets', href: sheets[group.id] }]
       : [];
+    if (group.id === 'g2' && deck && deck.pdf) files.push({ title: 'Lesson slides (PDF)', href: deck.pdf });
     return { slides: deck ? '#/foundation/slides/' + group.id : '', files: files, days: (deck && deck.days) || [] };
   }
   function pdfLink(label, href) {
@@ -3365,7 +3385,7 @@
       introScreen(app, g);
       return true;
     }
-    const countLetter = /^#\/foundation\/letters\/(g[1345])\/play\/count\/([a-z])\/?$/.exec(hash);
+    const countLetter = /^#\/foundation\/letters\/(g[1-5])\/play\/count\/([a-z])\/?$/.exec(hash);
     if (countLetter && IR.day1Play) {
       const g = groupById(countLetter[1]);
       if (!g || !groupOpen(g) || g.letters.indexOf(countLetter[2]) < 0) return false;
@@ -3373,7 +3393,7 @@
       pack.countLetter = countLetter[2];
       return IR.day1Play(app, 'count', pack, '#/foundation/letters/' + g.id + '/lesson/' + countLetter[2]);
     }
-    const play10 = /^#\/foundation\/letters\/(g[1345])\/play\/([a-z]+)\/?$/.exec(hash);
+    const play10 = /^#\/foundation\/letters\/(g[1-5])\/play\/([a-z]+)\/?$/.exec(hash);
     if (play10 && IR.day1Play) {
       const g = groupById(play10[1]);
       if (!g || !groupOpen(g)) return false;

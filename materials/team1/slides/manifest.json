@@ -1,31 +1,31 @@
 {
   "title": "Team 1: m s a t",
-  "count": 170,
+  "count": 164,
   "days": [
     {
       "day": 1,
       "start": 1,
-      "end": 33
+      "end": 32
     },
     {
       "day": 2,
-      "start": 34,
-      "end": 90
+      "start": 33,
+      "end": 87
     },
     {
       "day": 3,
-      "start": 91,
-      "end": 124
+      "start": 88,
+      "end": 121
     },
     {
       "day": 4,
-      "start": 125,
-      "end": 156
+      "start": 122,
+      "end": 151
     },
     {
       "day": 5,
-      "start": 157,
-      "end": 170
+      "start": 152,
+      "end": 164
     }
   ],
   "slides": [
@@ -192,12 +192,6 @@
     "slide-161.jpg",
     "slide-162.jpg",
     "slide-163.jpg",
-    "slide-164.jpg",
-    "slide-165.jpg",
-    "slide-166.jpg",
-    "slide-167.jpg",
-    "slide-168.jpg",
-    "slide-169.jpg",
-    "slide-170.jpg"
+    "slide-164.jpg"
   ]
 }
