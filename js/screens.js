@@ -778,12 +778,14 @@
     const stories = ((plan.stories && plan.stories.length) ? plan.stories : (plan.story ? [plan.story] : []))
       .filter(Boolean)
       .map((item) => Object.assign({ big: true, doneIcon: 'star', note: item.note || 'Story Time' }, item));
+    const shells = [];
+    const shellNames = [];
+    if (lessons.length) { shells.push(kidShell(labels[0], lessons.every((item) => item.done))); shellNames.push(labels[0]); }
+    if (games.length) { shells.push(kidShell(labels[1], games.every((item) => item.done))); shellNames.push(labels[1]); }
+    if (stories.length) { shells.push(kidShell(labels[2], stories.every((item) => item.done))); shellNames.push(labels[2]); }
     return h('div', { class: 'ngpath' },
       plan.before || null,
-      h('div', { class: 'ngshells', role: 'group', 'aria-label': labels.join(', ') },
-        kidShell(labels[0], lessons.length > 0 && lessons.every((item) => item.done)),
-        kidShell(labels[1], games.length > 0 && games.every((item) => item.done)),
-        kidShell(labels[2], stories.length > 0 && stories.every((item) => item.done))),
+      shells.length ? h('div', { class: 'ngshells', role: 'group', 'aria-label': shellNames.join(', ') }, ...shells) : null,
       lessons.length ? h('section', { class: 'ngstep' },
         stepHead(1, labels[0]),
         h('div', { class: 'lessonrow' }, ...lessons.map((item) => lessonTab(item)))) : null,

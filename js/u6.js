@@ -580,16 +580,7 @@
     app.append(h('div', { class: 'screen trailscreen unitpage unitA stepage ngpreview' },
       h('header', { class: 'uA-top' }, IR.ui.pageNav('#/home'), h('h1', { class: 'uA-title' }, h('small', null, 'Unit 6'), 'Endings'), IR.teacherBox(u6Teach('hub'))),
       IR.modeBar({
-        lesson: lessons,
-        games: reviewCards(),
-        stories: PACK.lessons.map((L) => ({
-          title: L.storyTitle,
-          href: '#/u6/' + L.key + '/read',
-          img: IR.storyCovers[L.n],
-          alt: L.storyTitle,
-          big: true,
-          note: 'Lesson ' + IR.kidLesson(L.n)
-        }))
+        lesson: lessons
       })));
   }
   function reviewMenu(app) {
