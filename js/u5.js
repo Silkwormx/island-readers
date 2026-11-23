@@ -508,7 +508,12 @@
     function runNgnk(ctx) {
       ctx.setInstr(N.prompts.ngnk.text, 'ngnk');
       pickRounds(ctx, N.ngnk, (R) => { const slot = h('span', { class: 'chunkslot' }, '?');
-        const buttons = N.opts.map(([e, lab], k) => { const el = h('button', { class: 'choice endchoice', type: 'button', 'data-w': e, style: 'color:' + (k ? NKCOL : '#0E8584') }, lab); el.addEventListener('click', () => { if (e === R.answer) { slot.textContent = e || '\u00a0'; slot.style.color = el.style.color; } }); return { word: e, ok: e === R.answer, el }; });
+        const buttons = N.opts.map(([e, lab], k) => {
+          const noE = lab === 'no e';
+          const el = h('button', { class: 'choice endchoice' + (noE ? ' noe-choice' : ''), type: 'button', 'data-w': e, 'aria-label': lab, style: noE ? '' : 'color:' + (k ? NKCOL : '#0E8584') }, noE ? IR.noEMark() : lab);
+          el.addEventListener('click', () => { if (e === R.answer) { slot.textContent = e || '\u00a0'; slot.style.color = noE ? '#E23B2F' : el.style.color; } });
+          return { word: e, ok: e === R.answer, el };
+        });
         return { body: h('div', null, h('div', { class: 'wordframe' }, h('span', { class: 'onset' }, R.onset), slot), h('div', { class: 'choices two' }, ...buttons.map((b) => b.el))), buttons }; });
     }
     /* 6. Heart words */
@@ -598,9 +603,9 @@
       readBtn.addEventListener('click', () => { S.reads[KEY] = Math.min(3, (S.reads[KEY] || 0) + 1); IR.save(); renderReads(); setLbl(); });
       function setPage(i) { p = i; reached = Math.max(reached, p); picEl.src = pages[p].img; wordsInto(sentEl, pages[p]); setLbl(); ctx.progress(reached / (pages.length - 1)); }
       function play() { const pg = pages[p]; const ws = $$('.w', sentEl); return Snd.play(pg.audio, { onTime: hl(pg, ws) }).then((ok) => { ws.forEach((e) => e.classList.remove('hl', 'read')); if (ok) { heard.add(p); setLbl(); } }); }
-      next.addEventListener('click', () => { if (p < pages.length - 1) { setPage(p + 1); play(); } else { Snd.stop(); if (readIt()) ctx.finish(); else location.hash = BASE + '/comp'; } });
+      next.addEventListener('click', () => { Snd.stop(); if (p < pages.length - 1) setPage(p + 1); else if (readIt()) ctx.finish(); else location.hash = BASE + '/comp'; });
       ctx.stage.append(h('div', { class: 'activity story readit' }, h('div', { class: 'panelwrap' }, picEl), h('div', { class: 'sentrow' }, spk, sentEl), h('div', { class: 'row' }, next), h('div', { class: 'row' }, readBtn, reads)));
-      renderReads(); setPage(0); Snd.play(AU.p('read'));
+      renderReads(); setPage(0);
     }
     /* 9. Story Check (reusable comprehension type): question read aloud, 3 picture+word answers, gentle hint with the story page, no penalties */
     IR.runComprehension = function (ctx, items, opts) {

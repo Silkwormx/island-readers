@@ -131,6 +131,17 @@
   };
 
   /* Index of this question inside its category (same type), 1-based. */
+  /* Classroom number badge. Same orange circle on bells, word tiles, and chain choices. */
+  IR.numBadge = function (n) {
+    return h('span', { class: 'irnum', 'aria-hidden': 'true' }, String(n));
+  };
+  /* Silent e: the "no e" choice is a red box with a bold X over the letter e. */
+  IR.noEMark = function () {
+    return h('span', { class: 'noe', role: 'img', 'aria-label': 'no e' },
+      h('span', { class: 'noe-e' }, 'e'),
+      h('span', { class: 'noe-x', 'aria-hidden': 'true' }));
+  };
+
   IR.catCount = function (items, q, keyFn) {
     const key = keyFn(items[q]);
     const same = [];
@@ -229,7 +240,7 @@
         const b = h('button', { class: 'bellbtn', type: 'button', 'data-w': w, 'aria-label': 'Bell ' + n + ', ' + w },
           h('span', { class: 'bellface' },
             h('img', { src: 'img/bell_unlit.png', alt: '' }),
-            h('span', { class: 'bellnum', 'aria-hidden': 'true' }, n)),
+            h('span', { class: 'bellnum irnum', 'aria-hidden': 'true' }, n)),
           h('span', { class: 'bellword' }, color(w)));
         b.addEventListener('click', () => tap(w, b, status, row));
         row.append(b);

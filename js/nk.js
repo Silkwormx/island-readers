@@ -321,9 +321,9 @@
     readBtn.addEventListener('click', () => { S.reads.nk = Math.min(3, (S.reads.nk || 0) + 1); IR.save(); renderReads(); setLbl(); });
     function setPage(i) { p = i; reached = Math.max(reached, p); picEl.src = pages[p].img; wordsInto(sentEl, pages[p]); setLbl(); ctx.progress(reached / (pages.length - 1)); }
     function play() { const pg = pages[p]; const ws = $$('.w', sentEl); return Snd.play(pg.audio, { onTime: hl(pg, ws) }).then((ok) => { ws.forEach((e) => e.classList.remove('hl', 'read')); if (ok) { heard.add(p); setLbl(); } }); }
-    next.addEventListener('click', () => { if (p < pages.length - 1) { setPage(p + 1); play(); } else { Snd.stop(); if (readIt()) ctx.finish(); else location.hash = '#/nk/comp'; } });
+    next.addEventListener('click', () => { Snd.stop(); if (p < pages.length - 1) setPage(p + 1); else if (readIt()) ctx.finish(); else location.hash = '#/nk/comp'; });
     ctx.stage.append(h('div', { class: 'activity story readit' }, h('div', { class: 'panelwrap' }, picEl), h('div', { class: 'sentrow' }, spk, sentEl), h('div', { class: 'row' }, next), h('div', { class: 'row' }, readBtn, reads)));
-    renderReads(); setPage(0); Snd.play(AU.p('read'));
+    renderReads(); setPage(0);
   }
   /* 9. Story Check (reusable comprehension type): question read aloud, 3 picture+word answers, gentle hint with the story page, no penalties */
   IR.runComprehension = function (ctx, items, opts) {

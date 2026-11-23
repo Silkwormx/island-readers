@@ -105,22 +105,26 @@
         ? ['s', 'es', 'ed', 'ing', 'ng', 'nk', 'sh', 'ch', 'th'].filter((x) => ending.test(x))
         : letters;
       const others = shuffle(graphemes.filter((x) => x !== need && b.indexOf(x) < 0)).slice(0, 3);
+      const clip = changeSrc(from, to);
       const pool = h('div', { class: 'chainopts' });
-      shuffle([need].concat(others)).forEach((t) => {
-        const btn = h('button', { class: 'wtile chainpick', type: 'button', 'data-t': t }, t);
+      const spoken = clip;
+      shuffle([need].concat(others)).forEach((t, i) => {
+        const btn = h('button', { class: 'wtile chainpick', type: 'button', 'data-t': t, 'aria-label': (i + 1) + ', ' + t },
+          IR.numBadge(i + 1), h('span', { class: 'chainletter' }, t));
         btn.addEventListener('pointerup', () => pick(t, btn));
         btn.addEventListener('click', () => pick(t, btn));
         pool.append(btn);
       });
+      const again = h('button', { class: 'btn big', type: 'button', onclick: () => Snd.play(spoken, { manual: true }) }, icon('replay'), 'Hear it again');
       stage.append(h('div', { class: 'activity chainact' },
         h('p', { class: 'chainfrom' }, from),
         h('div', { class: 'chainslots' }, ...slotEls),
+        h('div', { class: 'row center' }, again),
         pool,
         status));
       if (ctx.armReveal) ctx.armReveal(need, (root) => root.querySelector('[data-t="' + String(need).replace(/"/g, '') + '"]'));
       ctx.setBack(() => { if (r > 1) { r--; round(); return true; } modelStep(); return true; });
       ctx.setNext(() => { if (r < words.length - 1) { r++; round(); return true; } return false; });
-      const clip = changeSrc(from, to);
       if (!ruled) { ruled = true; IR.sayItem(ctx, rule, clip); }
       else Snd.play(clip);
 
