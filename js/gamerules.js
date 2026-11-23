@@ -224,9 +224,13 @@
       ctx.stage.innerHTML = '';
       const status = h('p', { class: 'status', 'aria-live': 'polite' }, '\u00a0');
       const row = h('div', { class: 'bellrow trio' });
-      shuffle(round.bells.slice()).forEach((w) => {
-        const b = h('button', { class: 'bellbtn', type: 'button', 'data-w': w, 'aria-label': 'Bell: ' + w },
-          h('img', { src: 'img/bell_unlit.png', alt: '' }), h('span', null, color(w)));
+      shuffle(round.bells.slice()).forEach((w, i) => {
+        const n = String(i + 1);
+        const b = h('button', { class: 'bellbtn', type: 'button', 'data-w': w, 'aria-label': 'Bell ' + n + ', ' + w },
+          h('span', { class: 'bellface' },
+            h('img', { src: 'img/bell_unlit.png', alt: '' }),
+            h('span', { class: 'bellnum', 'aria-hidden': 'true' }, n)),
+          h('span', { class: 'bellword' }, color(w)));
         b.addEventListener('click', () => tap(w, b, status, row));
         row.append(b);
       });
