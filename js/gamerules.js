@@ -213,7 +213,7 @@
     let r = 0; let locked = false; let current = '';
     const { h, sleep, shuffle, icon, Snd, A } = IR;
     function speak(manual) { return Snd.play(audio(current), manual ? { manual: true } : {}); }
-    if (ctx.setInstr) ctx.setInstr('Ring the bell you hear.', function () { return speak(true); });
+    if (ctx.setInstr) ctx.setInstr('');
     function show() {
       if (r >= rounds.length) return done();
       const round = rounds[r];

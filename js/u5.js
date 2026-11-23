@@ -28,8 +28,10 @@
       : key === 'hub'
         ? 'materials/unit5/Unit5_Teacher_Led_Checks_Combined.pdf'
         : 'materials/unit5/Lesson5.1_Teacher_Led_Checks.pdf';
+    const slides = key === 'u53' ? '#/teachers/slides/tricky' : (key === 'u51' ? '#/teachers/slides/u5' : '');
     return {
-      slides: key === 'u53' ? '#/teachers/slides/tricky' : '#/teachers/slides/u5',
+      slides: slides,
+      hideSlides: !slides,
       days: key === 'u53'
         ? [1, 2, 3].map((n) => ({ label: 'Day ' + n }))
         : (key === 'u51' ? [{ label: 'Day 1' }] : []),

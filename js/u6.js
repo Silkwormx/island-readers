@@ -496,7 +496,7 @@
       { title: 'Daily practice sheets', href: 'materials/unit6/Unit6_Teacher_Led_Student_Sheets.pdf' },
       { title: 'Teacher pack', href: pack }
     ];
-    if (!spec) return { files: files };
+    if (!spec) return { files: files, hideSlides: true };
     files.push({ title: 'Word List', href: spec.word });
     return {
       slides: spec.slides,

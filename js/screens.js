@@ -716,7 +716,7 @@
         else window.open(plan.pdf, '_blank', 'noopener');
       });
       wrap.append(slides);
-    } else wrap.append(soonBox('Teacher Slides'));
+    } else if (!plan.hideSlides) wrap.append(soonBox('Teacher Slides'));
     if (!files.length) {
       wrap.append(soonBox('Printables'));
       return wrap;
