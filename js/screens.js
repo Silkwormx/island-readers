@@ -465,32 +465,12 @@
         const root = app.querySelector('.gridhome.bellspeek');
         const bells = root && root.querySelector('.bellgrid');
         if (!root || !bells || !root.isConnected) return;
-        const cols = 3;
-        const rows = 1.5;
-        bells.style.gridTemplateColumns = 'repeat(' + cols + ',minmax(0,1fr))';
-        const pics = [...bells.querySelectorAll('.tpic')];
-        pics.forEach((pic) => { pic.style.aspectRatio = 'auto'; });
-        const bodies = [...bells.querySelectorAll('.tcard')].slice(0, cols * 2).map((card) => {
-          const body = card.querySelector('.tbody');
-          return body ? body.offsetHeight : 0;
-        });
-        const bodyH = bodies.length ? Math.max.apply(null, bodies) : 72;
-        const gap = parseFloat(getComputedStyle(bells).rowGap) || 8;
-        const slot = bells.closest('.bellslot');
-        const narrow = window.innerWidth < 1000;
-        const top = bells.getBoundingClientRect().top;
-        let space = window.innerHeight - top - 16;
-        if (narrow && slot && slot.clientHeight > 160) space = slot.clientHeight - 8;
-        else if (space < window.innerHeight * 0.55) space = window.innerHeight - 4;
-        const rowH = (space - gap * (rows - 1)) / rows;
-        const picH = Math.max(64, Math.round(rowH - bodyH - 8));
-        const cardH = Math.floor(rowH);
-        pics.forEach((pic) => { pic.style.height = picH + 'px'; });
-        bells.querySelectorAll('.tcard').forEach((card) => {
-          card.style.height = cardH + 'px';
-          card.style.minHeight = cardH + 'px';
-          card.style.boxSizing = 'border-box';
-          card.style.overflow = 'hidden';
+        bells.style.gridTemplateColumns = '';
+        bells.querySelectorAll('.tpic, .tcard').forEach((el) => {
+          el.style.height = '';
+          el.style.minHeight = '';
+          el.style.aspectRatio = '';
+          el.style.overflow = '';
         });
     };
     /* Nov 3 2026: the whole left sidebar (About, Start here, Practice) stays in one spot while the tiles scroll (wide layouts only). */
