@@ -1,4 +1,4 @@
-/* nk activities that mirror the ng unit (Nov 2 2026): Hear and Pick, Ring every bell and learn its sounds, Build-a-Word, Word Chains,
+/* nk activities that mirror the ng unit (Nov 2 2026): Hear and Pick, Build-a-Word, Word Chains,
    Scrambled Letters, Feed Zip, Sentence Bridge. Whole-word and whole-sentence audio only; no isolated sounds.
    Loaded before nk.js, which places them in the unit order. */
 (function () {
@@ -41,33 +41,6 @@
       stage.append(h('div', { class: 'activity' }, spk, grid, status)); IR.sayItem(ctx, 'audio/nk_p_hear.mp3', W(R.word));
     }
     round();
-  }
-
-  function bells(ctx) {
-    const stage = ctx.stage; const words = N.bells; const order = shuffle(words); let r = 0; const lit = new Set();
-    ctx.setInstr('Read the word out loud. Then tap the bell with the same word.', 'bells');
-    const row = h('div', { class: 'bellrow' }); const card = h('div', { class: 'bellcard' });
-    const status = h('p', { class: 'status', 'aria-live': 'polite' }, '\u00a0');
-    words.forEach((w) => { const b = h('button', { class: 'bellbtn', type: 'button', 'aria-label': 'Bell: ' + w }, h('img', { src: 'img/bell_unlit.png', alt: '' }), h('span', null, w)); b.addEventListener('click', () => tapBell(w, b)); row.append(b); });
-    const hearB = h('button', { class: 'btn big', type: 'button', onclick: () => say(order[r]) }, icon('speaker'), 'Hear it');
-    stage.append(h('div', { class: 'activity bellgame' }, h('div', { class: 'bellscene', style: 'background-image:url(img/ob_scene.jpg)' }), row, card,
-      h('p', { class: 'small' }, 'nk is glued: n and k stay together at the end.'), h('div', { class: 'row center' }, hearB), status));
-    const show = () => { ctx.progress(lit.size / words.length); if (ctx.count) ctx.count(r + 1, words.length); card.innerHTML = ''; card.append(h('span', { class: 'bigword' }, colorNk(order[r]))); status.textContent = '\u00a0'; };
-    async function tapBell(w, b) {
-      if (lit.has(w)) { say(w); return; }
-      if (w !== order[r]) {
-        ctx.miss();
-        const stepName = await IR.coachMiss({ key: 'nk-bell-' + r, wrongEl: b, correctEl: () => row.querySelector('[aria-label="Bell: ' + order[r] + '"]'), statusEl: status, replay: () => say(order[r]) });
-        if (stepName === 'model') IR.againLater(order, r);
-        return;
-      }
-      lit.add(w); b.classList.add('lit'); b.querySelector('img').src = 'img/bell_lit.png'; status.textContent = w + '! The bell lights up.';
-      await ding(w); if (!ctx.scr.ok()) return; r++;
-      if (r >= order.length) { ctx.progress(1); status.textContent = 'All the bells are lit!'; await Snd.play(A.sfx.gong); if (ctx.scr.ok()) ctx.finish(); return; }
-      await sleep(300); if (ctx.scr.ok()) show();
-    }
-    ctx.setNext(() => { if (r < order.length - 1) { Snd.stop(); r++; show(); return true; } return false; });
-    show(); Snd.play('audio/nk_p_bells.mp3');
   }
 
   function build(ctx) {
@@ -196,5 +169,5 @@
     });
   }
 
-  IR.nkActs = { hear, bells, build, chain, scramble, feed, sentence };
+  IR.nkActs = { hear, build, chain, scramble, feed, sentence };
 })();

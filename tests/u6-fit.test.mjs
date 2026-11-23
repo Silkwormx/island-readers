@@ -76,7 +76,7 @@ test('Unit 6 word tiles do not overflow at phone, tablet, and smartboard widths'
       });
       return bad;
     })()`);
-    const routes = ['#/u6/u61/hear', '#/u6/u61/bells', '#/u6/u61/sentence', '#/u6/u62/hear', '#/u6/u62/sentence', '#/u6/u63/hear', '#/u6/u61/feed', '#/u6/u61/chain'];
+    const routes = ['#/u6/u61/hear', '#/u6/u61/build', '#/u6/u61/sentence', '#/u6/u62/hear', '#/u6/u62/sentence', '#/u6/u63/hear', '#/u6/u61/feed', '#/u6/u61/chain'];
     const widths = [375, 768, 1280];
     const problems = [];
     for (const width of widths) {
