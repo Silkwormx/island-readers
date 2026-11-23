@@ -329,7 +329,6 @@
       if (ctx.setNextLabel) ctx.setNextLabel('Next');
       if (ctx.showNav) ctx.showNav(true);
       if (IR.pinStoryNav) IR.pinStoryNav(null);
-      Snd.play(P('heart'));
     }
     function showPages() {
       p = 0; st.innerHTML = '';
@@ -343,7 +342,6 @@
         pic.src = pages[p].img; sent.textContent = pages[p].text;
         label.textContent = 'Page ' + (p + 1) + ' of ' + pages.length;
         ctx.progress(p / pages.length);
-        Snd.play(pageAudio());
       }
       const next = h('button', { class: 'btn big primary', type: 'button', onclick: () => { if (p < pages.length - 1) { p++; show(); } else ctx.finish(); } }, 'Next page', icon('next'));
       st.append(h('div', { class: 'activity story' }, h('div', { class: 'panelwrap' }, pic), h('div', { class: 'sentrow' }, replay, sent), label, h('div', { class: 'row center' }, next)));

@@ -75,7 +75,9 @@
       const status = h('p', { class: 'status', 'aria-live': 'polite' }, '\u00a0');
       const zip = h('div', { class: 'fz-zip', 'aria-hidden': 'true' },
         h('img', { class: 'fz-zipimg', src: 'img/zipA.webp', alt: '' }),
-        h('span', { class: 'fz-mouth' }, ''));
+        h('span', { class: 'fz-cheek l' }), h('span', { class: 'fz-cheek r' }),
+        h('span', { class: 'fz-mouth' }),
+        h('span', { class: 'fz-spit' }));
       const replay = h('button', { class: 'btn big primary fz-replay', type: 'button', onclick: () => say(w) }, icon('replay'), 'Hear the word');
       const field = h('div', { class: 'fz-field' });
       const streak = h('p', { class: 'fz-streak' }, 'In a row: ' + row);
@@ -105,8 +107,9 @@
 
       async function choose(choice, b) {
         if (locked || my !== token || b.classList.contains('tried') || b.dataset.hit === '1') return;
-        b.dataset.hit = '1';
-        if (choice === w) {
+          b.dataset.hit = '1';
+          zip.classList.remove('yum', 'oops');
+          if (choice === w) {
           locked = true;
           row++;
           b.classList.add('right', 'feeding');
@@ -134,6 +137,8 @@
           setTimeout(advance, 200);
         } else {
           row = 0;
+          zip.classList.add('oops');
+          setTimeout(() => { if (zip.isConnected) zip.classList.remove('oops'); }, 1000);
           if (ctx.miss) ctx.miss();
           const stepName = await IR.coachMiss({ key: 'feed-' + r, wrongEl: b, correctEl: () => field.querySelector('[data-yes="1"], [data-w="' + w + '"]'), statusEl: status, replay: () => say(w) });
           if (stepName === 'model') IR.againLater(targets, r);

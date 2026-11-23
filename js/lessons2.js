@@ -99,9 +99,9 @@
         } }).then((ok) => { ws.forEach((e) => e.classList.remove('hl', 'read')); if (ok && pg.n != null) { heard.add(pg.n); setNextLabel(); } return ok; });
       }
       next.addEventListener('click', async () => {
-        auto = false;
-        if (p < pages.length - 1) { setPage(p + 1); playPage(false); }
-        else { Snd.stop(); if (!ctx.scr.ok()) return; if (readIt()) { ctx.progress(1); ctx.finish(); } else location.hash = '#/check'; }   /* not read yet: Next just skips ahead, no star */
+        auto = false; Snd.stop();
+        if (p < pages.length - 1) setPage(p + 1);
+        else { if (!ctx.scr.ok()) return; if (readIt()) { ctx.progress(1); ctx.finish(); } else location.hash = '#/check'; }   /* not read yet: Next just skips ahead, no star */
       });
       allBtn.addEventListener('click', async () => {
         auto = true; setPage(0);
@@ -112,7 +112,6 @@
         h('div', { class: 'panelwrap' }, picEl), h('div', { class: 'sentrow' }, spk, sentEl),
         h('div', { class: 'row' }, allBtn, next), h('div', { class: 'row' }, readBtn, reads)));
       renderReads(); setPage(0);
-      Snd.seq([A.prompt('p_story')], 100).then(() => {});
     }
   });
 })();
