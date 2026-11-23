@@ -40,7 +40,7 @@
     { id: 'rhyme', title: 'Rhyme Time', group: 'extra', run: runRhyme, color: '#C2408A' }
   ];
   /* one-line tips for grown-ups, in the same style as the ng unit */
-  const TIPS = { hear: 'Let your child listen first, then point.', bells: 'Ask your child to read the word out loud first.', build: 'Say the word slowly together.', chain: 'Only one letter changes each time.', scramble: 'Say the word slowly, then find each part.', feed: 'Ask your child to read the word out loud, then feed Zip.', sentence: 'Read the sentence together at the end.', read: 'Reading it 3 times builds fluency.', ngnk: 'Say the word slowly. Listen for the k at the end.', check: 'Let your child work alone. Just cheer.', comp: 'Optional extra. Look back at the story page together.', rhyme: 'Optional extra. Read the poem together for fun.' };
+  const TIPS = { hear: 'Let your child listen first, then point.', bells: 'Frill says a word. Ring the bell with that word.', build: 'Say the word slowly together.', chain: 'Only one letter changes each time.', scramble: 'Say the word slowly, then find each part.', feed: 'Ask your child to read the word out loud, then feed Zip.', sentence: 'Read the sentence together at the end.', read: 'Reading it 3 times builds fluency.', ngnk: 'Say the word slowly. Listen for the k at the end.', check: 'Let your child work alone. Just cheer.', comp: 'Optional extra. Look back at the story page together.', rhyme: 'Optional extra. Read the poem together for fun.' };
   IR.nkTips = TIPS;
   const pid = (s) => 'nk_' + s.id;
   function sections() {
@@ -109,7 +109,7 @@
     const ctx = {
       scr, stage, miss() { mistakes++; },
       progress(f) { const v = Math.round(((idx + Math.max(0, Math.min(1, f))) / STEPS.length) * 100); fill.style.width = v + '%'; bar.setAttribute('aria-valuenow', v); },
-      setInstr(text, p) { instrBox.innerHTML = ''; instrBox.style.display = text ? '' : 'none'; if (text) instrBox.append(speakerBtn(() => Snd.play(AU.p(p)), 'Hear the directions'), h('span', { class: 'itext' }, text)); },
+      setInstr(text, p) { instrBox.innerHTML = ''; instrBox.style.display = text ? '' : 'none'; if (text) { const play = typeof p === 'function' ? p : () => Snd.play(AU.p(p)); instrBox.append(speakerBtn(play, 'Hear the directions'), h('span', { class: 'itext' }, text)); } },
       setBack(fn) { backH = fn; }, setNext(fn) { nextH = fn; },
       goBack() { Snd.stop(); if (backH && backH()) return; location.hash = idx > 0 ? '#/nk/' + STEPS[idx - 1].id : '#/nk'; },
       goNext() { Snd.stop(); if (nextH && nextH()) return; location.hash = idx < STEPS.length - 1 ? '#/nk/' + STEPS[idx + 1].id : '#/nk'; },
