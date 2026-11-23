@@ -526,7 +526,7 @@
     { id: 'activities', title: 'Activities', sub: 'Play as often as you like', ids: ['hear', 'bells', 'build', 'chain', 'scramble', 'feed', 'sentence', 'story', 'check'] }];
   const OPTIONAL = [];   /* Nov 4 2026: Feed Zip replaced Trace Trail */
   /* one-line tips for grown-ups, shown small under each activity */
-  const TIPS = { hear: 'Let your child listen first, then point.', bells: 'Ask your child to read the word out loud first.', build: 'Say the word slowly together.', chain: 'Only one letter changes each time.', scramble: 'Say the word slowly, then find each part.', feed: 'Ask your child to read the word out loud, then feed Zip.', sentence: 'Read the sentence together at the end.', story: 'Reading it 3 times builds fluency.', check: 'Let your child work alone. Just cheer.' };   /* optional extra: not needed to finish the unit, not counted in the total time */
+  const TIPS = { hear: 'Let your child listen first, then point.', bells: 'Frill says a word. Ring the bell with that word.', build: 'Say the word slowly together.', chain: 'Only one letter changes each time.', scramble: 'Say the word slowly, then find each part.', feed: 'Ask your child to read the word out loud, then feed Zip.', sentence: 'Read the sentence together at the end.', story: 'Reading it 3 times builds fluency.', check: 'Let your child work alone. Just cheer.' };   /* optional extra: not needed to finish the unit, not counted in the total time */
   const GICON = { lesson: 'book', story: 'speaker', activities: 'play' };
   function unitSections() {
     const items = LESSONS.map((L, i) => ({ id: L.id, title: L.title, blurb: L.blurb, href: '#/lesson/' + (i + 1), color: L.color }))
@@ -716,7 +716,7 @@
         else window.open(plan.pdf, '_blank', 'noopener');
       });
       wrap.append(slides);
-    } else wrap.append(soonBox('Teacher Slides'));
+    } else if (!plan.hideSlides) wrap.append(soonBox('Teacher Slides'));
     if (!files.length) {
       wrap.append(soonBox('Printables'));
       return wrap;
@@ -778,12 +778,14 @@
     const stories = ((plan.stories && plan.stories.length) ? plan.stories : (plan.story ? [plan.story] : []))
       .filter(Boolean)
       .map((item) => Object.assign({ big: true, doneIcon: 'star', note: item.note || 'Story Time' }, item));
+    const shells = [];
+    const shellNames = [];
+    if (lessons.length) { shells.push(kidShell(labels[0], lessons.every((item) => item.done))); shellNames.push(labels[0]); }
+    if (games.length) { shells.push(kidShell(labels[1], games.every((item) => item.done))); shellNames.push(labels[1]); }
+    if (stories.length) { shells.push(kidShell(labels[2], stories.every((item) => item.done))); shellNames.push(labels[2]); }
     return h('div', { class: 'ngpath' },
       plan.before || null,
-      h('div', { class: 'ngshells', role: 'group', 'aria-label': labels.join(', ') },
-        kidShell(labels[0], lessons.length > 0 && lessons.every((item) => item.done)),
-        kidShell(labels[1], games.length > 0 && games.every((item) => item.done)),
-        kidShell(labels[2], stories.length > 0 && stories.every((item) => item.done))),
+      shells.length ? h('div', { class: 'ngshells', role: 'group', 'aria-label': shellNames.join(', ') }, ...shells) : null,
       lessons.length ? h('section', { class: 'ngstep' },
         stepHead(1, labels[0]),
         h('div', { class: 'lessonrow' }, ...lessons.map((item) => lessonTab(item)))) : null,
@@ -865,7 +867,8 @@
       progress(f) { prog = Math.max(0, Math.min(1, f)); setBar(); },
       setInstr(text, pid) {
         instrBox.innerHTML = ''; if (!text) { instrBox.style.display = 'none'; return; } instrBox.style.display = '';
-        instrBox.append(IR.speakerBtn(() => Snd.play(A.prompt(pid.replace(/^p_/, 'p_'))), 'Hear the directions'), h('span', { class: 'itext' }, text));
+        const play = typeof pid === 'function' ? pid : () => Snd.play(A.prompt(String(pid).replace(/^p_/, 'p_')));
+        instrBox.append(IR.speakerBtn(play, 'Hear the directions'), h('span', { class: 'itext' }, text));
       },
       finish() { complete(); },
       /* Back: a lesson registers setBack(fn) (fn returns true if it stepped back inside the lesson). Otherwise Back goes to the previous lesson, or the trail from the first one. */

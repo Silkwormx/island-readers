@@ -48,7 +48,7 @@
   const TIPS = {
     meet: 'Model the ending sound. Never say the letter names.',
     hear: 'Let your child listen first, then call the number.',
-    bells: '1 means the word has the ending. 2 means it does not.',
+    bells: 'Frill says a word. Ring the bell with that word.',
     build: 'Hear the word. Pick the ending that was added.',
     chain: 'The glowing letter is the one that changes.',
     feed: 'Listen, then call the number of the word.',
@@ -174,39 +174,22 @@
     return 's';
   }
 
+  function lessonBellWords(L) {
+    const out = [];
+    function add(w) { if (w) out.push(w); }
+    (L.hear || []).forEach((x) => { add(x.word); (x.choices || []).forEach(add); });
+    if (L.bells) { (L.bells.yes || []).forEach(add); (L.bells.no || []).forEach(add); }
+    (L.build || []).forEach((x) => { add(x.word); add(x.base); });
+    (L.chains || []).forEach((row) => (row || []).forEach(add));
+    (L.feedYes || []).forEach(add); (L.feedNo || []).forEach(add);
+    (L.fishYes || []).forEach(add); (L.fishNo || []).forEach(add);
+    (L.rhyme || []).forEach((x) => { add(x.prompt); add(x.answer); (x.choices || []).forEach(add); });
+    (L.check || []).forEach((x) => { add(x.word); add(x.answer); (x.choices || []).forEach(add); });
+    if (L.example) { add(L.example.word); add(L.example.base); }
+    return out;
+  }
   function runBells(ctx, L) {
-    const items = shuffle(L.bells.yes.map((w) => ({ w, yes: true })).concat(L.bells.no.map((w) => ({ w, yes: false }))));
-    let r = 0; const st = ctx.stage;
-    ctx.setInstr('Does this word have the ending? Listen first. Answer 1 for yes, 2 for no.', 'yesno');
-    function round() {
-      const it = items[r]; ctx.progress(r / items.length); if (ctx.count) ctx.count(r + 1, items.length); st.innerHTML = '';
-      let locked = false;
-      const status = h('p', { class: 'status' }, 'Listen.');
-      const word = h('p', { class: 'bigword yn-secret' }, '\u00a0');
-      const reveal = () => { word.classList.remove('yn-secret'); word.textContent = ''; word.append(colorEnd(it.w)); };
-      const grid = h('div', { class: 'choices two yn-row' });
-      [['yes', 'Yes', 'yn yn-yes'], ['no', 'No', 'yn yn-no']].forEach(([id, lab, cls]) => {
-        const b = h('button', { class: 'choice ' + cls, type: 'button', 'data-w': id }, lab);
-        b.addEventListener('click', async () => {
-          if (locked) return;
-          const ok = (id === 'yes') === it.yes;
-          reveal();
-          if (ok) { locked = true; b.classList.add('right'); status.textContent = 'Yes. ' + it.w + '.'; await ding(it.w); if (!ctx.scr.ok()) return; r++; if (r >= items.length) ctx.finish(); else round(); }
-          else {
-            ctx.miss();
-            const yesBtn = grid.querySelector('[data-w="' + (it.yes ? 'yes' : 'no') + '"]');
-            const stepName = await IR.coachMiss({ key: 'u6-bell-' + r, wrongEl: b, correctEl: yesBtn, statusEl: status, replay: () => say(it.w) });
-            if (stepName === 'model') IR.againLater(items, r);
-          }
-        });
-        grid.append(b);
-      });
-      st.append(h('div', { class: 'activity' }, word, speakerBtn(() => say(it.w), 'Hear the word'), grid, status));
-      IR.sayItem(ctx, P('yesno'), W(it.w));
-    }
-    ctx.setNext(() => { if (r < items.length - 1) { r++; round(); return true; } return false; });
-    ctx.setBack(() => { if (r > 0) { r--; round(); return true; } return false; });
-    round();
+    IR.ringBells(ctx, { words: lessonBellWords(L), audio: (w) => W(w), color: colorEnd });
   }
 
   function runBuild(ctx, L) {
@@ -513,7 +496,7 @@
       { title: 'Daily practice sheets', href: 'materials/unit6/Unit6_Teacher_Led_Student_Sheets.pdf' },
       { title: 'Teacher pack', href: pack }
     ];
-    if (!spec) return { files: files };
+    if (!spec) return { files: files, hideSlides: true };
     files.push({ title: 'Word List', href: spec.word });
     return {
       slides: spec.slides,
@@ -580,16 +563,7 @@
     app.append(h('div', { class: 'screen trailscreen unitpage unitA stepage ngpreview' },
       h('header', { class: 'uA-top' }, IR.ui.pageNav('#/home'), h('h1', { class: 'uA-title' }, h('small', null, 'Unit 6'), 'Endings'), IR.teacherBox(u6Teach('hub'))),
       IR.modeBar({
-        lesson: lessons,
-        games: reviewCards(),
-        stories: PACK.lessons.map((L) => ({
-          title: L.storyTitle,
-          href: '#/u6/' + L.key + '/read',
-          img: IR.storyCovers[L.n],
-          alt: L.storyTitle,
-          big: true,
-          note: 'Lesson ' + IR.kidLesson(L.n)
-        }))
+        lesson: lessons
       })));
   }
   function reviewMenu(app) {
@@ -612,7 +586,7 @@
     const ctx = {
       scr, stage, miss() { mistakes++; },
       progress(f) { fill.style.width = Math.round(((idx + Math.max(0, Math.min(1, f))) / STEPS.length) * 100) + '%'; },
-      setInstr(text, p) { instrBox.innerHTML = ''; if (!text) { instrBox.style.display = 'none'; return; } instrBox.style.display = ''; instrBox.append(speakerBtn(() => { if (p) Snd.play(P(p)); }, 'Hear the directions'), h('span', { class: 'itext' }, text)); },
+      setInstr(text, p) { instrBox.innerHTML = ''; if (!text) { instrBox.style.display = 'none'; return; } instrBox.style.display = ''; const play = typeof p === 'function' ? p : () => { if (p) Snd.play(P(p)); }; instrBox.append(speakerBtn(play, 'Hear the directions'), h('span', { class: 'itext' }, text)); },
       setBack(fn) { backH = fn; }, setNext(fn) { nextH = fn; },
       setNextLabel(t) { navApi.label(t); },
       showNav(on) { nav.classList.toggle('nonext', on === false); if (on === false) nextBtn.hidden = true; },

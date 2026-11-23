@@ -28,8 +28,10 @@
       : key === 'hub'
         ? 'materials/unit5/Unit5_Teacher_Led_Checks_Combined.pdf'
         : 'materials/unit5/Lesson5.1_Teacher_Led_Checks.pdf';
+    const slides = key === 'u53' ? '#/teachers/slides/tricky' : (key === 'u51' ? '#/teachers/slides/u5' : '');
     return {
-      slides: key === 'u53' ? '#/teachers/slides/tricky' : '#/teachers/slides/u5',
+      slides: slides,
+      hideSlides: !slides,
       days: key === 'u53'
         ? [1, 2, 3].map((n) => ({ label: 'Day ' + n }))
         : (key === 'u51' ? [{ label: 'Day 1' }] : []),
@@ -754,34 +756,10 @@
       note: 'Words from every lesson',
       goLabel: 'Open review'
     });
-    const seen = {};
-    const games = [];
-    lessons.forEach((L) => {
-      (L.steps || []).forEach((step) => {
-        if (step.group !== 'activities' && step.group !== 'extra') return;
-        if (seen[step.title]) return;
-        seen[step.title] = 1;
-        games.push({ title: step.title, href: '#/' + L.key + '/' + step.id });
-      });
-    });
-    const stories = lessons.map((L) => {
-      const step = (L.steps || []).filter((item) => item.group === 'story')[0];
-      const data = window.IR_DATA_U5[L.key] || {};
-      return {
-        title: data.storyTitle || (step && step.title) || 'Story Time',
-        href: step ? ('#/' + L.key + '/' + step.id) : ('#/' + L.key),
-        img: IR.storyCovers[L.n] || '',
-        alt: data.storyTitle || '',
-        big: true,
-        note: 'Lesson ' + IR.kidLesson(L.n)
-      };
-    });
     app.append(h('div', { class: 'screen trailscreen unitpage unitA u5menu stepage ngpreview u5lessons' },
       h('header', { class: 'uA-top' }, IR.ui.pageNav('#/home'), h('h1', { class: 'uA-title' }, h('small', null, 'Unit 5'), 'Silent e'), IR.teacherBox(u5Teach('hub'))),
       IR.modeBar({
-        lesson: cards,
-        games: games,
-        stories: stories
+        lesson: cards
       })));
     if (IR.teach) IR.teach.sync();
   }

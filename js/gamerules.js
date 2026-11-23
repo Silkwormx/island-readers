@@ -137,4 +137,149 @@
     items.forEach((it, i) => { if (keyFn(it) === key) same.push(i); });
     return { i: same.indexOf(q) + 1, n: same.length };
   };
+
+  /* Ring every bell: Frill says a whole word. Three bells, one of them that word. */
+  function bellNorm(w) { return String(w || '').toLowerCase().replace(/[^a-z]/g, ''); }
+  function bellStem(w) {
+    const s = bellNorm(w);
+    if (s.length > 4 && s.endsWith('ing')) return s.slice(0, -3);
+    if (s.length > 3 && s.endsWith('es')) return s.slice(0, -2);
+    if (s.length > 3 && s.endsWith('ed')) return s.slice(0, -2);
+    if (s.length > 3 && /[^s]s$/.test(s)) return s.slice(0, -1);
+    return s;
+  }
+  function bellLev(a, b) {
+    const m = [];
+    for (let i = 0; i <= a.length; i++) {
+      m[i] = [i];
+      for (let j = 1; j <= b.length; j++) {
+        if (i === 0) m[i][j] = j;
+        else m[i][j] = Math.min(m[i - 1][j] + 1, m[i][j - 1] + 1, m[i - 1][j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1));
+      }
+    }
+    return m[a.length][b.length];
+  }
+  function bellClose(a, b) {
+    const A = bellNorm(a); const B = bellNorm(b);
+    if (!A || !B || A === B) return 99;
+    if (bellStem(A) === bellStem(B)) return 1;
+    const d = bellLev(A, B);
+    if (d === 1) return 2;
+    if (d === 2) return 4;
+    return 8 + d;
+  }
+  function bellPool(words) {
+    const seen = Object.create(null); const out = [];
+    (words || []).forEach((w) => {
+      const n = bellNorm(w);
+      if (n.length < 3 || n.length > 12 || seen[n]) return;
+      if (n === 'ing' || n === 'ed' || n === 'es') return;
+      seen[n] = 1; out.push(n);
+    });
+    return out;
+  }
+  function bellMates(target, pool) {
+    const ranked = pool.filter((w) => w !== target).map((w) => ({ w: w, s: bellClose(target, w) }));
+    ranked.sort((a, b) => a.s - b.s || (a.w < b.w ? -1 : 1));
+    const out = [];
+    ranked.forEach((item) => { if (out.length < 2 && (out.length === 0 || item.s <= 4)) out.push(item); });
+    ranked.forEach((item) => { if (out.length < 2 && !out.some((x) => x.w === item.w)) out.push(item); });
+    return out.slice(0, 2);
+  }
+  IR.bellClose = bellClose;
+  IR.bellRounds = function (words) {
+    const pool = bellPool(words);
+    function usable(maxScore) {
+      return pool.filter((t) => {
+        const mates = bellMates(t, pool);
+        return mates.length === 2 && mates.every((x) => x.s <= maxScore);
+      });
+    }
+    let targets = usable(2);
+    if (targets.length < 10) targets = usable(4);
+    const order = IR.shuffle ? IR.shuffle(targets.slice()) : targets.slice();
+    const n = Math.min(12, order.length);
+    const take = n >= 10 ? order.slice(0, n) : order.slice(0, Math.min(12, order.length));
+    return take.map((t) => {
+      const mates = bellMates(t, pool);
+      return { target: t, bells: [t, mates[0].w, mates[1].w] };
+    });
+  };
+  IR.ringBells = function (ctx, opts) {
+    opts = opts || {};
+    const audio = opts.audio;
+    const color = opts.color || function (w) { return document.createTextNode(w); };
+    const rounds = IR.bellRounds(opts.words);
+    let r = 0; let locked = false; let current = '';
+    const { h, sleep, shuffle, icon, Snd, A } = IR;
+    function speak(manual) { return Snd.play(audio(current), manual ? { manual: true } : {}); }
+    if (ctx.setInstr) ctx.setInstr('');
+    function show() {
+      if (r >= rounds.length) return done();
+      const round = rounds[r];
+      current = round.target;
+      locked = false;
+      if (IR.coachReset) IR.coachReset('ring-' + r);
+      ctx.progress(r / rounds.length);
+      ctx.stage.innerHTML = '';
+      const status = h('p', { class: 'status', 'aria-live': 'polite' }, '\u00a0');
+      const row = h('div', { class: 'bellrow trio' });
+      shuffle(round.bells.slice()).forEach((w, i) => {
+        const n = String(i + 1);
+        const b = h('button', { class: 'bellbtn', type: 'button', 'data-w': w, 'aria-label': 'Bell ' + n + ', ' + w },
+          h('span', { class: 'bellface' },
+            h('img', { src: 'img/bell_unlit.png', alt: '' }),
+            h('span', { class: 'bellnum', 'aria-hidden': 'true' }, n)),
+          h('span', { class: 'bellword' }, color(w)));
+        b.addEventListener('click', () => tap(w, b, status, row));
+        row.append(b);
+      });
+      const again = h('button', { class: 'btn big', type: 'button', onclick: () => speak(true) }, icon('speaker'), 'Hear it again');
+      ctx.stage.append(h('div', { class: 'activity bellgame' },
+        h('div', { class: 'bellask' },
+          h('img', { src: 'img/frill.webp', alt: 'Frill' }),
+          h('p', null, 'Ring the bell you hear.'),
+          again),
+        h('div', { class: 'bellscene', style: 'background-image:url(img/ob_scene.jpg)' }),
+        row, status));
+      speak(false);
+    }
+    async function tap(w, b, status, row) {
+      if (locked || b.classList.contains('tried')) return;
+      if (w !== current) {
+        ctx.miss();
+        const stepName = await IR.coachMiss({
+          key: 'ring-' + r, wrongEl: b,
+          correctEl: () => row.querySelector('[data-w="' + current + '"]'),
+          statusEl: status, replay: () => speak(true), model: () => speak(true)
+        });
+        if (stepName === 'model') IR.againLater(rounds, r);
+        return;
+      }
+      locked = true;
+      b.classList.add('lit');
+      const img = b.querySelector('img');
+      if (img) img.src = 'img/bell_lit.png';
+      status.textContent = 'The bell rings.';
+      await Snd.play(A.sfx.ding, { manual: true });
+      if (!ctx.scr.ok()) return;
+      await sleep(420);
+      if (!ctx.scr.ok()) return;
+      r++;
+      show();
+    }
+    async function done() {
+      ctx.progress(1);
+      ctx.stage.innerHTML = '';
+      ctx.stage.append(h('div', { class: 'activity bellgame belldone' },
+        IR.celebration(false),
+        h('h2', null, 'The bells rang!')));
+      await Snd.play(A.sfx.gong, { manual: true });
+      await sleep(900);
+      if (ctx.scr.ok()) ctx.finish();
+    }
+    ctx.setBack(() => { if (r > 0) { Snd.stop(); r--; show(); return true; } return false; });
+    ctx.setNext(() => { if (r < rounds.length - 1) { Snd.stop(); r++; show(); return true; } return false; });
+    show();
+  };
 })();
