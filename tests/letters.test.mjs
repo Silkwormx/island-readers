@@ -128,7 +128,7 @@ test('home opens Foundation Skills from the first bell, not a sidebar tab', () =
   assert.match(html, /js\/foundation\/letters\.js/);
   assert.match(html, /foundation\/foundation\.css/);
   assert.match(sw, /js\/foundation\/letters\.js/);
-  assert.match(sw, /ir-20261124k/);
+  assert.match(sw, /ir-20261124n/);
   assert.match(sw, /foundation\/img\/foundations_sidebar\.jpg/);
   assert.match(teach, /#\/foundation/);
   assert.match(letters, /Teacher Slideshows/);
@@ -143,8 +143,8 @@ test('home opens Foundation Skills from the first bell, not a sidebar tab', () =
   assert.equal(letters.includes('Day 1a'), false);
   assert.equal(letters.includes('Day 1b'), false);
   assert.match(letters, /label: 'Day 1', page: 1/);
-  assert.match(letters, /label: 'Day 2', page: 34/);
-  assert.match(letters, /label: 'Day 5', page: 157/);
+  assert.match(letters, /label: 'Day 2', page: 33/);
+  assert.match(letters, /label: 'Day 5', page: 152/);
   assert.match(letters, /label: 'Day 1', page: 3/);
   assert.match(letters, /label: 'Day 2', page: 40/);
   assert.match(letters, /label: 'Day 5', page: 143/);
@@ -155,8 +155,8 @@ test('home opens Foundation Skills from the first bell, not a sidebar tab', () =
   assert.match(screens, /Learn_the_Letters_Team3\.pdf/);
   assert.match(screens, /Learn_the_Letters_Team4\.pdf/);
   assert.match(screens, /Learn_the_Letters_Team5\.pdf/);
-  assert.match(letters, /label: 'Day 4', page: 93/);
-  assert.match(letters, /label: 'Team check', page: 93/);
+  assert.match(letters, /label: 'Day 4', page: 101/);
+  assert.match(letters, /label: 'Day 5', page: 137/);
   assert.match(letters, /Team 1 Quick Sounds/);
   assert.match(letters, /Team 2 Quick Sounds/);
   assert.match(letters, /const SCORE_TRACKER = ''/);

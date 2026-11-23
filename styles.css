@@ -3061,7 +3061,11 @@ button,
 .fsmenu .gamenote{font-size:.85rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .llword.on{background:#FFE08A;border-radius:.35rem;box-shadow:0 0 0 3px #FFE08A}
 .llstory .llstoryact{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.6rem;overflow:hidden}
-.llstory .llstoryart{max-height:28vh;width:auto;max-width:70%;object-fit:contain}
+.llstory .llstoryart{max-height:28vh;width:auto;max-width:70%;object-fit:contain;object-position:center}
+@media (max-width:800px){
+  .llstory .llstoryart{max-height:46vh;max-width:88%;object-fit:contain;object-position:center}
+  .llstory .llstoryact{overflow:visible}
+}
 .llstory .llstoryline{margin:0;font-size:clamp(2rem,5vh,3.2rem);font-weight:700;text-align:center}
 .llstory .lesson-nav{display:flex;justify-content:center;padding:.3rem .6rem .5rem}
 .llstory .lesson-nav .btn.next{background:#F28C00;border-color:#C95A10;box-shadow:0 3px 0 #C95A10;color:#fff;justify-content:center}
@@ -3236,7 +3240,7 @@ html.teach .u5step .sentact .tile.word{font-size:clamp(1.7rem,4vh,2.4rem)!import
 .ngpreview .gamecard.done{background:#E7F6EA;border-color:#2E9E6B;box-shadow:0 4px 0 #1F7A3A}
 .ngpreview .gamecard.done .gamedone{display:inline-flex;width:1.7rem;height:1.7rem;color:#E2A318;background:#fff;border-radius:50%;align-items:center;justify-content:center}
 .ngpreview .storycard{min-height:12rem;padding:1rem 1.2rem;gap:1.2rem;border-width:4px;border-radius:1.6rem}
-.ngpreview .storypic{width:16rem;height:10rem;object-fit:cover;border-radius:1rem}
+.ngpreview .storypic{width:16rem;height:10rem;object-fit:contain;object-position:center;background:#FFF6E3;border-radius:1rem}
 .ngpreview .storycard b{font-size:2rem}
 @media (max-width:800px){
   .ngpreview .uA-top{row-gap:.4rem}
@@ -3248,7 +3252,7 @@ html.teach .u5step .sentact .tile.word{font-size:clamp(1.7rem,4vh,2.4rem)!import
   .ngpreview .gamegrid:not(.pics) .gamecard{height:11rem;min-height:11rem;max-height:11rem}
   .ngpreview .gamegrid:not(.pics) .gamepic{width:4rem;height:4rem;min-width:4rem;min-height:4rem;max-width:4rem;max-height:4rem}
   .ngpreview .storycard{flex-direction:column;text-align:center}
-  .ngpreview .storypic{width:100%;height:9rem}
+  .ngpreview .storypic{width:auto;max-width:min(100%,16rem);height:auto;max-height:14rem;object-fit:contain;object-position:center;background:#FFF6E3}
 }
 @media (min-width:1600px){
   .ngpreview .ngpath{width:min(100%,92rem)}
@@ -3582,7 +3586,7 @@ html.teach .u5step .sentact .tile.word{font-size:clamp(1.7rem,4vh,2.4rem)!import
 .ngpreview.fsteam1 .gamegrid .gameico,.ngpreview.fsteam1 .gamecard .gamepair{display:flex}
 .ngpreview.fsteam1 .gamegrid .gametxt,.ngpreview.fsteam1 .gamegrid .gametxt b{align-items:center;text-align:center}
 .ngpreview.fsteam1 .storycard{min-height:12rem;padding:1rem 1.2rem}
-.ngpreview.fsteam1 .storypic{width:16rem;height:10rem}
+.ngpreview.fsteam1 .storypic{width:16rem;height:10rem;object-fit:contain;object-position:center;background:#FFF6E3}
 .ngpreview.u5menu .lessonrow .lessontab{height:auto;max-height:none;min-height:15rem}
 .ngpreview.u5menu .lessonrow .uimg{max-height:8.5rem}
 .ngpreview.u5menu .lessonrow .uimg img{max-height:8rem}
@@ -3592,7 +3596,7 @@ html.teach .u5step .sentact .tile.word{font-size:clamp(1.7rem,4vh,2.4rem)!import
 @media (max-width:800px){
   .ngpreview.fsteam1 .gamerow .gamegrid{grid-template-columns:1fr 1fr}
   .ngpreview.fsteam1 .storycard{flex-direction:column}
-  .ngpreview.fsteam1 .storypic,.ngpreview.u5menu .storypic{width:100%;height:9rem}
+  .ngpreview.fsteam1 .storypic,.ngpreview.u5menu .storypic{width:auto;max-width:min(100%,16rem);height:auto;max-height:14rem;object-fit:contain;object-position:center;background:#FFF6E3}
   .ngpreview.u5menu .gamegrid:not(.pics) .gamecard{height:11rem;min-height:11rem;max-height:11rem}
 }
 .ngpreview .ngpath,.ngpreview .ngstep,.ngpreview .gamerows,.ngpreview .gamerow{height:auto!important;min-height:0!important;flex:none!important;overflow:visible!important}
