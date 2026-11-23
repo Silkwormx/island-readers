@@ -59,7 +59,7 @@ test('stories are Lunch Crabs, Kite That Zipped, and Stick by the Bell', () => {
   assert.doesNotMatch(data, /A thick branch landed on the bell/);
   assert.doesNotMatch(data, /Zip packs the cups and the hats/);
   assert.doesNotMatch(u6 + data, /\u2014|—/);
-  assert.match(sw, /ir-20261124h/);
+  assert.match(sw, /ir-20261124i/);
   const rules = fs.readFileSync(new URL('../js/gamerules.js', import.meta.url), 'utf8');
   assert.match(rules, /IR\.pairCard/);
   assert.match(rules, /lesson \? 'Learn' : 'Read'/);
@@ -86,8 +86,10 @@ test('every Unit 6 speaker line is tagged, and Frill is not Zip', () => {
   assert.match(data, /"say": "\/t\/"/);
   assert.match(u6, /class: 'edsay'/);
   assert.match(u6, /class: 'edmark'/);
-  assert.match(u6, /Answer 1 for yes, 2 for no/);
-  assert.match(u6, /yn-secret/);
+  const rules = fs.readFileSync(new URL('../js/gamerules.js', import.meta.url), 'utf8');
+  assert.match(rules, /Ring the bell you hear/);
+  assert.match(u6, /IR\.ringBells/);
+  assert.doesNotMatch(u6, /Answer 1 for yes, 2 for no/);
   assert.match(u6, /from: 'cat', to: 'cats'/);
   assert.match(u6, /from: 'jump', to: 'jumped'/);
   assert.match(u6, /from: 'hang', to: 'hanging'/);

@@ -58,14 +58,14 @@ test('Unit 6 word tiles do not overflow at phone, tablet, and smartboard widths'
       await send('Page.navigate', { url: 'http://127.0.0.1:' + port + '/?fit=' + Date.now() + hash }, sessionId);
       const t0 = Date.now();
       while (Date.now() - t0 < 8000) {
-        if (await ev(`document.querySelectorAll('.u6step .choice, .u6step .bigword, .u6step .fz-bubble, .u6step .chainfrom').length > 0`)) return;
+        if (await ev(`document.querySelectorAll('.u6step .choice, .u6step .bigword, .u6step .fz-bubble, .u6step .chainfrom, .u6step .bellbtn').length > 0`)) return;
         await new Promise((r) => setTimeout(r, 80));
       }
       throw new Error('no tiles for ' + hash);
     };
     const overflow = async () => ev(`(() => {
       const bad = [];
-      document.querySelectorAll('.u6step .choice, .u6step .bigword, .u6step .fz-bubble').forEach((el) => {
+      document.querySelectorAll('.u6step .choice, .u6step .bigword, .u6step .fz-bubble, .u6step .bellbtn span').forEach((el) => {
         const word = (el.innerText || '').replace(/\\s+/g, ' ').trim();
         if (!word) return;
         const style = getComputedStyle(el);
