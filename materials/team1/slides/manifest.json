@@ -1,6 +1,6 @@
 {
   "title": "Team 1: m s a t",
-  "count": 170,
+  "count": 168,
   "days": [
     {
       "day": 1,
@@ -20,12 +20,12 @@
     {
       "day": 4,
       "start": 125,
-      "end": 156
+      "end": 154
     },
     {
       "day": 5,
-      "start": 157,
-      "end": 170
+      "start": 155,
+      "end": 168
     }
   ],
   "slides": [
@@ -196,8 +196,6 @@
     "slide-165.jpg",
     "slide-166.jpg",
     "slide-167.jpg",
-    "slide-168.jpg",
-    "slide-169.jpg",
-    "slide-170.jpg"
+    "slide-168.jpg"
   ]
 }

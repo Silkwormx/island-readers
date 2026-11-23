@@ -128,7 +128,7 @@ test('home opens Foundation Skills from the first bell, not a sidebar tab', () =
   assert.match(html, /js\/foundation\/letters\.js/);
   assert.match(html, /foundation\/foundation\.css/);
   assert.match(sw, /js\/foundation\/letters\.js/);
-  assert.match(sw, /ir-20261124g/);
+  assert.match(sw, /ir-20261124h/);
   assert.match(sw, /foundation\/img\/foundations_sidebar\.jpg/);
   assert.match(teach, /#\/foundation/);
   assert.match(letters, /Teacher Slideshows/);
@@ -144,7 +144,7 @@ test('home opens Foundation Skills from the first bell, not a sidebar tab', () =
   assert.equal(letters.includes('Day 1b'), false);
   assert.match(letters, /label: 'Day 1', page: 1/);
   assert.match(letters, /label: 'Day 2', page: 34/);
-  assert.match(letters, /label: 'Day 5', page: 157/);
+  assert.match(letters, /label: 'Day 5', page: 155/);
   assert.match(letters, /label: 'Day 1', page: 3/);
   assert.match(letters, /label: 'Day 2', page: 40/);
   assert.match(letters, /label: 'Day 5', page: 143/);
