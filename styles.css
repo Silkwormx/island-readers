@@ -1214,7 +1214,7 @@ body.calm .magebox.wrong{animation:none}
 .orangeunit .snum{background:var(--orange-l);color:var(--orange-d)}
 .lessonscreen .sor-tag{color:var(--orange-d);background:var(--orange-l)}
 .bellgame{gap:.7rem}
-.bellscene{width:100%;max-width:640px;height:8.5rem;border-radius:1rem;background-size:cover;background-position:center 35%}
+.bellscene{width:100%;max-width:640px;aspect-ratio:16/9;height:auto;border-radius:1rem;background-color:#FFF8E7;background-size:contain;background-repeat:no-repeat;background-position:center}
 .bellrow{display:flex;justify-content:space-between;width:100%;max-width:640px;gap:.2rem}
 .bellbtn{flex:1;background:none;border:3px solid transparent;border-radius:1rem;padding:.2rem 0;display:flex;flex-direction:column;align-items:center;font-size:1.05rem;color:#7a7268}
 .bellbtn img{width:3.2rem;height:3.2rem;object-fit:contain}
@@ -1223,7 +1223,7 @@ body.calm .magebox.wrong{animation:none}
 .bellcard{background:#fff;border:4px solid var(--orange);border-radius:1.4rem;padding:.6rem 1.6rem;text-align:center;min-width:12rem}
 .bellcard .bigword{font-size:3.6rem;font-weight:700;letter-spacing:.08em}
 .ob-bellhero{position:relative;border-radius:1.2rem;overflow:hidden;max-width:36rem;width:100%;margin:0 auto}
-.ob-bellhero .ob-scene{display:block;width:100%;height:13rem;object-fit:cover;object-position:center 35%}
+.ob-bellhero .ob-scene{display:block;width:100%;height:auto;aspect-ratio:4/3;object-fit:contain;object-position:center;background:#FFF8E7}
 .ob-glow{position:absolute;inset:0;background:radial-gradient(circle at 70% 42%,#FFB45Acc 0,#FF9A2E55 14%,transparent 36%);animation:obglow 1.6s ease-in-out infinite}
 @keyframes obglow{0%,100%{opacity:.55}50%{opacity:1}}
 body.calm .ob-glow{animation:none;opacity:.85}
@@ -1658,7 +1658,7 @@ body.calm .ob-glow{animation:none;opacity:.85}
 .plc-map{display:grid;grid-template-columns:repeat(5,1fr);gap:.8rem}
 @media (max-width:759px){.plc-map{grid-template-columns:repeat(2,1fr)}}
 .plc-bell{background:#fff;border-radius:1.2rem;padding:.5rem;box-shadow:0 4px 12px rgba(60,40,20,.1);text-align:center}
-.plc-bell .gpic{position:relative;display:block;aspect-ratio:3/4;border-radius:.9rem;overflow:hidden}.plc-bell .gpic>img{width:100%;height:100%;object-fit:cover;display:block}
+.plc-bell .gpic{position:relative;display:block;aspect-ratio:1/1;border-radius:.9rem;overflow:hidden;background:#FFF8E7}.plc-bell .gpic>img{width:100%;height:100%;object-fit:contain;background:#FFF8E7;display:block}
 .plc-bell .gunit{position:absolute;top:.4rem;left:.4rem;background:#FFF8E7;border-radius:.6rem;padding:.1rem .5rem;font-weight:700;font-size:.85rem}
 .plc-bname{display:block;font-weight:700;margin-top:.4rem}
 .pb-rung{box-shadow:0 0 0 3px #F5C542,0 0 18px rgba(245,197,66,.8)}
@@ -1862,9 +1862,9 @@ a.btn.tmlink.tmslide:visited{color:#fff}
   .gridhome.bellspeek .homelay{display:flex;flex-direction:column;gap:.55rem;margin-top:.25rem}
   .gridhome.bellspeek .bellslot{order:-1;height:calc(100dvh - 4.4rem);overflow:auto}
 }
-.gridhome.bellfit .bellpath .tpic{aspect-ratio:auto;width:100%;flex:none}
-.gridhome.bellfit .bellpath .tcard{justify-content:flex-start;align-items:stretch}
-.gridhome.bellfit .bellpath .tpic img{width:100%;height:100%;object-fit:cover;object-position:center}
+.gridhome.bellfit .bellpath .tpic{aspect-ratio:1/1;width:100%;height:auto;flex:none;background:#FFF8E7}
+.gridhome.bellfit .bellpath .tcard{justify-content:flex-start;align-items:stretch;height:auto;overflow:hidden}
+.gridhome.bellfit .bellpath .tpic img{width:100%;height:100%;object-fit:contain;object-position:center;background:#FFF8E7}
 .gridhome.bellfit .bellpath .tbody{flex:none;min-height:0;justify-content:flex-start;gap:.12rem;padding:.45rem .5rem .6rem}
 @media (max-width:759px){
   .gridhome.bellfit .mwrap{padding-left:.4rem;padding-right:.4rem}
