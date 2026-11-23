@@ -2973,7 +2973,7 @@
         { label: 'Day 2', page: 34 },
         { label: 'Day 3', page: 91 },
         { label: 'Day 4', page: 125 },
-        { label: 'Day 5', page: 157 }
+        { label: 'Day 5', page: 155 }
       ]
     },
     g2: {
