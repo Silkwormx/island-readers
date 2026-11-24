@@ -479,44 +479,82 @@
     const pin = () => {
       if (!side || !scr || !side.isConnected) { window.removeEventListener('resize', layoutHome); return; }
       const nav = side.querySelector('.hometabs');
-      const tabs = nav ? [...nav.querySelectorAll('.hometab')] : [];
+      const tabEls = nav ? [...nav.querySelectorAll('.hometab')] : [];
+      const hero = side.querySelector('.homefeature');
+      const pics = side.querySelector('.zfpics');
+      const artEl = side.querySelector('.homeart');
+      const goBtn = side.querySelector('.zfstart2');
       const relax = () => {
         side.style.removeProperty('height');
         side.style.removeProperty('max-height');
+        side.style.removeProperty('overflow-y');
         side.style.removeProperty('gap');
         if (nav) nav.style.removeProperty('gap');
-        tabs.forEach((t) => { t.style.removeProperty('height'); t.style.removeProperty('min-height'); t.style.removeProperty('max-height'); });
+        tabEls.forEach((t) => { t.style.removeProperty('height'); t.style.removeProperty('min-height'); t.style.removeProperty('max-height'); });
+        if (artEl) artEl.style.removeProperty('max-height');
+        if (pics) { pics.style.removeProperty('max-height'); pics.style.removeProperty('flex-grow'); pics.style.removeProperty('flex-basis'); }
       };
       if (!matchMedia('(min-width:1000px)').matches) { side.style.removeProperty('--side-top'); relax(); return; }
       const banner = scr.querySelector('.hbanner');
       const bannerH = banner ? banner.offsetHeight : 0;
       side.style.setProperty('--side-top', bannerH + 'px');
-      const room = Math.max(240, scr.getBoundingClientRect().bottom - side.getBoundingClientRect().top - 8);
+      const top = side.getBoundingClientRect().top;
+      const room = Math.max(200, Math.floor(scr.getBoundingClientRect().bottom - top - 8));
       side.style.height = room + 'px';
       side.style.maxHeight = room + 'px';
+      if (artEl) artEl.style.removeProperty('max-height');
+      if (pics) { pics.style.removeProperty('max-height'); pics.style.removeProperty('flex-grow'); pics.style.removeProperty('flex-basis'); }
       const open = side.querySelector('.sidedrop.is-open');
-      const artEl = side.querySelector('.homeart');
-      const goBtn = side.querySelector('.zfstart2');
-      if (artEl) artEl.style.maxHeight = '';
-      if (!open && side.scrollHeight > side.clientHeight + 2) {
-        side.style.gap = '8px';
-        if (nav) nav.style.gap = '8px';
-        tabs.forEach((t) => { t.style.height = '48px'; t.style.minHeight = '48px'; t.style.maxHeight = '48px'; });
-        if (artEl && goBtn) {
-          const overflow = side.scrollHeight - side.clientHeight;
-          const next = Math.max(48, Math.round(artEl.getBoundingClientRect().height - overflow - 12));
-          artEl.style.maxHeight = next + 'px';
-        }
-      } else if (!open) {
-        side.style.removeProperty('gap');
-        if (nav) nav.style.removeProperty('gap');
-        tabs.forEach((t) => { t.style.removeProperty('height'); t.style.removeProperty('min-height'); t.style.removeProperty('max-height'); });
+      if (open) return;
+      const shadow = 4;
+      const limits = () => {
+        const sideBox = side.getBoundingClientRect();
+        const heroBox = hero ? hero.getBoundingClientRect() : sideBox;
+        const viewBottom = Math.min(window.innerHeight, scr.getBoundingClientRect().bottom);
+        return { sideBox, heroBox, viewBottom };
+      };
+      const buttonPast = () => {
+        if (!goBtn) return false;
+        const btn = goBtn.getBoundingClientRect();
+        const box = limits();
+        const edge = Math.min(box.heroBox.bottom, box.sideBox.bottom, box.viewBottom);
+        return btn.bottom + shadow > edge + 1;
+      };
+      const sideOverflow = () => side.scrollHeight > side.clientHeight + 2;
+      const heroOverflow = () => !!(hero && hero.scrollHeight > hero.clientHeight + 2);
+      if (buttonPast() || sideOverflow() || heroOverflow()) {
+        side.style.gap = '6px';
+        if (nav) nav.style.gap = '6px';
+        tabEls.forEach((t) => {
+          if (t.classList.contains('trailtab')) return;
+          t.style.height = '42px';
+          t.style.minHeight = '42px';
+          t.style.maxHeight = '42px';
+        });
       }
+      if (pics && (buttonPast() || heroOverflow())) {
+        const btn = goBtn ? goBtn.getBoundingClientRect() : null;
+        const box = limits();
+        const edge = Math.min(box.heroBox.bottom, box.sideBox.bottom, box.viewBottom);
+        const past = btn ? Math.ceil(btn.bottom + shadow - edge) : 0;
+        const extra = hero ? Math.max(0, hero.scrollHeight - hero.clientHeight) : 0;
+        const cut = Math.max(past, extra);
+        if (cut > 1) {
+          const next = Math.max(72, Math.round(pics.getBoundingClientRect().height - cut - 2));
+          pics.style.flexGrow = '0';
+          pics.style.flexBasis = 'auto';
+          pics.style.maxHeight = next + 'px';
+        }
+      }
+      const stillTight = buttonPast() || sideOverflow() || heroOverflow();
+      if (matchMedia('(max-height:520px)').matches && stillTight) side.style.overflowY = 'auto';
+      else side.style.removeProperty('overflow-y');
     };
     layoutHome = () => { pin(); fitBells(); };
     requestAnimationFrame(layoutHome); window.addEventListener('resize', layoutHome);
     const art = side.querySelector('.homeart');
     if (art && !art.complete) art.addEventListener('load', layoutHome, { once: true });
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { if (side.isConnected) layoutHome(); });
   }
   function gemScreen() {
     IR.newScreen(); const earned = gemsEarned(); const nEarned = earned.filter(Boolean).length; const nx = gemNext();
