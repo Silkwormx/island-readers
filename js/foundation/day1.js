@@ -654,7 +654,7 @@
       const decoys = rest.slice(0, i < 6 ? 2 : 3);
       const options = shuffle([item].concat(decoys));
       ctx.stage.append(h('div', { class: 'llfirst llhear lltapfit' },
-        h('button', { class: 'btn big primary', type: 'button', onclick: hear }, 'Hear the word'),
+        h('button', { class: 'btn big primary', type: 'button', onclick: hear }, 'Hear the sound'),
         h('div', { class: 'll1trio' }, ...options.map((opt, n) => tag(h('button', {
           class: 'll1friend', type: 'button', 'data-yes': opt.src === item.src ? '1' : '0',
           'aria-label': 'Choice ' + (n + 1),
@@ -725,7 +725,7 @@
       const status = h('p', { class: 'status', 'aria-live': 'polite' }, '\u00a0');
       let locked = false;
       [1, 2, 3, 4].forEach((n) => {
-        const b = tag(h('button', {
+        const b = h('button', {
           class: 'llcountchoice',
           type: 'button',
           'data-yes': n === item.n ? '1' : '0',
@@ -751,7 +751,7 @@
             });
             if (stepName === 'model') IR.againLater(items, i);
           }
-        }, String(n)), n);
+        }, String(n));
         choices.append(b);
       });
       const hear = h('button', { class: 'btn big primary', type: 'button', onclick: () => playRecordedWord(item.w) }, 'Hear word again');

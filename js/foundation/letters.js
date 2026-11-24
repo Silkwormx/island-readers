@@ -138,7 +138,7 @@
     o: { chant: 'Round as an ox, /o/ /o/ /o/.', action: 'Make a round mouth.' },
     d: { chant: 'Dog digs down, /d/ /d/ /d/.', action: 'Tap your tongue.' },
     c: { chant: 'Cat curls up, /k/ /k/ /k/.', action: 'Open for /k/.' },
-    u: { chant: 'Uppy the umbrella, /u/ /u/ /u/.', action: 'Lift the umbrella a little.' },
+    u: { chant: 'Up goes the umbrella, /u/ /u/ /u/.', action: 'Lift the umbrella a little.' },
     g: { chant: 'Goat gulps, /g/ /g/ /g/.', action: 'Gulp once.' },
     b: { chant: 'Bounce the ball, /b/ /b/ /b/.', action: 'Press your lips, then pop.' },
     e: { chant: 'Edge of the egg, /e/ /e/ /e/.', action: 'Smile and say /e/.' },
@@ -152,7 +152,7 @@
     x: { chant: 'Cross the box, /ks/ /ks/.', action: 'Cross your arms.' },
     q: { chant: 'Quilt says /kw/ /kw/.', action: 'A circle, then a tail.' },
     v: { chant: 'Van goes /v/ /v/ /v/.', action: 'Bite your lip and hum.' },
-    z: { chant: 'Zip zooms, /z/ /z/ /z/.', action: 'Zip a jacket.' }
+    z: { chant: 'Zigzag, /z/ /z/ /z/.', action: 'Zigzag a finger.' }
   };
   /* The picture is the letter. s is a snake on sand. */
   function memo(inner) { return '<svg viewBox="0 0 160 200" aria-hidden="true">' + inner + '</svg>'; }
@@ -188,7 +188,7 @@
   const WHO = {
     a: 'apple', m: 'mangrove', s: 'snake', t: 'turtle',
     p: 'Puffer fish', f: 'Fish', i: 'Insect', n: 'Fishing net',
-    o: 'Round ox', d: 'Island dog', c: 'Crab claw', u: 'Uppy the umbrella',
+    o: 'octopus', d: 'dog', c: 'crab', u: 'umbrella',
     g: 'Hill goat', b: 'Ball', e: 'Reef eel', k: 'Kite',
     h: 'Hat', r: 'Manta ray', l: 'Lighthouse', w: 'Shore waves',
     j: 'Jellyfish', y: 'Young palm', x: 'Crossed oars', q: 'Queen conch',
@@ -703,7 +703,7 @@
       const path = '<path class="llstroke" d="' + s.d + '" fill="' + (s.dot ? '#2B2540' : 'none') + '" stroke="#2B2540" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"' + (s.dot ? '' : ' marker-end="url(#llarrow)"') + '/>';
       return path + '<circle cx="' + s.nx + '" cy="' + s.ny + '" r="11" fill="#F28C00" stroke="#2B2540" stroke-width="2"/><text x="' + s.nx + '" y="' + (s.ny + 5) + '" text-anchor="middle" font-size="14" font-family="Andika,sans-serif" fill="#fff" font-weight="700">' + n + '</text>';
     }).join('');
-    return '<svg viewBox="0 0 120 150" aria-hidden="true"><defs><marker id="llarrow" markerUnits="userSpaceOnUse" markerWidth="16" markerHeight="16" refX="14" refY="8" orient="auto"><path d="M0 1 L16 8 L0 15 z" fill="#E8731C"/></marker></defs><line x1="18" y1="78" x2="104" y2="78" stroke="#F3E6C4" stroke-width="2" stroke-dasharray="4 4"/><line x1="18" y1="116" x2="104" y2="116" stroke="#E4D6B4" stroke-width="3"/>' + marks + '</svg>';
+    return '<svg viewBox="0 4 120 152" aria-hidden="true"><defs><marker id="llarrow" markerUnits="userSpaceOnUse" markerWidth="16" markerHeight="16" refX="14" refY="8" orient="auto"><path d="M0 1 L16 8 L0 15 z" fill="#E8731C"/></marker></defs><line x1="18" y1="26" x2="104" y2="26" stroke="#C4B08A" stroke-width="3"/><line x1="18" y1="78" x2="104" y2="78" stroke="#C4B08A" stroke-width="2" stroke-dasharray="5 4"/><line x1="18" y1="116" x2="104" y2="116" stroke="#C4B08A" stroke-width="3"/>' + marks + '</svg>';
   }
   function take(pool, n) {
     const out = [];
@@ -1272,7 +1272,7 @@
       ctx.stage.append(h('div', { class: 'activity llgame llmeet' },
         letterCardStep(L, fadeStep(group, L.id), i),
         h('div', { class: 'llmeettext' },
-          h('p', { class: 'llwho' }, (info && info.character) || WHO[L.id] || ''),
+          h('p', { class: 'llwho' }, L.id + ' · ' + ((info && info.keyword) || L.word || WHO[L.id] || '')),
           h('p', { class: 'llchant' }, (info && info.chant) || mem.chant),
           h('p', { class: 'llaction' }, 'Action: ' + ((info && info.action) || mem.action)),
           h('button', { class: 'btn primary', type: 'button', onclick: (e) => hear(L, 'sound', e.currentTarget) }, icon('speaker'), 'Hear the sound'))));
@@ -1424,10 +1424,10 @@
   };
   const STORY = {
     g1: [
-      { text: 'sam sat.' },
-      { text: 'sam sat.', pic: 'foundation/img/scenes/sat.jpg' },
-      { text: 'sam sat at a mat.' },
-      { text: 'sam sat at a mat.', pic: 'foundation/img/scenes/mat.jpg' }
+      { text: 'Sam sat.' },
+      { text: 'Sam sat.', pic: 'foundation/img/scenes/sat.jpg' },
+      { text: 'Sam sat at a mat.' },
+      { text: 'Sam sat at a mat.', pic: 'foundation/img/scenes/mat.jpg' }
     ],
     g2: [
       { text: 'pat sat.' },
@@ -2497,10 +2497,10 @@
     return L && L.word ? L.word : '';
   }
   function shortName(id) {
-    if (pictureWord(id)) return pictureWord(id);
     const info = letterInfo(id);
-    const name = prettyName((info && info.character) || WHO[id] || id);
-    return name.split(' ')[0] || id;
+    if (info && info.keyword) return info.keyword;
+    if (pictureWord(id)) return pictureWord(id);
+    return WHO[id] || id;
   }
   function menuScreen(app, group, up, title, small, plan) {
     IR.newScreen();
@@ -3255,6 +3255,126 @@
     }).catch(() => { counter.textContent = 'Could not open the slideshow'; });
     if (IR.teach) IR.teach.sync();
   }
+  /* Handwriting board. Single-story a, hookless t. Top, middle, and bottom lines. */
+  function arcPath(cx, cy, r, a0, a1, steps) {
+    let d = '';
+    const n = steps || 36;
+    for (let i = 0; i <= n; i++) {
+      const a = (a0 + (a1 - a0) * i / n) * Math.PI / 180;
+      const x = cx + r * Math.cos(a);
+      const y = cy - r * Math.sin(a);
+      d += (i ? 'L' : 'M') + x.toFixed(1) + ' ' + y.toFixed(1);
+    }
+    return d;
+  }
+  const WRITE_LINES = { top: 80, mid: 200, base: 320, desc: 430 };
+  function writeStrokes(letter) {
+    const T = WRITE_LINES.top;
+    const M = WRITE_LINES.mid;
+    const B = WRITE_LINES.base;
+    const D = WRITE_LINES.desc;
+    const c = arcPath(168, (M + B) / 2, (B - M) / 2, 60, 420, 40);
+    const down = 'M228 ' + ((M + B) / 2) + ' L228 ' + B;
+    const map = {
+      a: [c, down],
+      b: ['M120 ' + T + ' L120 ' + B, arcPath(180, (M + B) / 2, (B - M) / 2, 90, -230, 32)],
+      c: [arcPath(180, (M + B) / 2, (B - M) / 2, 60, 240, 28)],
+      d: [c, 'M228 ' + T + ' L228 ' + B],
+      e: ['M130 ' + M + ' L230 ' + M, arcPath(180, (M + B) / 2, (B - M) / 2, 10, 200, 28)],
+      f: ['M200 ' + (T + 36) + ' C250 ' + T + ' 250 ' + (T + 50) + ' 200 ' + (T + 54) + ' L200 ' + (B + 36), 'M150 ' + M + ' L250 ' + M],
+      g: [c, 'M228 ' + ((M + B) / 2) + ' L228 ' + (D - 20) + ' C228 ' + D + ' 160 ' + D + ' 150 ' + (D - 24)],
+      h: ['M120 ' + T + ' L120 ' + B, 'M120 ' + M + ' C120 ' + (M - 50) + ' 240 ' + (M - 50) + ' 240 ' + M + ' L240 ' + B],
+      i: ['M180 ' + M + ' L180 ' + B, 'M180 ' + (M - 28) + ' L180 ' + (M - 28)],
+      j: ['M200 ' + M + ' L200 ' + (D - 16) + ' C200 ' + D + ' 140 ' + D + ' 130 ' + (D - 20), 'M200 ' + (M - 28) + ' L200 ' + (M - 28)],
+      k: ['M120 ' + T + ' L120 ' + B, 'M230 ' + M + ' L120 ' + ((M + B) / 2) + ' L240 ' + B],
+      l: ['M180 ' + T + ' L180 ' + B],
+      m: ['M90 ' + M + ' L90 ' + B, 'M90 ' + (M + 16) + ' C90 ' + (M - 36) + ' 170 ' + (M - 36) + ' 170 ' + M + ' L170 ' + B, 'M170 ' + (M + 16) + ' C170 ' + (M - 36) + ' 250 ' + (M - 36) + ' 250 ' + M + ' L250 ' + B],
+      n: ['M120 ' + M + ' L120 ' + B, 'M120 ' + (M + 16) + ' C120 ' + (M - 40) + ' 240 ' + (M - 40) + ' 240 ' + M + ' L240 ' + B],
+      o: [arcPath(180, (M + B) / 2, (B - M) / 2, 70, 430, 40)],
+      p: ['M120 ' + M + ' L120 ' + D, arcPath(180, (M + B) / 2, (B - M) / 2, 110, -210, 32)],
+      q: [c, 'M228 ' + ((M + B) / 2) + ' L228 ' + (D - 10) + ' L250 ' + (D - 36)],
+      r: ['M140 ' + M + ' L140 ' + B, 'M140 ' + (M + 10) + ' C140 ' + (M - 36) + ' 230 ' + (M - 20) + ' 230 ' + (M + 16)],
+      s: ['M230 ' + (M + 16) + ' C230 ' + (M - 20) + ' 120 ' + (M - 10) + ' 130 ' + ((M + B) / 2) + ' C140 ' + (B + 10) + ' 250 ' + (B + 8) + ' 230 ' + (B - 28)],
+      t: ['M180 ' + (T + 8) + ' L180 ' + B, 'M130 ' + M + ' L240 ' + M],
+      u: ['M120 ' + M + ' L120 ' + (B - 20) + ' C120 ' + (B + 8) + ' 240 ' + (B + 8) + ' 240 ' + (B - 24) + ' L240 ' + M],
+      v: ['M110 ' + M + ' L180 ' + B + ' L250 ' + M],
+      w: ['M80 ' + M + ' L120 ' + B + ' L180 ' + M + ' L230 ' + B + ' L280 ' + M],
+      x: ['M120 ' + M + ' L250 ' + B, 'M250 ' + M + ' L120 ' + B],
+      y: ['M120 ' + M + ' L180 ' + B, 'M250 ' + M + ' L160 ' + (D - 10)],
+      z: ['M120 ' + M + ' L250 ' + M + ' L120 ' + B + ' L250 ' + B]
+    };
+    return map[letter] || map.a;
+  }
+  const WRITE_PAGES = {
+    g1: { 9: 'a', 14: 'm', 39: 's', 51: 't' },
+    g2: { 5: 'p', 8: 'f', 11: 'i', 14: 'n' },
+    g3: { 11: 'o', 13: 'd', 46: 'u' },
+    g4: { 11: 'g', 13: 'b' },
+    g5: { 11: 'h', 13: 'r' }
+  };
+  function writeBoard(letter) {
+    const strokes = writeStrokes(letter);
+    const paths = strokes.map((d, i) => {
+      const start = d.split(/[ML]/).filter(Boolean)[0].trim().split(/\s+/);
+      const sx = start[0];
+      const sy = start[1];
+      return '<path class="fs-ink" data-i="' + i + '" d="' + d + '" fill="none" stroke="#2B2540" stroke-width="16" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#fspen)"/>' +
+        '<circle cx="' + sx + '" cy="' + sy + '" r="16" fill="#F28C00" stroke="#2B2540" stroke-width="3"/>' +
+        '<text x="' + sx + '" y="' + (Number(sy) + 6) + '" text-anchor="middle" font-size="18" font-family="Andika,sans-serif" font-weight="700" fill="#fff">' + (i + 1) + '</text>';
+    }).join('');
+    const L = WRITE_LINES;
+    const svg = '<svg viewBox="0 0 360 500" class="fs-writesvg" aria-hidden="true"><defs><marker id="fspen" markerUnits="userSpaceOnUse" markerWidth="16" markerHeight="16" refX="2" refY="8" orient="auto"><path d="M0 1 L15 8 L0 15 z" fill="#E8731C"/></marker></defs>' +
+      '<line x1="40" y1="' + L.top + '" x2="320" y2="' + L.top + '" stroke="#8A7048" stroke-width="4"/>' +
+      '<line x1="40" y1="' + L.mid + '" x2="320" y2="' + L.mid + '" stroke="#8A7048" stroke-width="3" stroke-dasharray="10 8"/>' +
+      '<line x1="40" y1="' + L.base + '" x2="320" y2="' + L.base + '" stroke="#8A7048" stroke-width="4"/>' +
+      paths +
+      '<g class="fs-pencil"><circle r="10" fill="#F28C00" stroke="#2B2540" stroke-width="3"/></g>' +
+      '</svg>';
+    const board = h('div', { class: 'fs-write' },
+      h('p', { class: 'fs-writeask' }, 'Watch ' + letter + '.'),
+      h('div', { class: 'fs-writeart', html: svg }),
+      h('button', { class: 'btn big primary fs-watch', type: 'button' }, 'Watch again'));
+    const root = board.querySelector('svg');
+    const inks = [...root.querySelectorAll('.fs-ink')];
+    const pencil = root.querySelector('.fs-pencil');
+    let token = 0;
+    function play() {
+      const mine = ++token;
+      inks.forEach((path) => {
+        const len = path.getTotalLength();
+        path.style.strokeDasharray = String(len);
+        path.style.strokeDashoffset = String(len);
+      });
+      let i = 0;
+      function next() {
+        if (mine !== token) return;
+        if (i >= inks.length) {
+          pencil.style.opacity = '0';
+          return;
+        }
+        const path = inks[i];
+        const len = path.getTotalLength();
+        const dur = len < 2 ? 280 : Math.max(700, len * 2.2);
+        const start = performance.now();
+        pencil.style.opacity = '1';
+        function frame(now) {
+          if (mine !== token) return;
+          const t = Math.min(1, (now - start) / dur);
+          path.style.strokeDashoffset = String(len * (1 - t));
+          const pt = path.getPointAtLength(Math.max(0, len * t - 0.5));
+          pencil.setAttribute('transform', 'translate(' + pt.x.toFixed(1) + ' ' + pt.y.toFixed(1) + ')');
+          if (t < 1) requestAnimationFrame(frame);
+          else { i += 1; setTimeout(next, 220); }
+        }
+        requestAnimationFrame(frame);
+      }
+      next();
+    }
+    board.querySelector('.fs-watch').addEventListener('click', play);
+    setTimeout(play, 280);
+    return board;
+  }
+  IR.writeBoard = writeBoard;
   function imageSlides(app, team, page, deck) {
     IR.newScreen();
     const requested = parseInt(page, 10);
@@ -3264,6 +3384,7 @@
     const counter = h('p', { class: 'fs-slidecount', 'aria-live': 'polite' }, 'Opening…');
     const dayEl = h('p', { class: 'fs-slideday' }, '');
     const img = h('img', { class: 'fs-slideimg', alt: '' });
+    const writeHost = h('div', { class: 'fs-writehost', hidden: true });
     const prev = h('button', { class: 'btn big', type: 'button' }, 'Back');
     const next = h('button', { class: 'btn big next', type: 'button' }, 'Next');
     const jumps = h('div', { class: 'fs-dayjumps' });
@@ -3273,7 +3394,7 @@
         IR.ui.pageNav('#/foundation/letters/' + team),
         h('div', { class: 'fs-slidehead' }, h('h1', { class: 'uA-title' }, named), dayEl, counter)),
       jumps,
-      h('div', { class: 'fs-slidestage' }, menuHold, img),
+      h('div', { class: 'fs-slidestage' }, menuHold, writeHost, img),
       h('div', { class: 'lesson-nav fs-slidenav' }, prev, next));
     app.append(view);
     let total = deck.days.length ? deck.days[deck.days.length - 1].page : 1;
@@ -3287,6 +3408,7 @@
         onMenu = false;
         menuHold.hidden = true;
         img.hidden = false;
+        writeHost.hidden = true;
         show(pageNo);
       });
       menuHold.replaceChildren(built || h('span'));
@@ -3297,6 +3419,7 @@
       if (onMenu) {
         menuHold.hidden = false;
         img.hidden = true;
+        writeHost.hidden = true;
         jumps.hidden = true;
         counter.textContent = '';
         dayEl.textContent = '';
@@ -3305,9 +3428,17 @@
         return;
       }
       menuHold.hidden = true;
-      img.hidden = false;
       jumps.hidden = false;
       pageNum = Math.max(1, Math.min(total, n));
+      const writeLetter = (WRITE_PAGES[team] || {})[pageNum];
+      if (writeLetter) {
+        img.hidden = true;
+        writeHost.hidden = false;
+        writeHost.replaceChildren(writeBoard(writeLetter));
+      } else {
+        writeHost.hidden = true;
+        img.hidden = false;
+      }
       const file = 'slide-' + String(pageNum).padStart(3, '0') + '.jpg';
       img.src = deck.images + file;
       img.alt = 'Slide ' + pageNum;

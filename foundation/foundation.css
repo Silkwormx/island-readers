@@ -165,6 +165,12 @@ html.teach .llist .u5name,html.teach .llplay .u5name{font-size:32px}
 .fs-slidehead .uA-title{margin:0;min-width:0}
 .fs-slideday{margin:0;font-weight:700;color:#C95A10;white-space:nowrap}
 .fs-slideimg{max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;background:#fff;border-radius:.4rem}
+.fs-writehost{width:min(100%,52rem);height:100%;display:flex;align-items:center;justify-content:center}
+.fs-write{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.35rem;padding:.2rem .6rem .4rem}
+.fs-writeask{margin:0;font-size:clamp(1.4rem,3vh,2rem);font-weight:700}
+.fs-writeart{width:min(100%,22rem);max-height:52vh}
+.fs-writesvg{width:100%;height:auto;display:block;background:#FFFDF8;border-radius:1.2rem}
+.fs-watch{min-width:14rem;text-align:center;justify-content:center;background:#F28C00;border-color:#C95A10;color:#fff;box-shadow:0 4px 0 #C95A10}
 .fs-dayjumps{display:flex;flex-wrap:wrap;justify-content:center;gap:.35rem;padding:.15rem .5rem 0;flex:none}
 .fs-dayjump{min-height:44px;padding:.2rem .7rem;background:#fff;border:3px solid #C95A10;color:#C95A10;box-shadow:none}
 .fs-dayjump.on{background:#F28C00;color:#fff;border-color:#C95A10}

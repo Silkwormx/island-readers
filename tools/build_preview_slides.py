@@ -3,7 +3,7 @@
 plural -s lesson, fresh alliterations, and the Team 1 read-it / ending cards
 with a straight-tail Andika t."""
 import os
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageDraw, ImageFilter, ImageFont
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 ART = "/tmp"
@@ -264,14 +264,67 @@ def plural(n, left, right, img_a, img_b):
     save(im, "team2", n)
 
 
-def plural_fixed(n, left, right, img_a, img_b):
+def same_object(path):
+    """Cut the object out of its cream photo so copies can sit on the same cream."""
+    im = Image.open(path).convert("RGBA")
+    w, h = im.size
+    px = im.load()
+    corners = [px[4, 4], px[w - 5, 4], px[4, h - 5], px[w - 5, h - 5]]
+    bg = tuple(sum(c[i] for c in corners) // 4 for i in range(3))
+    mask = Image.new("L", (w, h), 0)
+    mp = mask.load()
+    for y in range(h):
+        for x in range(w):
+            r, g, b, a = px[x, y]
+            dist = abs(r - bg[0]) + abs(g - bg[1]) + abs(b - bg[2])
+            if dist > 16:
+                mp[x, y] = min(255, (dist - 16) * 10)
+    mask = mask.filter(ImageFilter.GaussianBlur(1.2))
+    im.putalpha(mask)
+    box = mask.point(lambda v: 255 if v > 12 else 0).getbbox()
+    pad = 8
+    box = (
+        max(0, box[0] - pad),
+        max(0, box[1] - pad),
+        min(w, box[2] + pad),
+        min(h, box[3] + pad),
+    )
+    return im.crop(box), bg
+
+
+def copies_of(path, count, size):
+    """count identical copies of the exact object, on its own cream, with no box seams."""
+    sprite, bg = same_object(path)
+    canvas = Image.new("RGB", size, bg)
+    sw, sh = sprite.size
+    max_h = int(size[1] * 0.78)
+    max_w = int(size[0] * 0.88 / count)
+    scale = min(max_h / sh, max_w / sw)
+    nw, nh = max(1, int(sw * scale)), max(1, int(sh * scale))
+    sprite = sprite.resize((nw, nh), Image.Resampling.LANCZOS)
+    gap = max(8, int(nw * 0.06))
+    total = count * nw + (count - 1) * gap
+    x = (size[0] - total) // 2
+    y = (size[1] - nh) // 2
+    for i in range(count):
+        canvas.paste(sprite, (x + i * (nw + gap), y), sprite)
+    return canvas
+
+
+def plural_fixed(n, left, right, one_path):
+    one = copies_of(one_path, 1, (900, 700))
+    many = copies_of(one_path, 3, (900, 700))
+    many_path = os.path.join(STORY, "three-" + left + ".jpg")
+    many.save(many_path, quality=92)
+    one_path_out = os.path.join(STORY, "single-" + left + ".jpg")
+    one.save(one_path_out, quality=92)
     im, d = canvas()
     pill(d, "Add -s", 48, 28)
     day_label(d, "Day 2")
     heading(d, "One, then more", size=54)
     d.text((64, 200), "Watch the ending. " + left + " becomes " + right + ".", font=font(32), fill=MUTED)
-    rounded_paste(im, img_a, (70, 270, 640, 430))
-    rounded_paste(im, img_b, (890, 270, 640, 430))
+    rounded_paste(im, one_path_out, (70, 270, 640, 430))
+    rounded_paste(im, many_path, (890, 270, 640, 430))
     f = font(64, True)
     for x, word, fill in ((70, left, INK), (890, right, ORANGE_D)):
         tw = text_width(d, word, f)
@@ -336,10 +389,15 @@ def team1_t():
     day_label(d, "Day 2")
     heading(d, "Say /t/.")
     d.text((64, 230), "Teeth close. Tap your tongue.", font=font(36), fill=MUTED)
-    d.rounded_rectangle((180, 300, 760, 780), radius=36, fill=WHITE, outline=(230, 214, 180), width=4)
-    f = font(320, True)
-    tw = text_width(d, "t", f)
-    d.text((180 + (580 - tw) / 2, 360), "t", font=f, fill=INK)
+    card = (180, 300, 760, 780)
+    d.rounded_rectangle(card, radius=36, fill=WHITE, outline=(230, 214, 180), width=4)
+    f = font(280, True)
+    bbox = d.textbbox((0, 0), "t", font=f)
+    tw, th = bbox[2] - bbox[0], bbox[3] - bbox[1]
+    d.text((
+        card[0] + ((card[2] - card[0]) - tw) / 2 - bbox[0],
+        card[1] + ((card[3] - card[1]) - th) / 2 - bbox[1],
+    ), "t", font=f, fill=INK)
     d.text((860, 420), "sat", font=font(100, True), fill=INK)
     d.text((860, 560), "mat", font=font(100, True), fill=INK)
     d.text((860, 700), "at", font=font(100, True), fill=INK)
@@ -408,10 +466,10 @@ def main():
     celebrate(29, ["pat", "pin", "fin", "nap"])
     yay()
     day2_plan()
-    plural_fixed(32, "mat", "mats", os.path.join(STORY, "one-mat.jpg"), os.path.join(STORY, "many-mats.jpg"))
-    plural_fixed(33, "pin", "pins", os.path.join(STORY, "one-pin.jpg"), os.path.join(STORY, "many-pins.jpg"))
-    plural_fixed(34, "fin", "fins", os.path.join(STORY, "one-fin.jpg"), os.path.join(STORY, "many-fins.jpg"))
-    plural_fixed(35, "pan", "pans", os.path.join(STORY, "one-pan.jpg"), os.path.join(STORY, "many-pans.jpg"))
+    plural_fixed(32, "mat", "mats", os.path.join(STORY, "one-mat.jpg"))
+    plural_fixed(33, "pin", "pins", os.path.join(STORY, "one-pin.jpg"))
+    plural_fixed(34, "fin", "fins", os.path.join(STORY, "one-fin.jpg"))
+    plural_fixed(35, "pan", "pans", os.path.join(STORY, "one-pan.jpg"))
     words_day2 = canvas_words_day2()
     save(words_day2, "team2", 36)
     alliteration(37, "i", "Itchy insects itch in igloos!", os.path.join(STORY, "allit-i-insects.jpg"), "Day 2")
