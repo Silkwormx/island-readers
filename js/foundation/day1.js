@@ -351,10 +351,11 @@
   function cycle(list, n) {
     const out = [];
     if (!list.length) return out;
-    const early = list.slice(0, Math.max(1, Math.ceil(list.length / 2)));
-    for (let i = 0; i < (n || ROUND_N); i++) {
-      const bag = i < 4 ? early : list;
-      out.push(bag[i % bag.length]);
+    const rounds = n || ROUND_N;
+    for (let i = 0; i < rounds; i++) {
+      let item = list[i % list.length];
+      if (out.length && item === out[out.length - 1] && list.length > 1) item = list[(i + 1) % list.length];
+      out.push(item);
     }
     return out;
   }
@@ -435,13 +436,21 @@
     return PACK.ids.length > 2 ? PACK.ids.slice() : PACK.ids.concat(PACK.ids);
   }
   function pictureCards() {
-    const out = [];
-    PACK.ids.forEach((id) => {
+    const by = {};
+    const ids = [];
+    (PACK.ids || []).forEach((id) => {
+      ids.push(id);
+      by[id] = [];
       (PACK.pics[id] || []).forEach((pic) => {
-        if (pic && typeof pic === 'object') out.push({ src: pic.src, answer: id, name: pic.name || '' });
-        else out.push({ src: pic, answer: id, name: '' });
+        if (pic && typeof pic === 'object') by[id].push({ src: pic.src, answer: id, name: pic.name || '' });
+        else by[id].push({ src: pic, answer: id, name: '' });
       });
     });
+    const out = [];
+    const deep = Math.max.apply(null, ids.map((id) => by[id].length).concat([0]));
+    for (let n = 0; n < deep; n++) {
+      ids.forEach((id) => { if (by[id][n]) out.push(by[id][n]); });
+    }
     return out;
   }
   function capWord(text) {

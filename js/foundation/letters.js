@@ -43,7 +43,7 @@
   /* Stroke numbers sit at the start. The arrow is the end of the stroke. */
   const LETTERS = [
     { id: 'a', name: 'a', nameSay: 'ay', sound: '/a/', soundSay: 'ah, apple', word: 'apple', cue: 'a as in apple', where: 'start',
-      strokes: [{ d: 'M68 78 C68 48 28 46 28 76 C28 106 70 108 70 78', nx: 96, ny: 70 }, { d: 'M70 58 L70 112', nx: 96, ny: 44 }] },
+      strokes: [{ d: 'M68 78 C68 48 28 46 28 76 C28 106 70 108 70 78', nx: 96, ny: 70 }, { d: 'M70 78 L70 116', nx: 88, ny: 68 }] },
     { id: 'm', name: 'm', nameSay: 'em', sound: '/m/', soundSay: 'mmm, mango', word: 'mango', cue: 'm as in mango', where: 'start',
       strokes: [{ d: 'M24 112 L24 52', nx: 12, ny: 40 }, { d: 'M24 70 C24 48 52 48 52 74 L52 112', nx: 36, ny: 40 }, { d: 'M52 70 C52 48 82 48 82 74 L82 112', nx: 70, ny: 40 }] },
     { id: 's', name: 's', nameSay: 'ess', sound: '/s/', soundSay: 'sss, snake', word: 'snake', cue: 's as in snake', where: 'start',
@@ -903,6 +903,62 @@
     }
     return '';
   }
+  const CARD_PICS = {
+    a: [{ src: 'foundation/img/objects/ant.jpg', name: 'ant' }, { src: 'foundation/img/letters/a_apple.jpg', name: 'apple' }, { src: 'foundation/img/objects/apple.jpg', name: 'apple' }],
+    m: [{ src: 'foundation/img/objects/mango.jpg', name: 'mango' }, { src: 'foundation/img/letters/m_manny_mangrove.jpg', name: 'mango' }, { src: 'foundation/img/story/one-mat.jpg', name: 'mat' }],
+    s: [{ src: 'foundation/img/letters/s_sami_sea_snake.jpg', name: 'snake' }, { src: 'foundation/img/objects/sun.jpg', name: 'sun' }],
+    t: [{ src: 'foundation/img/letters/t_tama_sea_turtle.jpg', name: 'turtle' }, { src: 'foundation/img/objects/top.jpg', name: 'top' }],
+    p: [{ src: 'foundation/img/story/one-pan.jpg', name: 'pan' }, { src: 'foundation/img/story/allit-p-pigs.jpg', name: 'pigs' }, { src: 'foundation/img/letters/p_puku_pufferfish.jpg', name: 'pufferfish' }],
+    f: [{ src: 'foundation/img/story/one-fin.jpg', name: 'fin' }, { src: 'foundation/img/story/allit-f-fish.jpg', name: 'fish' }, { src: 'foundation/img/letters/f_fumi_fish.jpg', name: 'fish' }],
+    i: [{ src: 'foundation/img/letters/i_iggy_insect.jpg', name: 'insect' }, { src: 'foundation/img/story/allit-i-insects.jpg', name: 'insects' }],
+    n: [{ src: 'foundation/img/letters/n_nobu_noodle.jpg', name: 'noodle' }, { src: 'foundation/img/story/allit-n-newts.jpg', name: 'newts' }],
+    o: [{ src: 'foundation/img/letters/o_ollie_octopus.jpg', name: 'octopus' }, { src: 'foundation/img/objects/pot.jpg', name: 'pot' }],
+    d: [{ src: 'foundation/img/letters/d_dai_dog.jpg', name: 'dog' }, { src: 'foundation/img/objects/dot.jpg', name: 'dot' }],
+    c: [{ src: 'foundation/img/letters/c_coco_crab.jpg', name: 'crab' }, { src: 'foundation/img/objects/cup.jpg', name: 'cup' }],
+    u: [{ src: 'foundation/img/letters/u_umbrella.jpg', name: 'umbrella' }, { src: 'foundation/img/objects/pup.jpg', name: 'pup' }],
+    g: [{ src: 'foundation/img/letters/g_gogo_goat.jpg', name: 'goat' }, { src: 'foundation/img/objects/bag.jpg', name: 'bag' }],
+    b: [{ src: 'foundation/img/letters/b_bani_ball.jpg', name: 'ball' }, { src: 'foundation/img/objects/bed.jpg', name: 'bed' }],
+    e: [{ src: 'foundation/img/letters/e_egg.jpg', name: 'egg' }, { src: 'foundation/img/letters/e_eto_turtle_egg.jpg', name: 'egg' }],
+    k: [{ src: 'foundation/img/letters/k_kiko_kite.jpg', name: 'kite' }, { src: 'foundation/img/objects/key.jpg', name: 'key' }],
+    h: [{ src: 'foundation/img/letters/h_hana_hat.jpg', name: 'hat' }, { src: 'foundation/img/objects/hen.jpg', name: 'hen' }],
+    r: [{ src: 'foundation/img/letters/r_ruri_robin.jpg', name: 'robin' }, { src: 'foundation/img/objects/rat.jpg', name: 'rat' }],
+    l: [{ src: 'foundation/img/letters/l_lili_lily.jpg', name: 'lily' }, { src: 'foundation/img/objects/leaf.jpg', name: 'leaf' }],
+    w: [{ src: 'foundation/img/letters/w_wawa_wave.jpg', name: 'wave' }, { src: 'foundation/img/objects/web.jpg', name: 'web' }]
+  };
+  function cardPics(ids) {
+    const out = {};
+    ids.forEach((id) => { out[id] = (CARD_PICS[id] || []).slice(); });
+    return out;
+  }
+  function firstRounds(pool) {
+    const ids = pool.map((L) => L.id);
+    const start = ids.length > 2 ? 2 : 0;
+    const order = ids.slice(start).concat(ids.slice(0, start));
+    const by = {};
+    pool.forEach((L) => { by[L.id] = L; });
+    const used = {};
+    const rounds = [];
+    let last = '';
+    for (let i = 0; i < 12; i++) {
+      const id = order[i % order.length];
+      const L = by[id];
+      const bag = (CARD_PICS[id] || []).filter((pic) => pic && pic.src);
+      const pics = bag.length ? bag : [{ src: artUrl(id), word: (L && L.word) || id }];
+      let pic = null;
+      for (let k = 0; k < pics.length; k++) {
+        const cand = pics[(i + k) % pics.length];
+        if ((used[cand.src] || 0) >= 2) continue;
+        if (cand.src === last) continue;
+        pic = cand;
+        break;
+      }
+      if (!pic) pic = pics[i % pics.length];
+      used[pic.src] = (used[pic.src] || 0) + 1;
+      last = pic.src;
+      rounds.push({ letter: L, pic: pic, reveal: id, nChoices: i < 6 ? 3 : Math.min(4, Math.max(3, pool.length)) });
+    }
+    return rounds;
+  }
   function teamOnePack() {
     const art = {
       a: 'foundation/img/letters/a_apple.jpg',
@@ -914,21 +970,7 @@
       ids: ['a', 'm', 's', 't'],
       say: { a: 'ah', m: 'mmm', s: 'sss', t: 't' },
       art: art,
-      pics: {
-        a: [
-          { src: 'foundation/img/objects/apple.jpg', name: 'apple' },
-          { src: 'foundation/img/objects/ant.jpg', name: 'ant' }
-        ],
-        m: [
-          { src: 'foundation/img/objects/mango.jpg', name: 'mango' }
-        ],
-        s: [
-          { src: art.s, name: 'snake' }
-        ],
-        t: [
-          { src: art.t, name: 'turtle' }
-        ]
-      },
+      pics: cardPics(['a', 'm', 's', 't']),
       words: [
         { text: 'am', src: 'foundation/img/scenes/am.jpg', parts: IRPhonemes.of('am'), decoy: 'foundation/img/objects/apple.jpg' },
         { text: 'mat', src: 'foundation/img/scenes/mat.jpg', parts: IRPhonemes.of('mat'), decoy: art.s },
@@ -949,7 +991,8 @@
     ids.forEach((id) => {
       art[id] = letterArt(id);
       const word = pictureWord(id) || id;
-      pics[id] = art[id] ? [{ src: art[id], name: word }] : [];
+      pics[id] = cardPics([id])[id] || [];
+      if (!pics[id].length && art[id]) pics[id] = [{ src: art[id], name: word }];
     });
     const foils = [];
     GROUPS.forEach((g) => { if (g.n < group.n) foils.push.apply(foils, g.letters); });
@@ -1269,8 +1312,12 @@
       ctx.progress(i / letters.length);
       if (ctx.count) ctx.count(i + 1, letters.length);
       ctx.stage.innerHTML = '';
+      const mouth = 'msatpfinodcugbekhrlw'.indexOf(L.id) >= 0
+        ? h('img', { class: 'llmouth', src: 'foundation/img/mouths/mouth_' + L.id + '.jpg', alt: 'Mouth for ' + L.id })
+        : null;
       ctx.stage.append(h('div', { class: 'activity llgame llmeet' },
         letterCardStep(L, fadeStep(group, L.id), i),
+        mouth,
         h('div', { class: 'llmeettext' },
           h('p', { class: 'llwho' }, L.id + ' · ' + ((info && info.keyword) || L.word || WHO[L.id] || '')),
           h('p', { class: 'llchant' }, (info && info.chant) || mem.chant),
@@ -1740,7 +1787,7 @@
       letter: L,
       reveal: L.id,
       replay: () => hear(L, 'sound'),
-      upper: i >= 8,
+      upper: false,
       nChoices: i < 4 ? 2 : i < 8 ? 3 : Math.min(4, pool.length)
     }));
     runRounds(ctx, rounds, (round, host, pick) => {
@@ -1773,11 +1820,11 @@
 
   function runSound(ctx, pool) {
     ctx.setInstr('Hear the word. Tap its first sound.');
-    const rounds = plan12(pool).map((L, i) => ({ letter: L, reveal: L.id, nChoices: i < 6 ? 3 : Math.min(4, Math.max(3, pool.length)) }));
+    const rounds = firstRounds(pool);
     runRounds(ctx, rounds, (round, host, pick) => {
       const L = round.letter;
       const end = L.where === 'end';
-      const word = L.word && L.word !== 'any' ? L.word : '';
+      const word = String(round.pic.word || L.word || '').toLowerCase();
       const opts = options(L, pool, round.nChoices || Math.min(4, pool.length)).map((item) => ({
         letter: item,
         yes: item.id === L.id,
@@ -1785,7 +1832,7 @@
       }));
       const hearWord = () => { if (word) sayRead(word); };
       host.append(
-        h('div', { class: 'llpic big', html: PICS[word] || '' }),
+        round.pic.src ? h('img', { class: 'll1link', src: round.pic.src, alt: '' }) : h('div', { class: 'llpic big', html: PICS[word] || '' }),
         word ? h('p', { class: 'llword' }, word) : null,
         h('button', { class: 'btn big primary', type: 'button', onclick: hearWord }, 'Hear the word'),
         h('p', { class: 'llask' }, end ? 'Which letter is at the end?' : 'Which letter is at the start?'),
@@ -1843,7 +1890,7 @@
       }
       host.append(
         h('p', { class: 'llprompt' }, 'Which letter?'),
-        choiceGrid(opts.map((item) => ({ letter: item, yes: item.id === L.id, label: glyph(item.id, round.showUpper) })), (it, btn) => pick(it.yes, btn)));
+        choiceGrid(opts.map((item) => ({ letter: item, yes: item.id === L.id, label: glyph(item.id, false) })), (it, btn) => pick(it.yes, btn)));
       round.replay();
     });
   }
@@ -3274,7 +3321,8 @@
     const B = WRITE_LINES.base;
     const D = WRITE_LINES.desc;
     const c = arcPath(168, (M + B) / 2, (B - M) / 2, 60, 420, 40);
-    const down = 'M228 ' + ((M + B) / 2) + ' L228 ' + B;
+    const right = 168 + (B - M) / 2;
+    const down = 'M' + right + ' ' + M + ' L' + right + ' ' + B;
     const map = {
       a: [c, down],
       b: ['M120 ' + T + ' L120 ' + B, arcPath(180, (M + B) / 2, (B - M) / 2, 90, -230, 32)],
@@ -3307,10 +3355,10 @@
   }
   const WRITE_PAGES = {
     g1: { 9: 'a', 14: 'm', 39: 's', 51: 't' },
-    g2: { 5: 'p', 8: 'f', 11: 'i', 14: 'n' },
-    g3: { 11: 'o', 13: 'd', 46: 'u' },
-    g4: { 11: 'g', 13: 'b' },
-    g5: { 11: 'h', 13: 'r' }
+    g2: { 6: 'p', 9: 'f', 12: 'i', 15: 'n' },
+    g3: { 8: 'o', 11: 'd', 14: 'c', 17: 'u' },
+    g4: { 8: 'g', 11: 'b', 14: 'e', 17: 'k' },
+    g5: { 8: 'h', 11: 'r', 14: 'l', 17: 'w' }
   };
   function writeBoard(letter) {
     const strokes = writeStrokes(letter);
@@ -3328,11 +3376,19 @@
       '<line x1="40" y1="' + L.mid + '" x2="320" y2="' + L.mid + '" stroke="#8A7048" stroke-width="3" stroke-dasharray="10 8"/>' +
       '<line x1="40" y1="' + L.base + '" x2="320" y2="' + L.base + '" stroke="#8A7048" stroke-width="4"/>' +
       paths +
-      '<g class="fs-pencil"><circle r="10" fill="#F28C00" stroke="#2B2540" stroke-width="3"/></g>' +
+      '<g class="fs-pencil"><g transform="rotate(38)">' +
+        '<polygon points="0,0 -18,-5 -18,5" fill="#F6D56A" stroke="#2B2540" stroke-width="1.5"/>' +
+        '<rect x="-46" y="-6" width="28" height="12" rx="2" fill="#F28C00" stroke="#2B2540" stroke-width="1.5"/>' +
+        '<rect x="-53" y="-6" width="8" height="12" fill="#E25B4A" stroke="#2B2540" stroke-width="1.3"/>' +
+        '<rect x="-60" y="-5" width="8" height="10" rx="1" fill="#F6E7B2" stroke="#2B2540" stroke-width="1.3"/>' +
+      '</g></g>' +
       '</svg>';
+    const mouthSrc = 'msatpfinodcugbekhrlw'.indexOf(letter) >= 0 ? 'foundation/img/mouths/mouth_' + letter + '.jpg' : '';
     const board = h('div', { class: 'fs-write' },
       h('p', { class: 'fs-writeask' }, 'Watch ' + letter + '.'),
-      h('div', { class: 'fs-writeart', html: svg }),
+      h('div', { class: 'fs-writetop' },
+        mouthSrc ? h('img', { class: 'fs-mouth', src: mouthSrc, alt: 'Mouth for ' + letter }) : null,
+        h('div', { class: 'fs-writeart', html: svg })),
       h('button', { class: 'btn big primary fs-watch', type: 'button' }, 'Watch again'));
     const root = board.querySelector('svg');
     const inks = [...root.querySelectorAll('.fs-ink')];
@@ -3348,10 +3404,7 @@
       let i = 0;
       function next() {
         if (mine !== token) return;
-        if (i >= inks.length) {
-          pencil.style.opacity = '0';
-          return;
-        }
+        if (i >= inks.length) return;
         const path = inks[i];
         const len = path.getTotalLength();
         const dur = len < 2 ? 280 : Math.max(700, len * 2.2);
@@ -3388,7 +3441,7 @@
     const prev = h('button', { class: 'btn big', type: 'button' }, 'Back');
     const next = h('button', { class: 'btn big next', type: 'button' }, 'Next');
     const jumps = h('div', { class: 'fs-dayjumps' });
-    const menuHold = h('div');
+    const menuHold = h('div', { class: 'fs-slidemenu' });
     const view = h('div', { class: 'screen fs-slideview' },
       h('header', { class: 'uA-top' },
         IR.ui.pageNav('#/foundation/letters/' + team),
