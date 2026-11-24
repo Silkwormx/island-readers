@@ -495,10 +495,18 @@
       side.style.height = room + 'px';
       side.style.maxHeight = room + 'px';
       const open = side.querySelector('.sidedrop.is-open');
+      const artEl = side.querySelector('.homeart');
+      const goBtn = side.querySelector('.zfstart2');
+      if (artEl) artEl.style.maxHeight = '';
       if (!open && side.scrollHeight > side.clientHeight + 2) {
         side.style.gap = '8px';
         if (nav) nav.style.gap = '8px';
         tabs.forEach((t) => { t.style.height = '48px'; t.style.minHeight = '48px'; t.style.maxHeight = '48px'; });
+        if (artEl && goBtn) {
+          const overflow = side.scrollHeight - side.clientHeight;
+          const next = Math.max(48, Math.round(artEl.getBoundingClientRect().height - overflow - 12));
+          artEl.style.maxHeight = next + 'px';
+        }
       } else if (!open) {
         side.style.removeProperty('gap');
         if (nav) nav.style.removeProperty('gap');

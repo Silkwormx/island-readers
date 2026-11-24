@@ -95,7 +95,7 @@ test('reading words stay inside the letters taught so far', () => {
   assert.match(letters, /Snakes sell sandy socks/);
   assert.match(letters, /Slide your hand like a snake/);
   assert.match(letters, /llcast/);
-  assert.match(letters, /hold hands/);
+  assert.match(letters, /sam sat at a mat/);
   assert.equal(/\bfree\b/i.test(letters), false);
 });
 
@@ -128,7 +128,7 @@ test('home opens Foundation Skills from the first bell, not a sidebar tab', () =
   assert.match(html, /js\/foundation\/letters\.js/);
   assert.match(html, /foundation\/foundation\.css/);
   assert.match(sw, /js\/foundation\/letters\.js/);
-  assert.match(sw, /ir-20261124o/);
+  assert.match(sw, /ir-20261124p/);
   assert.match(sw, /foundation\/img\/foundations_sidebar\.jpg/);
   assert.match(teach, /#\/foundation/);
   assert.match(letters, /Teacher Slideshows/);
