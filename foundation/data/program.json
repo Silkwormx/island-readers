@@ -68,7 +68,7 @@
     "m",
     "n"
    ],
-   "tip": "Count the humps: m has two humps (mangrove's two roots), n has one (Nobu bends once). Say the sound while tracing the humps."
+   "tip": "Count the humps: m has two humps (mangrove's two roots), n has one (the noodle bends once). Say the sound while tracing the humps."
   },
   "i/a": {
    "letters": [
@@ -104,7 +104,7 @@
     "h",
     "n"
    ],
-   "tip": "h has a tall stem (Hana's tall stem reaches the top line); n is short. Run a finger up the stem: is it tall or short?"
+   "tip": "h has a tall stem (the hat's tall stem reaches the top line); n is short. Run a finger up the stem: is it tall or short?"
   },
   "p/q": {
    "letters": [
@@ -191,7 +191,7 @@
    "group": "G1",
    "sound": "/m/ as in mango",
    "keyword": "mango",
-   "character": "mangrove",
+   "character": "mango",
    "concept": "A smiling mangrove tree. His trunk is the first stick and his two arched roots make the two humps of the m. He holds an Okinawa mango.",
    "chant": "Moles make mighty mud mountains. Messy monkeys munch muffins.",
    "action": "Rub your tummy in a circle and hum /mmm/ with lips closed.",
@@ -233,13 +233,13 @@
    "group": "G2",
    "sound": "/p/ as in pufferfish",
    "keyword": "pufferfish",
-   "character": "Puku the pufferfish",
+   "character": "pufferfish",
    "concept": "A round spotted pufferfish puffed up at the top right of a long straight tail that drops below the line.",
-   "chant": "Puku puffs and pops: /p/ /p/ /p/!",
+   "chant": "Pink pigs pop purple pies!",
    "action": "Puff your cheeks, then pop the air out with a tiny /p/ on your hand.",
    "formation": "Start at the middle line and pull straight down below the bottom line. Go back up and curve around to close.",
    "art": "img/letters/p_puku_pufferfish.jpg",
-   "cue": "'Think of Puku' + puff and pop",
+   "cue": "'Think of the pufferfish' + puff and pop",
    "capital": "P"
   },
   {
@@ -247,13 +247,13 @@
    "group": "G2",
    "sound": "/f/ as in fish",
    "keyword": "fish",
-   "character": "Fumi the fish",
+   "character": "fish",
    "concept": "A friendly fish curled like an f. The top fin hooks over and a side fin crosses the middle.",
-   "chant": "Fumi the fish fans the air: /fff/!",
+   "chant": "Five funny fish flip fast fins!",
    "action": "Gently bite your bottom lip and blow /fff/ while your fingers flutter like fish fins.",
    "formation": "Start a little below the top line. Curve up and over to the left, then pull straight down. Lift and cross at the middle line.",
    "art": "img/letters/f_fumi_fish.jpg",
-   "cue": "'Think of Fumi' + bite lip, fish fins",
+   "cue": "'Think of the fish' + bite lip, fish fins",
    "capital": "F"
   },
   {
@@ -261,13 +261,13 @@
    "group": "G2",
    "sound": "/i/ as in insect",
    "keyword": "insect",
-   "character": "Iggy the insect",
+   "character": "insect",
    "concept": "A little green insect standing straight up, with one shiny drop floating above his head like the dot on i.",
-   "chant": "Iggy the insect says /i/ /i/ /i/!",
+   "chant": "Itchy insects itch in igloos!",
    "action": "Inch one finger up your arm, saying /i/ with each step.",
    "formation": "Start at the middle line and pull straight down. Lift and add the dot above.",
    "art": "img/letters/i_iggy_insect.jpg",
-   "cue": "'Think of Iggy' + inch up the arm",
+   "cue": "'Think of the insect' + inch up the arm",
    "capital": "I"
   },
   {
@@ -275,13 +275,13 @@
    "group": "G2",
    "sound": "/n/ as in noodle",
    "keyword": "noodle",
-   "character": "Nobu the noodle",
+   "character": "noodle",
    "concept": "A cheerful Okinawa soba noodle bent into one tall hump, steam curling off the top.",
-   "chant": "Nobu the noodle says /nnn/!",
+   "chant": "Nine neat newts nap near nests!",
    "action": "Twirl a pretend fork and hum /nnn/ through your nose.",
    "formation": "Start at the middle line and pull down. Go back up, hump over and down.",
    "art": "img/letters/n_nobu_noodle.jpg",
-   "cue": "'Think of Nobu' + twirl the fork",
+   "cue": "'Think of the noodle' + twirl the fork",
    "capital": "N"
   },
   {
@@ -289,13 +289,13 @@
    "group": "G3",
    "sound": "/o/ as in octopus",
    "keyword": "octopus",
-   "character": "Ollie the octopus",
+   "character": "octopus",
    "concept": "A small orange octopus curled into one perfect round ring, his arms wrapped around it and his smiling face at the bottom.",
-   "chant": "Ollie the octopus says /o/ /o/ /o/!",
+   "chant": "the octopus says /o/ /o/ /o/!",
    "action": "Make a round mouth for /o/ and wiggle all ten fingers like arms.",
    "formation": "Start just under the middle line. Curve back and all the way around to close the circle.",
    "art": "img/letters/o_ollie_octopus.jpg",
-   "cue": "'Think of Ollie' + round mouth, wiggle fingers",
+   "cue": "'Think of the octopus' + round mouth, wiggle fingers",
    "capital": "O"
   },
   {
@@ -303,13 +303,13 @@
    "group": "G3",
    "sound": "/d/ as in dog",
    "keyword": "dog",
-   "character": "Dai the dog",
+   "character": "dog",
    "concept": "A friendly dog curled into a d. His round body is the circle and his tail rises tall on the right as the stick.",
-   "chant": "Dai the dog digs: /d/ /d/ /d/!",
+   "chant": "the dog the dog digs: /d/ /d/ /d/!",
    "action": "Drum two fists on the table for each /d/.",
    "formation": "Start just under the middle line and curve back around like a c. Go up to the top line and pull straight down. (Circle first, then stick.)",
    "art": "img/letters/d_dai_dog.jpg",
-   "cue": "'Think of Dai' + drum fists",
+   "cue": "'Think of the dog' + drum fists",
    "capital": "D"
   },
   {
@@ -317,13 +317,13 @@
    "group": "G3",
    "sound": "/k/ as in crab",
    "keyword": "crab",
-   "character": "Coco the crab",
+   "character": "crab",
    "concept": "A red crab with one big open claw shaped like a c, ready to pinch a shell.",
-   "chant": "Coco the crab clicks: /k/ /k/ /k/!",
+   "chant": "the crab clicks: /k/ /k/ /k/!",
    "action": "Open and close your hand like a claw for each /k/.",
    "formation": "Start just under the middle line. Curve back, around and stop. Leave it open.",
    "art": "img/letters/c_coco_crab.jpg",
-   "cue": "'Think of Coco' + claw pinch",
+   "cue": "'Think of the crab' + claw pinch",
    "capital": "C"
   },
   {
@@ -331,13 +331,13 @@
    "group": "G3",
    "sound": "/u/ as in umbrella",
    "keyword": "umbrella",
-   "character": "Uppy the umbrella",
+   "character": "umbrella",
    "concept": "A blue umbrella. The curve is the cup of the u and the handle sits on the right.",
-   "chant": "Uppy flips up: /u/ /u/ /u/!",
+   "chant": "the umbrella flips up: /u/ /u/ /u/!",
    "action": "Point both thumbs up and push them up for each /u/.",
    "formation": "Start at the middle line, pull down and curve around and up to the middle line. Pull straight down.",
    "art": "img/letters/u_umbrella.jpg",
-   "cue": "'Think of Uppy' + thumbs up",
+   "cue": "'Think of the umbrella' + thumbs up",
    "capital": "U"
   },
   {
@@ -345,13 +345,13 @@
    "group": "G4",
    "sound": "/g/ as in goat",
    "keyword": "goat",
-   "character": "Gogo the goat",
+   "character": "goat",
    "concept": "A fluffy white island goat. His round curled body is the circle and his long beard drops down and hooks back under the line.",
-   "chant": "Gogo the goat gulps: /g/ /g/ /g/!",
+   "chant": "the goat gulps: /g/ /g/ /g/!",
    "action": "Touch your throat and feel /g/ bump in the back.",
    "formation": "Start just under the middle line and curve back around like a c. Go up to the middle line, pull straight down below the bottom line and hook back to the left.",
    "art": "img/letters/g_gogo_goat.jpg",
-   "cue": "'Think of Gogo' + hand on throat",
+   "cue": "'Think of the goat' + hand on throat",
    "capital": "G"
   },
   {
@@ -359,13 +359,13 @@
    "group": "G4",
    "sound": "/b/ as in ball",
    "keyword": "ball",
-   "character": "Bani the ball",
+   "character": "ball",
    "concept": "A round ball beside a tall stick. The stick comes first, then the ball.",
-   "chant": "Bani the ball bounces: /b/ /b/ /b/!",
+   "chant": "the ball bounces: /b/ /b/ /b/!",
    "action": "Bounce two fists for each /b/, lips together then pop.",
    "formation": "Start at the top line and pull straight down. Go back up to the middle and curve around to close at the bottom. (Stick first, then ball.)",
    "art": "img/letters/b_bani_ball.jpg",
-   "cue": "'Think of Bani' + bounce fists",
+   "cue": "'Think of the ball' + bounce fists",
    "capital": "B"
   },
   {
@@ -373,13 +373,13 @@
    "group": "G4",
    "sound": "/e/ as in egg",
    "keyword": "egg",
-   "character": "the egg",
+   "character": "egg",
    "concept": "A plain egg in a nest. The egg is the picture for /e/.",
-   "chant": "Eto the egg cracks: /e/ /e/ /e/!",
+   "chant": "the egg the egg cracks: /e/ /e/ /e/!",
    "action": "Tap your fist on your palm like cracking an egg for each /e/.",
    "formation": "Start in the middle. Go straight across to the right, then curve up, back and around. Stop open.",
    "art": "img/letters/e_egg.jpg",
-   "cue": "'Think of Eto' + crack the egg",
+   "cue": "'Think of the egg' + crack the egg",
    "capital": "E"
   },
   {
@@ -387,13 +387,13 @@
    "group": "G4",
    "sound": "/k/ as in kite",
    "keyword": "kite",
-   "character": "Kiko the kite",
+   "character": "kite",
    "concept": "A bright kite. The tall stick is on the left, and two corners kick out like a k.",
-   "chant": "Kiko the kite kicks: /k/ /k/ /k/!",
+   "chant": "the kite kicks: /k/ /k/ /k/!",
    "action": "Do a tiny kick for each /k/.",
    "formation": "Start at the top line and pull straight down. Lift. Start at the middle line on the right, slant in to touch the stick, then slant out to the bottom line.",
    "art": "img/letters/k_kiko_kite.jpg",
-   "cue": "'Think of Kiko' + tiny kick",
+   "cue": "'Think of the kite' + tiny kick",
    "capital": "K"
   },
   {
@@ -401,13 +401,13 @@
    "group": "G5",
    "sound": "/h/ as in hat",
    "keyword": "hat",
-   "character": "Hana the hat",
+   "character": "hat",
    "concept": "A sun hat. The tall crown is the stick, and the brim humps over and down.",
-   "chant": "Hana the hat huffs: /h/ /h/ /h/!",
+   "chant": "the hat huffs: /h/ /h/ /h/!",
    "action": "Hold your hand in front of your mouth and feel the warm /h/ breath.",
    "formation": "Start at the top line and pull straight down. Go back up, hump over and down.",
    "art": "img/letters/h_hana_hat.jpg",
-   "cue": "'Think of Hana' + hand in front of mouth",
+   "cue": "'Think of the hat' + hand in front of mouth",
    "capital": "H"
   },
   {
@@ -415,13 +415,13 @@
    "group": "G5",
    "sound": "/r/ as in robin",
    "keyword": "robin",
-   "character": "Ruri the Ryukyu robin",
+   "character": "robin",
    "concept": "A little Ryukyu robin with a tall straight body and her head bent over to the right like the short curve of an r.",
-   "chant": "Ruri the robin races: /rrr/!",
+   "chant": "the robin races: /rrr/!",
    "action": "Roll your fists like running and growl a soft /rrr/.",
    "formation": "Start at the middle line and pull down. Go back up, curve over a little and stop.",
    "art": "img/letters/r_ruri_robin.jpg",
-   "cue": "'Think of Ruri' + running fists",
+   "cue": "'Think of the robin' + running fists",
    "capital": "R"
   },
   {
@@ -429,13 +429,13 @@
    "group": "G5",
    "sound": "/l/ as in lily",
    "keyword": "lily",
-   "character": "Lili the lily",
+   "character": "lily",
    "concept": "A tall, slim island lily, like the white lilies that bloom on Okinawa's islands in spring. Her straight green stem is the l, with long leaves hugging her sides and a white trumpet flower on top like a sun hat.",
-   "chant": "Lili the lily grows up tall: /lll/!",
+   "chant": "the lily grows up tall: /lll/!",
    "action": "Stand tall, stretch one arm straight up like a lily stem and sing /lll/ with your tongue behind your top teeth.",
-   "formation": "Start at the top line and pull straight down to the bottom line. Tall and straight like Lili.",
+   "formation": "Start at the top line and pull straight down to the bottom line. Tall and straight like the lily.",
    "art": "img/letters/l_lili_lily.jpg",
-   "cue": "'Think of Lili' + arm straight up like a lily stem",
+   "cue": "'Think of the lily' + arm straight up like a lily stem",
    "capital": "L"
   },
   {
@@ -443,13 +443,13 @@
    "group": "G5",
    "sound": "/w/ as in wave",
    "keyword": "wave",
-   "character": "Wawa the wave",
+   "character": "wave",
    "concept": "A playful sea wave that dips down and up twice like a w, with foam on each tip.",
-   "chant": "Wawa the wave wiggles: /w/ /w/ /w/!",
+   "chant": "the wave wiggles: /w/ /w/ /w/!",
    "action": "Round your lips and wave your hand down and up for each /w/.",
    "formation": "Start at the middle line. Slant down, slant up, slant down, slant up.",
    "art": "img/letters/w_wawa_wave.jpg",
-   "cue": "'Think of Wawa' + wave hand",
+   "cue": "'Think of the wave' + wave hand",
    "capital": "W"
   },
   {
@@ -457,13 +457,13 @@
    "group": "G6",
    "sound": "/j/ as in jellyfish",
    "keyword": "jellyfish",
-   "character": "Jojo the jellyfish",
+   "character": "jellyfish",
    "concept": "A see-through jellyfish with one long tentacle that drops below the line and hooks back, with a bubble above her head.",
-   "chant": "Jojo the jellyfish jiggles: /j/ /j/ /j/!",
+   "chant": "the jellyfish jiggles: /j/ /j/ /j/!",
    "action": "Jiggle your hands like jelly for each /j/.",
    "formation": "Start at the middle line and pull straight down below the bottom line. Hook back to the left. Lift and add the dot above.",
    "art": "img/letters/j_jojo_jellyfish.jpg",
-   "cue": "'Think of Jojo' + jiggle hands",
+   "cue": "'Think of the jellyfish' + jiggle hands",
    "capital": "J"
   },
   {
@@ -471,13 +471,13 @@
    "group": "G6",
    "sound": "/y/ as in yam",
    "keyword": "yam",
-   "character": "Yumi the purple yam",
+   "character": "yam",
    "concept": "An Okinawa purple sweet potato with two root arms in a y, the long root dropping below the line.",
-   "chant": "Yumi the yam says yum: /y/ /y/ /y/!",
+   "chant": "the yam says yum: /y/ /y/ /y/!",
    "action": "Smile wide and do a yo-yo hand down and up for each /y/.",
    "formation": "Start at the middle line and slant down to the right. Lift. Start at the middle line on the right and slant down all the way below the bottom line.",
    "art": "img/letters/y_yumi_purple_yam.jpg",
-   "cue": "'Think of Yumi' + yo-yo hand",
+   "cue": "'Think of the yam' + yo-yo hand",
    "capital": "Y"
   },
   {
@@ -485,13 +485,13 @@
    "group": "G6",
    "sound": "/ks/ as in box",
    "keyword": "box",
-   "character": "the box",
+   "character": "box",
    "concept": "A gift box. The /ks/ sound is at the end of box.",
    "chant": "Cross the box: /ks/ /ks/!",
    "action": "Cross your arms in an x and say /ks/.",
    "formation": "Start at the middle line on the left and slant down to the right. Lift. Start at the middle line on the right and slant down to the left.",
    "art": "img/letters/x_box.jpg",
-   "cue": "'Think of Tix' + cross arms",
+   "cue": "'Think of the box' + cross arms",
    "capital": "X"
   },
   {
@@ -499,13 +499,13 @@
    "group": "G6",
    "sound": "/kw/ as in quail (q and u work together)",
    "keyword": "quail",
-   "character": "Quinn the quail",
-   "concept": "A round quail with a tail that drops below the line and flicks out. Quinn never goes anywhere without her buddy u.",
-   "chant": "Quinn and u say /kw/ /kw/!",
+   "character": "quail",
+   "concept": "A round quail with a tail that drops below the line and flicks out. the quail never goes anywhere without her buddy u.",
+   "chant": "the quail and u say /kw/ /kw/!",
    "action": "Link two pointer fingers (q and u are buddies) and say /kw/.",
    "formation": "Start just under the middle line and curve back around like a c. Go up to the middle line, pull straight down below the bottom line and flick to the right.",
    "art": "img/letters/q_quinn_quail.jpg",
-   "cue": "'Think of Quinn' + link fingers",
+   "cue": "'Think of the quail' + link fingers",
    "capital": "Q"
   },
   {
@@ -513,13 +513,13 @@
    "group": "G7",
    "sound": "/v/ as in vine",
    "keyword": "vine",
-   "character": "Vida the vine",
+   "character": "vine",
    "concept": "Two leafy island vines that grow down and meet at a point like a v.",
-   "chant": "Vida the vine vibrates: /vvv/!",
+   "chant": "the vine vibrates: /vvv/!",
    "action": "Gently bite your bottom lip, hum /vvv/ and feel it buzz. Make a v with two fingers.",
    "formation": "Start at the middle line. Slant down to the bottom line, then slant back up.",
    "art": "img/letters/v_vida_vine.jpg",
-   "cue": "'Think of Vida' + two-finger v",
+   "cue": "'Think of the vine' + two-finger v",
    "capital": "V"
   },
   {
@@ -527,13 +527,13 @@
    "group": "G7",
    "sound": "/z/ as in zigzag",
    "keyword": "zigzag",
-   "character": "Zuzu the zigzag cloud",
+   "character": "zigzag",
    "concept": "A smiling little cloud sitting on a glowing golden lightning bolt that goes across, slants down and goes across again like a z.",
-   "chant": "Zuzu zigzags: /zzz/!",
+   "chant": "the zigzag zigzags: /zzz/!",
    "action": "Draw a zigzag in the air and buzz /zzz/ like a bee.",
    "formation": "Start at the middle line and go across to the right. Slant down to the left. Go across to the right.",
    "art": "img/letters/z_zuzu_zigzag_cloud.jpg",
-   "cue": "'Think of Zuzu' + zigzag finger",
+   "cue": "'Think of the zigzag' + zigzag finger",
    "capital": "Z"
   }
  ],
@@ -2238,16 +2238,16 @@
     },
     "scripts": {
      "p": {
-      "picture": "Puku beside the plain p: 'Puku makes a p shape. This is p. p says /p/.' Trace p over Puku, then trace the plain p.",
-      "outline": "Plain p over a faint Puku: 'Can you still see Puku? This is p.' Cover Puku: child says /p/ from the letter alone.",
+      "picture": "the pufferfish beside the plain p: 'the pufferfish makes a p shape. This is p. p says /p/.' Trace p over the pufferfish, then trace the plain p.",
+      "outline": "Plain p over a faint the pufferfish: 'Can you still see the pufferfish? This is p.' Cover the pufferfish: child says /p/ from the letter alone.",
       "plain": "Plain lowercase p only, in 2-3 fonts. 'Same letter, different clothes. What does it say?'",
-      "cue": "'Think of Puku' + puff and pop"
+      "cue": "'Think of the pufferfish' + puff and pop"
      },
      "f": {
-      "picture": "Fumi beside the plain f: 'Fumi makes an f shape. This is f. f says /f/.' Trace f over Fumi, then trace the plain f.",
-      "outline": "Plain f over a faint Fumi: 'Can you still see Fumi? This is f.' Cover Fumi: child says /f/ from the letter alone.",
+      "picture": "the fish beside the plain f: 'the fish makes an f shape. This is f. f says /f/.' Trace f over the fish, then trace the plain f.",
+      "outline": "Plain f over a faint the fish: 'Can you still see the fish? This is f.' Cover the fish: child says /f/ from the letter alone.",
       "plain": "Plain lowercase f only, in 2-3 fonts. 'Same letter, different clothes. What does it say?'",
-      "cue": "'Think of Fumi' + bite lip, fish fins"
+      "cue": "'Think of the fish' + bite lip, fish fins"
      }
     },
     "record": "After each flash, tick a box for every letter answered correctly in under 3 seconds. 3 ticks on 3 different lessons moves the letter one step.",
@@ -2294,7 +2294,7 @@
      "id": "meet",
      "step": "Meet the letter",
      "minutes": 3,
-     "what_to_do": "Puku beside the plain p: 'Puku makes a p shape. This is p. p says /p/.' Trace p over Puku, then trace the plain p. Chant and action. Fumi beside the plain f: 'Fumi makes an f shape. This is f. f says /f/.' Trace f over Fumi, then trace the plain f. Chant and action."
+     "what_to_do": "the pufferfish beside the plain p: 'the pufferfish makes a p shape. This is p. p says /p/.' Trace p over the pufferfish, then trace the plain p. Chant and action. the fish beside the plain f: 'the fish makes an f shape. This is f. f says /f/.' Trace f over the fish, then trace the plain f. Chant and action."
     },
     {
      "id": "trace",
@@ -2401,7 +2401,7 @@
       "m",
       "n"
      ],
-     "tip": "Count the humps: m has two humps (mangrove's two roots), n has one (Nobu bends once). Say the sound while tracing the humps.",
+     "tip": "Count the humps: m has two humps (mangrove's two roots), n has one (the noodle bends once). Say the sound while tracing the humps.",
      "minutes": 1,
      "new_today": true
     },
@@ -2473,7 +2473,7 @@
     },
     {
      "word": "in",
-     "scene": "Iggy the insect sits in a cup",
+     "scene": "the insect sits in a cup",
      "caption": "In."
     },
     {
@@ -2583,28 +2583,28 @@
     },
     "scripts": {
      "p": {
-      "picture": "Puku beside the plain p: 'Puku makes a p shape. This is p. p says /p/.' Trace p over Puku, then trace the plain p.",
-      "outline": "Plain p over a faint Puku: 'Can you still see Puku? This is p.' Cover Puku: child says /p/ from the letter alone.",
+      "picture": "the pufferfish beside the plain p: 'the pufferfish makes a p shape. This is p. p says /p/.' Trace p over the pufferfish, then trace the plain p.",
+      "outline": "Plain p over a faint the pufferfish: 'Can you still see the pufferfish? This is p.' Cover the pufferfish: child says /p/ from the letter alone.",
       "plain": "Plain lowercase p only, in 2-3 fonts. 'Same letter, different clothes. What does it say?'",
-      "cue": "'Think of Puku' + puff and pop"
+      "cue": "'Think of the pufferfish' + puff and pop"
      },
      "f": {
-      "picture": "Fumi beside the plain f: 'Fumi makes an f shape. This is f. f says /f/.' Trace f over Fumi, then trace the plain f.",
-      "outline": "Plain f over a faint Fumi: 'Can you still see Fumi? This is f.' Cover Fumi: child says /f/ from the letter alone.",
+      "picture": "the fish beside the plain f: 'the fish makes an f shape. This is f. f says /f/.' Trace f over the fish, then trace the plain f.",
+      "outline": "Plain f over a faint the fish: 'Can you still see the fish? This is f.' Cover the fish: child says /f/ from the letter alone.",
       "plain": "Plain lowercase f only, in 2-3 fonts. 'Same letter, different clothes. What does it say?'",
-      "cue": "'Think of Fumi' + bite lip, fish fins"
+      "cue": "'Think of the fish' + bite lip, fish fins"
      },
      "i": {
-      "picture": "Iggy beside the plain i: 'Iggy makes an i shape. This is i. i says /i/.' Trace i over Iggy, then trace the plain i.",
-      "outline": "Plain i over a faint Iggy: 'Can you still see Iggy? This is i.' Cover Iggy: child says /i/ from the letter alone.",
+      "picture": "the insect beside the plain i: 'the insect makes an i shape. This is i. i says /i/.' Trace i over the insect, then trace the plain i.",
+      "outline": "Plain i over a faint the insect: 'Can you still see the insect? This is i.' Cover the insect: child says /i/ from the letter alone.",
       "plain": "Plain lowercase i only, in 2-3 fonts. 'Same letter, different clothes. What does it say?'",
-      "cue": "'Think of Iggy' + inch up the arm"
+      "cue": "'Think of the insect' + inch up the arm"
      },
      "n": {
-      "picture": "Nobu beside the plain n: 'Nobu makes an n shape. This is n. n says /n/.' Trace n over Nobu, then trace the plain n.",
-      "outline": "Plain n over a faint Nobu: 'Can you still see Nobu? This is n.' Cover Nobu: child says /n/ from the letter alone.",
+      "picture": "the noodle beside the plain n: 'the noodle makes an n shape. This is n. n says /n/.' Trace n over the noodle, then trace the plain n.",
+      "outline": "Plain n over a faint the noodle: 'Can you still see the noodle? This is n.' Cover the noodle: child says /n/ from the letter alone.",
       "plain": "Plain lowercase n only, in 2-3 fonts. 'Same letter, different clothes. What does it say?'",
-      "cue": "'Think of Nobu' + twirl the fork"
+      "cue": "'Think of the noodle' + twirl the fork"
      }
     },
     "record": "After each flash, tick a box for every letter answered correctly in under 3 seconds. 3 ticks on 3 different lessons moves the letter one step.",
@@ -2659,7 +2659,7 @@
      "id": "meet",
      "step": "Meet the letter",
      "minutes": 3,
-     "what_to_do": "Iggy beside the plain i: 'Iggy makes an i shape. This is i. i says /i/.' Trace i over Iggy, then trace the plain i. Chant and action. Nobu beside the plain n: 'Nobu makes an n shape. This is n. n says /n/.' Trace n over Nobu, then trace the plain n. Chant and action. Look-alike sort (m/n, 1 min): Count the humps: m has two humps (mangrove's two roots), n has one (Nobu bends once). Say the sound while tracing the humps. Look-alike sort (i/a, 1 min): Mouth shape: /i/ is a small smile, /a/ drops the jaw wide open. Child looks in a mirror and feels the jaw."
+     "what_to_do": "the insect beside the plain i: 'the insect makes an i shape. This is i. i says /i/.' Trace i over the insect, then trace the plain i. Chant and action. the noodle beside the plain n: 'the noodle makes an n shape. This is n. n says /n/.' Trace n over the noodle, then trace the plain n. Chant and action. Look-alike sort (m/n, 1 min): Count the humps: m has two humps (mangrove's two roots), n has one (the noodle bends once). Say the sound while tracing the humps. Look-alike sort (i/a, 1 min): Mouth shape: /i/ is a small smile, /a/ drops the jaw wide open. Child looks in a mirror and feels the jaw."
     },
     {
      "id": "trace",
@@ -2768,7 +2768,7 @@
       "m",
       "n"
      ],
-     "tip": "Count the humps: m has two humps (mangrove's two roots), n has one (Nobu bends once). Say the sound while tracing the humps.",
+     "tip": "Count the humps: m has two humps (mangrove's two roots), n has one (the noodle bends once). Say the sound while tracing the humps.",
      "minutes": 1,
      "new_today": false
     },
@@ -2969,28 +2969,28 @@
     },
     "scripts": {
      "p": {
-      "picture": "Puku beside the plain p: 'Puku makes a p shape. This is p. p says /p/.' Trace p over Puku, then trace the plain p.",
-      "outline": "Plain p over a faint Puku: 'Can you still see Puku? This is p.' Cover Puku: child says /p/ from the letter alone.",
+      "picture": "the pufferfish beside the plain p: 'the pufferfish makes a p shape. This is p. p says /p/.' Trace p over the pufferfish, then trace the plain p.",
+      "outline": "Plain p over a faint the pufferfish: 'Can you still see the pufferfish? This is p.' Cover the pufferfish: child says /p/ from the letter alone.",
       "plain": "Plain lowercase p only, in 2-3 fonts. 'Same letter, different clothes. What does it say?'",
-      "cue": "'Think of Puku' + puff and pop"
+      "cue": "'Think of the pufferfish' + puff and pop"
      },
      "f": {
-      "picture": "Fumi beside the plain f: 'Fumi makes an f shape. This is f. f says /f/.' Trace f over Fumi, then trace the plain f.",
-      "outline": "Plain f over a faint Fumi: 'Can you still see Fumi? This is f.' Cover Fumi: child says /f/ from the letter alone.",
+      "picture": "the fish beside the plain f: 'the fish makes an f shape. This is f. f says /f/.' Trace f over the fish, then trace the plain f.",
+      "outline": "Plain f over a faint the fish: 'Can you still see the fish? This is f.' Cover the fish: child says /f/ from the letter alone.",
       "plain": "Plain lowercase f only, in 2-3 fonts. 'Same letter, different clothes. What does it say?'",
-      "cue": "'Think of Fumi' + bite lip, fish fins"
+      "cue": "'Think of the fish' + bite lip, fish fins"
      },
      "i": {
-      "picture": "Iggy beside the plain i: 'Iggy makes an i shape. This is i. i says /i/.' Trace i over Iggy, then trace the plain i.",
-      "outline": "Plain i over a faint Iggy: 'Can you still see Iggy? This is i.' Cover Iggy: child says /i/ from the letter alone.",
+      "picture": "the insect beside the plain i: 'the insect makes an i shape. This is i. i says /i/.' Trace i over the insect, then trace the plain i.",
+      "outline": "Plain i over a faint the insect: 'Can you still see the insect? This is i.' Cover the insect: child says /i/ from the letter alone.",
       "plain": "Plain lowercase i only, in 2-3 fonts. 'Same letter, different clothes. What does it say?'",
-      "cue": "'Think of Iggy' + inch up the arm"
+      "cue": "'Think of the insect' + inch up the arm"
      },
      "n": {
-      "picture": "Nobu beside the plain n: 'Nobu makes an n shape. This is n. n says /n/.' Trace n over Nobu, then trace the plain n.",
-      "outline": "Plain n over a faint Nobu: 'Can you still see Nobu? This is n.' Cover Nobu: child says /n/ from the letter alone.",
+      "picture": "the noodle beside the plain n: 'the noodle makes an n shape. This is n. n says /n/.' Trace n over the noodle, then trace the plain n.",
+      "outline": "Plain n over a faint the noodle: 'Can you still see the noodle? This is n.' Cover the noodle: child says /n/ from the letter alone.",
       "plain": "Plain lowercase n only, in 2-3 fonts. 'Same letter, different clothes. What does it say?'",
-      "cue": "'Think of Nobu' + twirl the fork"
+      "cue": "'Think of the noodle' + twirl the fork"
      }
     },
     "record": "After each flash, tick a box for every letter answered correctly in under 3 seconds. 3 ticks on 3 different lessons moves the letter one step.",
@@ -3156,7 +3156,7 @@
       "m",
       "n"
      ],
-     "tip": "Count the humps: m has two humps (mangrove's two roots), n has one (Nobu bends once). Say the sound while tracing the humps.",
+     "tip": "Count the humps: m has two humps (mangrove's two roots), n has one (the noodle bends once). Say the sound while tracing the humps.",
      "minutes": 1,
      "new_today": false
     },
@@ -3317,28 +3317,28 @@
     },
     "scripts": {
      "p": {
-      "picture": "Puku beside the plain p: 'Puku makes a p shape. This is p. p says /p/.' Trace p over Puku, then trace the plain p.",
-      "outline": "Plain p over a faint Puku: 'Can you still see Puku? This is p.' Cover Puku: child says /p/ from the letter alone.",
+      "picture": "the pufferfish beside the plain p: 'the pufferfish makes a p shape. This is p. p says /p/.' Trace p over the pufferfish, then trace the plain p.",
+      "outline": "Plain p over a faint the pufferfish: 'Can you still see the pufferfish? This is p.' Cover the pufferfish: child says /p/ from the letter alone.",
       "plain": "Plain lowercase p only, in 2-3 fonts. 'Same letter, different clothes. What does it say?'",
-      "cue": "'Think of Puku' + puff and pop"
+      "cue": "'Think of the pufferfish' + puff and pop"
      },
      "f": {
-      "picture": "Fumi beside the plain f: 'Fumi makes an f shape. This is f. f says /f/.' Trace f over Fumi, then trace the plain f.",
-      "outline": "Plain f over a faint Fumi: 'Can you still see Fumi? This is f.' Cover Fumi: child says /f/ from the letter alone.",
+      "picture": "the fish beside the plain f: 'the fish makes an f shape. This is f. f says /f/.' Trace f over the fish, then trace the plain f.",
+      "outline": "Plain f over a faint the fish: 'Can you still see the fish? This is f.' Cover the fish: child says /f/ from the letter alone.",
       "plain": "Plain lowercase f only, in 2-3 fonts. 'Same letter, different clothes. What does it say?'",
-      "cue": "'Think of Fumi' + bite lip, fish fins"
+      "cue": "'Think of the fish' + bite lip, fish fins"
      },
      "i": {
-      "picture": "Iggy beside the plain i: 'Iggy makes an i shape. This is i. i says /i/.' Trace i over Iggy, then trace the plain i.",
-      "outline": "Plain i over a faint Iggy: 'Can you still see Iggy? This is i.' Cover Iggy: child says /i/ from the letter alone.",
+      "picture": "the insect beside the plain i: 'the insect makes an i shape. This is i. i says /i/.' Trace i over the insect, then trace the plain i.",
+      "outline": "Plain i over a faint the insect: 'Can you still see the insect? This is i.' Cover the insect: child says /i/ from the letter alone.",
       "plain": "Plain lowercase i only, in 2-3 fonts. 'Same letter, different clothes. What does it say?'",
-      "cue": "'Think of Iggy' + inch up the arm"
+      "cue": "'Think of the insect' + inch up the arm"
      },
      "n": {
-      "picture": "Nobu beside the plain n: 'Nobu makes an n shape. This is n. n says /n/.' Trace n over Nobu, then trace the plain n.",
-      "outline": "Plain n over a faint Nobu: 'Can you still see Nobu? This is n.' Cover Nobu: child says /n/ from the letter alone.",
+      "picture": "the noodle beside the plain n: 'the noodle makes an n shape. This is n. n says /n/.' Trace n over the noodle, then trace the plain n.",
+      "outline": "Plain n over a faint the noodle: 'Can you still see the noodle? This is n.' Cover the noodle: child says /n/ from the letter alone.",
       "plain": "Plain lowercase n only, in 2-3 fonts. 'Same letter, different clothes. What does it say?'",
-      "cue": "'Think of Nobu' + twirl the fork"
+      "cue": "'Think of the noodle' + twirl the fork"
      }
     },
     "record": "After each flash, tick a box for every letter answered correctly in under 3 seconds. 3 ticks on 3 different lessons moves the letter one step.",
@@ -3583,7 +3583,7 @@
       "m",
       "n"
      ],
-     "tip": "Count the humps: m has two humps (mangrove's two roots), n has one (Nobu bends once). Say the sound while tracing the humps.",
+     "tip": "Count the humps: m has two humps (mangrove's two roots), n has one (the noodle bends once). Say the sound while tracing the humps.",
      "minutes": 1,
      "new_today": false
     },
@@ -3793,16 +3793,16 @@
     },
     "scripts": {
      "o": {
-      "picture": "Ollie beside the plain o: 'Ollie makes an o shape. This is o. o says /o/.' Trace o over Ollie, then trace the plain o.",
-      "outline": "Plain o over a faint Ollie: 'Can you still see Ollie? This is o.' Cover Ollie: child says /o/ from the letter alone.",
+      "picture": "the octopus beside the plain o: 'the octopus makes an o shape. This is o. o says /o/.' Trace o over the octopus, then trace the plain o.",
+      "outline": "Plain o over a faint the octopus: 'Can you still see the octopus? This is o.' Cover the octopus: child says /o/ from the letter alone.",
       "plain": "Plain lowercase o only, in 2-3 fonts. 'Same letter, different clothes. What does it say?'",
-      "cue": "'Think of Ollie' + round mouth, wiggle fingers"
+      "cue": "'Think of the octopus' + round mouth, wiggle fingers"
      },
      "d": {
-      "picture": "Dai beside the plain d: 'Dai makes a d shape. This is d. d says /d/.' Trace d over Dai, then trace the plain d.",
-      "outline": "Plain d over a faint Dai: 'Can you still see Dai? This is d.' Cover Dai: child says /d/ from the letter alone.",
+      "picture": "the dog beside the plain d: 'the dog makes a d shape. This is d. d says /d/.' Trace d over the dog, then trace the plain d.",
+      "outline": "Plain d over a faint the dog: 'Can you still see the dog? This is d.' Cover the dog: child says /d/ from the letter alone.",
       "plain": "Plain lowercase d only, in 2-3 fonts. 'Same letter, different clothes. What does it say?'",
-      "cue": "'Think of Dai' + drum fists"
+      "cue": "'Think of the dog' + drum fists"
      }
     },
     "record": "After each flash, tick a box for every letter answered correctly in under 3 seconds. 3 ticks on 3 different lessons moves the letter one step.",
@@ -3878,7 +3878,7 @@
      "id": "meet",
      "step": "Meet the letter",
      "minutes": 3,
-     "what_to_do": "Ollie beside the plain o: 'Ollie makes an o shape. This is o. o says /o/.' Trace o over Ollie, then trace the plain o. Chant and action. Dai beside the plain d: 'Dai makes a d shape. This is d. d says /d/.' Trace d over Dai, then trace the plain d. Chant and action."
+     "what_to_do": "the octopus beside the plain o: 'the octopus makes an o shape. This is o. o says /o/.' Trace o over the octopus, then trace the plain o. Chant and action. the dog beside the plain d: 'the dog makes a d shape. This is d. d says /d/.' Trace d over the dog, then trace the plain d. Chant and action."
     },
     {
      "id": "trace",
@@ -3995,7 +3995,7 @@
       "m",
       "n"
      ],
-     "tip": "Count the humps: m has two humps (mangrove's two roots), n has one (Nobu bends once). Say the sound while tracing the humps.",
+     "tip": "Count the humps: m has two humps (mangrove's two roots), n has one (the noodle bends once). Say the sound while tracing the humps.",
      "minutes": 1,
      "new_today": false
     },
@@ -4221,28 +4221,28 @@
     },
     "scripts": {
      "o": {
-      "picture": "Ollie beside the plain o: 'Ollie makes an o shape. This is o. o says /o/.' Trace o over Ollie, then trace the plain o.",
-      "outline": "Plain o over a faint Ollie: 'Can you still see Ollie? This is o.' Cover Ollie: child says /o/ from the letter alone.",
+      "picture": "the octopus beside the plain o: 'the octopus makes an o shape. This is o. o says /o/.' Trace o over the octopus, then trace the plain o.",
+      "outline": "Plain o over a faint the octopus: 'Can you still see the octopus? This is o.' Cover the octopus: child says /o/ from the letter alone.",
       "plain": "Plain lowercase o only, in 2-3 fonts. 'Same letter, different clothes. What does it say?'",
-      "cue": "'Think of Ollie' + round mouth, wiggle fingers"
+      "cue": "'Think of the octopus' + round mouth, wiggle fingers"
      },
      "d": {
-      "picture": "Dai beside the plain d: 'Dai makes a d shape. This is d. d says /d/.' Trace d over Dai, then trace the plain d.",
-      "outline": "Plain d over a faint Dai: 'Can you still see Dai? This is d.' Cover Dai: child says /d/ from the letter alone.",
+      "picture": "the dog beside the plain d: 'the dog makes a d shape. This is d. d says /d/.' Trace d over the dog, then trace the plain d.",
+      "outline": "Plain d over a faint the dog: 'Can you still see the dog? This is d.' Cover the dog: child says /d/ from the letter alone.",
       "plain": "Plain lowercase d only, in 2-3 fonts. 'Same letter, different clothes. What does it say?'",
-      "cue": "'Think of Dai' + drum fists"
+      "cue": "'Think of the dog' + drum fists"
      },
      "c": {
-      "picture": "Coco beside the plain c: 'Coco makes a c shape. This is c. c says /k/.' Trace c over Coco, then trace the plain c.",
-      "outline": "Plain c over a faint Coco: 'Can you still see Coco? This is c.' Cover Coco: child says /k/ from the letter alone.",
+      "picture": "the crab beside the plain c: 'the crab makes a c shape. This is c. c says /k/.' Trace c over the crab, then trace the plain c.",
+      "outline": "Plain c over a faint the crab: 'Can you still see the crab? This is c.' Cover the crab: child says /k/ from the letter alone.",
       "plain": "Plain lowercase c only, in 2-3 fonts. 'Same letter, different clothes. What does it say?'",
-      "cue": "'Think of Coco' + claw pinch"
+      "cue": "'Think of the crab' + claw pinch"
      },
      "u": {
-      "picture": "Uppy beside the plain u: 'Uppy makes a u shape. This is u. u says /u/.' Trace u over Uppy, then trace the plain u.",
-      "outline": "Plain u over a faint Uppy: 'Can you still see Uppy? This is u.' Cover Uppy: child says /u/ from the letter alone.",
+      "picture": "the umbrella beside the plain u: 'the umbrella makes a u shape. This is u. u says /u/.' Trace u over the umbrella, then trace the plain u.",
+      "outline": "Plain u over a faint the umbrella: 'Can you still see the umbrella? This is u.' Cover the umbrella: child says /u/ from the letter alone.",
       "plain": "Plain lowercase u only, in 2-3 fonts. 'Same letter, different clothes. What does it say?'",
-      "cue": "'Think of Uppy' + thumbs up"
+      "cue": "'Think of the umbrella' + thumbs up"
      }
     },
     "record": "After each flash, tick a box for every letter answered correctly in under 3 seconds. 3 ticks on 3 different lessons moves the letter one step.",
@@ -4326,7 +4326,7 @@
      "id": "meet",
      "step": "Meet the letter",
      "minutes": 3,
-     "what_to_do": "Coco beside the plain c: 'Coco makes a c shape. This is c. c says /k/.' Trace c over Coco, then trace the plain c. Chant and action. Uppy beside the plain u: 'Uppy makes a u shape. This is u. u says /u/.' Trace u over Uppy, then trace the plain u. Chant and action. Look-alike sort (n/u, 1 min): n is a bridge with the hump up; u is a cup open at the top that catches rain. Flip a card and watch it change."
+     "what_to_do": "the crab beside the plain c: 'the crab makes a c shape. This is c. c says /k/.' Trace c over the crab, then trace the plain c. Chant and action. the umbrella beside the plain u: 'the umbrella makes a u shape. This is u. u says /u/.' Trace u over the umbrella, then trace the plain u. Chant and action. Look-alike sort (n/u, 1 min): n is a bridge with the hump up; u is a cup open at the top that catches rain. Flip a card and watch it change."
     },
     {
      "id": "trace",
@@ -4442,7 +4442,7 @@
       "m",
       "n"
      ],
-     "tip": "Count the humps: m has two humps (mangrove's two roots), n has one (Nobu bends once). Say the sound while tracing the humps.",
+     "tip": "Count the humps: m has two humps (mangrove's two roots), n has one (the noodle bends once). Say the sound while tracing the humps.",
      "minutes": 1,
      "new_today": false
     },
@@ -4674,28 +4674,28 @@
     },
     "scripts": {
      "o": {
-      "picture": "Ollie beside the plain o: 'Ollie makes an o shape. This is o. o says /o/.' Trace o over Ollie, then trace the plain o.",
-      "outline": "Plain o over a faint Ollie: 'Can you still see Ollie? This is o.' Cover Ollie: child says /o/ from the letter alone.",
+      "picture": "the octopus beside the plain o: 'the octopus makes an o shape. This is o. o says /o/.' Trace o over the octopus, then trace the plain o.",
+      "outline": "Plain o over a faint the octopus: 'Can you still see the octopus? This is o.' Cover the octopus: child says /o/ from the letter alone.",
       "plain": "Plain lowercase o only, in 2-3 fonts. 'Same letter, different clothes. What does it say?'",
-      "cue": "'Think of Ollie' + round mouth, wiggle fingers"
+      "cue": "'Think of the octopus' + round mouth, wiggle fingers"
      },
      "d": {
-      "picture": "Dai beside the plain d: 'Dai makes a d shape. This is d. d says /d/.' Trace d over Dai, then trace the plain d.",
-      "outline": "Plain d over a faint Dai: 'Can you still see Dai? This is d.' Cover Dai: child says /d/ from the letter alone.",
+      "picture": "the dog beside the plain d: 'the dog makes a d shape. This is d. d says /d/.' Trace d over the dog, then trace the plain d.",
+      "outline": "Plain d over a faint the dog: 'Can you still see the dog? This is d.' Cover the dog: child says /d/ from the letter alone.",
       "plain": "Plain lowercase d only, in 2-3 fonts. 'Same letter, different clothes. What does it say?'",
-      "cue": "'Think of Dai' + drum fists"
+      "cue": "'Think of the dog' + drum fists"
      },
      "c": {
-      "picture": "Coco beside the plain c: 'Coco makes a c shape. This is c. c says /k/.' Trace c over Coco, then trace the plain c.",
-      "outline": "Plain c over a faint Coco: 'Can you still see Coco? This is c.' Cover Coco: child says /k/ from the letter alone.",
+      "picture": "the crab beside the plain c: 'the crab makes a c shape. This is c. c says /k/.' Trace c over the crab, then trace the plain c.",
+      "outline": "Plain c over a faint the crab: 'Can you still see the crab? This is c.' Cover the crab: child says /k/ from the letter alone.",
       "plain": "Plain lowercase c only, in 2-3 fonts. 'Same letter, different clothes. What does it say?'",
-      "cue": "'Think of Coco' + claw pinch"
+      "cue": "'Think of the crab' + claw pinch"
      },
      "u": {
-      "picture": "Uppy beside the plain u: 'Uppy makes a u shape. This is u. u says /u/.' Trace u over Uppy, then trace the plain u.",
-      "outline": "Plain u over a faint Uppy: 'Can you still see Uppy? This is u.' Cover Uppy: child says /u/ from the letter alone.",
+      "picture": "the umbrella beside the plain u: 'the umbrella makes a u shape. This is u. u says /u/.' Trace u over the umbrella, then trace the plain u.",
+      "outline": "Plain u over a faint the umbrella: 'Can you still see the umbrella? This is u.' Cover the umbrella: child says /u/ from the letter alone.",
       "plain": "Plain lowercase u only, in 2-3 fonts. 'Same letter, different clothes. What does it say?'",
-      "cue": "'Think of Uppy' + thumbs up"
+      "cue": "'Think of the umbrella' + thumbs up"
      }
     },
     "record": "After each flash, tick a box for every letter answered correctly in under 3 seconds. 3 ticks on 3 different lessons moves the letter one step.",
@@ -5107,28 +5107,28 @@
     },
     "scripts": {
      "o": {
-      "picture": "Ollie beside the plain o: 'Ollie makes an o shape. This is o. o says /o/.' Trace o over Ollie, then trace the plain o.",
-      "outline": "Plain o over a faint Ollie: 'Can you still see Ollie? This is o.' Cover Ollie: child says /o/ from the letter alone.",
+      "picture": "the octopus beside the plain o: 'the octopus makes an o shape. This is o. o says /o/.' Trace o over the octopus, then trace the plain o.",
+      "outline": "Plain o over a faint the octopus: 'Can you still see the octopus? This is o.' Cover the octopus: child says /o/ from the letter alone.",
       "plain": "Plain lowercase o only, in 2-3 fonts. 'Same letter, different clothes. What does it say?'",
-      "cue": "'Think of Ollie' + round mouth, wiggle fingers"
+      "cue": "'Think of the octopus' + round mouth, wiggle fingers"
      },
      "d": {
-      "picture": "Dai beside the plain d: 'Dai makes a d shape. This is d. d says /d/.' Trace d over Dai, then trace the plain d.",
-      "outline": "Plain d over a faint Dai: 'Can you still see Dai? This is d.' Cover Dai: child says /d/ from the letter alone.",
+      "picture": "the dog beside the plain d: 'the dog makes a d shape. This is d. d says /d/.' Trace d over the dog, then trace the plain d.",
+      "outline": "Plain d over a faint the dog: 'Can you still see the dog? This is d.' Cover the dog: child says /d/ from the letter alone.",
       "plain": "Plain lowercase d only, in 2-3 fonts. 'Same letter, different clothes. What does it say?'",
-      "cue": "'Think of Dai' + drum fists"
+      "cue": "'Think of the dog' + drum fists"
      },
      "c": {
-      "picture": "Coco beside the plain c: 'Coco makes a c shape. This is c. c says /k/.' Trace c over Coco, then trace the plain c.",
-      "outline": "Plain c over a faint Coco: 'Can you still see Coco? This is c.' Cover Coco: child says /k/ from the letter alone.",
+      "picture": "the crab beside the plain c: 'the crab makes a c shape. This is c. c says /k/.' Trace c over the crab, then trace the plain c.",
+      "outline": "Plain c over a faint the crab: 'Can you still see the crab? This is c.' Cover the crab: child says /k/ from the letter alone.",
       "plain": "Plain lowercase c only, in 2-3 fonts. 'Same letter, different clothes. What does it say?'",
-      "cue": "'Think of Coco' + claw pinch"
+      "cue": "'Think of the crab' + claw pinch"
      },
      "u": {
-      "picture": "Uppy beside the plain u: 'Uppy makes a u shape. This is u. u says /u/.' Trace u over Uppy, then trace the plain u.",
-      "outline": "Plain u over a faint Uppy: 'Can you still see Uppy? This is u.' Cover Uppy: child says /u/ from the letter alone.",
+      "picture": "the umbrella beside the plain u: 'the umbrella makes a u shape. This is u. u says /u/.' Trace u over the umbrella, then trace the plain u.",
+      "outline": "Plain u over a faint the umbrella: 'Can you still see the umbrella? This is u.' Cover the umbrella: child says /u/ from the letter alone.",
       "plain": "Plain lowercase u only, in 2-3 fonts. 'Same letter, different clothes. What does it say?'",
-      "cue": "'Think of Uppy' + thumbs up"
+      "cue": "'Think of the umbrella' + thumbs up"
      }
     },
     "record": "After each flash, tick a box for every letter answered correctly in under 3 seconds. 3 ticks on 3 different lessons moves the letter one step.",
@@ -5542,28 +5542,28 @@
     },
     "scripts": {
      "o": {
-      "picture": "Ollie beside the plain o: 'Ollie makes an o shape. This is o. o says /o/.' Trace o over Ollie, then trace the plain o.",
-      "outline": "Plain o over a faint Ollie: 'Can you still see Ollie? This is o.' Cover Ollie: child says /o/ from the letter alone.",
+      "picture": "the octopus beside the plain o: 'the octopus makes an o shape. This is o. o says /o/.' Trace o over the octopus, then trace the plain o.",
+      "outline": "Plain o over a faint the octopus: 'Can you still see the octopus? This is o.' Cover the octopus: child says /o/ from the letter alone.",
       "plain": "Plain lowercase o only, in 2-3 fonts. 'Same letter, different clothes. What does it say?'",
-      "cue": "'Think of Ollie' + round mouth, wiggle fingers"
+      "cue": "'Think of the octopus' + round mouth, wiggle fingers"
      },
      "d": {
-      "picture": "Dai beside the plain d: 'Dai makes a d shape. This is d. d says /d/.' Trace d over Dai, then trace the plain d.",
-      "outline": "Plain d over a faint Dai: 'Can you still see Dai? This is d.' Cover Dai: child says /d/ from the letter alone.",
+      "picture": "the dog beside the plain d: 'the dog makes a d shape. This is d. d says /d/.' Trace d over the dog, then trace the plain d.",
+      "outline": "Plain d over a faint the dog: 'Can you still see the dog? This is d.' Cover the dog: child says /d/ from the letter alone.",
       "plain": "Plain lowercase d only, in 2-3 fonts. 'Same letter, different clothes. What does it say?'",
-      "cue": "'Think of Dai' + drum fists"
+      "cue": "'Think of the dog' + drum fists"
      },
      "c": {
-      "picture": "Coco beside the plain c: 'Coco makes a c shape. This is c. c says /k/.' Trace c over Coco, then trace the plain c.",
-      "outline": "Plain c over a faint Coco: 'Can you still see Coco? This is c.' Cover Coco: child says /k/ from the letter alone.",
+      "picture": "the crab beside the plain c: 'the crab makes a c shape. This is c. c says /k/.' Trace c over the crab, then trace the plain c.",
+      "outline": "Plain c over a faint the crab: 'Can you still see the crab? This is c.' Cover the crab: child says /k/ from the letter alone.",
       "plain": "Plain lowercase c only, in 2-3 fonts. 'Same letter, different clothes. What does it say?'",
-      "cue": "'Think of Coco' + claw pinch"
+      "cue": "'Think of the crab' + claw pinch"
      },
      "u": {
-      "picture": "Uppy beside the plain u: 'Uppy makes a u shape. This is u. u says /u/.' Trace u over Uppy, then trace the plain u.",
-      "outline": "Plain u over a faint Uppy: 'Can you still see Uppy? This is u.' Cover Uppy: child says /u/ from the letter alone.",
+      "picture": "the umbrella beside the plain u: 'the umbrella makes a u shape. This is u. u says /u/.' Trace u over the umbrella, then trace the plain u.",
+      "outline": "Plain u over a faint the umbrella: 'Can you still see the umbrella? This is u.' Cover the umbrella: child says /u/ from the letter alone.",
       "plain": "Plain lowercase u only, in 2-3 fonts. 'Same letter, different clothes. What does it say?'",
-      "cue": "'Think of Uppy' + thumbs up"
+      "cue": "'Think of the umbrella' + thumbs up"
      }
     },
     "record": "After each flash, tick a box for every letter answered correctly in under 3 seconds. 3 ticks on 3 different lessons moves the letter one step.",
@@ -6070,16 +6070,16 @@
     },
     "scripts": {
      "g": {
-      "picture": "Gogo beside the plain g: 'Gogo makes a g shape. This is g. g says /g/.' Trace g over Gogo, then trace the plain g.",
-      "outline": "Plain g over a faint Gogo: 'Can you still see Gogo? This is g.' Cover Gogo: child says /g/ from the letter alone.",
+      "picture": "the goat beside the plain g: 'the goat makes a g shape. This is g. g says /g/.' Trace g over the goat, then trace the plain g.",
+      "outline": "Plain g over a faint the goat: 'Can you still see the goat? This is g.' Cover the goat: child says /g/ from the letter alone.",
       "plain": "Plain lowercase g only, in 2-3 fonts. 'Same letter, different clothes. What does it say?'",
-      "cue": "'Think of Gogo' + hand on throat"
+      "cue": "'Think of the goat' + hand on throat"
      },
      "b": {
-      "picture": "Bani beside the plain b: 'Bani makes a b shape. This is b. b says /b/.' Trace b over Bani, then trace the plain b.",
-      "outline": "Plain b over a faint Bani: 'Can you still see Bani? This is b.' Cover Bani: child says /b/ from the letter alone.",
+      "picture": "the ball beside the plain b: 'the ball makes a b shape. This is b. b says /b/.' Trace b over the ball, then trace the plain b.",
+      "outline": "Plain b over a faint the ball: 'Can you still see the ball? This is b.' Cover the ball: child says /b/ from the letter alone.",
       "plain": "Plain lowercase b only, in 2-3 fonts. 'Same letter, different clothes. What does it say?'",
-      "cue": "'Think of Bani' + bounce fists"
+      "cue": "'Think of the ball' + bounce fists"
      }
     },
     "record": "After each flash, tick a box for every letter answered correctly in under 3 seconds. 3 ticks on 3 different lessons moves the letter one step.",
@@ -6188,7 +6188,7 @@
      "id": "meet",
      "step": "Meet the letter",
      "minutes": 3,
-     "what_to_do": "Gogo beside the plain g: 'Gogo makes a g shape. This is g. g says /g/.' Trace g over Gogo, then trace the plain g. Chant and action. Bani beside the plain b: 'Bani makes a b shape. This is b. b says /b/.' Trace b over Bani, then trace the plain b. Chant and action. Look-alike sort (b/d, 1 min): Bed hands: make two fists with thumbs up, left fist is b, right fist is d, and together they make a bed. b is stick first then ball; d is circle first then stick."
+     "what_to_do": "the goat beside the plain g: 'the goat makes a g shape. This is g. g says /g/.' Trace g over the goat, then trace the plain g. Chant and action. the ball beside the plain b: 'the ball makes a b shape. This is b. b says /b/.' Trace b over the ball, then trace the plain b. Chant and action. Look-alike sort (b/d, 1 min): Bed hands: make two fists with thumbs up, left fist is b, right fist is d, and together they make a bed. b is stick first then ball; d is circle first then stick."
     },
     {
      "id": "trace",
@@ -6547,28 +6547,28 @@
     },
     "scripts": {
      "g": {
-      "picture": "Gogo beside the plain g: 'Gogo makes a g shape. This is g. g says /g/.' Trace g over Gogo, then trace the plain g.",
-      "outline": "Plain g over a faint Gogo: 'Can you still see Gogo? This is g.' Cover Gogo: child says /g/ from the letter alone.",
+      "picture": "the goat beside the plain g: 'the goat makes a g shape. This is g. g says /g/.' Trace g over the goat, then trace the plain g.",
+      "outline": "Plain g over a faint the goat: 'Can you still see the goat? This is g.' Cover the goat: child says /g/ from the letter alone.",
       "plain": "Plain lowercase g only, in 2-3 fonts. 'Same letter, different clothes. What does it say?'",
-      "cue": "'Think of Gogo' + hand on throat"
+      "cue": "'Think of the goat' + hand on throat"
      },
      "b": {
-      "picture": "Bani beside the plain b: 'Bani makes a b shape. This is b. b says /b/.' Trace b over Bani, then trace the plain b.",
-      "outline": "Plain b over a faint Bani: 'Can you still see Bani? This is b.' Cover Bani: child says /b/ from the letter alone.",
+      "picture": "the ball beside the plain b: 'the ball makes a b shape. This is b. b says /b/.' Trace b over the ball, then trace the plain b.",
+      "outline": "Plain b over a faint the ball: 'Can you still see the ball? This is b.' Cover the ball: child says /b/ from the letter alone.",
       "plain": "Plain lowercase b only, in 2-3 fonts. 'Same letter, different clothes. What does it say?'",
-      "cue": "'Think of Bani' + bounce fists"
+      "cue": "'Think of the ball' + bounce fists"
      },
      "e": {
-      "picture": "Eto beside the plain e: 'Eto makes an e shape. This is e. e says /e/.' Trace e over Eto, then trace the plain e.",
-      "outline": "Plain e over a faint Eto: 'Can you still see Eto? This is e.' Cover Eto: child says /e/ from the letter alone.",
+      "picture": "the egg beside the plain e: 'the egg makes an e shape. This is e. e says /e/.' Trace e over the egg, then trace the plain e.",
+      "outline": "Plain e over a faint the egg: 'Can you still see the egg? This is e.' Cover the egg: child says /e/ from the letter alone.",
       "plain": "Plain lowercase e only, in 2-3 fonts. 'Same letter, different clothes. What does it say?'",
-      "cue": "'Think of Eto' + crack the egg"
+      "cue": "'Think of the egg' + crack the egg"
      },
      "k": {
-      "picture": "Kiko beside the plain k: 'Kiko makes a k shape. This is k. k says /k/.' Trace k over Kiko, then trace the plain k.",
-      "outline": "Plain k over a faint Kiko: 'Can you still see Kiko? This is k.' Cover Kiko: child says /k/ from the letter alone.",
+      "picture": "the kite beside the plain k: 'the kite makes a k shape. This is k. k says /k/.' Trace k over the kite, then trace the plain k.",
+      "outline": "Plain k over a faint the kite: 'Can you still see the kite? This is k.' Cover the kite: child says /k/ from the letter alone.",
       "plain": "Plain lowercase k only, in 2-3 fonts. 'Same letter, different clothes. What does it say?'",
-      "cue": "'Think of Kiko' + tiny kick"
+      "cue": "'Think of the kite' + tiny kick"
      }
     },
     "record": "After each flash, tick a box for every letter answered correctly in under 3 seconds. 3 ticks on 3 different lessons moves the letter one step.",
@@ -6685,7 +6685,7 @@
      "id": "meet",
      "step": "Meet the letter",
      "minutes": 3,
-     "what_to_do": "Eto beside the plain e: 'Eto makes an e shape. This is e. e says /e/.' Trace e over Eto, then trace the plain e. Chant and action. Kiko beside the plain k: 'Kiko makes a k shape. This is k. k says /k/.' Trace k over Kiko, then trace the plain k. Chant and action. Look-alike sort (i/e/a, 1 min): Mouth shape ladder: /i/ small smile, /e/ jaw drops a little, /a/ jaw drops wide. Hand under the chin feels it go down."
+     "what_to_do": "the egg beside the plain e: 'the egg makes an e shape. This is e. e says /e/.' Trace e over the egg, then trace the plain e. Chant and action. the kite beside the plain k: 'the kite makes a k shape. This is k. k says /k/.' Trace k over the kite, then trace the plain k. Chant and action. Look-alike sort (i/e/a, 1 min): Mouth shape ladder: /i/ small smile, /e/ jaw drops a little, /a/ jaw drops wide. Hand under the chin feels it go down."
     },
     {
      "id": "trace",
@@ -7036,28 +7036,28 @@
     },
     "scripts": {
      "g": {
-      "picture": "Gogo beside the plain g: 'Gogo makes a g shape. This is g. g says /g/.' Trace g over Gogo, then trace the plain g.",
-      "outline": "Plain g over a faint Gogo: 'Can you still see Gogo? This is g.' Cover Gogo: child says /g/ from the letter alone.",
+      "picture": "the goat beside the plain g: 'the goat makes a g shape. This is g. g says /g/.' Trace g over the goat, then trace the plain g.",
+      "outline": "Plain g over a faint the goat: 'Can you still see the goat? This is g.' Cover the goat: child says /g/ from the letter alone.",
       "plain": "Plain lowercase g only, in 2-3 fonts. 'Same letter, different clothes. What does it say?'",
-      "cue": "'Think of Gogo' + hand on throat"
+      "cue": "'Think of the goat' + hand on throat"
      },
      "b": {
-      "picture": "Bani beside the plain b: 'Bani makes a b shape. This is b. b says /b/.' Trace b over Bani, then trace the plain b.",
-      "outline": "Plain b over a faint Bani: 'Can you still see Bani? This is b.' Cover Bani: child says /b/ from the letter alone.",
+      "picture": "the ball beside the plain b: 'the ball makes a b shape. This is b. b says /b/.' Trace b over the ball, then trace the plain b.",
+      "outline": "Plain b over a faint the ball: 'Can you still see the ball? This is b.' Cover the ball: child says /b/ from the letter alone.",
       "plain": "Plain lowercase b only, in 2-3 fonts. 'Same letter, different clothes. What does it say?'",
-      "cue": "'Think of Bani' + bounce fists"
+      "cue": "'Think of the ball' + bounce fists"
      },
      "e": {
-      "picture": "Eto beside the plain e: 'Eto makes an e shape. This is e. e says /e/.' Trace e over Eto, then trace the plain e.",
-      "outline": "Plain e over a faint Eto: 'Can you still see Eto? This is e.' Cover Eto: child says /e/ from the letter alone.",
+      "picture": "the egg beside the plain e: 'the egg makes an e shape. This is e. e says /e/.' Trace e over the egg, then trace the plain e.",
+      "outline": "Plain e over a faint the egg: 'Can you still see the egg? This is e.' Cover the egg: child says /e/ from the letter alone.",
       "plain": "Plain lowercase e only, in 2-3 fonts. 'Same letter, different clothes. What does it say?'",
-      "cue": "'Think of Eto' + crack the egg"
+      "cue": "'Think of the egg' + crack the egg"
      },
      "k": {
-      "picture": "Kiko beside the plain k: 'Kiko makes a k shape. This is k. k says /k/.' Trace k over Kiko, then trace the plain k.",
-      "outline": "Plain k over a faint Kiko: 'Can you still see Kiko? This is k.' Cover Kiko: child says /k/ from the letter alone.",
+      "picture": "the kite beside the plain k: 'the kite makes a k shape. This is k. k says /k/.' Trace k over the kite, then trace the plain k.",
+      "outline": "Plain k over a faint the kite: 'Can you still see the kite? This is k.' Cover the kite: child says /k/ from the letter alone.",
       "plain": "Plain lowercase k only, in 2-3 fonts. 'Same letter, different clothes. What does it say?'",
-      "cue": "'Think of Kiko' + tiny kick"
+      "cue": "'Think of the kite' + tiny kick"
      }
     },
     "record": "After each flash, tick a box for every letter answered correctly in under 3 seconds. 3 ticks on 3 different lessons moves the letter one step.",
@@ -7532,28 +7532,28 @@
     },
     "scripts": {
      "g": {
-      "picture": "Gogo beside the plain g: 'Gogo makes a g shape. This is g. g says /g/.' Trace g over Gogo, then trace the plain g.",
-      "outline": "Plain g over a faint Gogo: 'Can you still see Gogo? This is g.' Cover Gogo: child says /g/ from the letter alone.",
+      "picture": "the goat beside the plain g: 'the goat makes a g shape. This is g. g says /g/.' Trace g over the goat, then trace the plain g.",
+      "outline": "Plain g over a faint the goat: 'Can you still see the goat? This is g.' Cover the goat: child says /g/ from the letter alone.",
       "plain": "Plain lowercase g only, in 2-3 fonts. 'Same letter, different clothes. What does it say?'",
-      "cue": "'Think of Gogo' + hand on throat"
+      "cue": "'Think of the goat' + hand on throat"
      },
      "b": {
-      "picture": "Bani beside the plain b: 'Bani makes a b shape. This is b. b says /b/.' Trace b over Bani, then trace the plain b.",
-      "outline": "Plain b over a faint Bani: 'Can you still see Bani? This is b.' Cover Bani: child says /b/ from the letter alone.",
+      "picture": "the ball beside the plain b: 'the ball makes a b shape. This is b. b says /b/.' Trace b over the ball, then trace the plain b.",
+      "outline": "Plain b over a faint the ball: 'Can you still see the ball? This is b.' Cover the ball: child says /b/ from the letter alone.",
       "plain": "Plain lowercase b only, in 2-3 fonts. 'Same letter, different clothes. What does it say?'",
-      "cue": "'Think of Bani' + bounce fists"
+      "cue": "'Think of the ball' + bounce fists"
      },
      "e": {
-      "picture": "Eto beside the plain e: 'Eto makes an e shape. This is e. e says /e/.' Trace e over Eto, then trace the plain e.",
-      "outline": "Plain e over a faint Eto: 'Can you still see Eto? This is e.' Cover Eto: child says /e/ from the letter alone.",
+      "picture": "the egg beside the plain e: 'the egg makes an e shape. This is e. e says /e/.' Trace e over the egg, then trace the plain e.",
+      "outline": "Plain e over a faint the egg: 'Can you still see the egg? This is e.' Cover the egg: child says /e/ from the letter alone.",
       "plain": "Plain lowercase e only, in 2-3 fonts. 'Same letter, different clothes. What does it say?'",
-      "cue": "'Think of Eto' + crack the egg"
+      "cue": "'Think of the egg' + crack the egg"
      },
      "k": {
-      "picture": "Kiko beside the plain k: 'Kiko makes a k shape. This is k. k says /k/.' Trace k over Kiko, then trace the plain k.",
-      "outline": "Plain k over a faint Kiko: 'Can you still see Kiko? This is k.' Cover Kiko: child says /k/ from the letter alone.",
+      "picture": "the kite beside the plain k: 'the kite makes a k shape. This is k. k says /k/.' Trace k over the kite, then trace the plain k.",
+      "outline": "Plain k over a faint the kite: 'Can you still see the kite? This is k.' Cover the kite: child says /k/ from the letter alone.",
       "plain": "Plain lowercase k only, in 2-3 fonts. 'Same letter, different clothes. What does it say?'",
-      "cue": "'Think of Kiko' + tiny kick"
+      "cue": "'Think of the kite' + tiny kick"
      }
     },
     "record": "After each flash, tick a box for every letter answered correctly in under 3 seconds. 3 ticks on 3 different lessons moves the letter one step.",
@@ -8008,28 +8008,28 @@
     },
     "scripts": {
      "g": {
-      "picture": "Gogo beside the plain g: 'Gogo makes a g shape. This is g. g says /g/.' Trace g over Gogo, then trace the plain g.",
-      "outline": "Plain g over a faint Gogo: 'Can you still see Gogo? This is g.' Cover Gogo: child says /g/ from the letter alone.",
+      "picture": "the goat beside the plain g: 'the goat makes a g shape. This is g. g says /g/.' Trace g over the goat, then trace the plain g.",
+      "outline": "Plain g over a faint the goat: 'Can you still see the goat? This is g.' Cover the goat: child says /g/ from the letter alone.",
       "plain": "Plain lowercase g only, in 2-3 fonts. 'Same letter, different clothes. What does it say?'",
-      "cue": "'Think of Gogo' + hand on throat"
+      "cue": "'Think of the goat' + hand on throat"
      },
      "b": {
-      "picture": "Bani beside the plain b: 'Bani makes a b shape. This is b. b says /b/.' Trace b over Bani, then trace the plain b.",
-      "outline": "Plain b over a faint Bani: 'Can you still see Bani? This is b.' Cover Bani: child says /b/ from the letter alone.",
+      "picture": "the ball beside the plain b: 'the ball makes a b shape. This is b. b says /b/.' Trace b over the ball, then trace the plain b.",
+      "outline": "Plain b over a faint the ball: 'Can you still see the ball? This is b.' Cover the ball: child says /b/ from the letter alone.",
       "plain": "Plain lowercase b only, in 2-3 fonts. 'Same letter, different clothes. What does it say?'",
-      "cue": "'Think of Bani' + bounce fists"
+      "cue": "'Think of the ball' + bounce fists"
      },
      "e": {
-      "picture": "Eto beside the plain e: 'Eto makes an e shape. This is e. e says /e/.' Trace e over Eto, then trace the plain e.",
-      "outline": "Plain e over a faint Eto: 'Can you still see Eto? This is e.' Cover Eto: child says /e/ from the letter alone.",
+      "picture": "the egg beside the plain e: 'the egg makes an e shape. This is e. e says /e/.' Trace e over the egg, then trace the plain e.",
+      "outline": "Plain e over a faint the egg: 'Can you still see the egg? This is e.' Cover the egg: child says /e/ from the letter alone.",
       "plain": "Plain lowercase e only, in 2-3 fonts. 'Same letter, different clothes. What does it say?'",
-      "cue": "'Think of Eto' + crack the egg"
+      "cue": "'Think of the egg' + crack the egg"
      },
      "k": {
-      "picture": "Kiko beside the plain k: 'Kiko makes a k shape. This is k. k says /k/.' Trace k over Kiko, then trace the plain k.",
-      "outline": "Plain k over a faint Kiko: 'Can you still see Kiko? This is k.' Cover Kiko: child says /k/ from the letter alone.",
+      "picture": "the kite beside the plain k: 'the kite makes a k shape. This is k. k says /k/.' Trace k over the kite, then trace the plain k.",
+      "outline": "Plain k over a faint the kite: 'Can you still see the kite? This is k.' Cover the kite: child says /k/ from the letter alone.",
       "plain": "Plain lowercase k only, in 2-3 fonts. 'Same letter, different clothes. What does it say?'",
-      "cue": "'Think of Kiko' + tiny kick"
+      "cue": "'Think of the kite' + tiny kick"
      }
     },
     "record": "After each flash, tick a box for every letter answered correctly in under 3 seconds. 3 ticks on 3 different lessons moves the letter one step.",
@@ -8382,7 +8382,7 @@
       "h",
       "n"
      ],
-     "tip": "h has a tall stem (Hana's tall stem reaches the top line); n is short. Run a finger up the stem: is it tall or short?",
+     "tip": "h has a tall stem (the hat's tall stem reaches the top line); n is short. Run a finger up the stem: is it tall or short?",
      "minutes": 1,
      "new_today": true
     }
@@ -8606,16 +8606,16 @@
     },
     "scripts": {
      "h": {
-      "picture": "Hana beside the plain h: 'Hana makes an h shape. This is h. h says /h/.' Trace h over Hana, then trace the plain h.",
-      "outline": "Plain h over a faint Hana: 'Can you still see Hana? This is h.' Cover Hana: child says /h/ from the letter alone.",
+      "picture": "the hat beside the plain h: 'the hat makes an h shape. This is h. h says /h/.' Trace h over the hat, then trace the plain h.",
+      "outline": "Plain h over a faint the hat: 'Can you still see the hat? This is h.' Cover the hat: child says /h/ from the letter alone.",
       "plain": "Plain lowercase h only, in 2-3 fonts. 'Same letter, different clothes. What does it say?'",
-      "cue": "'Think of Hana' + hand in front of mouth"
+      "cue": "'Think of the hat' + hand in front of mouth"
      },
      "r": {
-      "picture": "Ruri beside the plain r: 'Ruri makes an r shape. This is r. r says /r/.' Trace r over Ruri, then trace the plain r.",
-      "outline": "Plain r over a faint Ruri: 'Can you still see Ruri? This is r.' Cover Ruri: child says /r/ from the letter alone.",
+      "picture": "the robin beside the plain r: 'the robin makes an r shape. This is r. r says /r/.' Trace r over the robin, then trace the plain r.",
+      "outline": "Plain r over a faint the robin: 'Can you still see the robin? This is r.' Cover the robin: child says /r/ from the letter alone.",
       "plain": "Plain lowercase r only, in 2-3 fonts. 'Same letter, different clothes. What does it say?'",
-      "cue": "'Think of Ruri' + running fists"
+      "cue": "'Think of the robin' + running fists"
      }
     },
     "record": "After each flash, tick a box for every letter answered correctly in under 3 seconds. 3 ticks on 3 different lessons moves the letter one step.",
@@ -8762,7 +8762,7 @@
      "id": "meet",
      "step": "Meet the letter",
      "minutes": 3,
-     "what_to_do": "Hana beside the plain h: 'Hana makes an h shape. This is h. h says /h/.' Trace h over Hana, then trace the plain h. Chant and action. Ruri beside the plain r: 'Ruri makes an r shape. This is r. r says /r/.' Trace r over Ruri, then trace the plain r. Chant and action. Look-alike sort (h/n, 1 min): h has a tall stem (Hana's tall stem reaches the top line); n is short. Run a finger up the stem: is it tall or short?"
+     "what_to_do": "the hat beside the plain h: 'the hat makes an h shape. This is h. h says /h/.' Trace h over the hat, then trace the plain h. Chant and action. the robin beside the plain r: 'the robin makes an r shape. This is r. r says /r/.' Trace r over the robin, then trace the plain r. Chant and action. Look-alike sort (h/n, 1 min): h has a tall stem (the hat's tall stem reaches the top line); n is short. Run a finger up the stem: is it tall or short?"
     },
     {
      "id": "trace",
@@ -8889,7 +8889,7 @@
       "h",
       "n"
      ],
-     "tip": "h has a tall stem (Hana's tall stem reaches the top line); n is short. Run a finger up the stem: is it tall or short?",
+     "tip": "h has a tall stem (the hat's tall stem reaches the top line); n is short. Run a finger up the stem: is it tall or short?",
      "minutes": 1,
      "new_today": false
     }
@@ -9119,28 +9119,28 @@
     },
     "scripts": {
      "h": {
-      "picture": "Hana beside the plain h: 'Hana makes an h shape. This is h. h says /h/.' Trace h over Hana, then trace the plain h.",
-      "outline": "Plain h over a faint Hana: 'Can you still see Hana? This is h.' Cover Hana: child says /h/ from the letter alone.",
+      "picture": "the hat beside the plain h: 'the hat makes an h shape. This is h. h says /h/.' Trace h over the hat, then trace the plain h.",
+      "outline": "Plain h over a faint the hat: 'Can you still see the hat? This is h.' Cover the hat: child says /h/ from the letter alone.",
       "plain": "Plain lowercase h only, in 2-3 fonts. 'Same letter, different clothes. What does it say?'",
-      "cue": "'Think of Hana' + hand in front of mouth"
+      "cue": "'Think of the hat' + hand in front of mouth"
      },
      "r": {
-      "picture": "Ruri beside the plain r: 'Ruri makes an r shape. This is r. r says /r/.' Trace r over Ruri, then trace the plain r.",
-      "outline": "Plain r over a faint Ruri: 'Can you still see Ruri? This is r.' Cover Ruri: child says /r/ from the letter alone.",
+      "picture": "the robin beside the plain r: 'the robin makes an r shape. This is r. r says /r/.' Trace r over the robin, then trace the plain r.",
+      "outline": "Plain r over a faint the robin: 'Can you still see the robin? This is r.' Cover the robin: child says /r/ from the letter alone.",
       "plain": "Plain lowercase r only, in 2-3 fonts. 'Same letter, different clothes. What does it say?'",
-      "cue": "'Think of Ruri' + running fists"
+      "cue": "'Think of the robin' + running fists"
      },
      "l": {
-      "picture": "Lili beside the plain l: 'Lili makes an l shape. This is l. l says /l/.' Trace l over Lili, then trace the plain l.",
-      "outline": "Plain l over a faint Lili: 'Can you still see Lili? This is l.' Cover Lili: child says /l/ from the letter alone.",
+      "picture": "the lily beside the plain l: 'the lily makes an l shape. This is l. l says /l/.' Trace l over the lily, then trace the plain l.",
+      "outline": "Plain l over a faint the lily: 'Can you still see the lily? This is l.' Cover the lily: child says /l/ from the letter alone.",
       "plain": "Plain lowercase l only, in 2-3 fonts. 'Same letter, different clothes. What does it say?'",
-      "cue": "'Think of Lili' + arm straight up like a lily stem"
+      "cue": "'Think of the lily' + arm straight up like a lily stem"
      },
      "w": {
-      "picture": "Wawa beside the plain w: 'Wawa makes a w shape. This is w. w says /w/.' Trace w over Wawa, then trace the plain w.",
-      "outline": "Plain w over a faint Wawa: 'Can you still see Wawa? This is w.' Cover Wawa: child says /w/ from the letter alone.",
+      "picture": "the wave beside the plain w: 'the wave makes a w shape. This is w. w says /w/.' Trace w over the wave, then trace the plain w.",
+      "outline": "Plain w over a faint the wave: 'Can you still see the wave? This is w.' Cover the wave: child says /w/ from the letter alone.",
       "plain": "Plain lowercase w only, in 2-3 fonts. 'Same letter, different clothes. What does it say?'",
-      "cue": "'Think of Wawa' + wave hand"
+      "cue": "'Think of the wave' + wave hand"
      }
     },
     "record": "After each flash, tick a box for every letter answered correctly in under 3 seconds. 3 ticks on 3 different lessons moves the letter one step.",
@@ -9295,7 +9295,7 @@
      "id": "meet",
      "step": "Meet the letter",
      "minutes": 3,
-     "what_to_do": "Lili beside the plain l: 'Lili makes an l shape. This is l. l says /l/.' Trace l over Lili, then trace the plain l. Chant and action. Wawa beside the plain w: 'Wawa makes a w shape. This is w. w says /w/.' Trace w over Wawa, then trace the plain w. Chant and action."
+     "what_to_do": "the lily beside the plain l: 'the lily makes an l shape. This is l. l says /l/.' Trace l over the lily, then trace the plain l. Chant and action. the wave beside the plain w: 'the wave makes a w shape. This is w. w says /w/.' Trace w over the wave, then trace the plain w. Chant and action."
     },
     {
      "id": "trace",
@@ -9411,7 +9411,7 @@
       "h",
       "n"
      ],
-     "tip": "h has a tall stem (Hana's tall stem reaches the top line); n is short. Run a finger up the stem: is it tall or short?",
+     "tip": "h has a tall stem (the hat's tall stem reaches the top line); n is short. Run a finger up the stem: is it tall or short?",
      "minutes": 1,
      "new_today": false
     }
@@ -9521,7 +9521,7 @@
     },
     {
      "word": "rib",
-     "scene": "Ruri points to her side",
+     "scene": "the robin points to her side",
      "caption": "A rib."
     }
    ],
@@ -9647,28 +9647,28 @@
     },
     "scripts": {
      "h": {
-      "picture": "Hana beside the plain h: 'Hana makes an h shape. This is h. h says /h/.' Trace h over Hana, then trace the plain h.",
-      "outline": "Plain h over a faint Hana: 'Can you still see Hana? This is h.' Cover Hana: child says /h/ from the letter alone.",
+      "picture": "the hat beside the plain h: 'the hat makes an h shape. This is h. h says /h/.' Trace h over the hat, then trace the plain h.",
+      "outline": "Plain h over a faint the hat: 'Can you still see the hat? This is h.' Cover the hat: child says /h/ from the letter alone.",
       "plain": "Plain lowercase h only, in 2-3 fonts. 'Same letter, different clothes. What does it say?'",
-      "cue": "'Think of Hana' + hand in front of mouth"
+      "cue": "'Think of the hat' + hand in front of mouth"
      },
      "r": {
-      "picture": "Ruri beside the plain r: 'Ruri makes an r shape. This is r. r says /r/.' Trace r over Ruri, then trace the plain r.",
-      "outline": "Plain r over a faint Ruri: 'Can you still see Ruri? This is r.' Cover Ruri: child says /r/ from the letter alone.",
+      "picture": "the robin beside the plain r: 'the robin makes an r shape. This is r. r says /r/.' Trace r over the robin, then trace the plain r.",
+      "outline": "Plain r over a faint the robin: 'Can you still see the robin? This is r.' Cover the robin: child says /r/ from the letter alone.",
       "plain": "Plain lowercase r only, in 2-3 fonts. 'Same letter, different clothes. What does it say?'",
-      "cue": "'Think of Ruri' + running fists"
+      "cue": "'Think of the robin' + running fists"
      },
      "l": {
-      "picture": "Lili beside the plain l: 'Lili makes an l shape. This is l. l says /l/.' Trace l over Lili, then trace the plain l.",
-      "outline": "Plain l over a faint Lili: 'Can you still see Lili? This is l.' Cover Lili: child says /l/ from the letter alone.",
+      "picture": "the lily beside the plain l: 'the lily makes an l shape. This is l. l says /l/.' Trace l over the lily, then trace the plain l.",
+      "outline": "Plain l over a faint the lily: 'Can you still see the lily? This is l.' Cover the lily: child says /l/ from the letter alone.",
       "plain": "Plain lowercase l only, in 2-3 fonts. 'Same letter, different clothes. What does it say?'",
-      "cue": "'Think of Lili' + arm straight up like a lily stem"
+      "cue": "'Think of the lily' + arm straight up like a lily stem"
      },
      "w": {
-      "picture": "Wawa beside the plain w: 'Wawa makes a w shape. This is w. w says /w/.' Trace w over Wawa, then trace the plain w.",
-      "outline": "Plain w over a faint Wawa: 'Can you still see Wawa? This is w.' Cover Wawa: child says /w/ from the letter alone.",
+      "picture": "the wave beside the plain w: 'the wave makes a w shape. This is w. w says /w/.' Trace w over the wave, then trace the plain w.",
+      "outline": "Plain w over a faint the wave: 'Can you still see the wave? This is w.' Cover the wave: child says /w/ from the letter alone.",
       "plain": "Plain lowercase w only, in 2-3 fonts. 'Same letter, different clothes. What does it say?'",
-      "cue": "'Think of Wawa' + wave hand"
+      "cue": "'Think of the wave' + wave hand"
      }
     },
     "record": "After each flash, tick a box for every letter answered correctly in under 3 seconds. 3 ticks on 3 different lessons moves the letter one step.",
@@ -9946,7 +9946,7 @@
       "h",
       "n"
      ],
-     "tip": "h has a tall stem (Hana's tall stem reaches the top line); n is short. Run a finger up the stem: is it tall or short?",
+     "tip": "h has a tall stem (the hat's tall stem reaches the top line); n is short. Run a finger up the stem: is it tall or short?",
      "minutes": 1,
      "new_today": false
     }
@@ -10182,28 +10182,28 @@
     },
     "scripts": {
      "h": {
-      "picture": "Hana beside the plain h: 'Hana makes an h shape. This is h. h says /h/.' Trace h over Hana, then trace the plain h.",
-      "outline": "Plain h over a faint Hana: 'Can you still see Hana? This is h.' Cover Hana: child says /h/ from the letter alone.",
+      "picture": "the hat beside the plain h: 'the hat makes an h shape. This is h. h says /h/.' Trace h over the hat, then trace the plain h.",
+      "outline": "Plain h over a faint the hat: 'Can you still see the hat? This is h.' Cover the hat: child says /h/ from the letter alone.",
       "plain": "Plain lowercase h only, in 2-3 fonts. 'Same letter, different clothes. What does it say?'",
-      "cue": "'Think of Hana' + hand in front of mouth"
+      "cue": "'Think of the hat' + hand in front of mouth"
      },
      "r": {
-      "picture": "Ruri beside the plain r: 'Ruri makes an r shape. This is r. r says /r/.' Trace r over Ruri, then trace the plain r.",
-      "outline": "Plain r over a faint Ruri: 'Can you still see Ruri? This is r.' Cover Ruri: child says /r/ from the letter alone.",
+      "picture": "the robin beside the plain r: 'the robin makes an r shape. This is r. r says /r/.' Trace r over the robin, then trace the plain r.",
+      "outline": "Plain r over a faint the robin: 'Can you still see the robin? This is r.' Cover the robin: child says /r/ from the letter alone.",
       "plain": "Plain lowercase r only, in 2-3 fonts. 'Same letter, different clothes. What does it say?'",
-      "cue": "'Think of Ruri' + running fists"
+      "cue": "'Think of the robin' + running fists"
      },
      "l": {
-      "picture": "Lili beside the plain l: 'Lili makes an l shape. This is l. l says /l/.' Trace l over Lili, then trace the plain l.",
-      "outline": "Plain l over a faint Lili: 'Can you still see Lili? This is l.' Cover Lili: child says /l/ from the letter alone.",
+      "picture": "the lily beside the plain l: 'the lily makes an l shape. This is l. l says /l/.' Trace l over the lily, then trace the plain l.",
+      "outline": "Plain l over a faint the lily: 'Can you still see the lily? This is l.' Cover the lily: child says /l/ from the letter alone.",
       "plain": "Plain lowercase l only, in 2-3 fonts. 'Same letter, different clothes. What does it say?'",
-      "cue": "'Think of Lili' + arm straight up like a lily stem"
+      "cue": "'Think of the lily' + arm straight up like a lily stem"
      },
      "w": {
-      "picture": "Wawa beside the plain w: 'Wawa makes a w shape. This is w. w says /w/.' Trace w over Wawa, then trace the plain w.",
-      "outline": "Plain w over a faint Wawa: 'Can you still see Wawa? This is w.' Cover Wawa: child says /w/ from the letter alone.",
+      "picture": "the wave beside the plain w: 'the wave makes a w shape. This is w. w says /w/.' Trace w over the wave, then trace the plain w.",
+      "outline": "Plain w over a faint the wave: 'Can you still see the wave? This is w.' Cover the wave: child says /w/ from the letter alone.",
       "plain": "Plain lowercase w only, in 2-3 fonts. 'Same letter, different clothes. What does it say?'",
-      "cue": "'Think of Wawa' + wave hand"
+      "cue": "'Think of the wave' + wave hand"
      }
     },
     "record": "After each flash, tick a box for every letter answered correctly in under 3 seconds. 3 ticks on 3 different lessons moves the letter one step.",
@@ -10482,7 +10482,7 @@
       "h",
       "n"
      ],
-     "tip": "h has a tall stem (Hana's tall stem reaches the top line); n is short. Run a finger up the stem: is it tall or short?",
+     "tip": "h has a tall stem (the hat's tall stem reaches the top line); n is short. Run a finger up the stem: is it tall or short?",
      "minutes": 1,
      "new_today": false
     }
@@ -10670,28 +10670,28 @@
     },
     "scripts": {
      "h": {
-      "picture": "Hana beside the plain h: 'Hana makes an h shape. This is h. h says /h/.' Trace h over Hana, then trace the plain h.",
-      "outline": "Plain h over a faint Hana: 'Can you still see Hana? This is h.' Cover Hana: child says /h/ from the letter alone.",
+      "picture": "the hat beside the plain h: 'the hat makes an h shape. This is h. h says /h/.' Trace h over the hat, then trace the plain h.",
+      "outline": "Plain h over a faint the hat: 'Can you still see the hat? This is h.' Cover the hat: child says /h/ from the letter alone.",
       "plain": "Plain lowercase h only, in 2-3 fonts. 'Same letter, different clothes. What does it say?'",
-      "cue": "'Think of Hana' + hand in front of mouth"
+      "cue": "'Think of the hat' + hand in front of mouth"
      },
      "r": {
-      "picture": "Ruri beside the plain r: 'Ruri makes an r shape. This is r. r says /r/.' Trace r over Ruri, then trace the plain r.",
-      "outline": "Plain r over a faint Ruri: 'Can you still see Ruri? This is r.' Cover Ruri: child says /r/ from the letter alone.",
+      "picture": "the robin beside the plain r: 'the robin makes an r shape. This is r. r says /r/.' Trace r over the robin, then trace the plain r.",
+      "outline": "Plain r over a faint the robin: 'Can you still see the robin? This is r.' Cover the robin: child says /r/ from the letter alone.",
       "plain": "Plain lowercase r only, in 2-3 fonts. 'Same letter, different clothes. What does it say?'",
-      "cue": "'Think of Ruri' + running fists"
+      "cue": "'Think of the robin' + running fists"
      },
      "l": {
-      "picture": "Lili beside the plain l: 'Lili makes an l shape. This is l. l says /l/.' Trace l over Lili, then trace the plain l.",
-      "outline": "Plain l over a faint Lili: 'Can you still see Lili? This is l.' Cover Lili: child says /l/ from the letter alone.",
+      "picture": "the lily beside the plain l: 'the lily makes an l shape. This is l. l says /l/.' Trace l over the lily, then trace the plain l.",
+      "outline": "Plain l over a faint the lily: 'Can you still see the lily? This is l.' Cover the lily: child says /l/ from the letter alone.",
       "plain": "Plain lowercase l only, in 2-3 fonts. 'Same letter, different clothes. What does it say?'",
-      "cue": "'Think of Lili' + arm straight up like a lily stem"
+      "cue": "'Think of the lily' + arm straight up like a lily stem"
      },
      "w": {
-      "picture": "Wawa beside the plain w: 'Wawa makes a w shape. This is w. w says /w/.' Trace w over Wawa, then trace the plain w.",
-      "outline": "Plain w over a faint Wawa: 'Can you still see Wawa? This is w.' Cover Wawa: child says /w/ from the letter alone.",
+      "picture": "the wave beside the plain w: 'the wave makes a w shape. This is w. w says /w/.' Trace w over the wave, then trace the plain w.",
+      "outline": "Plain w over a faint the wave: 'Can you still see the wave? This is w.' Cover the wave: child says /w/ from the letter alone.",
       "plain": "Plain lowercase w only, in 2-3 fonts. 'Same letter, different clothes. What does it say?'",
-      "cue": "'Think of Wawa' + wave hand"
+      "cue": "'Think of the wave' + wave hand"
      }
     },
     "record": "After each flash, tick a box for every letter answered correctly in under 3 seconds. 3 ticks on 3 different lessons moves the letter one step.",
@@ -11059,7 +11059,7 @@
       "h",
       "n"
      ],
-     "tip": "h has a tall stem (Hana's tall stem reaches the top line); n is short. Run a finger up the stem: is it tall or short?",
+     "tip": "h has a tall stem (the hat's tall stem reaches the top line); n is short. Run a finger up the stem: is it tall or short?",
      "minutes": 1,
      "new_today": false
     }
@@ -11295,16 +11295,16 @@
     },
     "scripts": {
      "j": {
-      "picture": "Jojo beside the plain j: 'Jojo makes a j shape. This is j. j says /j/.' Trace j over Jojo, then trace the plain j.",
-      "outline": "Plain j over a faint Jojo: 'Can you still see Jojo? This is j.' Cover Jojo: child says /j/ from the letter alone.",
+      "picture": "the jellyfish beside the plain j: 'the jellyfish makes a j shape. This is j. j says /j/.' Trace j over the jellyfish, then trace the plain j.",
+      "outline": "Plain j over a faint the jellyfish: 'Can you still see the jellyfish? This is j.' Cover the jellyfish: child says /j/ from the letter alone.",
       "plain": "Plain lowercase j only, in 2-3 fonts. 'Same letter, different clothes. What does it say?'",
-      "cue": "'Think of Jojo' + jiggle hands"
+      "cue": "'Think of the jellyfish' + jiggle hands"
      },
      "y": {
-      "picture": "Yumi beside the plain y: 'Yumi makes a y shape. This is y. y says /y/.' Trace y over Yumi, then trace the plain y.",
-      "outline": "Plain y over a faint Yumi: 'Can you still see Yumi? This is y.' Cover Yumi: child says /y/ from the letter alone.",
+      "picture": "the yam beside the plain y: 'the yam makes a y shape. This is y. y says /y/.' Trace y over the yam, then trace the plain y.",
+      "outline": "Plain y over a faint the yam: 'Can you still see the yam? This is y.' Cover the yam: child says /y/ from the letter alone.",
       "plain": "Plain lowercase y only, in 2-3 fonts. 'Same letter, different clothes. What does it say?'",
-      "cue": "'Think of Yumi' + yo-yo hand"
+      "cue": "'Think of the yam' + yo-yo hand"
      }
     },
     "record": "After each flash, tick a box for every letter answered correctly in under 3 seconds. 3 ticks on 3 different lessons moves the letter one step.",
@@ -11488,7 +11488,7 @@
      "id": "meet",
      "step": "Meet the letter",
      "minutes": 3,
-     "what_to_do": "Jojo beside the plain j: 'Jojo makes a j shape. This is j. j says /j/.' Trace j over Jojo, then trace the plain j. Chant and action. Yumi beside the plain y: 'Yumi makes a y shape. This is y. y says /y/.' Trace y over Yumi, then trace the plain y. Chant and action."
+     "what_to_do": "the jellyfish beside the plain j: 'the jellyfish makes a j shape. This is j. j says /j/.' Trace j over the jellyfish, then trace the plain j. Chant and action. the yam beside the plain y: 'the yam makes a y shape. This is y. y says /y/.' Trace y over the yam, then trace the plain y. Chant and action."
     },
     {
      "id": "trace",
@@ -11834,28 +11834,28 @@
     },
     "scripts": {
      "j": {
-      "picture": "Jojo beside the plain j: 'Jojo makes a j shape. This is j. j says /j/.' Trace j over Jojo, then trace the plain j.",
-      "outline": "Plain j over a faint Jojo: 'Can you still see Jojo? This is j.' Cover Jojo: child says /j/ from the letter alone.",
+      "picture": "the jellyfish beside the plain j: 'the jellyfish makes a j shape. This is j. j says /j/.' Trace j over the jellyfish, then trace the plain j.",
+      "outline": "Plain j over a faint the jellyfish: 'Can you still see the jellyfish? This is j.' Cover the jellyfish: child says /j/ from the letter alone.",
       "plain": "Plain lowercase j only, in 2-3 fonts. 'Same letter, different clothes. What does it say?'",
-      "cue": "'Think of Jojo' + jiggle hands"
+      "cue": "'Think of the jellyfish' + jiggle hands"
      },
      "y": {
-      "picture": "Yumi beside the plain y: 'Yumi makes a y shape. This is y. y says /y/.' Trace y over Yumi, then trace the plain y.",
-      "outline": "Plain y over a faint Yumi: 'Can you still see Yumi? This is y.' Cover Yumi: child says /y/ from the letter alone.",
+      "picture": "the yam beside the plain y: 'the yam makes a y shape. This is y. y says /y/.' Trace y over the yam, then trace the plain y.",
+      "outline": "Plain y over a faint the yam: 'Can you still see the yam? This is y.' Cover the yam: child says /y/ from the letter alone.",
       "plain": "Plain lowercase y only, in 2-3 fonts. 'Same letter, different clothes. What does it say?'",
-      "cue": "'Think of Yumi' + yo-yo hand"
+      "cue": "'Think of the yam' + yo-yo hand"
      },
      "x": {
-      "picture": "Tix beside the plain x: 'Tix makes an x shape. This is x. x says /ks/.' Trace x over Tix, then trace the plain x.",
-      "outline": "Plain x over a faint Tix: 'Can you still see Tix? This is x.' Cover Tix: child says /ks/ from the letter alone.",
+      "picture": "the box beside the plain x: 'the box makes an x shape. This is x. x says /ks/.' Trace x over the box, then trace the plain x.",
+      "outline": "Plain x over a faint the box: 'Can you still see the box? This is x.' Cover the box: child says /ks/ from the letter alone.",
       "plain": "Plain lowercase x only, in 2-3 fonts. 'Same letter, different clothes. What does it say?'",
-      "cue": "'Think of Tix' + cross arms"
+      "cue": "'Think of the box' + cross arms"
      },
      "q": {
-      "picture": "Quinn beside the plain q: 'Quinn makes a q shape. This is q. q says /kw/.' Trace q over Quinn, then trace the plain q.",
-      "outline": "Plain q over a faint Quinn: 'Can you still see Quinn? This is q.' Cover Quinn: child says /kw/ from the letter alone.",
+      "picture": "the quail beside the plain q: 'the quail makes a q shape. This is q. q says /kw/.' Trace q over the quail, then trace the plain q.",
+      "outline": "Plain q over a faint the quail: 'Can you still see the quail? This is q.' Cover the quail: child says /kw/ from the letter alone.",
       "plain": "Plain lowercase q only, in 2-3 fonts. 'Same letter, different clothes. What does it say?'",
-      "cue": "'Think of Quinn' + link fingers"
+      "cue": "'Think of the quail' + link fingers"
      }
     },
     "record": "After each flash, tick a box for every letter answered correctly in under 3 seconds. 3 ticks on 3 different lessons moves the letter one step.",
@@ -12046,7 +12046,7 @@
      "id": "meet",
      "step": "Meet the letter",
      "minutes": 3,
-     "what_to_do": "Tix beside the plain x: 'Tix makes an x shape. This is x. x says /ks/.' Trace x over Tix, then trace the plain x. Chant and action. Quinn beside the plain q: 'Quinn makes a q shape. This is q. q says /kw/.' Trace q over Quinn, then trace the plain q. Chant and action. Look-alike sort (p/q, 1 min): p: stick first, then the ball on the right. q: ball first, then the stick with a flick, and q always brings its buddy u."
+     "what_to_do": "the box beside the plain x: 'the box makes an x shape. This is x. x says /ks/.' Trace x over the box, then trace the plain x. Chant and action. the quail beside the plain q: 'the quail makes a q shape. This is q. q says /kw/.' Trace q over the quail, then trace the plain q. Chant and action. Look-alike sort (p/q, 1 min): p: stick first, then the ball on the right. q: ball first, then the stick with a flick, and q always brings its buddy u."
     },
     {
      "id": "trace",
@@ -12408,28 +12408,28 @@
     },
     "scripts": {
      "j": {
-      "picture": "Jojo beside the plain j: 'Jojo makes a j shape. This is j. j says /j/.' Trace j over Jojo, then trace the plain j.",
-      "outline": "Plain j over a faint Jojo: 'Can you still see Jojo? This is j.' Cover Jojo: child says /j/ from the letter alone.",
+      "picture": "the jellyfish beside the plain j: 'the jellyfish makes a j shape. This is j. j says /j/.' Trace j over the jellyfish, then trace the plain j.",
+      "outline": "Plain j over a faint the jellyfish: 'Can you still see the jellyfish? This is j.' Cover the jellyfish: child says /j/ from the letter alone.",
       "plain": "Plain lowercase j only, in 2-3 fonts. 'Same letter, different clothes. What does it say?'",
-      "cue": "'Think of Jojo' + jiggle hands"
+      "cue": "'Think of the jellyfish' + jiggle hands"
      },
      "y": {
-      "picture": "Yumi beside the plain y: 'Yumi makes a y shape. This is y. y says /y/.' Trace y over Yumi, then trace the plain y.",
-      "outline": "Plain y over a faint Yumi: 'Can you still see Yumi? This is y.' Cover Yumi: child says /y/ from the letter alone.",
+      "picture": "the yam beside the plain y: 'the yam makes a y shape. This is y. y says /y/.' Trace y over the yam, then trace the plain y.",
+      "outline": "Plain y over a faint the yam: 'Can you still see the yam? This is y.' Cover the yam: child says /y/ from the letter alone.",
       "plain": "Plain lowercase y only, in 2-3 fonts. 'Same letter, different clothes. What does it say?'",
-      "cue": "'Think of Yumi' + yo-yo hand"
+      "cue": "'Think of the yam' + yo-yo hand"
      },
      "x": {
-      "picture": "Tix beside the plain x: 'Tix makes an x shape. This is x. x says /ks/.' Trace x over Tix, then trace the plain x.",
-      "outline": "Plain x over a faint Tix: 'Can you still see Tix? This is x.' Cover Tix: child says /ks/ from the letter alone.",
+      "picture": "the box beside the plain x: 'the box makes an x shape. This is x. x says /ks/.' Trace x over the box, then trace the plain x.",
+      "outline": "Plain x over a faint the box: 'Can you still see the box? This is x.' Cover the box: child says /ks/ from the letter alone.",
       "plain": "Plain lowercase x only, in 2-3 fonts. 'Same letter, different clothes. What does it say?'",
-      "cue": "'Think of Tix' + cross arms"
+      "cue": "'Think of the box' + cross arms"
      },
      "q": {
-      "picture": "Quinn beside the plain q: 'Quinn makes a q shape. This is q. q says /kw/.' Trace q over Quinn, then trace the plain q.",
-      "outline": "Plain q over a faint Quinn: 'Can you still see Quinn? This is q.' Cover Quinn: child says /kw/ from the letter alone.",
+      "picture": "the quail beside the plain q: 'the quail makes a q shape. This is q. q says /kw/.' Trace q over the quail, then trace the plain q.",
+      "outline": "Plain q over a faint the quail: 'Can you still see the quail? This is q.' Cover the quail: child says /kw/ from the letter alone.",
       "plain": "Plain lowercase q only, in 2-3 fonts. 'Same letter, different clothes. What does it say?'",
-      "cue": "'Think of Quinn' + link fingers"
+      "cue": "'Think of the quail' + link fingers"
      }
     },
     "record": "After each flash, tick a box for every letter answered correctly in under 3 seconds. 3 ticks on 3 different lessons moves the letter one step.",
@@ -12935,28 +12935,28 @@
     },
     "scripts": {
      "j": {
-      "picture": "Jojo beside the plain j: 'Jojo makes a j shape. This is j. j says /j/.' Trace j over Jojo, then trace the plain j.",
-      "outline": "Plain j over a faint Jojo: 'Can you still see Jojo? This is j.' Cover Jojo: child says /j/ from the letter alone.",
+      "picture": "the jellyfish beside the plain j: 'the jellyfish makes a j shape. This is j. j says /j/.' Trace j over the jellyfish, then trace the plain j.",
+      "outline": "Plain j over a faint the jellyfish: 'Can you still see the jellyfish? This is j.' Cover the jellyfish: child says /j/ from the letter alone.",
       "plain": "Plain lowercase j only, in 2-3 fonts. 'Same letter, different clothes. What does it say?'",
-      "cue": "'Think of Jojo' + jiggle hands"
+      "cue": "'Think of the jellyfish' + jiggle hands"
      },
      "y": {
-      "picture": "Yumi beside the plain y: 'Yumi makes a y shape. This is y. y says /y/.' Trace y over Yumi, then trace the plain y.",
-      "outline": "Plain y over a faint Yumi: 'Can you still see Yumi? This is y.' Cover Yumi: child says /y/ from the letter alone.",
+      "picture": "the yam beside the plain y: 'the yam makes a y shape. This is y. y says /y/.' Trace y over the yam, then trace the plain y.",
+      "outline": "Plain y over a faint the yam: 'Can you still see the yam? This is y.' Cover the yam: child says /y/ from the letter alone.",
       "plain": "Plain lowercase y only, in 2-3 fonts. 'Same letter, different clothes. What does it say?'",
-      "cue": "'Think of Yumi' + yo-yo hand"
+      "cue": "'Think of the yam' + yo-yo hand"
      },
      "x": {
-      "picture": "Tix beside the plain x: 'Tix makes an x shape. This is x. x says /ks/.' Trace x over Tix, then trace the plain x.",
-      "outline": "Plain x over a faint Tix: 'Can you still see Tix? This is x.' Cover Tix: child says /ks/ from the letter alone.",
+      "picture": "the box beside the plain x: 'the box makes an x shape. This is x. x says /ks/.' Trace x over the box, then trace the plain x.",
+      "outline": "Plain x over a faint the box: 'Can you still see the box? This is x.' Cover the box: child says /ks/ from the letter alone.",
       "plain": "Plain lowercase x only, in 2-3 fonts. 'Same letter, different clothes. What does it say?'",
-      "cue": "'Think of Tix' + cross arms"
+      "cue": "'Think of the box' + cross arms"
      },
      "q": {
-      "picture": "Quinn beside the plain q: 'Quinn makes a q shape. This is q. q says /kw/.' Trace q over Quinn, then trace the plain q.",
-      "outline": "Plain q over a faint Quinn: 'Can you still see Quinn? This is q.' Cover Quinn: child says /kw/ from the letter alone.",
+      "picture": "the quail beside the plain q: 'the quail makes a q shape. This is q. q says /kw/.' Trace q over the quail, then trace the plain q.",
+      "outline": "Plain q over a faint the quail: 'Can you still see the quail? This is q.' Cover the quail: child says /kw/ from the letter alone.",
       "plain": "Plain lowercase q only, in 2-3 fonts. 'Same letter, different clothes. What does it say?'",
-      "cue": "'Think of Quinn' + link fingers"
+      "cue": "'Think of the quail' + link fingers"
      }
     },
     "record": "After each flash, tick a box for every letter answered correctly in under 3 seconds. 3 ticks on 3 different lessons moves the letter one step.",
@@ -13575,10 +13575,10 @@
     },
     "scripts": {
      "v": {
-      "picture": "Vida beside the plain v: 'Vida makes a v shape. This is v. v says /v/.' Trace v over Vida, then trace the plain v.",
-      "outline": "Plain v over a faint Vida: 'Can you still see Vida? This is v.' Cover Vida: child says /v/ from the letter alone.",
+      "picture": "the vine beside the plain v: 'the vine makes a v shape. This is v. v says /v/.' Trace v over the vine, then trace the plain v.",
+      "outline": "Plain v over a faint the vine: 'Can you still see the vine? This is v.' Cover the vine: child says /v/ from the letter alone.",
       "plain": "Plain lowercase v only, in 2-3 fonts. 'Same letter, different clothes. What does it say?'",
-      "cue": "'Think of Vida' + two-finger v"
+      "cue": "'Think of the vine' + two-finger v"
      }
     },
     "record": "After each flash, tick a box for every letter answered correctly in under 3 seconds. 3 ticks on 3 different lessons moves the letter one step.",
@@ -13786,7 +13786,7 @@
      "id": "meet",
      "step": "Meet the letter",
      "minutes": 3,
-     "what_to_do": "Vida beside the plain v: 'Vida makes a v shape. This is v. v says /v/.' Trace v over Vida, then trace the plain v. Chant and action."
+     "what_to_do": "the vine beside the plain v: 'the vine makes a v shape. This is v. v says /v/.' Trace v over the vine, then trace the plain v. Chant and action."
     },
     {
      "id": "trace",
@@ -14134,16 +14134,16 @@
     },
     "scripts": {
      "v": {
-      "picture": "Vida beside the plain v: 'Vida makes a v shape. This is v. v says /v/.' Trace v over Vida, then trace the plain v.",
-      "outline": "Plain v over a faint Vida: 'Can you still see Vida? This is v.' Cover Vida: child says /v/ from the letter alone.",
+      "picture": "the vine beside the plain v: 'the vine makes a v shape. This is v. v says /v/.' Trace v over the vine, then trace the plain v.",
+      "outline": "Plain v over a faint the vine: 'Can you still see the vine? This is v.' Cover the vine: child says /v/ from the letter alone.",
       "plain": "Plain lowercase v only, in 2-3 fonts. 'Same letter, different clothes. What does it say?'",
-      "cue": "'Think of Vida' + two-finger v"
+      "cue": "'Think of the vine' + two-finger v"
      },
      "z": {
-      "picture": "Zuzu beside the plain z: 'Zuzu makes a z shape. This is z. z says /z/.' Trace z over Zuzu, then trace the plain z.",
-      "outline": "Plain z over a faint Zuzu: 'Can you still see Zuzu? This is z.' Cover Zuzu: child says /z/ from the letter alone.",
+      "picture": "the zigzag beside the plain z: 'the zigzag makes a z shape. This is z. z says /z/.' Trace z over the zigzag, then trace the plain z.",
+      "outline": "Plain z over a faint the zigzag: 'Can you still see the zigzag? This is z.' Cover the zigzag: child says /z/ from the letter alone.",
       "plain": "Plain lowercase z only, in 2-3 fonts. 'Same letter, different clothes. What does it say?'",
-      "cue": "'Think of Zuzu' + zigzag finger"
+      "cue": "'Think of the zigzag' + zigzag finger"
      }
     },
     "record": "After each flash, tick a box for every letter answered correctly in under 3 seconds. 3 ticks on 3 different lessons moves the letter one step.",
@@ -14358,7 +14358,7 @@
      "id": "meet",
      "step": "Meet the letter",
      "minutes": 3,
-     "what_to_do": "Zuzu beside the plain z: 'Zuzu makes a z shape. This is z. z says /z/.' Trace z over Zuzu, then trace the plain z. Chant and action."
+     "what_to_do": "the zigzag beside the plain z: 'the zigzag makes a z shape. This is z. z says /z/.' Trace z over the zigzag, then trace the plain z. Chant and action."
     },
     {
      "id": "trace",
@@ -14671,16 +14671,16 @@
     },
     "scripts": {
      "v": {
-      "picture": "Vida beside the plain v: 'Vida makes a v shape. This is v. v says /v/.' Trace v over Vida, then trace the plain v.",
-      "outline": "Plain v over a faint Vida: 'Can you still see Vida? This is v.' Cover Vida: child says /v/ from the letter alone.",
+      "picture": "the vine beside the plain v: 'the vine makes a v shape. This is v. v says /v/.' Trace v over the vine, then trace the plain v.",
+      "outline": "Plain v over a faint the vine: 'Can you still see the vine? This is v.' Cover the vine: child says /v/ from the letter alone.",
       "plain": "Plain lowercase v only, in 2-3 fonts. 'Same letter, different clothes. What does it say?'",
-      "cue": "'Think of Vida' + two-finger v"
+      "cue": "'Think of the vine' + two-finger v"
      },
      "z": {
-      "picture": "Zuzu beside the plain z: 'Zuzu makes a z shape. This is z. z says /z/.' Trace z over Zuzu, then trace the plain z.",
-      "outline": "Plain z over a faint Zuzu: 'Can you still see Zuzu? This is z.' Cover Zuzu: child says /z/ from the letter alone.",
+      "picture": "the zigzag beside the plain z: 'the zigzag makes a z shape. This is z. z says /z/.' Trace z over the zigzag, then trace the plain z.",
+      "outline": "Plain z over a faint the zigzag: 'Can you still see the zigzag? This is z.' Cover the zigzag: child says /z/ from the letter alone.",
       "plain": "Plain lowercase z only, in 2-3 fonts. 'Same letter, different clothes. What does it say?'",
-      "cue": "'Think of Zuzu' + zigzag finger"
+      "cue": "'Think of the zigzag' + zigzag finger"
      }
     },
     "record": "After each flash, tick a box for every letter answered correctly in under 3 seconds. 3 ticks on 3 different lessons moves the letter one step.",
@@ -15195,16 +15195,16 @@
     },
     "scripts": {
      "v": {
-      "picture": "Vida beside the plain v: 'Vida makes a v shape. This is v. v says /v/.' Trace v over Vida, then trace the plain v.",
-      "outline": "Plain v over a faint Vida: 'Can you still see Vida? This is v.' Cover Vida: child says /v/ from the letter alone.",
+      "picture": "the vine beside the plain v: 'the vine makes a v shape. This is v. v says /v/.' Trace v over the vine, then trace the plain v.",
+      "outline": "Plain v over a faint the vine: 'Can you still see the vine? This is v.' Cover the vine: child says /v/ from the letter alone.",
       "plain": "Plain lowercase v only, in 2-3 fonts. 'Same letter, different clothes. What does it say?'",
-      "cue": "'Think of Vida' + two-finger v"
+      "cue": "'Think of the vine' + two-finger v"
      },
      "z": {
-      "picture": "Zuzu beside the plain z: 'Zuzu makes a z shape. This is z. z says /z/.' Trace z over Zuzu, then trace the plain z.",
-      "outline": "Plain z over a faint Zuzu: 'Can you still see Zuzu? This is z.' Cover Zuzu: child says /z/ from the letter alone.",
+      "picture": "the zigzag beside the plain z: 'the zigzag makes a z shape. This is z. z says /z/.' Trace z over the zigzag, then trace the plain z.",
+      "outline": "Plain z over a faint the zigzag: 'Can you still see the zigzag? This is z.' Cover the zigzag: child says /z/ from the letter alone.",
       "plain": "Plain lowercase z only, in 2-3 fonts. 'Same letter, different clothes. What does it say?'",
-      "cue": "'Think of Zuzu' + zigzag finger"
+      "cue": "'Think of the zigzag' + zigzag finger"
      }
     },
     "record": "After each flash, tick a box for every letter answered correctly in under 3 seconds. 3 ticks on 3 different lessons moves the letter one step.",

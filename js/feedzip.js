@@ -83,8 +83,8 @@
       const streak = h('p', { class: 'fz-streak' }, 'In a row: ' + row);
       shuffle([w].concat(others(w))).forEach((choice, i) => {
         const kind = COLORS[i % COLORS.length];
-        const b = h('button', { class: 'fz-bubble fz-snack ' + kind, type: 'button', 'data-w': choice, 'aria-label': 'Choice ' + (i + 1) + ', ' + choice },
-          h('span', { class: 'fz-w' }, colorWord(choice)));
+        const b = h('button', { class: 'fz-bubble fz-snack fz-hasnum ' + kind, type: 'button', 'data-w': choice, 'aria-label': 'Choice ' + (i + 1) + ', ' + choice },
+          IR.numBadge(i + 1), h('span', { class: 'fz-w' }, colorWord(choice)));
         b.addEventListener('pointerup', () => choose(choice, b));
         b.addEventListener('click', () => choose(choice, b));
         field.append(b);

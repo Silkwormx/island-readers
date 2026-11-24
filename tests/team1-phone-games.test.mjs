@@ -113,7 +113,8 @@ test('every Team 1 game reaches its end screen in 12 rounds on a phone', async (
               const r = el.getBoundingClientRect();
               return r.width >= 44 && r.height >= 44;
             });
-            const replay = [...document.querySelectorAll('button')].some((b) => (b.textContent || '').trim() === 'Hear the word');
+            const replayLabel = ${JSON.stringify(name === 'Sound Match' ? 'Hear the sound' : 'Hear the word')};
+            const replay = [...document.querySelectorAll('button')].some((b) => (b.textContent || '').trim() === replayLabel);
             const next = document.querySelector('.lesson-nav .btn.next');
             const nr = next ? next.getBoundingClientRect() : null;
             return {
@@ -125,7 +126,7 @@ test('every Team 1 game reaches its end screen in 12 rounds on a phone', async (
             };
           })()`);
           assert.ok(hear.choices >= 3 && hear.choices <= 4, name + ' round ' + (seen + 1) + ' has ' + hear.choices + ' choices');
-          assert.equal(hear.replay, true, name + ' is missing Hear the word');
+          assert.equal(hear.replay, true, name + ' is missing ' + (name === 'Sound Match' ? 'Hear the sound' : 'Hear the word'));
           assert.equal(hear.next, true, name + ' Next is missing');
           assert.equal(hear.any, false, name + ' still says any');
           assert.equal(hear.scores, 0, name + ' still shows Zip or Frill scores');

@@ -219,8 +219,18 @@
     return ctx;
   }
 
-  function big(label, on) {
-    return h('button', { class: 'll1card', type: 'button', onclick: on }, h('b', null, label));
+  function kid(text) { return String(text == null ? '' : text).toLowerCase(); }
+  function tag(el, n) {
+    el.classList.add('llpick');
+    if (n && IR.numBadge) el.prepend(IR.numBadge(n));
+    return el;
+  }
+  function hearWord(word) {
+    if (IR.playWord) return IR.playWord(word);
+    return say(word);
+  }
+  function big(label, on, n) {
+    return tag(h('button', { class: 'll1card', type: 'button', onclick: on }, h('b', null, kid(label))), n);
   }
 
   function team(ctx) {
@@ -341,10 +351,11 @@
   function cycle(list, n) {
     const out = [];
     if (!list.length) return out;
-    const early = list.slice(0, Math.max(1, Math.ceil(list.length / 2)));
-    for (let i = 0; i < (n || ROUND_N); i++) {
-      const bag = i < 4 ? early : list;
-      out.push(bag[i % bag.length]);
+    const rounds = n || ROUND_N;
+    for (let i = 0; i < rounds; i++) {
+      let item = list[i % list.length];
+      if (out.length && item === out[out.length - 1] && list.length > 1) item = list[(i + 1) % list.length];
+      out.push(item);
     }
     return out;
   }
@@ -425,13 +436,21 @@
     return PACK.ids.length > 2 ? PACK.ids.slice() : PACK.ids.concat(PACK.ids);
   }
   function pictureCards() {
-    const out = [];
-    PACK.ids.forEach((id) => {
+    const by = {};
+    const ids = [];
+    (PACK.ids || []).forEach((id) => {
+      ids.push(id);
+      by[id] = [];
       (PACK.pics[id] || []).forEach((pic) => {
-        if (pic && typeof pic === 'object') out.push({ src: pic.src, answer: id, name: pic.name || '' });
-        else out.push({ src: pic, answer: id, name: '' });
+        if (pic && typeof pic === 'object') by[id].push({ src: pic.src, answer: id, name: pic.name || '' });
+        else by[id].push({ src: pic, answer: id, name: '' });
       });
     });
+    const out = [];
+    const deep = Math.max.apply(null, ids.map((id) => by[id].length).concat([0]));
+    for (let n = 0; n < deep; n++) {
+      ids.forEach((id) => { if (by[id][n]) out.push(by[id][n]); });
+    }
     return out;
   }
   function capWord(text) {
@@ -446,17 +465,18 @@
       ctx._coachReplay = () => playSound(id, hear);
       playSound(id, hear);
       const shown = choicesFor(id, i < 4 ? 1 : i < 8 ? 2 : Math.max(2, ids.length - 1));
-      const bubbles = shuffle(shown).map((letter) => h('button', {
+      const bubbles = shuffle(shown).map((letter, n) => tag(h('button', {
         class: 'll1bubble',
         type: 'button',
         'data-yes': letter === id ? '1' : '0',
+        'aria-label': 'Choice ' + (n + 1) + ', ' + letter,
         onclick: (e) => {
           if (e.currentTarget.classList.contains('popped')) return;
           if (letter !== id) { again(e.currentTarget); return; }
           e.currentTarget.classList.add('popped');
           ok();
         }
-      }, letter));
+      }, kid(letter)), n + 1));
       ctx.stage.append(
         h('div', { class: 'row center' }, hear),
         h('div', { class: 'll1bubbles' }, ...bubbles));
@@ -478,29 +498,31 @@
       ctx._coachReplay = () => playSound(id);
       playSound(id);
       const shown = [id].concat(likeIds(id, PACK.ids, i < 4 ? 1 : Math.max(2, PACK.ids.length - 1)));
-      const friends = shuffle(shown).map((letter) => h('button', {
+      const friends = shuffle(shown).map((letter, n) => tag(h('button', {
         class: 'll1friend',
         type: 'button',
         'data-yes': letter === id ? '1' : '0',
+        'aria-label': 'Choice ' + (n + 1) + ', ' + letter,
         onclick: (e) => { if (letter === id) ok(); else again(e.currentTarget); }
-      }, h('img', { src: PACK.art[letter], alt: letter }), h('b', null, letter)));
+      }, h('img', { src: PACK.art[letter], alt: '' }), h('b', null, kid(letter))), n + 1));
       ctx.stage.append(h('div', { class: 'll1friends' }, ...friends));
     }, 'feed');
   }
 
   function catchSound(ctx) {
-    ctx.setInstr('Hear the word. Tap its first sound.');
+    ctx.setInstr('Hear the sound. Tap that letter.');
     rounds(ctx, pictureCards(), (pic, ok, again, i) => {
       const choices = soundChoices(pic.answer, i < 6 ? 3 : 4);
-      const hear = () => { if (pic.name && pic.name !== 'any') say(pic.name); };
+      const hear = () => playSound(pic.answer);
       ctx._coachReplay = hear;
       hear();
       ctx.stage.append(h('div', { class: 'llfirst llhear' },
         h('button', { class: 'btn big primary', type: 'button', onclick: hear }, 'Hear the word'),
         h('img', { class: 'll1link', src: pic.src, alt: '' }),
-        h('div', { class: 'll1friends' }, ...shuffle(choices).map((letter) => {
-          const b = big(letter, (e) => { if (letter === pic.answer) ok(); else again(e.currentTarget); });
+        h('div', { class: 'll1friends' }, ...shuffle(choices).map((letter, n) => {
+          const b = big(letter, (e) => { if (letter === pic.answer) ok(); else again(e.currentTarget); }, n + 1);
           b.setAttribute('data-yes', letter === pic.answer ? '1' : '0');
+          b.setAttribute('aria-label', 'Choice ' + (n + 1) + ', ' + letter);
           return b;
         }))));
     }, 'catch');
@@ -518,10 +540,11 @@
       const beach = h('div', { class: 'll1beach' });
       shuffle(letters).forEach((id, n) => {
         const spot = spots[n];
-        beach.append(h('button', {
+        beach.append(tag(h('button', {
           class: 'll1hunt',
           type: 'button',
           'data-yes': id === target ? '1' : '0',
+          'aria-label': 'Choice ' + (n + 1) + ', ' + id,
           style: 'left:' + spot[0] + '%;top:' + spot[1] + '%',
           onclick: (e) => {
             if (e.currentTarget.classList.contains('lit')) return;
@@ -532,7 +555,7 @@
             if (left > 0) return;
             ok();
           }
-        }, id));
+        }, kid(id)), n + 1));
       });
       ctx.stage.append(beach);
     }, 'hunt');
@@ -545,13 +568,13 @@
       const slots = word.parts.map(() => h('span', { class: 'llbuildslot' }));
       const extras = likeIds(word.parts[0], PACK.ids, 1);
       const tiles = shuffle(word.parts.concat(extras.filter((id) => word.parts.indexOf(id) < 0)));
-      const hear = () => say(word.text);
+      const hear = () => hearWord(word.text);
       ctx._coachReplay = hear;
       hear();
       ctx.stage.append(h('div', { class: 'llbuild' },
         h('div', { class: 'llbuildslots' }, ...slots),
         h('button', { class: 'btn big primary', type: 'button', onclick: hear }, 'Hear the word'),
-        h('div', { class: 'll1friends' }, ...tiles.map((id) => {
+        h('div', { class: 'll1friends' }, ...tiles.map((id, n) => {
           const b = big(id, (e) => {
             const btn = e.currentTarget;
             if (btn.disabled) return;
@@ -564,14 +587,14 @@
             playSound(id);
             if (at < word.parts.length) return;
             ok();
-          });
+          }, n + 1);
           return b;
         }))));
     }, 'build');
   }
 
   function blendPick(ctx) {
-    ctx.setInstr('Listen to the sounds. Tap the picture.');
+    ctx.setInstr('Hear the sounds. Tap the picture.');
     let blendToken = 0;
     rounds(ctx, PACK.words, (word, ok, again) => {
       const speak = () => {
@@ -589,12 +612,13 @@
       while (pics.length < 3) pics.push(word);
       ctx.stage.append(h('div', { class: 'llfirst' },
         h('button', { class: 'btn big primary', type: 'button', onclick: speak }, 'Hear the sounds'),
-        h('div', { class: 'll1friends' }, ...shuffle(pics).slice(0, 3).map((item) => {
+        h('div', { class: 'll1friends' }, ...shuffle(pics).slice(0, 3).map((item, n) => {
           const good = item === word;
-          return h('button', {
+          return tag(h('button', {
             class: 'll1friend', type: 'button', 'data-yes': good ? '1' : '0',
+            'aria-label': 'Choice ' + (n + 1),
             onclick: (e) => { if (good) ok(); else again(e.currentTarget); }
-          }, h('img', { src: item.src, alt: '' }));
+          }, h('img', { src: item.src, alt: '' })), n + 1);
         }))));
     }, 'ears');
   }
@@ -606,23 +630,22 @@
       ctx.stage.append(
         h('p', { class: 'll1flash' }, id),
         h('div', { class: 'll1pair' },
-          h('button', { class: 'btn big primary', type: 'button', 'data-yes': '1', onclick: () => { playSound(id); ok(); } }, 'I said it'),
-          h('button', { class: 'btn big', type: 'button', onclick: () => again() }, 'Not yet')));
+          tag(h('button', { class: 'btn big primary', type: 'button', 'data-yes': '1', onclick: () => { playSound(id); ok(); } }, 'I said it'), 1),
+          tag(h('button', { class: 'btn big', type: 'button', onclick: () => again() }, 'Not yet'), 2)));
     }, 'flash');
   }
 
   function match(ctx) {
     ctx.setInstr('Tap the word for the picture.');
     rounds(ctx, PACK.words, (word, ok, again, i) => {
-      ctx._coachReplay = () => say(word.text);
+      ctx._coachReplay = () => hearWord(word.text);
       const others = PACK.words.filter((item) => item.text !== word.text).slice(0, i < 6 ? 1 : 2);
       const choices = shuffle([{ text: word.text, good: true }].concat(others.map((item) => ({ text: item.text, good: false }))));
       ctx.stage.append(
         h('figure', { class: 'fs-scene ll1pic' },
-          h('img', { src: word.src, alt: capWord(word.text) }),
-          h('figcaption', null, capWord(word.text))),
-        h('div', { class: 'll1friends' }, ...choices.map((choice) => {
-          const b = big(choice.text, (e) => { if (choice.good) ok(); else again(e.currentTarget); });
+          h('img', { src: word.src, alt: '' })),
+        h('div', { class: 'll1friends' }, ...choices.map((choice, n) => {
+          const b = big(choice.text, (e) => { if (choice.good) ok(); else again(e.currentTarget); }, n + 1);
           b.setAttribute('data-yes', choice.good ? '1' : '0');
           return b;
         })));
@@ -630,28 +653,22 @@
   }
 
   function soundMatch(ctx) {
-    ctx.setInstr('Hear the word. Tap the picture.');
+    ctx.setInstr('Hear the sound. Tap its picture.');
     const cards = pictureCards().filter((pic) => pic && pic.src);
     rounds(ctx, cards, (item, ok, again, i) => {
-      const hear = () => { if (item.name && item.name !== 'any') say(item.name); };
+      const hear = () => playSound(item.answer);
       ctx._coachReplay = hear;
       hear();
-      const rest = shuffle(cards.filter((pic) => pic.src !== item.src));
-      const seen = {};
-      const decoys = [];
-      rest.forEach((pic) => {
-        if (seen[pic.src] || decoys.length >= (i < 6 ? 2 : 3)) return;
-        seen[pic.src] = 1;
-        decoys.push(pic);
-      });
+      const rest = shuffle(cards.filter((pic) => pic.src !== item.src && pic.answer !== item.answer));
+      const decoys = rest.slice(0, i < 6 ? 2 : 3);
       const options = shuffle([item].concat(decoys));
-      ctx.stage.append(h('div', { class: 'llfirst llhear' },
-        h('button', { class: 'btn big primary', type: 'button', onclick: hear }, 'Hear the word'),
-        h('div', { class: 'll1trio' }, ...options.map((opt) => h('button', {
+      ctx.stage.append(h('div', { class: 'llfirst llhear lltapfit' },
+        h('button', { class: 'btn big primary', type: 'button', onclick: hear }, 'Hear the sound'),
+        h('div', { class: 'll1trio' }, ...options.map((opt, n) => tag(h('button', {
           class: 'll1friend', type: 'button', 'data-yes': opt.src === item.src ? '1' : '0',
-          'aria-label': opt.name && opt.name !== 'any' ? opt.name : 'picture',
+          'aria-label': 'Choice ' + (n + 1),
           onclick: (e) => { if (opt.src === item.src) ok(); else again(e.currentTarget); }
-        }, h('img', { src: opt.src, alt: '' }))))));
+        }, h('img', { src: opt.src, alt: '' })), n + 1)))));
     }, 'sound');
   }
 
@@ -663,15 +680,18 @@
     }).filter((item) => item.n > 0);
   }
   function countList() {
-    const all = countItems((window.IRPhonemes && IRPhonemes.countWords) || []);
+    const ids = PACK.ids || [];
+    const raw = (PACK.words || []).map((item) => String(item.text || '').toLowerCase());
+    const extra = ['am', 'at'];
+    const words = (raw.length ? raw : extra).concat(extra).filter((word, index, list) => {
+      if (list.indexOf(word) !== index) return false;
+      const parts = (window.IRPhonemes && IRPhonemes.of(word)) || String(word).split('');
+      return parts.length > 0 && parts.every((part) => ids.indexOf(part) >= 0);
+    });
     const letter = PACK && PACK.countLetter;
-    if (letter) {
-      const list = all.filter((item) => item.sounds[0] === letter || item.w.toLowerCase().charAt(0) === letter);
-      return list.length ? list : all;
-    }
-    const rounds = [];
-    while (all.length && rounds.length < 12) rounds.push(all[rounds.length % all.length]);
-    return rounds;
+    const picked = letter ? words.filter((word) => word.charAt(0) === letter) : words;
+    const use = (picked.length ? picked : words).slice(0, 8);
+    return countItems(use.length ? use : ['am', 'at']);
   }
   function countSay(text, phoneme) {
     const key = phoneme ? (PHONEME_KEY[text] || '') : bareSound(text);
@@ -694,81 +714,67 @@
     });
   }
   function playRecordedWord(word) {
-    try { speechSynthesis.cancel(); } catch (e) { /* quiet */ }
-    const src = 'audio/w_' + String(word || '').toLowerCase() + '.mp3';
-    return Snd.play(src).then((ok) => (ok ? true : say(word)));
+    return hearWord(word);
   }
   function countGame(ctx) {
     const items = countList();
     let i = 0;
     let token = 0;
-    ctx.setInstr('Listen. Tap a dot for each sound.');
+    ctx.setInstr('How many sounds?');
     function show() {
       const roundToken = ++token;
       const item = items[i];
       if (!item) { ctx.badge('Count the Sounds', 'count'); return; }
-      try { speechSynthesis.cancel(); } catch (e) { /* quiet */ }
       ctx.stage.innerHTML = '';
       if (ctx.roundTo) ctx.roundTo(i + 1, items.length);
       ctx.progress(i / items.length);
-      let picked = 0;
-      let checked = false;
-      const taps = h('div', { class: 'llcounttaps' });
-      const answer = h('div', { class: 'llcountanswer' });
+      const boxes = h('div', { class: 'llcountboxes' });
+      for (let n = 0; n < 4; n++) boxes.append(h('i', { class: 'llcountbox' + (n < item.n ? ' wait' : '') }));
+      const choices = h('div', { class: 'llcountchoices' });
       const status = h('p', { class: 'status', 'aria-live': 'polite' }, '\u00a0');
-      const check = h('button', { class: 'btn big', type: 'button' }, 'Check');
-      function paintTaps() {
-        taps.innerHTML = '';
-        if (checked) return;
-        for (let n = 0; n < 4; n++) {
-          taps.append(h('button', {
-            class: 'llcounttap' + (n < picked ? ' on' : ''),
-            type: 'button',
-            'aria-label': 'Sound ' + (n + 1),
-            onclick: () => {
-              if (checked) return;
-              picked = n < picked ? n : n + 1;
-              paintTaps();
+      let locked = false;
+      [1, 2, 3, 4].forEach((n) => {
+        const b = h('button', {
+          class: 'llcountchoice',
+          type: 'button',
+          'data-yes': n === item.n ? '1' : '0',
+          'aria-label': 'Choice ' + n + ', ' + n + ' sounds',
+          onclick: async (e) => {
+            if (locked || roundToken !== token) return;
+            if (n === item.n) {
+              locked = true;
+              e.currentTarget.classList.add('lit');
+              [...boxes.children].forEach((box, k) => box.classList.toggle('on', k < item.n));
+              status.textContent = 'Yes.';
+              ctx.progress((i + 1) / items.length);
+              i += 1;
+              setTimeout(() => { if (roundToken === token) show(); }, 500);
+              return;
             }
-          }));
-        }
-      }
-      check.addEventListener('click', async () => {
-        if (roundToken !== token || check.classList.contains('coach-off')) return;
-        if (picked === item.n) {
-          checked = true;
-          paintTaps();
-          status.textContent = 'Yes.';
-          ctx.progress((i + 1) / items.length);
-          i += 1;
-          setTimeout(() => { if (roundToken === token) show(); }, 500);
-          return;
-        }
-        const stepName = await IR.coachTiles({
-          key: 'count-' + i,
-          wrongEl: check,
-          statusEl: status,
-          list: items,
-          index: i,
-          replay: () => playRecordedWord(item.w),
-          correctEl: () => taps.children[Math.max(0, item.n - 1)]
-        });
-        check.classList.remove('coach-off', 'coach-grey', 'tried');
-        if (stepName === 'model' && taps.children[item.n - 1]) taps.children[item.n - 1].classList.add('coach-model');
+            const stepName = await IR.coachMiss({
+              key: 'count-' + i,
+              wrongEl: e.currentTarget,
+              correctEl: () => choices.querySelector('[data-yes="1"]'),
+              statusEl: status,
+              replay: () => playRecordedWord(item.w)
+            });
+            if (stepName === 'model') IR.againLater(items, i);
+          }
+        }, String(n));
+        choices.append(b);
       });
-      ctx.stage.append(h('div', { class: 'llcountplay' },
-        h('p', { class: 'llcountword llcountbig' }, item.w),
-        h('button', { class: 'btn big primary', type: 'button', onclick: () => playRecordedWord(item.w) }, 'Hear the word'),
-        taps,
-        check,
-        status,
-        answer));
-      paintTaps();
+      const hear = h('button', { class: 'btn big primary', type: 'button', onclick: () => playRecordedWord(item.w) }, 'Hear word again');
+      ctx.stage.append(h('div', { class: 'llcountplay llcountfit' },
+        h('p', { class: 'llcountask' }, 'How many sounds?'),
+        h('button', { class: 'llcountword llcountbig', type: 'button', onclick: () => playRecordedWord(item.w) }, kid(item.w)),
+        hear,
+        boxes,
+        choices,
+        status));
       playRecordedWord(item.w);
     }
     ctx.setNext(() => {
       token += 1;
-      try { speechSynthesis.cancel(); } catch (e) { /* quiet */ }
       if (i < items.length - 1) { i += 1; show(); return true; }
       ctx.badge('Count the Sounds', 'count');
       return true;
@@ -777,18 +783,23 @@
   }
 
   function sortGame(ctx) {
-    ctx.setInstr('Hear the word. Tap its first sound.');
+    ctx.setInstr('Hear the sound. Tap its bucket.');
     rounds(ctx, pictureCards(), (card, ok, again, i) => {
       const choices = soundChoices(card.answer, i < 6 ? 3 : 4);
-      const hear = () => { if (card.name && card.name !== 'any') say(card.name); };
+      const hear = () => playSound(card.answer);
       ctx._coachReplay = hear;
       hear();
-      ctx.stage.append(h('div', { class: 'llfirst llhear' },
+      ctx.stage.append(h('div', { class: 'llsortfit' },
         h('button', { class: 'btn big primary', type: 'button', onclick: hear }, 'Hear the word'),
         h('img', { class: 'll1link', src: card.src, alt: '' }),
-        h('div', { class: 'll1friends' }, ...shuffle(choices).map((letter) => {
-          const b = big(letter, (e) => { if (letter === card.answer) ok(); else again(e.currentTarget); });
-          b.setAttribute('data-yes', letter === card.answer ? '1' : '0');
+        h('div', { class: 'llbuckets' }, ...shuffle(choices).map((letter, n) => {
+          const b = tag(h('button', {
+            class: 'llbucket',
+            type: 'button',
+            'data-yes': letter === card.answer ? '1' : '0',
+            'aria-label': 'Choice ' + (n + 1) + ', ' + letter,
+            onclick: (e) => { if (letter === card.answer) ok(); else again(e.currentTarget); }
+          }, h('b', null, kid(letter))), n + 1);
           return b;
         }))));
     }, 'sort');

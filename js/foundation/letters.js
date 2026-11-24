@@ -43,7 +43,7 @@
   /* Stroke numbers sit at the start. The arrow is the end of the stroke. */
   const LETTERS = [
     { id: 'a', name: 'a', nameSay: 'ay', sound: '/a/', soundSay: 'ah, apple', word: 'apple', cue: 'a as in apple', where: 'start',
-      strokes: [{ d: 'M68 78 C68 48 28 46 28 76 C28 106 70 108 70 78', nx: 96, ny: 70 }, { d: 'M70 58 L70 112', nx: 96, ny: 44 }] },
+      strokes: [{ d: 'M68 78 C68 48 28 46 28 76 C28 106 70 108 70 78', nx: 96, ny: 70 }, { d: 'M70 78 L70 116', nx: 88, ny: 68 }] },
     { id: 'm', name: 'm', nameSay: 'em', sound: '/m/', soundSay: 'mmm, mango', word: 'mango', cue: 'm as in mango', where: 'start',
       strokes: [{ d: 'M24 112 L24 52', nx: 12, ny: 40 }, { d: 'M24 70 C24 48 52 48 52 74 L52 112', nx: 36, ny: 40 }, { d: 'M52 70 C52 48 82 48 82 74 L82 112', nx: 70, ny: 40 }] },
     { id: 's', name: 's', nameSay: 'ess', sound: '/s/', soundSay: 'sss, snake', word: 'snake', cue: 's as in snake', where: 'start',
@@ -131,14 +131,14 @@
     m: { chant: 'Moles make mighty mud mountains. Messy monkeys munch muffins.', action: 'Lips together. Hum.' },
     s: { chant: 'Snakes sell sandy socks. Silly seals sip soup.', action: 'Slide your hand like a snake.' },
     t: { chant: 'Tigers tap ten toes. Tiny turtles tumble.', action: 'Tap two fingers.' },
-    p: { chant: 'Puff like a pig, /p/ /p/ /p/.', action: 'Puff your lips.' },
-    f: { chant: 'Fan the fish, /f/ /f/ /f/.', action: 'Bite your lip and blow.' },
-    i: { chant: 'Little insect, /i/ /i/ /i/.', action: 'Smile a little and say /i/.' },
-    n: { chant: 'Nod at the nest, /n/ /n/ /n/.', action: 'Nod your head.' },
+    p: { chant: 'Pink pigs pop purple pies!', action: 'Puff your lips.' },
+    f: { chant: 'Five funny fish flip fast fins!', action: 'Bite your lip and blow.' },
+    i: { chant: 'Itchy insects itch in igloos!', action: 'Smile a little and say /i/.' },
+    n: { chant: 'Nine neat newts nap near nests!', action: 'Nod your head.' },
     o: { chant: 'Round as an ox, /o/ /o/ /o/.', action: 'Make a round mouth.' },
     d: { chant: 'Dog digs down, /d/ /d/ /d/.', action: 'Tap your tongue.' },
     c: { chant: 'Cat curls up, /k/ /k/ /k/.', action: 'Open for /k/.' },
-    u: { chant: 'Uppy the umbrella, /u/ /u/ /u/.', action: 'Lift the umbrella a little.' },
+    u: { chant: 'Up goes the umbrella, /u/ /u/ /u/.', action: 'Lift the umbrella a little.' },
     g: { chant: 'Goat gulps, /g/ /g/ /g/.', action: 'Gulp once.' },
     b: { chant: 'Bounce the ball, /b/ /b/ /b/.', action: 'Press your lips, then pop.' },
     e: { chant: 'Edge of the egg, /e/ /e/ /e/.', action: 'Smile and say /e/.' },
@@ -152,7 +152,7 @@
     x: { chant: 'Cross the box, /ks/ /ks/.', action: 'Cross your arms.' },
     q: { chant: 'Quilt says /kw/ /kw/.', action: 'A circle, then a tail.' },
     v: { chant: 'Van goes /v/ /v/ /v/.', action: 'Bite your lip and hum.' },
-    z: { chant: 'Zip zooms, /z/ /z/ /z/.', action: 'Zip a jacket.' }
+    z: { chant: 'Zigzag, /z/ /z/ /z/.', action: 'Zigzag a finger.' }
   };
   /* The picture is the letter. s is a snake on sand. */
   function memo(inner) { return '<svg viewBox="0 0 160 200" aria-hidden="true">' + inner + '</svg>'; }
@@ -188,7 +188,7 @@
   const WHO = {
     a: 'apple', m: 'mangrove', s: 'snake', t: 'turtle',
     p: 'Puffer fish', f: 'Fish', i: 'Insect', n: 'Fishing net',
-    o: 'Round ox', d: 'Island dog', c: 'Crab claw', u: 'Uppy the umbrella',
+    o: 'octopus', d: 'dog', c: 'crab', u: 'umbrella',
     g: 'Hill goat', b: 'Ball', e: 'Reef eel', k: 'Kite',
     h: 'Hat', r: 'Manta ray', l: 'Lighthouse', w: 'Shore waves',
     j: 'Jellyfish', y: 'Young palm', x: 'Crossed oars', q: 'Queen conch',
@@ -471,8 +471,7 @@
   }
   function printLook(text, n) {
     const raw = String(text);
-    const shown = n % 3 === 2 ? raw.charAt(0).toUpperCase() + raw.slice(1) : raw;
-    return { className: PRINT_FONTS[n % PRINT_FONTS.length], text: shown };
+    return { className: PRINT_FONTS[n % PRINT_FONTS.length], text: raw.toLowerCase() };
   }
   function letterInfo(id) {
     return program && program.letters && program.letters.filter((row) => row.letter === id)[0];
@@ -534,10 +533,26 @@
     for (; i < word.length; i++) out.push({ g: word[i], id: word[i].toLowerCase() });
     return out;
   }
+  function blendWord(key) {
+    const known = window.IRPhonemes && IRPhonemes.of(key);
+    const parts = known || String(key || '').split('');
+    const playable = parts.filter((id) => PHONEME_SRC[id]);
+    if (!playable.length || playable.length !== parts.length) return Promise.resolve(false);
+    return playable.reduce((chain, id) => chain.then(() => playPhoneme(id).then(() => sleep(150))), Promise.resolve(true));
+  }
+  function playWord(word) {
+    const key = String(word || '').toLowerCase().replace(/[^a-z]/g, '');
+    if (!key) return Promise.resolve(false);
+    const src = WORD_AUDIO[key];
+    if (src) return Snd.play(src).then((ok) => (ok ? true : blendWord(key)));
+    return blendWord(key);
+  }
+  function playStory(text) {
+    const words = String(text || '').split(/\s+/).filter(Boolean);
+    return words.reduce((chain, word) => chain.then(() => playWord(word).then(() => sleep(160))), Promise.resolve(false));
+  }
   function sayRead(word) {
-    const src = WORD_AUDIO[String(word).toLowerCase()];
-    if (src) return Snd.play(src).then((ok) => (ok ? true : speak(word)));
-    return speak(word);
+    return playWord(word);
   }
   function stepDone(group, id) {
     if (id === 'games') return gamesFor(group).every((game) => IR.isDone(doneId(group, game.id)));
@@ -668,6 +683,8 @@
     if (el && el.setAttribute) el.setAttribute('aria-label', (letter || 'This letter') + ', sound coming soon');
   }
   IR.playPhoneme = playPhoneme;
+  IR.playWord = playWord;
+  IR.playStory = playStory;
   IR.soundSoon = soundSoon;
   IR.speakLinePlan = speakLinePlan;
   function hear(L, kind, el) {
@@ -686,7 +703,7 @@
       const path = '<path class="llstroke" d="' + s.d + '" fill="' + (s.dot ? '#2B2540' : 'none') + '" stroke="#2B2540" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"' + (s.dot ? '' : ' marker-end="url(#llarrow)"') + '/>';
       return path + '<circle cx="' + s.nx + '" cy="' + s.ny + '" r="11" fill="#F28C00" stroke="#2B2540" stroke-width="2"/><text x="' + s.nx + '" y="' + (s.ny + 5) + '" text-anchor="middle" font-size="14" font-family="Andika,sans-serif" fill="#fff" font-weight="700">' + n + '</text>';
     }).join('');
-    return '<svg viewBox="0 0 120 150" aria-hidden="true"><defs><marker id="llarrow" markerUnits="userSpaceOnUse" markerWidth="16" markerHeight="16" refX="14" refY="8" orient="auto"><path d="M0 1 L16 8 L0 15 z" fill="#E8731C"/></marker></defs><line x1="18" y1="78" x2="104" y2="78" stroke="#F3E6C4" stroke-width="2" stroke-dasharray="4 4"/><line x1="18" y1="116" x2="104" y2="116" stroke="#E4D6B4" stroke-width="3"/>' + marks + '</svg>';
+    return '<svg viewBox="0 4 120 152" aria-hidden="true"><defs><marker id="llarrow" markerUnits="userSpaceOnUse" markerWidth="16" markerHeight="16" refX="14" refY="8" orient="auto"><path d="M0 1 L16 8 L0 15 z" fill="#E8731C"/></marker></defs><line x1="18" y1="26" x2="104" y2="26" stroke="#C4B08A" stroke-width="3"/><line x1="18" y1="78" x2="104" y2="78" stroke="#C4B08A" stroke-width="2" stroke-dasharray="5 4"/><line x1="18" y1="116" x2="104" y2="116" stroke="#C4B08A" stroke-width="3"/>' + marks + '</svg>';
   }
   function take(pool, n) {
     const out = [];
@@ -886,6 +903,62 @@
     }
     return '';
   }
+  const CARD_PICS = {
+    a: [{ src: 'foundation/img/objects/ant.jpg', name: 'ant' }, { src: 'foundation/img/letters/a_apple.jpg', name: 'apple' }, { src: 'foundation/img/objects/apple.jpg', name: 'apple' }],
+    m: [{ src: 'foundation/img/objects/mango.jpg', name: 'mango' }, { src: 'foundation/img/letters/m_manny_mangrove.jpg', name: 'mango' }, { src: 'foundation/img/story/one-mat.jpg', name: 'mat' }],
+    s: [{ src: 'foundation/img/letters/s_sami_sea_snake.jpg', name: 'snake' }, { src: 'foundation/img/objects/sun.jpg', name: 'sun' }],
+    t: [{ src: 'foundation/img/letters/t_tama_sea_turtle.jpg', name: 'turtle' }, { src: 'foundation/img/objects/top.jpg', name: 'top' }],
+    p: [{ src: 'foundation/img/story/one-pan.jpg', name: 'pan' }, { src: 'foundation/img/story/allit-p-pigs.jpg', name: 'pigs' }, { src: 'foundation/img/letters/p_puku_pufferfish.jpg', name: 'pufferfish' }],
+    f: [{ src: 'foundation/img/story/one-fin.jpg', name: 'fin' }, { src: 'foundation/img/story/allit-f-fish.jpg', name: 'fish' }, { src: 'foundation/img/letters/f_fumi_fish.jpg', name: 'fish' }],
+    i: [{ src: 'foundation/img/letters/i_iggy_insect.jpg', name: 'insect' }, { src: 'foundation/img/story/allit-i-insects.jpg', name: 'insects' }],
+    n: [{ src: 'foundation/img/letters/n_nobu_noodle.jpg', name: 'noodle' }, { src: 'foundation/img/story/allit-n-newts.jpg', name: 'newts' }],
+    o: [{ src: 'foundation/img/letters/o_ollie_octopus.jpg', name: 'octopus' }, { src: 'foundation/img/objects/pot.jpg', name: 'pot' }],
+    d: [{ src: 'foundation/img/letters/d_dai_dog.jpg', name: 'dog' }, { src: 'foundation/img/objects/dot.jpg', name: 'dot' }],
+    c: [{ src: 'foundation/img/letters/c_coco_crab.jpg', name: 'crab' }, { src: 'foundation/img/objects/cup.jpg', name: 'cup' }],
+    u: [{ src: 'foundation/img/letters/u_umbrella.jpg', name: 'umbrella' }, { src: 'foundation/img/objects/pup.jpg', name: 'pup' }],
+    g: [{ src: 'foundation/img/letters/g_gogo_goat.jpg', name: 'goat' }, { src: 'foundation/img/objects/bag.jpg', name: 'bag' }],
+    b: [{ src: 'foundation/img/letters/b_bani_ball.jpg', name: 'ball' }, { src: 'foundation/img/objects/bed.jpg', name: 'bed' }],
+    e: [{ src: 'foundation/img/letters/e_egg.jpg', name: 'egg' }, { src: 'foundation/img/letters/e_eto_turtle_egg.jpg', name: 'egg' }],
+    k: [{ src: 'foundation/img/letters/k_kiko_kite.jpg', name: 'kite' }, { src: 'foundation/img/objects/key.jpg', name: 'key' }],
+    h: [{ src: 'foundation/img/letters/h_hana_hat.jpg', name: 'hat' }, { src: 'foundation/img/objects/hen.jpg', name: 'hen' }],
+    r: [{ src: 'foundation/img/letters/r_ruri_robin.jpg', name: 'robin' }, { src: 'foundation/img/objects/rat.jpg', name: 'rat' }],
+    l: [{ src: 'foundation/img/letters/l_lili_lily.jpg', name: 'lily' }, { src: 'foundation/img/objects/leaf.jpg', name: 'leaf' }],
+    w: [{ src: 'foundation/img/letters/w_wawa_wave.jpg', name: 'wave' }, { src: 'foundation/img/objects/web.jpg', name: 'web' }]
+  };
+  function cardPics(ids) {
+    const out = {};
+    ids.forEach((id) => { out[id] = (CARD_PICS[id] || []).slice(); });
+    return out;
+  }
+  function firstRounds(pool) {
+    const ids = pool.map((L) => L.id);
+    const start = ids.length > 2 ? 2 : 0;
+    const order = ids.slice(start).concat(ids.slice(0, start));
+    const by = {};
+    pool.forEach((L) => { by[L.id] = L; });
+    const used = {};
+    const rounds = [];
+    let last = '';
+    for (let i = 0; i < 12; i++) {
+      const id = order[i % order.length];
+      const L = by[id];
+      const bag = (CARD_PICS[id] || []).filter((pic) => pic && pic.src);
+      const pics = bag.length ? bag : [{ src: artUrl(id), word: (L && L.word) || id }];
+      let pic = null;
+      for (let k = 0; k < pics.length; k++) {
+        const cand = pics[(i + k) % pics.length];
+        if ((used[cand.src] || 0) >= 2) continue;
+        if (cand.src === last) continue;
+        pic = cand;
+        break;
+      }
+      if (!pic) pic = pics[i % pics.length];
+      used[pic.src] = (used[pic.src] || 0) + 1;
+      last = pic.src;
+      rounds.push({ letter: L, pic: pic, reveal: id, nChoices: i < 6 ? 3 : Math.min(4, Math.max(3, pool.length)) });
+    }
+    return rounds;
+  }
   function teamOnePack() {
     const art = {
       a: 'foundation/img/letters/a_apple.jpg',
@@ -897,32 +970,11 @@
       ids: ['a', 'm', 's', 't'],
       say: { a: 'ah', m: 'mmm', s: 'sss', t: 't' },
       art: art,
-      pics: {
-        a: [
-          { src: 'foundation/img/objects/ant.jpg', name: 'ant' },
-          { src: 'foundation/img/objects/apple.jpg', name: 'apple' }
-        ],
-        m: [
-          { src: 'foundation/img/scenes/mat.jpg', name: 'mat' },
-          { src: 'foundation/img/objects/mango.jpg', name: 'mango' },
-          { src: 'img/refresh_mop.jpg', name: 'mop' }
-        ],
-        s: [
-          { src: 'foundation/img/scenes/sat.jpg', name: 'sat' },
-          { src: art.s, name: 'snake' }
-        ],
-        t: [
-          { src: 'foundation/img/scenes/tam.jpg', name: 'turtle' },
-          { src: art.t, name: 'turtle' }
-        ]
-      },
+      pics: cardPics(['a', 'm', 's', 't']),
       words: [
         { text: 'am', src: 'foundation/img/scenes/am.jpg', parts: IRPhonemes.of('am'), decoy: 'foundation/img/objects/apple.jpg' },
-        { text: 'at', src: art.a, parts: IRPhonemes.of('at'), decoy: 'foundation/img/objects/mango.jpg' },
         { text: 'mat', src: 'foundation/img/scenes/mat.jpg', parts: IRPhonemes.of('mat'), decoy: art.s },
-        { text: 'sat', src: 'foundation/img/scenes/sat.jpg', parts: IRPhonemes.of('sat'), decoy: art.m },
-        { text: 'Sam', src: art.s, parts: IRPhonemes.of('Sam'), decoy: 'foundation/img/objects/apple.jpg' },
-        { text: 'Tam', src: 'foundation/img/scenes/tam.jpg', parts: IRPhonemes.of('Tam'), decoy: art.a }
+        { text: 'sat', src: 'foundation/img/scenes/sat.jpg', parts: IRPhonemes.of('sat'), decoy: art.m }
       ],
       onDone(id) {
         IR.recordActivity('ll_g1_d1_' + id, 3);
@@ -939,7 +991,8 @@
     ids.forEach((id) => {
       art[id] = letterArt(id);
       const word = pictureWord(id) || id;
-      pics[id] = art[id] ? [{ src: art[id], name: word }] : [];
+      pics[id] = cardPics([id])[id] || [];
+      if (!pics[id].length && art[id]) pics[id] = [{ src: art[id], name: word }];
     });
     const foils = [];
     GROUPS.forEach((g) => { if (g.n < group.n) foils.push.apply(foils, g.letters); });
@@ -1259,10 +1312,14 @@
       ctx.progress(i / letters.length);
       if (ctx.count) ctx.count(i + 1, letters.length);
       ctx.stage.innerHTML = '';
+      const mouth = 'msatpfinodcugbekhrlw'.indexOf(L.id) >= 0
+        ? h('img', { class: 'llmouth', src: 'foundation/img/mouths/mouth_' + L.id + '.jpg', alt: 'Mouth for ' + L.id })
+        : null;
       ctx.stage.append(h('div', { class: 'activity llgame llmeet' },
         letterCardStep(L, fadeStep(group, L.id), i),
+        mouth,
         h('div', { class: 'llmeettext' },
-          h('p', { class: 'llwho' }, (info && info.character) || WHO[L.id] || ''),
+          h('p', { class: 'llwho' }, L.id + ' · ' + ((info && info.keyword) || L.word || WHO[L.id] || '')),
           h('p', { class: 'llchant' }, (info && info.chant) || mem.chant),
           h('p', { class: 'llaction' }, 'Action: ' + ((info && info.action) || mem.action)),
           h('button', { class: 'btn primary', type: 'button', onclick: (e) => hear(L, 'sound', e.currentTarget) }, icon('speaker'), 'Hear the sound'))));
@@ -1379,84 +1436,79 @@
   }
 
   function runRead(ctx, group) {
-    const items = plan12(wordsFor(group));
+    const pages = STORY[group.id] || STORY.g1;
     let i = 0;
-    let token = 0;
-    ctx.setInstr('Tap each letter. They step in, hold hands, and say the word.');
+    ctx.setInstr('Read the story. Tap to hear it again.');
     function show() {
-      const my = ++token;
-      if (i >= items.length) { ctx.finishRead(); return; }
-      if (ctx.showRound) ctx.showRound(i + 1, items.length);
-      const item = items[i];
-      const parts = graphemes(item.w);
-      let at = 0;
-      ctx.progress(i / items.length);
-      if (ctx.count) ctx.count(i + 1, items.length);
+      if (i >= pages.length) { ctx.finishRead(); return; }
+      if (ctx.showRound) ctx.showRound(i + 1, pages.length);
+      const page = pages[i];
+      ctx.progress(i / pages.length);
       ctx.stage.innerHTML = '';
-      const cast = h('div', { class: 'llcast' });
-      const hands = h('i', { class: 'llhands' });
-      const line = h('p', { class: 'llline' }, '');
-      const spread = 90;
-      parts.forEach((part, n) => {
-        const from = Math.round((n - (parts.length - 1) / 2) * spread);
-        const b = h('button', {
-          class: 'llbuddy',
-          type: 'button',
-          style: '--from:' + from,
-          'data-g': part.g,
-          'aria-label': 'Sound ' + (n + 1) + ', ' + part.g
-        }, h('b', { class: 'llprint ' + printLook(part.g, n + i).className }, printLook(part.g, n + i).text));
-        b.addEventListener('click', async () => {
-          if (my !== token || b.classList.contains('lit')) return;
-          if (n !== at) {
-            ctx.miss();
-            b.classList.add('tried');
-            await Snd.play(A.sfx.tryagain);
-            b.classList.remove('tried');
-            return;
-          }
-          b.classList.add('lit');
-          at++;
-          await hear(BY[part.id], 'sound');
-          if (at < parts.length || my !== token || !ctx.scr.ok()) return;
-          cast.classList.add('held');
-          hands.classList.add('go');
-          await Snd.play(A.sfx.ding);
-          rememberWord(item.w);
-          if (ctx.scr.ok() && my === token) await sayRead(item.w);
-          if (ctx.scr.ok() && my === token) await speakLine(line, item.line || item.w);
-          ctx.setNextLabel(i < items.length - 1 ? 'Next word' : 'Look what I can read!');
-        });
-        cast.append(b);
-      });
-      ctx.stage.append(h('div', { class: 'activity llgame llread' }, cast, hands, line, hintButton(parts.map((part) => part.id))));
-      ctx.setNextLabel('');
-      if (ctx.armReveal) ctx.armReveal(item.w, (stage) => [...stage.querySelectorAll('.llbuddy')]);
+      const again = h('button', { class: 'btn big primary', type: 'button' }, 'Hear it again');
+      const play = () => playStory(page.text);
+      again.addEventListener('click', () => { Snd.stop(); play(); });
+      const bits = [h('p', { class: 'llstoryline' }, page.text), again];
+      if (page.pic) bits.unshift(h('img', { class: 'llstoryart', src: page.pic, alt: '' }));
+      ctx.stage.append(h('div', { class: 'activity llgame llread llstoryact' }, ...bits));
+      ctx.setNextLabel(i < pages.length - 1 ? 'Next' : 'Look what I can read!');
+      play();
     }
     ctx.setNext(() => {
-      if (i < items.length - 1) { i++; show(); return true; }
+      if (i < pages.length - 1) { i++; show(); return true; }
       ctx.finishRead();
       return true;
     });
     show();
   }
 
+  const CAN_READ = {
+    g1: ['sam', 'sat', 'mat', 'am', 'at'],
+    g2: ['pat', 'pin', 'fin', 'nap'],
+    g3: ['on', 'pot', 'top', 'cat', 'cup'],
+    g4: ['bag', 'dog', 'bed', 'kit'],
+    g5: ['hat', 'hen', 'log', 'wet']
+  };
+  const STORY = {
+    g1: [
+      { text: 'Sam sat.' },
+      { text: 'Sam sat.', pic: 'foundation/img/scenes/sat.jpg' },
+      { text: 'Sam sat at a mat.' },
+      { text: 'Sam sat at a mat.', pic: 'foundation/img/scenes/mat.jpg' }
+    ],
+    g2: [
+      { text: 'pat sat.' },
+      { text: 'pat sat.', pic: 'foundation/img/story/pat-sat.jpg' },
+      { text: 'a pin.' },
+      { text: 'a pin.', pic: 'foundation/img/story/a-pin-scene.jpg' }
+    ],
+    g3: [
+      { text: 'tom sat.' },
+      { text: 'a cat sat.' }
+    ],
+    g4: [
+      { text: 'a dog sat.' },
+      { text: 'meg sat.' }
+    ],
+    g5: [
+      { text: 'a hen sat.' },
+      { text: 'sam ran.' }
+    ]
+  };
   function celebrateScreen(app, group) {
     IR.newScreen();
     IR.recordActivity(doneId(group, 'celebrate'), 3);
     IR.touchStreak();
     IR.save();
-    const words = readBank();
-    const fresh = {};
-    lessonRead(group).forEach((item) => { fresh[item.w.toLowerCase()] = 1; });
+    const words = CAN_READ[group.id] || [];
     const screen = h('div', { class: 'screen lessonscreen nkstep u5step llstep' },
       h('header', { class: 'lesson-top' }, IR.ui.pageNav('#/foundation/letters/' + group.id)),
       h('div', { class: 'stage' }, h('div', { class: 'activity llgame llcelebrate' },
         IR.engage.faces(),
         h('div', { class: 'badgeart', html: IR.ICON.badge }),
         h('h1', null, 'Look what I can read!'),
-        h('p', { class: 'llprompt' }, words.length ? words.length + (words.length === 1 ? ' word' : ' words') : 'Read a word and it stays here.'),
-        h('div', { class: 'llreadwords' }, ...words.map((word) => h('span', { class: fresh[word.toLowerCase()] ? 'fresh' : '' }, word))))));
+        h('p', { class: 'llprompt' }, words.join('  ')),
+        h('div', { class: 'llreadwords' }, ...words.map((word) => h('span', null, word))))));
     const nav = h('div', { class: 'lesson-nav' });
     screen.append(nav);
     IR.simpleNav(nav, h('button', { class: 'btn big next', type: 'button' }), () => { location.hash = '#/foundation/letters/' + group.id; }, 'Back to the group');
@@ -1652,14 +1704,17 @@
   }
 
   function choiceGrid(items, onPick) {
-    return h('div', { class: 'llchoices' + (items.length < 3 ? ' few' : '') }, ...items.map((it) => {
+    return h('div', { class: 'llchoices' + (items.length < 3 ? ' few' : '') }, ...items.map((it, i) => {
+      const look = it.keepCase
+        ? { className: 'llfont-a', text: it.label }
+        : printLook(it.label, i);
       const b = h('button', {
-        class: 'llchoice',
+        class: 'llchoice llpick',
         type: 'button',
         'data-l': it.letter.id,
         'data-yes': it.yes ? '1' : '0',
-        'aria-label': it.label
-      }, h('b', { class: 'llprint ' + printLook(it.label, items.indexOf(it)).className }, printLook(it.label, items.indexOf(it)).text));
+        'aria-label': 'Choice ' + (i + 1) + ', ' + it.label
+      }, IR.numBadge(i + 1), h('b', { class: 'llprint ' + look.className }, look.text));
       b.addEventListener('click', () => onPick(it, b));
       return b;
     }));
@@ -1732,7 +1787,7 @@
       letter: L,
       reveal: L.id,
       replay: () => hear(L, 'sound'),
-      upper: i >= 8,
+      upper: false,
       nChoices: i < 4 ? 2 : i < 8 ? 3 : Math.min(4, pool.length)
     }));
     runRounds(ctx, rounds, (round, host, pick) => {
@@ -1754,7 +1809,8 @@
       const opts = options(round.letter, pool, round.nChoices || Math.min(4, pool.length)).map((L) => ({
         letter: L,
         yes: L.id === round.letter.id,
-        label: glyph(L.id, wantUpper)
+        label: glyph(L.id, wantUpper),
+        keepCase: true
       }));
       host.append(
         h('p', { class: 'llshown' }, glyph(round.letter.id, round.showUpper)),
@@ -1764,11 +1820,11 @@
 
   function runSound(ctx, pool) {
     ctx.setInstr('Hear the word. Tap its first sound.');
-    const rounds = plan12(pool).map((L, i) => ({ letter: L, reveal: L.id, nChoices: i < 6 ? 3 : Math.min(4, Math.max(3, pool.length)) }));
+    const rounds = firstRounds(pool);
     runRounds(ctx, rounds, (round, host, pick) => {
       const L = round.letter;
       const end = L.where === 'end';
-      const word = L.word && L.word !== 'any' ? L.word : '';
+      const word = String(round.pic.word || L.word || '').toLowerCase();
       const opts = options(L, pool, round.nChoices || Math.min(4, pool.length)).map((item) => ({
         letter: item,
         yes: item.id === L.id,
@@ -1776,7 +1832,7 @@
       }));
       const hearWord = () => { if (word) sayRead(word); };
       host.append(
-        h('div', { class: 'llpic big', html: PICS[word] || '' }),
+        round.pic.src ? h('img', { class: 'll1link', src: round.pic.src, alt: '' }) : h('div', { class: 'llpic big', html: PICS[word] || '' }),
         word ? h('p', { class: 'llword' }, word) : null,
         h('button', { class: 'btn big primary', type: 'button', onclick: hearWord }, 'Hear the word'),
         h('p', { class: 'llask' }, end ? 'Which letter is at the end?' : 'Which letter is at the start?'),
@@ -1820,7 +1876,7 @@
         const wantUpper = !round.showUpper;
         host.append(
           h('p', { class: 'llshown' }, glyph(L.id, round.showUpper)),
-          choiceGrid(opts.map((item) => ({ letter: item, yes: item.id === L.id, label: glyph(item.id, wantUpper) })), (it, btn) => pick(it.yes, btn)));
+          choiceGrid(opts.map((item) => ({ letter: item, yes: item.id === L.id, label: glyph(item.id, wantUpper), keepCase: true })), (it, btn) => pick(it.yes, btn)));
         return;
       }
       if (round.kind === 'sound') {
@@ -1834,7 +1890,7 @@
       }
       host.append(
         h('p', { class: 'llprompt' }, 'Which letter?'),
-        choiceGrid(opts.map((item) => ({ letter: item, yes: item.id === L.id, label: glyph(item.id, round.showUpper) })), (it, btn) => pick(it.yes, btn)));
+        choiceGrid(opts.map((item) => ({ letter: item, yes: item.id === L.id, label: glyph(item.id, false) })), (it, btn) => pick(it.yes, btn)));
       round.replay();
     });
   }
@@ -2488,10 +2544,10 @@
     return L && L.word ? L.word : '';
   }
   function shortName(id) {
-    if (pictureWord(id)) return pictureWord(id);
     const info = letterInfo(id);
-    const name = prettyName((info && info.character) || WHO[id] || id);
-    return name.split(' ')[0] || id;
+    if (info && info.keyword) return info.keyword;
+    if (pictureWord(id)) return pictureWord(id);
+    return WHO[id] || id;
   }
   function menuScreen(app, group, up, title, small, plan) {
     IR.newScreen();
@@ -2536,8 +2592,8 @@
     const host = h('p', { class: 'llstoryline' }, line);
     const src = letterArt(id);
     const again = h('button', { class: 'btn big primary', type: 'button' }, 'Hear it again');
-    function play() { speakLine(host, line); }
-    again.addEventListener('click', () => { Snd.stop(); try { speechSynthesis.cancel(); } catch (e) {} play(); });
+    function play() { playStory(line); }
+    again.addEventListener('click', () => { Snd.stop(); play(); });
     const next = h('button', { class: 'btn big next', type: 'button', onclick: () => { Snd.stop(); location.hash = back; } }, 'Next');
     app.append(h('div', { class: 'screen lessonscreen u5step llstep llstory' },
       h('header', { class: 'lesson-top' }, IR.ui.pageNav(back)),
@@ -3246,6 +3302,132 @@
     }).catch(() => { counter.textContent = 'Could not open the slideshow'; });
     if (IR.teach) IR.teach.sync();
   }
+  /* Handwriting board. Single-story a, hookless t. Top, middle, and bottom lines. */
+  function arcPath(cx, cy, r, a0, a1, steps) {
+    let d = '';
+    const n = steps || 36;
+    for (let i = 0; i <= n; i++) {
+      const a = (a0 + (a1 - a0) * i / n) * Math.PI / 180;
+      const x = cx + r * Math.cos(a);
+      const y = cy - r * Math.sin(a);
+      d += (i ? 'L' : 'M') + x.toFixed(1) + ' ' + y.toFixed(1);
+    }
+    return d;
+  }
+  const WRITE_LINES = { top: 80, mid: 200, base: 320, desc: 430 };
+  function writeStrokes(letter) {
+    const T = WRITE_LINES.top;
+    const M = WRITE_LINES.mid;
+    const B = WRITE_LINES.base;
+    const D = WRITE_LINES.desc;
+    const c = arcPath(168, (M + B) / 2, (B - M) / 2, 60, 420, 40);
+    const right = 168 + (B - M) / 2;
+    const down = 'M' + right + ' ' + M + ' L' + right + ' ' + B;
+    const map = {
+      a: [c, down],
+      b: ['M120 ' + T + ' L120 ' + B, arcPath(180, (M + B) / 2, (B - M) / 2, 90, -230, 32)],
+      c: [arcPath(180, (M + B) / 2, (B - M) / 2, 60, 240, 28)],
+      d: [c, 'M228 ' + T + ' L228 ' + B],
+      e: ['M130 ' + M + ' L230 ' + M, arcPath(180, (M + B) / 2, (B - M) / 2, 10, 200, 28)],
+      f: ['M200 ' + (T + 36) + ' C250 ' + T + ' 250 ' + (T + 50) + ' 200 ' + (T + 54) + ' L200 ' + (B + 36), 'M150 ' + M + ' L250 ' + M],
+      g: [c, 'M228 ' + ((M + B) / 2) + ' L228 ' + (D - 20) + ' C228 ' + D + ' 160 ' + D + ' 150 ' + (D - 24)],
+      h: ['M120 ' + T + ' L120 ' + B, 'M120 ' + M + ' C120 ' + (M - 50) + ' 240 ' + (M - 50) + ' 240 ' + M + ' L240 ' + B],
+      i: ['M180 ' + M + ' L180 ' + B, 'M180 ' + (M - 28) + ' L180 ' + (M - 28)],
+      j: ['M200 ' + M + ' L200 ' + (D - 16) + ' C200 ' + D + ' 140 ' + D + ' 130 ' + (D - 20), 'M200 ' + (M - 28) + ' L200 ' + (M - 28)],
+      k: ['M120 ' + T + ' L120 ' + B, 'M230 ' + M + ' L120 ' + ((M + B) / 2) + ' L240 ' + B],
+      l: ['M180 ' + T + ' L180 ' + B],
+      m: ['M90 ' + M + ' L90 ' + B, 'M90 ' + (M + 16) + ' C90 ' + (M - 36) + ' 170 ' + (M - 36) + ' 170 ' + M + ' L170 ' + B, 'M170 ' + (M + 16) + ' C170 ' + (M - 36) + ' 250 ' + (M - 36) + ' 250 ' + M + ' L250 ' + B],
+      n: ['M120 ' + M + ' L120 ' + B, 'M120 ' + (M + 16) + ' C120 ' + (M - 40) + ' 240 ' + (M - 40) + ' 240 ' + M + ' L240 ' + B],
+      o: [arcPath(180, (M + B) / 2, (B - M) / 2, 70, 430, 40)],
+      p: ['M120 ' + M + ' L120 ' + D, arcPath(180, (M + B) / 2, (B - M) / 2, 110, -210, 32)],
+      q: [c, 'M228 ' + ((M + B) / 2) + ' L228 ' + (D - 10) + ' L250 ' + (D - 36)],
+      r: ['M140 ' + M + ' L140 ' + B, 'M140 ' + (M + 10) + ' C140 ' + (M - 36) + ' 230 ' + (M - 20) + ' 230 ' + (M + 16)],
+      s: ['M230 ' + (M + 16) + ' C230 ' + (M - 20) + ' 120 ' + (M - 10) + ' 130 ' + ((M + B) / 2) + ' C140 ' + (B + 10) + ' 250 ' + (B + 8) + ' 230 ' + (B - 28)],
+      t: ['M180 ' + (T + 8) + ' L180 ' + B, 'M130 ' + M + ' L240 ' + M],
+      u: ['M120 ' + M + ' L120 ' + (B - 20) + ' C120 ' + (B + 8) + ' 240 ' + (B + 8) + ' 240 ' + (B - 24) + ' L240 ' + M],
+      v: ['M110 ' + M + ' L180 ' + B + ' L250 ' + M],
+      w: ['M80 ' + M + ' L120 ' + B + ' L180 ' + M + ' L230 ' + B + ' L280 ' + M],
+      x: ['M120 ' + M + ' L250 ' + B, 'M250 ' + M + ' L120 ' + B],
+      y: ['M120 ' + M + ' L180 ' + B, 'M250 ' + M + ' L160 ' + (D - 10)],
+      z: ['M120 ' + M + ' L250 ' + M + ' L120 ' + B + ' L250 ' + B]
+    };
+    return map[letter] || map.a;
+  }
+  const WRITE_PAGES = {
+    g1: { 9: 'a', 14: 'm', 39: 's', 51: 't' },
+    g2: { 6: 'p', 9: 'f', 12: 'i', 15: 'n' },
+    g3: { 8: 'o', 11: 'd', 14: 'c', 17: 'u' },
+    g4: { 8: 'g', 11: 'b', 14: 'e', 17: 'k' },
+    g5: { 8: 'h', 11: 'r', 14: 'l', 17: 'w' }
+  };
+  function writeBoard(letter) {
+    const strokes = writeStrokes(letter);
+    const paths = strokes.map((d, i) => {
+      const start = d.split(/[ML]/).filter(Boolean)[0].trim().split(/\s+/);
+      const sx = start[0];
+      const sy = start[1];
+      return '<path class="fs-ink" data-i="' + i + '" d="' + d + '" fill="none" stroke="#2B2540" stroke-width="16" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#fspen)"/>' +
+        '<circle cx="' + sx + '" cy="' + sy + '" r="16" fill="#F28C00" stroke="#2B2540" stroke-width="3"/>' +
+        '<text x="' + sx + '" y="' + (Number(sy) + 6) + '" text-anchor="middle" font-size="18" font-family="Andika,sans-serif" font-weight="700" fill="#fff">' + (i + 1) + '</text>';
+    }).join('');
+    const L = WRITE_LINES;
+    const svg = '<svg viewBox="0 0 360 500" class="fs-writesvg" aria-hidden="true"><defs><marker id="fspen" markerUnits="userSpaceOnUse" markerWidth="16" markerHeight="16" refX="2" refY="8" orient="auto"><path d="M0 1 L15 8 L0 15 z" fill="#E8731C"/></marker></defs>' +
+      '<line x1="40" y1="' + L.top + '" x2="320" y2="' + L.top + '" stroke="#8A7048" stroke-width="4"/>' +
+      '<line x1="40" y1="' + L.mid + '" x2="320" y2="' + L.mid + '" stroke="#8A7048" stroke-width="3" stroke-dasharray="10 8"/>' +
+      '<line x1="40" y1="' + L.base + '" x2="320" y2="' + L.base + '" stroke="#8A7048" stroke-width="4"/>' +
+      paths +
+      '<g class="fs-pencil"><g transform="rotate(38)">' +
+        '<polygon points="0,0 -18,-5 -18,5" fill="#F6D56A" stroke="#2B2540" stroke-width="1.5"/>' +
+        '<rect x="-46" y="-6" width="28" height="12" rx="2" fill="#F28C00" stroke="#2B2540" stroke-width="1.5"/>' +
+        '<rect x="-53" y="-6" width="8" height="12" fill="#E25B4A" stroke="#2B2540" stroke-width="1.3"/>' +
+        '<rect x="-60" y="-5" width="8" height="10" rx="1" fill="#F6E7B2" stroke="#2B2540" stroke-width="1.3"/>' +
+      '</g></g>' +
+      '</svg>';
+    const mouthSrc = 'msatpfinodcugbekhrlw'.indexOf(letter) >= 0 ? 'foundation/img/mouths/mouth_' + letter + '.jpg' : '';
+    const board = h('div', { class: 'fs-write' },
+      h('p', { class: 'fs-writeask' }, 'Watch ' + letter + '.'),
+      h('div', { class: 'fs-writetop' },
+        mouthSrc ? h('img', { class: 'fs-mouth', src: mouthSrc, alt: 'Mouth for ' + letter }) : null,
+        h('div', { class: 'fs-writeart', html: svg })),
+      h('button', { class: 'btn big primary fs-watch', type: 'button' }, 'Watch again'));
+    const root = board.querySelector('svg');
+    const inks = [...root.querySelectorAll('.fs-ink')];
+    const pencil = root.querySelector('.fs-pencil');
+    let token = 0;
+    function play() {
+      const mine = ++token;
+      inks.forEach((path) => {
+        const len = path.getTotalLength();
+        path.style.strokeDasharray = String(len);
+        path.style.strokeDashoffset = String(len);
+      });
+      let i = 0;
+      function next() {
+        if (mine !== token) return;
+        if (i >= inks.length) return;
+        const path = inks[i];
+        const len = path.getTotalLength();
+        const dur = len < 2 ? 280 : Math.max(700, len * 2.2);
+        const start = performance.now();
+        pencil.style.opacity = '1';
+        function frame(now) {
+          if (mine !== token) return;
+          const t = Math.min(1, (now - start) / dur);
+          path.style.strokeDashoffset = String(len * (1 - t));
+          const pt = path.getPointAtLength(Math.max(0, len * t - 0.5));
+          pencil.setAttribute('transform', 'translate(' + pt.x.toFixed(1) + ' ' + pt.y.toFixed(1) + ')');
+          if (t < 1) requestAnimationFrame(frame);
+          else { i += 1; setTimeout(next, 220); }
+        }
+        requestAnimationFrame(frame);
+      }
+      next();
+    }
+    board.querySelector('.fs-watch').addEventListener('click', play);
+    setTimeout(play, 280);
+    return board;
+  }
+  IR.writeBoard = writeBoard;
   function imageSlides(app, team, page, deck) {
     IR.newScreen();
     const requested = parseInt(page, 10);
@@ -3255,16 +3437,17 @@
     const counter = h('p', { class: 'fs-slidecount', 'aria-live': 'polite' }, 'Opening…');
     const dayEl = h('p', { class: 'fs-slideday' }, '');
     const img = h('img', { class: 'fs-slideimg', alt: '' });
+    const writeHost = h('div', { class: 'fs-writehost', hidden: true });
     const prev = h('button', { class: 'btn big', type: 'button' }, 'Back');
     const next = h('button', { class: 'btn big next', type: 'button' }, 'Next');
     const jumps = h('div', { class: 'fs-dayjumps' });
-    const menuHold = h('div');
+    const menuHold = h('div', { class: 'fs-slidemenu' });
     const view = h('div', { class: 'screen fs-slideview' },
       h('header', { class: 'uA-top' },
         IR.ui.pageNav('#/foundation/letters/' + team),
         h('div', { class: 'fs-slidehead' }, h('h1', { class: 'uA-title' }, named), dayEl, counter)),
       jumps,
-      h('div', { class: 'fs-slidestage' }, menuHold, img),
+      h('div', { class: 'fs-slidestage' }, menuHold, writeHost, img),
       h('div', { class: 'lesson-nav fs-slidenav' }, prev, next));
     app.append(view);
     let total = deck.days.length ? deck.days[deck.days.length - 1].page : 1;
@@ -3278,6 +3461,7 @@
         onMenu = false;
         menuHold.hidden = true;
         img.hidden = false;
+        writeHost.hidden = true;
         show(pageNo);
       });
       menuHold.replaceChildren(built || h('span'));
@@ -3288,6 +3472,7 @@
       if (onMenu) {
         menuHold.hidden = false;
         img.hidden = true;
+        writeHost.hidden = true;
         jumps.hidden = true;
         counter.textContent = '';
         dayEl.textContent = '';
@@ -3296,9 +3481,17 @@
         return;
       }
       menuHold.hidden = true;
-      img.hidden = false;
       jumps.hidden = false;
       pageNum = Math.max(1, Math.min(total, n));
+      const writeLetter = (WRITE_PAGES[team] || {})[pageNum];
+      if (writeLetter) {
+        img.hidden = true;
+        writeHost.hidden = false;
+        writeHost.replaceChildren(writeBoard(writeLetter));
+      } else {
+        writeHost.hidden = true;
+        img.hidden = false;
+      }
       const file = 'slide-' + String(pageNum).padStart(3, '0') + '.jpg';
       img.src = deck.images + file;
       img.alt = 'Slide ' + pageNum;
