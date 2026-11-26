@@ -170,13 +170,13 @@ html.teach .llist .u5name,html.teach .llplay .u5name{font-size:32px}
 .fs-slidemenu[hidden]{display:none}
 .fs-writehost{position:absolute;inset:0;width:100%;height:100%;display:flex;align-items:center;justify-content:center}
 .fs-writehost[hidden]{display:none}
-.fs-write{width:min(100%,56rem);height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.3rem;padding:.2rem .6rem .4rem}
-.fs-writeask{margin:0;font-size:clamp(1.3rem,3vh,1.8rem);font-weight:700}
-.fs-writetop{display:flex;align-items:center;justify-content:center;gap:1rem;width:100%;min-height:0}
-.fs-mouth{width:9.2rem;height:9.2rem;object-fit:cover;border-radius:1rem;border:3px solid #E6D6B4;flex:none}
-.fs-writeart{width:min(46%,18rem);max-height:50vh}
-.fs-writesvg{width:100%;height:auto;display:block;background:#FFFDF8;border-radius:1.2rem}
-.btn.primary.fs-watch{min-width:14rem;text-align:center;justify-content:center;background:#F28C00;border-color:#C95A10;color:#fff;box-shadow:0 4px 0 #C95A10}
+.fs-write{width:min(100%,56rem);height:100%;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:.35rem;padding:.35rem .6rem .5rem;box-sizing:border-box}
+.fs-writeask{margin:0;font-size:clamp(1.3rem,3vh,1.8rem);font-weight:700;flex:none}
+.fs-writetop{display:flex;align-items:center;justify-content:center;gap:1rem;width:100%;min-height:0;flex:1 1 auto}
+.fs-mouth{width:8rem;height:8rem;object-fit:cover;border-radius:1rem;border:3px solid #E6D6B4;flex:none}
+.fs-writeart{width:auto;height:100%;max-height:100%;max-width:15rem;display:flex;align-items:center;justify-content:center;min-height:0}
+.fs-writesvg{width:auto;height:100%;max-height:100%;max-width:15rem;display:block;background:#FFFDF8;border-radius:1.2rem}
+.btn.primary.fs-watch{flex:none;margin-top:.35rem;min-width:14rem;text-align:center;justify-content:center;background:#F28C00;border-color:#C95A10;color:#fff;box-shadow:0 4px 0 #C95A10;position:relative;z-index:2}
 .fs-dayjumps{display:flex;flex-wrap:wrap;justify-content:center;gap:.35rem;padding:.15rem .5rem 0;flex:none}
 .fs-dayjump{min-height:44px;padding:.2rem .7rem;background:#fff;border:3px solid #C95A10;color:#C95A10;box-shadow:none}
 .fs-dayjump.on{background:#F28C00;color:#fff;border-color:#C95A10}
@@ -301,6 +301,10 @@ html.teach .llist .u5name,html.teach .llplay .u5name{font-size:32px}
 .ll1friends{display:flex;flex-wrap:wrap;gap:.55rem;justify-content:center;width:100%;max-width:42rem}
 .ll1friends .ll1friend,.ll1friends .ll1card{flex:1 1 7.2rem;max-width:12rem;min-height:8rem}
 .fs-kidintro{display:flex;flex-direction:column;align-items:center;gap:.55rem;width:min(100%,28rem);margin:0 auto}
+.fs-silly{width:min(100%,52rem);gap:.4rem}
+.fs-allitpic{width:min(46rem,88vw);max-height:46vh;object-fit:contain;border-radius:1.2rem;background:#fff}
+.fs-allitline{margin:0;font-size:clamp(1.25rem,3.2vh,1.8rem);font-weight:700;text-align:center}
+.fs-allitcue{margin:0;font-weight:700;color:#0E7C7C}
 .fs-kidart{width:min(16rem,70vw);height:auto;border-radius:1.2rem;background:#fff}
 .fs-meetrow{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.6rem;width:min(100%,68rem);margin:0 auto}
 .fs-chip{display:flex;flex-direction:column;align-items:center;gap:.3rem;min-width:0}
@@ -388,7 +392,10 @@ html.teach .llist .u5name,html.teach .llplay .u5name{font-size:32px}
 .fs-group .fs-slidetext{border:0;background:transparent;color:#1F6F78;font-family:Andika,sans-serif;font-size:1rem;text-decoration:underline;cursor:pointer}
 .fs-home .fs-sidebtn{width:100%;display:inline-flex;align-items:center;justify-content:center;text-align:center;background:#fff;border:3px solid #C9841A;border-radius:1rem;box-shadow:0 3px 0 #C9841A;font-family:Andika,sans-serif}
 .fs-home .btn.primary.fs-continue,.fs-home .btn.primary.fs-slidebtn{width:100%;background:#F28C00;border-color:#C95A10;box-shadow:0 4px 0 #C95A10;color:#fff}
-.fs-home .bellgrid{grid-template-columns:repeat(3,minmax(0,1fr));gap:.7rem}
+.fs-home .bellgrid{grid-template-columns:repeat(4,minmax(0,1fr));gap:.55rem}
+.fs-teams.fs-home .fs-groupcard .tpic.fs-setpic{aspect-ratio:auto;height:168px;max-height:168px;grid-auto-rows:minmax(0,1fr);overflow:hidden}
+.fs-teams.fs-home .fs-setpic img{width:100%;height:100%;min-height:0;max-height:100%;aspect-ratio:auto;object-fit:contain}
+.fs-teams.fs-home .fs-groupcard .tbody{padding-top:.15rem}
 .fs-home .fs-groupcard{width:100%;text-align:center}
 .fs-home .fs-groupcard .tbody,
 .fs-home .fs-groupcard .tname,
@@ -446,7 +453,7 @@ html.teach .llist .u5name,html.teach .llplay .u5name{font-size:32px}
 .fs-teams.fs-home .hbanner h1::after,
 .fs-teams.fs-home.gridhome .mwrap > .hbanner h1::after{margin-left:auto;margin-right:auto}
 .fs-teams .bellgrid.fs-teamgrid{grid-template-columns:repeat(2,minmax(0,1fr))}
-@media (min-width:900px){.fs-teams .bellgrid.fs-teamgrid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (min-width:900px){.fs-teams .bellgrid.fs-teamgrid{grid-template-columns:repeat(4,minmax(0,1fr))}}
 .fs-teams .fs-groupcard{position:relative;min-height:12rem}
 .fs-teams .fs-groupcard.locked{opacity:.62}
 .fs-team{height:100dvh;max-height:100dvh;overflow:hidden;display:flex;flex-direction:column;background:var(--cream);font-family:Andika,sans-serif}

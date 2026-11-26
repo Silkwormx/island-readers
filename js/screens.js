@@ -1260,8 +1260,8 @@
         { title: 'Team 3: o d c u', board: '#/foundation/slides/g3', days: 5, daily: 'foundation/printables/Team3_Quick_Sounds.pdf', deck: 'foundation/slides/Learn_the_Letters_Team3.pdf' },
         { title: 'Team 4: g b e k', board: '#/foundation/slides/g4', days: 5, daily: 'foundation/printables/Team4_Quick_Sounds.pdf', deck: 'foundation/slides/Learn_the_Letters_Team4.pdf' },
         { title: 'Team 5: h r l w', board: '#/foundation/slides/g5', days: 5, daily: 'foundation/printables/Team5_Quick_Sounds.pdf', deck: 'foundation/slides/Learn_the_Letters_Team5.pdf' },
-        { title: 'Team 6: j y x q' },
-        { title: 'Team 7: v z' }
+        { title: 'Team 6: j y x q', board: '#/foundation/slides/g6', days: 5, daily: 'foundation/printables/Team6_Quick_Sounds.pdf' },
+        { title: 'Team 7: v z', board: '#/foundation/slides/g7', days: 5, daily: 'foundation/printables/Team7_Quick_Sounds.pdf' }
       ] },
       { name: 'Unit 4 \u00b7 Glued Sounds', sounds: [
         { s: 'ng', lesson: 'Lesson 4.1', days: [1, 2, 3, 4, 5].map((n) => ({ label: 'Day ' + n })), board: '#/teachers/slides/ng', slides: 'teachers/ng/Lesson3.1_ng_Week_Slides_v2.pptx', daily: 'teachers/ng/Lesson3.1_ng_Daily_Practice_Sheets.pdf', pack: 'teachers/ng/Lesson3.1_ng_Teacher_Pack.pdf' },

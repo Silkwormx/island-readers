@@ -1,0 +1,99 @@
+{
+  "title": "Team 7: v z",
+  "count": 62,
+  "days": [
+    {
+      "day": 1,
+      "start": 1,
+      "end": 22
+    },
+    {
+      "day": 2,
+      "start": 23,
+      "end": 36
+    },
+    {
+      "day": 3,
+      "start": 37,
+      "end": 44
+    },
+    {
+      "day": 4,
+      "start": 45,
+      "end": 53
+    },
+    {
+      "day": 5,
+      "start": 54,
+      "end": 62
+    }
+  ],
+  "slides": [
+    "slide-001.jpg",
+    "slide-002.jpg",
+    "slide-003.jpg",
+    "slide-004.jpg",
+    "slide-005.jpg",
+    "slide-006.jpg",
+    "slide-007.jpg",
+    "slide-008.jpg",
+    "slide-009.jpg",
+    "slide-010.jpg",
+    "slide-011.jpg",
+    "slide-012.jpg",
+    "slide-013.jpg",
+    "slide-014.jpg",
+    "slide-015.jpg",
+    "slide-016.jpg",
+    "slide-017.jpg",
+    "slide-018.jpg",
+    "slide-019.jpg",
+    "slide-020.jpg",
+    "slide-021.jpg",
+    "slide-022.jpg",
+    "slide-023.jpg",
+    "slide-024.jpg",
+    "slide-025.jpg",
+    "slide-026.jpg",
+    "slide-027.jpg",
+    "slide-028.jpg",
+    "slide-029.jpg",
+    "slide-030.jpg",
+    "slide-031.jpg",
+    "slide-032.jpg",
+    "slide-033.jpg",
+    "slide-034.jpg",
+    "slide-035.jpg",
+    "slide-036.jpg",
+    "slide-037.jpg",
+    "slide-038.jpg",
+    "slide-039.jpg",
+    "slide-040.jpg",
+    "slide-041.jpg",
+    "slide-042.jpg",
+    "slide-043.jpg",
+    "slide-044.jpg",
+    "slide-045.jpg",
+    "slide-046.jpg",
+    "slide-047.jpg",
+    "slide-048.jpg",
+    "slide-049.jpg",
+    "slide-050.jpg",
+    "slide-051.jpg",
+    "slide-052.jpg",
+    "slide-053.jpg",
+    "slide-054.jpg",
+    "slide-055.jpg",
+    "slide-056.jpg",
+    "slide-057.jpg",
+    "slide-058.jpg",
+    "slide-059.jpg",
+    "slide-060.jpg",
+    "slide-061.jpg",
+    "slide-062.jpg"
+  ],
+  "writePages": {
+    "8": "v",
+    "11": "z"
+  }
+}

@@ -936,24 +936,61 @@
     h: [{ src: 'foundation/img/letters/h_hana_hat.jpg', name: 'hat' }, { src: 'foundation/img/objects/hen.jpg', name: 'hen' }],
     r: [{ src: 'foundation/img/letters/r_ruri_robin.jpg', name: 'robin' }, { src: 'foundation/img/objects/rat.jpg', name: 'rat' }],
     l: [{ src: 'foundation/img/letters/l_lili_lily.jpg', name: 'lily' }, { src: 'foundation/img/objects/leaf.jpg', name: 'leaf' }],
-    w: [{ src: 'foundation/img/letters/w_wawa_wave.jpg', name: 'wave' }, { src: 'foundation/img/objects/web.jpg', name: 'web' }]
+    w: [{ src: 'foundation/img/letters/w_wawa_wave.jpg', name: 'wave' }, { src: 'foundation/img/objects/web.jpg', name: 'web' }],
+    j: [
+      { src: 'foundation/img/objects/jam.jpg', name: 'jam', word: 'jam' },
+      { src: 'foundation/img/objects/jet.jpg', name: 'jet', word: 'jet' },
+      { src: 'foundation/img/objects/jug.jpg', name: 'jug', word: 'jug' }
+    ],
+    y: [
+      { src: 'foundation/img/letters/y_yumi_purple_yam.jpg', name: 'yam', word: 'yam' },
+      { src: 'foundation/img/objects/yak.jpg', name: 'yak', word: 'yak' },
+      { src: 'foundation/img/story/allit-y-yams.jpg', name: 'yams', word: 'yam' }
+    ],
+    x: [
+      { src: 'foundation/img/letters/x_box.jpg', name: 'box', word: 'box' },
+      { src: 'foundation/img/objects/fox.jpg', name: 'fox', word: 'fox' },
+      { src: 'foundation/img/objects/six.jpg', name: 'six', word: 'six' }
+    ],
+    q: [
+      { src: 'foundation/img/letters/q_quinn_quail.jpg', name: 'quail', word: 'quit' },
+      { src: 'foundation/img/story/allit-q-quail.jpg', name: 'quail', word: 'quit' }
+    ],
+    v: [
+      { src: 'foundation/img/story/allit-v-van.jpg', name: 'van', word: 'van' },
+      { src: 'foundation/img/objects/vet.jpg', name: 'vet', word: 'vet' }
+    ],
+    z: [
+      { src: 'img/zipA.webp', name: 'zip', word: 'zip' },
+      { src: 'foundation/img/story/allit-z-zigzag.jpg', name: 'zap', word: 'zap' },
+      { src: 'foundation/img/story/zip-van.jpg', name: 'zip', word: 'zip' }
+    ]
   };
   function cardPics(ids) {
     const out = {};
     ids.forEach((id) => { out[id] = (CARD_PICS[id] || []).slice(); });
     return out;
   }
+  /* Twelve rounds. Each sound gets a fair share. A picture shows at most twice, and two pictures never trade places back and forth. */
   function firstRounds(pool) {
     const ids = pool.map((L) => L.id);
-    const start = ids.length > 2 ? 2 : 0;
-    const order = ids.slice(start).concat(ids.slice(0, start));
     const by = {};
     pool.forEach((L) => { by[L.id] = L; });
+    const counts = {};
+    ids.forEach((id) => { counts[id] = 0; });
+    const order = [];
+    while (order.length < 12) {
+      let least = counts[ids[0]];
+      ids.forEach((id) => { if (counts[id] < least) least = counts[id]; });
+      const tied = ids.filter((id) => counts[id] === least);
+      const id = tied[order.length % tied.length];
+      counts[id] += 1;
+      order.push(id);
+    }
     const used = {};
+    const recent = [];
     const rounds = [];
-    let last = '';
-    for (let i = 0; i < 12; i++) {
-      const id = order[i % order.length];
+    order.forEach((id, i) => {
       const L = by[id];
       const bag = (CARD_PICS[id] || []).filter((pic) => pic && pic.src);
       const pics = bag.length ? bag : [{ src: artUrl(id), word: (L && L.word) || id }];
@@ -961,16 +998,25 @@
       for (let k = 0; k < pics.length; k++) {
         const cand = pics[(i + k) % pics.length];
         if ((used[cand.src] || 0) >= 2) continue;
-        if (cand.src === last) continue;
+        if (recent.length && cand.src === recent[recent.length - 1]) continue;
+        if (recent.length >= 2 && cand.src === recent[recent.length - 2]) continue;
         pic = cand;
         break;
       }
-      if (!pic) pic = pics[i % pics.length];
+      if (!pic) {
+        pic = pics.filter((cand) => (used[cand.src] || 0) < 2 && cand.src !== recent[recent.length - 1])[0] || pics[i % pics.length];
+      }
       used[pic.src] = (used[pic.src] || 0) + 1;
-      last = pic.src;
+      recent.push(pic.src);
       rounds.push({ letter: L, pic: pic, reveal: id, nChoices: i < 6 ? 3 : Math.min(4, Math.max(3, pool.length)) });
-    }
+    });
     return rounds;
+  }
+  function soundPool(group) {
+    const mine = lettersOf(group);
+    if (!group || group.n !== 7) return mine;
+    const review = ['a', 'm', 's', 't', 'p', 'n'].map((id) => BY[id]).filter(Boolean);
+    return mine.concat(review);
   }
   function teamOnePack() {
     const art = {
@@ -1039,7 +1085,7 @@
       doneIcon: 'star',
       href: '#/foundation/letters/' + group.id + '/' + game.id
     }));
-    if (!/^(g1|g2|g3|g4|g5)$/.test(group.id) || !IR.day1Flow) return older;
+    if (!/^(g[1-7])$/.test(group.id) || !IR.day1Flow) return older;
     const ten = IR.day1Flow.GAMES.map((game) => ({
       id: game.id,
       key: 'd1-' + game.id,
@@ -1070,30 +1116,55 @@
       row('Words', ['d1-build', 'd1-ears', 'd1-match', 'd1-flash', 'd1-sort'])
     ];
   }
+  const ALLIT = {
+    j: { src: 'foundation/img/story/allit-j-jam.jpg', line: 'jellyfish jiggle in the jam!' },
+    y: { src: 'foundation/img/story/allit-y-yams.jpg', line: 'yaks yank yummy yams!' },
+    x: { src: 'foundation/img/story/allit-x-fox.jpg', line: 'a fox packs six boxes!' },
+    q: { src: 'foundation/img/story/allit-q-quail.jpg', line: 'a quail quits the quilt!' },
+    v: { src: 'foundation/img/story/allit-v-van.jpg', line: 'vines cover a van at the vet!' },
+    z: { src: 'foundation/img/story/allit-z-zigzag.jpg', line: 'a bee zips and zaps in a zigzag!' }
+  };
+  function introSteps(letters) {
+    const steps = [];
+    letters.forEach((L) => {
+      steps.push({ kind: 'sound', L: L });
+      if (ALLIT[L.id]) steps.push({ kind: 'silly', L: L, allit: ALLIT[L.id] });
+    });
+    return steps;
+  }
   function introScreen(app, group) {
     IR.newScreen();
-    const letters = lettersOf(group);
+    const steps = introSteps(lettersOf(group));
     let i = 0;
     const stage = h('div', { class: 'fs-stage' });
     const next = h('button', { class: 'btn big next', type: 'button' }, 'Next');
     function show() {
-      const L = letters[i];
-      const src = artUrl(L.id);
+      const step = steps[i];
+      const L = step.L;
       stage.innerHTML = '';
-      stage.append(h('div', { class: 'fs-kidintro' },
-        src ? h('img', { class: 'fs-kidart', src: src, alt: '' }) : letterCardStep(L, 'picture'),
-        nameTag(L.id),
-        h('div', { class: 'll1mouth' },
-          h('span', { class: 'll1mouthico', html: MOUTH }),
-          h('p', null, 'My sound is ' + L.sound))));
-      next.textContent = i >= letters.length - 1 ? 'Done' : 'Next';
-      const hello = i === 0 ? speak('Meet each letter.') : Promise.resolve(true);
-      hello.then(() => hear(L, 'sound'));
+      if (step.kind === 'silly') {
+        stage.append(h('div', { class: 'fs-kidintro fs-silly' },
+          h('img', { class: 'fs-allitpic', src: step.allit.src, alt: '' }),
+          h('p', { class: 'fs-allitline' }, step.allit.line),
+          h('p', { class: 'fs-allitcue' }, 'Say it fast 3 times.')));
+        speak(step.allit.line);
+      } else {
+        const src = artUrl(L.id);
+        stage.append(h('div', { class: 'fs-kidintro' },
+          src ? h('img', { class: 'fs-kidart', src: src, alt: '' }) : letterCardStep(L, 'picture'),
+          nameTag(L.id),
+          h('div', { class: 'll1mouth' },
+            h('span', { class: 'll1mouthico', html: MOUTH }),
+            h('p', null, 'My sound is ' + L.sound))));
+        const hello = i === 0 ? speak('Meet each letter.') : Promise.resolve(true);
+        hello.then(() => hear(L, 'sound'));
+      }
+      next.textContent = i >= steps.length - 1 ? 'Done' : 'Next';
     }
     next.addEventListener('click', () => {
       Snd.stop();
       try { speechSynthesis.cancel(); } catch (e) { /* quiet */ }
-      if (i >= letters.length - 1) { location.hash = '#/foundation/letters/' + group.id; return; }
+      if (i >= steps.length - 1) { location.hash = '#/foundation/letters/' + group.id; return; }
       i += 1;
       show();
     });
@@ -1116,7 +1187,7 @@
         h('p', null, 'My sound is ' + (L ? L.sound : ''))));
   }
   function teacherCorner(group) {
-    if (!group || group.n >= 6) return null;
+    if (!group || !SLIDES[group.id]) return null;
     const teach = teamTeacher(group) || {};
     return IR.teacherBox({ slides: teach.slides, files: teach.files, days: teach.days });
   }
@@ -1269,7 +1340,7 @@
     ctx.progress(0);
     if (game.id === 'find') runFind(ctx, lettersOf(group));
     else if (game.id === 'match') runMatch(ctx, lettersOf(group));
-    else if (game.id === 'sound') runSound(ctx, lettersOf(group));
+    else if (game.id === 'sound') runSound(ctx, soundPool(group));
     else if (game.id === 'feed') runFeed(ctx, lettersOf(group));
     else if (game.id === 'flash') runFlash(ctx, group);
     else if (game.id === 'ears') runEars(ctx, group);
@@ -1325,7 +1396,7 @@
       ctx.progress(i / letters.length);
       if (ctx.count) ctx.count(i + 1, letters.length);
       ctx.stage.innerHTML = '';
-      const mouth = 'msatpfinodcugbekhrlw'.indexOf(L.id) >= 0
+      const mouth = 'msatpfinodcugbekhrlwjyxqvz'.indexOf(L.id) >= 0
         ? h('img', { class: 'llmouth', src: 'foundation/img/mouths/mouth_' + L.id + '.jpg', alt: 'Mouth for ' + L.id })
         : null;
       ctx.stage.append(h('div', { class: 'activity llgame llmeet' },
@@ -1480,7 +1551,9 @@
     g2: ['pat', 'pin', 'fin', 'nap'],
     g3: ['on', 'pot', 'top', 'cat', 'cup'],
     g4: ['bag', 'dog', 'bed', 'kit'],
-    g5: ['hat', 'hen', 'log', 'wet']
+    g5: ['hat', 'hen', 'log', 'wet'],
+    g6: ['jam', 'yam', 'box', 'fox', 'jet'],
+    g7: ['van', 'zip', 'vet', 'zap']
   };
   const STORY = {
     g1: [
@@ -1506,6 +1579,18 @@
     g5: [
       { text: 'a hen sat.' },
       { text: 'sam ran.' }
+    ],
+    g6: [
+      { text: 'a fox sat.' },
+      { text: 'a fox sat.', pic: 'foundation/img/story/fox-sat.jpg' },
+      { text: 'jam in a box.' },
+      { text: 'jam in a box.', pic: 'foundation/img/story/jam-in-box.jpg' }
+    ],
+    g7: [
+      { text: 'zip sat.' },
+      { text: 'zip sat.', pic: 'img/zipA.webp' },
+      { text: 'zip sat in a van.' },
+      { text: 'zip sat in a van.', pic: 'foundation/img/story/zip-van.jpg' }
     ]
   };
   function celebrateScreen(app, group) {
@@ -2623,23 +2708,8 @@
   }
   function groupPage(app, group) {
     const base = '#/foundation/letters/' + group.id;
-    const nextId = group.letters.filter((id) => !letterDone(group, id))[0];
-    const sameAsTeam1 = /^(g1|g2|g3|g4|g5)$/.test(group.id);
-    const soonTeam = group.n >= 6;
-    const lessons = soonTeam
-      ? [
-        {
-          pick: true,
-          tone: 'student',
-          kicker: 'Student',
-          title: 'Independent Lesson',
-          note: 'Coming soon',
-          goLabel: 'Coming soon',
-          go: () => { Snd.stop(); }
-        }
-      ]
-      : (sameAsTeam1
-      ? [
+    const sameAsTeam1 = group.n >= 1 && group.n <= 7;
+    const lessons = [
         {
           pick: true,
           tone: 'student',
@@ -2651,17 +2721,7 @@
           goLabel: 'Open lesson',
           go: () => { Snd.stop(); location.hash = group.id === 'g1' ? base + '/flow/' + group.letters[0] + '/hear' : base + '/intro'; }
         }
-      ]
-      : group.letters.map((id) => ({
-        pick: true,
-        kicker: 'Lesson',
-        title: id + ' · ' + shortName(id),
-        img: letterArt(id),
-        alt: shortName(id),
-        note: letterDone(group, id) ? 'Done' : (id === nextId ? 'Up next' : ''),
-        goLabel: 'Open lesson',
-        go: () => { Snd.stop(); location.hash = base + '/lesson/' + id; }
-      })));
+      ];
     const phrase = storyLine(group);
     const games = teamGames(group);
     const teamTitle = TEAM_NAME[group.id] || ('Team ' + group.n);
@@ -2671,15 +2731,20 @@
       slides: deck,
       slideTitle: teamTitle,
       slideNote: 'Slideshow',
-      games: (sameAsTeam1 || soonTeam) ? null : games,
+      games: sameAsTeam1 ? null : games,
       gameRows: sameAsTeam1 ? team1GameRows(games) : null,
-      story: soonTeam ? null : {
+      story: {
         title: 'Read It',
-        note: (sameAsTeam1 && group.id !== 'g1' && program && program.lessons)
-          ? (((program.lessons.filter((row) => String(row.group).toLowerCase() === group.id)[0] || {}).sentences_today || [])[0] || phrase)
-          : phrase,
+        note: (group.id === 'g6' || group.id === 'g7')
+          ? ((STORY[group.id] && STORY[group.id][0] && STORY[group.id][0].text) || phrase)
+          : ((sameAsTeam1 && group.id !== 'g1' && program && program.lessons)
+            ? (((program.lessons.filter((row) => String(row.group).toLowerCase() === group.id)[0] || {}).sentences_today || [])[0] || phrase)
+            : phrase),
         big: true,
-        img: group.id === 'g1' ? 'foundation/img/scenes/mat.jpg' : letterArt(group.letters[0]),
+        img: group.id === 'g1' ? 'foundation/img/scenes/mat.jpg'
+          : group.id === 'g6' ? 'foundation/img/story/fox-sat.jpg'
+          : group.id === 'g7' ? 'foundation/img/story/zip-van.jpg'
+          : letterArt(group.letters[0]),
         alt: 'Read it',
         go: () => { Snd.stop(); location.hash = base + '/read'; }
       }
@@ -3099,6 +3164,26 @@
         { label: 'Day 4', page: 112 },
         { label: 'Day 5', page: 145 }
       ]
+    },
+    g6: {
+      images: 'materials/team6/slides/',
+      days: [
+        { label: 'Day 1', page: 1 },
+        { label: 'Day 2', page: 29 },
+        { label: 'Day 3', page: 47 },
+        { label: 'Day 4', page: 56 },
+        { label: 'Day 5', page: 65 }
+      ]
+    },
+    g7: {
+      images: 'materials/team7/slides/',
+      days: [
+        { label: 'Day 1', page: 1 },
+        { label: 'Day 2', page: 23 },
+        { label: 'Day 3', page: 37 },
+        { label: 'Day 4', page: 45 },
+        { label: 'Day 5', page: 54 }
+      ]
     }
   };
   const TEAM_NAME = {
@@ -3121,7 +3206,9 @@
       g2: 'foundation/printables/Team2_Quick_Sounds.pdf',
       g3: 'foundation/printables/Team3_Quick_Sounds.pdf',
       g4: 'foundation/printables/Team4_Quick_Sounds.pdf',
-      g5: 'foundation/printables/Team5_Quick_Sounds.pdf'
+      g5: 'foundation/printables/Team5_Quick_Sounds.pdf',
+      g6: 'foundation/printables/Team6_Quick_Sounds.pdf',
+      g7: 'foundation/printables/Team7_Quick_Sounds.pdf'
     };
     const files = sheets[group.id]
       ? [{ title: 'Daily practice sheets', href: sheets[group.id] }]
@@ -3141,7 +3228,7 @@
       extraClass: 'fs-slidepanel',
       fill(body) {
         const cols = h('div', { class: 'fs-slidecols' });
-        [1, 2, 3, 4, 5].forEach((n) => {
+        [1, 2, 3, 4, 5, 6, 7].forEach((n) => {
           const id = 'g' + n;
           const deck = SLIDES[id];
           const col = h('div', { class: 'fs-slidecol' });
@@ -3149,7 +3236,7 @@
           deck.days.forEach((day) => col.append(h('button', { class: 'drop-link fs-daylink', type: 'button', onclick: () => openSlides(id, day.page) }, day.label)));
           cols.append(col);
         });
-        body.append(cols, h('p', { class: 'drop-soon' }, 'Teams 6-7 coming soon'));
+        body.append(cols);
       }
     });
   }
@@ -3181,7 +3268,9 @@
           pdfLink('Team 2 Quick Sounds', 'foundation/printables/Team2_Quick_Sounds.pdf'),
           pdfLink('Team 3 Quick Sounds', 'foundation/printables/Team3_Quick_Sounds.pdf'),
           pdfLink('Team 4 Quick Sounds', 'foundation/printables/Team4_Quick_Sounds.pdf'),
-          pdfLink('Team 5 Quick Sounds', 'foundation/printables/Team5_Quick_Sounds.pdf'));
+          pdfLink('Team 5 Quick Sounds', 'foundation/printables/Team5_Quick_Sounds.pdf'),
+          pdfLink('Team 6 Quick Sounds', 'foundation/printables/Team6_Quick_Sounds.pdf'),
+          pdfLink('Team 7 Quick Sounds', 'foundation/printables/Team7_Quick_Sounds.pdf'));
         if (SCORE_TRACKER) body.append(h('a', { class: 'drop-link', href: SCORE_TRACKER, target: '_blank', rel: 'noopener' }, 'Score Tracker'));
         body.append(
           pdfLink('ng daily practice sheets', 'teachers/ng/Lesson3.1_ng_Daily_Practice_Sheets.pdf'),
@@ -3344,7 +3433,7 @@
       g: [c, 'M228 ' + ((M + B) / 2) + ' L228 ' + (D - 20) + ' C228 ' + D + ' 160 ' + D + ' 150 ' + (D - 24)],
       h: ['M120 ' + T + ' L120 ' + B, 'M120 ' + M + ' C120 ' + (M - 50) + ' 240 ' + (M - 50) + ' 240 ' + M + ' L240 ' + B],
       i: ['M180 ' + M + ' L180 ' + B, 'M180 ' + (M - 28) + ' L180 ' + (M - 28)],
-      j: ['M200 ' + M + ' L200 ' + (D - 16) + ' C200 ' + D + ' 140 ' + D + ' 130 ' + (D - 20), 'M200 ' + (M - 28) + ' L200 ' + (M - 28)],
+      j: ['M208 ' + M + ' L208 ' + (B + 24) + ' C208 ' + (D - 6) + ' 112 ' + (D + 8) + ' 102 ' + (D - 52), 'M208 ' + (M - 56) + ' m -10 0 a 10 10 0 1 0 20 0 a 10 10 0 1 0 -20 0'],
       k: ['M120 ' + T + ' L120 ' + B, 'M230 ' + M + ' L120 ' + ((M + B) / 2) + ' L240 ' + B],
       l: ['M180 ' + T + ' L180 ' + B],
       m: ['M90 ' + M + ' L90 ' + B, 'M90 ' + (M + 16) + ' C90 ' + (M - 36) + ' 170 ' + (M - 36) + ' 170 ' + M + ' L170 ' + B, 'M170 ' + (M + 16) + ' C170 ' + (M - 36) + ' 250 ' + (M - 36) + ' 250 ' + M + ' L250 ' + B],
@@ -3369,7 +3458,9 @@
     g2: { 6: 'p', 9: 'f', 12: 'i', 15: 'n' },
     g3: { 8: 'o', 11: 'd', 14: 'c', 17: 'u' },
     g4: { 8: 'g', 11: 'b', 14: 'e', 17: 'k' },
-    g5: { 8: 'h', 11: 'r', 14: 'l', 17: 'w' }
+    g5: { 8: 'h', 11: 'r', 14: 'l', 17: 'w' },
+    g6: { 8: 'j', 11: 'y', 14: 'x', 17: 'q' },
+    g7: { 8: 'v', 11: 'z' }
   };
   function writeBoard(letter) {
     const strokes = writeStrokes(letter);
@@ -3394,7 +3485,7 @@
         '<rect x="-60" y="-5" width="8" height="10" rx="1" fill="#F6E7B2" stroke="#2B2540" stroke-width="1.3"/>' +
       '</g></g>' +
       '</svg>';
-    const mouthSrc = 'msatpfinodcugbekhrlw'.indexOf(letter) >= 0 ? 'foundation/img/mouths/mouth_' + letter + '.jpg' : '';
+    const mouthSrc = 'msatpfinodcugbekhrlwjyxqvz'.indexOf(letter) >= 0 ? 'foundation/img/mouths/mouth_' + letter + '.jpg' : '';
     const board = h('div', { class: 'fs-write' },
       h('p', { class: 'fs-writeask' }, 'Watch ' + letter + '.'),
       h('div', { class: 'fs-writetop' },
@@ -3552,7 +3643,7 @@
   }
   IR.letters = { GROUPS: GROUPS, LETTERS: LETTERS, artNeeded: ART_NEEDED, who: WHO };
   IR.lettersRoute = function (hash, app) {
-    const deck = hash.match(/^#\/foundation\/slides\/(g[1-5])(?:\/(\d+))?\/?$/);
+    const deck = hash.match(/^#\/foundation\/slides\/(g[1-7])(?:\/(\d+))?\/?$/);
     if (deck && SLIDES[deck[1]]) { slidesScreen(app, deck[1], deck[2]); return true; }
     if (/^#\/foundation\/letters\/?$/.test(hash)) { foundationPage(app); return true; }
     const lesson = /^#\/foundation\/letters\/(g[1-7])\/l\/(\d+)(?:\/([a-z0-9-]+))?\/?$/.exec(hash);
@@ -3589,7 +3680,7 @@
       introScreen(app, g);
       return true;
     }
-    const countLetter = /^#\/foundation\/letters\/(g[1-5])\/play\/count\/([a-z])\/?$/.exec(hash);
+    const countLetter = /^#\/foundation\/letters\/(g[1-7])\/play\/count\/([a-z])\/?$/.exec(hash);
     if (countLetter && IR.day1Play) {
       const g = groupById(countLetter[1]);
       if (!g || !groupOpen(g) || g.letters.indexOf(countLetter[2]) < 0) return false;
@@ -3597,7 +3688,7 @@
       pack.countLetter = countLetter[2];
       return IR.day1Play(app, 'count', pack, '#/foundation/letters/' + g.id + '/lesson/' + countLetter[2]);
     }
-    const play10 = /^#\/foundation\/letters\/(g[1-5])\/play\/([a-z]+)\/?$/.exec(hash);
+    const play10 = /^#\/foundation\/letters\/(g[1-7])\/play\/([a-z]+)\/?$/.exec(hash);
     if (play10 && IR.day1Play) {
       const g = groupById(play10[1]);
       if (!g || !groupOpen(g)) return false;
