@@ -1134,6 +1134,7 @@
   }
   function introScreen(app, group) {
     IR.newScreen();
+    if (IR.zipShow) IR.zipShow.reset();
     const steps = introSteps(lettersOf(group));
     let i = 0;
     const stage = h('div', { class: 'fs-stage' });
@@ -1142,23 +1143,29 @@
       const step = steps[i];
       const L = step.L;
       stage.innerHTML = '';
+      const pose = step.kind === 'silly'
+        ? { kind: 'say', key: L.id, hint: 'Say it with me!' }
+        : { kind: 'keyword', key: L.id, hint: 'Ears on!' };
+      const buddy = IR.zipShow ? IR.zipShow.figure(IR.zipShow.next(pose)) : null;
+      let body;
       if (step.kind === 'silly') {
-        stage.append(h('div', { class: 'fs-kidintro fs-silly' },
+        body = h('div', { class: 'fs-kidintro fs-silly' },
           h('img', { class: 'fs-allitpic', src: step.allit.src, alt: '' }),
           h('p', { class: 'fs-allitline' }, step.allit.line),
-          h('p', { class: 'fs-allitcue' }, 'Say it fast 3 times.')));
+          h('p', { class: 'fs-allitcue' }, 'Say it fast 3 times.'));
         speak(step.allit.line);
       } else {
         const src = artUrl(L.id);
-        stage.append(h('div', { class: 'fs-kidintro' },
+        body = h('div', { class: 'fs-kidintro' },
           src ? h('img', { class: 'fs-kidart', src: src, alt: '' }) : letterCardStep(L, 'picture'),
           nameTag(L.id),
           h('div', { class: 'll1mouth' },
             h('span', { class: 'll1mouthico', html: MOUTH }),
-            h('p', null, 'My sound is ' + L.sound))));
+            h('p', null, 'My sound is ' + L.sound)));
         const hello = i === 0 ? speak('Meet each letter.') : Promise.resolve(true);
         hello.then(() => hear(L, 'sound'));
       }
+      stage.append(buddy ? h('div', { class: 'fs-withzip' }, buddy, body) : body);
       next.textContent = i >= steps.length - 1 ? 'Done' : 'Next';
     }
     next.addEventListener('click', () => {
@@ -2214,14 +2221,22 @@
     if (L && PHONEME_SRC[L.id]) return playPhoneme(L.id);
     return Promise.resolve(false);
   }
-  function narrate(who, text) {
-    const src = who === 'Zip' ? 'img/zipA.webp' : 'img/frill.webp';
+  function narrate(who, text, pose) {
+    let src = who === 'Zip' ? 'img/zipA.webp' : 'img/frill.webp';
+    let alt = who;
+    let motion = '';
+    if (IR.zipShow) {
+      const choice = IR.zipShow.next(pose || { kind: who === 'Zip' ? 'cheer' : 'listen' });
+      src = choice.src;
+      alt = choice.alt;
+      motion = 'zs-art zs-' + choice.motion;
+    }
     const line = h('button', {
       class: 'llnarr',
       type: 'button',
       'aria-label': who + ' says: ' + text,
       onclick: () => speak(text, who)
-    }, h('img', { src: src, alt: who }), h('span', null, text));
+    }, h('img', { class: motion, src: src, alt: alt }), h('span', null, text));
     speak(text, who);
     return line;
   }
@@ -2621,7 +2636,10 @@
           : 'Step ' + (index + 1) + ' of ' + KID_STEPS.length)),
       h('div', { class: 'llkidbar', role: 'progressbar', 'aria-valuemin': 1, 'aria-valuemax': KID_STEPS.length, 'aria-valuenow': index + 1 },
         h('i', { style: 'width:' + Math.round((index + 1) / KID_STEPS.length * 100) + '%' })),
-      narrate(step.who || 'Frill', step.say),
+      narrate(step.who || 'Frill', step.say, {
+        kind: { hear: 'listen', find: 'find', play: 'say', blend: 'blend', trace: 'mouth', read: 'say', check: 'find', done: 'cheer' }[step.id] || 'listen',
+        key: id
+      }),
       stage,
       h('div', { class: 'llkidnav' }, next)));
     if (step.id === 'done') ready();

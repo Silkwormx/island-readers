@@ -12,9 +12,6 @@
   const IR = window.IR;
   if (!IR) return;
   const { h, Snd, icon } = IR;
-  const FRILL = 'img/frill.webp';
-  const ZIP = 'img/zipA.webp';
-
   const PURE = {
     a: { src: 'audio/t1/pure_a.mp3', note: 'Recording needed: pure /a/, as in apple' },
     m: { src: 'audio/t1/pure_m.mp3', note: 'Recording needed: pure /m/, as in mangrove' },
@@ -148,18 +145,24 @@
     const note = h('span', { class: 't1need' }, PURE[id].note);
     pureReady[id].then((ok) => { if (ok && note.isConnected) note.remove(); });
     return h('div', { class: 't1spoken' },
-      h('p', { class: 't1line' },
-        h('img', { src: FRILL, alt: 'Frill' }),
-        h('span', null, before + '/' + id + '/' + after)),
+      h('p', { class: 't1line' }, h('span', null, before + '/' + id + '/' + after)),
       note);
   }
   function frill(text) {
-    const kids = [h('img', { src: FRILL, alt: 'Frill' })];
+    const kids = [];
     if (text) kids.push(h('span', null, text));
     for (let i = 1; i < arguments.length; i++) {
       if (arguments[i]) kids.push(arguments[i]);
     }
     return h('p', { class: 't1line' }, ...kids);
+  }
+  function showBuddy(opts) {
+    if (!IR.zipShow || !stage) return;
+    const choice = IR.zipShow.next(opts);
+    const fig = IR.zipShow.figure(choice);
+    const kids = Array.from(stage.childNodes);
+    stage.classList.add('has-buddy');
+    stage.replaceChildren(fig, h('div', { class: 't1work' }, ...kids));
   }
   function setCap(node) {
     capHost.replaceChildren(node || h('span'));
@@ -233,7 +236,7 @@
     if (hold) return [];
     return [
       { at: 200, fn: () => say(CLIP.say) },
-      { at: 5000, fn: () => { mic.classList.add('is-done'); setCap(frill('Nice!')); say(CLIP.nice); } },
+      { at: 5000, fn: () => { mic.classList.add('is-done'); setCap(frill('Nice!')); if (IR.zipShow) IR.zipShow.retarget(stage, { kind: 'cheer', hint: 'Nice!' }); say(CLIP.nice); } },
       { at: 7600, fn: () => {} }
     ];
   }
@@ -338,13 +341,12 @@
   function paintZip(hold) {
     const letter = h('b', { class: 't1giant t1ziplet' }, 'a');
     const mic = micIcon();
-    stage.append(h('div', { class: 't1zip' },
-      h('img', { class: 't1zippic', src: ZIP, alt: 'Zip' }),
-      h('div', { class: 't1zipask' }, letter, mic)));
+    stage.append(h('div', { class: 't1zip' }, h('div', { class: 't1zipask' }, letter, mic)));
     function show(id) {
       letter.textContent = id;
       mic.classList.remove('is-done');
       setCap(spoken('Say ', id, '.'));
+      if (IR.zipShow && stage.querySelector('.zs')) IR.zipShow.retarget(stage, { kind: 'keyword', key: id, hint: 'Teach me!' });
     }
     if (hold) {
       show('a');
@@ -422,6 +424,7 @@
     const screen = stage.closest('.t1watch');
     if (screen) screen.dataset.beat = beat.id;
     const cues = beat.run(holdFlag) || [];
+    if (IR.zipShow && beat.id !== 'read') showBuddy(IR.zipShow.planBeat(beat.id));
     if (holdFlag || !cues.length) {
       clock = null;
       isPaused = false;
@@ -482,6 +485,8 @@
 
   function team1Watch(app, beatId, flag) {
     IR.newScreen();
+    if (IR.zipShow && !IR.zipShow._watch) IR.zipShow.reset();
+    if (IR.zipShow) IR.zipShow._watch = true;
     stopSession();
     mine = session;
     holdFlag = flag === 'hold' || flag === 'phone';
@@ -508,6 +513,7 @@
     const onLeave = () => {
       const now = (location.hash || '').split('?')[0];
       if (/^#\/foundation\/letters\/g1\/watch/.test(now)) return;
+      if (IR.zipShow) IR.zipShow._watch = false;
       stopSession();
       window.removeEventListener('hashchange', onLeave);
     };

@@ -96,10 +96,15 @@
   function runMeet(ctx, L) {
     const beats = L.meet; let i = 0; const st = ctx.stage;
     const groups = L.soundGroups || null;
+    if (IR.zipShow) IR.zipShow.reset();
     const show = () => {
       const b = beats[i]; ctx.progress(i / beats.length); st.innerHTML = '';
       ctx.setInstr('', null);
-      const face = b.who === 'frill' ? 'img/frill.webp' : 'img/zipA.webp';
+      const pose = i === 0
+        ? { kind: 'listen', hint: 'Ears on!' }
+        : (i === beats.length - 1 ? { kind: 'blend', hint: 'Blend it fast!' } : { kind: 'say', hint: 'Your turn!' });
+      const choice = IR.zipShow ? IR.zipShow.next(pose) : null;
+      const face = choice ? choice.src : (b.who === 'frill' ? 'img/frill.webp' : 'img/zipA.webp');
       const replay = speakerBtn(() => Snd.play(P(b.audio)), 'Hear this again');
       const body = h('div', { class: 'bubble ' + b.who }, h('b', { class: 'who' }, b.who === 'zip' ? 'Zip' : 'Frill'), h('p', null, b.text), replay);
       let visual;
@@ -116,13 +121,13 @@
       } else {
         visual = h('div', null,
           h('div', { class: 'meetrow' },
-            h('div', { class: 'panelwrap small' }, h('img', { class: 'panel', src: face, alt: b.who === 'frill' ? 'Frill' : 'Zip' })),
+            h('div', { class: 'panelwrap small zs-face' }, h('img', { class: 'panel zs-art' + (choice ? ' zs-' + choice.motion : ''), src: face, alt: choice ? choice.alt : (b.who === 'frill' ? 'Frill' : 'Zip') }), choice ? h('b', { class: 'zs-chip' }, choice.prompt) : null),
             h('p', { class: 'bigword' }, colorEnd(b.word))),
           b.cap ? h('p', { class: 'cap' }, b.cap) : null,
           h('div', { class: 'chips' }, ...(b.chips || []).map((w) => h('button', { class: 'chip', type: 'button', onclick: () => say(w) }, colorEnd(w)))));
       }
       st.append(h('div', { class: 'activity nkmeet' }, body,
-        groups ? h('div', { class: 'meetrow' }, h('div', { class: 'panelwrap small' }, h('img', { class: 'panel', src: face, alt: '' }))) : null,
+        groups ? h('div', { class: 'meetrow' }, h('div', { class: 'panelwrap small zs-face' }, h('img', { class: 'panel zs-art' + (choice ? ' zs-' + choice.motion : ''), src: face, alt: choice ? choice.alt : '' }), choice ? h('b', { class: 'zs-chip' }, choice.prompt) : null)) : null,
         visual));
       ctx.setNextLabel(i === beats.length - 1 ? 'Activities' : 'Next');
       Snd.play(P(b.audio));

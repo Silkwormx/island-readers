@@ -1,0 +1,59 @@
+/* Zip and Frill action scenes on independent lessons.
+   Andika, cream, one screen. Motion turns off for calm mode and reduced motion. */
+.zs{position:relative;flex:0 1 34%;max-width:12.5rem;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:.25rem}
+.zs-art{width:100%;height:auto;max-height:26vh;object-fit:contain;object-position:center bottom;background:transparent}
+.zs-say{appearance:none;border:3px solid #2B2540;background:#fff;color:#2B2540;font-family:Andika,sans-serif;font-weight:700;font-size:clamp(.95rem,2.2vh,1.2rem);line-height:1.15;border-radius:1rem;padding:.25rem .6rem;max-width:100%;min-height:44px;min-width:44px;text-align:center;cursor:pointer}
+.zs-say:focus-visible{outline:3px solid #F28C00;outline-offset:2px}
+.zs-spark{position:absolute;top:.2rem;right:.35rem;width:.7rem;height:.7rem;border-radius:50%;background:#F28C00;box-shadow:-1.1rem .8rem 0 #E6A0FF, .2rem 1.3rem 0 #2E9E6B;pointer-events:none}
+.zs-in .zs-art{animation:zs-in .5s ease}
+.zs-tilt .zs-art{animation:zs-tilt 2.6s ease-in-out infinite}
+.zs-wiggle .zs-art{animation:zs-wiggle 1.5s ease-in-out infinite}
+.zs-hop .zs-art{animation:zs-hop .65s ease}
+.zs-hop .zs-spark{animation:zs-spark 1s ease}
+
+@keyframes zs-in{0%{transform:translateY(12px) scale(.94);opacity:0}70%{transform:translateY(-4px) scale(1.03);opacity:1}100%{transform:none;opacity:1}}
+@keyframes zs-tilt{0%{transform:translateY(8px);opacity:.4}18%{transform:none;opacity:1}48%{transform:rotate(-7deg)}72%{transform:rotate(5deg)}100%{transform:rotate(0)}}
+@keyframes zs-wiggle{0%,100%{transform:rotate(0)}30%{transform:rotate(-6deg)}70%{transform:rotate(6deg)}}
+@keyframes zs-hop{0%{transform:translateY(8px) scale(1)}40%{transform:translateY(-12px) scale(1.05,.96)}75%{transform:translateY(0) scale(.97,1.04)}100%{transform:none}}
+@keyframes zs-spark{0%{opacity:0;transform:scale(.4)}40%{opacity:1;transform:scale(1)}100%{opacity:0;transform:scale(1.2)}}
+
+.t1stage.has-buddy{flex-direction:row;align-items:center;justify-content:center;gap:.6rem}
+.t1work{flex:0 1 auto;min-width:0;min-height:0;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.t1work>*{max-width:100%}
+.t1work .t1pops{height:100%;min-height:0}
+
+.fs-withzip{display:flex;align-items:center;justify-content:center;gap:.45rem;width:100%;min-height:0}
+.fs-withzip .zs{flex:0 1 32%;max-width:10.5rem}
+.fs-withzip .zs-art{max-height:22vh}
+.fs-withzip .fs-kidintro,.fs-withzip .fs-silly{flex:1 1 auto;min-width:0;width:auto;margin:0}
+.fs-withzip .fs-kidart{max-height:22vh;width:auto;max-width:100%}
+.fs-withzip .fs-allitpic{max-height:24vh;max-width:100%}
+
+.zs-face{display:flex;flex-direction:column;align-items:center;gap:.25rem}
+.zs-face .panel.zs-art{max-height:20vh}
+.zs-chip{max-width:100%;margin:0;background:#fff;border:3px solid #2B2540;border-radius:.8rem;padding:.08rem .45rem;font-family:Andika,sans-serif;font-weight:700;font-size:.9rem;line-height:1.15;text-align:center;color:#2B2540}
+.zipsays{position:relative}
+.zipsays .zs-art{width:4.6rem;height:auto;max-height:5.2rem;flex:none}
+.zipsays .zs-chip{position:static;left:auto;bottom:auto;transform:none;white-space:nowrap}
+.chars .char.zip.zs-art{height:auto;max-height:7.2rem;width:auto}
+
+@media (max-width:700px){
+  .t1stage.has-buddy .zs{max-width:46%}
+  .t1stage.has-buddy .zs-art{max-height:30vh}
+  .fs-withzip .zs-art,.fs-withzip .fs-kidart{max-height:20vh}
+  .fs-withzip .fs-allitpic{max-height:22vh}
+  .zs-face .panel.zs-art{max-height:18vh}
+  .t1stage.has-buddy .t1giant,.t1stage.has-buddy .t1side{font-size:clamp(3.6rem,20vh,7rem)}
+  .t1stage.has-buddy .t1pic{max-height:14vh}
+}
+@media (max-height:520px){
+  .zs-art,.fs-withzip .zs-art{max-height:18vh}
+  .zs-say{font-size:.9rem;padding:.1rem .4rem}
+  .t1stage.has-buddy .t1pic{max-height:10vh}
+  .t1stage.has-buddy .t1mouth{height:4vh}
+}
+
+@media (prefers-reduced-motion:reduce){
+  .zs-art,.zs-spark{animation:none !important}
+}
+body.calm .zs-art,body.calm .zs-spark{animation:none !important}

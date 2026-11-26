@@ -446,11 +446,13 @@
     /* 2. I do: Zip blends sound by sound */
     function runIdo(ctx) {
       ctx.setInstr('I do: watch Zip. Zip looks at each letter, then reads the whole word.', 'ido2'); const st = ctx.stage; let i = 0; const W = N.ido;
+      if (IR.zipShow) IR.zipShow.reset();
       const show = async () => { const w = W[i]; ctx.progress(i / W.length); st.innerHTML = ''; const row = tilesFor(w); const out = h('p', { class: 'blendout' }, '\u00a0');
         const play = async () => { Snd.stop(); const id = Snd.id; const ts = $$('.btile', row); out.textContent = '\u00a0';
           for (const t of ts) { if (Snd.id !== id) return; ts.forEach((x) => x.classList.remove('lit')); t.classList.add('lit'); await sleep(650); }
           if (Snd.id !== id) return; ts.forEach((x) => x.classList.add('lit')); out.innerHTML = ''; out.append(colorNk(w)); await Snd.play(AU.w(w), { keep: true }); };
-        st.append(h('div', { class: 'activity' }, h('div', { class: 'zipsays' }, h('img', { class: 'char zip mini', src: 'img/zip.webp', alt: 'Zip' }), h('span', null, 'Zip blends: ' + w)), row, out,
+        const zipPose = IR.zipShow ? IR.zipShow.next({ kind: 'blend', hint: i === 0 ? 'Blend it fast!' : '' }) : null;
+        st.append(h('div', { class: 'activity' }, h('div', { class: 'zipsays' }, h('img', { class: 'char zip mini zs-art' + (zipPose ? ' zs-' + zipPose.motion : ''), src: zipPose ? zipPose.src : 'img/zip.webp', alt: zipPose ? zipPose.alt : 'Zip' }), zipPose ? h('b', { class: 'zs-chip' }, zipPose.prompt) : null, h('span', null, 'Zip blends: ' + w)), row, out,
           h('button', { class: 'btn', type: 'button', onclick: play }, icon('replay'), 'Watch again')));
         ctx.setNextLabel(i === W.length - 1 ? 'Finish' : 'Next'); if (i === 0) await Snd.seq([AU.p('ido2')], 200); if (ctx.scr.ok()) play(); };
       ctx.setNext(() => { if (i < W.length - 1) { i++; show(); } else runWedo(ctx); return true; });
