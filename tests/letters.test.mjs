@@ -128,7 +128,7 @@ test('home opens Foundation Skills from the first bell, not a sidebar tab', () =
   assert.match(html, /js\/foundation\/letters\.js/);
   assert.match(html, /foundation\/foundation\.css/);
   assert.match(sw, /js\/foundation\/letters\.js/);
-  assert.match(sw, /ir-20261124q/);
+  assert.match(sw, /ir-20261126a/);
   assert.match(sw, /foundation\/img\/foundations_sidebar\.jpg/);
   assert.match(teach, /#\/foundation/);
   assert.match(letters, /Teacher Slideshows/);
@@ -160,7 +160,13 @@ test('home opens Foundation Skills from the first bell, not a sidebar tab', () =
   assert.match(letters, /Team 1 Quick Sounds/);
   assert.match(letters, /Team 2 Quick Sounds/);
   assert.match(letters, /const SCORE_TRACKER = ''/);
-  assert.match(letters, /Teams 6-7 coming soon/);
+  assert.equal(letters.includes('Teams 6-7 coming soon'), false);
+  assert.match(letters, /Team 6 Quick Sounds/);
+  assert.match(letters, /Team 7 Quick Sounds/);
+  assert.match(letters, /materials\/team6\/slides\//);
+  assert.match(letters, /materials\/team7\/slides\//);
+  assert.match(screens, /foundation\/printables\/Team6_Quick_Sounds\.pdf/);
+  assert.match(screens, /foundation\/printables\/Team7_Quick_Sounds\.pdf/);
   assert.equal(letters.includes('Learn_the_Letters_Group1'), false);
   assert.equal(letters.includes(' free'), false);
   assert.equal(sw.includes('Learn_the_Letters_Group1.pdf'), false);
