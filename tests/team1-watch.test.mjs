@@ -14,7 +14,7 @@ test('Team 1 independent lesson is the auto-advancing sample', () => {
   assert.match(letters, /g\.id === 'g1' && IR\.team1Watch/);
   assert.match(html, /js\/foundation\/team1-watch\.js/);
   assert.match(sw, /js\/foundation\/team1-watch\.js/);
-  assert.match(sw, /ir-20261127-u1012/);
+  assert.match(sw, /ir-20261127h/);
   const order = [
     "L.id + '-meet'",
     "L.id + '-word'",

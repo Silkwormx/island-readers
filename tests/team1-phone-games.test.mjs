@@ -77,6 +77,7 @@ function chromeSession() {
 }
 
 test('every Team 1 game reaches its end screen in 12 rounds on a phone', async () => {
+  const server = spawn('python3', ['-m', 'http.server', '8765', '--bind', '127.0.0.1'], { cwd: new URL('..', import.meta.url).pathname, stdio: 'ignore' });
   const session = await chromeSession();
   try {
     for (const [name, hash] of GAMES) {
@@ -148,6 +149,7 @@ test('every Team 1 game reaches its end screen in 12 rounds on a phone', async (
       assert.equal(ended, true, name + ' did not reach the end screen');
     }
   } finally {
+    server.kill('SIGTERM');
     session.chrome.kill('SIGKILL');
   }
 });

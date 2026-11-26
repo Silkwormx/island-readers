@@ -90,4 +90,12 @@
 @media (max-height:500px){
   .u1012slides .slide-days{display:none}
   .u1012slides .slidebar .btn{height:2.2rem;min-height:2.2rem}
+  .u1012step > .instr.hasbuddy{flex-direction:row;align-items:center;gap:.35rem}
+  .u1012step > .instr.hasbuddy .buddy{height:2.6rem!important}
+  .u1012step > .instr.hasbuddy .ibubble::before{left:-9px;top:50%;margin:-8px 0 0;border:8px solid transparent;border-right-color:rgba(43,37,64,.18);border-left:0;border-bottom-color:transparent}
+  .u1012step .wordplay{gap:.15rem;padding:0;max-height:100%;justify-content:center}
+  .u1012step .wordplay .speaker.huge{width:2.4rem;height:2.4rem;min-width:2.4rem}
+  .u1012step .wpool > .wtile{flex-direction:row;gap:.25rem;min-height:0;height:2.6rem;margin:0;padding:0 .35rem;font-size:1.15rem}
+  .u1012step .wpool > .wtile::after{margin-top:0;height:1.15rem;min-width:1.15rem;font-size:.8rem}
+  .u1012step .wordplay .wslot{height:2.2rem;min-height:0;font-size:1.15rem}
 }
