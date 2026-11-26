@@ -26,8 +26,9 @@
     { id: 'shell', src: 'img/zip-show/shell.webp', who: 'Zip', motion: 'in', alt: 'Zip holds up a shell' },
     { id: 'mouth', src: 'img/zip-show/mouth.webp', who: 'Zip', motion: 'tilt', alt: 'Zip points at his mouth' },
     { id: 'wave', src: 'img/zipA.webp', who: 'Zip', motion: 'wiggle', alt: 'Zip waves' },
-    { id: 'frill-swim', src: 'img/zip-show/frill-swim.webp', who: 'Frill', motion: 'in', alt: 'Frill swims by' },
-    { id: 'highfive', src: 'img/zip-show/highfive.webp', who: 'both', motion: 'hop', alt: 'Zip and Frill high-five' },
+    /* Frill stays the approved v4 B portrait. Motion is CSS, not a new drawing. */
+    { id: 'frill-swim', src: 'img/frill.webp', who: 'Frill', motion: 'slide', alt: 'Frill swims by', approved: true },
+    { id: 'highfive', src: 'img/zipA.webp', who: 'both', motion: 'hop', alt: 'Zip and Frill high-five', pair: 'img/frill.webp', approved: true },
     { id: 'mangrove', src: 'img/zip-show/mangrove.webp', who: 'Zip', motion: 'in', alt: 'Zip climbs the mangrove roots' },
     { id: 'snake', src: 'img/zip-show/snake.webp', who: 'Zip', motion: 'wiggle', alt: 'Zip meets a sea snake' },
     { id: 'turtle', src: 'img/zip-show/turtle.webp', who: 'Zip', motion: 'in', alt: 'Zip walks with a sea turtle' }
@@ -125,15 +126,31 @@
     const id = sceneId(opts);
     const scene = BY_ID[id] || SCENES[0];
     const prompt = promptFor(opts);
+    const step = state.n;
     state.scene = scene.id;
     state.prompt = prompt;
     state.n += 1;
+    const celebrate = scene.motion === 'hop' || scene.id === 'highfive' || scene.id === 'cheer';
+    let surprise = '';
+    if (!celebrate && scene.who === 'Zip') {
+      if (step % 5 === 3) surprise = 'peek';
+      else if (step % 5 === 1) surprise = 'shell';
+      else if (step % 4 === 2) surprise = 'wag';
+    }
+    let enter = 'pop';
+    if (scene.motion === 'slide' || surprise === 'wag') enter = scene.motion === 'slide' ? 'slide' : 'wag';
+    else if (celebrate) enter = 'hop';
+    else if (step % 3 === 1) enter = 'slide';
     return {
       id: scene.id,
       src: scene.src,
+      pair: scene.pair || '',
       alt: scene.alt,
       who: scene.who,
       motion: scene.motion,
+      enter: enter,
+      surprise: surprise,
+      celebrate: celebrate,
       prompt: prompt
     };
   }
@@ -145,19 +162,27 @@
   function figure(choice) {
     const h = IR.h;
     const who = choice.who === 'both' ? 'Zip and Frill' : choice.who;
-    const img = h('img', { class: 'zs-art', src: choice.src, alt: choice.alt });
+    const art = choice.pair
+      ? h('span', { class: 'zs-pair' },
+        h('img', { class: 'zs-art', src: choice.src, alt: 'Zip' }),
+        h('img', { class: 'zs-art', src: choice.pair, alt: 'Frill' }))
+      : h('img', { class: 'zs-art', src: choice.src, alt: choice.alt });
     const say = h('button', {
       class: 'zs-say',
       type: 'button',
       'aria-label': who + ' says: ' + choice.prompt,
       onclick: () => speak(choice.prompt)
     }, choice.prompt);
-    const spark = choice.motion === 'hop' ? h('span', { class: 'zs-spark', 'aria-hidden': 'true' }) : null;
+    const extra = [];
+    if (choice.surprise === 'peek') extra.push(h('img', { class: 'zs-peekimg', src: 'img/frill.webp', alt: '' }));
+    if (choice.surprise === 'shell') extra.push(h('span', { class: 'zs-shell', 'aria-hidden': 'true' }));
+    if (choice.celebrate) extra.push(h('span', { class: 'zs-bits', 'aria-hidden': 'true' }, h('i'), h('i'), h('i'), h('i'), h('i')));
     return h('div', {
-      class: 'zs zs-' + choice.motion + (choice.who === 'Frill' ? ' zs-frill' : ''),
+      class: 'zs zs-' + (choice.enter || 'pop') + (choice.celebrate ? ' zs-celebrate' : '') + (choice.who === 'Frill' ? ' zs-frill' : ''),
       'data-scene': choice.id,
-      'data-prompt': choice.prompt
-    }, img, spark, say);
+      'data-prompt': choice.prompt,
+      'data-surprise': choice.surprise || ''
+    }, art, ...extra, say);
   }
 
   function retarget(root, opts) {

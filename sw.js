@@ -3059,8 +3059,6 @@ const ASSETS = [
  "./img/zip-show/dance.webp",
  "./img/zip-show/dig.webp",
  "./img/zip-show/drum.webp",
- "./img/zip-show/frill-swim.webp",
- "./img/zip-show/highfive.webp",
  "./img/zip-show/juggle.webp",
  "./img/zip-show/listen.webp",
  "./img/zip-show/mangrove.webp",

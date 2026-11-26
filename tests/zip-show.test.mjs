@@ -78,8 +78,26 @@ test('reduced motion and calm mode turn the mascot animation off', () => {
   assert.match(css, /prefers-reduced-motion:\s*reduce/);
   assert.match(css, /body\.calm \.zs-art/);
   assert.match(css, /animation:\s*none !important/);
+  assert.match(css, /body\.calm \.zs-peekimg/);
+  assert.match(css, /\.zs-bits\{display:none\}/);
   assert.match(css, /Andika/);
-  assert.equal(/\bfree\b/i.test(css + read('js/zip-show.js')), false);
+  const js = read('js/zip-show.js');
+  assert.equal(/\bfree\b/i.test(css + js), false);
+  assert.equal(/score/i.test(js), false);
+});
+
+test('Frill scenes use the approved portrait, not a new drawing', () => {
+  const zs = load();
+  zs.SCENES.filter((scene) => scene.who === 'Frill' || scene.pair).forEach((scene) => {
+    if (scene.who === 'Frill') assert.equal(scene.src, 'img/frill.webp');
+    if (scene.pair) assert.equal(scene.pair, 'img/frill.webp');
+  });
+  const js = read('js/zip-show.js');
+  assert.equal(js.includes('zip-show/frill-swim'), false);
+  assert.equal(js.includes('zip-show/highfive'), false);
+  assert.match(js, /zs-bits/);
+  assert.match(js, /zs-peekimg/);
+  assert.match(js, /surprise = 'shell'/);
 });
 
 test('action art is on disk and the new files are precached', () => {
