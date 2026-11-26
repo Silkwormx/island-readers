@@ -751,6 +751,8 @@ const ASSETS = [
  "./audio/nk_s_12.mp3",
  "./js/nk.js",
  "./js/orange.js",
+ "./js/placement-engine.js",
+ "./js/placement-classic.js",
  "./js/placement.js",
  "./audio/home_intro.mp3",
  "./audio/place_kid.mp3",
