@@ -2719,7 +2719,7 @@
           alt: group.letters.join(', '),
           note: group.letters.join(' · '),
           goLabel: 'Open lesson',
-          go: () => { Snd.stop(); location.hash = group.id === 'g1' ? base + '/flow/' + group.letters[0] + '/hear' : base + '/intro'; }
+          go: () => { Snd.stop(); location.hash = group.id === 'g1' ? base + '/watch' : base + '/intro'; }
         }
       ];
     const phrase = storyLine(group);
@@ -3655,11 +3655,21 @@
       lessonScreen(app, g, row, lesson[3] || '');
       return true;
     }
+    const watch = /^#\/foundation\/letters\/g1\/watch(?:\/([a-z0-9-]+))?(?:\/(hold|phone))?\/?$/.exec((hash || '').split('?')[0]);
+    if (watch) {
+      const g1 = groupById('g1');
+      if (!g1) return false;
+      if (!groupOpen(g1) && !(IR.teach && IR.teach.on && IR.teach.on())) { foundationPage(app); return true; }
+      if (!IR.team1Watch) return false;
+      IR.team1Watch(app, watch[1] || '', watch[2] || '');
+      return true;
+    }
     const flow = /^#\/foundation\/letters\/(g[1-7])\/flow\/([a-z])(?:\/([a-z]+))?\/?$/.exec(hash);
     if (flow) {
       const g = groupById(flow[1]);
       if (!g || g.letters.indexOf(flow[2]) < 0) return false;
       if (!groupOpen(g) && !(IR.teach && IR.teach.on && IR.teach.on())) { foundationPage(app); return true; }
+      if (g.id === 'g1' && IR.team1Watch) { IR.team1Watch(app, ''); return true; }
       kidLesson(app, g, flow[2], flow[3] || 'hear', true);
       return true;
     }
