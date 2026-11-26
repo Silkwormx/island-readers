@@ -269,7 +269,8 @@
     const bell = IR.placement && IR.placement.saved ? IR.placement.saved() : null;
     const acts = (IR.S().progress && IR.S().progress.activities) || {};
     const any = Object.keys(acts).some((k) => acts[k] && acts[k].completed);
-    const path = [
+    const early = (IR.u123Lessons || []).map((L) => ({ unit: L.unit, lesson: L.n, href: '#/u' + L.unit + '/' + L.key, done: () => IR.isDone(L.key + '_check') }));
+    const path = early.concat([
       { unit: 4, lesson: '4.1', href: '#/island3', done: () => IR.isDone('check') },
       { unit: 4, lesson: '4.2', href: '#/nk', done: () => IR.isDone('nk_check') },
       { unit: 5, lesson: '5.1', href: '#/u51', done: () => IR.isDone('u51_check') },
@@ -277,11 +278,14 @@
       { unit: 6, lesson: '6.1', href: '#/u6/u61', done: () => IR.isDone('u61_check') },
       { unit: 6, lesson: '6.2', href: '#/u6/u62', done: () => IR.isDone('u62_check') },
       { unit: 6, lesson: '6.3', href: '#/u6/u63', done: () => IR.isDone('u63_check') }
-    ];
+    ]);
     if (!any && !bell) return { href: '#/placement', sub: 'Pick up where you left off' };
-    let startAt = 0;
+    /* Units 1 to 3 join the path (Nov 27 2026). A reader who already started at Unit 4 or later keeps that start. */
+    const startedEarly = Object.keys(acts).some((k) => /^u[123]\d_/.test(k) && acts[k] && acts[k].completed);
+    let startAt = any && !startedEarly ? Math.max(0, path.findIndex((p) => p.unit === 4)) : 0;
     if (!any && bell) {
-      const unitForBell = bell <= 3 ? 4 : bell === 4 ? 5 : 6;
+      const bu = ((IR.placement.BELL || {})[bell] || {}).unit;
+      const unitForBell = early.length && bu && bu <= 3 ? bu : bell <= 3 ? 4 : bell === 4 ? 5 : 6;
       const i = path.findIndex((p) => p.unit >= unitForBell);
       if (i >= 0) startAt = i;
     }
@@ -362,7 +366,8 @@
       const t = TILES[n]; const isl = n === BUILT && !!(D.islands || {})[BUILT_ID];
       const u5 = n === 5 && !!IR.u5Route;   /* Nov 3 2026 local: Unit 5 Silent e is open (js/u5.js: same lesson flow as Unit 4; picker data islands.i5) */
       const u6 = n === 6 && !!IR.u6Route;   /* Unit 6 Endings (-s, -es, -ed, -ing), same lesson flow as Unit 4 */
-      const built = isl || u5 || u6;
+      const u123 = n <= 3 && !!IR.u123Route;   /* Nov 27 2026: Units 1 to 3 (js/u123.js), same lesson flow as Units 5 and 6 */
+      const built = isl || u5 || u6 || u123;
       const st = !built ? 'soon' : n === BUILT && complete ? 'done' : n === BUILT ? 'here' : 'open';
       const note = st === 'here' ? 'You are here' : st === 'done' ? 'Done' : st === 'open' ? 'Open' : 'Coming soon';
       const label = 'Unit ' + n + ': ' + t[0] + ', ' + t[1].replace(/\u00b7/g, ',') + ', ' + t[2] + (t[2] === 1 ? ' lesson. ' : ' lessons. ') + note + (built ? '. Opens Unit ' + n + '.' : '.');
@@ -374,7 +379,7 @@
           h('span', { class: 'tname' }, t[0]),
           h('span', { class: 'tsnd' }, t[1]),
           h('span', { class: 'tcount' }, t[2] + (t[2] === 1 ? ' lesson' : ' lessons'))));
-      b.addEventListener('click', () => { if (u6) { Snd.stop(); location.hash = '#/u6'; } else if (u5) { Snd.stop(); location.hash = '#/u5'; } else if (isl) openIsland(BUILT_ID); else { Snd.stop(); toast('Unit ' + n + ' is coming soon.'); } });
+      b.addEventListener('click', () => { if (u123) { Snd.stop(); location.hash = '#/u' + n; } else if (u6) { Snd.stop(); location.hash = '#/u6'; } else if (u5) { Snd.stop(); location.hash = '#/u5'; } else if (isl) openIsland(BUILT_ID); else { Snd.stop(); toast('Unit ' + n + ' is coming soon.'); } });
       return b;
     };
     const cover = h('img', { src: 'foundation/img/foundations_cover.jpg', alt: '' });
@@ -1000,6 +1005,8 @@
     if (u5) Object.keys(u5).map((k) => u5[k]).filter((L) => L && Array.isArray(L.story) && L.story.length).sort((a, b) => String(a.n || a.key).localeCompare(String(b.n || b.key), undefined, { numeric: true })).forEach((L) => {
       add('5', L.n || L.key, L.name || L.title, L.storyTitle, '#/' + (L.key || '') + '/read');
     });
+    const u123 = window.IR_DATA_U123;
+    if (u123 && Array.isArray(u123.lessons)) u123.lessons.forEach((L) => { if (L && Array.isArray(L.story) && L.story.length) add(String(L.unit), L.n, L.name, L.storyTitle, '#/u' + L.unit + '/' + L.key + '/read'); });
     const u6 = window.IR_DATA_U6;
     if (u6 && Array.isArray(u6.lessons)) u6.lessons.forEach((L) => { if (L && Array.isArray(L.story) && L.story.length) add('6', L.n || L.key, L.name, L.storyTitle, '#/u6/' + L.key + '/read'); });
     else if (u6 && Array.isArray(u6.story) && u6.story.length) add('6', '6', u6.name || 'Endings', u6.storyTitle, '#/u6/read');
@@ -1007,7 +1014,7 @@
   }
   /* Same open/locked rule as the home map: Units 4, 5, and 6 are open. Earlier and later units are still coming soon. */
   function spellUnitOpen(n) {
-    return n === 4 || (n === 5 && !!IR.u5Route) || (n === 6 && !!IR.u6Route);
+    return (n <= 3 && !!IR.u123Route) || n === 4 || (n === 5 && !!IR.u5Route) || (n === 6 && !!IR.u6Route);
   }
   const UNIT_NAMES = [null, 'Short Vowels & Floss', 'Blends', 'Digraphs', 'Glued Sounds', 'Silent e', 'Endings', 'Syllables', 'Tricky Sounds', 'Bossy R', 'More Bossy R', 'Long A & E Teams', 'Long O & I Teams', 'The oo Sounds', 'The au Sounds', 'Sliding Vowels', 'Tricky Teams', 'Soft c and g', 'Silent Letters', 'Suffixes', 'Suffix Spelling Rules', 'Prefixes', 'Big Endings'];
   function skillCatalog() {
@@ -1021,6 +1028,7 @@
       nk: (IR.nk && IR.nk.steps) || [],
       u5: IR.u5Lessons || [],
       u6: IR.u6SkillSteps ? IR.u6SkillSteps() : [],
+      u123: IR.u123SkillSteps ? IR.u123SkillSteps() : [],
       chests: chests
     });
   }
@@ -1229,6 +1237,7 @@
       if (lesson.daily) files.push({ title: 'Daily practice sheets', href: lesson.daily });
       if (lesson.deck) files.push({ title: 'Slideshow PDF', href: lesson.deck });
       if (lesson.wordlist) files.push({ title: 'Word List', href: lesson.wordlist });
+      if (lesson.indep) files.push({ title: 'Independent worksheets', href: lesson.indep });
       if (lesson.pack) files.push({ title: 'Teacher pack', href: lesson.pack });
       const title = lesson.title
         ? h('h3', null, lesson.title)
@@ -1262,6 +1271,22 @@
         { title: 'Team 5: h r l w', board: '#/foundation/slides/g5', days: 5, daily: 'foundation/printables/Team5_Quick_Sounds.pdf', deck: 'foundation/slides/Learn_the_Letters_Team5.pdf' },
         { title: 'Team 6: j y x q' },
         { title: 'Team 7: v z' }
+      ] },
+      { name: 'Unit 1 \u00b7 Short Vowels & Floss', sounds: [
+        { s: 'a', lesson: 'Lesson 1.1', days: [1, 2, 3].map((n) => ({ label: 'Day ' + n })), board: '#/teachers/slides/u11', daily: 'materials/unit1/Unit1_Teacher_Led_Student_Sheets.pdf', deck: 'materials/unit1/Lesson1.1_Slides.pdf', wordlist: 'materials/unit1/Lesson1.1_WordList.pdf', pack: 'materials/unit1/Lesson1.1_Teacher_Led_Checks.pdf', indep: 'materials/unit1/Unit1_Independent_Worksheets.pdf' },
+        { s: 'i o', lesson: 'Lesson 1.2', days: [1, 2, 3].map((n) => ({ label: 'Day ' + n })), board: '#/teachers/slides/u12', daily: 'materials/unit1/Unit1_Teacher_Led_Student_Sheets.pdf', deck: 'materials/unit1/Lesson1.2_Slides.pdf', wordlist: 'materials/unit1/Lesson1.2_WordList.pdf', pack: 'materials/unit1/Lesson1.2_Teacher_Led_Checks.pdf', indep: 'materials/unit1/Unit1_Independent_Worksheets.pdf' },
+        { s: 'u e', lesson: 'Lesson 1.3', days: [1, 2, 3].map((n) => ({ label: 'Day ' + n })), board: '#/teachers/slides/u13', daily: 'materials/unit1/Unit1_Teacher_Led_Student_Sheets.pdf', deck: 'materials/unit1/Lesson1.3_Slides.pdf', wordlist: 'materials/unit1/Lesson1.3_WordList.pdf', pack: 'materials/unit1/Lesson1.3_Teacher_Led_Checks.pdf', indep: 'materials/unit1/Unit1_Independent_Worksheets.pdf' },
+        { s: 'ff ll ss zz', lesson: 'Lesson 1.4', days: [1, 2, 3].map((n) => ({ label: 'Day ' + n })), board: '#/teachers/slides/u14', daily: 'materials/unit1/Unit1_Teacher_Led_Student_Sheets.pdf', deck: 'materials/unit1/Lesson1.4_Slides.pdf', wordlist: 'materials/unit1/Lesson1.4_WordList.pdf', pack: 'materials/unit1/Lesson1.4_Teacher_Led_Checks.pdf', indep: 'materials/unit1/Unit1_Independent_Worksheets.pdf' }
+      ] },
+      { name: 'Unit 2 \u00b7 Blends', sounds: [
+        { s: 'l-blends', lesson: 'Lesson 2.1', days: [1, 2, 3].map((n) => ({ label: 'Day ' + n })), board: '#/teachers/slides/u21', daily: 'materials/unit2/Unit2_Teacher_Led_Student_Sheets.pdf', deck: 'materials/unit2/Lesson2.1_Slides.pdf', wordlist: 'materials/unit2/Lesson2.1_WordList.pdf', pack: 'materials/unit2/Lesson2.1_Teacher_Led_Checks.pdf', indep: 'materials/unit2/Unit2_Independent_Worksheets.pdf' },
+        { s: 'r-blends', lesson: 'Lesson 2.2', days: [1, 2, 3].map((n) => ({ label: 'Day ' + n })), board: '#/teachers/slides/u22', daily: 'materials/unit2/Unit2_Teacher_Led_Student_Sheets.pdf', deck: 'materials/unit2/Lesson2.2_Slides.pdf', wordlist: 'materials/unit2/Lesson2.2_WordList.pdf', pack: 'materials/unit2/Lesson2.2_Teacher_Led_Checks.pdf', indep: 'materials/unit2/Unit2_Independent_Worksheets.pdf' },
+        { s: 's-blends', lesson: 'Lesson 2.3', days: [1, 2, 3].map((n) => ({ label: 'Day ' + n })), board: '#/teachers/slides/u23', daily: 'materials/unit2/Unit2_Teacher_Led_Student_Sheets.pdf', deck: 'materials/unit2/Lesson2.3_Slides.pdf', wordlist: 'materials/unit2/Lesson2.3_WordList.pdf', pack: 'materials/unit2/Lesson2.3_Teacher_Led_Checks.pdf', indep: 'materials/unit2/Unit2_Independent_Worksheets.pdf' },
+        { s: '-nd -mp -st', lesson: 'Lesson 2.4', days: [1, 2, 3].map((n) => ({ label: 'Day ' + n })), board: '#/teachers/slides/u24', daily: 'materials/unit2/Unit2_Teacher_Led_Student_Sheets.pdf', deck: 'materials/unit2/Lesson2.4_Slides.pdf', wordlist: 'materials/unit2/Lesson2.4_WordList.pdf', pack: 'materials/unit2/Lesson2.4_Teacher_Led_Checks.pdf', indep: 'materials/unit2/Unit2_Independent_Worksheets.pdf' }
+      ] },
+      { name: 'Unit 3 \u00b7 Digraphs', sounds: [
+        { s: 'sh ch th', lesson: 'Lesson 3.1', days: [1, 2, 3].map((n) => ({ label: 'Day ' + n })), board: '#/teachers/slides/u31', daily: 'materials/unit3/Unit3_Teacher_Led_Student_Sheets.pdf', deck: 'materials/unit3/Lesson3.1_Slides.pdf', wordlist: 'materials/unit3/Lesson3.1_WordList.pdf', pack: 'materials/unit3/Lesson3.1_Teacher_Led_Checks.pdf', indep: 'materials/unit3/Unit3_Independent_Worksheets.pdf' },
+        { s: 'ck wh', lesson: 'Lesson 3.2', days: [1, 2, 3].map((n) => ({ label: 'Day ' + n })), board: '#/teachers/slides/u32', daily: 'materials/unit3/Unit3_Teacher_Led_Student_Sheets.pdf', deck: 'materials/unit3/Lesson3.2_Slides.pdf', wordlist: 'materials/unit3/Lesson3.2_WordList.pdf', pack: 'materials/unit3/Lesson3.2_Teacher_Led_Checks.pdf', indep: 'materials/unit3/Unit3_Independent_Worksheets.pdf' }
       ] },
       { name: 'Unit 4 \u00b7 Glued Sounds', sounds: [
         { s: 'ng', lesson: 'Lesson 4.1', days: [1, 2, 3, 4, 5].map((n) => ({ label: 'Day ' + n })), board: '#/teachers/slides/ng', slides: 'teachers/ng/Lesson3.1_ng_Week_Slides_v2.pptx', daily: 'teachers/ng/Lesson3.1_ng_Daily_Practice_Sheets.pdf', pack: 'teachers/ng/Lesson3.1_ng_Teacher_Pack.pdf' },
@@ -1316,6 +1341,56 @@
     u63: [
       { label: 'Day 1', start: 1, end: 20 },
       { label: 'Day 2', start: 21, end: 43 }
+    ],
+    u11: [
+      { label: 'Day 1', start: 1, end: 20 },
+      { label: 'Day 2', start: 21, end: 40 },
+      { label: 'Day 3', start: 41, end: 67 }
+    ],
+    u12: [
+      { label: 'Day 1', start: 1, end: 20 },
+      { label: 'Day 2', start: 21, end: 40 },
+      { label: 'Day 3', start: 41, end: 67 }
+    ],
+    u13: [
+      { label: 'Day 1', start: 1, end: 20 },
+      { label: 'Day 2', start: 21, end: 40 },
+      { label: 'Day 3', start: 41, end: 67 }
+    ],
+    u14: [
+      { label: 'Day 1', start: 1, end: 20 },
+      { label: 'Day 2', start: 21, end: 40 },
+      { label: 'Day 3', start: 41, end: 67 }
+    ],
+    u21: [
+      { label: 'Day 1', start: 1, end: 20 },
+      { label: 'Day 2', start: 21, end: 40 },
+      { label: 'Day 3', start: 41, end: 67 }
+    ],
+    u22: [
+      { label: 'Day 1', start: 1, end: 20 },
+      { label: 'Day 2', start: 21, end: 40 },
+      { label: 'Day 3', start: 41, end: 67 }
+    ],
+    u23: [
+      { label: 'Day 1', start: 1, end: 20 },
+      { label: 'Day 2', start: 21, end: 40 },
+      { label: 'Day 3', start: 41, end: 67 }
+    ],
+    u24: [
+      { label: 'Day 1', start: 1, end: 20 },
+      { label: 'Day 2', start: 21, end: 40 },
+      { label: 'Day 3', start: 41, end: 71 }
+    ],
+    u31: [
+      { label: 'Day 1', start: 1, end: 20 },
+      { label: 'Day 2', start: 21, end: 40 },
+      { label: 'Day 3', start: 41, end: 67 }
+    ],
+    u32: [
+      { label: 'Day 1', start: 1, end: 20 },
+      { label: 'Day 2', start: 21, end: 40 },
+      { label: 'Day 3', start: 41, end: 67 }
     ]
   };
   /* In-app week-deck slideshow for smartboard (ng / nk / unit 5). Keeps PPTX download on the teachers page. */
@@ -1393,7 +1468,7 @@
     window.addEventListener('keydown', keyHandler);
     const oldCleanup = IR._slideCleanup; if (typeof oldCleanup === 'function') oldCleanup();
     IR._slideCleanup = () => { window.removeEventListener('keydown', keyHandler); };
-    const slideRoot = { u61: 'materials/unit6/slides/u61/', u62: 'materials/unit6/slides/u62/', u63: 'materials/unit6/slides/u63/' }[sound];
+    const slideRoot = /^u[123]\d$/.test(sound) ? 'materials/unit' + sound.charAt(1) + '/slides/' + sound + '/' : { u61: 'materials/unit6/slides/u61/', u62: 'materials/unit6/slides/u62/', u63: 'materials/unit6/slides/u63/' }[sound];
     fetch(slideRoot ? slideRoot + 'manifest.json' : 'teachers/' + sound + '/slides.json').then((r) => r.json()).then((man) => {
       slides = (man.slides || []).map((name) => (slideRoot && name.indexOf('/') < 0) ? slideRoot + name : name);
       days = (man.days && man.days.length) ? man.days : ((WEEK_DAYS[sound] || []).slice());
@@ -1492,13 +1567,14 @@
   function unitStatus(n, place) {
     if (place.finished[n]) return 'Done';
     if (n === place.here) return 'You are here';
-    if (n === 4 || (n === 5 && IR.u5Route) || (n === 6 && IR.u6Route)) return 'Open';
+    if ((n <= 3 && IR.u123Route) || n === 4 || (n === 5 && IR.u5Route) || (n === 6 && IR.u6Route)) return 'Open';
     return 'Coming soon';
   }
   function openTrailBell(n) {
     const u5 = n === 5 && !!IR.u5Route;
     const u6 = n === 6 && !!IR.u6Route;
     const isl = n === 4 && !!(D.islands || {}).i3;
+    if (n <= 3 && IR.u123Route) { Snd.stop(); location.hash = '#/u' + n; return; }
     if (u6) { Snd.stop(); location.hash = '#/u6'; return; }
     if (u5) { Snd.stop(); location.hash = '#/u5'; return; }
     if (isl) { openIsland('i3'); return; }
@@ -1780,6 +1856,7 @@
     else if (IR.nkRoute && IR.nkRoute(hash, app)) { /* nk unit + Island Review (js/nk.js) */ }
     else if (IR.u5Route && IR.u5Route(hash, app)) { /* Unit 5 Silent e (js/u5.js) */ }
     else if (IR.u6Route && IR.u6Route(hash, app)) { /* Unit 6 Endings (js/u6.js) */ }
+    else if (IR.u123Route && IR.u123Route(hash, app)) { /* Units 1 to 3 (js/u123.js) */ }
     else if ((m = /^#\/lesson\/(\d+)/.exec(hash))) lessonScreen(parseInt(m[1], 10) - 1);
     else if (/^#\/chest[1-4]/.test(hash)) IR.chest.render(hash, app);
     else if (hash === '#/practice/spelling' || hash === '#/practice/fluency') { location.replace(hash.replace('#/practice/', '#/practice/skills/')); return; }
@@ -1789,10 +1866,11 @@
     else if (hash.startsWith('#/about')) aboutScreen();
     else if (hash.startsWith('#/trail')) islandTrailPage();
     else if (hash.startsWith('#/find')) findScreen();
-    else if ((m = /^#\/teachers\/slides\/(ng|nk|u5|tricky|u61|u62|u63)$/.exec(hash))) slidesViewer(m[1]);
+    else if ((m = /^#\/teachers\/slides\/(ng|nk|u5|tricky|u61|u62|u63|u11|u12|u13|u14|u21|u22|u23|u24|u31|u32)$/.exec(hash))) slidesViewer(m[1]);
     else if (hash.startsWith('#/teachers')) { if (IR._slideCleanup) { IR._slideCleanup(); IR._slideCleanup = null; } teachersScreen(); }
     else if (hash.startsWith('#/placement')) IR.placement.render(app, (n) => {
       const bell = (IR.placement.BELL || {})[n] || { unit: n, name: 'this bell' };
+      if (bell.unit <= 3 && IR.u123Route) { location.hash = '#/u' + bell.unit; return; }
       if (bell.unit === 4) { location.hash = '#/home'; setTimeout(() => openIsland('i3'), 0); return; }
       if (bell.unit === 5) { location.hash = '#/u5'; return; }
       if (bell.unit === 6) { location.hash = '#/u6'; return; }
@@ -1807,6 +1885,9 @@
   /* Nov 4 2026: "Back to Unit N" on every lesson / activity / game page of a unit. Opens that unit's lesson picker.
      Shared template: a new unit only needs one row here (route test + picker id + unit number). */
   IR.UNIT_ROUTES = IR.UNIT_ROUTES || [
+    { n: 1, id: 'u1', href: '#/u1', test: (hs) => /^#\/u1(\/|$)/.test(hs) },
+    { n: 2, id: 'u2', href: '#/u2', test: (hs) => /^#\/u2(\/|$)/.test(hs) },
+    { n: 3, id: 'u3', href: '#/u3', test: (hs) => /^#\/u3(\/|$)/.test(hs) },
     { n: 4, id: 'i3', test: (hs) => /^#\/(nk|island3|lesson\/|review3|check|result)/.test(hs) || /^#\/spell\/(ng|nk)(\/|$)/.test(hs) },
     { n: 5, id: 'i5', test: (hs) => /^#\/(u5\d|review5)/.test(hs) || /^#\/spell\/u5(\/|$)/.test(hs) },
     { n: 6, id: 'u6', href: '#/u6', test: (hs) => /^#\/u6(\/|$)/.test(hs) || /^#\/spell\/u6(\/|$)/.test(hs) }];
