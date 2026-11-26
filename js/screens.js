@@ -266,7 +266,7 @@
   const gemNext = () => gemsEarned().indexOf(false);
   /* Continue opens the placement test when nothing is saved yet, otherwise the first unfinished built lesson. */
   function continueTarget() {
-    const bell = IR.placement && IR.placement.saved ? IR.placement.saved() : null;
+    const start = IR.placement && IR.placement.savedStart ? IR.placement.savedStart() : null;
     const acts = (IR.S().progress && IR.S().progress.activities) || {};
     const any = Object.keys(acts).some((k) => acts[k] && acts[k].completed);
     const path = [
@@ -278,10 +278,11 @@
       { unit: 6, lesson: '6.2', href: '#/u6/u62', done: () => IR.isDone('u62_check') },
       { unit: 6, lesson: '6.3', href: '#/u6/u63', done: () => IR.isDone('u63_check') }
     ];
-    if (!any && !bell) return { href: '#/placement', sub: 'Pick up where you left off' };
+    if (!any && !start) return { href: '#/placement', sub: 'Pick up where you left off' };
+    if (!any && start && start.team) return { href: '#/foundation/letters/g' + start.team, sub: 'Team ' + start.team };
     let startAt = 0;
-    if (!any && bell) {
-      const unitForBell = bell <= 3 ? 4 : bell === 4 ? 5 : 6;
+    if (!any && start) {
+      const unitForBell = start.unit <= 4 ? 4 : start.unit === 5 ? 5 : 6;
       const i = path.findIndex((p) => p.unit >= unitForBell);
       if (i >= 0) startAt = i;
     }
@@ -1479,13 +1480,9 @@
     else if (finished[4] && finished[5] && finished[6]) here = 7;
     const acts = (IR.S().progress && IR.S().progress.activities) || {};
     const any = Object.keys(acts).some((k) => acts[k] && acts[k].completed);
-    if (!any && IR.placement && IR.placement.saved) {
-      const start = IR.placement.saved();
-      if (start === 10) here = 22;
-      else {
-        const bell = IR.placement.BELL && IR.placement.BELL[start];
-        if (bell && bell.unit) here = bell.unit;
-      }
+    if (!any && IR.placement && IR.placement.savedStart) {
+      const start = IR.placement.savedStart();
+      if (start) here = start.unit || 1;
     }
     return { finished: finished, here: here };
   }
@@ -1791,13 +1788,22 @@
     else if (hash.startsWith('#/find')) findScreen();
     else if ((m = /^#\/teachers\/slides\/(ng|nk|u5|tricky|u61|u62|u63)$/.exec(hash))) slidesViewer(m[1]);
     else if (hash.startsWith('#/teachers')) { if (IR._slideCleanup) { IR._slideCleanup(); IR._slideCleanup = null; } teachersScreen(); }
-    else if (hash.startsWith('#/placement')) IR.placement.render(app, (n) => {
-      const bell = (IR.placement.BELL || {})[n] || { unit: n, name: 'this bell' };
+    else if (hash.startsWith('#/placement/classic')) IR.placementClassic.render(app, (n) => {
+      const bell = (IR.placementClassic.BELL || {})[n] || { unit: n, name: 'this bell' };
       if (bell.unit === 4) { location.hash = '#/home'; setTimeout(() => openIsland('i3'), 0); return; }
       if (bell.unit === 5) { location.hash = '#/u5'; return; }
       if (bell.unit === 6) { location.hash = '#/u6'; return; }
       location.hash = '#/home';
       setTimeout(() => toast(bell.name + ' is coming soon in the full app. Try Glued Sounds for now.'), 50);
+    });
+    else if (hash.startsWith('#/placement')) IR.placement.render(app, (start) => {
+      if (start.team) { location.hash = '#/foundation/letters/g' + start.team; return; }
+      const n = start.unit;
+      if (n === 4) { location.hash = '#/home'; setTimeout(() => openIsland('i3'), 0); return; }
+      if (n === 5) { location.hash = '#/u5'; return; }
+      if (n === 6) { location.hash = '#/u6'; return; }
+      location.hash = '#/home';
+      setTimeout(() => toast('Unit ' + n + ' is coming soon. Your starting point is saved for this reader.'), 50);
     });
     else if (hash.startsWith('#/island3')) trailScreen();
     else if (hash.startsWith('#/check')) checkScreen();
