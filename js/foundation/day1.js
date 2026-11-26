@@ -62,9 +62,12 @@
     if (/^(m{2,}|s{2,}|t{2,}|n{2,}|f{2,}|l{2,}|r{2,})$/.test(raw)) return raw.charAt(0);
     return '';
   }
+  /* Directions play Frill's recording (js/foundation/voice.js). A lone sound plays only a human recording.
+     Device speech used to drop a and I from lines ("Pick game.", "Tap said it."), so it is only a last resort now. */
   function say(text) {
-    const key = bareSound(text);
+    const key = /^\s*(a|I)[.!?]?\s*$/.test(String(text || '')) ? '' : bareSound(text);
     if (key) return playSound(key).then(() => {});
+    if (IR.voice) return IR.voice.line(text, 'Frill').then(() => {});
     const words = String(text || '').trim().split(/\s+/).filter(Boolean);
     const spoken = words.filter((word) => !bareSound(word)).join(' ');
     if (!spoken) return Promise.resolve();
@@ -599,7 +602,8 @@
     rounds(ctx, PACK.words, (word, ok, again) => {
       const speak = () => {
         const mine = ++blendToken;
-        Snd.stop();
+        /* Sounds need her recordings. Until every sound in the word has one, say the whole word so the round is not silent. */
+        if (IR.voice && !word.parts.every((id) => IR.voice.phonemeSrc(id))) return hearWord(word.text);
         return word.parts.reduce((p, id) => p.then(() => {
           if (mine !== blendToken) return undefined;
           return playSound(id).then(() => new Promise((r) => setTimeout(r, 180)));
@@ -698,6 +702,7 @@
     if (key) return Promise.race([Promise.resolve(playSound(key)).catch(() => {}), new Promise((r) => setTimeout(r, 700))]);
     if (phoneme) return Promise.resolve();
     if (String(text || '').replace(/[^A-Za-z]/g, '').length < 2) return Promise.resolve();
+    if (IR.playWord) return Promise.race([IR.playWord(text), new Promise((r) => setTimeout(r, 1500))]).then(() => {});
     return new Promise((resolve) => {
       let done = false;
       const fin = () => { if (done) return; done = true; resolve(); };

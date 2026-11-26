@@ -540,14 +540,19 @@
     if (!playable.length || playable.length !== parts.length) return Promise.resolve(false);
     return playable.reduce((chain, id) => chain.then(() => playPhoneme(id).then(() => sleep(150))), Promise.resolve(true));
   }
+  /* Whole words: the Foundations word clip (one voice for every word, see js/foundation/voice.js).
+     WORD_AUDIO is only a backup for a word with no Foundations clip. */
   function playWord(word) {
     const key = String(word || '').toLowerCase().replace(/[^a-z]/g, '');
     if (!key) return Promise.resolve(false);
+    if (IR.voice && IR.voice.wordSrc(key)) return IR.voice.word(key);
     const src = WORD_AUDIO[key];
-    if (src) return Snd.play(src).then((ok) => (ok ? true : blendWord(key)));
-    return blendWord(key);
+    if (src) return Snd.play(src);
+    return IR.voice ? IR.voice.word(key) : Promise.resolve(false);
   }
+  /* Story lines: Frill reads the whole sentence when it has a recording, otherwise word by word. */
   function playStory(text) {
+    if (IR.voice) return IR.voice.story(text);
     const words = String(text || '').split(/\s+/).filter(Boolean);
     return words.reduce((chain, word) => chain.then(() => playWord(word).then(() => sleep(160))), Promise.resolve(false));
   }
@@ -601,9 +606,21 @@
       } catch (e) { resolve(false); }
     });
   }
-  function speak(text) {
+  /* Directions play Frill's recording. One word plays its word clip. A lone sound plays only a human recording.
+     a and I are words, never sounds. */
+  function speak(text, who) {
     const words = String(text || '').trim().split(/\s+/).filter(Boolean);
     if (!words.length) return Promise.resolve(false);
+    if (IR.voice) {
+      if (IR.voice.lineSrc(text, who)) return IR.voice.line(text, who);
+      if (words.length === 1) {
+        const raw = words[0].replace(/[^A-Za-z]/g, '');
+        const key = /^(a|A|I)$/.test(raw) ? '' : soundKey(words[0]);
+        if (key) return playPhoneme(key);
+        return playWord(words[0]);
+      }
+      return IR.voice.line(text, who);
+    }
     const keys = words.map((word) => soundKey(word));
     const sounds = keys.filter(Boolean);
     const spoken = words.filter((word, i) => !keys[i]).join(' ');
@@ -657,18 +674,14 @@
       setTimeout(fin, Math.max(1600, words.length * slice + 500));
     });
   }
-  const PHONEME_SRC = {
-    a: 'audio/phonemes/a.mp3', ah: 'audio/phonemes/a.mp3',
-    m: 'audio/phonemes/m.mp3', mmm: 'audio/phonemes/m.mp3',
-    s: 'audio/phonemes/s.mp3', sss: 'audio/phonemes/s.mp3',
-    t: 'audio/phonemes/t.mp3',
-    d: 'audio/phonemes/d.mp3', n: 'audio/phonemes/n.mp3', nnn: 'audio/phonemes/n.mp3',
-    k: 'audio/phonemes/k.mp3', p: 'audio/phonemes/p.mp3',
-    e: 'audio/phonemes/e.mp3', eh: 'audio/phonemes/e.mp3',
-    i: 'audio/phonemes/i.mp3', ih: 'audio/phonemes/i.mp3',
-    u: 'audio/phonemes/u.mp3', uh: 'audio/phonemes/u.mp3',
-    ee: 'audio/phonemes/ee.mp3', oh: 'audio/phonemes/oh.mp3'
-  };
+  /* Letter sounds come only from human recordings listed in js/foundation/voice.js (c uses the k recording).
+     Nothing is generated for a missing sound: the button shows "sound coming soon" instead. */
+  const PHONEME_SRC = {};
+  ['a', 'ah', 'm', 'mmm', 's', 'sss', 't', 'p', 'f', 'fff', 'i', 'ih', 'n', 'nnn', 'o', 'd', 'c', 'k', 'u', 'uh', 'g', 'b', 'e', 'eh', 'h', 'r', 'rrr', 'l', 'lll', 'w',
+    'j', 'y', 'x', 'q', 'v', 'vvv', 'z', 'zzz', 'ee', 'oh'].forEach((key) => {
+    const src = IR.voice ? IR.voice.phonemeSrc(key) : '';
+    if (src) PHONEME_SRC[key] = src;
+  });
   function playPhoneme(key) {
     const src = PHONEME_SRC[key];
     if (!src) return Promise.resolve(false);
@@ -1189,7 +1202,7 @@
       setInstr(text) {
         instrBox.innerHTML = '';
         instrBox.style.display = text ? '' : 'none';
-        if (text) instrBox.append(speakerBtn(() => speak(text), 'Hear the directions'), h('span', { class: 'itext' }, text));
+        if (text) { instrBox.append(speakerBtn(() => speak(text), 'Hear the directions'), h('span', { class: 'itext' }, text)); speak(text); }
       },
       setBack(fn) { backH = fn; },
       setNext(fn) { nextH = fn; },
@@ -1949,13 +1962,15 @@
       h('summary', null, 'If your child needs a hand'),
       ...tips.map((tip) => h('p', null, tip)));
   }
+  /* Each sound in turn (human recordings only), then the whole word. One after another, never on top of each other. */
+  function soundsThenWord(ids, word, gap) {
+    const steps = ids.map((id) => BY[id]).filter((L) => L && PHONEME_SRC[L.id]).map((L) => () => hear(L, 'sound'));
+    steps.push(() => playWord(word));
+    if (IR.voice) return IR.voice.chain(steps, gap);
+    return steps.reduce((p, step) => p.then(step), Promise.resolve());
+  }
   function modelBlend(word) {
-    const parts = graphemes(String(word));
-    parts.forEach((part, n) => {
-      const letter = BY[part.id];
-      if (letter) setTimeout(() => hear(letter, 'sound'), n * 420);
-    });
-    setTimeout(() => speak(word), parts.length * 420 + 180);
+    return soundsThenWord(graphemes(String(word)).map((part) => part.id), word, 260);
   }
   const FLOW = [
     { id: 'warm', title: 'Warm-up' },
@@ -2120,9 +2135,9 @@
       class: 'llnarr',
       type: 'button',
       'aria-label': who + ' says: ' + text,
-      onclick: () => speak(text)
+      onclick: () => speak(text, who)
     }, h('img', { src: src, alt: who }), h('span', null, text));
-    speak(text);
+    speak(text, who);
     return line;
   }
   function letterKey(group, id) { return group.id + '-' + id; }
@@ -2813,11 +2828,7 @@
         onclick: () => {
           rememberWord(word);
           const parts = String(word).toLowerCase().replace(/[^a-z]/g, '').split('');
-          parts.forEach((ch, n) => {
-            const letter = BY[ch];
-            if (letter) setTimeout(() => hear(letter, 'sound'), n * 280);
-          });
-          setTimeout(() => speak(word), parts.length * 280 + 200);
+          soundsThenWord(parts, word, 200);
         }
       }, word))));
   }

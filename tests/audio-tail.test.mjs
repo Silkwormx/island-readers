@@ -8,7 +8,7 @@ const root = new URL('..', import.meta.url);
 
 function wordClips() {
   const dir = new URL('audio/', root);
-  return fs.readdirSync(dir).filter((name) => /^(w_|nk_w_|u51_w_|u53_w_|u6_w_)/.test(name) && name.endsWith('.mp3')).map((name) => path.join(dir.pathname, name));
+  return fs.readdirSync(dir).filter((name) => /^(w_|nk_w_|u51_w_|u53_w_|u6_w_|fw_)/.test(name) && name.endsWith('.mp3')).map((name) => path.join(dir.pathname, name));
 }
 
 test('every word clip keeps a quiet tail after the last voiced sound', () => {
