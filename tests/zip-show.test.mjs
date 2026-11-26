@@ -69,7 +69,7 @@ test('a long listen run still changes the picture and the line', () => {
   const rows = [];
   for (let i = 0; i < 12; i++) rows.push(zs.pick({ kind: 'listen', hint: 'Ears on!' }));
   noRepeats(rows);
-  assert.ok(rows.some((row) => row.id === 'frill-swim' || row.id === 'highfive'));
+  assert.ok(rows.some((row) => row.id.indexOf('frill-') === 0));
   assert.ok(rows.some((row) => row.prompt !== 'Ears on!'));
 });
 
@@ -86,18 +86,25 @@ test('reduced motion and calm mode turn the mascot animation off', () => {
   assert.equal(/score/i.test(js), false);
 });
 
-test('Frill scenes use the approved portrait, not a new drawing', () => {
+test('Frill actions keep the upright v4 B poses and do not repeat in a row', () => {
   const zs = load();
-  zs.SCENES.filter((scene) => scene.who === 'Frill' || scene.pair).forEach((scene) => {
-    if (scene.who === 'Frill') assert.equal(scene.src, 'img/frill.webp');
-    if (scene.pair) assert.equal(scene.pair, 'img/frill.webp');
+  const frills = zs.SCENES.filter((scene) => scene.id.indexOf('frill-') === 0);
+  assert.ok(frills.length >= 5);
+  frills.forEach((scene) => {
+    assert.match(scene.src, /^img\/zip-show\/frill-/);
+    assert.equal(fs.existsSync(new URL('../' + scene.src, import.meta.url)), true, scene.src);
+    assert.equal(scene.src.includes('frill-swim'), false);
   });
   const js = read('js/zip-show.js');
-  assert.equal(js.includes('zip-show/frill-swim'), false);
-  assert.equal(js.includes('zip-show/highfive'), false);
-  assert.match(js, /zs-bits/);
-  assert.match(js, /zs-peekimg/);
-  assert.match(js, /surprise = 'shell'/);
+  assert.equal(js.includes('frill-swim'), false);
+  assert.equal(js.includes("src: 'img/frill.webp'"), false);
+  zs.reset();
+  const rows = [];
+  for (let i = 0; i < 16; i++) rows.push(zs.pick({ kind: 'listen', hint: i % 2 ? 'Hear this one.' : 'Ears on!' }));
+  noRepeats(rows);
+  const seen = rows.filter((row) => row.id.indexOf('frill-') === 0).map((row) => row.id);
+  assert.ok(seen.length >= 2);
+  assert.ok(new Set(seen).size >= 2);
 });
 
 test('action art is on disk and the new files are precached', () => {

@@ -26,15 +26,20 @@
     { id: 'shell', src: 'img/zip-show/shell.webp', who: 'Zip', motion: 'in', alt: 'Zip holds up a shell' },
     { id: 'mouth', src: 'img/zip-show/mouth.webp', who: 'Zip', motion: 'tilt', alt: 'Zip points at his mouth' },
     { id: 'wave', src: 'img/zipA.webp', who: 'Zip', motion: 'wiggle', alt: 'Zip waves' },
-    /* Frill stays the approved v4 B portrait. Motion is CSS, not a new drawing. */
-    { id: 'frill-swim', src: 'img/frill.webp', who: 'Frill', motion: 'slide', alt: 'Frill swims by', approved: true },
-    { id: 'highfive', src: 'img/zipA.webp', who: 'both', motion: 'hop', alt: 'Zip and Frill high-five', pair: 'img/frill.webp', approved: true },
+    /* Frill actions keep the approved v4 B body: upright, wavy skirt foot, calm smile. */
+    { id: 'frill-wave', src: 'img/zip-show/frill-wave.webp', who: 'Frill', motion: 'slide', alt: 'Frill waves' },
+    { id: 'frill-glide', src: 'img/zip-show/frill-glide.webp', who: 'Frill', motion: 'slide', alt: 'Frill glides on the sand' },
+    { id: 'frill-peek', src: 'img/zip-show/frill-peek.webp', who: 'Frill', motion: 'in', alt: 'Frill peeks from behind a rock' },
+    { id: 'frill-cheer', src: 'img/zip-show/frill-cheer.webp', who: 'Frill', motion: 'hop', alt: 'Frill cheers' },
+    { id: 'frill-shell', src: 'img/zip-show/frill-shell.webp', who: 'Frill', motion: 'in', alt: 'Frill holds a shell' },
+    { id: 'frill-highfive', src: 'img/zip-show/frill-highfive.webp', who: 'both', motion: 'hop', alt: 'Zip and Frill high-five' },
     { id: 'mangrove', src: 'img/zip-show/mangrove.webp', who: 'Zip', motion: 'in', alt: 'Zip climbs the mangrove roots' },
     { id: 'snake', src: 'img/zip-show/snake.webp', who: 'Zip', motion: 'wiggle', alt: 'Zip meets a sea snake' },
     { id: 'turtle', src: 'img/zip-show/turtle.webp', who: 'Zip', motion: 'in', alt: 'Zip walks with a sea turtle' }
   ];
   const BY_ID = {};
   SCENES.forEach((scene) => { BY_ID[scene.id] = scene; });
+  const FRILL_ACTS = ['frill-wave', 'frill-glide', 'frill-peek', 'frill-cheer', 'frill-shell', 'frill-highfive'];
 
   const PROMPTS = {
     listen: ['Ears on!', 'Hear this one.', 'Listen close.'],
@@ -53,7 +58,7 @@
     mouth: ['mouth', 'point'],
     find: ['dig', 'banyan', 'bell'],
     teach: ['think', 'listen', 'wave'],
-    cheer: ['highfive', 'cheer', 'dance'],
+    cheer: ['frill-highfive', 'frill-cheer', 'cheer', 'dance'],
     blend: ['juggle', 'drum', 'cheer'],
     think: ['think', 'shell'],
     keyword: ['surf', 'dig', 'banyan', 'bell', 'splash', 'juggle']
@@ -64,7 +69,7 @@
     p: 'splash', f: 'surf', i: 'think', n: 'shell',
     o: 'dig', d: 'banyan', c: 'bell', u: 'juggle',
     g: 'drum', b: 'dance', e: 'surprise', k: 'point',
-    h: 'cheer', r: 'listen', l: 'highfive', w: 'surf',
+    h: 'cheer', r: 'listen', l: 'frill-shell', w: 'surf',
     j: 'juggle', y: 'apple', x: 'dig', q: 'think',
     v: 'banyan', z: 'dance'
   };
@@ -102,9 +107,9 @@
   function sceneId(opts) {
     const letterScene = opts.kind === 'keyword' && LETTER[opts.key];
     if (letterScene && letterScene !== state.scene) return letterScene;
-    if (opts.kind !== 'keyword' && state.n > 0 && state.n % 6 === 5) {
-      const frill = state.scene === 'frill-swim' ? 'highfive' : 'frill-swim';
-      if (BY_ID[frill] && frill !== state.scene) return frill;
+    if (opts.kind !== 'keyword' && state.n > 0 && state.n % 5 === 4) {
+      const frill = take(FRILL_ACTS, 's:frill', state.scene);
+      if (frill !== state.scene) return frill;
     }
     const pool = POOLS[opts.kind] || POOLS.listen;
     const id = take(pool, 's:' + opts.kind, state.scene);
@@ -130,7 +135,7 @@
     state.scene = scene.id;
     state.prompt = prompt;
     state.n += 1;
-    const celebrate = scene.motion === 'hop' || scene.id === 'highfive' || scene.id === 'cheer';
+    const celebrate = scene.motion === 'hop' || scene.id === 'frill-highfive' || scene.id === 'frill-cheer' || scene.id === 'cheer';
     let surprise = '';
     if (!celebrate && scene.who === 'Zip') {
       if (step % 5 === 3) surprise = 'peek';
@@ -174,7 +179,7 @@
       onclick: () => speak(choice.prompt)
     }, choice.prompt);
     const extra = [];
-    if (choice.surprise === 'peek') extra.push(h('img', { class: 'zs-peekimg', src: 'img/frill.webp', alt: '' }));
+    if (choice.surprise === 'peek') extra.push(h('img', { class: 'zs-peekimg', src: 'img/zip-show/frill-peek.webp', alt: '' }));
     if (choice.surprise === 'shell') extra.push(h('span', { class: 'zs-shell', 'aria-hidden': 'true' }));
     if (choice.celebrate) extra.push(h('span', { class: 'zs-bits', 'aria-hidden': 'true' }, h('i'), h('i'), h('i'), h('i'), h('i')));
     return h('div', {
