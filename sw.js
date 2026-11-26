@@ -1,7 +1,7 @@
 /* Island Readers sample service worker.
    Code (HTML/JS/CSS/data) is network-first so a new version always wins; the cache is only an offline fallback.
    Media (images/audio/video) is cache-first. Install never fails because of one file. */
-const CACHE = 'ir-20261124q';
+const CACHE = 'ir-20261127a';
 const ASSETS = [
  "./",
  "./index.html",
@@ -10,6 +10,8 @@ const ASSETS = [
  "./js/u5games.js",
  "./js/foundation/scope.js",
  "./js/foundation/phonemes.js",
+ "./js/foundation/voice_index.js",
+ "./js/foundation/voice.js",
  "./js/foundation/letters.js",
  "./js/foundation/day1.js",
  "./foundation/foundation.css",
@@ -1143,6 +1145,14 @@ self.addEventListener('fetch', (e) => {
   e.respondWith((async () => {
     const hit = await caches.match(req, { ignoreSearch: true });
     if (hit) return req.headers.has('range') ? ranged(req, hit) : fixMime(hit, url);
+    /* <audio> asks for byte ranges, and a 206 reply was never cached, so sounds were missing offline.
+       Fetch the whole clip once, keep it, and answer the range from it. */
+    if (req.headers.has('range') && /\.mp3$/.test(url.pathname)) {
+      try {
+        const full = await fetch(url.href, { credentials: 'same-origin' });
+        if (full && full.ok && full.status === 200) { const c = await caches.open(CACHE); c.put(url.href, full.clone()); return ranged(req, full); }
+      } catch (err) { /* fall through to the network */ }
+    }
     const net = await fetch(req);
     if (net && net.ok && net.status === 200 && !req.headers.has('range')) { const c = await caches.open(CACHE); c.put(req, net.clone()); }
     return fixMime(net, url);
