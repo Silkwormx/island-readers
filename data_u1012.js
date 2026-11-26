@@ -4246,12 +4246,7 @@ window.IR_DATA_U1012 = {
      ]
     }
    ],
-   "heart": [
-    {
-     "w": "sew",
-     "part": "ew"
-    }
-   ],
+   "heart": [],
    "newWords": [],
    "pics": {
     "snow": "img/u12pics/snow.webp",
@@ -4326,22 +4321,17 @@ window.IR_DATA_U1012 = {
      "img": "img/u122_p04.webp"
     },
     {
-     "text": "They own a slow plan. Frill can sew a patch. They tip the boat.",
+     "text": "They own a slow plan. They patch the hole.",
      "words": [
       "They",
       "own",
       "a",
       "slow",
       "plan.",
-      "Frill",
-      "can",
-      "sew",
-      "a",
-      "patch.",
       "They",
-      "tip",
+      "patch",
       "the",
-      "boat."
+      "hole."
      ],
      "img": "img/u122_p05.webp"
     },
@@ -4965,12 +4955,7 @@ window.IR_DATA_U1012 = {
      ]
     }
    ],
-   "heart": [
-    {
-     "w": "height",
-     "part": "eigh"
-    }
-   ],
+   "heart": [],
    "newWords": [],
    "pics": {
     "pie": "img/u12pics/pie.webp",
@@ -5062,7 +5047,7 @@ window.IR_DATA_U1012 = {
      "img": "img/u123_p05.webp"
     },
     {
-     "text": "Zip and Frill eat the pie. The tin was up at a great height.",
+     "text": "Zip and Frill eat the pie. The tin is up high.",
      "words": [
       "Zip",
       "and",
@@ -5072,12 +5057,9 @@ window.IR_DATA_U1012 = {
       "pie.",
       "The",
       "tin",
-      "was",
+      "is",
       "up",
-      "at",
-      "a",
-      "great",
-      "height."
+      "high."
      ],
      "img": "img/u123_p06.webp"
     }

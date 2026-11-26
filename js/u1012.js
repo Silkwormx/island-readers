@@ -209,7 +209,7 @@
   function runBells(ctx, L) {
     IR.ringBells(ctx, { words: L.bellWords.slice(), audio: (w) => W(w), color: (w) => document.createTextNode(w) });
     const face = ctx.stage.querySelector('.bellask img');
-    if (face) { face.src = 'img/u789act/act_frill_bell.webp'; face.alt = 'Frill rings a bell'; face.classList.add('buddy'); }
+    if (face) { face.src = 'img/zip-show/frill-wave.webp'; face.alt = 'Frill'; face.classList.add('buddy'); }
   }
 
   function runMatch(ctx, L) {
@@ -310,7 +310,7 @@
       go.addEventListener('click', () => { token++; Snd.stop(); round(); });
       const again = h('button', { class: 'btn', type: 'button' }, icon('replay'), 'Watch again');
       again.addEventListener('click', () => { token++; Snd.stop(); modelStep(); });
-      stage.append(h('div', { class: 'activity chainact' }, h('div', { class: 'chainwho' }, h('img', { src: 'img/frill.webp', alt: '' }), h('b', null, 'Frill')),
+      stage.append(h('div', { class: 'activity chainact' }, h('div', { class: 'chainwho' }, h('img', { src: 'img/zip-show/frill-shell.webp', alt: '' }), h('b', null, 'Frill')),
         sayLine, h('p', { class: 'chainfrom' }, colorWord(words[0], L)), h('div', { class: 'chainslots' }, ...boxes), h('div', { class: 'row center' }, again, go)));
       ctx.setBack(() => false); ctx.setNext(() => { token++; Snd.stop(); round(); return true; });
       if (!ruled) { ruled = true; await IR.sayItem(ctx, P('chain'), null); }
@@ -469,7 +469,6 @@
       const sent = h('p', { class: 'sentence' });
       const label = h('p', { class: 'small' });
       const pageAudio = () => 'audio/' + L.key + '_s_' + (p + 1) + '.mp3';
-      const replay = speakerBtn(() => Snd.play(pageAudio()), 'Hear this page'); replay.classList.add('huge');
       function show() {
         const pg = pages[p];
         pic.src = pg.img; sent.innerHTML = '';
@@ -480,10 +479,11 @@
         label.textContent = 'Page ' + (p + 1) + ' of ' + pages.length;
         ctx.progress(p / pages.length);
       }
-      st.append(h('div', { class: 'activity story' }, h('div', { class: 'panelwrap' }, pic), h('div', { class: 'sentrow' }, replay, sent), label));
+      st.append(h('div', { class: 'activity story' }, h('div', { class: 'panelwrap' }, pic), h('div', { class: 'sentrow' }, sent), label));
       ctx.setBack(() => { if (p > 0) { p--; show(); return true; } if (words.length) { showHeart(); return true; } return false; });
       ctx.setNext(() => { if (p < pages.length - 1) { p++; show(); return true; } ctx.finish(); return true; });
       if (ctx.setNextLabel) ctx.setNextLabel('Next');
+      if (ctx.setRepeat) ctx.setRepeat(() => Snd.play(pageAudio()));
       if (IR.pinStoryNav) IR.pinStoryNav(() => { if (p > 0) { p--; show(); } else if (words.length) showHeart(); });
       show();
     }
@@ -715,7 +715,18 @@
   }
 
   // Action art for each game: Zip and Frill doing something different on every screen (never the same picture twice in a row).
-  const ACT = (k) => 'img/u789act/act_' + k + '.webp';
+  const ART = {
+    zip_surf: 'img/zip-show/surf.webp',
+    zip_magnify: 'img/zip-show/think.webp',
+    zip_blocks: 'img/zip-show/dig.webp',
+    zip_juggle: 'img/zip-show/juggle.webp',
+    frill_bell: 'img/zip-show/frill-wave.webp',
+    frill_paint: 'img/zip-show/frill-peek.webp',
+    frill_drum: 'img/zip-show/frill-cheer.webp',
+    frill_fish: 'img/zip-show/frill-glide.webp',
+    both_dance: 'img/zip-show/dance.webp'
+  };
+  const ACT = (k) => ART[k] || ('img/zip-show/' + k + '.webp');
   const BUDDY = { hear: 'zip_surf', bells: 'frill_bell', match: 'zip_magnify', build: 'zip_blocks', chain: 'frill_paint', scramble: 'zip_juggle',
     sentence: 'both_dance', sort: 'zip_surf', which: 'zip_juggle', rhyme: 'frill_drum', fish: 'frill_fish', check: 'zip_magnify' };
   IR.u1012Buddy = BUDDY;
@@ -742,6 +753,7 @@
     const screen = h('div', { class: 'screen lessonscreen u6step u789step u1012step' + (S0.group === 'lesson' ? ' is-lesson' : ''), style: '--c:' + S0.color }, h('header', { class: 'lesson-top' }, IR.ui.pageNav(base), bar), instrBox, stage, nav);
     app.append(screen);
     if (S0.group === 'activities') IR.attachGameRules(ctx, screen, S0.title);
+    if (IR.wireUnitControls) IR.wireUnitControls(screen, ctx);
     S0.run(ctx);
   }
 

@@ -63,7 +63,7 @@ def reg_pdf_fonts():
 HEARTS = {
     'the': 'e', 'a': 'a', 'is': 's', 'to': 'o', 'I': 'I', 'has': 's', 'of': 'f', 'was': 'a',
     'you': 'ou', 'they': 'ey', 'says': 'ay', 'wear': 'ear', 'bear': 'ear', 'pear': 'ear',
-    'break': 'ea', 'shoe': 'oe', 'sew': 'ew', 'height': 'eigh', 'where': 'ere', 'there': 'ere',
+    'break': 'ea', 'shoe': 'oe', 'where': 'ere', 'there': 'ere',
     'their': 'eir', 'great': 'ea', 'again': 'ai', 'said': 'ai', 'do': 'o', 'does': 'oe', 'goes': 'oe',
 }
 
@@ -148,12 +148,10 @@ def paste(base, sprite, box, anchor='bottom'):
     base.alpha_composite(im, (x, y))
 
 SPRITES = [
-    'img/zipA.webp', 'img/frill.webp', 'img/frillC.webp',
-    'img/u789act/act_zip_surf.webp', 'img/u789act/act_frill_fish.webp',
-    'img/u789act/act_zip_blocks.webp', 'img/u789act/act_frill_paint.webp',
-    'img/u789act/act_zip_juggle.webp', 'img/u789act/act_frill_drum.webp',
-    'img/u789act/act_zip_magnify.webp', 'img/u789act/act_frill_bell.webp',
-    'img/u789act/act_both_dance.webp',
+    'img/zip-show/surf.webp', 'img/zip-show/frill-glide.webp', 'img/zip-show/think.webp',
+    'img/zip-show/frill-peek.webp', 'img/zip-show/juggle.webp', 'img/zip-show/frill-cheer.webp',
+    'img/zip-show/dig.webp', 'img/zip-show/frill-wave.webp', 'img/zip-show/frill-shell.webp',
+    'img/zip-show/dance.webp',
 ]
 
 def sky(draw, w, h, top, bot):
@@ -208,8 +206,8 @@ def cover_image(L, path):
     d.text((450, 300), title, font=F(54, True), fill=TEAL, anchor='mm')
     d.text((450, 380), L['name'], font=F(36, False), fill=ORANGE, anchor='mm')
     base = im.convert('RGBA')
-    paste(base, os.path.join(ROOT, 'img/zipA.webp'), (80, 460, 320, 380))
-    paste(base, os.path.join(ROOT, 'img/frill.webp'), (500, 470, 320, 370))
+    paste(base, os.path.join(ROOT, 'img/zip-show/surf.webp'), (80, 460, 320, 380))
+    paste(base, os.path.join(ROOT, 'img/zip-show/frill-glide.webp'), (500, 470, 320, 370))
     base.convert('RGB').save(path, 'WEBP', quality=78)
 
 def icon(word, path):
