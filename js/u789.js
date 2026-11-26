@@ -654,7 +654,6 @@
       return { files: files, hideSlides: true };
     }
     files.push({ title: 'Teacher pack', href: dir + 'Lesson' + L.n + '_Teacher_Led_Checks.pdf' });
-    files.push({ title: 'Download slides', href: dir + 'Lesson' + L.n + '_Slides.pdf', small: true });
     return {
       slides: '#/teachers/slides/' + key,
       days: (L.days || ['', '', '']).map((d, i) => ({ label: 'Day ' + (i + 1) })),
