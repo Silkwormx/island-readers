@@ -301,6 +301,10 @@ html.teach .llist .u5name,html.teach .llplay .u5name{font-size:32px}
 .ll1friends{display:flex;flex-wrap:wrap;gap:.55rem;justify-content:center;width:100%;max-width:42rem}
 .ll1friends .ll1friend,.ll1friends .ll1card{flex:1 1 7.2rem;max-width:12rem;min-height:8rem}
 .fs-kidintro{display:flex;flex-direction:column;align-items:center;gap:.55rem;width:min(100%,28rem);margin:0 auto}
+.fs-silly{width:min(100%,52rem);gap:.4rem}
+.fs-allitpic{width:min(46rem,88vw);max-height:46vh;object-fit:contain;border-radius:1.2rem;background:#fff}
+.fs-allitline{margin:0;font-size:clamp(1.25rem,3.2vh,1.8rem);font-weight:700;text-align:center}
+.fs-allitcue{margin:0;font-weight:700;color:#0E7C7C}
 .fs-kidart{width:min(16rem,70vw);height:auto;border-radius:1.2rem;background:#fff}
 .fs-meetrow{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.6rem;width:min(100%,68rem);margin:0 auto}
 .fs-chip{display:flex;flex-direction:column;align-items:center;gap:.3rem;min-width:0}

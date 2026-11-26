@@ -1103,30 +1103,55 @@
       row('Words', ['d1-build', 'd1-ears', 'd1-match', 'd1-flash', 'd1-sort'])
     ];
   }
+  const ALLIT = {
+    j: { src: 'foundation/img/story/allit-j-jam.jpg', line: 'jellyfish jiggle in the jam!' },
+    y: { src: 'foundation/img/story/allit-y-yams.jpg', line: 'yaks yank yummy yams!' },
+    x: { src: 'foundation/img/story/allit-x-fox.jpg', line: 'a fox packs six boxes!' },
+    q: { src: 'foundation/img/story/allit-q-quail.jpg', line: 'a quail quits the quilt!' },
+    v: { src: 'foundation/img/story/allit-v-van.jpg', line: 'vines cover a van at the vet!' },
+    z: { src: 'foundation/img/story/allit-z-zigzag.jpg', line: 'a bee zips and zaps in a zigzag!' }
+  };
+  function introSteps(letters) {
+    const steps = [];
+    letters.forEach((L) => {
+      steps.push({ kind: 'sound', L: L });
+      if (ALLIT[L.id]) steps.push({ kind: 'silly', L: L, allit: ALLIT[L.id] });
+    });
+    return steps;
+  }
   function introScreen(app, group) {
     IR.newScreen();
-    const letters = lettersOf(group);
+    const steps = introSteps(lettersOf(group));
     let i = 0;
     const stage = h('div', { class: 'fs-stage' });
     const next = h('button', { class: 'btn big next', type: 'button' }, 'Next');
     function show() {
-      const L = letters[i];
-      const src = artUrl(L.id);
+      const step = steps[i];
+      const L = step.L;
       stage.innerHTML = '';
-      stage.append(h('div', { class: 'fs-kidintro' },
-        src ? h('img', { class: 'fs-kidart', src: src, alt: '' }) : letterCardStep(L, 'picture'),
-        nameTag(L.id),
-        h('div', { class: 'll1mouth' },
-          h('span', { class: 'll1mouthico', html: MOUTH }),
-          h('p', null, 'My sound is ' + L.sound))));
-      next.textContent = i >= letters.length - 1 ? 'Done' : 'Next';
-      const hello = i === 0 ? speak('Meet each letter.') : Promise.resolve(true);
-      hello.then(() => hear(L, 'sound'));
+      if (step.kind === 'silly') {
+        stage.append(h('div', { class: 'fs-kidintro fs-silly' },
+          h('img', { class: 'fs-allitpic', src: step.allit.src, alt: '' }),
+          h('p', { class: 'fs-allitline' }, step.allit.line),
+          h('p', { class: 'fs-allitcue' }, 'Say it fast 3 times.')));
+        speak(step.allit.line);
+      } else {
+        const src = artUrl(L.id);
+        stage.append(h('div', { class: 'fs-kidintro' },
+          src ? h('img', { class: 'fs-kidart', src: src, alt: '' }) : letterCardStep(L, 'picture'),
+          nameTag(L.id),
+          h('div', { class: 'll1mouth' },
+            h('span', { class: 'll1mouthico', html: MOUTH }),
+            h('p', null, 'My sound is ' + L.sound))));
+        const hello = i === 0 ? speak('Meet each letter.') : Promise.resolve(true);
+        hello.then(() => hear(L, 'sound'));
+      }
+      next.textContent = i >= steps.length - 1 ? 'Done' : 'Next';
     }
     next.addEventListener('click', () => {
       Snd.stop();
       try { speechSynthesis.cancel(); } catch (e) { /* quiet */ }
-      if (i >= letters.length - 1) { location.hash = '#/foundation/letters/' + group.id; return; }
+      if (i >= steps.length - 1) { location.hash = '#/foundation/letters/' + group.id; return; }
       i += 1;
       show();
     });
