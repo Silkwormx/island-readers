@@ -570,18 +570,18 @@
     const need = L.fishYes.length; let caught = 0; const st = ctx.stage;
     const line = 'Catch every fish with a word that ' + L.fishLabel + '.';
     ctx.setInstr(line, () => Snd.play(P('fish_' + L.key)));
-    const status = h('p', { class: 'status' }, 'Caught 0 of ' + need + '.');
+    const status = h('p', { class: 'status' }, '\u00a0');
     const pond = h('div', { class: 'choices three fishpond' });
     fish.forEach((f) => {
       const b = h('button', { class: 'choice', type: 'button', 'data-w': f.w }, f.w);
       b.addEventListener('click', async () => {
         if (b.classList.contains('right') || b.classList.contains('tried')) return;
-        if (f.yes) { b.classList.add('right', 'found'); b.replaceChildren(colorWord(f.w, L)); caught++; status.textContent = 'Yes! Caught ' + caught + ' of ' + need + '.'; ctx.progress(caught / need); await ding(f.w); if (caught >= need && ctx.scr.ok()) ctx.finish(); }
+        if (f.yes) { b.classList.add('right', 'found'); b.replaceChildren(colorWord(f.w, L)); caught++; status.textContent = '\u00a0'; if (ctx.count) ctx.count(caught, need); ctx.progress(caught / need); await ding(f.w); if (caught >= need && ctx.scr.ok()) ctx.finish(); }
         else { ctx.miss(); b.classList.add('tried'); status.textContent = 'Listen again. That fish does not fit.'; await Snd.seq([P6('listenagain'), W(f.w)], 140); }
       });
       pond.append(b);
     });
-    if (ctx.count) ctx.count(1, need);
+    if (ctx.count) ctx.count(0, need);
     st.append(h('div', { class: 'activity' }, h('p', { class: 'bigprompt' }, 'Fish Pond: ' + L.fishLabel), pond, status));
     IR.sayItem(ctx, P('fish_' + L.key), null);
   }

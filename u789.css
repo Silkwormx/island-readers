@@ -31,13 +31,27 @@
 .u789step .u1pic{flex:0 1 auto;min-height:0;display:flex;justify-content:center}
 .u789step .u1pic img{max-height:min(30vh,14rem);max-height:min(30svh,14rem);width:auto;max-width:80vw;aspect-ratio:1;object-fit:contain;border-radius:1rem}
 .u789step .matchgame .choices{max-height:9rem}
-/* Story: picture shrinks so the sentence and the Next page button always fit */
-.u789step .activity.story{display:grid!important;grid-template-rows:minmax(0,1fr) auto auto auto;justify-items:center}
-.u789step .activity.story .panelwrap{min-height:0;height:100%;display:flex;align-items:center;justify-content:center;width:100%}
-.u789step .activity.story .panel{max-height:100%;max-width:100%;width:auto;height:auto;object-fit:contain;border-radius:.8rem}
-.u789step .activity.story .sentrow{display:flex;align-items:center;gap:.4rem;max-width:100%}
+/* Story reader, shared by Units 1-3 (.u123step) and 7-12 (.u789step).
+   Title stays above this block. The picture is as large as the width allows.
+   Words sit directly under the picture, the page count under the words.
+   Spare space is split above the picture and below the count. */
+.u123step .activity.story,
+.u789step .activity.story{display:flex!important;flex-direction:column!important;align-items:center;justify-content:flex-start;height:100%;width:100%;min-height:0;gap:0;grid-template-rows:none!important;grid-template-columns:none!important}
+.u123step .activity.story::before,
+.u789step .activity.story::before,
+.u123step .activity.story::after,
+.u789step .activity.story::after{content:'';flex:1 1 0;min-height:0}
+.u123step .activity.story .panelwrap,
+.u789step .activity.story .panelwrap{flex:0 1 auto;min-height:0;width:100%;height:auto!important;max-height:none;display:flex;align-items:center;justify-content:center;margin:0}
+.u123step .activity.story .panel,
+.u789step .activity.story .panel{display:block;width:100%!important;height:auto!important;max-width:100%!important;max-height:min(58vh,100%)!important;max-height:min(58svh,100%)!important;object-fit:contain!important;object-position:center center;margin:0 auto;border-radius:.8rem}
+.u123step .activity.story .sentrow,
+.u789step .activity.story .sentrow{flex:none;display:flex;align-items:center;justify-content:center;gap:.4rem;max-width:100%;margin-top:.35rem}
+.u123step .activity.story .sentence,
 .u789step .activity.story .sentence{margin:0;font-size:clamp(1.15rem,min(5.6vw,4.2vh),2rem);line-height:1.3}
-.u789step .activity.story .small{margin:0}
+.u123step .activity.story .small,
+.u789step .activity.story .small{flex:none;margin:.15rem 0 0}
+.u123step .activity.story .row,
 .u789step .activity.story .row{padding-bottom:env(safe-area-inset-bottom)}
 .u789step .nkmeet .panelwrap.small .panel{max-height:16vh;max-height:16svh}
 .u789step .chips{display:flex;flex-wrap:wrap;justify-content:center;gap:.35rem}
@@ -76,8 +90,12 @@ body:not(.teach) .u789step .recneed{display:none}
   .u789step .chantact .panelwrap.small{display:none}
   .u789step .chainopts > .chainpick{height:2.6rem}
   .u789step .chainslot{height:2.6rem}
-  .u789step .activity.story{grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-rows:minmax(0,1fr) auto auto}
-  .u789step .activity.story .panelwrap{grid-row:1 / span 3}
+  .u123step .activity.story,
+  .u789step .activity.story{display:flex!important;flex-direction:column!important;grid-template-columns:none!important;grid-template-rows:none!important}
+  .u123step .activity.story .panel,
+  .u789step .activity.story .panel{max-height:30vh!important;max-height:30svh!important}
+  .u123step .activity.story .panelwrap,
+  .u789step .activity.story .panelwrap{grid-row:auto}
   .u789step .activity.story .sentence{font-size:clamp(1rem,4.6vh,1.35rem)!important;line-height:1.25}
   .u789step .activity.story .sentence *{font-size:inherit!important}
   .u789step .activity.story .btn.big{min-height:0;padding:.35rem 1rem;font-size:1.1rem}

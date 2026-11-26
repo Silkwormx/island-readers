@@ -76,6 +76,12 @@
 .u1012slides .slidebar .homebtn{background:#F28C00;color:#fff;border:3px solid #C95A10}
 .u1012step .choice.found .chunk,.u1012step .bigword.found .chunk{font-weight:700}
 
+/* Game character sits centered above the instruction on every Units 10-12 game. */
+.u1012step > .instr.hasbuddy{flex-direction:column;align-items:center;justify-content:center;gap:.2rem;text-align:center}
+.u1012step > .instr.hasbuddy .buddy{height:clamp(3.4rem,11vh,5.2rem)!important}
+.u1012step > .instr.hasbuddy .ibubble{max-width:min(100%,22rem)}
+.u1012step > .instr.hasbuddy .ibubble::before{left:50%;top:-9px;margin:0 0 0 -8px;border:8px solid transparent;border-bottom-color:rgba(43,37,64,.18);border-top:0;border-right-color:transparent}
+
 @media (max-width:700px){
   .u1012slides .slide-title{font-size:.85rem}
   .u1012slides .slide-day{padding:.05rem .45rem;font-size:.85rem}

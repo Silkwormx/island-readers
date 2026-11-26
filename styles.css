@@ -3843,11 +3843,11 @@ html.teach .u5step .sentact .tile.word{font-size:clamp(1.7rem,4vh,2.4rem)!import
 .u123step .u1pic img,.u789step .u1pic img{
   display:block;margin-left:auto;margin-right:auto;object-fit:contain;object-position:center center
 }
-.u123step .activity.story .panel,.u789step .activity.story .panel{max-height:32vh;max-width:min(100%,36rem)}
+.u123step .activity.story .panel,.u789step .activity.story .panel{max-height:min(58vh,100%);max-height:min(58svh,100%);max-width:100%}
 .u123step .meetrow .panel,.u789step .meetrow .panel,.u123step .zs-art{max-height:22vh;width:auto;max-width:70vw}
 .u123step .u1pic,.u789step .u1pic{display:flex;align-items:center;justify-content:center;width:100%}
 @media (max-height:520px){
-  .u123step .activity.story .panel,.u789step .activity.story .panel{max-height:16vh}
+  .u123step .activity.story .panel,.u789step .activity.story .panel{max-height:30vh;max-height:30svh}
   .u123step .meetrow .panel,.u789step .meetrow .panel,.u123step .zs-art{max-height:12vh}
 }
 
