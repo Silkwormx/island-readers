@@ -48,7 +48,7 @@
     if (prev && prev.start) hist.unshift({ at: prev.at, start: prev.start });
     rec.history = hist.slice(0, 5); s.placement = rec; IR.save();
   }
-  const startLabel = (st) => st.team ? 'Team ' + st.team + ': ' + E.TEAMS[st.team - 1].letters.join(' ') : 'Unit ' + st.unit + ': ' + E.unit(st.unit).name;
+  const startLabel = (st) => st.team ? 'Team ' + st.team + ': ' + E.TEAMS[st.team - 1].letters.join(' ') : st.lesson ? ('Lesson ' + st.lesson + ' \u00b7 ' + (st.name || E.unit(st.unit).name)) : ('Unit ' + st.unit + ': ' + E.unit(st.unit).name);
 
   function render(app, openStart) {
     IR.newScreen(); hush();
@@ -83,6 +83,13 @@
     /* ---------- intro ---------- */
     function intro() {
       trail = []; const last = savedRecord();
+      try {
+        if (sessionStorage.getItem('ir_place_preview') === '8') {
+          sessionStorage.removeItem('ir_place_preview');
+          result({ at: new Date().toISOString(), start: { unit: 8, lesson: '8.1', key: 'u81', name: 'tch', href: '#/u8/u81' }, ladder: [{ w: 'match', ok: false }], units: { 7: { full: { right: 9, of: 10, missed: [] } }, 8: { full: { right: 5, of: 10, missed: ['plitch', 'brild'] } } }, heart: [] });
+          return;
+        }
+      } catch (e) { /* storage blocked */ }
       show({}, guides('big'),
         h('h1', { class: 'pg2-title' }, 'Island hop'),
         h('p', { class: 'pg2-lead' }, 'A calm trip across the islands to find the best place to start reading.'),
@@ -159,6 +166,10 @@
           const team = await foundations(st, false);
           st.start = team ? { team } : { unit: 1 };
         } else st.start = start === E.LAST + 1 ? { unit: E.LAST, beyond: true } : { unit: start };
+        if (st.start.unit && E.lessonItems(st.start.unit).length) {
+          const fine = await lessonPick(st.start.unit);
+          if (fine) st.start = fine;
+        }
       }
       here = 'heart'; await restP('Last stop: heart words', 'Listen to a word, then tap it.');
       await heartWords(st);
@@ -280,6 +291,35 @@
       }
       return E.bracket(res).hi;
     }
+    /* One screen of short words when a unit has lessons. Grown-up marks each word, then Next. */
+    function lessonPick(unit) {
+      const items = E.lessonItems(unit);
+      return new Promise((resolve) => {
+        const marks = {};
+        const rows = items.map((it) => {
+          const yes = h('button', { class: 'btn pg2-yes', type: 'button', 'aria-label': 'Read it right: ' + it.w }, 'Read it');
+          const no = h('button', { class: 'btn pg2-no', type: 'button', 'aria-label': 'Not yet: ' + it.w }, 'Not yet');
+          const set = (ok) => { marks[it.n] = ok; yes.classList.toggle('on', ok); no.classList.toggle('on', !ok); };
+          yes.addEventListener('click', () => set(true));
+          no.addEventListener('click', () => set(false));
+          return h('div', { class: 'pg2-lessonrow' }, h('b', { class: 'pg2-word', lang: 'en' }, it.w), h('span', null, it.n + ' \u00b7 ' + it.name), h('span', { class: 'pg2-markpair' }, yes, no));
+        });
+        const next = h('button', { class: 'btn big ir-btn', type: 'button' }, 'Next', icon('next'));
+        next.addEventListener('click', () => {
+          if (items.some((it) => marks[it.n] == null)) return;
+          resolve(E.lessonStart(unit, items.map((it) => ({ n: it.n, ok: marks[it.n] }))));
+        });
+        const home = h('button', { class: 'btn big ir-btn', type: 'button', 'aria-label': 'Home' }, icon('home'), 'Home');
+        home.addEventListener('click', () => { hush(); location.hash = '#/home'; });
+        const back = h('button', { class: 'btn big ir-btn', type: 'button', 'aria-label': 'Back' }, icon('back'), 'Back');
+        back.addEventListener('click', () => resolve(null));
+        show({ cls: 'lessonpick', noTrail: true },
+          h('h1', { class: 'pg2-title' }, 'A few more words'),
+          h('p', { class: 'pg2-kid' }, 'Read each word. A grown-up taps Read it or Not yet.'),
+          h('div', { class: 'pg2-lessons' }, ...rows),
+          h('div', { class: 'lesson-nav ir-controls pg2-calm' }, home, back, next));
+      });
+    }
     async function heartWords(st) {
       const sets = E.heartSetsFor(st.start);
       for (const set of sets) {
@@ -312,7 +352,7 @@
         h('div', { class: 'pg2-start' }, pic, h('div', null, h('p', { class: 'pg2-kicker' }, 'Start here'), h('h1', { class: 'pg2-title' }, startLabel(s)), h('p', { class: 'pg2-lead' }, line))),
         guides('cheer'),
         h('div', { class: 'pg2-row' },
-          go(s.team ? 'Go to Team ' + s.team : 'Go to Unit ' + s.unit, () => { hush(); openStart(s); }),
+          go(s.team ? 'Go to Team ' + s.team : (s.lesson ? 'Go to Lesson ' + s.lesson : 'Go to Unit ' + s.unit), () => { hush(); openStart(s); }),
           plain('Teacher summary', () => summary(rec)),
           plain('Hop again', () => intro())));
     }

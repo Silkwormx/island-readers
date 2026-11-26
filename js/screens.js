@@ -777,7 +777,7 @@
       return wrap;
     }
     const list = h('div', { class: 'teachpop teachfiles', hidden: '' },
-      ...files.map((file) => h('a', { class: 'teachlink', href: file.href, target: '_blank', rel: 'noopener' }, file.title)));
+      ...files.map((file) => h('a', { class: 'teachlink' + (file.small ? ' tmsmall' : ''), href: file.href, target: '_blank', rel: 'noopener' }, file.title)));
     const print = h('button', { class: 'teachbox teachprint', type: 'button', 'aria-expanded': 'false' }, 'Printables');
     function onDoc(e) { if (!wrap.contains(e.target)) setOpen(false); }
     function onKey(e) { if (e.key === 'Escape') setOpen(false); }
@@ -1246,6 +1246,7 @@
       if (lesson.wordlist) files.push({ title: 'Word List', href: lesson.wordlist });
       if (lesson.indep) files.push({ title: 'Independent worksheets', href: lesson.indep });
       if (lesson.pack) files.push({ title: 'Teacher pack', href: lesson.pack });
+      if (lesson.download) files.push({ title: 'Download slides', href: lesson.download, small: true });
       const title = lesson.title
         ? h('h3', null, lesson.title)
         : h('h3', null, h('span', { class: 'tmsound' }, lesson.s), ' ' + lesson.lesson);
@@ -1258,7 +1259,7 @@
       if (files.length === 1) {
         print = h('a', { class: 'btn big tmlink tmprint', href: files[0].href, target: '_blank', rel: 'noopener' }, 'Printables');
       } else if (files.length) {
-        list = h('div', { class: 'tmfiles', hidden: '' }, ...files.map((file) => h('a', { class: 'tmfile', href: file.href, target: '_blank', rel: 'noopener' }, file.title)));
+        list = h('div', { class: 'tmfiles', hidden: '' }, ...files.map((file) => h('a', { class: 'tmfile' + (file.small ? ' tmsmall' : ''), href: file.href, target: '_blank', rel: 'noopener' }, file.title)));
         print = h('button', { class: 'btn big tmlink tmprint', type: 'button', onclick: () => { list.hidden = !list.hidden; } }, 'Printables');
       }
       return h('div', { class: 'tmcard' },
@@ -1280,20 +1281,20 @@
         { title: 'Team 7: v z', board: '#/foundation/slides/g7', days: 5, daily: 'foundation/printables/Team7_Quick_Sounds.pdf' }
       ] },
       { name: 'Unit 1 \u00b7 Short Vowels & Floss', sounds: [
-        { s: 'a', lesson: 'Lesson 1.1', days: [1, 2, 3].map((n) => ({ label: 'Day ' + n })), board: '#/teachers/slides/u11', daily: 'materials/unit1/Unit1_Teacher_Led_Student_Sheets.pdf', deck: 'materials/unit1/Lesson1.1_Slides.pdf', wordlist: 'materials/unit1/Lesson1.1_WordList.pdf', pack: 'materials/unit1/Lesson1.1_Teacher_Led_Checks.pdf', indep: 'materials/unit1/Unit1_Independent_Worksheets.pdf' },
-        { s: 'i o', lesson: 'Lesson 1.2', days: [1, 2, 3].map((n) => ({ label: 'Day ' + n })), board: '#/teachers/slides/u12', daily: 'materials/unit1/Unit1_Teacher_Led_Student_Sheets.pdf', deck: 'materials/unit1/Lesson1.2_Slides.pdf', wordlist: 'materials/unit1/Lesson1.2_WordList.pdf', pack: 'materials/unit1/Lesson1.2_Teacher_Led_Checks.pdf', indep: 'materials/unit1/Unit1_Independent_Worksheets.pdf' },
-        { s: 'u e', lesson: 'Lesson 1.3', days: [1, 2, 3].map((n) => ({ label: 'Day ' + n })), board: '#/teachers/slides/u13', daily: 'materials/unit1/Unit1_Teacher_Led_Student_Sheets.pdf', deck: 'materials/unit1/Lesson1.3_Slides.pdf', wordlist: 'materials/unit1/Lesson1.3_WordList.pdf', pack: 'materials/unit1/Lesson1.3_Teacher_Led_Checks.pdf', indep: 'materials/unit1/Unit1_Independent_Worksheets.pdf' },
-        { s: 'ff ll ss zz', lesson: 'Lesson 1.4', days: [1, 2, 3].map((n) => ({ label: 'Day ' + n })), board: '#/teachers/slides/u14', daily: 'materials/unit1/Unit1_Teacher_Led_Student_Sheets.pdf', deck: 'materials/unit1/Lesson1.4_Slides.pdf', wordlist: 'materials/unit1/Lesson1.4_WordList.pdf', pack: 'materials/unit1/Lesson1.4_Teacher_Led_Checks.pdf', indep: 'materials/unit1/Unit1_Independent_Worksheets.pdf' }
+        { s: 'a', lesson: 'Lesson 1.1', days: [1, 2, 3].map((n) => ({ label: 'Day ' + n })), board: '#/teachers/slides/u11', daily: 'materials/unit1/Unit1_Teacher_Led_Student_Sheets.pdf', download: 'materials/unit1/Lesson1.1_Slides.pdf', wordlist: 'materials/unit1/Lesson1.1_WordList.pdf', pack: 'materials/unit1/Lesson1.1_Teacher_Led_Checks.pdf', indep: 'materials/unit1/Unit1_Independent_Worksheets.pdf' },
+        { s: 'i o', lesson: 'Lesson 1.2', days: [1, 2, 3].map((n) => ({ label: 'Day ' + n })), board: '#/teachers/slides/u12', daily: 'materials/unit1/Unit1_Teacher_Led_Student_Sheets.pdf', download: 'materials/unit1/Lesson1.2_Slides.pdf', wordlist: 'materials/unit1/Lesson1.2_WordList.pdf', pack: 'materials/unit1/Lesson1.2_Teacher_Led_Checks.pdf', indep: 'materials/unit1/Unit1_Independent_Worksheets.pdf' },
+        { s: 'u e', lesson: 'Lesson 1.3', days: [1, 2, 3].map((n) => ({ label: 'Day ' + n })), board: '#/teachers/slides/u13', daily: 'materials/unit1/Unit1_Teacher_Led_Student_Sheets.pdf', download: 'materials/unit1/Lesson1.3_Slides.pdf', wordlist: 'materials/unit1/Lesson1.3_WordList.pdf', pack: 'materials/unit1/Lesson1.3_Teacher_Led_Checks.pdf', indep: 'materials/unit1/Unit1_Independent_Worksheets.pdf' },
+        { s: 'ff ll ss zz', lesson: 'Lesson 1.4', days: [1, 2, 3].map((n) => ({ label: 'Day ' + n })), board: '#/teachers/slides/u14', daily: 'materials/unit1/Unit1_Teacher_Led_Student_Sheets.pdf', download: 'materials/unit1/Lesson1.4_Slides.pdf', wordlist: 'materials/unit1/Lesson1.4_WordList.pdf', pack: 'materials/unit1/Lesson1.4_Teacher_Led_Checks.pdf', indep: 'materials/unit1/Unit1_Independent_Worksheets.pdf' }
       ] },
       { name: 'Unit 2 \u00b7 Blends', sounds: [
-        { s: 'l-blends', lesson: 'Lesson 2.1', days: [1, 2, 3].map((n) => ({ label: 'Day ' + n })), board: '#/teachers/slides/u21', daily: 'materials/unit2/Unit2_Teacher_Led_Student_Sheets.pdf', deck: 'materials/unit2/Lesson2.1_Slides.pdf', wordlist: 'materials/unit2/Lesson2.1_WordList.pdf', pack: 'materials/unit2/Lesson2.1_Teacher_Led_Checks.pdf', indep: 'materials/unit2/Unit2_Independent_Worksheets.pdf' },
-        { s: 'r-blends', lesson: 'Lesson 2.2', days: [1, 2, 3].map((n) => ({ label: 'Day ' + n })), board: '#/teachers/slides/u22', daily: 'materials/unit2/Unit2_Teacher_Led_Student_Sheets.pdf', deck: 'materials/unit2/Lesson2.2_Slides.pdf', wordlist: 'materials/unit2/Lesson2.2_WordList.pdf', pack: 'materials/unit2/Lesson2.2_Teacher_Led_Checks.pdf', indep: 'materials/unit2/Unit2_Independent_Worksheets.pdf' },
-        { s: 's-blends', lesson: 'Lesson 2.3', days: [1, 2, 3].map((n) => ({ label: 'Day ' + n })), board: '#/teachers/slides/u23', daily: 'materials/unit2/Unit2_Teacher_Led_Student_Sheets.pdf', deck: 'materials/unit2/Lesson2.3_Slides.pdf', wordlist: 'materials/unit2/Lesson2.3_WordList.pdf', pack: 'materials/unit2/Lesson2.3_Teacher_Led_Checks.pdf', indep: 'materials/unit2/Unit2_Independent_Worksheets.pdf' },
-        { s: '-nd -mp -st', lesson: 'Lesson 2.4', days: [1, 2, 3].map((n) => ({ label: 'Day ' + n })), board: '#/teachers/slides/u24', daily: 'materials/unit2/Unit2_Teacher_Led_Student_Sheets.pdf', deck: 'materials/unit2/Lesson2.4_Slides.pdf', wordlist: 'materials/unit2/Lesson2.4_WordList.pdf', pack: 'materials/unit2/Lesson2.4_Teacher_Led_Checks.pdf', indep: 'materials/unit2/Unit2_Independent_Worksheets.pdf' }
+        { s: 'l-blends', lesson: 'Lesson 2.1', days: [1, 2, 3].map((n) => ({ label: 'Day ' + n })), board: '#/teachers/slides/u21', daily: 'materials/unit2/Unit2_Teacher_Led_Student_Sheets.pdf', download: 'materials/unit2/Lesson2.1_Slides.pdf', wordlist: 'materials/unit2/Lesson2.1_WordList.pdf', pack: 'materials/unit2/Lesson2.1_Teacher_Led_Checks.pdf', indep: 'materials/unit2/Unit2_Independent_Worksheets.pdf' },
+        { s: 'r-blends', lesson: 'Lesson 2.2', days: [1, 2, 3].map((n) => ({ label: 'Day ' + n })), board: '#/teachers/slides/u22', daily: 'materials/unit2/Unit2_Teacher_Led_Student_Sheets.pdf', download: 'materials/unit2/Lesson2.2_Slides.pdf', wordlist: 'materials/unit2/Lesson2.2_WordList.pdf', pack: 'materials/unit2/Lesson2.2_Teacher_Led_Checks.pdf', indep: 'materials/unit2/Unit2_Independent_Worksheets.pdf' },
+        { s: 's-blends', lesson: 'Lesson 2.3', days: [1, 2, 3].map((n) => ({ label: 'Day ' + n })), board: '#/teachers/slides/u23', daily: 'materials/unit2/Unit2_Teacher_Led_Student_Sheets.pdf', download: 'materials/unit2/Lesson2.3_Slides.pdf', wordlist: 'materials/unit2/Lesson2.3_WordList.pdf', pack: 'materials/unit2/Lesson2.3_Teacher_Led_Checks.pdf', indep: 'materials/unit2/Unit2_Independent_Worksheets.pdf' },
+        { s: '-nd -mp -st', lesson: 'Lesson 2.4', days: [1, 2, 3].map((n) => ({ label: 'Day ' + n })), board: '#/teachers/slides/u24', daily: 'materials/unit2/Unit2_Teacher_Led_Student_Sheets.pdf', download: 'materials/unit2/Lesson2.4_Slides.pdf', wordlist: 'materials/unit2/Lesson2.4_WordList.pdf', pack: 'materials/unit2/Lesson2.4_Teacher_Led_Checks.pdf', indep: 'materials/unit2/Unit2_Independent_Worksheets.pdf' }
       ] },
       { name: 'Unit 3 \u00b7 Digraphs', sounds: [
-        { s: 'sh ch th', lesson: 'Lesson 3.1', days: [1, 2, 3].map((n) => ({ label: 'Day ' + n })), board: '#/teachers/slides/u31', daily: 'materials/unit3/Unit3_Teacher_Led_Student_Sheets.pdf', deck: 'materials/unit3/Lesson3.1_Slides.pdf', wordlist: 'materials/unit3/Lesson3.1_WordList.pdf', pack: 'materials/unit3/Lesson3.1_Teacher_Led_Checks.pdf', indep: 'materials/unit3/Unit3_Independent_Worksheets.pdf' },
-        { s: 'ck wh', lesson: 'Lesson 3.2', days: [1, 2, 3].map((n) => ({ label: 'Day ' + n })), board: '#/teachers/slides/u32', daily: 'materials/unit3/Unit3_Teacher_Led_Student_Sheets.pdf', deck: 'materials/unit3/Lesson3.2_Slides.pdf', wordlist: 'materials/unit3/Lesson3.2_WordList.pdf', pack: 'materials/unit3/Lesson3.2_Teacher_Led_Checks.pdf', indep: 'materials/unit3/Unit3_Independent_Worksheets.pdf' }
+        { s: 'sh ch th', lesson: 'Lesson 3.1', days: [1, 2, 3].map((n) => ({ label: 'Day ' + n })), board: '#/teachers/slides/u31', daily: 'materials/unit3/Unit3_Teacher_Led_Student_Sheets.pdf', download: 'materials/unit3/Lesson3.1_Slides.pdf', wordlist: 'materials/unit3/Lesson3.1_WordList.pdf', pack: 'materials/unit3/Lesson3.1_Teacher_Led_Checks.pdf', indep: 'materials/unit3/Unit3_Independent_Worksheets.pdf' },
+        { s: 'ck wh', lesson: 'Lesson 3.2', days: [1, 2, 3].map((n) => ({ label: 'Day ' + n })), board: '#/teachers/slides/u32', daily: 'materials/unit3/Unit3_Teacher_Led_Student_Sheets.pdf', download: 'materials/unit3/Lesson3.2_Slides.pdf', wordlist: 'materials/unit3/Lesson3.2_WordList.pdf', pack: 'materials/unit3/Lesson3.2_Teacher_Led_Checks.pdf', indep: 'materials/unit3/Unit3_Independent_Worksheets.pdf' }
       ] },
       { name: 'Unit 4 \u00b7 Glued Sounds', sounds: [
         { s: 'ng', lesson: 'Lesson 4.1', days: [1, 2, 3, 4, 5].map((n) => ({ label: 'Day ' + n })), board: '#/teachers/slides/ng', slides: 'teachers/ng/Lesson3.1_ng_Week_Slides_v2.pptx', daily: 'teachers/ng/Lesson3.1_ng_Daily_Practice_Sheets.pdf', pack: 'teachers/ng/Lesson3.1_ng_Teacher_Pack.pdf' },
@@ -1309,20 +1310,20 @@
         { s: '-ing', lesson: 'Lesson 6.3', days: [1, 2].map((n) => ({ label: 'Day ' + n })), board: '#/teachers/slides/u63', daily: 'materials/unit6/Unit6_Teacher_Led_Student_Sheets.pdf', deck: 'foundation/slides/Lesson6.3_Endings_ing.pdf', wordlist: 'materials/unit6/Lesson6.3_WordList_ing.pdf', pack: 'materials/unit6/Lesson6.3_Teacher_Led_Checks.pdf' }
       ] },
       { name: 'Unit 7 \u00b7 Syllables', sounds: [
-        { s: 'compound words', lesson: 'Lesson 7.1', days: [1, 2, 3].map((n) => ({ label: 'Day ' + n })), board: '#/teachers/slides/u71', daily: 'materials/unit7/Unit7_Teacher_Led_Student_Sheets.pdf', deck: 'materials/unit7/Lesson7.1_Slides.pdf', wordlist: 'materials/unit7/Lesson7.1_WordList.pdf', pack: 'materials/unit7/Lesson7.1_Teacher_Led_Checks.pdf', indep: 'materials/unit7/Unit7_Independent_Worksheets.pdf' },
-        { s: 'closed + closed', lesson: 'Lesson 7.2', days: [1, 2, 3].map((n) => ({ label: 'Day ' + n })), board: '#/teachers/slides/u72', daily: 'materials/unit7/Unit7_Teacher_Led_Student_Sheets.pdf', deck: 'materials/unit7/Lesson7.2_Slides.pdf', wordlist: 'materials/unit7/Lesson7.2_WordList.pdf', pack: 'materials/unit7/Lesson7.2_Teacher_Led_Checks.pdf', indep: 'materials/unit7/Unit7_Independent_Worksheets.pdf' },
-        { s: 'open + closed', lesson: 'Lesson 7.3', days: [1, 2, 3].map((n) => ({ label: 'Day ' + n })), board: '#/teachers/slides/u73', daily: 'materials/unit7/Unit7_Teacher_Led_Student_Sheets.pdf', deck: 'materials/unit7/Lesson7.3_Slides.pdf', wordlist: 'materials/unit7/Lesson7.3_WordList.pdf', pack: 'materials/unit7/Lesson7.3_Teacher_Led_Checks.pdf', indep: 'materials/unit7/Unit7_Independent_Worksheets.pdf' }
+        { s: 'compound words', lesson: 'Lesson 7.1', days: [1, 2, 3].map((n) => ({ label: 'Day ' + n })), board: '#/teachers/slides/u71', daily: 'materials/unit7/Unit7_Teacher_Led_Student_Sheets.pdf', download: 'materials/unit7/Lesson7.1_Slides.pdf', pack: 'materials/unit7/Lesson7.1_Teacher_Led_Checks.pdf' },
+        { s: 'closed + closed', lesson: 'Lesson 7.2', days: [1, 2, 3].map((n) => ({ label: 'Day ' + n })), board: '#/teachers/slides/u72', daily: 'materials/unit7/Unit7_Teacher_Led_Student_Sheets.pdf', download: 'materials/unit7/Lesson7.2_Slides.pdf', pack: 'materials/unit7/Lesson7.2_Teacher_Led_Checks.pdf' },
+        { s: 'open + closed', lesson: 'Lesson 7.3', days: [1, 2, 3].map((n) => ({ label: 'Day ' + n })), board: '#/teachers/slides/u73', daily: 'materials/unit7/Unit7_Teacher_Led_Student_Sheets.pdf', download: 'materials/unit7/Lesson7.3_Slides.pdf', pack: 'materials/unit7/Lesson7.3_Teacher_Led_Checks.pdf' }
       ] },
       { name: 'Unit 8 \u00b7 Tricky Sounds', sounds: [
-        { s: 'tch', lesson: 'Lesson 8.1', days: [1, 2, 3].map((n) => ({ label: 'Day ' + n })), board: '#/teachers/slides/u81', daily: 'materials/unit8/Unit8_Teacher_Led_Student_Sheets.pdf', deck: 'materials/unit8/Lesson8.1_Slides.pdf', wordlist: 'materials/unit8/Lesson8.1_WordList.pdf', pack: 'materials/unit8/Lesson8.1_Teacher_Led_Checks.pdf', indep: 'materials/unit8/Unit8_Independent_Worksheets.pdf' },
-        { s: 'dge', lesson: 'Lesson 8.2', days: [1, 2, 3].map((n) => ({ label: 'Day ' + n })), board: '#/teachers/slides/u82', daily: 'materials/unit8/Unit8_Teacher_Led_Student_Sheets.pdf', deck: 'materials/unit8/Lesson8.2_Slides.pdf', wordlist: 'materials/unit8/Lesson8.2_WordList.pdf', pack: 'materials/unit8/Lesson8.2_Teacher_Led_Checks.pdf', indep: 'materials/unit8/Unit8_Independent_Worksheets.pdf' },
-        { s: '-ild -old -ind -olt -ost', lesson: 'Lesson 8.3', days: [1, 2, 3].map((n) => ({ label: 'Day ' + n })), board: '#/teachers/slides/u83', daily: 'materials/unit8/Unit8_Teacher_Led_Student_Sheets.pdf', deck: 'materials/unit8/Lesson8.3_Slides.pdf', wordlist: 'materials/unit8/Lesson8.3_WordList.pdf', pack: 'materials/unit8/Lesson8.3_Teacher_Led_Checks.pdf', indep: 'materials/unit8/Unit8_Independent_Worksheets.pdf' }
+        { s: 'tch', lesson: 'Lesson 8.1', days: [1, 2, 3].map((n) => ({ label: 'Day ' + n })), board: '#/teachers/slides/u81', daily: 'materials/unit8/Unit8_Teacher_Led_Student_Sheets.pdf', download: 'materials/unit8/Lesson8.1_Slides.pdf', pack: 'materials/unit8/Lesson8.1_Teacher_Led_Checks.pdf' },
+        { s: 'dge', lesson: 'Lesson 8.2', days: [1, 2, 3].map((n) => ({ label: 'Day ' + n })), board: '#/teachers/slides/u82', daily: 'materials/unit8/Unit8_Teacher_Led_Student_Sheets.pdf', download: 'materials/unit8/Lesson8.2_Slides.pdf', pack: 'materials/unit8/Lesson8.2_Teacher_Led_Checks.pdf' },
+        { s: '-ild -old -ind -olt -ost', lesson: 'Lesson 8.3', days: [1, 2, 3].map((n) => ({ label: 'Day ' + n })), board: '#/teachers/slides/u83', daily: 'materials/unit8/Unit8_Teacher_Led_Student_Sheets.pdf', download: 'materials/unit8/Lesson8.3_Slides.pdf', pack: 'materials/unit8/Lesson8.3_Teacher_Led_Checks.pdf' }
       ] },
       { name: 'Unit 9 \u00b7 Bossy R', sounds: [
-        { s: 'ar', lesson: 'Lesson 9.1', days: [1, 2, 3].map((n) => ({ label: 'Day ' + n })), board: '#/teachers/slides/u91', daily: 'materials/unit9/Unit9_Teacher_Led_Student_Sheets.pdf', deck: 'materials/unit9/Lesson9.1_Slides.pdf', wordlist: 'materials/unit9/Lesson9.1_WordList.pdf', pack: 'materials/unit9/Lesson9.1_Teacher_Led_Checks.pdf', indep: 'materials/unit9/Unit9_Independent_Worksheets.pdf' },
-        { s: 'or ore', lesson: 'Lesson 9.2', days: [1, 2, 3].map((n) => ({ label: 'Day ' + n })), board: '#/teachers/slides/u92', daily: 'materials/unit9/Unit9_Teacher_Led_Student_Sheets.pdf', deck: 'materials/unit9/Lesson9.2_Slides.pdf', wordlist: 'materials/unit9/Lesson9.2_WordList.pdf', pack: 'materials/unit9/Lesson9.2_Teacher_Led_Checks.pdf', indep: 'materials/unit9/Unit9_Independent_Worksheets.pdf' },
-        { s: 'er', lesson: 'Lesson 9.3', days: [1, 2, 3].map((n) => ({ label: 'Day ' + n })), board: '#/teachers/slides/u93', daily: 'materials/unit9/Unit9_Teacher_Led_Student_Sheets.pdf', deck: 'materials/unit9/Lesson9.3_Slides.pdf', wordlist: 'materials/unit9/Lesson9.3_WordList.pdf', pack: 'materials/unit9/Lesson9.3_Teacher_Led_Checks.pdf', indep: 'materials/unit9/Unit9_Independent_Worksheets.pdf' },
-        { s: 'ir ur (w)or', lesson: 'Lesson 9.4', days: [1, 2, 3].map((n) => ({ label: 'Day ' + n })), board: '#/teachers/slides/u94', daily: 'materials/unit9/Unit9_Teacher_Led_Student_Sheets.pdf', deck: 'materials/unit9/Lesson9.4_Slides.pdf', wordlist: 'materials/unit9/Lesson9.4_WordList.pdf', pack: 'materials/unit9/Lesson9.4_Teacher_Led_Checks.pdf', indep: 'materials/unit9/Unit9_Independent_Worksheets.pdf' }
+        { s: 'ar', lesson: 'Lesson 9.1', days: [1, 2, 3].map((n) => ({ label: 'Day ' + n })), board: '#/teachers/slides/u91', daily: 'materials/unit9/Unit9_Teacher_Led_Student_Sheets.pdf', download: 'materials/unit9/Lesson9.1_Slides.pdf', pack: 'materials/unit9/Lesson9.1_Teacher_Led_Checks.pdf' },
+        { s: 'or ore', lesson: 'Lesson 9.2', days: [1, 2, 3].map((n) => ({ label: 'Day ' + n })), board: '#/teachers/slides/u92', daily: 'materials/unit9/Unit9_Teacher_Led_Student_Sheets.pdf', download: 'materials/unit9/Lesson9.2_Slides.pdf', pack: 'materials/unit9/Lesson9.2_Teacher_Led_Checks.pdf' },
+        { s: 'er', lesson: 'Lesson 9.3', days: [1, 2, 3].map((n) => ({ label: 'Day ' + n })), board: '#/teachers/slides/u93', daily: 'materials/unit9/Unit9_Teacher_Led_Student_Sheets.pdf', download: 'materials/unit9/Lesson9.3_Slides.pdf', pack: 'materials/unit9/Lesson9.3_Teacher_Led_Checks.pdf' },
+        { s: 'ir ur (w)or', lesson: 'Lesson 9.4', days: [1, 2, 3].map((n) => ({ label: 'Day ' + n })), board: '#/teachers/slides/u94', daily: 'materials/unit9/Unit9_Teacher_Led_Student_Sheets.pdf', download: 'materials/unit9/Lesson9.4_Slides.pdf', pack: 'materials/unit9/Lesson9.4_Teacher_Led_Checks.pdf' }
       ] }
     ];
     const sections = UNITS.map((unit) => h('section', { class: 'tmunit' },
@@ -1469,7 +1470,8 @@
   /* In-app week-deck slideshow for smartboard (ng / nk / unit 5). Keeps PPTX download on the teachers page. */
   function slidesViewer(sound) {
     IR.newScreen();
-    const root = h('div', { class: 'screen slidescreen', tabindex: '0', 'data-sound': sound });
+    const calm = /^u[123789]\d$/.test(sound);
+    const root = h('div', { class: 'screen slidescreen' + (calm ? ' slidecalm' : ''), tabindex: '0', 'data-sound': sound });
     const stage = h('div', { class: 'slide-stage' });
     const img = h('img', { class: 'slide-img', alt: sound + ' week slide' });
     const videoBox = h('div', { class: 'slide-video', hidden: '' });
@@ -1481,11 +1483,42 @@
     const next = h('button', { class: 'slide-nav slide-next', type: 'button', 'aria-label': 'Next slide' }, '\u25B6');
     const jumps = h('div', { class: 'fs-dayjumps slide-days' });
     const top = h('div', { class: 'slide-top' },
-      pageNav('#/teachers'),
+      calm ? null : pageNav('#/teachers'),
       h('h1', { class: 'slide-title' }, sound + ' week slides'),
       counter);
-    stage.append(prev, img, videoBox, next);
+    if (!calm) stage.append(prev, next);
+    stage.append(img, videoBox);
     root.append(top, jumps, stage);
+    let fullBtn = null;
+    if (calm) {
+      const home = h('button', { class: 'btn big ir-btn', type: 'button', 'aria-label': 'Home' }, icon('home'), 'Home');
+      home.addEventListener('click', () => { Snd.stop(); location.hash = '#/home'; });
+      const back = h('button', { class: 'btn big ir-btn slide-back', type: 'button', 'aria-label': 'Back' }, icon('back'), 'Back');
+      const forward = h('button', { class: 'btn big ir-btn slide-forward', type: 'button', 'aria-label': 'Forward' }, 'Next', icon('next'));
+      fullBtn = h('button', { class: 'btn big ir-btn slide-full', type: 'button', 'aria-pressed': 'false', 'aria-label': 'Full screen' }, 'Full');
+      back.addEventListener('click', () => { if (i > 0) go(-1); else location.hash = '#/teachers'; });
+      forward.addEventListener('click', () => go(1));
+      fullBtn.addEventListener('click', () => {
+        const on = document.fullscreenElement === root;
+        const p = on ? document.exitFullscreen() : root.requestFullscreen();
+        if (p && p.catch) p.catch(() => {});
+      });
+      root._onFs = () => {
+        const on = document.fullscreenElement === root;
+        fullBtn.textContent = on ? 'Exit' : 'Full';
+        fullBtn.setAttribute('aria-pressed', on ? 'true' : 'false');
+        fullBtn.setAttribute('aria-label', on ? 'Exit full screen' : 'Full screen');
+      };
+      document.addEventListener('fullscreenchange', root._onFs);
+      root.append(h('div', { class: 'lesson-nav ir-controls slide-controls' }, home, back, forward, fullBtn));
+      let startX = 0; let startY = 0;
+      stage.addEventListener('pointerdown', (e) => { startX = e.clientX; startY = e.clientY; });
+      stage.addEventListener('pointerup', (e) => {
+        const dx = e.clientX - startX; const dy = e.clientY - startY;
+        if (Math.abs(dx) < 48 || Math.abs(dx) < Math.abs(dy)) return;
+        go(dx < 0 ? 1 : -1);
+      });
+    }
     app.append(root);
     let slides = []; let days = []; let i = 0; let keyHandler = null;
     let videoStop = null;
@@ -1518,8 +1551,11 @@
       const spec = SLIDE_VIDEO[sound];
       if (spec && slides[i] === spec.file) showVideo(spec);
       else { clearVideo(); img.src = slides[i]; }
-      counter.textContent = (i + 1) + ' / ' + slides.length;
+      counter.textContent = calm ? ((i + 1) + ' of ' + slides.length) : ((i + 1) + ' / ' + slides.length);
       prev.disabled = i <= 0; next.disabled = i >= slides.length - 1;
+      const backBtn = root.querySelector('.slide-back');
+      const fwdBtn = root.querySelector('.slide-forward');
+      if (fwdBtn) fwdBtn.disabled = i >= slides.length - 1;
       const n = i + 1;
       let here = null;
       days.forEach((day) => { if (n >= dayStart(day)) here = day; });
@@ -1540,7 +1576,10 @@
     };
     window.addEventListener('keydown', keyHandler);
     const oldCleanup = IR._slideCleanup; if (typeof oldCleanup === 'function') oldCleanup();
-    IR._slideCleanup = () => { window.removeEventListener('keydown', keyHandler); };
+    IR._slideCleanup = () => {
+      window.removeEventListener('keydown', keyHandler);
+      if (root._onFs) document.removeEventListener('fullscreenchange', root._onFs);
+    };
     const slideRoot = /^u[123789]\d$/.test(sound) ? 'materials/unit' + sound.charAt(1) + '/slides/' + sound + '/' : { u61: 'materials/unit6/slides/u61/', u62: 'materials/unit6/slides/u62/', u63: 'materials/unit6/slides/u63/' }[sound];
     fetch(slideRoot ? slideRoot + 'manifest.json' : 'teachers/' + sound + '/slides.json').then((r) => r.json()).then((man) => {
       slides = (man.slides || []).map((name) => (slideRoot && name.indexOf('/') < 0) ? slideRoot + name : name);
@@ -1951,6 +1990,7 @@
     });
     else if (hash.startsWith('#/placement')) IR.placement.render(app, (start) => {
       if (start.team) { location.hash = '#/foundation/letters/g' + start.team; return; }
+      if (start.href) { location.hash = start.href; return; }
       const n = start.unit;
       if (n <= 3 && IR.u123Route) { location.hash = '#/u' + n; return; }
       if (n >= 7 && n <= 9 && IR.u789Route) { location.hash = '#/u' + n; return; }

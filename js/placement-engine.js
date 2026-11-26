@@ -47,6 +47,29 @@
     U(22, 'Big Endings', '-tion -ture -ment', ['motion', 'capture', 'payment', 'fiction', 'enjoyment'], [['glention', 'glen-shun'], ['dimpture', 'dimp-cher'], ['jandment', 'jand-ment'], ['voction', 'vok-shun'], ['flisture', 'flis-cher']])
   ];
   const LAST = UNITS.length; /* 22 */
+  /* Lesson landing inside a unit. Add a row here when a later unit (10, 11, 12...) should open on a lesson. */
+  const LESSONS = [
+    { unit: 7, n: '7.1', key: 'u71', name: 'Compound words', w: 'sandbox' },
+    { unit: 7, n: '7.2', key: 'u72', name: 'Closed syllables', w: 'napkin' },
+    { unit: 7, n: '7.3', key: 'u73', name: 'Open syllables', w: 'robot' },
+    { unit: 8, n: '8.1', key: 'u81', name: 'tch', w: 'match' },
+    { unit: 8, n: '8.2', key: 'u82', name: 'dge', w: 'ledge' },
+    { unit: 8, n: '8.3', key: 'u83', name: 'ild and old', w: 'child' },
+    { unit: 9, n: '9.1', key: 'u91', name: 'ar', w: 'shark' },
+    { unit: 9, n: '9.2', key: 'u92', name: 'or', w: 'horn' },
+    { unit: 9, n: '9.3', key: 'u93', name: 'er', w: 'fern' },
+    { unit: 9, n: '9.4', key: 'u94', name: 'ir and ur', w: 'bird' }
+  ];
+  function lessonItems(n) { return LESSONS.filter((row) => row.unit === n); }
+  /* marks: [{ n, ok }] in lesson order. The first miss is the start. If every word is read, begin at that unit's first lesson. */
+  function lessonStart(n, marks) {
+    const rows = lessonItems(n);
+    if (!rows.length) return null;
+    const by = {}; (marks || []).forEach((m) => { by[m.n] = !!m.ok; });
+    const miss = rows.filter((row) => by[row.n] === false)[0];
+    const pick = miss || rows[0];
+    return { unit: n, lesson: pick.n, key: pick.key, name: pick.name, href: '#/u' + n + '/' + pick.key };
+  }
   const unit = (n) => UNITS[n - 1];
   const item = (w, made, hint) => ({ w, made: !!made, hint: hint || '' });
   /* Quick probe: 2 real + 2 made-up. The full check adds the other 6, so the probe counts toward the 10. */
@@ -137,7 +160,7 @@
     const u = start.team ? 0 : start.unit;
     return HEART_SETS.filter((s) => (s.id === 'F' ? u <= 2 : s.units[0] < u));
   }
-  const api = { TEAMS, TEAM_OF, LETTER_NAMES, LETTER_SOUNDS, FOUND_WORDS, FOUND_HEART, UNITS, LAST, unit, probeItems, restItems, fullItems,
+  const api = { TEAMS, TEAM_OF, LETTER_NAMES, LETTER_SOUNDS, FOUND_WORDS, FOUND_HEART, UNITS, LAST, LESSONS, unit, lessonItems, lessonStart, probeItems, restItems, fullItems,
     SCREENER, HEART_SETS, PA, PA_PASS, UNIT_PASS, probePass, rowPass, foundationsPlacement, passed, bracket, nextStep, screenerOrder, screenerHint, screenerDone, heartSetsFor };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   if (root && root.IR) root.IR.placementEngine = api;

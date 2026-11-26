@@ -71,6 +71,13 @@
     if (!sp) return document.createTextNode(raw);
     return h('span', null, raw.slice(0, sp[0]), h('span', { class: 'chunk', style: 'color:' + FOCUS }, raw.slice(sp[0], sp[1])), raw.slice(sp[1]));
   }
+  /* Games that ask the child to find the pattern start in plain black. Color arrives after a correct tap. */
+  function plainWord(w) { return document.createTextNode(String(w)); }
+  function revealPart(el, w, L) {
+    const hold = el.querySelector('.bellword, .fz-w') || el;
+    hold.replaceChildren(colorWord(w, L));
+    el.classList.add('partyes');
+  }
   /* Sound units for chains and scrambles. Two-part words split into syllables; tch, dge, ore and the bossy r
      spellings stay together (r before a vowel is not bossy: ro-bot is not or). */
   const GRAPH = ['tch', 'dge', 'ore', 'ar', 'or', 'er', 'ir', 'ur', 'sh', 'ch', 'th', 'wh', 'ck', 'ng', 'nk', 'ff', 'll', 'ss', 'zz'];
@@ -134,7 +141,7 @@
   function choiceGrid(words, onPick, L, cls) {
     const grid = h('div', { class: 'choices ' + (cls || (words.length > 2 ? 'three' : 'two')) });
     words.forEach((w) => {
-      const b = h('button', { class: 'choice', type: 'button', 'data-w': w }, colorWord(w, L));
+      const b = h('button', { class: 'choice', type: 'button', 'data-w': w }, plainWord(w));
       b.addEventListener('click', () => onPick(w, b, grid));
       grid.append(b);
     });
@@ -192,7 +199,7 @@
       const spk = speakerBtn(() => say(R.word), 'Hear the word'); spk.classList.add('huge');
       const grid = choiceGrid(shuffle(R.choices.slice()), async (w, b) => {
         if (locked || b.classList.contains('tried')) return;
-        if (w === R.word) { locked = true; b.classList.add('right'); status.textContent = 'Yes! ' + w; await ding(w); if (!ctx.scr.ok()) return; r++; if (r >= rounds.length) ctx.finish(); else round(); }
+        if (w === R.word) { locked = true; b.classList.add('right'); revealPart(b, w, L); status.textContent = 'Yes! ' + w; await ding(w); if (!ctx.scr.ok()) return; r++; if (r >= rounds.length) ctx.finish(); else round(); }
         else {
           ctx.miss();
           const stepName = await IR.coachMiss({ key: 'u789-hear-' + L.key + r, wrongEl: b, correctEl: () => grid.querySelector('[data-w="' + R.word + '"]'), statusEl: status, replay: () => say(R.word) });
@@ -208,7 +215,7 @@
   }
 
   function runBells(ctx, L) {
-    IR.ringBells(ctx, { words: L.bellWords.slice(), audio: (w) => W(w), color: (w) => colorWord(w, L) });
+    IR.ringBells(ctx, { words: L.bellWords.slice(), audio: (w) => W(w), color: plainWord, onRight: (b, w) => revealPart(b, w, L) });
     const face = ctx.stage.querySelector('.bellask img');
     if (face) { face.src = 'img/u789act/act_frill_bell.webp'; face.alt = 'Frill rings a bell'; face.classList.add('buddy'); }
   }
@@ -399,7 +406,7 @@
   }
 
   function runFeed(ctx, L) {
-    IR.runFeedZip(ctx, { words: L.feed.slice(), say: say, colorWord: (w) => colorWord(w, L), promptKey: null, promptAudio: 'audio/p_feed_rule.mp3' });
+    IR.runFeedZip(ctx, { words: L.feed.slice(), say: say, colorWord: plainWord, onRight: (b, w) => revealPart(b, w, L), promptKey: null, promptAudio: 'audio/p_feed_rule.mp3' });
   }
 
   function runSentence(ctx, L) {
@@ -461,6 +468,7 @@
       ctx.setNext(() => { Snd.stop(); showPages(); return true; });
       if (ctx.setNextLabel) ctx.setNextLabel('Next');
       if (IR.pinStoryNav) IR.pinStoryNav(null);
+      if (ctx.setRepeat) ctx.setRepeat(null);
       Snd.play(P6('heart'));
     }
     function showPages() {
@@ -468,9 +476,8 @@
       ctx.setInstr('Read the story. One page at a time.', null);
       const pic = h('img', { class: 'panel', alt: '' });
       const sent = h('p', { class: 'sentence' });
-      const label = h('p', { class: 'small' });
+      const label = h('p', { class: 'small story-say' });
       const pageAudio = () => 'audio/' + L.key + '_s_' + (p + 1) + '.mp3';
-      const replay = speakerBtn(() => Snd.play(pageAudio()), 'Hear this page'); replay.classList.add('huge');
       function show() {
         const pg = pages[p];
         pic.src = pg.img; sent.innerHTML = '';
@@ -480,9 +487,9 @@
         });
         label.textContent = 'Page ' + (p + 1) + ' of ' + pages.length;
         ctx.progress(p / pages.length);
+        if (ctx.setRepeat) ctx.setRepeat(() => Snd.play(pageAudio()));
       }
-      const next = h('button', { class: 'btn big primary', type: 'button', onclick: () => { if (p < pages.length - 1) { p++; show(); } else ctx.finish(); } }, 'Next page', icon('next'));
-      st.append(h('div', { class: 'activity story' }, h('div', { class: 'panelwrap' }, pic), h('div', { class: 'sentrow' }, replay, sent), label, h('div', { class: 'row center' }, next)));
+      st.append(h('div', { class: 'activity story' }, h('div', { class: 'panelwrap' }, pic), h('div', { class: 'sentrow' }, sent), label));
       ctx.setBack(() => { if (p > 0) { p--; show(); return true; } if (words.length) { showHeart(); return true; } return false; });
       ctx.setNext(() => { if (p < pages.length - 1) { p++; show(); return true; } ctx.finish(); return true; });
       if (ctx.setNextLabel) ctx.setNextLabel('Next');
@@ -504,12 +511,12 @@
         const btn = h('button', { class: 'sortbin', type: 'button', 'data-bin': b.id }, h('b', null, b.label));
         btn.addEventListener('click', async () => {
           if (locked || btn.classList.contains('tried')) return;
-          if (b.id === it.bin) { locked = true; btn.classList.add('right'); status.textContent = 'Yes!'; await ding(it.word); if (!ctx.scr.ok()) return; i++; if (i >= items.length) ctx.finish(); else round(); }
+          if (b.id === it.bin) { locked = true; btn.classList.add('right'); revealPart(wordBtn, it.word, L); status.textContent = 'Yes!'; await ding(it.word); if (!ctx.scr.ok()) return; i++; if (i >= items.length) ctx.finish(); else round(); }
           else { ctx.miss(); await IR.coachMiss({ key: 'u789-sort-' + L.key + i, wrongEl: btn, correctEl: () => bins.querySelector('[data-bin="' + it.bin + '"]'), statusEl: status, replay: () => say(it.word) }); }
         });
         bins.append(btn);
       });
-      const wordBtn = h('button', { class: 'bigword sorword', type: 'button', onclick: () => say(it.word) }, colorWord(it.word, L));
+      const wordBtn = h('button', { class: 'bigword sorword', type: 'button', onclick: () => say(it.word) }, plainWord(it.word));
       st.append(h('div', { class: 'activity' }, wordBtn, h('p', { class: 'bigprompt' }, 'Which group?'), bins, status));
       if (i === 0) IR.sayItem(ctx, P('sort'), W(it.word)); else say(it.word);
     }
@@ -531,13 +538,14 @@
         const b = h('button', { class: 'choice', type: 'button', 'data-w': v }, v);
         b.addEventListener('click', async () => {
           if (locked || b.classList.contains('tried')) return;
-          if (v === it.part) { locked = true; b.classList.add('right'); status.textContent = 'Yes! ' + it.word; await ding(it.word); if (!ctx.scr.ok()) return; i++; if (i >= items.length) ctx.finish(); else round(); }
+          if (v === it.part) { locked = true; b.classList.add('right'); revealPart(wordEl, it.word, L); status.textContent = 'Yes! ' + it.word; await ding(it.word); if (!ctx.scr.ok()) return; i++; if (i >= items.length) ctx.finish(); else round(); }
           else { ctx.miss(); await IR.coachMiss({ key: 'u789-which-' + L.key + i, wrongEl: b, correctEl: () => grid.querySelector('[data-w="' + it.part + '"]'), statusEl: status, replay: () => say(it.word) }); }
         });
         grid.append(b);
       });
       const spk = speakerBtn(() => say(it.word), 'Hear the word'); spk.classList.add('huge');
-      st.append(h('div', { class: 'activity' }, spk, h('p', { class: 'bigword' }, colorWord(it.word, L)), grid, status));
+      const wordEl = h('p', { class: 'bigword' }, plainWord(it.word));
+      st.append(h('div', { class: 'activity' }, spk, wordEl, grid, status));
       if (i === 0) IR.sayItem(ctx, P(whichAudio(L)), W(it.word)); else say(it.word);
     }
     ctx.setNext(() => { if (i < items.length - 1) { i++; round(); return true; } return false; });
@@ -555,7 +563,7 @@
       const spk = speakerBtn(() => say(R.prompt), 'Hear the word'); spk.classList.add('huge');
       const grid = choiceGrid(R.choices.slice(), async (w, b) => {
         if (locked || b.classList.contains('tried')) return;
-        if (w === R.answer) { locked = true; b.classList.add('right'); status.textContent = 'Yes! ' + w + ' rhymes with ' + R.prompt + '.'; await ding(w); if (!ctx.scr.ok()) return; r++; if (r >= rounds.length) ctx.finish(); else round(); }
+        if (w === R.answer) { locked = true; b.classList.add('right'); revealPart(b, w, L); status.textContent = 'Yes! ' + w + ' rhymes with ' + R.prompt + '.'; await ding(w); if (!ctx.scr.ok()) return; r++; if (r >= rounds.length) ctx.finish(); else round(); }
         else { ctx.miss(); b.classList.add('tried'); status.textContent = 'Listen again.'; await Snd.seq([P6('listenagain'), W(R.prompt)], 160); }
       }, L, 'three');
       st.append(h('div', { class: 'activity' }, h('p', { class: 'bigprompt' }, 'Which word rhymes with ' + R.prompt + '?'), spk, grid, status));
@@ -574,10 +582,10 @@
     const status = h('p', { class: 'status' }, 'Caught 0 of ' + need + '.');
     const pond = h('div', { class: 'choices three fishpond' });
     fish.forEach((f) => {
-      const b = h('button', { class: 'choice', type: 'button', 'data-w': f.w }, colorWord(f.w, L));
+      const b = h('button', { class: 'choice', type: 'button', 'data-w': f.w }, plainWord(f.w));
       b.addEventListener('click', async () => {
         if (b.classList.contains('right') || b.classList.contains('tried')) return;
-        if (f.yes) { b.classList.add('right'); caught++; status.textContent = 'Yes! Caught ' + caught + ' of ' + need + '.'; ctx.progress(caught / need); await ding(f.w); if (caught >= need && ctx.scr.ok()) ctx.finish(); }
+        if (f.yes) { b.classList.add('right'); revealPart(b, f.w, L); caught++; status.textContent = 'Yes! Caught ' + caught + ' of ' + need + '.'; ctx.progress(caught / need); await ding(f.w); if (caught >= need && ctx.scr.ok()) ctx.finish(); }
         else { ctx.miss(); b.classList.add('tried'); status.textContent = 'Listen again. That fish does not fit.'; await Snd.seq([P6('listenagain'), W(f.w)], 140); }
       });
       pond.append(b);
@@ -600,13 +608,14 @@
       if (ctx.count) ctx.count(q + 1, items.length);
       let locked = false;
       const status = h('p', { class: 'status' }, 'Question ' + (q + 1) + ' of ' + items.length);
-      const ans = async (ok, b) => {
-        if (locked) return; locked = true; recs[q] = !!ok; b.classList.add('picked');
+      const ans = async (ok, b, w) => {
+        if (locked) return; locked = true; recs[q] = !!ok;
+        if (ok) { b.classList.add('right'); revealPart(b, w, L); } else b.classList.add('picked');
         status.textContent = 'Thank you.'; Snd.play(A.sfx.tap); await sleep(500); if (!ctx.scr.ok() || my !== tok) return; q++; step();
       };
       ctx.setInstr('Zip\u2019s Check. Tap the word you hear.', 'check');
       const spk = speakerBtn(() => say(it.word), 'Hear the word'); spk.classList.add('huge');
-      st.append(h('div', { class: 'activity' }, spk, choiceGrid(shuffle(it.choices.slice()), (w, b) => ans(w === it.word, b), L), status));
+      st.append(h('div', { class: 'activity' }, spk, choiceGrid(shuffle(it.choices.slice()), (w, b) => ans(w === it.word, b, w), L), status));
       if (q === 0) IR.sayItem(ctx, P('check'), W(it.word)); else say(it.word);
     }
     ctx.setNext(() => { if (q < items.length - 1) { q++; step(); return true; } return false; });
@@ -638,15 +647,14 @@
     const dir = 'materials/unit' + u + '/';
     const L = PACK.lessons.filter((x) => x.key === key)[0];
     const files = [
-      { title: 'Daily practice sheets', href: dir + 'Unit' + u + '_Teacher_Led_Student_Sheets.pdf' },
-      { title: 'Independent worksheets', href: dir + 'Unit' + u + '_Independent_Worksheets.pdf' }
+      { title: 'Daily practice sheets', href: dir + 'Unit' + u + '_Teacher_Led_Student_Sheets.pdf' }
     ];
     if (!L) {
       files.push({ title: 'Teacher pack', href: dir + 'Unit' + u + '_Teacher_Led_Checks_Combined.pdf' });
       return { files: files, hideSlides: true };
     }
     files.push({ title: 'Teacher pack', href: dir + 'Lesson' + L.n + '_Teacher_Led_Checks.pdf' });
-    files.push({ title: 'Word List', href: dir + 'Lesson' + L.n + '_WordList.pdf' });
+    files.push({ title: 'Download slides', href: dir + 'Lesson' + L.n + '_Slides.pdf', small: true });
     return {
       slides: '#/teachers/slides/' + key,
       days: (L.days || ['', '', '']).map((d, i) => ({ label: 'Day ' + (i + 1) })),
@@ -739,6 +747,7 @@
     const screen = h('div', { class: 'screen lessonscreen u6step u789step' + (S0.group === 'lesson' ? ' is-lesson' : ''), style: '--c:' + S0.color }, h('header', { class: 'lesson-top' }, IR.ui.pageNav(base), bar), instrBox, stage, nav);
     app.append(screen);
     if (S0.group === 'activities') IR.attachGameRules(ctx, screen, S0.title);
+    if (IR.wireUnitControls) IR.wireUnitControls(screen, ctx);
     S0.run(ctx);
   }
 

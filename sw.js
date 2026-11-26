@@ -767,6 +767,7 @@ const ASSETS = [
  "./js/u6.js",
  "./data_u123.js",
  "./js/u123.js",
+ "./js/controls.js",
  "./audio/chg_back_pack.mp3",
  "./audio/chg_band_bend.mp3",
  "./audio/chg_bash_bath.mp3",

@@ -279,6 +279,7 @@
       }
       locked = true;
       b.classList.add('lit');
+      if (typeof opts.onRight === 'function') opts.onRight(b, w);
       const img = b.querySelector('img');
       if (img) img.src = 'img/bell_lit.png';
       status.textContent = 'The bell rings.';

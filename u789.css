@@ -46,6 +46,9 @@
 .u789step .chantline{margin:0;font-size:clamp(1.15rem,min(5.4vw,4.4vh),2rem);line-height:1.25;text-align:center}
 .u789step .chantline .w{background:none;border:0;padding:0;font:inherit;color:inherit;cursor:pointer}
 .u789step .syl{font-weight:700}
+.u789step .partyes{animation:partyes .55s ease}
+@keyframes partyes{0%{transform:scale(.96)}45%{transform:scale(1.12)}100%{transform:scale(1)}}
+@media (prefers-reduced-motion:reduce){.u789step .partyes{animation:none}}
 .u789step .recneed{margin:0;padding:.15rem .6rem;border:2px dashed #C95A10;border-radius:.6rem;color:#8a3d0a;font-size:1rem;background:#FFF3E0}
 body:not(.teach) .u789step .recneed{display:none}
 @media (max-width:420px){
@@ -54,7 +57,8 @@ body:not(.teach) .u789step .recneed{display:none}
   .u789step .chainopts{grid-template-columns:repeat(2,minmax(0,1fr))}
   .u789step .chainopts > .chainpick{height:3rem}
   .u789step .choices.fishpond{grid-template-columns:repeat(3,minmax(0,1fr));max-height:none}
-  .u789step .choices.fishpond > .choice{font-size:clamp(1rem,5vw,1.5rem)!important}
+  .u789step .choices.fishpond > .choice{font-size:clamp(.85rem,4vw,1.3rem)!important;line-height:1.05;letter-spacing:0;word-spacing:0;padding-left:.12rem!important;padding-right:.12rem!important}
+  .u789step .choices.fishpond > .choice span{letter-spacing:0;word-spacing:0}
 }
 @media (max-height:900px) and (min-height:501px){
   .u789step .nkmeet .bubble{padding:.4rem .7rem}
