@@ -7825,12 +7825,12 @@ window.IR_DATA_U789 = {
    ],
    "chains": [
     [
-     "bird",
-     "bard",
-     "card",
-     "curd",
-     "curl",
-     "hurl"
+     "shirt",
+     "short",
+     "sort",
+     "port",
+     "fort",
+     "fork"
     ],
     [
      "burn",

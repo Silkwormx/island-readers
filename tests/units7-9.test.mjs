@@ -45,6 +45,33 @@ test('every lesson has 3 days, a 6-page story with art and narration, a chant, w
   }
 });
 
+test('lesson 9.4 first word chain has no bard or curd and changes one sound', () => {
+  const chain = data.lessons.find((l) => l.key === 'u94').chains[0];
+  assert.deepEqual(chain, ['shirt', 'short', 'sort', 'port', 'fort', 'fork']);
+  assert.equal(chain.includes('bard') || chain.includes('curd'), false);
+  const graph = ['tch', 'dge', 'ore', 'ar', 'or', 'er', 'ir', 'ur', 'sh', 'ch', 'th', 'wh', 'ck', 'ng', 'nk', 'ff', 'll', 'ss', 'zz'];
+  function split(w) {
+    const s = w.toLowerCase(); const out = []; let i = 0;
+    while (i < s.length) {
+      let hit = null;
+      for (const g of graph) {
+        if (s.startsWith(g, i) && !( /^(ar|or|er|ir|ur)$/.test(g) && i + 2 < s.length && 'aeiou'.includes(s[i + 2]))) { hit = g; break; }
+      }
+      if (hit) { out.push(hit); i += hit.length; } else { out.push(s[i]); i += 1; }
+    }
+    return out;
+  }
+  for (let i = 1; i < chain.length; i++) {
+    const a = split(chain[i - 1]); const b = split(chain[i]);
+    const diffs = Math.max(a.length, b.length);
+    let n = 0;
+    for (let k = 0; k < diffs; k++) if (a[k] !== b[k]) n += 1;
+    assert.equal(n, 1, chain[i - 1] + ' to ' + chain[i]);
+    assert.ok(exists('audio/chg_' + chain[i - 1] + '_' + chain[i] + '.mp3'));
+    assert.ok(exists('audio/w_' + chain[i] + '.mp3'));
+  }
+});
+
 test('each lesson has Meet, Chant and 14 games ending with Zip\u2019s Check', () => {
   for (const id of ['meet', 'chant', 'hear', 'bells', 'match', 'build', 'chain', 'scramble', 'feed', 'sentence', 'read', 'sort', 'which', 'rhyme', 'fish', 'check']) {
     assert.match(u789, new RegExp("id: '" + id + "'"), id);
