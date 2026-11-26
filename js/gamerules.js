@@ -12,6 +12,7 @@
     return h('span', { class: 'bframe' }, h('img', { src: src, alt: alt || '' }));
   };
   IR.storyCovers = { '7.1': 'img/cover_u71.webp', '7.2': 'img/cover_u72.webp', '7.3': 'img/cover_u73.webp', '8.1': 'img/cover_u81.webp', '8.2': 'img/cover_u82.webp', '8.3': 'img/cover_u83.webp', '9.1': 'img/cover_u91.webp', '9.2': 'img/cover_u92.webp', '9.3': 'img/cover_u93.webp', '9.4': 'img/cover_u94.webp',
+    '10.1': 'img/cover_u101.webp', '10.2': 'img/cover_u102.webp', '11.1': 'img/cover_u111.webp', '11.2': 'img/cover_u112.webp', '12.1': 'img/cover_u121.webp', '12.2': 'img/cover_u122.webp', '12.3': 'img/cover_u123.webp',
     '1.1': 'img/cover_u11.webp',
     '1.2': 'img/cover_u12.webp',
     '1.3': 'img/cover_u13.webp',

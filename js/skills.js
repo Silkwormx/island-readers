@@ -68,6 +68,7 @@
     (src.u5 || []).forEach((L) => take(L.steps, { unit: 5, lesson: L.n, name: L.name, href: (step) => '#/' + L.key + '/' + step.id }));
     (src.u123 || []).forEach((L) => take(L.steps, { unit: L.unit, lesson: L.n, name: L.name, href: (step) => '#/u' + L.unit + '/' + L.key + '/' + step.id }));
     (src.u789 || []).forEach((L) => take(L.steps, { unit: L.unit, lesson: L.n, name: L.name, href: (step) => '#/u' + L.unit + '/' + L.key + '/' + step.id }));
+    (src.u1012 || []).forEach((L) => take(L.steps, { unit: L.unit, lesson: L.n, name: L.name, href: (step) => '#/u' + L.unit + '/' + L.key + '/' + step.id }));
     (src.u6 || []).forEach((L) => take(L.steps, { unit: 6, lesson: L.n, name: L.name, href: (step) => '#/u6/' + L.key + '/' + step.id }));
     (src.chests || []).forEach((c) => {
       bags.sight.push({ unit: c.unit, lesson: c.lesson, name: c.name, title: c.title, href: c.href || '', type: 'Sight words', locked: false });
