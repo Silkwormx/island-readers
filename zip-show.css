@@ -1,0 +1,121 @@
+/* Zip and Frill action scenes on independent lessons.
+   Andika, cream, one screen. Motion turns off for calm mode and reduced motion. */
+.zs{position:relative;flex:0 0 auto;width:min(34rem,38vw);max-width:none;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:.35rem}
+.zs-art{width:100%;height:auto;max-height:52vh;object-fit:contain;object-position:center center;background:transparent}
+.zs-say{appearance:none;border:3px solid #2B2540;background:#fff;color:#2B2540;font-family:Andika,sans-serif;font-weight:700;font-size:clamp(.95rem,2.2vh,1.2rem);line-height:1.15;border-radius:1rem;padding:.25rem .6rem;max-width:100%;min-height:44px;min-width:44px;text-align:center;cursor:pointer}
+.zs-say:focus-visible{outline:3px solid #F28C00;outline-offset:2px}
+.zs-spark{position:absolute;top:.2rem;right:.35rem;width:.7rem;height:.7rem;border-radius:50%;background:#F28C00;box-shadow:-1.1rem .8rem 0 #E6A0FF, .2rem 1.3rem 0 #2E9E6B;pointer-events:none}
+.zs-pop .zs-art{animation:zs-pop .55s ease}
+.zs-slide .zs-art{animation:zs-slide 1.15s ease}
+.zs-hop .zs-art{animation:zs-hop .7s ease}
+.zs-wag .zs-art{transform-origin:62% 78%;animation:zs-wag 1s ease-in-out 2}
+.zs-peekimg{position:absolute;left:0;bottom:22%;width:22%;height:auto;pointer-events:none;animation:zs-peek 1.3s ease}
+.zs-shell{position:absolute;top:8%;right:8%;width:.9rem;height:.7rem;border-radius:60% 60% 40% 40%;background:#F4C56A;box-shadow:-1rem .7rem 0 #fff, .15rem 1.1rem 0 #E6A0FF;pointer-events:none;animation:zs-pop .6s ease}
+.zs-bits{position:absolute;left:10%;right:10%;top:0;height:70%;pointer-events:none}
+.zs-bits i{position:absolute;width:.45rem;height:.7rem;border-radius:.2rem;background:#F28C00;animation:zs-confetti .9s ease forwards}
+.zs-bits i:nth-child(2){left:20%;background:#E6A0FF;animation-delay:.05s}
+.zs-bits i:nth-child(3){left:45%;background:#2E9E6B;animation-delay:.1s}
+.zs-bits i:nth-child(4){left:68%;background:#1F8FD6;animation-delay:.08s}
+.zs-bits i:nth-child(5){left:86%;background:#C2408A}
+.zs-pair{display:flex;align-items:flex-end;justify-content:center;gap:.25rem;width:100%}
+.zs-pair .zs-art{width:auto;max-width:38vw;height:auto}
+
+@keyframes zs-pop{0%{transform:scale(.55);opacity:0}65%{transform:scale(1.06);opacity:1}100%{transform:none;opacity:1}}
+@keyframes zs-slide{0%{transform:translateX(-35%);opacity:0}100%{transform:none;opacity:1}}
+@keyframes zs-hop{0%{transform:translateY(14px) scale(.96);opacity:0}45%{transform:translateY(-16px) scale(1.04);opacity:1}100%{transform:none;opacity:1}}
+@keyframes zs-wag{0%{transform:rotate(0)}35%{transform:rotate(8deg)}70%{transform:rotate(-6deg)}100%{transform:rotate(0)}}
+@keyframes zs-peek{0%{transform:translateX(-130%);opacity:0}45%{transform:none;opacity:1}100%{transform:none;opacity:1}}
+@keyframes zs-confetti{0%{transform:translateY(8px) scale(.4);opacity:0}30%{opacity:1}100%{transform:translateY(-2.2rem) scale(1);opacity:0}}
+
+.t1stage.has-buddy{flex-direction:row;align-items:center;justify-content:center;gap:.7rem;min-height:0;overflow:hidden}
+.zs-say{box-sizing:border-box}
+.t1stage.has-buddy .zs{width:min(36vw,28rem)}
+.t1stage.has-buddy .zs-art{max-height:54vh}
+.t1work{flex:0 1 auto;min-width:0;min-height:0;display:flex;align-items:center;justify-content:center;overflow:visible}
+.t1work>*{max-width:100%}
+.t1work .t1pops{height:100%;min-height:12rem}
+
+.fs-withzip{display:flex;align-items:center;justify-content:center;gap:.6rem;width:100%;min-height:0}
+.fs-withzip .zs{width:min(42vw,20rem)}
+.fs-withzip .zs-art{max-height:40vh}
+.fs-withzip .fs-kidintro,.fs-withzip .fs-silly{flex:1 1 auto;min-width:0;width:auto;margin:0}
+.fs-withzip .fs-kidart{max-height:28vh;width:auto;max-width:100%}
+.fs-withzip .fs-allitpic{max-height:28vh;max-width:100%}
+
+.zs-face{display:flex;flex-direction:column;align-items:center;gap:.3rem}
+.nkmeet .panelwrap.small.zs-face{width:auto;max-width:none;overflow:visible;border:0;box-shadow:none;background:transparent;line-height:0}
+.nkmeet .panelwrap.small.zs-face .panel.zs-art{width:min(52vw,20rem);max-width:52vw;max-height:36vh;height:auto}
+.zs-chip{max-width:100%;margin:0;background:#fff;border:3px solid #2B2540;border-radius:.8rem;padding:.15rem .55rem;font-family:Andika,sans-serif;font-weight:700;font-size:1rem;line-height:1.15;text-align:center;color:#2B2540}
+.zipsays{position:relative;flex-wrap:wrap;justify-content:center}
+.zipsays .zs-art{width:min(42vw,14rem);height:auto;max-height:none;flex:none}
+.zipsays .zs-chip{position:static;left:auto;bottom:auto;transform:none}
+.chars .char.zip.zs-art{height:auto;width:auto;max-width:min(40vw,18rem);max-height:36vh}
+.llnarr img.zs-art{width:min(46vw,16rem);height:auto;max-height:30vh}
+
+/* Portrait phones: the action fills about half the screen or more, in the empty space. */
+@media (max-width:700px) and (min-height:560px){
+  .t1stage.has-buddy .zs{width:auto;max-width:50vw}
+  .t1stage.has-buddy .zs-art{width:auto;height:auto;max-width:50vw;max-height:44vh}
+  .t1stage.has-buddy .zs-say{max-width:50vw}
+  .t1stage.has-buddy:has(.t1blend) .zs,
+  .t1stage.has-buddy:has(.t1stack) .zs,
+  .t1stage.has-buddy:has(.t1silly) .zs,
+  .t1stage.has-buddy:has(.t1revs) .zs,
+  .t1stage.has-buddy:has(.t1blend) .zs-art,
+  .t1stage.has-buddy:has(.t1stack) .zs-art,
+  .t1stage.has-buddy:has(.t1silly) .zs-art,
+  .t1stage.has-buddy:has(.t1revs) .zs-art,
+  .t1stage.has-buddy:has(.t1blend) .zs-say,
+  .t1stage.has-buddy:has(.t1stack) .zs-say{max-width:58vw}
+  .t1stage.has-buddy:has(.t1blend),
+  .t1stage.has-buddy:has(.t1stack),
+  .t1stage.has-buddy:has(.t1silly),
+  .t1stage.has-buddy:has(.t1revs){flex-direction:column;gap:.3rem}
+  .t1stage.has-buddy:has(.t1blend) .zs-art,
+  .t1stage.has-buddy:has(.t1stack) .zs-art,
+  .t1stage.has-buddy:has(.t1revs) .zs-art{max-height:38vh}
+  .t1stage.has-buddy:has(.t1silly) .zs-art{max-height:28vh}
+  .fs-withzip{flex-direction:column}
+  .fs-withzip .zs{width:54vw;max-width:54vw}
+  .fs-withzip .zs-art{max-height:28vh}
+  .chars .char.zip.zs-art{max-width:50vw;max-height:28vh}
+  .llnarr{flex-direction:column;text-align:center}
+  .llnarr img.zs-art{width:50vw;max-height:24vh}
+  .zipsays{flex-direction:column}
+  .zipsays .zs-art{width:50vw}
+  .nkmeet .panelwrap.small.zs-face .panel.zs-art{width:52vw;max-width:52vw;max-height:26vh}
+}
+@media (min-width:1000px){
+  .t1stage.has-buddy .zs{width:min(32rem,34vw)}
+  .t1stage.has-buddy .zs-art{max-height:58vh}
+  .fs-withzip .zs{width:min(24rem,26vw)}
+  .fs-withzip .zs-art{max-height:48vh}
+  .nkmeet .panelwrap.small.zs-face .panel.zs-art{width:min(24rem,26vw);max-width:none;max-height:42vh}
+  .zipsays .zs-art{width:min(18rem,20vw)}
+  .chars .char.zip.zs-art{max-width:20rem;max-height:40vh}
+  .llnarr img.zs-art{width:min(18rem,18vw);max-height:36vh}
+}
+html.teach .t1stage.has-buddy .zs{width:min(42rem,42vw)}
+html.teach .t1stage.has-buddy .zs-art{max-height:64vh}
+html.teach .zs-say{font-size:1.7rem;min-height:64px;padding:.4rem 1rem}
+html.teach .zs-chip{font-size:1.5rem;padding:.3rem .8rem}
+html.teach .nkmeet .panelwrap.small.zs-face .panel.zs-art,
+html.teach .zipsays .zs-art,
+html.teach .chars .char.zip.zs-art,
+html.teach .llnarr img.zs-art{width:min(32rem,34vw);max-width:34vw;max-height:48vh}
+@media (max-height:520px){
+  .t1stage.has-buddy{flex-direction:row;align-items:center;gap:.45rem}
+  .t1stage.has-buddy .zs{width:auto;max-width:34vw}
+  .t1stage.has-buddy .zs-art{width:auto;max-width:34vw;max-height:36vh}
+  .fs-withzip{flex-direction:row}
+  .fs-withzip .zs{width:auto;max-width:30vw}
+  .fs-withzip .zs-art{max-height:52vh}
+  .zs-say{font-size:1rem;padding:.15rem .5rem}
+}
+
+@media (prefers-reduced-motion:reduce){
+  .zs-art,.zs-spark,.zs-peekimg,.zs-shell,.zs-bits,.zs-bits i{animation:none !important}
+  .zs-peekimg,.zs-shell,.zs-bits{display:none}
+}
+body.calm .zs-art,body.calm .zs-spark,body.calm .zs-peekimg,body.calm .zs-shell,body.calm .zs-bits,body.calm .zs-bits i{animation:none !important}
+body.calm .zs-peekimg,body.calm .zs-shell,body.calm .zs-bits{display:none}

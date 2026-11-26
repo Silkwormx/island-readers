@@ -132,16 +132,22 @@
 
   function runMeet(ctx, L) {
     const beats = L.meet; let i = 0; const st = ctx.stage;
+    if (IR.zipShow) IR.zipShow.reset();
     const show = () => {
       const b = beats[i]; ctx.progress(i / beats.length); st.innerHTML = '';
       ctx.setInstr('', null);
-      const face = b.who === 'frill' ? 'img/frill.webp' : 'img/zipA.webp';
+      const letter = (L.focus && String(L.focus[0] || '').length === 1) ? L.focus[0] : '';
+      const pose = i === 0
+        ? { kind: letter ? 'keyword' : 'listen', key: letter, hint: 'Ears on!' }
+        : (i === beats.length - 1 ? { kind: 'blend', key: letter, hint: 'Blend it fast!' } : { kind: 'say', key: letter, hint: 'Your turn!' });
+      const choice = IR.zipShow ? IR.zipShow.next(pose) : null;
+      const face = choice ? choice.src : (b.who === 'frill' ? 'img/frill.webp' : 'img/zipA.webp');
       const replay = speakerBtn(() => Snd.play(P(b.audio)), 'Hear this again');
       const body = h('div', { class: 'bubble ' + b.who }, h('b', { class: 'who' }, b.who === 'zip' ? 'Zip' : 'Frill'), h('p', null, b.text), replay);
       const pure = b.snd && PH(b.snd) ? h('button', { class: 'btn big sndbtn', type: 'button', onclick: () => Snd.play(PH(b.snd)) }, icon('speaker'), 'Sound') : null;
       st.append(h('div', { class: 'activity nkmeet' }, body,
         h('div', { class: 'meetrow' },
-          h('div', { class: 'panelwrap small' }, h('img', { class: 'panel', src: face, alt: b.who === 'frill' ? 'Frill' : 'Zip' })),
+          h('div', { class: 'panelwrap small zs-face' }, h('img', { class: 'panel zs-art' + (choice ? ' zs-' + choice.motion : ''), src: face, alt: choice ? choice.alt : (b.who === 'frill' ? 'Frill' : 'Zip') }), choice ? h('b', { class: 'zs-chip' }, choice.prompt) : null),
           h('p', { class: 'bigword' }, colorWord(b.word, L)), pure),
         b.cap ? h('p', { class: 'cap' }, b.cap) : null,
         h('div', { class: 'chips' }, ...(b.chips || []).map((w) => h('button', { class: 'chip', type: 'button', onclick: () => say(w) }, colorWord(w, L))))));

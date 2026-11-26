@@ -21,6 +21,7 @@
         { who: 'frill', p: 'i6', show: 'chips' }, { who: 'zip', p: 'i7', show: 'go' }
       ];
       let i = 0;
+      if (IR.zipShow) IR.zipShow.reset();
       const bubble = h('div', { class: 'bubble' });
       const visual = h('div', { class: 'visual' });
       const zip = h('img', { class: 'char zip', src: 'img/zipA.webp', alt: 'Zip the gecko inventor' });
@@ -55,6 +56,15 @@
         bubble.append(h('b', { class: 'who' }, b.who === 'zip' ? 'Zip' : 'Frill'), h('p', null, pr.text),
           speakerBtn(() => playBeat(b), 'Hear this again'));
         zip.classList.toggle('speaking', b.who === 'zip'); frill.classList.toggle('speaking', b.who === 'frill');
+        if (IR.zipShow) {
+          const kind = { apart: 'listen', glue: 'blend', say: 'mouth', mouth: 'mouth', hum: 'listen', vowels: 'find', swords: 'blend', chips: 'say', go: 'cheer' }[b.show] || 'listen';
+          const hint = { apart: 'Ears on!', glue: 'Blend it fast!', say: 'Watch my mouth', mouth: 'Watch my mouth', hum: 'Hear this one.', vowels: 'Can you find it?', swords: 'Blend it fast!', chips: 'Your turn!', go: 'Nice!' }[b.show] || 'Ears on!';
+          const choice = IR.zipShow.next({ kind: kind, hint: hint });
+          zip.src = choice.src;
+          zip.alt = choice.alt;
+          ['zs-in', 'zs-tilt', 'zs-wiggle', 'zs-hop'].forEach((name) => zip.classList.remove(name));
+          zip.classList.add('zs-art', 'zs-' + choice.motion);
+        }
         visual.innerHTML = ''; wrap.classList.toggle('vowelstep', b.show === 'vowels' || b.show === 'swords'); wrap.classList.toggle('mouthstep', b.show === 'mouth');   /* tiles step: layout keeps Frill's bubble clear of the examples */
         if (b.show === 'apart') visual.append(ngPill(false));
         if (b.show === 'glue') { const p = ngPill(false); visual.append(p, h('p', { class: 'cap' }, 'n + g = one sound')); setTimeout(() => p.classList.add('joined'), 900); }
