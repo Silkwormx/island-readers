@@ -1,0 +1,101 @@
+/* Units 10 to 12. The unit menu and the lesson menu fit a phone with no scroll. */
+.u1012page.ngpreview{height:100vh!important;height:100dvh!important;height:100svh!important;max-height:100svh!important;overflow:hidden!important;display:flex!important;flex-direction:column!important;box-sizing:border-box}
+.u1012page .uA-top{flex:none}
+.u1012page .ngpath{flex:1 1 auto;min-height:0;overflow:hidden;display:flex;flex-direction:column;gap:.15rem}
+.u1012page .ngshells{display:none!important}
+.u1012page .ngstep{flex:none;min-height:0}
+.u1012page .ngstep:has(.gamegrid){flex:1 1 auto;min-height:0;display:flex;flex-direction:column}
+.u1012page .ngstep:has(.gamegrid) .gamerows,
+.u1012page .ngstep:has(.gamegrid) .gamerow,
+.u1012page .ngstep:has(.gamegrid) .gamegrid{flex:1 1 auto;min-height:0;height:100%}
+.u1012page .gamegrid{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-rows:minmax(0,1fr);gap:.28rem;align-content:stretch}
+.u1012page .gamecard{min-height:0;height:100%;padding:.12rem .25rem;gap:.05rem}
+.u1012page .gamecard img,.u1012page .gamepic{max-height:1.45rem;width:auto}
+.u1012page .gamecard .gametxt{flex:1;min-width:0}
+.u1012page .gamecard img{display:none!important}
+.u1012page .gamecard .gametxt b{font-size:.78rem;line-height:1.05;white-space:nowrap!important;word-break:keep-all!important}
+.u1012page .gamecard .gamemin{display:none}
+.u1012page .ngpath:not(:has(.gamegrid)) .lessonrow{display:flex;flex-direction:column;gap:.4rem;flex:1 1 auto;min-height:0}
+.u1012page .ngpath:not(:has(.gamegrid)) .ngstep{flex:1 1 auto;min-height:0;display:flex;flex-direction:column}
+.u1012page .ngpath:not(:has(.gamegrid)) .lessontab{flex:1 1 auto;min-height:0;height:auto}
+.u1012page .ngpath:not(:has(.gamegrid)) .lessontab .uimg{height:42%;min-height:0}
+.u1012page .ngpath:has(.gamegrid) .lessonrow{display:grid;grid-template-columns:1fr 1fr;gap:.35rem}
+.u1012page .ngpath:has(.gamegrid) .lessontab{height:4.2rem;min-height:0}
+.u1012page .ngpath:has(.gamegrid) .lessontab .uimg{height:2.2rem}
+.u1012page .ngpath:has(.gamegrid) .lessontab h2{font-size:1rem}
+.u1012page .ngpath:has(.gamegrid) .lessontab .obtn{min-height:1.6rem;font-size:.9rem}
+.u1012page .storycard{min-height:0;padding:.35rem .6rem}
+.u1012page .storycard b{font-size:1.7rem;line-height:1;display:block}
+.u1012page .storycard .gamenote{display:block;margin-top:.2rem;font-size:1.05rem;font-weight:700;line-height:1.2}
+/* Later rules in styles.css lock game cards at 12.5rem. Compact rows fit the phone. */
+.u1012page.ngpreview .ngpath{flex:1 1 auto!important;min-height:0!important;overflow:hidden!important}
+.u1012page.ngpreview .gamegrid{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;grid-template-rows:none!important;grid-auto-rows:2.22rem!important;height:auto!important;gap:.12rem!important}
+.u1012page.ngpreview .gamegrid>li{height:auto!important;min-height:0!important;margin:0!important;padding:0!important}
+.u1012page.ngpreview .gamegrid:not(.pics) .gamecard{height:2.22rem!important;min-height:0!important;max-height:2.22rem!important;padding:.02rem .25rem .02rem 1.7rem!important;overflow:hidden!important;flex-direction:row!important;justify-content:flex-start!important;align-items:center!important;text-align:left!important;gap:.3rem!important}
+.u1012page.ngpreview .storycard{height:auto!important;min-height:0!important;max-height:none!important;overflow:hidden;padding:.2rem .45rem!important;align-items:center!important}
+.u1012page.ngpreview .storycard img{max-height:2.4rem!important;width:auto!important}
+.u1012page .storycard b{font-size:1.45rem!important}
+.u1012page .storycard .gamenote{font-size:.85rem!important;margin-top:0!important}
+.u1012page.ngpreview .ngpath:not(:has(.gamegrid)) .ngstep{flex:1 1 auto!important;min-height:0!important;overflow:hidden!important;display:flex!important;flex-direction:column}
+.u1012page.ngpreview .ngpath:not(:has(.gamegrid)) .lessonrow{flex:1 1 auto!important;min-height:0!important;overflow:hidden!important}
+.u1012page .ngpath:not(:has(.gamegrid)) .lessontab{min-height:6.2rem}
+@media (max-height:780px) and (min-height:521px){
+  .u1012page.ngpreview .gamegrid{grid-auto-rows:2.3rem!important}
+  .u1012page.ngpreview .gamegrid:not(.pics) .gamecard{height:2.3rem!important;max-height:2.3rem!important}
+  .u1012page.ngpreview .storycard img{display:none!important}
+  .u1012page.ngpreview .storycard{max-height:4.4rem!important;overflow:hidden!important}
+  .u1012page .ngpath:has(.gamegrid) .lessontab{height:3.2rem!important}
+  .u1012page .ngpath:has(.gamegrid) .lessontab .uimg{display:none!important}
+}
+@media (max-height:520px){
+  .u1012page .stephead{display:none}
+  .u1012page .storycard{height:40px!important;min-height:40px!important;max-height:40px!important}
+  .u1012page .ngpath:has(.gamegrid) .lessontab{height:2.3rem!important}
+  .u1012page .ngpath:not(:has(.gamegrid)) .lessonrow{display:grid;grid-template-columns:1fr 1fr}
+  .u1012page .ngpath:not(:has(.gamegrid)) .lessontab{min-height:0;height:100%}
+  .u1012page .ngpath:has(.gamegrid) .lessontab{height:3.1rem}
+  .u1012page .ngpath:has(.gamegrid) .lessontab .uimg{display:none}
+  .u1012page.ngpreview .gamegrid{grid-template-columns:repeat(4,minmax(0,1fr))!important;grid-auto-rows:2.45rem!important}
+  .u1012page.ngpreview .gamegrid:not(.pics) .gamecard{height:2.45rem!important;max-height:2.45rem!important}
+  .u1012page .storycard{padding:.15rem .4rem}
+  .u1012page .storycard b{font-size:1.15rem}
+  .u1012page .storycard .gamenote{font-size:.85rem}
+}
+
+.u1012slides{position:fixed;inset:0;z-index:40;background:#1a140c;color:#fff;display:flex;flex-direction:column;height:100vh;height:100dvh;height:100svh;overflow:hidden;box-sizing:border-box;padding-bottom:env(safe-area-inset-bottom)}
+.u1012slides .slide-top{display:flex;align-items:center;gap:.5rem;padding:.35rem .6rem;background:#1a140c;flex:none}
+.u1012slides .slide-title{font:700 1rem Andika,sans-serif;margin:0;flex:1;color:#fff}
+.u1012slides .slide-count{font:700 1.05rem Andika,sans-serif;min-width:4.5rem;text-align:right;color:#fff}
+.u1012slides .slide-days{display:flex;gap:.35rem;justify-content:center;flex:none;padding:.15rem .4rem .3rem}
+.u1012slides .slide-day{min-height:36px;padding:.1rem .7rem;border-radius:999px;border:3px solid #F28C00;background:#fff;color:#C95A10;font:700 .95rem Andika,sans-serif;cursor:pointer}
+.u1012slides .slide-day.on{background:#F28C00;color:#fff;border-color:#C95A10}
+.u1012slides .slide-stage{flex:1 1 0;min-height:0;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.u1012slides .slide-img{width:100%;height:100%;max-width:100%;max-height:100%;object-fit:contain;background:transparent}
+.u1012slides .slidebar{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.35rem;padding:.35rem .4rem;flex:none;background:#1a140c}
+.u1012slides .slidebar .btn{width:100%;min-width:0;min-height:2.7rem;height:2.7rem;margin:0;padding:.15rem .2rem;font-size:.85rem;box-sizing:border-box;justify-content:center;background:#fff;color:#2B2540;border:3px solid #C95A10}
+.u1012slides .slidebar .homebtn{background:#F28C00;color:#fff;border:3px solid #C95A10}
+.u1012step .choice.found .chunk,.u1012step .bigword.found .chunk{font-weight:700}
+
+/* Game character sits centered above the instruction on every Units 10-12 game. */
+.u1012step > .instr.hasbuddy{flex-direction:column;align-items:center;justify-content:center;gap:.2rem;text-align:center}
+.u1012step > .instr.hasbuddy .buddy{height:clamp(3.4rem,11vh,5.2rem)!important}
+.u1012step > .instr.hasbuddy .ibubble{max-width:min(100%,22rem)}
+.u1012step > .instr.hasbuddy .ibubble::before{left:50%;top:-9px;margin:0 0 0 -8px;border:8px solid transparent;border-bottom-color:rgba(43,37,64,.18);border-top:0;border-right-color:transparent}
+
+@media (max-width:700px){
+  .u1012slides .slide-title{font-size:.85rem}
+  .u1012slides .slide-day{padding:.05rem .45rem;font-size:.85rem}
+  .u1012slides .slidebar .btn{font-size:.8rem;height:2.5rem;min-height:2.5rem}
+}
+@media (max-height:500px){
+  .u1012slides .slide-days{display:none}
+  .u1012slides .slidebar .btn{height:2.2rem;min-height:2.2rem}
+  .u1012step > .instr.hasbuddy{flex-direction:row;align-items:center;gap:.35rem}
+  .u1012step > .instr.hasbuddy .buddy{height:2.6rem!important}
+  .u1012step > .instr.hasbuddy .ibubble::before{left:-9px;top:50%;margin:-8px 0 0;border:8px solid transparent;border-right-color:rgba(43,37,64,.18);border-left:0;border-bottom-color:transparent}
+  .u1012step .wordplay{gap:.15rem;padding:0;max-height:100%;justify-content:center}
+  .u1012step .wordplay .speaker.huge{width:2.4rem;height:2.4rem;min-width:2.4rem}
+  .u1012step .wpool > .wtile{flex-direction:row;gap:.25rem;min-height:0;height:2.6rem;margin:0;padding:0 .35rem;font-size:1.15rem}
+  .u1012step .wpool > .wtile::after{margin-top:0;height:1.15rem;min-width:1.15rem;font-size:.8rem}
+  .u1012step .wordplay .wslot{height:2.2rem;min-height:0;font-size:1.15rem}
+}

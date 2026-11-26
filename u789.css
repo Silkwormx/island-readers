@@ -1,0 +1,209 @@
+/* Units 7 to 9 (js/u789.js): phone-safe lesson screens and slides.
+   One screen, no scroll: the screen is the small viewport height (svh, falls back to dvh, then vh),
+   the stage takes what is left, and the bottom control row sits above the home bar (safe-area-inset-bottom).
+   Every answer button in an activity is the same size: grids use equal tracks and the buttons fill them. */
+.u789step{position:absolute;inset:0;height:100vh;height:100dvh;height:100svh;max-height:100vh;max-height:100dvh;max-height:100svh;display:flex;flex-direction:column;overflow:hidden;box-sizing:border-box;padding-top:env(safe-area-inset-top)}
+.u789step > .lesson-top,.u789step > .instr{flex:none}
+.u789step > .stage{flex:1 1 0;min-height:0;overflow:hidden;display:flex;flex-direction:column}
+.u789step > .stage > .activity{flex:1 1 0;min-height:0;max-height:100%;overflow:hidden;display:flex;flex-direction:column;align-items:center;gap:.3rem;width:100%;box-sizing:border-box}
+.u789step > .lesson-nav{flex:none;position:relative;z-index:5;background:var(--cream);padding-bottom:calc(.35rem + env(safe-area-inset-bottom))!important;min-height:2.9rem;box-sizing:border-box}
+/* Equal answer buttons */
+.u789step .choices{display:grid!important;width:min(100%,46rem);flex:1 1 0;min-height:0;max-height:22rem;gap:.4rem;grid-auto-rows:minmax(0,1fr);align-content:stretch}
+.u789step .choices.two{grid-template-columns:repeat(2,minmax(0,1fr));max-height:11rem}
+.u789step .choices.three{grid-template-columns:repeat(3,minmax(0,1fr))}
+.u789step .choices.many{grid-template-columns:repeat(3,minmax(0,1fr))}
+.u789step .choices.fishpond{grid-template-columns:repeat(3,minmax(0,1fr));max-height:none}
+.u789step .choices > .choice{width:100%!important;height:100%!important;min-height:0!important;max-width:none!important;margin:0;box-sizing:border-box;display:flex;align-items:center;justify-content:center;overflow:hidden;font-size:clamp(1.1rem,min(5.2vw,5vh),2.2rem)!important;padding:.2rem .3rem!important;white-space:nowrap}
+.u789step .choices > .choice > span{white-space:nowrap}
+.u789step .sortbins{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-rows:minmax(3.2rem,1fr);gap:.4rem;width:min(100%,40rem);flex:1 1 0;min-height:0;max-height:15rem}
+.u789step .sortbin{width:100%;height:100%;min-height:0;margin:0;box-sizing:border-box;display:flex;align-items:center;justify-content:center;text-align:center;font-size:clamp(.95rem,4vw,1.5rem);padding:.2rem .3rem;overflow:hidden}
+.u789step .chainopts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.4rem;width:min(100%,32rem)}
+.u789step .chainopts > .chainpick{width:100%;min-width:0;height:3.6rem;margin:0;box-sizing:border-box}
+.u789step .chainslots{display:flex;flex-wrap:nowrap;gap:.3rem;justify-content:center;max-width:100%}
+.u789step .chainslot{min-width:2.8rem;height:3.2rem;padding:0 .35rem;font-size:clamp(1.2rem,6vw,2rem)}
+.u789step .chainfrom{margin:0;font-size:clamp(1.6rem,8vw,2.6rem);line-height:1.1}
+.u789step .wpool{display:grid;grid-template-columns:repeat(auto-fit,minmax(4.2rem,1fr));gap:.4rem;width:min(100%,30rem)}
+.u789step .wpool > .wtile{width:100%;height:3.4rem;margin:0}
+.u789step .wcur{display:flex;gap:.3rem;justify-content:center}
+.u789step .bank{display:grid;grid-template-columns:repeat(auto-fit,minmax(5.2rem,1fr));gap:.4rem;width:min(100%,34rem)}
+.u789step .bank > *{width:100%;min-width:0;margin:0;box-sizing:border-box}
+.u789step .bigword{margin:0;font-size:clamp(1.6rem,min(8vw,7vh),2.8rem);line-height:1.1}
+.u789step .u1pic{flex:0 1 auto;min-height:0;display:flex;justify-content:center}
+.u789step .u1pic img{max-height:min(30vh,14rem);max-height:min(30svh,14rem);width:auto;max-width:80vw;aspect-ratio:1;object-fit:contain;border-radius:1rem}
+.u789step .matchgame .choices{max-height:9rem}
+/* Story reader, shared by Units 1-3 (.u123step) and 7-12 (.u789step).
+   Title stays above this block. The picture is as large as the width allows.
+   Words sit directly under the picture, the page count under the words.
+   Spare space is split above the picture and below the count. */
+.u123step .activity.story,
+.u789step .activity.story{display:flex!important;flex-direction:column!important;align-items:center;justify-content:flex-start;height:100%;width:100%;min-height:0;gap:0;grid-template-rows:none!important;grid-template-columns:none!important}
+.u123step .activity.story::before,
+.u789step .activity.story::before,
+.u123step .activity.story::after,
+.u789step .activity.story::after{content:'';flex:1 1 0;min-height:0}
+.u123step .activity.story .panelwrap,
+.u789step .activity.story .panelwrap{flex:0 1 auto;min-height:0;width:100%;height:auto!important;max-height:none;display:flex;align-items:center;justify-content:center;margin:0}
+.u123step .activity.story .panel,
+.u789step .activity.story .panel{display:block;width:100%!important;height:auto!important;max-width:100%!important;max-height:min(58vh,100%)!important;max-height:min(58svh,100%)!important;object-fit:contain!important;object-position:center center;margin:0 auto;border-radius:.8rem}
+.u123step .activity.story .sentrow,
+.u789step .activity.story .sentrow{flex:none;display:flex;align-items:center;justify-content:center;gap:.4rem;max-width:100%;margin-top:.35rem}
+.u123step .activity.story .sentence,
+.u789step .activity.story .sentence{margin:0;font-size:clamp(1.15rem,min(5.6vw,4.2vh),2rem);line-height:1.3}
+.u123step .activity.story .small,
+.u789step .activity.story .small{flex:none;margin:.15rem 0 0}
+.u123step .activity.story .row,
+.u789step .activity.story .row{padding-bottom:env(safe-area-inset-bottom)}
+.u789step .nkmeet .panelwrap.small .panel{max-height:16vh;max-height:16svh}
+.u789step .chips{display:flex;flex-wrap:wrap;justify-content:center;gap:.35rem}
+.u789step .chantact .panel{max-height:18vh;max-height:18svh}
+.u789step .chantlines{display:flex;flex-direction:column;gap:.15rem;align-items:center}
+.u789step .chantline{margin:0;font-size:clamp(1.15rem,min(5.4vw,4.4vh),2rem);line-height:1.25;text-align:center}
+.u789step .chantline .w{background:none;border:0;padding:0;font:inherit;color:inherit;cursor:pointer}
+.u789step .syl{font-weight:700}
+.u789step .partyes{animation:partyes .55s ease}
+@keyframes partyes{0%{transform:scale(.96)}45%{transform:scale(1.12)}100%{transform:scale(1)}}
+@media (prefers-reduced-motion:reduce){.u789step .partyes{animation:none}}
+.u789step .recneed{margin:0;padding:.15rem .6rem;border:2px dashed #C95A10;border-radius:.6rem;color:#8a3d0a;font-size:1rem;background:#FFF3E0}
+body:not(.teach) .u789step .recneed{display:none}
+@media (max-width:420px){
+  .u789step .choices.three{grid-template-columns:1fr;max-height:16rem}
+  .u789step .choices.many{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .u789step .chainopts{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .u789step .chainopts > .chainpick{height:3rem}
+  .u789step .choices.fishpond{grid-template-columns:repeat(3,minmax(0,1fr));max-height:none}
+  .u789step .choices.fishpond > .choice{font-size:clamp(.85rem,4vw,1.3rem)!important;line-height:1.05;letter-spacing:0;word-spacing:0;padding-left:.12rem!important;padding-right:.12rem!important}
+  .u789step .choices.fishpond > .choice span{letter-spacing:0;word-spacing:0}
+}
+@media (max-height:900px) and (min-height:501px){
+  .u789step .nkmeet .bubble{padding:.4rem .7rem}
+  .u789step .nkmeet .bubble p{font-size:1.05rem;line-height:1.3}
+  .u789step .nkmeet .panelwrap.small .panel{max-height:11vh;max-height:11svh}
+  .u789step .nkmeet .cap{margin:0;font-size:1rem}
+  .u789step .nkmeet .btn.big.sndbtn{min-height:0;padding:.35rem .9rem}
+  .u789step .chips > .chip{height:2.9rem;font-size:1.5rem}
+}
+@media (max-height:500px){
+  .u789step .choices.three{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .u789step .choices{max-height:none}
+  .u789step .u1pic img{max-height:24vh;max-height:24svh}
+  .u789step .nkmeet .panelwrap.small{display:none}
+  .u789step .chantact .panelwrap.small{display:none}
+  .u789step .chainopts > .chainpick{height:2.6rem}
+  .u789step .chainslot{height:2.6rem}
+  .u123step .activity.story,
+  .u789step .activity.story{display:flex!important;flex-direction:column!important;grid-template-columns:none!important;grid-template-rows:none!important}
+  .u123step .activity.story .panel,
+  .u789step .activity.story .panel{max-height:30vh!important;max-height:30svh!important}
+  .u123step .activity.story .panelwrap,
+  .u789step .activity.story .panelwrap{grid-row:auto}
+  .u789step .activity.story .sentence{font-size:clamp(1rem,4.6vh,1.35rem)!important;line-height:1.25}
+  .u789step .activity.story .sentence *{font-size:inherit!important}
+  .u789step .activity.story .btn.big{min-height:0;padding:.35rem 1rem;font-size:1.1rem}
+}
+
+/* Feed Zip: four snacks in a 2 by 2 grid that always fits; no streak or tummy count (no score counters) */
+.u789step .feedzip{display:flex;flex-direction:column}
+.u789step .feedzip .fz-top{flex:none}
+.u789step .feedzip .fz-streak,.u789step .feedzip .fz-tummy > b{display:none!important}
+.u789step .feedzip .fz-field{flex:1 1 0;min-height:0;height:auto!important;display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-rows:minmax(0,1fr);gap:.45rem;width:min(100%,40rem);position:relative}
+.u789step .feedzip .fz-field > .fz-bubble{position:relative!important;left:auto!important;top:auto!important;width:100%!important;height:100%!important;min-height:0!important;margin:0!important;box-sizing:border-box}
+/* Ring every bell: the bell row takes what is left */
+.u789step .bellgame{display:flex;flex-direction:column}
+.u789step .bellgame .bellask,.u789step .bellgame .status{flex:none}
+.u789step .bellgame .bellscene{flex:0 1 auto;min-height:0;overflow:hidden}
+.u789step .bellgame .bellrow{flex:1 1 0;min-height:0;display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr));gap:.4rem;width:min(100%,46rem);align-items:stretch}
+.u789step .bellgame .bellrow > .bellbtn{width:100%!important;height:100%!important;min-height:0!important;margin:0;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;box-sizing:border-box}
+.u789step .bellgame .bellface{flex:1 1 0;min-height:0;width:100%;display:flex;justify-content:center}
+.u789step .bellgame .bellface img{height:100%;width:auto;max-height:7rem;object-fit:contain}
+.u789step .bellgame .bellword,.u789step .bellgame .bellword *{flex:none;font-size:clamp(1.3rem,min(6vw,5vh),2.2rem)!important;line-height:1.15}
+.u789step .bellgame .bellrow > .bellbtn{justify-content:center;gap:.2rem}
+.u789step .bellgame .bellface{flex:0 1 auto!important}
+.u789step .bellgame .bellrow{max-height:14rem;align-self:center}
+/* Build-a-Word: slots and tiles share the height */
+.u789step .activity .slots{flex:0 1 auto;min-height:0}
+.u789step .activity > .bank{flex:none;height:clamp(3.4rem,12vh,6rem);height:clamp(3.4rem,12svh,6rem);grid-template-columns:none!important;grid-auto-flow:column;grid-auto-columns:minmax(0,1fr);grid-template-rows:minmax(0,1fr)}
+.u789step .activity > .bank > .tile{height:100%!important;min-height:0!important;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden}
+/* Meet: example chips are one even row */
+.u789step .chips{display:grid!important;grid-template-columns:none;grid-auto-flow:column;grid-auto-columns:minmax(0,1fr);width:min(100%,36rem)}
+.u789step .chips > .chip{width:100%;min-width:0;margin:0;box-sizing:border-box}
+@media (max-width:420px){
+  .u789step .chips{grid-auto-flow:row;grid-template-columns:repeat(2,minmax(0,1fr))}
+  .u789step .activity > .bank > .tile{flex-direction:column;padding:.1rem}
+  .u789step .activity > .bank > .tile .tileword{font-size:clamp(1.2rem,6vw,1.8rem);line-height:1}
+}
+@media (max-height:500px){
+  .u789step .bellgame .bellscene{display:none}
+  .u789step .bellgame .bellask .btn.big{min-height:0;padding:.3rem .8rem}
+  .u789step .bellgame .bellask{gap:.5rem;align-items:center}
+  .u789step .bellgame .bellface img{max-height:3.6rem}
+  .u789step .activity .slots{flex:none}
+  .u789step .activity .slot{height:2.8rem!important;min-height:0!important}
+  .u789step .activity > .speaker.huge{width:2.6rem;height:2.6rem;flex:none}
+  .u789step .chainact .chainwho{display:none}
+  .u789step .chainact .bigprompt{margin:0}
+  .u789step .chainact .row .btn{min-height:0;padding:.3rem .9rem}
+  .u789step .chainact{gap:.2rem}
+  .u789step .nkmeet .bubble{padding:.35rem .7rem;flex:none}
+  .u789step .nkmeet .bubble p{font-size:1rem;line-height:1.3;margin:0}
+  .u789step .nkmeet .bubble .speaker{width:2.4rem;height:2.4rem}
+  .u789step .nkmeet .cap{margin:0}
+  .u789step .chips > .chip{height:2.8rem;font-size:1.4rem}
+  .u789step .feedzip{display:grid!important;grid-template-columns:10rem minmax(0,1fr);grid-template-rows:minmax(0,1fr) auto;align-items:stretch}
+  .u789step .feedzip .fz-top{grid-column:1;grid-row:1 / span 2;display:flex;flex-direction:column;align-items:center;gap:.3rem}
+  .u789step .feedzip .fz-zip{width:4.5rem;height:4.5rem}
+  .u789step .feedzip .fz-side{width:100%}
+  .u789step .feedzip .fz-replay{width:100%;min-height:0;padding:.3rem .5rem}
+  .u789step .feedzip .fz-field{grid-column:2;grid-row:1;width:100%;height:100%!important}
+  .u789step .feedzip .status{grid-column:2;margin:0}
+  .u789step .activity > .bank{max-height:3.6rem}
+  .u789step .activity > .bank > .tile{flex-direction:row;gap:.3rem;padding:.1rem .4rem}
+  .u789step .activity > .bank > .tile .tileword{font-size:1.6rem;line-height:1}
+}
+/* Sentence Bridge: word tiles wrap in even rows */
+.u789step .sentact > .bank{height:auto;grid-auto-flow:row;grid-template-columns:repeat(3,minmax(0,1fr))!important;grid-auto-rows:3.4rem;grid-template-rows:none}
+.u789step .sentact > .bank > .tile{flex-direction:row;gap:.25rem;padding:.1rem .3rem}
+.u789step .sentact > .bank > .tile .irnum{flex:none;width:1.4rem;height:1.4rem;font-size:.8rem}
+.u789step .sentact > .bank > .tile .tileword{font-size:clamp(1.1rem,5vw,1.6rem)!important;line-height:1}
+.u789step .sentact .slots.sent{flex:0 1 auto;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.35rem;width:min(100%,40rem)}
+.u789step .sentact .slots.sent .slot{width:100%!important;min-width:0;height:3rem!important;min-height:0!important;margin:0}
+@media (max-height:500px){
+  .u789step .sentact .slots.sent{grid-template-columns:repeat(6,minmax(0,1fr))!important}
+  .u789step .sentact > .bank{grid-auto-rows:2.5rem;width:min(100%,34rem)}
+  .u789step .sentact .slots.sent .slot{height:2.5rem!important}
+  .u789step .sentact{gap:.25rem}
+  .u789step .choices.fishpond{grid-template-columns:repeat(6,minmax(0,1fr))!important}
+  .u789step .choices.fishpond > .choice{font-size:1.05rem!important;flex-direction:column!important;gap:0;padding:.1rem!important}
+  .u789step .choices.fishpond > .choice .irnum{width:1.3rem;height:1.3rem;font-size:.75rem}
+  .u789step .activity > .bigprompt{display:none}
+  .u789step .choices > .choice{flex-direction:row!important;gap:.5rem}
+}
+/* Action buddies: big Zip and Frill art beside the direction, with a calm bob and a small hop when an answer is right */
+.u789step > .instr.hasbuddy{display:flex;align-items:center;justify-content:center;gap:.5rem;padding:.15rem .6rem}
+.u789step .instr .buddy,.u789step .bellask .buddy{flex:none;width:auto!important;height:clamp(5.4rem,15vh,9rem)!important;height:clamp(5.4rem,15svh,9rem)!important;aspect-ratio:1;object-fit:contain;border-radius:1.2rem;background:#FFF8E7;animation:u789bob 3.2s ease-in-out infinite;transform-origin:50% 90%}
+.u789step .instr .ibubble{position:relative;display:flex;align-items:center;gap:.4rem;background:#fff;border:2px solid rgba(43,37,64,.18);border-radius:1rem;padding:.35rem .6rem;max-width:30rem;box-shadow:0 2px 0 rgba(43,37,64,.08)}
+.u789step .instr .ibubble::before{content:'';position:absolute;left:-9px;top:50%;margin-top:-8px;border:8px solid transparent;border-right-color:rgba(43,37,64,.18);border-left:0}
+.u789step .instr .ibubble .itext{font-size:clamp(1rem,4.2vw,1.3rem);line-height:1.25}
+.u789step:has(.right) .buddy,.u789step:has(.rang) .buddy{animation:u789hop .6s ease-out 1,u789bob 3.2s ease-in-out .6s infinite}
+.u789step .chainact .chainwho{display:none}
+@keyframes u789bob{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-4px) rotate(-1.5deg)}}
+@keyframes u789hop{0%{transform:translateY(0)}35%{transform:translateY(-12px) scale(1.04)}100%{transform:translateY(0)}}
+@media (prefers-reduced-motion:reduce){
+  .u789step .buddy{animation:none!important}
+}
+body.calm .u789step .buddy{animation:none!important}
+@media (max-height:500px){
+  .u789step .instr .buddy,.u789step .bellask .buddy{height:3.4rem!important}
+  .u789step .instr .ibubble{padding:.2rem .5rem}
+  .u789step .instr .ibubble .itext{font-size:1rem}
+}
+/* Slides for Units 7 to 9: the slide always fits the phone screen, with no scroll and no crop. */
+.slidescreen[data-sound^="u7"],.slidescreen[data-sound^="u8"],.slidescreen[data-sound^="u9"]{height:100vh;height:100dvh;height:100svh;bottom:auto;padding-bottom:env(safe-area-inset-bottom);box-sizing:border-box;overflow:hidden}
+.slidescreen[data-sound^="u7"] .slide-stage,.slidescreen[data-sound^="u8"] .slide-stage,.slidescreen[data-sound^="u9"] .slide-stage{flex:1 1 0;min-height:0;overflow:hidden}
+.slidescreen[data-sound^="u7"] .slide-img,.slidescreen[data-sound^="u8"] .slide-img,.slidescreen[data-sound^="u9"] .slide-img{width:100%;height:100%;max-width:100%;max-height:100%;object-fit:contain;background:transparent;box-shadow:none}
+@media (max-width:700px),(max-height:500px){
+  .slidescreen[data-sound^="u7"] .slide-stage,.slidescreen[data-sound^="u8"] .slide-stage,.slidescreen[data-sound^="u9"] .slide-stage{padding:0 .25rem}
+  .slidescreen[data-sound^="u7"] .slide-nav,.slidescreen[data-sound^="u8"] .slide-nav,.slidescreen[data-sound^="u9"] .slide-nav{top:auto;bottom:.4rem;transform:none;width:2.8rem;height:2.8rem;background:rgba(0,0,0,.6)}
+  .slidescreen[data-sound^="u7"] .slide-top,.slidescreen[data-sound^="u8"] .slide-top,.slidescreen[data-sound^="u9"] .slide-top{padding:.3rem .5rem}
+  .slidescreen[data-sound^="u7"] .slide-days,.slidescreen[data-sound^="u8"] .slide-days,.slidescreen[data-sound^="u9"] .slide-days{padding:.25rem .4rem;flex-wrap:nowrap}
+  .slidescreen[data-sound^="u7"] .slide-day,.slidescreen[data-sound^="u8"] .slide-day,.slidescreen[data-sound^="u9"] .slide-day{min-height:36px;padding:.1rem .7rem}
+}

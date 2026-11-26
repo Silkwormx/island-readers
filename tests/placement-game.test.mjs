@@ -21,6 +21,17 @@ function simulate(level, hint) {
   throw new Error('no answer');
 }
 
+test('Units 7 to 9 open on the first lesson whose word was missed', () => {
+  assert.equal(E.lessonStart(8, [{ n: '8.1', ok: true }, { n: '8.2', ok: false }, { n: '8.3', ok: true }]).lesson, '8.2');
+  assert.equal(E.lessonStart(8, [{ n: '8.1', ok: true }, { n: '8.2', ok: false }, { n: '8.3', ok: true }]).href, '#/u8/u82');
+  assert.equal(E.lessonStart(9, [{ n: '9.1', ok: true }, { n: '9.2', ok: true }, { n: '9.3', ok: true }, { n: '9.4', ok: false }]).lesson, '9.4');
+  assert.equal(E.lessonStart(7, [{ n: '7.1', ok: true }, { n: '7.2', ok: true }, { n: '7.3', ok: true }]).lesson, '7.1');
+  assert.equal(E.lessonItems(10).length, 0);
+  assert.equal(E.lessonStart(10, []), null);
+  assert.ok(ui.includes('lessonPick'));
+  assert.ok(ui.includes('Go to Lesson'));
+});
+
 test('adaptive search finds every start unit and stays short', () => {
   for (let level = 1; level <= 23; level++) {
     const r = simulate(level);

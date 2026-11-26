@@ -263,6 +263,8 @@
     },
     showFallback() {
       this.blocked = true; if ($('#soundfix')) return;
+      /* Teacher materials and Units 1-3 / 7-9 have no sound-off control. */
+      if (/^#\/teachers/.test(location.hash) || /^#\/u[123789](\/|$)/.test(location.hash) || document.querySelector('.tmscreen, .u123step, .u789step, .slidecalm')) return;
       const b = h('button', { id: 'soundfix', class: 'soundfix', type: 'button', 'aria-label': 'Sound is off. Tap to turn sound on.' }, icon('speaker'), 'Sound off? Tap to enable');
       b.addEventListener('click', () => { const l = this.last; b.remove(); this.blocked = false; this.unlocked = true; if (l) l(); });
       document.body.append(b);

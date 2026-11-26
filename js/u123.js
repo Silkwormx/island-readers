@@ -132,16 +132,22 @@
 
   function runMeet(ctx, L) {
     const beats = L.meet; let i = 0; const st = ctx.stage;
+    if (IR.zipShow) IR.zipShow.reset();
     const show = () => {
       const b = beats[i]; ctx.progress(i / beats.length); st.innerHTML = '';
       ctx.setInstr('', null);
-      const face = b.who === 'frill' ? 'img/frill.webp' : 'img/zipA.webp';
+      const letter = (L.focus && String(L.focus[0] || '').length === 1) ? L.focus[0] : '';
+      const pose = i === 0
+        ? { kind: letter ? 'keyword' : 'listen', key: letter, hint: 'Ears on!' }
+        : (i === beats.length - 1 ? { kind: 'blend', key: letter, hint: 'Blend it fast!' } : { kind: 'say', key: letter, hint: 'Your turn!' });
+      const choice = IR.zipShow ? IR.zipShow.next(pose) : null;
+      const face = choice ? choice.src : (b.who === 'frill' ? 'img/frill.webp' : 'img/zipA.webp');
       const replay = speakerBtn(() => Snd.play(P(b.audio)), 'Hear this again');
       const body = h('div', { class: 'bubble ' + b.who }, h('b', { class: 'who' }, b.who === 'zip' ? 'Zip' : 'Frill'), h('p', null, b.text), replay);
       const pure = b.snd && PH(b.snd) ? h('button', { class: 'btn big sndbtn', type: 'button', onclick: () => Snd.play(PH(b.snd)) }, icon('speaker'), 'Sound') : null;
       st.append(h('div', { class: 'activity nkmeet' }, body,
         h('div', { class: 'meetrow' },
-          h('div', { class: 'panelwrap small' }, h('img', { class: 'panel', src: face, alt: b.who === 'frill' ? 'Frill' : 'Zip' })),
+          h('div', { class: 'panelwrap small zs-face' }, h('img', { class: 'panel zs-art' + (choice ? ' zs-' + choice.motion : ''), src: face, alt: choice ? choice.alt : (b.who === 'frill' ? 'Frill' : 'Zip') }), choice ? h('b', { class: 'zs-chip' }, choice.prompt) : null),
           h('p', { class: 'bigword' }, colorWord(b.word, L)), pure),
         b.cap ? h('p', { class: 'cap' }, b.cap) : null,
         h('div', { class: 'chips' }, ...(b.chips || []).map((w) => h('button', { class: 'chip', type: 'button', onclick: () => say(w) }, colorWord(w, L))))));
@@ -356,6 +362,7 @@
       ctx.setNext(() => { Snd.stop(); showPages(); return true; });
       if (ctx.setNextLabel) ctx.setNextLabel('Next');
       if (IR.pinStoryNav) IR.pinStoryNav(null);
+      if (ctx.setRepeat) ctx.setRepeat(null);
       Snd.play(P6('heart'));
     }
     function showPages() {
@@ -363,9 +370,8 @@
       ctx.setInstr('Read the story. One page at a time.', null);
       const pic = h('img', { class: 'panel', alt: '' });
       const sent = h('p', { class: 'sentence' });
-      const label = h('p', { class: 'small' });
+      const label = h('p', { class: 'small story-say' });
       const pageAudio = () => 'audio/' + L.key + '_s_' + (p + 1) + '.mp3';
-      const replay = speakerBtn(() => Snd.play(pageAudio()), 'Hear this page'); replay.classList.add('huge');
       function show() {
         const pg = pages[p];
         pic.src = pg.img; sent.innerHTML = '';
@@ -375,9 +381,9 @@
         });
         label.textContent = 'Page ' + (p + 1) + ' of ' + pages.length;
         ctx.progress(p / pages.length);
+        if (ctx.setRepeat) ctx.setRepeat(() => Snd.play(pageAudio()));
       }
-      const next = h('button', { class: 'btn big primary', type: 'button', onclick: () => { if (p < pages.length - 1) { p++; show(); } else ctx.finish(); } }, 'Next page', icon('next'));
-      st.append(h('div', { class: 'activity story' }, h('div', { class: 'panelwrap' }, pic), h('div', { class: 'sentrow' }, replay, sent), label, h('div', { class: 'row center' }, next)));
+      st.append(h('div', { class: 'activity story' }, h('div', { class: 'panelwrap' }, pic), h('div', { class: 'sentrow' }, sent), label));
       ctx.setBack(() => { if (p > 0) { p--; show(); return true; } if (words.length) { showHeart(); return true; } return false; });
       ctx.setNext(() => { if (p < pages.length - 1) { p++; show(); return true; } ctx.finish(); return true; });
       if (ctx.setNextLabel) ctx.setNextLabel('Next');
@@ -628,6 +634,7 @@
     const screen = h('div', { class: 'screen lessonscreen u6step u123step' + (S0.group === 'lesson' ? ' is-lesson' : ''), style: '--c:' + S0.color }, h('header', { class: 'lesson-top' }, IR.ui.pageNav(base), bar), instrBox, stage, nav);
     app.append(screen);
     if (S0.group === 'activities') IR.attachGameRules(ctx, screen, S0.title);
+    if (IR.wireUnitControls) IR.wireUnitControls(screen, ctx);
     S0.run(ctx);
   }
 

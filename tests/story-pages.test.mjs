@@ -104,6 +104,7 @@ const STATE = `(() => {
 })()`;
 
 test('each story can be paged from the heart words to the end on a phone', async () => {
+  const server = spawn('python3', ['-m', 'http.server', '8765', '--bind', '127.0.0.1'], { cwd: new URL('..', import.meta.url).pathname, stdio: 'ignore' });
   const session = await chromeSession();
   try {
     for (const [name, hash, paged] of STORIES) {
@@ -141,6 +142,7 @@ test('each story can be paged from the heart words to the end on a phone', async
       }
     }
   } finally {
+    server.kill('SIGTERM');
     session.chrome.kill('SIGKILL');
   }
 });

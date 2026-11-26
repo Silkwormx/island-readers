@@ -1,0 +1,58 @@
+{
+  "title": "Lesson 12.2 \u00b7 ow",
+  "count": 29,
+  "days": [
+    {
+      "day": 1,
+      "label": "Day 1",
+      "start": 1,
+      "end": 9,
+      "page": 1
+    },
+    {
+      "day": 2,
+      "label": "Day 2",
+      "start": 10,
+      "end": 18,
+      "page": 10
+    },
+    {
+      "day": 3,
+      "label": "Day 3",
+      "start": 19,
+      "end": 29,
+      "page": 19
+    }
+  ],
+  "slides": [
+    "slide-001.jpg",
+    "slide-002.jpg",
+    "slide-003.jpg",
+    "slide-004.jpg",
+    "slide-005.jpg",
+    "slide-006.jpg",
+    "slide-007.jpg",
+    "slide-008.jpg",
+    "slide-009.jpg",
+    "slide-010.jpg",
+    "slide-011.jpg",
+    "slide-012.jpg",
+    "slide-013.jpg",
+    "slide-014.jpg",
+    "slide-015.jpg",
+    "slide-016.jpg",
+    "slide-017.jpg",
+    "slide-018.jpg",
+    "slide-019.jpg",
+    "slide-020.jpg",
+    "slide-021.jpg",
+    "slide-022.jpg",
+    "slide-023.jpg",
+    "slide-024.jpg",
+    "slide-025.jpg",
+    "slide-026.jpg",
+    "slide-027.jpg",
+    "slide-028.jpg",
+    "slide-029.jpg"
+  ]
+}

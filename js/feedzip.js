@@ -113,6 +113,7 @@
           locked = true;
           row++;
           b.classList.add('right', 'feeding');
+          if (typeof opts.onRight === 'function') opts.onRight(b, choice);
           zip.classList.add('yum');
           const treat = nextTreat();
           status.textContent = row && row % 3 === 0 ? row + ' in a row!' : (treat.yuck ? 'Yuck!' : 'Yum! Zip munched ' + w + '.');

@@ -49,6 +49,11 @@ for src in (letters, day1):
         if m.group(2) == 'Frill': prompts.add(m.group(1))
 # lines built in code that the regexes above cannot see
 prompts.update(['Listen. Feed Zip the letter you hear.', 'Mastery check. Plain letters only.'])
+show = read('js/zip-show.js')
+block = re.search(r'const PROMPTS = \{.*?\n  \};', show, re.S)
+if not block:
+    raise SystemExit('zip-show prompts not found')
+prompts.update(re.findall(r"'([^']+)'", block.group(0)))
 zip_lines = set(m.group(1) for m in re.finditer(r"\{ id: '\w+', say: '([^']+)', label: '[^']+', who: 'Zip' \}", letters))
 zip_lines.add('You did it.')
 

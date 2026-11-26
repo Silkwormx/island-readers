@@ -264,6 +264,16 @@
   /* sample rules: Units 1-2 count as done; the amber gem is earned when Unit 3 is finished (ng + nk + review) */
   const gemsEarned = () => { const n = [true, true, islandDone('i3')]; return GEMS.map((_, i) => !!n[i]); };
   const gemNext = () => gemsEarned().indexOf(false);
+  /* A unit module can register itself so placement, the trail, and the home tiles open it.
+     Units 7 to 9 stay on their own checks. Units 10 to 12 register from js/u1012.js. */
+  function builtUnitHref(n) {
+    const list = IR.unitHrefs || [];
+    for (let i = 0; i < list.length; i++) {
+      const row = list[i];
+      if (row.units.indexOf(n) >= 0 && (!row.open || row.open(n))) return row.href(n);
+    }
+    return '';
+  }
   /* Continue opens the placement test when nothing is saved yet, otherwise the first unfinished built lesson. */
   function continueTarget() {
     const start = IR.placement && IR.placement.savedStart ? IR.placement.savedStart() : null;
@@ -278,7 +288,8 @@
       { unit: 6, lesson: '6.1', href: '#/u6/u61', done: () => IR.isDone('u61_check') },
       { unit: 6, lesson: '6.2', href: '#/u6/u62', done: () => IR.isDone('u62_check') },
       { unit: 6, lesson: '6.3', href: '#/u6/u63', done: () => IR.isDone('u63_check') }
-    ]);
+    ].concat((IR.u789Lessons || []).map((L) => ({ unit: L.unit, lesson: L.n, href: '#/u' + L.unit + '/' + L.key, done: () => IR.isDone(L.key + '_check') })))
+      .concat((IR.u1012Lessons || []).map((L) => ({ unit: L.unit, lesson: L.n, href: '#/u' + L.unit + '/' + L.key, done: () => IR.isDone(L.key + '_check') }))));
     if (!any && !start) return { href: '#/placement', sub: 'Pick up where you left off' };
     if (!any && start && start.team) return { href: '#/foundation/letters/g' + start.team, sub: 'Team ' + start.team };
     /* Units 1 to 3 join the path (Nov 27 2026). A reader who already started at Unit 4 or later keeps that start. */
@@ -288,7 +299,7 @@
       /* Adaptive placement stores a unit number. Units 1-3 stay on that unit when those lessons are built.
          A start above the built units lands on the last open unit, the same as the Island hop game. */
       let unitForBell = start.unit;
-      if (!(early.length && unitForBell <= 3)) unitForBell = unitForBell <= 4 ? 4 : unitForBell === 5 ? 5 : 6;
+      if (!(early.length && unitForBell <= 3) && !builtUnitHref(unitForBell)) unitForBell = unitForBell <= 4 ? 4 : unitForBell === 5 ? 5 : (unitForBell >= 7 && unitForBell <= 9 && IR.u789Route) ? unitForBell : 6;
       const i = path.findIndex((p) => p.unit >= unitForBell);
       if (i >= 0) startAt = i;
     }
@@ -370,7 +381,9 @@
       const u5 = n === 5 && !!IR.u5Route;   /* Nov 3 2026 local: Unit 5 Silent e is open (js/u5.js: same lesson flow as Unit 4; picker data islands.i5) */
       const u6 = n === 6 && !!IR.u6Route;   /* Unit 6 Endings (-s, -es, -ed, -ing), same lesson flow as Unit 4 */
       const u123 = n <= 3 && !!IR.u123Route;   /* Nov 27 2026: Units 1 to 3 (js/u123.js), same lesson flow as Units 5 and 6 */
-      const built = isl || u5 || u6 || u123;
+      const u789 = n >= 7 && n <= 9 && !!IR.u789Route;   /* Nov 27 2026: Units 7 to 9 (js/u789.js), same lesson flow as Units 1 to 3 */
+      const hop = builtUnitHref(n);
+      const built = isl || u5 || u6 || u123 || u789 || !!hop;
       const st = !built ? 'soon' : n === BUILT && complete ? 'done' : n === BUILT ? 'here' : 'open';
       const note = st === 'here' ? 'You are here' : st === 'done' ? 'Done' : st === 'open' ? 'Open' : 'Coming soon';
       const label = 'Unit ' + n + ': ' + t[0] + ', ' + t[1].replace(/\u00b7/g, ',') + ', ' + t[2] + (t[2] === 1 ? ' lesson. ' : ' lessons. ') + note + (built ? '. Opens Unit ' + n + '.' : '.');
@@ -382,7 +395,7 @@
           h('span', { class: 'tname' }, t[0]),
           h('span', { class: 'tsnd' }, t[1]),
           h('span', { class: 'tcount' }, t[2] + (t[2] === 1 ? ' lesson' : ' lessons'))));
-      b.addEventListener('click', () => { if (u123) { Snd.stop(); location.hash = '#/u' + n; } else if (u6) { Snd.stop(); location.hash = '#/u6'; } else if (u5) { Snd.stop(); location.hash = '#/u5'; } else if (isl) openIsland(BUILT_ID); else { Snd.stop(); toast('Unit ' + n + ' is coming soon.'); } });
+      b.addEventListener('click', () => { if (hop) { Snd.stop(); location.hash = hop; } else if (u123 || u789) { Snd.stop(); location.hash = '#/u' + n; } else if (u6) { Snd.stop(); location.hash = '#/u6'; } else if (u5) { Snd.stop(); location.hash = '#/u5'; } else if (isl) openIsland(BUILT_ID); else { Snd.stop(); toast('Unit ' + n + ' is coming soon.'); } });
       return b;
     };
     const cover = h('img', { src: 'foundation/img/foundations_cover.jpg', alt: '' });
@@ -776,7 +789,7 @@
       return wrap;
     }
     const list = h('div', { class: 'teachpop teachfiles', hidden: '' },
-      ...files.map((file) => h('a', { class: 'teachlink', href: file.href, target: '_blank', rel: 'noopener' }, file.title)));
+      ...files.map((file) => h('a', { class: 'teachlink' + (file.small ? ' tmsmall' : ''), href: file.href, target: '_blank', rel: 'noopener' }, file.title)));
     const print = h('button', { class: 'teachbox teachprint', type: 'button', 'aria-expanded': 'false' }, 'Printables');
     function onDoc(e) { if (!wrap.contains(e.target)) setOpen(false); }
     function onKey(e) { if (e.key === 'Escape') setOpen(false); }
@@ -1010,6 +1023,10 @@
     });
     const u123 = window.IR_DATA_U123;
     if (u123 && Array.isArray(u123.lessons)) u123.lessons.forEach((L) => { if (L && Array.isArray(L.story) && L.story.length) add(String(L.unit), L.n, L.name, L.storyTitle, '#/u' + L.unit + '/' + L.key + '/read'); });
+    const u789 = window.IR_DATA_U789;
+    if (u789 && Array.isArray(u789.lessons)) u789.lessons.forEach((L) => { if (L && Array.isArray(L.story) && L.story.length) add(String(L.unit), L.n, L.name, L.storyTitle, '#/u' + L.unit + '/' + L.key + '/read'); });
+    const u1012 = window.IR_DATA_U1012;
+    if (u1012 && Array.isArray(u1012.lessons)) u1012.lessons.forEach((L) => { if (L && Array.isArray(L.story) && L.story.length) add(String(L.unit), L.n, L.name, L.storyTitle, '#/u' + L.unit + '/' + L.key + '/read'); });
     const u6 = window.IR_DATA_U6;
     if (u6 && Array.isArray(u6.lessons)) u6.lessons.forEach((L) => { if (L && Array.isArray(L.story) && L.story.length) add('6', L.n || L.key, L.name, L.storyTitle, '#/u6/' + L.key + '/read'); });
     else if (u6 && Array.isArray(u6.story) && u6.story.length) add('6', '6', u6.name || 'Endings', u6.storyTitle, '#/u6/read');
@@ -1017,7 +1034,7 @@
   }
   /* Same open/locked rule as the home map: Units 4, 5, and 6 are open. Earlier and later units are still coming soon. */
   function spellUnitOpen(n) {
-    return (n <= 3 && !!IR.u123Route) || n === 4 || (n === 5 && !!IR.u5Route) || (n === 6 && !!IR.u6Route);
+    return (n <= 3 && !!IR.u123Route) || n === 4 || (n === 5 && !!IR.u5Route) || (n === 6 && !!IR.u6Route) || (n >= 7 && n <= 9 && !!IR.u789Route) || !!builtUnitHref(n);
   }
   const UNIT_NAMES = [null, 'Short Vowels & Floss', 'Blends', 'Digraphs', 'Glued Sounds', 'Silent e', 'Endings', 'Syllables', 'Tricky Sounds', 'Bossy R', 'More Bossy R', 'Long A & E Teams', 'Long O & I Teams', 'The oo Sounds', 'The au Sounds', 'Sliding Vowels', 'Tricky Teams', 'Soft c and g', 'Silent Letters', 'Suffixes', 'Suffix Spelling Rules', 'Prefixes', 'Big Endings'];
   function skillCatalog() {
@@ -1032,6 +1049,8 @@
       u5: IR.u5Lessons || [],
       u6: IR.u6SkillSteps ? IR.u6SkillSteps() : [],
       u123: IR.u123SkillSteps ? IR.u123SkillSteps() : [],
+      u789: IR.u789SkillSteps ? IR.u789SkillSteps() : [],
+      u1012: IR.u1012SkillSteps ? IR.u1012SkillSteps() : [],
       chests: chests
     });
   }
@@ -1242,9 +1261,10 @@
       if (lesson.wordlist) files.push({ title: 'Word List', href: lesson.wordlist });
       if (lesson.indep) files.push({ title: 'Independent worksheets', href: lesson.indep });
       if (lesson.pack) files.push({ title: 'Teacher pack', href: lesson.pack });
+      (lesson.files || []).forEach((file) => files.push(file));
       const title = lesson.title
         ? h('h3', null, lesson.title)
-        : h('h3', null, h('span', { class: 'tmsound' }, lesson.s), ' ' + lesson.lesson);
+        : h('h3', null, h('span', { class: 'tmsound' }, lesson.s), h('span', { class: 'tmlesson' }, lesson.lesson));
       const dayText = lesson.days ? slideDays({ days: lesson.days }) : '';
       const slide = lesson.board
         ? h('button', { class: 'btn big tmlink tmslide', type: 'button', onclick: () => { Snd.stop(); location.hash = lesson.board; } }, 'Slideshow', dayText && dayText !== slideDays({}) ? h('span', { class: 'tmdays' }, dayText) : null)
@@ -1254,7 +1274,7 @@
       if (files.length === 1) {
         print = h('a', { class: 'btn big tmlink tmprint', href: files[0].href, target: '_blank', rel: 'noopener' }, 'Printables');
       } else if (files.length) {
-        list = h('div', { class: 'tmfiles', hidden: '' }, ...files.map((file) => h('a', { class: 'tmfile', href: file.href, target: '_blank', rel: 'noopener' }, file.title)));
+        list = h('div', { class: 'tmfiles', hidden: '' }, ...files.map((file) => h('a', { class: 'tmfile' + (file.small ? ' tmsmall' : ''), href: file.href, target: '_blank', rel: 'noopener' }, file.title)));
         print = h('button', { class: 'btn big tmlink tmprint', type: 'button', onclick: () => { list.hidden = !list.hidden; } }, 'Printables');
       }
       return h('div', { class: 'tmcard' },
@@ -1303,6 +1323,35 @@
         { s: '-s -es', lesson: 'Lesson 6.1', days: [1, 2, 3].map((n) => ({ label: 'Day ' + n })), board: '#/teachers/slides/u61', daily: 'materials/unit6/Unit6_Teacher_Led_Student_Sheets.pdf', deck: 'foundation/slides/Lesson6.1_Endings_s_es.pdf', wordlist: 'materials/unit6/Lesson6.1_WordList_s_es.pdf', pack: 'materials/unit6/Lesson6.1_Teacher_Led_Checks.pdf' },
         { s: '-ed', lesson: 'Lesson 6.2', days: [1, 2, 3].map((n) => ({ label: 'Day ' + n })), board: '#/teachers/slides/u62', daily: 'materials/unit6/Unit6_Teacher_Led_Student_Sheets.pdf', deck: 'foundation/slides/Lesson6.2_Endings_ed.pdf', wordlist: 'materials/unit6/Lesson6.2_WordList_ed.pdf', pack: 'materials/unit6/Lesson6.2_Teacher_Led_Checks.pdf' },
         { s: '-ing', lesson: 'Lesson 6.3', days: [1, 2].map((n) => ({ label: 'Day ' + n })), board: '#/teachers/slides/u63', daily: 'materials/unit6/Unit6_Teacher_Led_Student_Sheets.pdf', deck: 'foundation/slides/Lesson6.3_Endings_ing.pdf', wordlist: 'materials/unit6/Lesson6.3_WordList_ing.pdf', pack: 'materials/unit6/Lesson6.3_Teacher_Led_Checks.pdf' }
+      ] },
+      { name: 'Unit 7 \u00b7 Syllables', sounds: [
+        { s: 'compound words', lesson: 'Lesson 7.1', days: [1, 2, 3].map((n) => ({ label: 'Day ' + n })), board: '#/teachers/slides/u71', daily: 'materials/unit7/Unit7_Teacher_Led_Student_Sheets.pdf', deck: 'materials/unit7/Lesson7.1_Slides.pdf', pack: 'materials/unit7/Lesson7.1_Teacher_Led_Checks.pdf' },
+        { s: 'closed + closed', lesson: 'Lesson 7.2', days: [1, 2, 3].map((n) => ({ label: 'Day ' + n })), board: '#/teachers/slides/u72', daily: 'materials/unit7/Unit7_Teacher_Led_Student_Sheets.pdf', deck: 'materials/unit7/Lesson7.2_Slides.pdf', pack: 'materials/unit7/Lesson7.2_Teacher_Led_Checks.pdf' },
+        { s: 'open + closed', lesson: 'Lesson 7.3', days: [1, 2, 3].map((n) => ({ label: 'Day ' + n })), board: '#/teachers/slides/u73', daily: 'materials/unit7/Unit7_Teacher_Led_Student_Sheets.pdf', deck: 'materials/unit7/Lesson7.3_Slides.pdf', pack: 'materials/unit7/Lesson7.3_Teacher_Led_Checks.pdf' }
+      ] },
+      { name: 'Unit 8 \u00b7 Tricky Sounds', sounds: [
+        { s: 'tch', lesson: 'Lesson 8.1', days: [1, 2, 3].map((n) => ({ label: 'Day ' + n })), board: '#/teachers/slides/u81', daily: 'materials/unit8/Unit8_Teacher_Led_Student_Sheets.pdf', deck: 'materials/unit8/Lesson8.1_Slides.pdf', pack: 'materials/unit8/Lesson8.1_Teacher_Led_Checks.pdf' },
+        { s: 'dge', lesson: 'Lesson 8.2', days: [1, 2, 3].map((n) => ({ label: 'Day ' + n })), board: '#/teachers/slides/u82', daily: 'materials/unit8/Unit8_Teacher_Led_Student_Sheets.pdf', deck: 'materials/unit8/Lesson8.2_Slides.pdf', pack: 'materials/unit8/Lesson8.2_Teacher_Led_Checks.pdf' },
+        { s: '-ild -old', lesson: 'Lesson 8.3', days: [1, 2, 3].map((n) => ({ label: 'Day ' + n })), board: '#/teachers/slides/u83', daily: 'materials/unit8/Unit8_Teacher_Led_Student_Sheets.pdf', deck: 'materials/unit8/Lesson8.3_Slides.pdf', pack: 'materials/unit8/Lesson8.3_Teacher_Led_Checks.pdf' }
+      ] },
+      { name: 'Unit 9 \u00b7 Bossy R', sounds: [
+        { s: 'ar', lesson: 'Lesson 9.1', days: [1, 2, 3].map((n) => ({ label: 'Day ' + n })), board: '#/teachers/slides/u91', daily: 'materials/unit9/Unit9_Teacher_Led_Student_Sheets.pdf', deck: 'materials/unit9/Lesson9.1_Slides.pdf', pack: 'materials/unit9/Lesson9.1_Teacher_Led_Checks.pdf' },
+        { s: 'or ore', lesson: 'Lesson 9.2', days: [1, 2, 3].map((n) => ({ label: 'Day ' + n })), board: '#/teachers/slides/u92', daily: 'materials/unit9/Unit9_Teacher_Led_Student_Sheets.pdf', deck: 'materials/unit9/Lesson9.2_Slides.pdf', pack: 'materials/unit9/Lesson9.2_Teacher_Led_Checks.pdf' },
+        { s: 'er', lesson: 'Lesson 9.3', days: [1, 2, 3].map((n) => ({ label: 'Day ' + n })), board: '#/teachers/slides/u93', daily: 'materials/unit9/Unit9_Teacher_Led_Student_Sheets.pdf', deck: 'materials/unit9/Lesson9.3_Slides.pdf', pack: 'materials/unit9/Lesson9.3_Teacher_Led_Checks.pdf' },
+        { s: 'ir ur (w)or', lesson: 'Lesson 9.4', days: [1, 2, 3].map((n) => ({ label: 'Day ' + n })), board: '#/teachers/slides/u94', daily: 'materials/unit9/Unit9_Teacher_Led_Student_Sheets.pdf', deck: 'materials/unit9/Lesson9.4_Slides.pdf', pack: 'materials/unit9/Lesson9.4_Teacher_Led_Checks.pdf' }
+      ] },
+      { name: 'Unit 10 \u00b7 More Bossy R', sounds: [
+        { s: 'air, are', lesson: 'Lesson 10.1', days: [1, 2, 3].map((n) => ({ label: 'Day ' + n })), board: '#/teachers/slides/u101', daily: 'materials/unit10/Unit10_Teacher_Led_Student_Sheets.pdf', deck: 'materials/unit10/Lesson10.1_Slides.pdf', pack: 'materials/unit10/Lesson10.1_Teacher_Led_Checks.pdf' },
+        { s: 'ear', lesson: 'Lesson 10.2', days: [1, 2, 3].map((n) => ({ label: 'Day ' + n })), board: '#/teachers/slides/u102', daily: 'materials/unit10/Unit10_Teacher_Led_Student_Sheets.pdf', deck: 'materials/unit10/Lesson10.2_Slides.pdf', pack: 'materials/unit10/Lesson10.2_Teacher_Led_Checks.pdf' }
+      ] },
+      { name: 'Unit 11 \u00b7 Long A and E Teams', sounds: [
+        { s: 'ai, ay', lesson: 'Lesson 11.1', days: [1, 2, 3].map((n) => ({ label: 'Day ' + n })), board: '#/teachers/slides/u111', daily: 'materials/unit11/Unit11_Teacher_Led_Student_Sheets.pdf', deck: 'materials/unit11/Lesson11.1_Slides.pdf', pack: 'materials/unit11/Lesson11.1_Teacher_Led_Checks.pdf' },
+        { s: 'ee, ea, ey', lesson: 'Lesson 11.2', days: [1, 2, 3].map((n) => ({ label: 'Day ' + n })), board: '#/teachers/slides/u112', daily: 'materials/unit11/Unit11_Teacher_Led_Student_Sheets.pdf', deck: 'materials/unit11/Lesson11.2_Slides.pdf', pack: 'materials/unit11/Lesson11.2_Teacher_Led_Checks.pdf' }
+      ] },
+      { name: 'Unit 12 \u00b7 Long O and I Teams', sounds: [
+        { s: 'oa, oe', lesson: 'Lesson 12.1', days: [1, 2, 3].map((n) => ({ label: 'Day ' + n })), board: '#/teachers/slides/u121', daily: 'materials/unit12/Unit12_Teacher_Led_Student_Sheets.pdf', deck: 'materials/unit12/Lesson12.1_Slides.pdf', pack: 'materials/unit12/Lesson12.1_Teacher_Led_Checks.pdf' },
+        { s: 'ow', lesson: 'Lesson 12.2', days: [1, 2, 3].map((n) => ({ label: 'Day ' + n })), board: '#/teachers/slides/u122', daily: 'materials/unit12/Unit12_Teacher_Led_Student_Sheets.pdf', deck: 'materials/unit12/Lesson12.2_Slides.pdf', pack: 'materials/unit12/Lesson12.2_Teacher_Led_Checks.pdf' },
+        { s: 'ie, igh', lesson: 'Lesson 12.3', days: [1, 2, 3].map((n) => ({ label: 'Day ' + n })), board: '#/teachers/slides/u123', daily: 'materials/unit12/Unit12_Teacher_Led_Student_Sheets.pdf', deck: 'materials/unit12/Lesson12.3_Slides.pdf', pack: 'materials/unit12/Lesson12.3_Teacher_Led_Checks.pdf' }
       ] }
     ];
     const sections = UNITS.map((unit) => h('section', { class: 'tmunit' },
@@ -1313,6 +1362,7 @@
       h('h1', null, 'Parent and Teacher Materials'),
       h('p', { class: 'tmlead' }, 'In course order. Slideshow opens the deck. Printables opens the files.'),
       ...sections)));
+    Snd.hideFallback();
   }
   /* Day jumps for the in-app decks. Same ranges as teachers/<id>/slides.json. */
   IR.deckDays = {
@@ -1394,12 +1444,63 @@
       { label: 'Day 1', start: 1, end: 20 },
       { label: 'Day 2', start: 21, end: 40 },
       { label: 'Day 3', start: 41, end: 67 }
+    ],
+    u71: [
+      { label: 'Day 1', start: 1, end: 20 },
+      { label: 'Day 2', start: 21, end: 40 },
+      { label: 'Day 3', start: 41, end: 67 }
+    ],
+    u72: [
+      { label: 'Day 1', start: 1, end: 20 },
+      { label: 'Day 2', start: 21, end: 40 },
+      { label: 'Day 3', start: 41, end: 67 }
+    ],
+    u73: [
+      { label: 'Day 1', start: 1, end: 20 },
+      { label: 'Day 2', start: 21, end: 40 },
+      { label: 'Day 3', start: 41, end: 67 }
+    ],
+    u81: [
+      { label: 'Day 1', start: 1, end: 20 },
+      { label: 'Day 2', start: 21, end: 40 },
+      { label: 'Day 3', start: 41, end: 67 }
+    ],
+    u82: [
+      { label: 'Day 1', start: 1, end: 20 },
+      { label: 'Day 2', start: 21, end: 40 },
+      { label: 'Day 3', start: 41, end: 67 }
+    ],
+    u83: [
+      { label: 'Day 1', start: 1, end: 20 },
+      { label: 'Day 2', start: 21, end: 40 },
+      { label: 'Day 3', start: 41, end: 67 }
+    ],
+    u91: [
+      { label: 'Day 1', start: 1, end: 20 },
+      { label: 'Day 2', start: 21, end: 40 },
+      { label: 'Day 3', start: 41, end: 67 }
+    ],
+    u92: [
+      { label: 'Day 1', start: 1, end: 20 },
+      { label: 'Day 2', start: 21, end: 40 },
+      { label: 'Day 3', start: 41, end: 67 }
+    ],
+    u93: [
+      { label: 'Day 1', start: 1, end: 20 },
+      { label: 'Day 2', start: 21, end: 40 },
+      { label: 'Day 3', start: 41, end: 67 }
+    ],
+    u94: [
+      { label: 'Day 1', start: 1, end: 20 },
+      { label: 'Day 2', start: 21, end: 40 },
+      { label: 'Day 3', start: 41, end: 67 }
     ]
   };
   /* In-app week-deck slideshow for smartboard (ng / nk / unit 5). Keeps PPTX download on the teachers page. */
   function slidesViewer(sound) {
     IR.newScreen();
-    const root = h('div', { class: 'screen slidescreen', tabindex: '0' });
+    const calm = /^u[123789]\d$/.test(sound);
+    const root = h('div', { class: 'screen slidescreen' + (calm ? ' slidecalm' : ''), tabindex: '0', 'data-sound': sound });
     const stage = h('div', { class: 'slide-stage' });
     const img = h('img', { class: 'slide-img', alt: sound + ' week slide' });
     const videoBox = h('div', { class: 'slide-video', hidden: '' });
@@ -1411,11 +1512,42 @@
     const next = h('button', { class: 'slide-nav slide-next', type: 'button', 'aria-label': 'Next slide' }, '\u25B6');
     const jumps = h('div', { class: 'fs-dayjumps slide-days' });
     const top = h('div', { class: 'slide-top' },
-      pageNav('#/teachers'),
+      calm ? null : pageNav('#/teachers'),
       h('h1', { class: 'slide-title' }, sound + ' week slides'),
       counter);
-    stage.append(prev, img, videoBox, next);
+    if (!calm) stage.append(prev, next);
+    stage.append(img, videoBox);
     root.append(top, jumps, stage);
+    let fullBtn = null;
+    if (calm) {
+      const home = h('button', { class: 'btn big ir-btn', type: 'button', 'aria-label': 'Home' }, icon('home'), 'Home');
+      home.addEventListener('click', () => { Snd.stop(); location.hash = '#/home'; });
+      const back = h('button', { class: 'btn big ir-btn slide-back', type: 'button', 'aria-label': 'Back' }, icon('back'), 'Back');
+      const forward = h('button', { class: 'btn big ir-btn slide-forward', type: 'button', 'aria-label': 'Forward' }, 'Next', icon('next'));
+      fullBtn = h('button', { class: 'btn big ir-btn slide-full', type: 'button', 'aria-pressed': 'false', 'aria-label': 'Full screen' }, 'Full');
+      back.addEventListener('click', () => { if (i > 0) go(-1); else location.hash = '#/teachers'; });
+      forward.addEventListener('click', () => go(1));
+      fullBtn.addEventListener('click', () => {
+        const on = document.fullscreenElement === root;
+        const p = on ? document.exitFullscreen() : root.requestFullscreen();
+        if (p && p.catch) p.catch(() => {});
+      });
+      root._onFs = () => {
+        const on = document.fullscreenElement === root;
+        fullBtn.textContent = on ? 'Exit' : 'Full';
+        fullBtn.setAttribute('aria-pressed', on ? 'true' : 'false');
+        fullBtn.setAttribute('aria-label', on ? 'Exit full screen' : 'Full screen');
+      };
+      document.addEventListener('fullscreenchange', root._onFs);
+      root.append(h('div', { class: 'lesson-nav ir-controls slide-controls' }, home, back, forward, fullBtn));
+      let startX = 0; let startY = 0;
+      stage.addEventListener('pointerdown', (e) => { startX = e.clientX; startY = e.clientY; });
+      stage.addEventListener('pointerup', (e) => {
+        const dx = e.clientX - startX; const dy = e.clientY - startY;
+        if (Math.abs(dx) < 48 || Math.abs(dx) < Math.abs(dy)) return;
+        go(dx < 0 ? 1 : -1);
+      });
+    }
     app.append(root);
     let slides = []; let days = []; let i = 0; let keyHandler = null;
     let videoStop = null;
@@ -1448,8 +1580,11 @@
       const spec = SLIDE_VIDEO[sound];
       if (spec && slides[i] === spec.file) showVideo(spec);
       else { clearVideo(); img.src = slides[i]; }
-      counter.textContent = (i + 1) + ' / ' + slides.length;
+      counter.textContent = calm ? ((i + 1) + ' of ' + slides.length) : ((i + 1) + ' / ' + slides.length);
       prev.disabled = i <= 0; next.disabled = i >= slides.length - 1;
+      const backBtn = root.querySelector('.slide-back');
+      const fwdBtn = root.querySelector('.slide-forward');
+      if (fwdBtn) fwdBtn.disabled = i >= slides.length - 1;
       const n = i + 1;
       let here = null;
       days.forEach((day) => { if (n >= dayStart(day)) here = day; });
@@ -1470,8 +1605,11 @@
     };
     window.addEventListener('keydown', keyHandler);
     const oldCleanup = IR._slideCleanup; if (typeof oldCleanup === 'function') oldCleanup();
-    IR._slideCleanup = () => { window.removeEventListener('keydown', keyHandler); };
-    const slideRoot = /^u[123]\d$/.test(sound) ? 'materials/unit' + sound.charAt(1) + '/slides/' + sound + '/' : { u61: 'materials/unit6/slides/u61/', u62: 'materials/unit6/slides/u62/', u63: 'materials/unit6/slides/u63/' }[sound];
+    IR._slideCleanup = () => {
+      window.removeEventListener('keydown', keyHandler);
+      if (root._onFs) document.removeEventListener('fullscreenchange', root._onFs);
+    };
+    const slideRoot = /^u[123789]\d$/.test(sound) ? 'materials/unit' + sound.charAt(1) + '/slides/' + sound + '/' : { u61: 'materials/unit6/slides/u61/', u62: 'materials/unit6/slides/u62/', u63: 'materials/unit6/slides/u63/' }[sound];
     fetch(slideRoot ? slideRoot + 'manifest.json' : 'teachers/' + sound + '/slides.json').then((r) => r.json()).then((man) => {
       slides = (man.slides || []).map((name) => (slideRoot && name.indexOf('/') < 0) ? slideRoot + name : name);
       days = (man.days && man.days.length) ? man.days : ((WEEK_DAYS[sound] || []).slice());
@@ -1566,7 +1704,7 @@
   function unitStatus(n, place) {
     if (place.finished[n]) return 'Done';
     if (n === place.here) return 'You are here';
-    if ((n <= 3 && IR.u123Route) || n === 4 || (n === 5 && IR.u5Route) || (n === 6 && IR.u6Route)) return 'Open';
+    if ((n <= 3 && IR.u123Route) || n === 4 || (n === 5 && IR.u5Route) || (n === 6 && IR.u6Route) || (n >= 7 && n <= 9 && IR.u789Route) || builtUnitHref(n)) return 'Open';
     return 'Coming soon';
   }
   function openTrailBell(n) {
@@ -1574,6 +1712,8 @@
     const u6 = n === 6 && !!IR.u6Route;
     const isl = n === 4 && !!(D.islands || {}).i3;
     if (n <= 3 && IR.u123Route) { Snd.stop(); location.hash = '#/u' + n; return; }
+    if (builtUnitHref(n)) { Snd.stop(); location.hash = builtUnitHref(n); return; }
+    if (n >= 7 && n <= 9 && IR.u789Route) { Snd.stop(); location.hash = '#/u' + n; return; }
     if (u6) { Snd.stop(); location.hash = '#/u6'; return; }
     if (u5) { Snd.stop(); location.hash = '#/u5'; return; }
     if (isl) { openIsland('i3'); return; }
@@ -1856,6 +1996,8 @@
     else if (IR.u5Route && IR.u5Route(hash, app)) { /* Unit 5 Silent e (js/u5.js) */ }
     else if (IR.u6Route && IR.u6Route(hash, app)) { /* Unit 6 Endings (js/u6.js) */ }
     else if (IR.u123Route && IR.u123Route(hash, app)) { /* Units 1 to 3 (js/u123.js) */ }
+    else if (IR.u789Route && IR.u789Route(hash, app)) { /* Units 7 to 9 (js/u789.js) */ }
+    else if (IR.u1012Route && IR.u1012Route(hash, app)) { /* Units 10 to 12 (js/u1012.js) */ }
     else if ((m = /^#\/lesson\/(\d+)/.exec(hash))) lessonScreen(parseInt(m[1], 10) - 1);
     else if (/^#\/chest[1-4]/.test(hash)) IR.chest.render(hash, app);
     else if (hash === '#/practice/spelling' || hash === '#/practice/fluency') { location.replace(hash.replace('#/practice/', '#/practice/skills/')); return; }
@@ -1865,11 +2007,14 @@
     else if (hash.startsWith('#/about')) aboutScreen();
     else if (hash.startsWith('#/trail')) islandTrailPage();
     else if (hash.startsWith('#/find')) findScreen();
-    else if ((m = /^#\/teachers\/slides\/(ng|nk|u5|tricky|u61|u62|u63|u11|u12|u13|u14|u21|u22|u23|u24|u31|u32)$/.exec(hash))) slidesViewer(m[1]);
+    else if ((m = /^#\/teachers\/slides\/(u1[012]\d)$/.exec(hash)) && IR.slides1012) IR.slides1012(m[1]);
+    else if ((m = /^#\/teachers\/slides\/(ng|nk|u5|tricky|u61|u62|u63|u11|u12|u13|u14|u21|u22|u23|u24|u31|u32|u71|u72|u73|u81|u82|u83|u91|u92|u93|u94)$/.exec(hash))) slidesViewer(m[1]);
     else if (hash.startsWith('#/teachers')) { if (IR._slideCleanup) { IR._slideCleanup(); IR._slideCleanup = null; } teachersScreen(); }
     else if (hash.startsWith('#/placement/classic')) IR.placementClassic.render(app, (n) => {
       const bell = (IR.placementClassic.BELL || {})[n] || { unit: n, name: 'this bell' };
       if (bell.unit <= 3 && IR.u123Route) { location.hash = '#/u' + bell.unit; return; }
+      if (builtUnitHref(bell.unit)) { location.hash = builtUnitHref(bell.unit); return; }
+      if (bell.unit >= 7 && bell.unit <= 9 && IR.u789Route) { location.hash = '#/u' + bell.unit; return; }
       if (bell.unit === 4) { location.hash = '#/home'; setTimeout(() => openIsland('i3'), 0); return; }
       if (bell.unit === 5) { location.hash = '#/u5'; return; }
       if (bell.unit === 6) { location.hash = '#/u6'; return; }
@@ -1878,8 +2023,11 @@
     });
     else if (hash.startsWith('#/placement')) IR.placement.render(app, (start) => {
       if (start.team) { location.hash = '#/foundation/letters/g' + start.team; return; }
+      if (start.href) { location.hash = start.href; return; }
       const n = start.unit;
       if (n <= 3 && IR.u123Route) { location.hash = '#/u' + n; return; }
+      if (builtUnitHref(n)) { location.hash = builtUnitHref(n); return; }
+      if (n >= 7 && n <= 9 && IR.u789Route) { location.hash = '#/u' + n; return; }
       if (n === 4) { location.hash = '#/home'; setTimeout(() => openIsland('i3'), 0); return; }
       if (n === 5) { location.hash = '#/u5'; return; }
       if (n === 6) { location.hash = '#/u6'; return; }
@@ -1899,7 +2047,13 @@
     { n: 3, id: 'u3', href: '#/u3', test: (hs) => /^#\/u3(\/|$)/.test(hs) },
     { n: 4, id: 'i3', test: (hs) => /^#\/(nk|island3|lesson\/|review3|check|result)/.test(hs) || /^#\/spell\/(ng|nk)(\/|$)/.test(hs) },
     { n: 5, id: 'i5', test: (hs) => /^#\/(u5\d|review5)/.test(hs) || /^#\/spell\/u5(\/|$)/.test(hs) },
-    { n: 6, id: 'u6', href: '#/u6', test: (hs) => /^#\/u6(\/|$)/.test(hs) || /^#\/spell\/u6(\/|$)/.test(hs) }];
+    { n: 6, id: 'u6', href: '#/u6', test: (hs) => /^#\/u6(\/|$)/.test(hs) || /^#\/spell\/u6(\/|$)/.test(hs) },
+    { n: 7, id: 'u7', href: '#/u7', test: (hs) => /^#\/u7(\/|$)/.test(hs) },
+    { n: 8, id: 'u8', href: '#/u8', test: (hs) => /^#\/u8(\/|$)/.test(hs) },
+    { n: 9, id: 'u9', href: '#/u9', test: (hs) => /^#\/u9(\/|$)/.test(hs) },
+    { n: 10, id: 'u10', href: '#/u10', test: (hs) => /^#\/u10(\/|$)/.test(hs) },
+    { n: 11, id: 'u11', href: '#/u11', test: (hs) => /^#\/u11(\/|$)/.test(hs) },
+    { n: 12, id: 'u12', href: '#/u12', test: (hs) => /^#\/u12(\/|$)/.test(hs) }];
   function addUnitBack() {
     /* Back in the page nav already goes one level up. A second "Back to Unit" button is not added. */
   }

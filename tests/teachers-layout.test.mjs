@@ -23,6 +23,12 @@ test('every Teacher Materials section uses the Unit 4 lesson card', () => {
   assert.ok(teachers.includes("class: 'tmgrid'"));
   assert.ok(teachers.includes("class: 'tmcard'"));
   assert.ok(teachers.includes("class: 'tmsound'"));
+  assert.ok(teachers.includes("class: 'tmlesson'"));
+  assert.equal(teachers.includes('Download slides'), false);
+  const css = fs.readFileSync(new URL('../styles.css', import.meta.url), 'utf8');
+  assert.match(css, /\.tmfiles\[hidden\]\{display:none!important\}/);
+  assert.match(css, /\.tmsound\{[^}]*white-space:nowrap/);
+  assert.match(css, /body:has\(\.tmscreen\) #soundfix/);
   assert.equal(teachers.includes('rows:'), false);
   assert.equal(teachers.includes('tmchecks'), false);
 });
