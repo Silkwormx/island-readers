@@ -35,6 +35,8 @@ test('every lesson has 3 days, a 6-page story with art and narration, a chant, w
       assert.ok(exists('audio/' + l.key + '_s_' + (i + 1) + '.mp3'), l.key + ' page audio ' + (i + 1));
     });
     assert.ok(exists('img/cover_' + l.key + '.webp'), l.key + ' cover');
+    assert.ok(exists('img/pick_' + l.key + '.webp'), l.key + ' picker art');
+    assert.ok(exists('img/pick_review.webp'), 'review picker art');
     for (const w of l.bellWords) assert.ok(exists('audio/w_' + w.toLowerCase() + '.mp3'), l.key + ' ' + w);
     for (const w of l.words) assert.ok(exists('audio/w_' + w.toLowerCase() + '.mp3'), l.key + ' ' + w);
     for (const p of Object.values(l.pics)) assert.ok(p.startsWith('svg') || exists(p), l.key + ' pic ' + p);
@@ -133,7 +135,7 @@ test('phone-safe CSS: small viewport height, safe area, equal answer tracks', ()
 });
 
 test('service worker caches the new code and media', () => {
-  assert.match(sw, /const CACHE = 'ir-20261127h'/);
+  assert.match(sw, /const CACHE = 'ir-20261127i'/);
   for (const f of ['data_u789.js', 'js/u789.js', 'u789.css', 'img/u71_p01.webp', 'materials/unit9/slides/u94/manifest.json']) {
     assert.match(sw, new RegExp('"\\./' + f.replace(/[.]/g, '\\.') + '"'), f);
   }
