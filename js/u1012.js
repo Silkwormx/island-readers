@@ -167,7 +167,7 @@
           h('div', { class: 'panelwrap small' }, h('img', { class: 'panel', src: face, alt: b.who === 'frill' ? 'Frill' : 'Zip' })),
           h('p', { class: 'bigword' }, colorWord(b.word, L)), pure),
         b.cap ? h('p', { class: 'cap' }, b.cap) : null, rec,
-        (b.chips || []).some((w) => bare(w) === 'hoe') ? h('img', { class: 'hoepic', src: 'img/u12pics/hoe.webp', alt: 'a garden hoe' }) : null,
+        wordPic(b.word),
         h('div', { class: 'chips' }, ...(b.chips || []).map((w) => h('button', { class: 'chip', type: 'button', onclick: () => say(w) }, colorWord(w, L))))));
       ctx.setNextLabel(i === beats.length - 1 ? 'Activities' : 'Next');
       Snd.play(P(b.audio)).then(() => { if (b.snd && PH(b.snd) && ctx.scr.ok()) Snd.play(PH(b.snd)); });
@@ -177,6 +177,14 @@
     show();
   }
 
+  const WORD_PIC = {
+    toe: ['img/u12pics/toe-foot.webp', 'a toe'],
+    hoe: ['img/u12pics/hoe.webp', 'a garden hoe']
+  };
+  function wordPic(w) {
+    const hit = WORD_PIC[bare(w)];
+    return hit ? h('img', { class: 'hoepic', src: hit[0], alt: hit[1] }) : null;
+  }
   function hoeFace(w, node) {
     if (bare(w) !== 'hoe') return node;
     return h('span', { class: 'hoeword' }, h('img', { class: 'hoepic', src: 'img/u12pics/hoe.webp', alt: 'a garden hoe' }), node);
