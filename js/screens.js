@@ -859,20 +859,53 @@
       const fixed = sideEl && getComputedStyle(sideEl).position === 'fixed';
       const limit = fixed ? sideEl.getBoundingClientRect().top : window.innerHeight;
       const avail = Math.max(narrow ? 500 : 620, limit - trail.getBoundingClientRect().top - 8);
-      const rowH = Math.round((avail - 12) / (narrow ? 3.15 : 3.48));
-      const total = Math.round((stops.length - 1) * rowH + heightRoom(rowH, narrow, avail) + 36);
-      trail.style.height = total + 'px';
-      stops.forEach((el, i) => {
-        const side = i % 2 === 0 ? 'l' : 'r';
+      const sized = stops.map((el) => {
         const img = el.querySelector('.skyisland');
         const aspect = img && img.naturalWidth ? img.naturalHeight / img.naturalWidth : 1.15;
-        const fitH = heightRoom(rowH, narrow, avail);
-        const maxW = Math.round(w * (narrow ? 0.46 : 0.62));
+        const fitH = heightRoom(Math.round((avail - 12) / (narrow ? 2.9 : 3.3)), narrow, avail);
+        const maxW = Math.round(w * (narrow ? 0.42 : 0.58));
         let width = Math.min(maxW, Math.round(fitH / aspect));
-        /* A long rocky point must not shrink the tree. Grow the box downward instead. */
         const usualW = Math.min(maxW, Math.round(fitH / 1.15));
         if (width < usualW * 0.84) width = Math.round(usualW * 0.9);
         const height = Math.max(fitH, Math.round(width * aspect));
+        return { width: width, height: height };
+      });
+      /* Signs hang under the tip, so same-side stops need a gap for that sign. */
+      stops.forEach((el) => {
+        const lbl = el.querySelector('.skylbl');
+        if (!lbl) return;
+        lbl.style.position = 'absolute';
+        lbl.style.boxSizing = 'border-box';
+        lbl.style.width = (narrow ? 156 : 180) + 'px';
+        lbl.style.height = 'auto';
+        lbl.style.maxHeight = 'none';
+        lbl.style.overflow = 'visible';
+      });
+      const signH = Math.max(64, ...stops.map((el) => (el.querySelector('.skylbl') || { offsetHeight: 64 }).offsetHeight));
+      const tallest = Math.max(...sized.map((s) => s.height));
+      let rowH = Math.max(Math.round((avail - 12) / (narrow ? 2.85 : 3.15)), Math.ceil((tallest + signH + 10) / 2));
+      /* Unit 1's sign has to finish on the first laptop screen, under the tip. */
+      if (!narrow && sized[1]) {
+        const trailTop = trail.getBoundingClientRect().top;
+        const roomForIslands = (limit - 18) - trailTop - 15 - signH * 1.5;
+        const used = tallest / 2 + sized[1].height;
+        const fit = roomForIslands / used;
+        if (fit > 0 && fit < 1) {
+          const scale = Math.max(0.88, fit);
+          sized.forEach((s) => {
+            s.width = Math.round(s.width * scale);
+            s.height = Math.round(s.height * scale);
+          });
+          const tall2 = Math.max(...sized.map((s) => s.height));
+          rowH = Math.max(Math.round((avail - 12) / 3.15), Math.ceil((tall2 + signH + 10) / 2));
+        }
+      }
+      const last = sized[sized.length - 1];
+      trail.style.height = Math.round((stops.length - 1) * rowH + 6 + last.height + signH + 20) + 'px';
+      stops.forEach((el, i) => {
+        const side = i % 2 === 0 ? 'l' : 'r';
+        const width = sized[i].width;
+        const height = sized[i].height;
         el.classList.remove('sky-l', 'sky-r', 'sky-b');
         el.classList.add(side === 'r' ? 'sky-r' : 'sky-l');
         el.dataset.land = String(Math.floor(Math.max(0, i - 1) / 6));
@@ -885,31 +918,11 @@
         else el.style.left = Math.max(narrow ? 8 : 16, Math.round(w - width - (narrow ? 8 : 20))) + 'px';
         const lbl = el.querySelector('.skylbl');
         if (lbl) {
-          const rim = img && img.naturalWidth ? grassRim(img, side === 'r') : { fy: 0.62 };
-          const fit = fittedArt(el, img);
-          /* On the outer grass rim, clear of the trunk, canopy, and bell. */
-          const fy = Math.min(0.72, Math.max(0.5, (rim.fy || 0.62) + 0.02));
-          lbl.style.position = 'absolute';
-          /* Wide enough for the sound line to stay inside the sign, then grow taller for the name. */
-          const lblW = Math.min(narrow ? 148 : 168, Math.max(narrow ? 120 : 132, Math.round(width * 0.7)));
-          lbl.style.boxSizing = 'border-box';
-          lbl.style.width = lblW + 'px';
-          lbl.style.height = 'auto';
-          lbl.style.maxHeight = 'none';
-          lbl.style.overflow = 'visible';
-          lbl.style.transform = 'none';
-          const stopLeft = parseFloat(el.style.left) || 0;
-          let left = side === 'l' ? 0 : width - lblW;
-          if (stopLeft + left < 8) left += 8 - (stopLeft + left);
-          if (stopLeft + left + lblW > w - 8) left -= (stopLeft + left + lblW) - (w - 8);
-          lbl.style.left = Math.round(left) + 'px';
+          /* Under the rocky tip, in the open sky, clear of the tree, bell, and island top. */
+          lbl.style.left = '50%';
           lbl.style.right = 'auto';
-          const lh = lbl.offsetHeight || 96;
-          const stopTop = parseFloat(el.style.top) || 0;
-          let top = Math.round(fit.y + fit.h * fy);
-          const room = window.innerHeight - trail.getBoundingClientRect().top - 8;
-          if (stopTop + top + lh > room) top = Math.max(4, Math.round(room - stopTop - lh));
-          lbl.style.top = top + 'px';
+          lbl.style.transform = 'translateX(-50%)';
+          lbl.style.top = (height + 4) + 'px';
           lbl.style.bottom = 'auto';
         }
       });

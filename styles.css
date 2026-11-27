@@ -4002,35 +4002,32 @@ body:has(.tmscreen) #soundfix,body:has(.u123step) #soundfix,body:has(.u789step) 
   background:#d5e8f6 url("img/sky/sky_far.webp") center 18% / cover no-repeat fixed;
   box-shadow:inset 0 0 0 2px #E7D3A4, 0 8px 16px rgba(70,46,20,.12);
 }
-.skyhome.ledges .skystop{position:absolute;margin:0!important;width:auto;z-index:4;overflow:visible}
+.gridhome.bellfit.skyhome.ledges .bellpath .skystop{position:absolute;margin:0!important;width:auto;z-index:4;overflow:visible}
 .skyhome.ledges .skyisland{display:block;width:100%;height:100%;object-fit:contain;object-position:center bottom;filter:drop-shadow(0 12px 8px rgba(42,28,14,.32))}
 .skyhome.ledges .skylbl{
-  position:absolute;z-index:6;top:auto;bottom:auto;width:6.8rem;height:auto;max-height:none;margin:0;
-  padding:.28rem .42rem .32rem;overflow:visible;border-radius:1rem;
+  position:absolute;z-index:6;top:auto;bottom:auto;width:10.5rem;height:auto;max-height:none;margin:0;
+  padding:.08rem .4rem .1rem;overflow:visible;border-radius:.7rem;
   transform:none;white-space:normal;font-family:Andika,sans-serif;
-  align-items:center;justify-content:flex-start;gap:.06rem;
+  letter-spacing:0;word-spacing:normal;
+  align-items:center;justify-content:flex-start;gap:0;
 }
-.skyhome.ledges .skylbl .thead{display:flex;align-items:center;justify-content:center;gap:.28rem;flex-wrap:wrap;width:100%}
-.skyhome.ledges .skylbl .tnum{font-size:.78rem;line-height:1.15;font-weight:700;color:#0E7C7C;white-space:normal}
+.skyhome.ledges .skylbl .thead{display:flex;align-items:center;justify-content:center;gap:.22rem;flex-wrap:wrap;width:100%}
+.skyhome.ledges .skylbl .tnum{font-size:.68rem;line-height:1.1;font-weight:700;color:#0E7C7C;white-space:normal}
 .skyhome.ledges .skylbl .tname,
 .skyhome.ledges .skylbl .tsnd,
 .skyhome.ledges .skylbl .tcount,
 .skyhome.ledges .skylbl .tnum{
   display:block;width:100%;height:auto;max-height:none;overflow:visible;white-space:normal;text-align:center;
 }
-.skyhome.ledges .skylbl .tname{font-size:.72rem;font-weight:700;line-height:1.2;color:#2B2540}
-.skyhome.ledges .skylbl .tsnd{font-size:.66rem;font-weight:700;line-height:1.25;color:#5a4632}
-.skyhome.ledges .skylbl .tcount{font-size:.64rem;font-weight:700;line-height:1.2;color:#5a4632}
-.skyhome.ledges .skylbl .tdot{width:.52rem;height:.52rem}
+.skyhome.ledges .skylbl .tname{font-size:.64rem;font-weight:700;line-height:1.12;color:#2B2540}
+.skyhome.ledges .skylbl .tsnd{font-size:.56rem;font-weight:700;line-height:1.12;color:#5a4632}
+.skyhome.ledges .skylbl .tcount{font-size:.54rem;font-weight:700;line-height:1.1;color:#5a4632}
+.skyhome.ledges .skylbl .tdot{width:.42rem;height:.42rem}
 .skyhome.ledges .sky-l .skylbl{left:auto;right:4%}
 .skyhome.ledges .sky-r .skylbl{right:auto;left:4%}
 .skyhome.ledges .skyrootspans{position:absolute;left:0;top:0;z-index:3;pointer-events:none}
 .skyhome.ledges .skybook{position:absolute;z-index:6;margin:0;top:10px;right:12px;left:auto;align-self:auto}
 .skyhome.ledges .skyfig{width:2.85rem;z-index:8}
 @media (min-width:1000px){
-  .skyhome.ledges .skylbl{width:7.8rem}
-  .skyhome.ledges .skylbl .tnum{font-size:.84rem}
-  .skyhome.ledges .skylbl .tname{font-size:.78rem}
-  .skyhome.ledges .skylbl .tsnd{font-size:.72rem}
-  .skyhome.ledges .skylbl .tcount{font-size:.7rem}
+  .skyhome.ledges .skylbl{width:11.2rem}
 }
