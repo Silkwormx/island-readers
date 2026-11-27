@@ -4003,6 +4003,7 @@ body:has(.tmscreen) #soundfix,body:has(.u123step) #soundfix,body:has(.u789step) 
   .skyhome .skylbl b{font-size:.95rem}
   .skyhome .skylbl small{font-size:.74rem}
   .skyhome .mwrap > .hbanner{position:sticky;top:0;z-index:24;background:linear-gradient(#e7f4fb 70%, rgba(231,244,251,0));padding-top:.4rem}
+  .skyhome.ledges .mwrap > .hbanner{z-index:40;background:#FFF8E7;padding-bottom:.55rem}
 }
 .skyhome.ledges .skyline,.skyhome.ledges .skystones{stroke:none}
 .skyhome.ledges .skywalk{display:none}

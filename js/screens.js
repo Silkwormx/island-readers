@@ -379,7 +379,7 @@
     const place = trailPlace();
     const atFoundations = continueTarget().href.indexOf('#/foundation') === 0;
     const hereUnit = atFoundations ? 0 : place.here;
-    const ledgesHome = /[?&]home=ledges\b/.test(location.search);
+    const ledgesHome = !/[?&]home=zigzag\b/.test(location.search);
     const coilSide = (n) => (n % 2 === 1 ? 'r' : 'l');
     /* Paint Zip and Frill into the island daylight: drop the studio edge, warm the light, and leave no halo. */
     function paintIntoScene(img, done) {
@@ -1035,7 +1035,8 @@
       ctx.save();
       ctx.translate(left.x, left.y);
       ctx.rotate(ang);
-      ctx.drawImage(img, box.minX, box.minY, bw, bh, 0, -rail * 0.34, dist, rail);
+      const tuck = Math.min(36, dist * 0.08);
+      ctx.drawImage(img, box.minX, box.minY, bw, bh, -tuck, -rail * 0.32, dist + tuck * 2, rail);
       ctx.restore();
     }
     function layoutPath() {
