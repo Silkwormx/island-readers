@@ -469,17 +469,12 @@
       if (img.complete && img.naturalWidth) paint();
       else img.addEventListener('load', paint, { once: true });
     }
-    function skyBridge(from, to) {
-      const x = { l: 96, r: 204, c: 150 };
-      const d = 'M' + x[from] + ' 2 C ' + x[from] + ' 28, ' + x[to] + ' 18, ' + x[to] + ' 46';
-      return h('div', { class: 'skybridge', 'aria-hidden': 'true', html:
-        '<svg viewBox="0 0 300 48" preserveAspectRatio="none">' +
-        '<path class="cloudpath" d="' + d + '"/>' +
-        '<path class="vine" d="' + d + '"/>' +
-        '<ellipse cx="150" cy="24" rx="18" ry="8" fill="#fff" opacity=".88"/>' +
-        '<ellipse cx="136" cy="26" rx="11" ry="6" fill="#fff" opacity=".9"/>' +
-        '<ellipse cx="166" cy="25" rx="12" ry="6.5" fill="#fff" opacity=".82"/>' +
-        '</svg>' });
+    const PAINTED = ['img/sky/island_a.webp', 'img/sky/island_b.webp', 'img/sky/island_d.webp'];
+    function skyBridge(i) {
+      const src = i % 2 ? 'img/sky/bridge_vine.webp' : 'img/sky/bridge_clouds.webp';
+      return h('span', { class: 'skybridge', 'aria-hidden': 'true', html:
+        '<img src="' + src + '" alt="">' +
+        '<svg class="skybridge-path" viewBox="0 0 240 48"><path class="vine" d="M18 30 C 70 6, 170 6, 222 30"/></svg>' });
     }
     function skyStop(opts) {
       const pic = h('img', { class: 'skypic', src: opts.img, alt: '', loading: opts.lazy ? 'lazy' : 'eager' });
@@ -493,12 +488,13 @@
         'aria-label': opts.label
       },
         h('span', { class: 'skyart' },
-          h('span', { class: 'skybase', html: IR.islandSVG(opts.theme), 'aria-hidden': 'true' }),
+          h('img', { class: 'skyisland', src: PAINTED[opts.theme % PAINTED.length], alt: '' }),
           pic),
         h('span', { class: 'skylbl' },
           opts.here ? h('span', { class: 'herechip' }, 'You are here') : opts.soon ? h('span', { class: 'herechip soonchip' }, 'Coming soon') : null,
           h('b', null, opts.num),
           h('span', { class: 'skytitle' }, opts.title)));
+      if (opts.bridge) b.append(opts.bridge);
       b.addEventListener('click', opts.onclick);
       return b;
     }
@@ -520,7 +516,8 @@
         here: st === 'here',
         soon: st === 'soon',
         done: st === 'done',
-        theme: n % 11,
+        theme: n % 3,
+        bridge: skyBridge(n),
         img: 'img/units/tile' + String(n).padStart(2, '0') + '.webp',
         lazy: n > 8,
         num: 'Unit ' + n,
@@ -556,11 +553,7 @@
       'aria-label': 'Library. Opens the Library.',
       onclick: () => { Snd.stop(); location.hash = '#/library'; }
     }, h('span', { class: 'skybookart', html: BOOK, 'aria-hidden': 'true' }), h('b', null, 'Library'));
-    const trailBits = [library, skyBridge('c', 'l')];
-    cards.forEach((stop, i) => {
-      if (i) trailBits.push(skyBridge(i % 2 === 1 ? 'l' : 'r', i % 2 === 1 ? 'r' : 'l'));
-      trailBits.push(stop);
-    });
+    const trailBits = [library].concat(cards);
     const zipImg = h('img', { class: 'skyfigpic', alt: '', src: 'img/zipA.webp' });
     const frillImg = h('img', { class: 'skyfigpic', alt: '', src: 'img/zip-show/frill-glide.webp' });
     const zipFig = h('div', { class: 'skyfig zip is-painting' }, h('span', { class: 'skyshade', 'aria-hidden': 'true' }), zipImg);
@@ -651,14 +644,14 @@
       const art = stop.querySelector('.skyart');
       const a = art.getBoundingClientRect();
       const t = trail.getBoundingClientRect();
-      const y = a.top - t.top + a.height * 0.64;
+      const y = a.top - t.top + a.height * 0.4;
       return { y: y, zipX: a.left - t.left + a.width * 0.24, frillX: a.left - t.left + a.width * 0.76, midX: a.left - t.left + a.width * 0.5 };
     }
     function put(fig, x, y) {
       fig.style.transform = 'translate(' + (x - fig.offsetWidth / 2) + 'px,' + (y - fig.offsetHeight) + 'px)';
     }
     function bridgePts(fromStop, toStop) {
-      const bridge = toStop.previousElementSibling;
+      const bridge = toStop.querySelector('.skybridge');
       const path = bridge && bridge.querySelector('.vine');
       const t = trail.getBoundingClientRect();
       if (!path || !bridge.classList.contains('skybridge')) return [];
@@ -668,7 +661,7 @@
       for (let i = 0; i <= 16; i++) {
         const p = path.getPointAtLength(len * i / 16);
         pts.push({
-          x: br.left - t.left + (p.x / 300) * br.width,
+          x: br.left - t.left + (p.x / 240) * br.width,
           y: br.top - t.top + (p.y / 48) * br.height
         });
       }
