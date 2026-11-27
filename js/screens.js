@@ -376,6 +376,132 @@
       ['Suffixes', '-er \u00b7 -est \u00b7 -ly \u00b7 -ful', 6, ['purple', 'purple']], ['Suffix Spelling Rules', 'double \u00b7 drop e \u00b7 y to i', 4, ['pink', 'pink']],
       ['Prefixes', 'un- \u00b7 pre- \u00b7 re- \u00b7 dis-', 5, ['rainbow']], ['Big Endings', '-tion \u00b7 -ture \u00b7 -ment', 6, ['gold']]];
     const BUILT = 4, BUILT_ID = 'i3';
+    const place = trailPlace();
+    const atFoundations = continueTarget().href.indexOf('#/foundation') === 0;
+    const hereUnit = atFoundations ? 0 : place.here;
+    /* Paint Zip and Frill into the daylight of the sky islands: lift the studio backdrop, soften the edge, and warm the light so they are not stickers. */
+    function paintIntoScene(img, done) {
+      const paint = () => {
+        const w = img.naturalWidth, ht = img.naturalHeight;
+        if (!w || !ht || img.dataset.painted) { if (done) done(); return; }
+        img.dataset.painted = '1';
+        const scale = Math.min(1, 480 / w);
+        const c = document.createElement('canvas');
+        c.width = Math.max(1, Math.round(w * scale));
+        c.height = Math.max(1, Math.round(ht * scale));
+        const g = c.getContext('2d', { willReadFrequently: true });
+        if (!g) { if (done) done(); return; }
+        g.drawImage(img, 0, 0, c.width, c.height);
+        const frame = g.getImageData(0, 0, c.width, c.height);
+        const p = frame.data;
+        const W = c.width, H = c.height;
+        const cream = (i) => {
+          const r = p[i], gg = p[i + 1], b = p[i + 2], a = p[i + 3];
+          if (a < 18) return true;
+          return r > 208 && gg > 196 && b > 172 && (r - b) > 6 && (r - b) < 82 && Math.abs(r - gg) < 42 && gg + 8 > b;
+        };
+        const seen = new Uint8Array(W * H);
+        const qx = new Int16Array(W * H);
+        const qy = new Int16Array(W * H);
+        let qs = 0, qe = 0;
+        const seed = (x, y) => {
+          const k = y * W + x;
+          if (seen[k] || !cream(k * 4)) return;
+          seen[k] = 1;
+          qx[qe] = x; qy[qe] = y; qe++;
+        };
+        for (let x = 0; x < W; x++) { seed(x, 0); seed(x, H - 1); }
+        for (let y = 0; y < H; y++) { seed(0, y); seed(W - 1, y); }
+        while (qs < qe) {
+          const x = qx[qs], y = qy[qs]; qs++;
+          p[(y * W + x) * 4 + 3] = 0;
+          if (x > 0) seed(x - 1, y);
+          if (x + 1 < W) seed(x + 1, y);
+          if (y > 0) seed(x, y - 1);
+          if (y + 1 < H) seed(x, y + 1);
+        }
+        const alpha = new Float32Array(W * H);
+        for (let i = 0; i < W * H; i++) alpha[i] = p[i * 4 + 3];
+        const soft = new Float32Array(W * H);
+        for (let y = 0; y < H; y++) {
+          for (let x = 0; x < W; x++) {
+            let s = 0, n = 0;
+            for (let dy = -1; dy <= 1; dy++) {
+              for (let dx = -1; dx <= 1; dx++) {
+                const xx = x + dx, yy = y + dy;
+                if (xx < 0 || yy < 0 || xx >= W || yy >= H) continue;
+                s += alpha[yy * W + xx]; n++;
+              }
+            }
+            soft[y * W + x] = s / n;
+          }
+        }
+        for (let y = 0; y < H; y++) {
+          const up = 1 - y / H;
+          for (let x = 0; x < W; x++) {
+            const i = (y * W + x) * 4;
+            const a = soft[y * W + x];
+            if (a < 2) { p[i + 3] = 0; continue; }
+            let r = p[i], gg = p[i + 1], b = p[i + 2];
+            const avg = (r + gg + b) / 3;
+            r = r * 0.86 + avg * 0.08 + 20 + up * 12;
+            gg = gg * 0.90 + avg * 0.05 + 14 + up * 8;
+            b = b * 0.84 + avg * 0.04 + 10 + up * 4;
+            if (up < 0.22) {
+              const k = (0.22 - up) / 0.22 * 0.07;
+              r = r * (1 - k) + 96 * k;
+              gg = gg * (1 - k) + 124 * k;
+              b = b * (1 - k) + 62 * k;
+            }
+            p[i] = r < 0 ? 0 : r > 255 ? 255 : r;
+            p[i + 1] = gg < 0 ? 0 : gg > 255 ? 255 : gg;
+            p[i + 2] = b < 0 ? 0 : b > 255 ? 255 : b;
+            p[i + 3] = a > 255 ? 255 : a;
+          }
+        }
+        g.putImageData(frame, 0, 0);
+        img.onload = null;
+        img.src = c.toDataURL('image/png');
+        if (!done) return;
+        if (img.complete && img.naturalWidth) done();
+        else img.addEventListener('load', done, { once: true });
+      };
+      if (img.complete && img.naturalWidth) paint();
+      else img.addEventListener('load', paint, { once: true });
+    }
+    function skyBridge(from, to) {
+      const x = { l: 96, r: 204, c: 150 };
+      const d = 'M' + x[from] + ' 2 C ' + x[from] + ' 28, ' + x[to] + ' 18, ' + x[to] + ' 46';
+      return h('div', { class: 'skybridge', 'aria-hidden': 'true', html:
+        '<svg viewBox="0 0 300 48" preserveAspectRatio="none">' +
+        '<path class="cloudpath" d="' + d + '"/>' +
+        '<path class="vine" d="' + d + '"/>' +
+        '<ellipse cx="150" cy="24" rx="18" ry="8" fill="#fff" opacity=".88"/>' +
+        '<ellipse cx="136" cy="26" rx="11" ry="6" fill="#fff" opacity=".9"/>' +
+        '<ellipse cx="166" cy="25" rx="12" ry="6.5" fill="#fff" opacity=".82"/>' +
+        '</svg>' });
+    }
+    function skyStop(opts) {
+      const pic = h('img', { class: 'skypic', src: opts.img, alt: '', loading: opts.lazy ? 'lazy' : 'eager' });
+      if (opts.onpic) opts.onpic(pic);
+      const b = h('button', {
+        class: 'tcard skystop sky-' + opts.side + (opts.here ? ' is-here t-current' : '') + (opts.soon ? ' is-soon' : '') + (opts.done ? ' is-done' : ''),
+        type: 'button',
+        'data-id': opts.id,
+        'data-kind': 'island',
+        'data-n': opts.n,
+        'aria-label': opts.label
+      },
+        h('span', { class: 'skyart' },
+          h('span', { class: 'skybase', html: IR.islandSVG(opts.theme), 'aria-hidden': 'true' }),
+          pic),
+        h('span', { class: 'skylbl' },
+          opts.here ? h('span', { class: 'herechip' }, 'You are here') : opts.soon ? h('span', { class: 'herechip soonchip' }, 'Coming soon') : null,
+          h('b', null, opts.num),
+          h('span', { class: 'skytitle' }, opts.title)));
+      b.addEventListener('click', opts.onclick);
+      return b;
+    }
     const unit = (n) => {
       const t = TILES[n]; const isl = n === BUILT && !!(D.islands || {})[BUILT_ID];
       const u5 = n === 5 && !!IR.u5Route;   /* Nov 3 2026 local: Unit 5 Silent e is open (js/u5.js: same lesson flow as Unit 4; picker data islands.i5) */
@@ -384,42 +510,63 @@
       const u789 = n >= 7 && n <= 9 && !!IR.u789Route;   /* Nov 27 2026: Units 7 to 9 (js/u789.js), same lesson flow as Units 1 to 3 */
       const hop = builtUnitHref(n);
       const built = isl || u5 || u6 || u123 || u789 || !!hop;
-      const st = !built ? 'soon' : n === BUILT && complete ? 'done' : n === BUILT ? 'here' : 'open';
+      const st = !built ? 'soon' : n === hereUnit ? 'here' : (place.finished[n] ? 'done' : 'open');
       const note = st === 'here' ? 'You are here' : st === 'done' ? 'Done' : st === 'open' ? 'Open' : 'Coming soon';
-      const label = 'Unit ' + n + ': ' + t[0] + ', ' + t[1].replace(/\u00b7/g, ',') + ', ' + t[2] + (t[2] === 1 ? ' lesson. ' : ' lessons. ') + note + (built ? '. Opens Unit ' + n + '.' : '.');
-      const b = h('button', { class: 'tcard t-' + st + (st === 'here' ? ' t-current' : ''), type: 'button', 'data-id': 'u' + n, 'data-kind': 'island', 'data-n': n, 'aria-label': label },
-        h('span', { class: 'tpic' }, h('img', { src: 'img/units/tile' + String(n).padStart(2, '0') + '.webp', alt: '', width: 600, height: 600, loading: n > 8 ? 'lazy' : 'eager' }),
-          st === 'here' ? h('span', { class: 'herechip' }, 'You are here') : st === 'soon' ? h('span', { class: 'herechip soonchip' }, 'Coming soon') : null),
-        h('span', { class: 'tbody' },
-          h('span', { class: 'thead' }, h('span', { class: 'tdots', 'aria-hidden': 'true' }, ...t[3].map((c) => h('i', { class: 'tdot td-' + c }))), h('b', { class: 'tnum' }, 'Unit ' + n)),
-          h('span', { class: 'tname' }, t[0]),
-          h('span', { class: 'tsnd' }, t[1]),
-          h('span', { class: 'tcount' }, t[2] + (t[2] === 1 ? ' lesson' : ' lessons'))));
-      b.addEventListener('click', () => { if (hop) { Snd.stop(); location.hash = hop; } else if (u123 || u789) { Snd.stop(); location.hash = '#/u' + n; } else if (u6) { Snd.stop(); location.hash = '#/u6'; } else if (u5) { Snd.stop(); location.hash = '#/u5'; } else if (isl) openIsland(BUILT_ID); else { Snd.stop(); toast('Unit ' + n + ' is coming soon.'); } });
-      return b;
+      const label = 'Unit ' + n + ': ' + t[0] + ', ' + t[1].replace(/\u00b7/g, ',') + ', ' + t[2] + (t[2] === 1 ? ' lesson. ' : ' lessons. ') + note + (built ? '. Opens Unit ' + n + '.' : '.') + (st === 'here' ? ' Zip and Frill are here.' : '');
+      return skyStop({
+        id: 'u' + n,
+        n: n,
+        side: n % 2 === 1 ? 'r' : 'l',
+        here: st === 'here',
+        soon: st === 'soon',
+        done: st === 'done',
+        theme: n % 11,
+        img: 'img/units/tile' + String(n).padStart(2, '0') + '.webp',
+        lazy: n > 8,
+        num: 'Unit ' + n,
+        title: t[0],
+        label: label,
+        onclick: () => { if (hop) { Snd.stop(); location.hash = hop; } else if (u123 || u789) { Snd.stop(); location.hash = '#/u' + n; } else if (u6) { Snd.stop(); location.hash = '#/u6'; } else if (u5) { Snd.stop(); location.hash = '#/u5'; } else if (isl) openIsland(BUILT_ID); else { Snd.stop(); toast('Unit ' + n + ' is coming soon.'); } }
+      });
     };
-    const cover = h('img', { src: 'foundation/img/foundations_cover.jpg', alt: '' });
-    const pic = h('span', { class: 'tpic' }, cover);
-    cover.addEventListener('error', () => {
-      pic.className = 'tpic tfaces';
-      pic.replaceChildren(...['a_apple.jpg', 'm_manny_mangrove.jpg', 's_sami_sea_snake.jpg', 't_tama_sea_turtle.jpg'].map((file) => h('img', { src: 'foundation/img/letters/' + file, alt: '' })));
+    const coverSrc = 'foundation/img/foundations_cover.jpg';
+    const foundations = skyStop({
+      id: 'foundations',
+      n: 0,
+      side: 'l',
+      here: atFoundations,
+      theme: 2,
+      img: coverSrc,
+      num: 'Foundations',
+      title: 'Learn the letters',
+      label: 'Foundations. Learn the letters. Opens Foundation Skills.' + (atFoundations ? ' You are here. Zip and Frill are here.' : ''),
+      onclick: () => { Snd.stop(); location.hash = '#/foundation'; },
+      onpic(pic) {
+        pic.addEventListener('error', () => {
+          pic.remove();
+        });
+      }
     });
-    const foundations = h('button', {
-      class: 'tcard',
-      type: 'button',
-      'data-id': 'foundations',
-      'aria-label': 'Foundations. Learn the letters. Opens Foundation Skills.'
-    },
-      pic,
-      h('span', { class: 'tbody' },
-        h('span', { class: 'thead' }, h('b', { class: 'tnum' }, 'Foundations')),
-        h('span', { class: 'tname' }, 'Learn the letters'),
-        h('span', { class: 'tsnd' }, '\u00a0'),
-        h('span', { class: 'tcount' }, '\u00a0')));
-    foundations.addEventListener('click', () => { Snd.stop(); location.hash = '#/foundation'; });
     const cards = [foundations];
     for (let n = 1; n <= 22; n++) cards.push(unit(n));
-    const grid = h('div', { class: 'bellpath', id: 'skymap' }, h('div', { class: 'bellgrid' }, ...cards));
+    const BOOK = '<svg viewBox="0 0 140 110" class="bookpic" aria-hidden="true"><ellipse cx="70" cy="102" rx="46" ry="7" fill="#2b2540" opacity=".14"/><ellipse cx="48" cy="96" rx="22" ry="6" fill="#fff" opacity=".85"/><ellipse cx="70" cy="94" rx="26" ry="7" fill="#fff"/><ellipse cx="94" cy="96" rx="20" ry="6" fill="#fff" opacity=".8"/><path d="M18 20h46c7 8 14 11 20 12v60c-6-2-13-5-20-11H18z" fill="#f4ead8" stroke="#7a5230" stroke-width="2.4" stroke-linejoin="round"/><path d="M122 20H76c-7 8-14 11-20 12v60c6-2 13-5 20-11h46z" fill="#c4552a" stroke="#7a3218" stroke-width="2.4" stroke-linejoin="round"/><path d="M70 32v50" stroke="#7a5230" stroke-width="2.2"/><path d="M82 38h26M82 48h20M82 58h24" stroke="#f8e6d0" stroke-width="2.4" stroke-linecap="round"/></svg>';
+    const library = h('button', {
+      class: 'skybook',
+      type: 'button',
+      'aria-label': 'Library. Opens the Library.',
+      onclick: () => { Snd.stop(); location.hash = '#/library'; }
+    }, h('span', { class: 'skybookart', html: BOOK, 'aria-hidden': 'true' }), h('b', null, 'Library'));
+    const trailBits = [library, skyBridge('c', 'l')];
+    cards.forEach((stop, i) => {
+      if (i) trailBits.push(skyBridge(i % 2 === 1 ? 'l' : 'r', i % 2 === 1 ? 'r' : 'l'));
+      trailBits.push(stop);
+    });
+    const zipImg = h('img', { class: 'skyfigpic', alt: '', src: 'img/zipA.webp' });
+    const frillImg = h('img', { class: 'skyfigpic', alt: '', src: 'img/zip-show/frill-glide.webp' });
+    const zipFig = h('div', { class: 'skyfig zip is-painting' }, h('span', { class: 'skyshade', 'aria-hidden': 'true' }), zipImg);
+    const frillFig = h('div', { class: 'skyfig frill is-painting' }, h('span', { class: 'skyshade', 'aria-hidden': 'true' }), frillImg);
+    const walkers = h('div', { class: 'skywalk', 'aria-hidden': 'true' }, zipFig, frillFig);
+    const grid = h('div', { class: 'bellpath skytrail', id: 'skymap' }, ...trailBits, walkers);
     const tab = (href, name, icoName) => h('a', { class: 'hometab', href: href, 'aria-label': name },
       h('span', { class: 'hometab-ico', 'aria-hidden': 'true' }, icon(icoName)),
       h('span', { class: 'hometab-name' }, name));
@@ -473,109 +620,122 @@
       window.addEventListener('hashchange', stop, { once: true });
       return b;
     }
-    /* Home card in the left column. 'A' = the picture on top (default); 'B' = heading above the picture. Test with ?hero=B. */
+    /* Home card in the left column. On a phone these controls sit in the bottom bar. */
     const HERO_VARIANT = (/[?&]hero=B\b/.test(location.search) ? 'B' : 'A');
     const hero = h('section', { class: 'homefeature zf' + HERO_VARIANT, 'aria-label': 'Learn to read with Zip and Frill' },
-      h('div', { class: 'zfpics' }, h('img', { class: 'homeart', src: 'img/home_zip_frill.webp', width: 1280, height: 720, alt: 'Zip and Frill sit on a tree root reading a book together. An orange bell hangs from the banyan behind them, and the island coast glows at sunset.' })),
       h('div', { class: 'hfbody' },
         h('div', { class: 'zfhead' }, h('h2', { class: 'zfline' }, 'Learn to read with Zip and Frill'), readAloudBtn()),
         h('p', { class: 'zfsub' }, 'Ring every bell by learning its sounds.'),
         continueButton()));
-    app.append(h('div', { class: 'screen home mapscreen gridhome bellfit bellspeek' }, h('div', { class: 'mwrap' }, banner, h('div', { class: 'homelay' }, h('div', { class: 'homeside' }, aboutDrop, hero, tabs), h('div', { class: 'bellslot' }, grid)))));
-    const fitBells = () => {
-        const root = app.querySelector('.gridhome.bellspeek');
-        const bells = root && root.querySelector('.bellgrid');
-        if (!root || !bells || !root.isConnected) return;
-        bells.style.gridTemplateColumns = '';
-        bells.querySelectorAll('.tpic, .tcard').forEach((el) => {
-          el.style.height = '';
-          el.style.minHeight = '';
-          el.style.aspectRatio = '';
-          el.style.overflow = '';
-        });
+    app.append(h('div', { class: 'screen home mapscreen gridhome skyhome' }, h('div', { class: 'mwrap' }, banner, h('div', { class: 'homelay' }, h('div', { class: 'homeside' }, aboutDrop, hero, tabs), h('div', { class: 'bellslot' }, grid)))));
+    standOnTrail(grid, hereUnit, zipFig, frillFig, zipImg, frillImg, paintIntoScene);
+  }
+  /* Zip and Frill stand on the current island. After a unit is completed they walk the path to the next one. */
+  function standOnTrail(trail, here, zipFig, frillFig, zipImg, frillImg, paintIntoScene) {
+    const WALK_MS = 2000;
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const STOOD = 'ir_sky_stood';
+    let ready = 0;
+    const go = () => {
+      ready++;
+      if (ready < 2 || !trail.isConnected) return;
+      requestAnimationFrame(() => {
+        placePair();
+        zipFig.classList.remove('is-painting');
+        frillFig.classList.remove('is-painting');
+      });
     };
-    /* Nov 3 2026: the whole left sidebar (About, Start here, Practice) stays in one spot while the tiles scroll (wide layouts only). */
-    const side = app.querySelector('.homeside'); const scr = app.querySelector('.screen.home');
-    let layoutHome = function () {};
-    const pin = () => {
-      if (!side || !scr || !side.isConnected) { window.removeEventListener('resize', layoutHome); return; }
-      const nav = side.querySelector('.hometabs');
-      const tabEls = nav ? [...nav.querySelectorAll('.hometab')] : [];
-      const hero = side.querySelector('.homefeature');
-      const pics = side.querySelector('.zfpics');
-      const artEl = side.querySelector('.homeart');
-      const goBtn = side.querySelector('.zfstart2');
-      const relax = () => {
-        side.style.removeProperty('height');
-        side.style.removeProperty('max-height');
-        side.style.removeProperty('overflow-y');
-        side.style.removeProperty('gap');
-        if (nav) nav.style.removeProperty('gap');
-        tabEls.forEach((t) => { t.style.removeProperty('height'); t.style.removeProperty('min-height'); t.style.removeProperty('max-height'); });
-        if (artEl) artEl.style.removeProperty('max-height');
-        if (pics) { pics.style.removeProperty('max-height'); pics.style.removeProperty('flex-grow'); pics.style.removeProperty('flex-basis'); }
-      };
-      if (!matchMedia('(min-width:1000px)').matches) { side.style.removeProperty('--side-top'); relax(); return; }
-      const banner = scr.querySelector('.hbanner');
-      const bannerH = banner ? banner.offsetHeight : 0;
-      side.style.setProperty('--side-top', bannerH + 'px');
-      const top = side.getBoundingClientRect().top;
-      const room = Math.max(200, Math.floor(scr.getBoundingClientRect().bottom - top - 8));
-      side.style.height = room + 'px';
-      side.style.maxHeight = room + 'px';
-      if (artEl) artEl.style.removeProperty('max-height');
-      if (pics) { pics.style.removeProperty('max-height'); pics.style.removeProperty('flex-grow'); pics.style.removeProperty('flex-basis'); }
-      const open = side.querySelector('.sidedrop.is-open');
-      if (open) return;
-      const shadow = 4;
-      const limits = () => {
-        const sideBox = side.getBoundingClientRect();
-        const heroBox = hero ? hero.getBoundingClientRect() : sideBox;
-        const viewBottom = Math.min(window.innerHeight, scr.getBoundingClientRect().bottom);
-        return { sideBox, heroBox, viewBottom };
-      };
-      const buttonPast = () => {
-        if (!goBtn) return false;
-        const btn = goBtn.getBoundingClientRect();
-        const box = limits();
-        const edge = Math.min(box.heroBox.bottom, box.sideBox.bottom, box.viewBottom);
-        return btn.bottom + shadow > edge + 1;
-      };
-      const sideOverflow = () => side.scrollHeight > side.clientHeight + 2;
-      const heroOverflow = () => !!(hero && hero.scrollHeight > hero.clientHeight + 2);
-      if (buttonPast() || sideOverflow() || heroOverflow()) {
-        side.style.gap = '6px';
-        if (nav) nav.style.gap = '6px';
-        tabEls.forEach((t) => {
-          if (t.classList.contains('trailtab')) return;
-          t.style.height = '42px';
-          t.style.minHeight = '42px';
-          t.style.maxHeight = '42px';
+    paintIntoScene(zipImg, go);
+    paintIntoScene(frillImg, go);
+    function feet(stop) {
+      const art = stop.querySelector('.skyart');
+      const a = art.getBoundingClientRect();
+      const t = trail.getBoundingClientRect();
+      const y = a.top - t.top + a.height * 0.64;
+      return { y: y, zipX: a.left - t.left + a.width * 0.24, frillX: a.left - t.left + a.width * 0.76, midX: a.left - t.left + a.width * 0.5 };
+    }
+    function put(fig, x, y) {
+      fig.style.transform = 'translate(' + (x - fig.offsetWidth / 2) + 'px,' + (y - fig.offsetHeight) + 'px)';
+    }
+    function bridgePts(fromStop, toStop) {
+      const bridge = toStop.previousElementSibling;
+      const path = bridge && bridge.querySelector('.vine');
+      const t = trail.getBoundingClientRect();
+      if (!path || !bridge.classList.contains('skybridge')) return [];
+      const br = bridge.getBoundingClientRect();
+      const len = path.getTotalLength();
+      const pts = [];
+      for (let i = 0; i <= 16; i++) {
+        const p = path.getPointAtLength(len * i / 16);
+        pts.push({
+          x: br.left - t.left + (p.x / 300) * br.width,
+          y: br.top - t.top + (p.y / 48) * br.height
         });
       }
-      if (pics && (buttonPast() || heroOverflow())) {
-        const btn = goBtn ? goBtn.getBoundingClientRect() : null;
-        const box = limits();
-        const edge = Math.min(box.heroBox.bottom, box.sideBox.bottom, box.viewBottom);
-        const past = btn ? Math.ceil(btn.bottom + shadow - edge) : 0;
-        const extra = hero ? Math.max(0, hero.scrollHeight - hero.clientHeight) : 0;
-        const cut = Math.max(past, extra);
-        if (cut > 1) {
-          const next = Math.max(72, Math.round(pics.getBoundingClientRect().height - cut - 2));
-          pics.style.flexGrow = '0';
-          pics.style.flexBasis = 'auto';
-          pics.style.maxHeight = next + 'px';
-        }
+      const from = feet(fromStop);
+      if (pts.length && pts[0].y < from.y - 4) pts.reverse();
+      return pts;
+    }
+    function placePair() {
+      const stops = [...trail.querySelectorAll('.skystop')];
+      const now = stops[here] || stops[0];
+      if (!now) return;
+      let prev = null;
+      try { prev = sessionStorage.getItem(STOOD); } catch (e) { /* storage blocked */ }
+      const fromIndex = prev == null ? here : Number(prev);
+      const from = stops[fromIndex] || now;
+      const hop = prev != null && fromIndex + 1 === here && from !== now;
+      const end = feet(now);
+      if (!hop || reduce) {
+        put(zipFig, end.zipX, end.y);
+        put(frillFig, end.frillX, end.y);
+        zipFig.classList.remove('is-walking');
+        frillFig.classList.remove('is-walking');
+        try { sessionStorage.setItem(STOOD, String(here)); } catch (e) { /* ignore */ }
+        return;
       }
-      const stillTight = buttonPast() || sideOverflow() || heroOverflow();
-      if (matchMedia('(max-height:520px)').matches && stillTight) side.style.overflowY = 'auto';
-      else side.style.removeProperty('overflow-y');
-    };
-    layoutHome = () => { pin(); fitBells(); };
-    requestAnimationFrame(layoutHome); window.addEventListener('resize', layoutHome);
-    const art = side.querySelector('.homeart');
-    if (art && !art.complete) art.addEventListener('load', layoutHome, { once: true });
-    if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { if (side.isConnected) layoutHome(); });
+      const start = feet(from);
+      const line = [{ x: start.midX, y: start.y }].concat(bridgePts(from, now), [{ x: end.midX, y: end.y }]);
+      /* They keep the drawn pose. A mirror would move the satchel and scarf off model. */
+      zipFig.classList.add('is-walking');
+      frillFig.classList.add('is-walking');
+      const scr = trail.closest('.skyhome');
+      if (scr) {
+        const y = from.getBoundingClientRect().top - scr.getBoundingClientRect().top + scr.scrollTop;
+        scr.scrollTop = Math.max(0, y - 72);
+      }
+      const t0 = performance.now();
+      let finished = false;
+      const finish = () => {
+        if (finished || !trail.isConnected) return;
+        finished = true;
+        put(zipFig, end.zipX, end.y);
+        put(frillFig, end.frillX, end.y);
+        zipFig.classList.remove('is-walking');
+        frillFig.classList.remove('is-walking');
+        try { sessionStorage.setItem(STOOD, String(here)); } catch (e) { /* ignore */ }
+      };
+      const step = (nowMs) => {
+        if (finished || !trail.isConnected) return;
+        const raw = Math.min(1, (nowMs - t0) / WALK_MS);
+        const t = raw < 0.5 ? 4 * raw * raw * raw : 1 - Math.pow(-2 * raw + 2, 3) / 2;
+        const seg = t * (line.length - 1);
+        const i = Math.min(line.length - 2, Math.floor(seg));
+        const u = seg - i;
+        const x = line[i].x + (line[i + 1].x - line[i].x) * u;
+        const y = line[i].y + (line[i + 1].y - line[i].y) * u - Math.sin(raw * Math.PI * 3) * 3;
+        const spread0 = start.frillX - start.zipX;
+        const spread1 = end.frillX - end.zipX;
+        const together = 0.46 + 0.54 * (0.5 + 0.5 * Math.cos(raw * Math.PI));
+        const spread = (spread0 + (spread1 - spread0) * raw) * together;
+        put(zipFig, x - spread / 2, y);
+        put(frillFig, x + spread / 2, y);
+        if (raw < 1) requestAnimationFrame(step);
+        else finish();
+      };
+      requestAnimationFrame(step);
+      setTimeout(finish, WALK_MS + 60);
+    }
   }
   function gemScreen() {
     IR.newScreen(); const earned = gemsEarned(); const nEarned = earned.filter(Boolean).length; const nx = gemNext();
@@ -1914,6 +2074,22 @@
     fluency.forEach((g) => g.items.forEach(addSearch));
     return { unit: unit, skill: skill, sight: sight, fluency: fluency, search: search };
   }
+  function libraryScreen() {
+    IR.newScreen();
+    const stories = fluencyStories();
+    const cards = stories.map((s) => h('a', {
+      class: 'libcard',
+      href: s.href,
+      'aria-label': (s.title || s.name) + '. ' + s.lesson
+    },
+      h('span', { class: 'libmark', 'aria-hidden': 'true' }),
+      h('span', { class: 'libtxt' }, h('b', null, s.title || s.name), h('small', null, s.lesson))));
+    app.append(h('div', { class: 'screen home simplepage libpage' }, h('div', { class: 'mwrap' },
+      h('div', { class: 'gtop' }, pageNav('#/home')),
+      h('h1', null, 'Library'),
+      h('p', { class: 'calm' }, stories.length ? 'Stories to read again.' : 'Stories will show up here as units open.'),
+      cards.length ? h('div', { class: 'liblist' }, ...cards) : null)));
+  }
   function findScreen() {
     IR.newScreen();
     const data = findCatalog();
@@ -2006,6 +2182,7 @@
     else if (hash.startsWith('#/gems')) gemScreen();
     else if (hash.startsWith('#/about')) aboutScreen();
     else if (hash.startsWith('#/trail')) islandTrailPage();
+    else if (hash.startsWith('#/library')) libraryScreen();
     else if (hash.startsWith('#/find')) findScreen();
     else if ((m = /^#\/teachers\/slides\/(u1[012]\d)$/.exec(hash)) && IR.slides1012) IR.slides1012(m[1]);
     else if ((m = /^#\/teachers\/slides\/(ng|nk|u5|tricky|u61|u62|u63|u11|u12|u13|u14|u21|u22|u23|u24|u31|u32|u71|u72|u73|u81|u82|u83|u91|u92|u93|u94)$/.exec(hash))) slidesViewer(m[1]);
