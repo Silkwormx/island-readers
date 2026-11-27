@@ -838,6 +838,9 @@
       }
       svg.append(g);
     }
+    function heightRoom(rowH, narrow, avail) {
+      return Math.round(Math.min(rowH * (narrow ? 1.36 : 1.62), avail * (narrow ? 0.4 : 0.46)));
+    }
     function placeLedges() {
       const stops = [...trail.querySelectorAll('.skystop')];
       const book = trail.querySelector('.skybook');
@@ -847,17 +850,17 @@
       const sideEl = trail.closest('.skyhome').querySelector('.homeside');
       const fixed = sideEl && getComputedStyle(sideEl).position === 'fixed';
       const limit = fixed ? sideEl.getBoundingClientRect().top : window.innerHeight;
-      const avail = Math.max(narrow ? 520 : 600, limit - trail.getBoundingClientRect().top - 8);
-      const rowH = Math.round((avail - 20) / (narrow ? 3.25 : 3.02));
-      const total = Math.round((stops.length - 1) * rowH + rowH * 1.15 + 24);
+      const avail = Math.max(narrow ? 560 : 620, limit - trail.getBoundingClientRect().top - 8);
+      const rowH = Math.round((avail - 12) / (narrow ? 3.15 : 3.48));
+      const total = Math.round((stops.length - 1) * rowH + heightRoom(rowH, narrow, avail) + 36);
       trail.style.height = total + 'px';
       stops.forEach((el, i) => {
         const side = i % 2 === 0 ? 'l' : 'r';
         const img = el.querySelector('.skyisland');
         const aspect = img && img.naturalWidth ? img.naturalHeight / img.naturalWidth : 1.15;
-        const height = Math.round(Math.min(rowH * 1.08, avail * 0.38));
+        const height = heightRoom(rowH, narrow, avail);
         let width = Math.round(height / aspect);
-        width = Math.min(width, Math.round(w * (narrow ? 0.62 : 0.58)));
+        width = Math.min(width, Math.round(w * (narrow ? 0.72 : 0.62)));
         el.classList.remove('sky-l', 'sky-r', 'sky-b');
         el.classList.add(side === 'r' ? 'sky-r' : 'sky-l');
         el.dataset.land = String(Math.floor(Math.max(0, i - 1) / 6));
@@ -866,14 +869,21 @@
         el.style.top = Math.round(i * rowH + 6) + 'px';
         const lbl = el.querySelector('.skylbl');
         if (lbl) {
-          const rim = img && img.naturalWidth ? grassRim(img, side === 'r') : { fy: 0.58 };
+          const rim = img && img.naturalWidth ? grassRim(img, side === 'r') : { fy: 0.62 };
+          /* On the outer rock rim, just under the grass, clear of the trunk, canopy, and bell. */
+          const fy = Math.min(0.68, Math.max(0.54, (rim.fy || 0.62) + 0.015));
           lbl.style.position = 'absolute';
-          lbl.style.top = Math.round(height * Math.max(0.4, rim.fy - 0.12)) + 'px';
+          lbl.style.top = Math.round(height * fy) + 'px';
           lbl.style.bottom = 'auto';
-          lbl.style.left = '50%';
-          lbl.style.right = 'auto';
-          lbl.style.width = '7.2rem';
-          lbl.style.transform = 'translateX(-50%)';
+          lbl.style.width = (narrow ? '6.2rem' : '6.8rem');
+          lbl.style.transform = 'none';
+          if (side === 'l') {
+            lbl.style.left = '0';
+            lbl.style.right = 'auto';
+          } else {
+            lbl.style.left = 'auto';
+            lbl.style.right = '0';
+          }
         }
         /* Foundations keeps the a m s t letters inside the frame. */
         if (side === 'l') el.style.left = (i === 0 ? '16px' : '26px');
