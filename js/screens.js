@@ -624,8 +624,12 @@
         body.append(h('p', { class: 'drop-soon' }, 'Units 9 and 10 come later.'));
       }
     });
+    const booksBtn = h('button', {
+      class: 'homebook', type: 'button', 'aria-label': 'Library. Open every book.',
+      onclick: () => { Snd.stop(); location.hash = '#/library'; }
+    }, h('span', { class: 'homebook-art', 'aria-hidden': 'true' }, h('i'), h('i'), h('i')), h('span', { class: 'homebook-name' }, 'Library'));
     const tabs = h('nav', { class: 'hometabs', 'aria-label': 'More places' },
-      trailBtn, sightDrop, tab('#/find', 'Find It', 'search'));
+      booksBtn, trailBtn, sightDrop, tab('#/find', 'Find It', 'search'));
     /* Nov 6 2026: full-width home feature (approved banyan scene), then About + the hero beside the unit grid */
     const banner = h('header', { class: 'hbanner' }, h('h1', null, 'Island Readers'), kidChip(),
       h('div', { class: 'grownwrap' }, h('span', { class: 'grownlab' }, 'Parent and Teacher Materials'), IR.ui.gearButton()));
@@ -651,13 +655,94 @@
     /* Home card in the left column. On a phone these controls sit in the bottom bar. */
     const HERO_VARIANT = (/[?&]hero=B\b/.test(location.search) ? 'B' : 'A');
     const hero = h('section', { class: 'homefeature zf' + HERO_VARIANT, 'aria-label': 'Learn to read with Zip and Frill' },
+      h('div', { class: 'zfpics' }, h('img', { class: 'homeart', src: 'img/home_zip_frill.webp', width: 1280, height: 720, alt: 'Zip and Frill sit on a tree root reading a book together. An orange bell hangs from the banyan behind them, and the island coast glows at sunset.' })),
       h('div', { class: 'hfbody' },
         h('div', { class: 'zfhead' }, h('h2', { class: 'zfline' }, 'Learn to read with Zip and Frill'), readAloudBtn()),
         h('p', { class: 'zfsub' }, 'Ring every bell by learning its sounds.'),
         continueButton()));
-    app.append(h('div', { class: 'screen home mapscreen gridhome skyhome' + (ledgesHome ? ' ledges' : '') }, h('div', { class: 'mwrap' }, banner, h('div', { class: 'homelay' }, h('div', { class: 'homeside' }, aboutDrop, hero, tabs), h('div', { class: 'bellslot' }, grid)))));
+    app.append(h('div', { class: 'screen home mapscreen gridhome bellfit bellspeek skyhome' + (ledgesHome ? ' ledges' : '') }, h('div', { class: 'mwrap' }, banner, h('div', { class: 'homelay' }, h('div', { class: 'homeside' }, aboutDrop, hero, tabs), h('div', { class: 'bellslot' }, grid)))));
     if (ledgesHome) standOnTrail(grid, hereUnit, null, null, null, null, null);
     else standOnTrail(grid, hereUnit, zipFig, frillFig, zipImg, frillImg, paintIntoScene);
+    const side = app.querySelector('.homeside'); const scr = app.querySelector('.screen.home');
+    let layoutHome = function () {};
+    const pin = () => {
+      if (!side || !scr || !side.isConnected) { window.removeEventListener('resize', layoutHome); return; }
+      const nav = side.querySelector('.hometabs');
+      const tabEls = nav ? [...nav.querySelectorAll('.hometab')] : [];
+      const heroEl = side.querySelector('.homefeature');
+      const pics = side.querySelector('.zfpics');
+      const artEl = side.querySelector('.homeart');
+      const goBtn = side.querySelector('.zfstart2');
+      const relax = () => {
+        side.style.removeProperty('height');
+        side.style.removeProperty('max-height');
+        side.style.removeProperty('overflow-y');
+        side.style.removeProperty('gap');
+        if (nav) nav.style.removeProperty('gap');
+        tabEls.forEach((t) => { t.style.removeProperty('height'); t.style.removeProperty('min-height'); t.style.removeProperty('max-height'); });
+        if (artEl) artEl.style.removeProperty('max-height');
+        if (pics) { pics.style.removeProperty('max-height'); pics.style.removeProperty('flex-grow'); pics.style.removeProperty('flex-basis'); }
+      };
+      if (!matchMedia('(min-width:1000px)').matches) { side.style.removeProperty('--side-top'); relax(); return; }
+      const bannerEl = scr.querySelector('.hbanner');
+      const bannerH = bannerEl ? bannerEl.offsetHeight : 0;
+      side.style.setProperty('--side-top', bannerH + 'px');
+      const top = side.getBoundingClientRect().top;
+      const room = Math.max(200, Math.floor(scr.getBoundingClientRect().bottom - top - 8));
+      side.style.height = room + 'px';
+      side.style.maxHeight = room + 'px';
+      if (artEl) artEl.style.removeProperty('max-height');
+      if (pics) { pics.style.removeProperty('max-height'); pics.style.removeProperty('flex-grow'); pics.style.removeProperty('flex-basis'); }
+      if (side.querySelector('.sidedrop.is-open')) return;
+      const shadow = 4;
+      const limits = () => {
+        const sideBox = side.getBoundingClientRect();
+        const heroBox = heroEl ? heroEl.getBoundingClientRect() : sideBox;
+        const viewBottom = Math.min(window.innerHeight, scr.getBoundingClientRect().bottom);
+        return { sideBox, heroBox, viewBottom };
+      };
+      const buttonPast = () => {
+        if (!goBtn) return false;
+        const btn = goBtn.getBoundingClientRect();
+        const box = limits();
+        const edge = Math.min(box.heroBox.bottom, box.sideBox.bottom, box.viewBottom);
+        return btn.bottom + shadow > edge + 1;
+      };
+      const sideOverflow = () => side.scrollHeight > side.clientHeight + 2;
+      const heroOverflow = () => !!(heroEl && heroEl.scrollHeight > heroEl.clientHeight + 2);
+      if (buttonPast() || sideOverflow() || heroOverflow()) {
+        side.style.gap = '6px';
+        if (nav) nav.style.gap = '6px';
+        tabEls.forEach((t) => {
+          if (t.classList.contains('trailtab')) return;
+          t.style.height = '42px';
+          t.style.minHeight = '42px';
+          t.style.maxHeight = '42px';
+        });
+      }
+      if (pics && (buttonPast() || heroOverflow())) {
+        const btn = goBtn ? goBtn.getBoundingClientRect() : null;
+        const box = limits();
+        const edge = Math.min(box.heroBox.bottom, box.sideBox.bottom, box.viewBottom);
+        const past = btn ? Math.ceil(btn.bottom + shadow - edge) : 0;
+        const extra = heroEl ? Math.max(0, heroEl.scrollHeight - heroEl.clientHeight) : 0;
+        const cut = Math.max(past, extra);
+        if (cut > 1) {
+          const next = Math.max(72, Math.round(pics.getBoundingClientRect().height - cut - 2));
+          pics.style.flexGrow = '0';
+          pics.style.flexBasis = 'auto';
+          pics.style.maxHeight = next + 'px';
+        }
+      }
+      const stillTight = buttonPast() || sideOverflow() || heroOverflow();
+      if (matchMedia('(max-height:520px)').matches && stillTight) side.style.overflowY = 'auto';
+      else side.style.removeProperty('overflow-y');
+    };
+    layoutHome = () => { pin(); };
+    requestAnimationFrame(layoutHome); window.addEventListener('resize', layoutHome);
+    const art = side && side.querySelector('.homeart');
+    if (art && !art.complete) art.addEventListener('load', layoutHome, { once: true });
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { if (side && side.isConnected) layoutHome(); });
   }
   /* Zip and Frill stand on the current island. After a unit is completed they walk the path to the next one. */
   function standOnTrail(trail, here, zipFig, frillFig, zipImg, frillImg, paintIntoScene) {
@@ -763,30 +848,42 @@
       const fixed = sideEl && getComputedStyle(sideEl).position === 'fixed';
       const limit = fixed ? sideEl.getBoundingClientRect().top : window.innerHeight;
       const avail = Math.max(narrow ? 520 : 600, limit - trail.getBoundingClientRect().top - 8);
-      const rowH = Math.round((avail - 8) / (narrow ? 3.6 : 3.15));
-      const total = stops.length * rowH + 28;
+      const rowH = Math.round((avail - 28) / (narrow ? 3.25 : 3.05));
+      const total = Math.round((stops.length - 1) * rowH + rowH * 0.84 + 40);
       trail.style.height = total + 'px';
       stops.forEach((el, i) => {
         const side = i % 2 === 0 ? 'l' : 'r';
         const img = el.querySelector('.skyisland');
         const aspect = img && img.naturalWidth ? img.naturalHeight / img.naturalWidth : 1.15;
-        let width = Math.round((rowH * 0.92) / aspect);
-        width = Math.max(width, Math.round(w * (narrow ? 0.62 : 0.5)));
+        const height = Math.round(rowH * 0.84);
+        let width = Math.round(height / aspect);
+        width = Math.min(width, Math.round(w * (narrow ? 0.74 : 0.48)));
         el.classList.remove('sky-l', 'sky-r', 'sky-b');
         el.classList.add(side === 'r' ? 'sky-r' : 'sky-l');
         el.dataset.land = String(Math.floor(Math.max(0, i - 1) / 6));
         el.style.width = width + 'px';
+        el.style.height = height + 'px';
         el.style.top = Math.round(i * rowH + 6) + 'px';
+        const lbl = el.querySelector('.skylbl');
+        if (lbl) {
+          lbl.style.position = 'absolute';
+          lbl.style.top = Math.round(height * 0.58) + 'px';
+          lbl.style.bottom = 'auto';
+          lbl.style.left = '50%';
+          lbl.style.right = 'auto';
+          lbl.style.width = '7.4rem';
+          lbl.style.transform = 'translateX(-50%)';
+        }
         /* Foundations keeps the a m s t letters inside the frame. */
-        if (i === 0) el.style.left = '8px';
-        else if (side === 'l') el.style.left = Math.round(-width * 0.18) + 'px';
-        else el.style.left = Math.round(w - width * 0.74) + 'px';
+        if (side === 'l') el.style.left = (i === 0 ? '16px' : '26px');
+        else el.style.left = Math.max(16, Math.round(w - width - (narrow ? 12 : 20))) + 'px';
       });
       if (book) {
         book.style.position = 'absolute';
         book.style.width = (narrow ? 46 : 58) + 'px';
-        book.style.top = (narrow ? 2 : 6) + 'px';
-        book.style.left = (narrow ? Math.round(w - 78) : Math.round(w * 0.3)) + 'px';
+        book.style.top = '10px';
+        book.style.left = 'auto';
+        book.style.right = '12px';
         book.style.zIndex = '6';
       }
     }
@@ -819,36 +916,93 @@
       svg.append(g);
     }
     function placePaintedBridges(pts) {
-      let layer = trail.querySelector('.skyrootspans');
-      if (!layer) {
-        layer = document.createElement('div');
-        layer.className = 'skyrootspans';
-        trail.append(layer);
+      let canvas = trail.querySelector('.skyrootspans');
+      if (!canvas || canvas.tagName !== 'CANVAS') {
+        if (canvas) canvas.remove();
+        canvas = document.createElement('canvas');
+        canvas.className = 'skyrootspans';
+        trail.append(canvas);
       }
-      layer.replaceChildren();
-      const kinds = [
-        ['img/sky/bridges/bridge-vine.webp', 0.55],
-        ['img/sky/bridges/bridge-net.webp', 0.56],
-        ['img/sky/bridges/bridge-deck.webp', 0.7]
-      ];
-      for (let i = 0; i < pts.length - 1; i++) {
-        const a = pts[i], b = pts[i + 1];
-        const dx = b.x - a.x, dy = b.y - a.y;
-        const dist = Math.hypot(dx, dy) || 1;
-        const kind = kinds[i % kinds.length];
-        const img = document.createElement('img');
-        img.className = 'skyrootspan';
-        img.alt = '';
-        img.src = kind[0];
-        const spanH = dist * 0.46;
-        const ang = Math.atan2(dy, dx) * 180 / Math.PI;
-        img.style.left = a.x + 'px';
-        img.style.top = (a.y - spanH * kind[1]) + 'px';
-        img.style.width = dist + 'px';
-        img.style.height = spanH + 'px';
-        img.style.transformOrigin = '0 ' + (kind[1] * 100) + '%';
-        img.style.transform = 'rotate(' + ang + 'deg)';
-        layer.append(img);
+      const w = trail.clientWidth;
+      const hgt = parseInt(trail.style.height, 10) || trail.scrollHeight;
+      canvas.width = Math.max(1, w);
+      canvas.height = Math.max(1, hgt);
+      canvas.style.width = w + 'px';
+      canvas.style.height = hgt + 'px';
+      const ctx = canvas.getContext('2d');
+      const kinds = ['img/sky/bridges/bridge-vine.webp', 'img/sky/bridges/bridge-net.webp', 'img/sky/bridges/bridge-deck.webp'];
+      const paint = () => {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.save();
+        ctx.beginPath();
+        ctx.rect(6, 0, Math.max(0, w - 12), hgt);
+        ctx.clip();
+        for (let i = 0; i < pts.length - 1; i++) {
+          const img = trail._bridgeImgs && trail._bridgeImgs[i % kinds.length];
+          if (img && img.complete && img.naturalWidth) hangBridge(ctx, img, pts[i], pts[i + 1], w);
+        }
+        ctx.restore();
+      };
+      if (!trail._bridgeImgs) {
+        trail._bridgeImgs = kinds.map((src) => {
+          const img = new Image();
+          img.onload = () => { if (trail.isConnected) paint(); };
+          img.src = src;
+          return img;
+        });
+      }
+      paint();
+    }
+    function bridgeInk(img) {
+      if (img._ink) return img._ink;
+      const c = document.createElement('canvas');
+      c.width = img.naturalWidth;
+      c.height = img.naturalHeight;
+      const g = c.getContext('2d', { willReadFrequently: true });
+      g.drawImage(img, 0, 0);
+      const data = g.getImageData(0, 0, c.width, c.height).data;
+      let minX = c.width, minY = c.height, maxX = 0, maxY = 0;
+      for (let y = 0; y < c.height; y += 2) {
+        for (let x = 0; x < c.width; x += 2) {
+          if (data[(y * c.width + x) * 4 + 3] > 24) {
+            if (x < minX) minX = x;
+            if (y < minY) minY = y;
+            if (x > maxX) maxX = x;
+            if (y > maxY) maxY = y;
+          }
+        }
+      }
+      img._ink = { minX, minY, maxX: Math.max(minX + 1, maxX), maxY: Math.max(minY + 1, maxY) };
+      return img._ink;
+    }
+    function hangBridge(ctx, img, a, b, frameW) {
+      const left = a.x <= b.x ? a : b;
+      const right = a.x <= b.x ? b : a;
+      const x1 = Math.max(16, Math.min(frameW - 16, left.x));
+      const x2 = Math.max(16, Math.min(frameW - 16, right.x));
+      if (x2 - x1 < 24) return;
+      const span = x2 - x1;
+      const sag = Math.max(26, Math.min(72, span * 0.18));
+      const rail = Math.max(72, Math.min(150, span * 0.32));
+      const box = bridgeInk(img);
+      const steps = 36;
+      const cy = (left.y + right.y) / 2 + sag;
+      const at = (t) => {
+        const u = 1 - t;
+        return {
+          x: u * u * x1 + 2 * u * t * ((x1 + x2) / 2) + t * t * x2,
+          y: u * u * left.y + 2 * u * t * cy + t * t * right.y
+        };
+      };
+      for (let s = 0; s < steps; s++) {
+        const p = at(s / steps);
+        const q = at((s + 1) / steps);
+        const sx = Math.floor(box.minX + (s / steps) * (box.maxX - box.minX));
+        const sw = Math.max(1, Math.ceil((box.maxX - box.minX) / steps));
+        ctx.save();
+        ctx.setTransform(q.x - p.x, q.y - p.y, 0, rail, p.x, p.y - rail);
+        ctx.drawImage(img, sx, box.minY, sw, Math.max(1, box.maxY - box.minY), 0, 0, 1, 1);
+        ctx.restore();
       }
     }
     function layoutPath() {
@@ -878,8 +1032,8 @@
         if (ledges) {
           const onRight = s.classList.contains('sky-r');
           return {
-            x: art.left - origin.left + art.width * (onRight ? 0.34 : 0.66),
-            y: art.top - origin.top + art.height * 0.64
+            x: art.left - origin.left + art.width * (onRight ? 0.2 : 0.8),
+            y: art.top - origin.top + art.height * 0.7
           };
         }
         if (coil) return { x: art.left - origin.left + art.width * 0.5, y: art.top - origin.top + art.height * 0.7 };
