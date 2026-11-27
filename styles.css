@@ -3872,7 +3872,7 @@ html.teach .u5step .sentact .tile.word{font-size:clamp(1.7rem,4vh,2.4rem)!import
 .slidecalm .slide-controls .ir-btn .ico{width:1.15rem;height:1.15rem;flex:none}
 .slidecalm .slide-controls .ir-btn:disabled{opacity:.4}
 .tmfile.tmsmall,.teachlink.tmsmall{min-height:0;margin:.1rem .15rem .2rem;padding:.05rem;border:0;background:transparent;box-shadow:none;color:#5c5648;font-size:.85rem;font-weight:700;text-decoration:underline}
-body:has(.tmscreen) #soundfix,body:has(.u123step) #soundfix,body:has(.u789step) #soundfix,body:has(.slidecalm) #soundfix{display:none!important}
+body:has(.tmscreen) #soundfix,body:has(.u123step) #soundfix,body:has(.u789step) #soundfix,body:has(.slidecalm) #soundfix,body:has(.u11trail) #soundfix{display:none!important}
 .u123step .nkmeet,.u789step .nkmeet{gap:.25rem}
 .u123step .nkmeet .bubble,.u789step .nkmeet .bubble{padding:.35rem .65rem}
 .u123step .nkmeet .bubble p,.u789step .nkmeet .bubble p{font-size:1.02rem;line-height:1.2;margin:.1rem 0 0}

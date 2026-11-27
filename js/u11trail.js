@@ -321,7 +321,13 @@
     home.addEventListener('click', () => go('#/home'));
     back.addEventListener('click', () => { Snd.stop(); clearTimeout(timer); doBack(); });
     forward.addEventListener('click', () => { Snd.stop(); clearTimeout(timer); doNext(); });
-    repeat.addEventListener('click', () => { Snd.stop(); replay(); });
+    repeat.addEventListener('click', () => {
+      Snd.stop();
+      Snd.hideFallback();
+      Snd.unlocked = true;
+      Snd.manual = true;
+      Promise.resolve(replay()).then(() => { Snd.manual = false; }, () => { Snd.manual = false; });
+    });
     const corner = o.corner || 'unit';
     const bar = h('div', { class: 'u11t-bar' + (corner === 'home' ? ' is-home' : ' is-unit') },
       corner === 'home' ? home : unitBtn);
@@ -331,6 +337,7 @@
     screen = h('div', { class: 'screen u11trail' + (showNext ? ' u11t-preview' : ''), 'data-view': o.view || '' },
       bar, top, stage, countEl,
       h('div', { class: 'lesson-nav ir-controls u11t-nav' }, back, repeat, forward));
+    Snd.hideFallback();
     app.append(screen);
     const ctx = {
       stage: stage,
@@ -497,16 +504,8 @@
     if (!endLocked || demo()) end.addEventListener('click', () => { location.hash = '#/u1/u11/trail/end'; });
     else end.disabled = true;
     board.append(end);
-    const toI = Math.min(here, list.length - 1);
-    const fromI = st.moveFrom == null ? toI : Math.min(st.moveFrom, list.length - 1);
     if (st.moveFrom != null) { st.moveFrom = null; save(st); }
-    const marker = h('div', {
-      class: 'u11t-marker',
-      style: 'left:' + list[fromI].x + '%;top:' + list[fromI].y + '%'
-    }, h('span', { class: 'u11t-ground' }), h('img', { src: 'img/u11-zip-frill.png', alt: 'Zip and Frill' }));
-    board.append(marker);
     view.stage.append(h('div', { class: 'u11t-mapwrap' }, gems, board));
-    walkPair(marker, list, fromI, toI, view.scr);
     view.setReplay(() => Snd.play('audio/phonemes/a.mp3'));
   }
 
@@ -602,9 +601,6 @@
     });
     const prize = fresh ? stop.gemName.charAt(0).toUpperCase() + stop.gemName.slice(1) + '.' : 'Gem safe.';
     view.stage.append(h('div', { class: 'u11t-celebrate' },
-      h('div', { class: 'u11t-cast' },
-        h('span', { class: 'u11t-ground' }),
-        h('img', { src: 'img/u11-zip-frill-cheer.png', alt: 'Zip and Frill' })),
       h('img', { class: 'prize', src: stop.gem, alt: '' }),
       h('p', { class: 'u11t-line' }, prize)));
     Snd.seq([SFX.ding, SFX.done], 120);
@@ -621,9 +617,6 @@
       onNext() { location.hash = '#/u1/u11'; }
     });
     view.stage.append(h('div', { class: 'u11t-card' },
-      h('div', { class: 'u11t-faces' },
-        h('img', { src: POSE.cheer, alt: 'Zip' }),
-        h('img', { src: POSE.frillcheer, alt: 'Frill' })),
       h('p', { class: 'u11t-line' }, 'Great job, see you next time.')));
     view.setReplay(() => Snd.play(SFX.done));
     Snd.play(SFX.done);
@@ -786,7 +779,7 @@
         onBack() { ctx.prev(); }
       });
       view.stage.append(h('div', { class: 'u11t-card' },
-        h('img', { class: 'u11t-scene', src: 'img/u11-guides.jpg', alt: 'Zip and Frill in the banyan' }),
+        h('img', { class: 'u11t-scene', src: 'img/u11-forest-wide.jpg', alt: 'The banyan forest' }),
         h('div', { class: 'u11t-letter' }, 'a'),
         h('p', { class: 'u11t-line' }, 'The a says /a/.'),
         h('p', { class: 'u11t-line' }, 'Open wide.'),
@@ -1337,9 +1330,6 @@
       view.setCount(spec.steps.length + ' of ' + spec.steps.length);
       view.stage.append(h('div', { class: 'u11-build', 'data-finale': spec.scene },
         scene,
-        h('div', { class: 'u11t-faces' },
-          h('img', { src: spec.scene === 'raft' ? POSE.surf : POSE.cheer, alt: 'Zip' }),
-          h('img', { src: POSE.frillcheer, alt: 'Frill' })),
         h('p', { class: 'u11t-line' }, spec.done)));
       paintParts();
       step = spec.steps.length;
@@ -1512,7 +1502,7 @@
         onBack() { if (i > 0) { i--; show(); } else if (o.back) o.back(); else finish(); }
       });
       const line = lines[i].line || lines[i];
-      const art = lines[i].art || 'img/u11-guides.jpg';
+      const art = lines[i].art || 'img/u11-forest-wide.jpg';
       view.stage.append(h('div', { class: 'u11t-card' },
         h('img', { class: 'u11t-scene', src: art, alt: '' }),
         h('p', { class: 'u11t-line' }, wordNode(line))));
@@ -1565,9 +1555,6 @@
     for (let i = 0; i < 5; i++) bells.append(h('img', { src: 'img/bell_lit.png', alt: '' }));
     view.stage.append(h('div', { class: 'u11t-card' },
       bells,
-      h('div', { class: 'u11t-faces' },
-        h('img', { src: POSE.bell, alt: 'Zip' }),
-        h('img', { src: POSE.frill, alt: 'Frill' })),
       h('p', { class: 'u11t-joke' }, 'I tap a pan.'),
       h('p', { class: 'u11t-joke' }, 'I tap a map.'),
       h('p', { class: 'u11t-rec' }, 'Recording needed: Zip and Frill say the joke. The bell sounds are ready.')));
