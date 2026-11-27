@@ -3916,11 +3916,11 @@ body:has(.tmscreen) #soundfix,body:has(.u123step) #soundfix,body:has(.u789step) 
   overflow:visible;
 }
 .skyhome .skypath{position:absolute;left:0;top:0;z-index:0;pointer-events:none;overflow:visible}
-.skyhome .skyline{fill:none;stroke:rgba(255,248,231,.72);stroke-width:7;stroke-linecap:round;stroke-linejoin:round}
-.skyhome .skystones{fill:none;stroke:#fff;stroke-width:11;stroke-linecap:round;stroke-dasharray:0.2 18;filter:drop-shadow(0 1px 0 rgba(180,140,70,.35))}
+.skyhome .skyline{fill:none;stroke:rgba(196,148,72,.55);stroke-width:8;stroke-linecap:round;stroke-linejoin:round}
+.skyhome .skystones{fill:none;stroke:#fff8e7;stroke-width:16;stroke-linecap:round;stroke-dasharray:0.4 26;filter:drop-shadow(0 1px 0 rgba(140,96,40,.45))}
 .skyhome .skybook{
   position:relative;z-index:2;align-self:center;display:flex;flex-direction:column;align-items:center;gap:0;
-  width:4.2rem;margin:0 auto 1.45rem;padding:0;border:0;background:none;color:#2B2540;cursor:pointer;font:inherit;
+  width:4.2rem;margin:0 auto .35rem;padding:0;border:0;background:none;color:#2B2540;cursor:pointer;font:inherit;
 }
 .skyhome .skybookart{display:block;width:6.6rem}
 .skyhome .skybookart svg{display:block;width:100%;height:auto;filter:drop-shadow(0 8px 6px rgba(43,37,64,.18))}
@@ -3929,44 +3929,21 @@ body:has(.tmscreen) #soundfix,body:has(.u123step) #soundfix,body:has(.u789step) 
   padding:.12rem .75rem;font-size:1.08rem;line-height:1.2;
 }
 .skyhome .skystop{
-  position:relative;z-index:2;display:block;width:172px;height:auto;margin:-2.55rem 0 0;padding:0 0 .1rem;border:0;background:none;
+  position:relative;z-index:2;display:block;width:158px;height:auto;margin:-7.05rem 0 0;padding:0;border:0;background:none;
   color:inherit;font:inherit;text-align:center;cursor:pointer;box-shadow:none;
 }
-.skyhome .skystop:first-of-type{margin-top:.15rem}
+.skyhome .skystop:first-of-type{margin-top:.1rem}
 .skyhome .skystop.sky-l{align-self:flex-start;margin-left:0}
 .skyhome .skystop.sky-r{align-self:flex-end;margin-right:0}
-.skyhome .skybody{position:relative;display:block;width:100%;filter:drop-shadow(0 8px 7px rgba(43,37,64,.2))}
-.skyhome .skytop{
-  position:relative;z-index:1;display:block;width:100%;aspect-ratio:4/3;object-fit:cover;object-position:center 36%;
-  -webkit-mask-image:
-    radial-gradient(ellipse 98% 84% at 50% 44%, #000 66%, transparent 86%),
-    linear-gradient(to bottom, transparent 0%, #000 12%, #000 68%, transparent 97%);
-  -webkit-mask-composite: source-in;
-  mask-image:
-    radial-gradient(ellipse 98% 84% at 50% 44%, #000 66%, transparent 86%),
-    linear-gradient(to bottom, transparent 0%, #000 12%, #000 68%, transparent 97%);
-  mask-composite: intersect;
-}
-.skyhome .skyrock{
-  display:block;width:84%;height:auto;margin:-20% auto 0;position:relative;z-index:0;pointer-events:none;
-  -webkit-mask-image:linear-gradient(to bottom, #000 0%, #000 70%, transparent 100%);
-  mask-image:linear-gradient(to bottom, #000 0%, #000 70%, transparent 100%);
-}
-.skyhome .skybadge{
-  position:absolute;left:50%;bottom:.15rem;z-index:5;transform:translateX(-50%);
-  display:flex;align-items:center;justify-content:center;
-  width:1.85rem;height:1.85rem;border-radius:50%;background:#fff8e7;border:2px solid #C9841A;color:#2B2540;
-  font-size:1rem;font-weight:700;line-height:1;box-shadow:0 2px 4px rgba(43,37,64,.18);
-}
-.skyhome .skystop.is-here .skybadge{background:#F28C00;color:#fff;border-color:#C95A10}
+.skyhome .skybody{position:relative;display:block;width:100%;filter:drop-shadow(0 10px 8px rgba(43,37,64,.22))}
+.skyhome .skyisland{display:block;width:100%;height:auto}
 .skyhome .skystop.is-soon{filter:saturate(.72)}
-.skyhome .skystop.is-soon .skybadge{background:#efe6d4;color:#7a6a52}
-.skyhome .skylock{position:absolute;right:-.35rem;bottom:-.2rem;width:.85rem;height:.85rem;color:#7a5a3a}
+.skyhome .skylock{position:absolute;right:.4rem;top:50%;width:.85rem;height:.85rem;color:#7a5a3a;transform:translateY(-50%)}
 .skyhome .skylock .ico{width:.85rem;height:.85rem}
 .skyhome .skygem{position:absolute;top:8%;right:10%;z-index:5;width:1.15rem;height:1.15rem;object-fit:contain;filter:drop-shadow(0 1px 1px rgba(43,37,64,.3))}
 .skyhome .skystop .herechip{position:static;display:inline-block;margin:0 0 .12rem;font-size:.92rem;z-index:1}
 .skyhome .skywalk{position:absolute;inset:0;z-index:7;pointer-events:none;overflow:visible}
-.skyhome .skyfig{position:absolute;left:0;top:0;width:3.35rem;margin:0;padding:0}
+.skyhome .skyfig{position:absolute;left:0;top:0;width:2.7rem;margin:0;padding:0}
 .skyhome .skyfig.is-painting{visibility:hidden}
 .skyhome .skyfigpic{display:block;width:100%;height:auto}
 .skyhome .skyshade{
@@ -3974,7 +3951,7 @@ body:has(.tmscreen) #soundfix,body:has(.u123step) #soundfix,body:has(.u789step) 
   background:radial-gradient(ellipse at 50% 50%, rgba(52,44,28,.5), rgba(52,44,28,0) 70%);
   filter:blur(1.5px);
 }
-@media (min-width:1000px){.skyhome .skyfig{width:4.35rem}}
+@media (min-width:1000px){.skyhome .skyfig{width:3.6rem}}
 .skyhome .skyfig:not(.is-walking) .skyfigpic{animation:skyidle 3.6s ease-in-out infinite}
 .skyhome .skyfig.is-walking .skyfigpic{animation:skybob .7s ease-in-out infinite}
 @keyframes skyidle{0%,100%{transform:translateY(0)}50%{transform:translateY(-2px)}}
@@ -3984,16 +3961,16 @@ body:has(.tmscreen) #soundfix,body:has(.u123step) #soundfix,body:has(.u789step) 
   .skyhome .skyfig.is-walking .skyfigpic{animation:none}
 }
 .skyhome .skylbl{
-  display:flex;flex-direction:column;align-items:center;gap:0;
-  width:100%;max-width:100%;margin-top:-.55rem;padding:.22rem .4rem .28rem;
-  background:rgba(255,248,231,.94);border:2px solid #E4D6B4;border-radius:.8rem;
-  line-height:1.2;position:relative;z-index:5;
+  position:relative;z-index:5;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  width:100%;height:3.15rem;margin:.05rem 0 0;padding:.12rem .45rem;
+  background:#fff8e7;border:2px solid #C9841A;border-radius:999px;
+  box-shadow:0 3px 0 #C9841A;line-height:1.05;
 }
-.skyhome .skylbl b{font-size:1rem;color:#0E7C7C;font-weight:700}
+.skyhome .skylbl b{font-size:.86rem;color:#0E7C7C;font-weight:700}
+.skyhome .skylbl small{font-size:.7rem;font-weight:700;color:#2B2540;max-width:100%;line-height:1.05;text-align:center}
 .skyhome .skytitle{font-size:.92rem;font-weight:700;color:#2B2540}
-.skyhome .skystop.is-here .skylbl{border-color:#F28C00;box-shadow:0 0 0 3px rgba(242,140,0,.35)}
-.skyhome .skystop.is-soon .skybase,.skyhome .skystop.is-soon .skypic{filter:saturate(.45) brightness(1.05)}
-.skyhome .skystop.is-soon .skylbl{opacity:1}
+.skyhome .skystop.is-here .skylbl{background:#fff1dc;border-color:#F28C00;box-shadow:0 3px 0 #C95A10}
+.skyhome .skystop.is-soon .skylbl{background:#f3ecdf;border-color:#cbb892;box-shadow:0 3px 0 #cbb892}
 .skyhome .homeside{display:flex;flex-direction:column;gap:.45rem}
 .skyhome .homefeature{box-shadow:0 4px 12px rgba(60,40,20,.08);padding:.45rem .55rem .55rem}
 .skyhome .homefeature .zfline{font-size:1.05rem}
@@ -4013,9 +3990,12 @@ body:has(.tmscreen) #soundfix,body:has(.u123step) #soundfix,body:has(.u789step) 
   .skyhome .homelay{display:grid!important;grid-template-columns:18.5rem minmax(0,1fr)!important;align-items:start;gap:.8rem 1.1rem;margin-top:.15rem}
   .skyhome .homeside{position:sticky;top:.25rem;align-self:start;max-height:calc(100dvh - 6.2rem);overflow:auto;gap:.4rem}
   .skyhome .homeside .hometabs .hometab{height:auto!important;min-height:2.7rem;padding:.35rem .55rem}
-  .skyhome .skystop{width:278px;margin-top:-7.35rem}
-  .skyhome .skystop.sky-l{margin-left:1%}
-  .skyhome .skystop.sky-r{margin-right:2%}
+  .skyhome .skystop{width:154px;margin-top:-6.9rem}
+  .skyhome .skystop.sky-l{margin-left:4%}
+  .skyhome .skystop.sky-r{margin-right:8%}
+  .skyhome .skylbl{height:3.2rem}
+  .skyhome .skylbl b{font-size:.95rem}
+  .skyhome .skylbl small{font-size:.74rem}
   .skyhome .mwrap > .hbanner{position:sticky;top:0;z-index:24;background:linear-gradient(#e7f4fb 70%, rgba(231,244,251,0));padding-top:.4rem}
 }
 @media (max-width:999px){

@@ -484,9 +484,11 @@
         'aria-label': opts.label
       },
         h('span', { class: 'skybody' },
-          h('img', { class: 'skytop', src: opts.img, alt: '', loading: opts.lazy ? 'lazy' : 'eager' }),
-          h('img', { class: 'skyrock', src: 'img/sky/rock_base.webp', alt: '' })),
-        h('span', { class: 'skybadge' }, opts.mark, opts.soon ? h('span', { class: 'skylock', 'aria-hidden': 'true' }, icon('lock')) : null),
+          h('img', { class: 'skyisland', src: opts.img, alt: '', loading: opts.lazy ? 'lazy' : 'eager' })),
+        h('span', { class: 'skylbl' },
+          h('b', null, opts.kicker),
+          h('small', null, opts.name),
+          opts.soon ? h('span', { class: 'skylock', 'aria-hidden': 'true' }, icon('lock')) : null),
         gem);
       b.addEventListener('click', opts.onclick);
       return b;
@@ -509,9 +511,10 @@
         here: st === 'here',
         soon: st === 'soon',
         done: st === 'done',
-        img: 'img/units/tile' + String(n).padStart(2, '0') + '.webp',
+        img: 'img/sky/stops/u' + String(n).padStart(2, '0') + '.webp', /* painted from img/units/tile */
         lazy: n > 8,
-        mark: String(n),
+        kicker: 'Unit ' + n,
+        name: t[0],
         title: 'Unit ' + n + ': ' + t[0],
         label: label,
         onclick: () => { if (hop) { Snd.stop(); location.hash = hop; } else if (u123 || u789) { Snd.stop(); location.hash = '#/u' + n; } else if (u6) { Snd.stop(); location.hash = '#/u6'; } else if (u5) { Snd.stop(); location.hash = '#/u5'; } else if (isl) openIsland(BUILT_ID); else { Snd.stop(); toast('Unit ' + n + ' is coming soon.'); } }
@@ -523,8 +526,9 @@
       n: 0,
       side: 'l',
       here: atFoundations,
-      img: coverSrc,
-      mark: 'F',
+      img: 'img/sky/stops/f.webp', /* painted from coverSrc, foundation/img/foundations_cover.jpg */
+      kicker: 'Foundations',
+      name: 'Learn the letters',
       title: 'Foundations: Learn the letters',
       label: 'Foundations. Learn the letters. Opens Foundation Skills.' + (atFoundations ? ' You are here. Zip and Frill are here.' : ''),
       onclick: () => { Snd.stop(); location.hash = '#/foundation'; }
@@ -630,11 +634,11 @@
     paintIntoScene(zipImg, go);
     paintIntoScene(frillImg, go);
     function standAt(stop) {
-      const art = stop.querySelector('.skytop');
+      const art = stop.querySelector('.skyisland');
       const a = art.getBoundingClientRect();
       const t = trail.getBoundingClientRect();
-      const y = a.top - t.top + a.height * 0.84;
-      return { y: y, zipX: a.left - t.left + a.width * 0.28, frillX: a.left - t.left + a.width * 0.72, midX: a.left - t.left + a.width * 0.5 };
+      const y = a.top - t.top + a.height * 0.58;
+      return { y: y, zipX: a.left - t.left + a.width * 0.32, frillX: a.left - t.left + a.width * 0.68, midX: a.left - t.left + a.width * 0.5 };
     }
     function put(fig, x, y) {
       fig.style.transform = 'translate(' + (x - fig.offsetWidth / 2) + 'px,' + (y - fig.offsetHeight) + 'px)';
@@ -650,8 +654,8 @@
       svg.style.height = hgt + 'px';
       const origin = trail.getBoundingClientRect();
       const pts = stops.map((s) => {
-        const badge = s.querySelector('.skybadge').getBoundingClientRect();
-        return { x: badge.left - origin.left + badge.width / 2, y: badge.top - origin.top + badge.height * 0.45 };
+        const sign = s.querySelector('.skylbl').getBoundingClientRect();
+        return { x: sign.left - origin.left + sign.width / 2, y: sign.top - origin.top + sign.height * 0.5 };
       });
       let d = 'M ' + pts[0].x.toFixed(1) + ' ' + Math.max(6, pts[0].y - 22).toFixed(1);
       d += ' L ' + pts[0].x.toFixed(1) + ' ' + pts[0].y.toFixed(1);
