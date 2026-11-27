@@ -45,8 +45,8 @@
     lock: '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2" fill="currentColor"/><path d="M8 11V8a4 4 0 018 0v3" fill="none" stroke="currentColor" stroke-width="2.4"/></svg>'
   };
   const PICS = {
-    mat: { kind: 'img', src: 'foundation/img/story/single-mat.jpg', alt: 'A mat' },
-    pan: { kind: 'img', src: 'foundation/img/story/single-pan.jpg', alt: 'A pan' },
+    mat: { kind: 'img', src: 'img/u11-mat.jpg', alt: 'A mat' },
+    pan: { kind: 'img', src: 'img/u11-pan.jpg', alt: 'A pan' },
     map: { kind: 'img', src: 'img/u11-map.jpg', alt: 'A map' },
     man: { kind: 'img', src: 'img/u11-man.jpg', alt: 'A man' },
     fan: { kind: 'img', src: 'img/u11-fan.jpg', alt: 'A fan' }
@@ -68,50 +68,46 @@
   const TWIST_LINES = ['Sam sat at a mat.', 'Pam sat at a pan.', 'A fat man sat at a fan.'];
   const CHANT_LINES = ['Mat. Map. Man.', 'Sat. Sap. Sam.', 'Tap. Tap. Pan.', 'Pam sat. Sam sat.'];
   const STOPS = [
-    { id: 'listen', name: 'Listen', gem: 'img/gem_01_ruby.webp', gemName: 'ruby', beats: ['concept', 'hear', 'match', 'twist'] },
-    { id: 'satchel', name: 'Pack the satchel', gem: 'img/gem_02_coral.webp', gemName: 'coral', beats: ['review', 'satchel', 'chant'], review: ['mat', 'sat', 'map'] },
-    { id: 'words', name: 'Match', gem: 'img/gem_03_amber.webp', gemName: 'amber', beats: ['drag', 'fill', 'picsent'] },
-    { id: 'book-map-pan', name: 'A Map at a Pan', gem: 'img/gem_04_topaz.webp', gemName: 'topaz', beats: ['book'], book: 'map-pan' },
-    { id: 'raft', name: 'Build a raft', gem: 'img/gem_05_emerald.webp', gemName: 'emerald', beats: ['review', 'raft'], review: ['fan', 'mat', 'map', 'sat', 'tap'] },
-    { id: 'read', name: 'Read', gem: 'img/gem_06_aquamarine.webp', gemName: 'aquamarine', beats: ['heart', 'yesno', 'comp'] },
-    { id: 'book-fat-fan', name: 'A Fat Fan', gem: 'img/gem_07_sapphire.webp', gemName: 'sapphire', beats: ['book'], book: 'fat-fan' },
-    { id: 'tree', name: 'Light the tree', gem: 'img/gem_08_amethyst.webp', gemName: 'amethyst', beats: ['review', 'tree'], review: ['tap', 'pat', 'mat', 'nap', 'man'] },
-    { id: 'book-tap-map', name: 'Tap a Map', gem: 'img/gem_09_rosequartz.webp', gemName: 'rose quartz', beats: ['book'], book: 'tap-map' }
+    { id: 'listen', name: 'Find the sound', gem: 'img/gem_01_ruby.webp', gemName: 'ruby', beats: ['concept', 'hear', 'twist'] },
+    { id: 'spell', name: 'Build a word', gem: 'img/gem_02_coral.webp', gemName: 'coral', beats: ['buildword'] },
+    { id: 'pics', name: 'Picture and sentence', gem: 'img/gem_03_amber.webp', gemName: 'amber', beats: ['picsent'] },
+    { id: 'book-map-pan', name: 'Sam and a map', gem: 'img/gem_04_topaz.webp', gemName: 'topaz', beats: ['book'], book: 'map-pan' },
+    { id: 'sort', name: 'Sort', gem: 'img/gem_05_emerald.webp', gemName: 'emerald', beats: ['sort'] },
+    { id: 'read', name: 'Read and choose', gem: 'img/gem_06_aquamarine.webp', gemName: 'aquamarine', beats: ['fill'] },
+    { id: 'book-fat-fan', name: 'Pam and a fan', gem: 'img/gem_07_sapphire.webp', gemName: 'sapphire', beats: ['book'], book: 'fat-fan' },
+    { id: 'satchel', name: 'Pack the satchel', gem: 'img/gem_08_amethyst.webp', gemName: 'amethyst', beats: ['satchel', 'chant'] },
+    { id: 'book-tap-map', name: 'Pat and a map', gem: 'img/gem_09_rosequartz.webp', gemName: 'rose quartz', beats: ['book'], book: 'tap-map' }
   ];
 
   const BOOKS = [
     {
-      id: 'map-pan', title: 'A Map at a Pan', at: 2, pose: 'both',
-      blurb: 'Sam sat at a map. A map sat at a pan.',
+      id: 'map-pan', title: 'Sam and a map', at: 2, pose: 'both',
+      blurb: 'Sam sat at a map. Pam sat at a pan.',
       pages: [
         { line: 'I am Sam.', pose: 'zip' },
         { line: 'Sam sat at a map.', pose: 'point', prop: 'map' },
-        { line: 'Tap. Tap. Tap.', pose: 'tap', prop: 'map' },
-        { line: 'A man sat.', pose: 'zip', prop: 'man' },
-        { line: 'A fat man sat at a mat.', pose: 'zip', prop: 'mat' },
+        { line: 'I tap a map.', pose: 'tap', prop: 'map' },
+        { line: 'A man sat at a mat.', pose: 'zip', prop: 'mat' },
         { line: 'Pam sat at a pan.', pose: 'frill', prop: 'pan' },
-        { line: 'A map sat at a pan.', pose: 'frill', prop: 'pan' },
         { line: 'Sam sat. Pam sat.', pose: 'both' },
-        { line: 'I nap.', pose: 'nap' }
+        { line: 'I nap at a mat.', pose: 'nap', prop: 'mat' }
       ],
       ask: [
         { line: 'Sam sat at a map.', choices: ['Sam', 'Pam', 'man'], answer: 'Sam' },
-        { line: 'A map sat at a pan.', choices: ['pan', 'mat', 'fan'], answer: 'pan' }
+        { line: 'Pam sat at a pan.', choices: ['pan', 'mat', 'fan'], answer: 'pan' }
       ]
     },
     {
-      id: 'fat-fan', title: 'A Fat Fan', at: 4, pose: 'frill',
-      blurb: 'A fat fan sat at Sam.',
+      id: 'fat-fan', title: 'Pam and a fan', at: 4, pose: 'frill',
+      blurb: 'Pam sat at a fan. A fat man sat at a fan.',
       pages: [
         { line: 'I am Pam.', pose: 'frill' },
-        { line: 'A fan sat.', pose: 'frill', prop: 'fan' },
-        { line: 'A fat fan sat.', pose: 'frill', prop: 'fan' },
         { line: 'Pam sat at a fan.', pose: 'frill', prop: 'fan' },
-        { line: 'Pat. Pat. Pat.', pose: 'tap' },
+        { line: 'A fat man sat at a fan.', pose: 'frill', prop: 'fan' },
+        { line: 'Pat sat at a mat.', pose: 'zip', prop: 'mat' },
         { line: 'Sam sat at a mat.', pose: 'zip', prop: 'mat' },
-        { line: 'I fan Sam.', pose: 'both' },
-        { line: 'A fat fan sat at Sam.', pose: 'frillcheer', prop: 'fan' },
-        { line: 'Sam sat. A nap.', pose: 'nap' }
+        { line: 'Pam sat. Sam sat.', pose: 'both' },
+        { line: 'I nap.', pose: 'nap' }
       ],
       ask: [
         { line: 'Pam sat at a fan.', choices: ['Pam', 'Sam', 'man'], answer: 'Pam' },
@@ -119,14 +115,12 @@
       ]
     },
     {
-      id: 'tap-map', title: 'Tap a Map', at: 5, pose: 'point',
+      id: 'tap-map', title: 'Pat and a map', at: 5, pose: 'point',
       blurb: 'Pat sat at a map. A man sat at a tap.',
       pages: [
         { line: 'Pat sat at a map.', pose: 'point', prop: 'map' },
         { line: 'I tap a map.', pose: 'tap', prop: 'map' },
-        { line: 'A sap. A map.', pose: 'zip', prop: 'map' },
         { line: 'Pam sat at a tap.', pose: 'frill' },
-        { line: 'Tap. Map. Pat.', pose: 'tap' },
         { line: 'A man sat at a tap.', pose: 'zip', prop: 'man' },
         { line: 'Pat sat. Pam sat.', pose: 'both' },
         { line: 'I sat at a map.', pose: 'nap', prop: 'map' }
@@ -142,9 +136,10 @@
     satchel: {
       title: 'Pack the satchel', scene: 'satchel', done: 'Packed.',
       steps: [
-        { line: 'Tap map.', say: 'map', choices: ['map', 'man', 'nap'], answer: 'map', part: 'map' },
-        { line: 'Pam sat at a', blank: true, say: 'Pam sat at a', choices: ['fan', 'pan', 'fat'], answer: 'fan', part: 'fan' },
-        { line: 'Tap mat.', say: 'mat', choices: ['mat', 'map', 'man'], answer: 'mat', part: 'mat' }
+        { line: 'I tap a map.', say: 'I tap a map.', choices: ['map', 'man', 'nap'], answer: 'map', part: 'map' },
+        { line: 'Pam sat at a', blank: true, say: 'Pam sat at a fan.', choices: ['fan', 'pan', 'pat'], answer: 'fan', part: 'fan' },
+        { line: 'I tap a mat.', say: 'I tap a mat.', choices: ['mat', 'map', 'man'], answer: 'mat', part: 'mat' },
+        { line: 'Sam sat at a pan.', say: 'Sam sat at a pan.', choices: ['pan', 'pat', 'nap'], answer: 'pan' }
       ]
     },
     raft: {
@@ -166,9 +161,15 @@
   };
 
   function W(w) { return 'audio/w_' + String(w).toLowerCase().replace(/[^a-z]/g, '') + '.mp3'; }
+  function lineKey(text) {
+    return String(text).toLowerCase().replace(/[^a-z\s]/g, ' ').replace(/\s+/g, ' ').trim();
+  }
   function sayText(text) {
+    const key = lineKey(text);
+    const clip = window.IR_U11_LINES && IR_U11_LINES[key];
+    if (clip) return Snd.play(clip);
     const files = String(text).split(/\s+/).filter(Boolean).map(W);
-    return files.length ? Snd.seq(files, 200) : Promise.resolve(false);
+    return files.length ? Snd.seq(files, 40) : Promise.resolve(false);
   }
   function partsOf(word) {
     const letters = String(word).toLowerCase().replace(/[^a-z]/g, '').split('');
@@ -770,7 +771,7 @@
         onBack() { ctx.prev(); }
       });
       view.stage.append(h('div', { class: 'u11t-card' },
-        h('img', { class: 'u11t-pose', src: POSE.apple, alt: 'Zip holds an apple' }),
+        h('img', { class: 'u11t-scene', src: 'img/u11-cast.jpg', alt: 'Zip and Frill in the banyan' }),
         h('div', { class: 'u11t-letter' }, 'a'),
         h('p', { class: 'u11t-line' }, 'The a says /a/.'),
         h('p', { class: 'u11t-line' }, 'Open wide.'),
@@ -785,10 +786,12 @@
         { word: 'mat', choices: shuffle(['mat', 'map', 'man']) },
         { word: 'sat', choices: shuffle(['sat', 'pat', 'sap']) },
         { word: 'pan', choices: shuffle(['pan', 'pat', 'nap']) },
-        { word: 'map', choices: shuffle(['map', 'man', 'mat']) }
-      ].slice(0, 3);
+        { word: 'map', choices: shuffle(['map', 'man', 'mat']) },
+        { word: 'fan', choices: shuffle(['fan', 'fat', 'pan']) },
+        { word: 'man', choices: shuffle(['man', 'map', 'mat']) }
+      ];
       playRounds(ctx, {
-        title: 'Hear and Pick', view: 'hear', game: 'hear', demo: 'Watch. Tap the word you hear.', items: items,
+        title: 'Find the sound', view: 'hear', game: 'hear', demo: 'Listen. Tap the word you hear.', items: items,
         speak(item) { return sayText(item.word); },
         render(item, status, hit) {
           const row = choiceRow(item.choices, (w, b) => hit(w === item.word, b));
@@ -860,10 +863,14 @@
     fill(ctx) {
       const items = [
         { line: 'Sam sat at a map.', answer: 'sat', before: 'Sam', after: 'at a map.', choices: shuffle(['sat', 'pan', 'fan']) },
-        { line: 'A man sat at a mat.', answer: 'mat', before: 'A man sat at a', after: '.', choices: shuffle(['mat', 'map', 'nap']) }
+        { line: 'A man sat at a mat.', answer: 'mat', before: 'A man sat at a', after: '.', choices: shuffle(['mat', 'map', 'nap']) },
+        { line: 'Pam sat at a pan.', answer: 'pan', before: 'Pam sat at a', after: '.', choices: shuffle(['pan', 'map', 'fan']) },
+        { line: 'Pat sat at a fan.', answer: 'fan', before: 'Pat sat at a', after: '.', choices: shuffle(['fan', 'fat', 'pan']) },
+        { line: 'I tap a map.', answer: 'tap', before: 'I', after: 'a map.', choices: shuffle(['tap', 'sat', 'nap']) },
+        { line: 'A fat man sat at a fan.', answer: 'fan', before: 'A fat man sat at a', after: '.', choices: shuffle(['fan', 'mat', 'map']) }
       ];
       playRounds(ctx, {
-        title: 'Fill the blank', view: 'fill', game: 'fill', demo: 'Watch. Tap the missing word.', items: items,
+        title: 'Read and choose', view: 'fill', game: 'fill', demo: 'Read. Tap the missing word.', items: items,
         speak(item) { return sayText(item.before + ' ' + item.after); },
         render(item, status, hit) {
           const row = choiceRow(item.choices, (w, b) => hit(w === item.answer, b));
@@ -875,11 +882,15 @@
     },
     picsent(ctx) {
       const items = [
-        { line: 'A fat man sat at a mat.', answer: 'mat', pic: 'mat', before: 'A fat man sat at a', after: '.', choices: shuffle(['mat', 'pan', 'fan']) },
-        { line: 'Pam sat at a pan.', answer: 'pan', pic: 'pan', before: 'Pam sat at a', after: '.', choices: shuffle(['pan', 'map', 'nap']) }
+        { line: 'Sam sat at a mat.', answer: 'mat', pic: 'mat', before: 'Sam sat at a', after: '.', choices: shuffle(['mat', 'pan', 'fan']) },
+        { line: 'Pam sat at a pan.', answer: 'pan', pic: 'pan', before: 'Pam sat at a', after: '.', choices: shuffle(['pan', 'map', 'nap']) },
+        { line: 'A man sat at a map.', answer: 'map', pic: 'map', before: 'A man sat at a', after: '.', choices: shuffle(['map', 'mat', 'man']) },
+        { line: 'Pat sat at a fan.', answer: 'fan', pic: 'fan', before: 'Pat sat at a', after: '.', choices: shuffle(['fan', 'fat', 'pan']) },
+        { line: 'A fat man sat.', answer: 'man', pic: 'man', before: 'A fat', after: 'sat.', choices: shuffle(['man', 'map', 'mat']) },
+        { line: 'I tap a map.', answer: 'map', pic: 'map', before: 'I tap a', after: '.', choices: shuffle(['map', 'mat', 'pan']) }
       ];
       playRounds(ctx, {
-        title: 'Picture sentence', view: 'picsent', items: items,
+        title: 'Picture and sentence', view: 'picsent', items: items,
         speak(item) { return sayText(item.before); },
         render(item, status, hit) {
           const row = choiceRow(item.choices, (w, b) => hit(w === item.answer, b));
@@ -975,6 +986,103 @@
     },
     drag(ctx) { dragGame(ctx); },
     satchel(ctx) { buildGame(ctx, BUILDS.satchel); },
+    sort(ctx) {
+      const bank = [
+        { word: 'Sam', answer: 'man' },
+        { word: 'Pam', answer: 'man' },
+        { word: 'Pat', answer: 'man' },
+        { word: 'man', answer: 'man' },
+        { word: 'mat', answer: 'map' },
+        { word: 'map', answer: 'map' },
+        { word: 'pan', answer: 'map' },
+        { word: 'fan', answer: 'map' }
+      ];
+      const items = bank.map((item) => Object.assign({ choices: shuffle(['man', 'map']) }, item));
+      playRounds(ctx, {
+        title: 'Sort', view: 'sort', items: items,
+        speak(item) { return sayText(item.word); },
+        render(item, status, hit) {
+          const row = h('div', { class: 'u11t-choices u11t-sort' });
+          item.choices.forEach((w, n) => {
+            const b = h('button', {
+              class: 'u11t-choice u11t-sortbtn', type: 'button', 'data-w': w,
+              'aria-label': (n + 1) + '. ' + w
+            }, badge(n + 1), picNode(w), wordNode(w));
+            b.addEventListener('click', () => hit(w === item.answer, b));
+            row.append(b);
+          });
+          return h('div', { class: 'u11t-card' },
+            h('p', { class: 'u11t-line' }, 'Man or map?'),
+            h('p', { class: 'u11t-line' }, wordNode(item.word)),
+            row, status);
+        }
+      });
+    },
+    buildword(ctx) {
+      const words = ['mat', 'sat', 'map', 'pan', 'tap', 'man'];
+      let i = 0;
+      function show() {
+        if (i >= words.length) { ctx.next(); return; }
+        const word = words[i];
+        const letters = word.split('');
+        let mix = shuffle(letters.slice());
+        if (mix.join('') === word && mix.length > 1) mix = mix.slice(1).concat(mix[0]);
+        const view = shell(ctx.app, {
+          title: 'Build a word', view: 'buildword', count: (i + 1) + ' of ' + words.length,
+          home: '#/u1/u11',
+          onNext() { i++; show(); },
+          onBack() { if (i > 0) { i--; show(); } else ctx.prev(); }
+        });
+        let step = 0;
+        let locked = false;
+        let missed = false;
+        const status = h('p', { class: 'u11t-status' }, '\u00a0');
+        const slots = h('div', { class: 'u11t-slots' });
+        letters.forEach(() => slots.append(h('span', { class: 'u11t-slot' }, '\u00a0')));
+        const row = h('div', { class: 'u11t-choices' });
+        mix.forEach((ch, n) => {
+          const b = h('button', {
+            class: 'u11t-choice', type: 'button', 'data-n': String(n + 1),
+            'aria-label': (n + 1) + '. ' + ch
+          }, badge(n + 1), ch);
+          b.addEventListener('click', () => {
+            if (locked || b.disabled) return;
+            if (ch !== letters[step]) {
+              if (!missed && ctx.stats) {
+                missed = true;
+                ctx.stats.firstN++;
+                if (ctx.stats.missed.indexOf(word) < 0) ctx.stats.missed.push(word);
+              }
+              status.textContent = letters[step];
+              Snd.play('audio/phonemes/' + letters[step] + '.mp3');
+              return;
+            }
+            b.disabled = true;
+            slots.children[step].textContent = ch;
+            if (ch === 'a') slots.children[step].classList.add('a');
+            step++;
+            if (step < letters.length) return;
+            locked = true;
+            if (!missed && ctx.stats) {
+              ctx.stats.firstN++;
+              ctx.stats.firstOk++;
+            }
+            status.textContent = word;
+            let moved = false;
+            const go = () => { if (moved || !view.scr.ok()) return; moved = true; i++; show(); };
+            view.setNext(go);
+            sayText(word).then(() => { if (!moved && view.scr.ok()) view.auto(500, go); });
+          });
+          row.append(b);
+        });
+        view.stage.append(h('div', { class: 'u11t-card' },
+          h('p', { class: 'u11t-line' }, 'Tap the letters.'),
+          slots, row, status));
+        view.setReplay(() => sayText(word));
+        sayText(word);
+      }
+      show();
+    },
     raft(ctx) { buildGame(ctx, BUILDS.raft); },
     tree(ctx) { buildGame(ctx, BUILDS.tree); },
     twist(ctx) {
@@ -1312,9 +1420,10 @@
         onNext() { i++; show(); },
         onBack() { if (i > 0) { i--; show(); } else location.hash = backHash; }
       });
-      const cast = h('div', { class: 'u11t-cast' }, h('img', { src: POSE[page.pose] || POSE.zip, alt: '' }));
-      if (page.prop) cast.append(picNode(page.prop));
-      view.stage.append(h('div', { class: 'u11t-book' }, cast, h('p', { class: 'u11t-line' }, wordNode(page.line))));
+      const art = page.prop && PICS[page.prop] ? PICS[page.prop].src : 'img/u11-cast.jpg';
+      view.stage.append(h('div', { class: 'u11t-book' },
+        h('img', { class: 'u11t-scene', src: art, alt: '' }),
+        h('p', { class: 'u11t-line' }, wordNode(page.line))));
       view.setReplay(() => sayText(page.line));
       sayText(page.line);
       view.auto(2600, () => { if (view.scr.ok()) { i++; show(); } });
@@ -1385,9 +1494,8 @@
         onNext() { if (!last) { i++; show(); } else finish(); },
         onBack() { if (i > 0) { i--; show(); } else if (o.back) o.back(); else finish(); }
       });
-      const pose = o.poses ? o.poses[i % o.poses.length] : (o.pose || POSE.frill);
       view.stage.append(h('div', { class: 'u11t-card' },
-        h('img', { class: 'u11t-pose', src: pose, alt: '' }),
+        h('img', { class: 'u11t-scene', src: 'img/u11-cast.jpg', alt: 'Zip and Frill' }),
         h('p', { class: 'u11t-line' }, wordNode(lines[i]))));
       view.setReplay(() => sayText(lines[i]));
       sayText(lines[i]);
@@ -1441,8 +1549,8 @@
       h('div', { class: 'u11t-faces' },
         h('img', { src: POSE.bell, alt: 'Zip' }),
         h('img', { src: POSE.frill, alt: 'Frill' })),
-      h('p', { class: 'u11t-joke' }, 'Pam pat a pan.'),
-      h('p', { class: 'u11t-joke' }, 'A map sat at a pan.'),
+      h('p', { class: 'u11t-joke' }, 'Pam sat at a pan.'),
+      h('p', { class: 'u11t-joke' }, 'Pat sat at a map.'),
       h('p', { class: 'u11t-rec' }, 'Recording needed: Zip and Frill say the joke. The bell sounds are ready.')));
     const tune = () => Snd.seq([SFX.ding, SFX.tap, SFX.ding, SFX.gong, SFX.ding], 160);
     view.setReplay(tune);

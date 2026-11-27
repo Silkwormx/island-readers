@@ -46,8 +46,12 @@ test('choices are numbered, misses are calm, and a sitting stays short', () => {
   assert.match(trail, /Great job, see you next time/);
   assert.match(trail, /ir_u11_prog/);
   assert.match(trail, /Warm-up/);
-  assert.match(trail, /beats: \['concept', 'hear', 'match', 'twist'\]/);
-  assert.match(trail, /beats: \['review', 'satchel', 'chant'\]/);
+  assert.match(trail, /beats: \['concept', 'hear', 'twist'\]/);
+  assert.match(trail, /beats: \['buildword'\]/);
+  assert.match(trail, /beats: \['picsent'\]/);
+  assert.match(trail, /beats: \['sort'\]/);
+  assert.match(trail, /beats: \['fill'\]/);
+  assert.match(trail, /beats: \['satchel', 'chant'\]/);
   assert.match(trail, /book: 'map-pan'/);
   assert.match(trail, /is-done/);
   assert.match(trail, /is-walk/);
