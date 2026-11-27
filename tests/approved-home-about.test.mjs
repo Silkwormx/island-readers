@@ -48,6 +48,9 @@ test('home shows Zip and Frill again and keeps the left-column layout', () => {
   assert.ok(home.includes('Zip and Frill sit on a tree root reading a book together.'));
   assert.ok(home.includes('ledgesHome = !/[?&]home=zigzag\\b/'));
   assert.ok(home.includes('if (!ledgesHome) trailBits.push(walkers)'));
+  assert.ok(home.includes("class: 'skyfar'"));
+  assert.ok(css.includes('.skyhome.ledges .skyfar'));
+  assert.equal(css.includes('no-repeat fixed'), false);
   assert.equal(home.includes('home_banyan_c.jpg'), false);
   assert.equal(home.includes('frillC.webp'), false);
   const featureCss = css.slice(css.indexOf('Zip and Frill portraits back in the left-column card'));
@@ -80,7 +83,7 @@ test('home shows Zip and Frill again and keeps the left-column layout', () => {
   assert.equal(home.includes('banner, hero,'), false);
   const sw = fs.readFileSync(new URL('../sw.js', import.meta.url), 'utf8');
   assert.equal(sw.includes('home_banyan_c.jpg'), false);
-  assert.ok(sw.includes('ir-20261128n'));
+  assert.ok(sw.includes('ir-20261128o'));
   assert.ok(sw.includes('home_zip_frill.webp'));
 });
 

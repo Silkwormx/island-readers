@@ -593,7 +593,8 @@
     const pathSvg = document.createElementNS(NS, 'svg');
     pathSvg.setAttribute('class', 'skypath');
     pathSvg.setAttribute('aria-hidden', 'true');
-    const trailBits = [pathSvg, library].concat(cards);
+    const skyfar = ledgesHome ? h('div', { class: 'skyfar', 'aria-hidden': 'true' }) : null;
+    const trailBits = [skyfar, pathSvg, library].concat(cards).filter(Boolean);
     const zipImg = h('img', { class: 'skyfigpic', alt: '', src: 'img/zipA.webp' });
     const frillImg = h('img', { class: 'skyfigpic', alt: '', src: 'img/zip-show/frill-glide.webp' });
     const tuft = () => h('img', { class: 'skygrass', alt: '', src: 'img/sky/grass_tuft.webp' });
