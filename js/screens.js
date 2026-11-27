@@ -449,8 +449,12 @@
         body.append(h('p', { class: 'drop-soon' }, 'Units 9 and 10 come later.'));
       }
     });
+    const booksBtn = h('button', {
+      class: 'homebook', type: 'button', 'aria-label': 'Library. Open every book.',
+      onclick: () => { Snd.stop(); location.hash = '#/library'; }
+    }, h('span', { class: 'homebook-art', 'aria-hidden': 'true' }, h('i'), h('i'), h('i')), h('span', { class: 'homebook-name' }, 'Library'));
     const tabs = h('nav', { class: 'hometabs', 'aria-label': 'More places' },
-      trailBtn, sightDrop, tab('#/find', 'Find It', 'search'));
+      booksBtn, trailBtn, sightDrop, tab('#/find', 'Find It', 'search'));
     /* Nov 6 2026: full-width home feature (approved banyan scene), then About + the hero beside the unit grid */
     const banner = h('header', { class: 'hbanner' }, h('h1', null, 'Island Readers'), kidChip(),
       h('div', { class: 'grownwrap' }, h('span', { class: 'grownlab' }, 'Parent and Teacher Materials'), IR.ui.gearButton()));
@@ -2034,6 +2038,7 @@
       location.hash = '#/home';
       setTimeout(() => toast('Unit ' + n + ' is coming soon. Your starting point is saved for this reader.'), 50);
     });
+    else if (hash.startsWith('#/library') && IR.u11Trail) IR.u11Trail.library(app, hash);
     else if (hash.startsWith('#/island3')) trailScreen();
     else if (hash.startsWith('#/check')) checkScreen();
     else if (hash.startsWith('#/result')) { IR.newScreen(); app.append(h('div', { class: 'screen resultscreen' })); IR.renderResult($('.resultscreen')); $('.resultscreen').prepend(h('div', { class: 'unitbar' }, pageNav('#/island3'))); }
