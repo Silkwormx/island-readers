@@ -80,8 +80,12 @@ test('home shows Zip and Frill again and keeps the left-column layout', () => {
   assert.equal(home.includes('banner, hero,'), false);
   const sw = fs.readFileSync(new URL('../sw.js', import.meta.url), 'utf8');
   assert.equal(sw.includes('home_banyan_c.jpg'), false);
-  assert.ok(sw.includes('ir-20261128d'));
+  assert.ok(sw.includes('ir-20261128e'));
   assert.ok(sw.includes('home_zip_frill.webp'));
+  assert.ok(sw.includes('img/sky/mid-isle.webp'));
+  assert.ok(home.includes("class: 'skymid'"));
+  assert.ok(home.includes('img/sky/mid-isle.webp'));
+  assert.ok(home.includes('if (!narrow) { placeWideLedges(stops, book, w); return; }'));
 });
 
 test('Unit 5 teacher-led checks are linked from Teacher materials', () => {

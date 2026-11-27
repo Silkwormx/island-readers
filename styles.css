@@ -4011,6 +4011,8 @@ body:has(.tmscreen) #soundfix,body:has(.u123step) #soundfix,body:has(.u789step) 
 .skyhome.ledges .sky-l .skylbl{left:auto;right:4%}
 .skyhome.ledges .sky-r .skylbl{right:auto;left:4%}
 .skyhome.ledges .skyrootspans{position:absolute;left:0;top:0;z-index:3;pointer-events:none}
+.skyhome.ledges .skymid{position:absolute;z-index:4;margin:0;pointer-events:none}
+.skyhome.ledges .skymid .skyisland{filter:drop-shadow(0 8px 6px rgba(43,37,64,.22))}
 .skyhome.ledges .skybook{position:absolute;z-index:6;margin:0;top:10px;right:12px;left:auto;align-self:auto}
 .skyhome.ledges .skyfig{width:2.85rem;z-index:8}
 @media (min-width:1000px){

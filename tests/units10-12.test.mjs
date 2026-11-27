@@ -109,7 +109,7 @@ test('house style: no em dashes, no banned words, no letter-name speech', () => 
 });
 
 test('service worker caches the new units', () => {
-  assert.match(sw, /const CACHE = 'ir-20261128d'/);
+  assert.match(sw, /const CACHE = 'ir-20261128e'/);
   for (const f of ['data_u1012.js', 'js/u1012.js', 'u1012.css', 'img/u101_p01.webp', 'materials/unit12/slides/u123/manifest.json']) {
     assert.match(sw, new RegExp('"\\./' + f.replace(/[.]/g, '\\.') + '"'), f);
   }

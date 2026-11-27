@@ -838,12 +838,114 @@
       }
       svg.append(g);
     }
+    /* Laptop only: a small unlabeled plateau in the middle of each span, so the unit islands can sit closer. */
+    function placeWideLedges(stops, book, w) {
+      const sideEl = trail.closest('.skyhome').querySelector('.homeside');
+      const fixed = sideEl && getComputedStyle(sideEl).position === 'fixed';
+      const limit = fixed ? sideEl.getBoundingClientRect().top : window.innerHeight;
+      const avail = Math.max(560, limit - trail.getBoundingClientRect().top - 8);
+      const rowH = Math.round(Math.max(112, (avail - 28) / 3.9));
+      const total = Math.round((stops.length - 1) * rowH + rowH * 1.45 + 28);
+      trail.style.height = total + 'px';
+      const height = Math.round(Math.min(rowH * 1.18, avail * 0.30));
+      const channel = Math.round(w * 0.30);
+      stops.forEach((el, i) => {
+        const side = i % 2 === 0 ? 'l' : 'r';
+        const img = el.querySelector('.skyisland');
+        const aspect = img && img.naturalWidth ? img.naturalHeight / img.naturalWidth : 1.15;
+        let width = Math.round(height / aspect);
+        width = Math.min(width, Math.round((w - 36 - channel) / 2));
+        width = Math.max(96, width);
+        el.classList.remove('sky-l', 'sky-r', 'sky-b');
+        el.classList.add(side === 'r' ? 'sky-r' : 'sky-l');
+        el.dataset.land = String(Math.floor(Math.max(0, i - 1) / 6));
+        el.style.width = width + 'px';
+        el.style.height = height + 'px';
+        el.style.top = Math.round(i * rowH + 8) + 'px';
+        el.style.zIndex = '5';
+        const lbl = el.querySelector('.skylbl');
+        if (lbl) {
+          const rim = img && img.naturalWidth ? grassRim(img, side === 'r') : { fy: 0.58 };
+          lbl.style.position = 'absolute';
+          lbl.style.top = Math.round(height * Math.max(0.34, rim.fy - 0.16)) + 'px';
+          lbl.style.bottom = 'auto';
+          lbl.style.left = '50%';
+          lbl.style.right = 'auto';
+          lbl.style.width = '8rem';
+          lbl.style.transform = 'translateX(-50%)';
+        }
+        if (side === 'l') el.style.left = (i === 0 ? '16px' : '22px');
+        else el.style.left = Math.max(16, Math.round(w - width - 18)) + 'px';
+      });
+      if (book) {
+        book.style.position = 'absolute';
+        book.style.width = '58px';
+        book.style.top = '10px';
+        book.style.left = 'auto';
+        book.style.right = '12px';
+        book.style.zIndex = '6';
+      }
+      placeMidIslands(stops, height);
+    }
+    function placeMidIslands(stops, unitH) {
+      const have = [...trail.querySelectorAll('.skymid')];
+      const mids = [];
+      for (let i = 0; i < stops.length - 1; i++) {
+        let el = have[i];
+        if (!el) {
+          const img = h('img', { class: 'skyisland', alt: '', src: 'img/sky/mid-isle.webp' });
+          el = h('div', { class: 'skymid', 'aria-hidden': 'true' }, img);
+          trail.append(el);
+          if (!img.complete) img.addEventListener('load', () => { if (trail.isConnected) layoutPath(); }, { once: true });
+        }
+        mids.push(el);
+      }
+      have.slice(stops.length - 1).forEach((el) => el.remove());
+      const probe = mids[0] && mids[0].querySelector('img');
+      const midAspect = probe && probe.naturalWidth ? probe.naturalHeight / probe.naturalWidth : 1.19;
+      mids.forEach((el, i) => {
+        const a = stops[i];
+        const b = stops[i + 1];
+        const aTop = parseFloat(a.style.top);
+        const bTop = parseFloat(b.style.top);
+        const aH = parseFloat(a.style.height);
+        const bH = parseFloat(b.style.height);
+        const aImg = a.querySelector('.skyisland');
+        const bImg = b.querySelector('.skyisland');
+        const aRim = aImg && aImg.naturalWidth ? grassRim(aImg, a.classList.contains('sky-r')) : { fy: 0.62 };
+        const bRim = bImg && bImg.naturalWidth ? grassRim(bImg, b.classList.contains('sky-r')) : { fy: 0.62 };
+        const yRim = (aTop + aH * aRim.fy + bTop + bH * bRim.fy) / 2;
+        const midImg = el.querySelector('img');
+        const cap = midImg && midImg.naturalWidth ? grassRim(midImg, false, true) : { fy: 0.24 };
+        let midH = Math.round(unitH * 0.46);
+        let midW = Math.round(midH / midAspect);
+        const aLeft = parseFloat(a.style.left);
+        const bLeft = parseFloat(b.style.left);
+        const leftStop = aLeft <= bLeft
+          ? { r: aLeft + parseFloat(a.style.width) }
+          : { r: bLeft + parseFloat(b.style.width) };
+        const rightStop = aLeft <= bLeft ? { l: bLeft } : { l: aLeft };
+        const gap = rightStop.l - leftStop.r;
+        const maxMid = Math.max(72, gap - 48);
+        if (midW > maxMid) {
+          midW = Math.round(maxMid);
+          midH = Math.round(midW * midAspect);
+        }
+        el.style.width = midW + 'px';
+        el.style.height = midH + 'px';
+        el.style.top = Math.round(yRim - midH * cap.fy) + 'px';
+        el.style.left = Math.round(leftStop.r + (gap - midW) / 2) + 'px';
+        el.style.zIndex = '4';
+      });
+    }
     function placeLedges() {
       const stops = [...trail.querySelectorAll('.skystop')];
       const book = trail.querySelector('.skybook');
       if (!stops.length) return;
       const w = trail.clientWidth;
       const narrow = w < 520;
+      if (!narrow) { placeWideLedges(stops, book, w); return; }
+      trail.querySelectorAll('.skymid').forEach((el) => el.remove());
       const sideEl = trail.closest('.skyhome').querySelector('.homeside');
       const fixed = sideEl && getComputedStyle(sideEl).position === 'fixed';
       const limit = fixed ? sideEl.getBoundingClientRect().top : window.innerHeight;
@@ -888,7 +990,7 @@
         book.style.zIndex = '6';
       }
     }
-    function paintRootBridges(svg, pts, NS) {
+    function paintRootBridges(svg, spans, NS) {
       const g = svgEl(NS, 'g', { class: 'skybridges' });
       const defs = svgEl(NS, 'defs', {});
       const filter = svgEl(NS, 'filter', { id: 'rootmist', x: '-40%', y: '-40%', width: '180%', height: '180%' });
@@ -899,11 +1001,9 @@
         const cx = (a.x + b.x) / 2, cy = (a.y + b.y) / 2 + sag, u = 1 - t;
         return { x: u * u * a.x + 2 * u * t * cx + t * t * b.x, y: u * u * a.y + 2 * u * t * cy + t * t * b.y };
       };
-      const kinds = ['net', 'plank', 'deck', 'lantern'];
-      for (let i = 0; i < pts.length - 1; i++) {
-        const a = pts[i], b = pts[i + 1];
+      spans.forEach((span) => {
+        const a = span.a, b = span.b;
         const sag = Math.max(28, Math.min(78, Math.abs(b.x - a.x) * 0.22 + 16));
-        const kind = kinds[i % 4];
         const n = 16;
         const samples = [];
         for (let s = 0; s <= n; s++) samples.push(curve(a, b, sag, s / n));
@@ -913,10 +1013,10 @@
           rx: (Math.abs(b.x - a.x) * 0.34).toFixed(1), ry: '26',
           fill: 'rgba(210,224,214,.42)', filter: 'url(#rootmist)'
         }));
-      }
+      });
       svg.append(g);
     }
-    function placePaintedBridges(pts) {
+    function placePaintedBridges(spans) {
       let canvas = trail.querySelector('.skyrootspans');
       if (!canvas || canvas.tagName !== 'CANVAS') {
         if (canvas) canvas.remove();
@@ -938,10 +1038,10 @@
         ctx.beginPath();
         ctx.rect(6, 0, Math.max(0, w - 12), hgt);
         ctx.clip();
-        for (let i = 0; i < pts.length - 1; i++) {
-          const img = trail._bridgeImgs && trail._bridgeImgs[i % kinds.length];
-          if (img && img.complete && img.naturalWidth) hangBridge(ctx, img, pts[i], pts[i + 1], w);
-        }
+        spans.forEach((span) => {
+          const img = trail._bridgeImgs && trail._bridgeImgs[span.kind % kinds.length];
+          if (img && img.complete && img.naturalWidth) hangBridge(ctx, img, span.a, span.b, w);
+        });
         ctx.restore();
       };
       if (!trail._bridgeImgs) {
@@ -976,13 +1076,13 @@
       img._ink = { minX, minY, maxX: Math.max(minX + 1, maxX), maxY: Math.max(minY + 1, maxY) };
       return img._ink;
     }
-    function grassRim(img, onRight) {
+    function grassRim(img, onRight, upper) {
       const rows = islandRows(img);
       let yFirst = -1, yLast = -1;
       for (let y = 0; y < rows.length; y++) if (rows[y]) { if (yFirst < 0) yFirst = y; yLast = y; }
       const span = Math.max(1, yLast - yFirst);
-      const y0 = Math.floor(yFirst + span * 0.58);
-      const y1 = Math.floor(yFirst + span * 0.74);
+      const y0 = Math.floor(yFirst + span * (upper ? 0.12 : 0.58));
+      const y1 = Math.floor(yFirst + span * (upper ? 0.40 : 0.74));
       let best = null;
       for (let y = y0; y <= y1; y += 2) {
         const row = rows[y];
@@ -1035,9 +1135,34 @@
       ctx.save();
       ctx.translate(left.x, left.y);
       ctx.rotate(ang);
-      const tuck = Math.min(36, dist * 0.08);
+      const tuck = slim ? Math.min(36, dist * 0.08) : Math.min(28, Math.max(10, dist * 0.12));
       ctx.drawImage(img, box.minX, box.minY, bw, bh, -tuck, -rail * 0.32, dist + tuck * 2, rail);
       ctx.restore();
+    }
+    function ledgeSpans(stops, pts, origin) {
+      const mids = [...trail.querySelectorAll('.skymid')];
+      if (mids.length !== stops.length - 1 || !mids.length) {
+        const spans = [];
+        for (let i = 0; i < pts.length - 1; i++) spans.push({ a: pts[i], b: pts[i + 1], kind: i % 3 });
+        return spans;
+      }
+      const spans = [];
+      mids.forEach((el, i) => {
+        const art = el.querySelector('img').getBoundingClientRect();
+        const img = el.querySelector('img');
+        const left = img && img.naturalWidth ? grassRim(img, true, true) : { fx: 0.12, fy: 0.24 };
+        const right = img && img.naturalWidth ? grassRim(img, false, true) : { fx: 0.88, fy: 0.24 };
+        const ends = {
+          left: { x: art.left - origin.left + art.width * left.fx, y: art.top - origin.top + art.height * left.fy },
+          right: { x: art.left - origin.left + art.width * right.fx, y: art.top - origin.top + art.height * right.fy }
+        };
+        const from = pts[i], to = pts[i + 1];
+        const goRight = from.x <= to.x;
+        const kind = i % 3;
+        spans.push({ a: from, b: goRight ? ends.left : ends.right, kind: kind });
+        spans.push({ a: goRight ? ends.right : ends.left, b: to, kind: kind });
+      });
+      return spans;
     }
     function layoutPath() {
       const home = trail.closest('.skyhome');
@@ -1092,8 +1217,9 @@
       const NS = 'http://www.w3.org/2000/svg';
       while (svg.firstChild) svg.removeChild(svg.firstChild);
       if (ledges) {
-        paintRootBridges(svg, pts, NS);
-        placePaintedBridges(pts);
+        const spans = ledgeSpans(stops, pts, origin);
+        paintRootBridges(svg, spans, NS);
+        placePaintedBridges(spans);
       } else if (!coil) paintBridges(svg, pts, sagOf, NS);
       const line = document.createElementNS(NS, 'path');
       line.setAttribute('class', 'skyline');
