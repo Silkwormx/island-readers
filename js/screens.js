@@ -760,7 +760,16 @@
       const draw = () => { if (trail.isConnected) layoutPath(); };
       requestAnimationFrame(draw);
       window.addEventListener('resize', () => { if (trail.isConnected) draw(); });
-      trail.querySelectorAll('.skyisland').forEach((img) => { if (!img.complete) img.addEventListener('load', draw, { once: true }); });
+      const islands = [...trail.querySelectorAll('.skyisland')];
+      const whenReady = (img) => (img.complete && img.naturalWidth) ? Promise.resolve() : new Promise((res) => {
+        img.addEventListener('load', res, { once: true });
+        img.addEventListener('error', res, { once: true });
+      });
+      islands.forEach((img) => { if (!img.complete) img.addEventListener('load', draw, { once: true }); });
+      /* A large island can finish after the first layout and miss that pass, which leaves its sign small. */
+      if (islands.some((img) => !img.complete || !img.naturalWidth)) {
+        Promise.all(islands.map(whenReady)).then(() => { if (trail.isConnected) draw(); });
+      }
       return;
     }
     const WALK_MS = 2000;
@@ -870,7 +879,13 @@
           const row = rows[y] || rows[y - 1];
           if (row && (!best || row.w > best.w)) best = row;
         }
-        if (!best || best.w < 8) return;
+        if (!best || best.w < 8) {
+          best = {
+            min: Math.round(rim.left * img.naturalWidth),
+            max: Math.round(rim.right * img.naturalWidth),
+            w: Math.max(8, Math.round((rim.right - rim.left) * img.naturalWidth))
+          };
+        }
         const grassTop = fit.y + grass * scaleY;
         seats.push({
           el: el,

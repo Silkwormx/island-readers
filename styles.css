@@ -3996,8 +3996,7 @@ body:has(.tmscreen) #soundfix,body:has(.u123step) #soundfix,body:has(.u789step) 
 }
 .skyhome.ledges .skyline,.skyhome.ledges .skystones{stroke:none}
 .skyhome.ledges .skywalk{display:none}
-/* Fixed layer: iOS Safari drops background-attachment:fixed, so the clouds sit on their own layer.
-   overflow:clip on the trail keeps that layer inside the sky frame while the trail scrolls. */
+/* Phone: iOS Safari drops background-attachment:fixed, so the clouds sit on their own layer. */
 .skyhome.ledges .skyfar{
   position:fixed;left:0;top:0;right:0;bottom:0;z-index:0;pointer-events:none;
   background:#d5e8f6 url("img/sky/sky_far.webp") center 18% / cover no-repeat;
@@ -4007,6 +4006,13 @@ body:has(.tmscreen) #soundfix,body:has(.u123step) #soundfix,body:has(.u789step) 
   border:4px solid #7A5430;border-radius:1.35rem;
   background:transparent;
   box-shadow:inset 0 0 0 2px #E7D3A4, 0 8px 16px rgba(70,46,20,.12);
+}
+/* Laptop: clouds stay inside the framed trail and the sidebar stays put. Desktop honors attachment:fixed. */
+@media (min-width:1000px){
+  .skyhome.ledges .skyfar{display:none}
+  .skyhome.ledges .skytrail{
+    background:#d5e8f6 url("img/sky/sky_far.webp") center 18% / cover no-repeat fixed;
+  }
 }
 .gridhome.bellfit.skyhome.ledges .bellpath .skystop{position:absolute;margin:0!important;width:auto;z-index:4;overflow:visible}
 .skyhome.ledges .skyisland{display:block;width:100%;height:100%;object-fit:contain;object-position:center bottom}

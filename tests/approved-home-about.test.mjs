@@ -50,7 +50,13 @@ test('home shows Zip and Frill again and keeps the left-column layout', () => {
   assert.ok(home.includes('if (!ledgesHome) trailBits.push(walkers)'));
   assert.ok(home.includes("class: 'skyfar'"));
   assert.ok(css.includes('.skyhome.ledges .skyfar'));
-  assert.equal(css.includes('no-repeat fixed'), false);
+  const skyfarAt = css.indexOf('.skyhome.ledges .skyfar');
+  const skySlice = css.slice(skyfarAt, skyfarAt + 1100);
+  const desk = skySlice.indexOf('@media (min-width:1000px)');
+  assert.ok(desk > 0);
+  assert.equal(skySlice.slice(0, desk).includes('no-repeat fixed'), false);
+  assert.ok(skySlice.includes('no-repeat fixed'));
+  assert.ok(skySlice.includes('.skyhome.ledges .skyfar{display:none}'));
   assert.equal(home.includes('home_banyan_c.jpg'), false);
   assert.equal(home.includes('frillC.webp'), false);
   const featureCss = css.slice(css.indexOf('Zip and Frill portraits back in the left-column card'));
@@ -83,7 +89,7 @@ test('home shows Zip and Frill again and keeps the left-column layout', () => {
   assert.equal(home.includes('banner, hero,'), false);
   const sw = fs.readFileSync(new URL('../sw.js', import.meta.url), 'utf8');
   assert.equal(sw.includes('home_banyan_c.jpg'), false);
-  assert.ok(sw.includes('ir-20261128o'));
+  assert.ok(sw.includes('ir-20261128p'));
   assert.ok(sw.includes('home_zip_frill.webp'));
 });
 
