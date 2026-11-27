@@ -3522,7 +3522,16 @@ window.IR_DATA_U1012 = {
     "soap": "img/u12pics/soap.webp",
     "toast": "img/u12pics/toast.webp",
     "toe": "img/u12pics/toe.webp",
-    "hoe": "img/u12pics/hoe.webp"
+    "hoe": "img/u12pics/hoe.webp",
+    "Joe": "img/u12pics/joe.webp",
+    "foe": "img/u12pics/foe.webp",
+    "doe": "img/u12pics/doe.webp",
+    "woe": "img/u12pics/woe.webp",
+    "float": "img/u12pics/float.webp",
+    "road": "img/u12pics/road.webp",
+    "goat": "img/u12pics/goat.webp",
+    "load": "img/u12pics/load.webp",
+    "moat": "img/u12pics/moat.webp"
    },
    "story": [
     {

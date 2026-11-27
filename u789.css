@@ -94,6 +94,9 @@
 .u1012step .hoeword{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.2rem;width:100%}
 .u1012step .hoepic,.u1012step .hoeround > .hoepic{display:block;width:auto;max-width:min(92%,24rem);max-height:min(28vh,14rem);max-height:min(28svh,14rem);height:auto;margin:0 auto;object-fit:contain}
 .u1012step .bellgame > .hoepic{max-height:min(16vh,7rem);max-height:min(16svh,7rem)}
+.u1012step .bigword .hoepic,.u1012step .sorword .hoepic{max-height:min(16vh,6.5rem);max-height:min(16svh,6.5rem);max-width:8rem}
+.u1012step .chips > .chip.haspic{height:auto!important;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:.12rem;padding:.28rem .2rem .4rem;font-size:1.25rem}
+.u1012step .chips > .chip.haspic .chippic{display:block;width:auto;height:4.4rem;max-width:100%;max-height:4.4rem;object-fit:contain;margin:0 auto}
 @media (prefers-reduced-motion:reduce){
   .u789step .chantpic.go .chantactor,.u789step .chantpic.go > img{animation:none}
 }

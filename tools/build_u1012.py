@@ -104,7 +104,7 @@ def runtime(L):
     key = L['key']
     pics = {w: 'img/u10pics/%s.webp' % w for w in L['pics']}
     # unit folders: u10pics, u11pics, u12pics
-    pics = {w: 'img/u%dpics/%s.webp' % (L['unit'], w) for w in L['pics']}
+    pics = {w: 'img/u%dpics/%s.webp' % (L['unit'], re.sub(r'[^A-Za-z]', '', w).lower()) for w in L['pics']}
     story = []
     for i, page in enumerate(L['story']):
         story.append({'text': page['text'], 'words': page['words'], 'img': 'img/%s_p%02d.webp' % (key, i + 1)})
@@ -302,13 +302,14 @@ def icon(word, path):
     def toast():
         d.rounded_rectangle([80, 90, 320, 320], 24, fill=(214, 160, 70, 255), outline=ink, width=6)
         d.rounded_rectangle([110, 120, 290, 290], 16, fill=(186, 120, 50, 255))
-    def toe():
-        d.ellipse([60, 180, 300, 320], fill=(244, 206, 170, 255), outline=ink, width=6)
-        d.ellipse([250, 150, 340, 240], fill=(244, 206, 170, 255), outline=ink, width=6)
-    def hoe():
-        painted = Image.open(os.path.join(ROOT, 'img', 'u12pics', 'hoe.webp')).convert('RGBA')
+    def keep(name):
+        painted = Image.open(os.path.join(ROOT, 'img', 'u12pics', name + '.webp')).convert('RGBA')
         painted.thumbnail((380, 380), Image.Resampling.LANCZOS)
         im.paste(painted, ((400 - painted.width) // 2, (400 - painted.height) // 2), painted)
+    def toe():
+        keep('toe')
+    def hoe():
+        keep('hoe')
     def snow():
         d.ellipse([150, 40, 250, 140], fill=(255, 255, 255, 255), outline=ink, width=6)
         d.ellipse([80, 110, 210, 250], fill=(255, 255, 255, 255), outline=ink, width=6)
@@ -342,11 +343,15 @@ def icon(word, path):
         'ear': ear, 'gear': gear, 'beard': beard, 'year': year, 'rain': rain, 'train': train,
         'paint': paint, 'hay': hay, 'bay': bay, 'bee': bee, 'tree': tree, 'key': key,
         'leaf': leaf, 'beach': beach, 'tea': tea, 'boat': boat, 'toad': toad, 'coat': coat,
-        'soap': soap, 'toast': toast, 'toe': toe, 'hoe': hoe, 'snow': snow, 'rowboat': rowboat,
+        'soap': soap, 'toast': toast, 'toe': toe, 'hoe': hoe,
+        'joe': lambda: keep('joe'), 'foe': lambda: keep('foe'), 'doe': lambda: keep('doe'), 'woe': lambda: keep('woe'),
+        'float': lambda: keep('float'), 'road': lambda: keep('road'), 'goat': lambda: keep('goat'),
+        'load': lambda: keep('load'), 'moat': lambda: keep('moat'),
+        'snow': snow, 'rowboat': rowboat,
         'glow': glow, 'bowl': bowl, 'pillow': pillow, 'pie': pie, 'night': night,
         'light': light, 'tie': tie,
     }
-    (fn.get(word) or chair)()
+    (fn.get(word) or fn.get(re.sub(r'[^A-Za-z]', '', word).lower()) or chair)()
     im.save(path, 'WEBP', quality=80)
 
 def wrap_text(draw, text, font, width):
@@ -371,7 +376,7 @@ def slide_image(L, day, kind, lines, path, n, total):
     d.text((70, 150), kind, font=F(64, True), fill=TEAL)
     y = 250
     body = F(48, True)
-    hoe_icon = os.path.join(ROOT, 'img', 'u12pics', 'hoe.webp')
+    pic_dir = os.path.join(ROOT, 'img', 'u%dpics' % L['unit'])
     for line in lines:
         for part in wrap_text(d, line, body, 900):
             x = 70
@@ -381,12 +386,13 @@ def slide_image(L, day, kind, lines, path, n, total):
                 token = bit + (' ' if bi < len(bits) - 1 else '')
                 d.text((x, y), token, font=body, fill=INK)
                 x += d.textlength(token, font=body)
-                if re.sub(r'[^A-Za-z]', '', bit).lower() == 'hoe' and os.path.exists(hoe_icon):
-                    icon_im = Image.open(hoe_icon).convert('RGBA')
-                    icon_im.thumbnail((150, 150), Image.Resampling.LANCZOS)
-                    im.paste(icon_im, (int(x) + 6, int(y) - 18), icon_im)
-                    x += icon_im.width + 12
-                    line_h = max(line_h, icon_im.height + 16)
+                icon_path = os.path.join(pic_dir, re.sub(r'[^A-Za-z]', '', bit).lower() + '.webp')
+                if L['unit'] == 12 and os.path.exists(icon_path):
+                    icon_im = Image.open(icon_path).convert('RGBA')
+                    icon_im.thumbnail((72, 72), Image.Resampling.LANCZOS)
+                    im.paste(icon_im, (int(x) + 4, int(y) - 8), icon_im)
+                    x += icon_im.width + 8
+                    line_h = max(line_h, icon_im.height + 12)
             y += line_h
     d.text((70, SLIDE_H - 70), 'Island Readers', font=F(28, False), fill=TEAL)
     d.text((SLIDE_W - 70, SLIDE_H - 70), '%d of %d' % (n, total), font=F(28, True), fill=INK, anchor='ra')
@@ -508,11 +514,10 @@ def day_page(doc, L, day, index):
                 x = 56; y -= 32
             draw_bits(c, x, y, w, 20, focus_part=focus)
             x += pdfmetrics.stringWidth(w, 'Andika-Bold', 20) + 28
-            if re.sub(r'[^A-Za-z]', '', w).lower() == 'hoe':
-                hoe_icon = os.path.join(ROOT, 'img', 'u12pics', 'hoe.webp')
-                if os.path.exists(hoe_icon):
-                    c.drawImage(hoe_icon, x - 24, y - 2, 22, 22, mask='auto', preserveAspectRatio=True)
-                    x += 10
+            icon_path = os.path.join(ROOT, 'img', 'u%dpics' % L['unit'], re.sub(r'[^A-Za-z]', '', w).lower() + '.webp')
+            if L['unit'] == 12 and os.path.exists(icon_path):
+                c.drawImage(icon_path, x - 8, y - 6, 28, 28, mask='auto', preserveAspectRatio=True)
+                x += 18
         y -= 40
     pdf_rgb(c, TEAL); c.setFont('Andika-Bold', 14); c.drawString(48, y, 'You do  ·  spell. Your teacher says the word.'); y -= 28
     for i, w in enumerate(day['spell']):
@@ -563,10 +568,9 @@ def wordlist(path, L):
             if x > 480:
                 x = 56; y -= 28
             draw_bits(c, x, y, w, 16, focus_part=L['focus'][0])
-            if re.sub(r'[^A-Za-z]', '', w).lower() == 'hoe':
-                hoe_icon = os.path.join(ROOT, 'img', 'u12pics', 'hoe.webp')
-                if os.path.exists(hoe_icon):
-                    c.drawImage(hoe_icon, x + 36, y - 2, 18, 18, mask='auto', preserveAspectRatio=True)
+            icon_path = os.path.join(ROOT, 'img', 'u%dpics' % L['unit'], re.sub(r'[^A-Za-z]', '', w).lower() + '.webp')
+            if L['unit'] == 12 and os.path.exists(icon_path):
+                c.drawImage(icon_path, x + 28, y - 4, 22, 22, mask='auto', preserveAspectRatio=True)
             x += 90
         y -= 36
     pdf_rgb(c, RED); c.setFont('Andika-Bold', 14); c.drawString(48, y, 'Heart words'); y -= 26
