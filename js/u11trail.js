@@ -340,16 +340,17 @@
 
   function trailWide() { return window.matchMedia('(min-width: 900px)').matches; }
   function pts() {
+    /* Mirrored from the live path so the first swing goes left, as in 0172783. */
     if (!trailWide()) {
       return [
-        { x: 34, y: 90 }, { x: 68, y: 80 }, { x: 32, y: 70 }, { x: 70, y: 60 }, { x: 30, y: 50 },
-        { x: 68, y: 40 }, { x: 32, y: 30 }, { x: 66, y: 21 }, { x: 36, y: 13 }, { x: 64, y: 6 }
+        { x: 66, y: 90 }, { x: 32, y: 80 }, { x: 68, y: 70 }, { x: 30, y: 60 }, { x: 70, y: 50 },
+        { x: 32, y: 40 }, { x: 68, y: 30 }, { x: 34, y: 21 }, { x: 64, y: 13 }, { x: 36, y: 6 }
       ];
     }
-    /* Same switchbacks as the phone, gathered in the middle of the wide scene. */
+    /* Same switchbacks, gathered in the middle, flipped left/right. */
     return [
-      { x: 43, y: 90 }, { x: 58, y: 80 }, { x: 42, y: 70 }, { x: 59, y: 60 }, { x: 41, y: 50 },
-      { x: 58, y: 40 }, { x: 42, y: 30 }, { x: 57, y: 21 }, { x: 44, y: 13 }, { x: 56, y: 6 }
+      { x: 57, y: 90 }, { x: 42, y: 80 }, { x: 58, y: 70 }, { x: 41, y: 60 }, { x: 59, y: 50 },
+      { x: 42, y: 40 }, { x: 58, y: 30 }, { x: 43, y: 21 }, { x: 56, y: 13 }, { x: 44, y: 6 }
     ];
   }
   function controlsFor(list) {
@@ -363,7 +364,7 @@
       const dx = b.x - a.x;
       const dy = b.y - a.y;
       const len = Math.hypot(dx, dy) || 1;
-      const bow = bowBase * (i % 2 ? 1 : -1);
+      const bow = bowBase * (i % 2 ? -1 : 1);
       segs.push({ a: a, b: b, c: { x: mx + (-dy / len) * bow, y: my + (dx / len) * bow * 0.45 } });
     }
     return segs;
