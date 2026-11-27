@@ -1,7 +1,7 @@
 /* Island Readers sample service worker.
    Code (HTML/JS/CSS/data) is network-first so a new version always wins; the cache is only an offline fallback.
    Media (images/audio/video) is cache-first. Install never fails because of one file. */
-const CACHE = 'ir-20261127s';
+const CACHE = 'ir-20261127t';
 const ASSETS = [
  "./index.html",
  "./js/wordplay.js",
@@ -712,6 +712,8 @@ const ASSETS = [
  "./img/sky/sky_paint.webp",
  "./img/sky/sky_far.webp",
  "./img/sky/rock_base.webp",
+ "./img/sky/grass_tuft.webp",
+ "./img/sky/spiral.webp",
  "./img/sky/island_a.webp",
  "./img/sky/island_b.webp",
  "./img/sky/island_d.webp",
