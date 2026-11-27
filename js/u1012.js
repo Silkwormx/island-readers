@@ -143,7 +143,8 @@
       b.addEventListener('click', () => onPick(w, b, grid));
       grid.append(b);
     });
-    return grid;
+    if (!words.some((w) => bare(w) === 'hoe')) return grid;
+    return h('div', { class: 'hoeround' }, h('img', { class: 'hoepic', src: 'img/u12pics/hoe.webp', alt: 'a garden hoe' }), grid);
   }
   function picEl(src) {
     if (!src) return null;
@@ -166,7 +167,9 @@
           h('div', { class: 'panelwrap small' }, h('img', { class: 'panel', src: face, alt: b.who === 'frill' ? 'Frill' : 'Zip' })),
           h('p', { class: 'bigword' }, colorWord(b.word, L)), pure),
         b.cap ? h('p', { class: 'cap' }, b.cap) : null, rec,
-        h('div', { class: 'chips' }, ...(b.chips || []).map((w) => h('button', { class: 'chip', type: 'button', onclick: () => say(w) }, colorWord(w, L))))));
+        h('div', { class: 'chips' }, ...(b.chips || []).map((w) => h('span', { class: 'chipstack' },
+          bare(w) === 'hoe' ? h('img', { class: 'hoepic', src: 'img/u12pics/hoe.webp', alt: 'a garden hoe' }) : null,
+          h('button', { class: 'chip', type: 'button', onclick: () => say(w) }, colorWord(w, L)))))));
       ctx.setNextLabel(i === beats.length - 1 ? 'Activities' : 'Next');
       Snd.play(P(b.audio)).then(() => { if (b.snd && PH(b.snd) && ctx.scr.ok()) Snd.play(PH(b.snd)); });
     };
@@ -175,26 +178,13 @@
     show();
   }
 
+  function hoeFace(w, node) {
+    if (bare(w) !== 'hoe') return node;
+    return h('span', { class: 'hoeword' }, h('img', { class: 'hoepic', src: 'img/u12pics/hoe.webp', alt: 'a garden hoe' }), node);
+  }
   function runChant(ctx, L) {
-    const lines = L.chant; let i = 0; const st = ctx.stage; let first = true;
     ctx.setInstr('Say it with Frill. Clap the beat!', 'chant');
-    let countEl = st.parentElement.querySelector(':scope > .qcount');
-    if (!countEl) { countEl = h('p', { class: 'qcount', 'aria-live': 'polite' }, ''); st.after(countEl); }
-    const replay = () => Snd.seq(lines[i].split(' ').map((w) => W(w)), 140);
-    const show = () => {
-      ctx.progress(i / lines.length);
-      countEl.textContent = (i + 1) + ' of ' + lines.length;
-      st.innerHTML = '';
-      const line = h('p', { class: 'chantline' }, ...lines[i].split(' ').map((w, k) => [k ? ' ' : '', h('button', { class: 'w', type: 'button', onclick: () => say(w) }, w)]).flat());
-      st.append(h('div', { class: 'activity chantact' }, h('div', { class: 'panelwrap small' }, h('img', { class: 'panel', src: ACT('frill_drum'), alt: 'Frill drums the beat' })), line));
-      ctx.setNextLabel(i === lines.length - 1 ? 'Activities' : 'Next');
-      if (ctx.setRepeat) ctx.setRepeat(replay);
-      if (first) { first = false; const p = IR.sayItem(ctx, P('chant'), null); if (p && p.then) p.then(() => { if (ctx.scr.ok()) replay(); }); else replay(); }
-      else replay();
-    };
-    ctx.setBack(() => { if (i > 0) { i--; show(); return true; } return false; });
-    ctx.setNext(() => { if (i < lines.length - 1) { i++; show(); return true; } return false; });
-    show();
+    IR.mountChant(ctx, { key: L.key, lines: L.chant, audio: (w) => W(w), color: (w) => colorWord(w, L), intro: P('chant') });
   }
 
   function runHear(ctx, L) {
@@ -223,7 +213,10 @@
   }
 
   function runBells(ctx, L) {
-    IR.ringBells(ctx, { words: L.bellWords.slice(), audio: (w) => W(w), color: (w) => document.createTextNode(w) });
+    IR.ringBells(ctx, {
+      words: L.bellWords.slice(), audio: (w) => W(w), color: (w) => document.createTextNode(w),
+      banner: (w) => bare(w) === 'hoe' ? h('img', { class: 'hoepic', src: 'img/u12pics/hoe.webp', alt: 'a garden hoe' }) : null
+    });
     const face = ctx.stage.querySelector('.bellask img');
     if (face) { face.src = 'img/zip-show/frill-wave.webp'; face.alt = 'Frill'; face.classList.add('buddy'); }
   }
@@ -258,6 +251,7 @@
       const R = rounds[r]; ctx.progress(r / rounds.length); if (ctx.count) ctx.count(r + 1, rounds.length); st.innerHTML = '';
       const slotsEl = h('div', { class: 'slots' }); const bankEl = h('div', { class: 'bank' });
       const status = h('p', { class: 'status' }, teach() ? 'Tap a tile, then tap a box.' : 'Tap or drag tiles into the boxes.');
+      const hoe = bare(R.word) === 'hoe' ? h('img', { class: 'hoepic', src: 'img/u12pics/hoe.webp', alt: 'a garden hoe' }) : null;
       const tiles = shuffle([
         { id: 'o1', text: R.a, cls: 'onset' }, { id: 'o2', text: R.altA, cls: 'onset' },
         { id: 'c1', text: R.b, cls: 'chunk' }, { id: 'c2', text: R.altB, cls: 'chunk' }]);
@@ -276,7 +270,7 @@
         }
       });
       const spk = speakerBtn(() => say(R.word), 'Hear the word'); spk.classList.add('huge');
-      st.append(h('div', { class: 'activity' }, spk, slotsEl, bankEl, status));
+      st.append(h('div', { class: 'activity' }, hoe, spk, slotsEl, bankEl, status));
       IR.sayItem(ctx, P('build'), W(R.word));
     }
     ctx.setNext(() => { if (r < rounds.length - 1) { r++; round(); return true; } return false; });
@@ -426,6 +420,7 @@
       const slotsEl = h('div', { class: 'slots sent' }); const bankEl = h('div', { class: 'bank' });
       const status = h('p', { class: 'status' }, teach() ? 'Tap a word, then tap a box.' : 'Tap or drag the words into the boxes.');
       const plain = R.words.map((w) => w.replace(/[^A-Za-z]/g, ''));
+      const hoe = plain.some((w) => bare(w) === 'hoe') ? h('img', { class: 'hoepic', src: 'img/u12pics/hoe.webp', alt: 'a garden hoe' }) : null;
       const tiles = shuffle(plain.map((w, i) => ({ id: 'w' + i, text: w, cls: 'word' })));
       IR.TileBoard({
         tiles: tiles, nSlots: plain.length, slotsEl: slotsEl, bankEl: bankEl,
@@ -444,7 +439,7 @@
           }
         }
       });
-      st.append(h('div', { class: 'activity sentact' }, slotsEl, bankEl, status));
+      st.append(h('div', { class: 'activity sentact' }, hoe, slotsEl, bankEl, status));
       if (r === 0) IR.sayItem(ctx, P('sentence'), null);
     }
     ctx.setNext(() => { if (r < rounds.length - 1) { r++; round(); return true; } return false; });
@@ -523,7 +518,7 @@
         });
         bins.append(btn);
       });
-      const wordBtn = h('button', { class: 'bigword sorword', type: 'button', onclick: () => say(it.word) }, it.word);
+      const wordBtn = h('button', { class: 'bigword sorword', type: 'button', onclick: () => say(it.word) }, hoeFace(it.word, document.createTextNode(it.word)));
       st.append(h('div', { class: 'activity' }, wordBtn, h('p', { class: 'bigprompt' }, 'Which group?'), bins, status));
       if (i === 0) IR.sayItem(ctx, P('sort'), W(it.word)); else say(it.word);
     }
@@ -551,7 +546,7 @@
         grid.append(b);
       });
       const spk = speakerBtn(() => say(it.word), 'Hear the word'); spk.classList.add('huge');
-      const wordEl = h('p', { class: 'bigword' }, it.word);
+      const wordEl = h('p', { class: 'bigword' }, hoeFace(it.word, document.createTextNode(it.word)));
       st.append(h('div', { class: 'activity' }, spk, wordEl, grid, status));
       if (i === 0) IR.sayItem(ctx, P(whichAudio(L)), W(it.word)); else say(it.word);
     }

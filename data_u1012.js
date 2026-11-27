@@ -3521,7 +3521,8 @@ window.IR_DATA_U1012 = {
     "coat": "img/u12pics/coat.webp",
     "soap": "img/u12pics/soap.webp",
     "toast": "img/u12pics/toast.webp",
-    "toe": "img/u12pics/toe.webp"
+    "toe": "img/u12pics/toe.webp",
+    "hoe": "img/u12pics/hoe.webp"
    },
    "story": [
     {

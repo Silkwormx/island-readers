@@ -610,7 +610,7 @@ add({
     ],
     'heart': [{'w': 'shoe', 'part': 'oe'}],
     'newWords': [],
-    'pics': ['boat', 'toad', 'coat', 'soap', 'toast', 'toe'],
+    'pics': ['boat', 'toad', 'coat', 'soap', 'toast', 'toe', 'hoe'],
     'bellExtra': ['goat', 'moat', 'load', 'float', 'road', 'hoe', 'dock', 'rock'],
     'story': [
         S('Zip loads a boat with toast, a coat, and soap.'),
