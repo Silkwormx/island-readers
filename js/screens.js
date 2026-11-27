@@ -526,9 +526,13 @@
         h('span', { class: 'skybody' },
           h('img', { class: 'skyisland', src: opts.img, alt: '', loading: opts.lazy ? 'lazy' : 'eager' })),
         h('span', { class: 'skylbl' },
-          h('b', null, opts.kicker),
-          h('small', null, opts.name),
-          opts.soon ? h('span', { class: 'skylock', 'aria-hidden': 'true' }, icon('lock')) : null),
+          h('span', { class: 'thead' },
+            opts.dots && opts.dots.length ? h('span', { class: 'tdots', 'aria-hidden': 'true' }, ...opts.dots.map((c) => h('i', { class: 'tdot td-' + c }))) : null,
+            h('b', { class: 'tnum' }, opts.kicker),
+            opts.soon ? h('span', { class: 'skylock', 'aria-hidden': 'true' }, icon('lock')) : null),
+          h('span', { class: 'tname' }, opts.name),
+          opts.sounds ? h('span', { class: 'tsnd' }, opts.sounds) : null,
+          opts.count ? h('span', { class: 'tcount' }, opts.count) : null),
         gem);
       b.addEventListener('click', opts.onclick);
       return b;
@@ -555,6 +559,9 @@
         lazy: n > 8,
         kicker: 'Unit ' + n,
         name: t[0],
+        sounds: t[1],
+        count: t[2] + (t[2] === 1 ? ' lesson' : ' lessons'),
+        dots: t[3],
         title: 'Unit ' + n + ': ' + t[0],
         label: label,
         onclick: () => { if (hop) { Snd.stop(); location.hash = hop; } else if (u123 || u789) { Snd.stop(); location.hash = '#/u' + n; } else if (u6) { Snd.stop(); location.hash = '#/u6'; } else if (u5) { Snd.stop(); location.hash = '#/u5'; } else if (isl) openIsland(BUILT_ID); else { Snd.stop(); toast('Unit ' + n + ' is coming soon.'); } }
@@ -746,6 +753,8 @@
   }
   /* Zip and Frill stand on the current island. After a unit is completed they walk the path to the next one. */
   function standOnTrail(trail, here, zipFig, frillFig, zipImg, frillImg, paintIntoScene) {
+    let layingLedges = false;
+    let ledgesAgain = false;
     if (!zipFig) {
       const draw = () => { if (trail.isConnected) layoutPath(); };
       requestAnimationFrame(draw);
@@ -838,14 +847,134 @@
       }
       svg.append(g);
     }
+    function placeLedgeLabels(stops, narrow) {
+      /* A small drop from the seat just under the grass: about 14px on a laptop, less on a phone. */
+      const drop = narrow ? 8 : 14;
+      const seats = [];
+      stops.forEach((el) => {
+        const img = el.querySelector('.skyisland');
+        const lbl = el.querySelector('.skylbl');
+        if (!lbl || !img || !img.naturalWidth) return;
+        const fit = fittedArt(el, img);
+        const rim = plateauRim(img);
+        const rows = islandRows(img);
+        if (!rim.ok || !rows) return;
+        const grass = rim.fy * img.naturalHeight;
+        const scaleX = fit.w / img.naturalWidth;
+        const scaleY = fit.h / img.naturalHeight;
+        const y0 = Math.round(grass) + 2;
+        const y1 = Math.min(img.naturalHeight - 2, Math.round(grass + (img.naturalHeight - grass) * 0.2));
+        let best = null;
+        for (let y = y0; y <= y1; y += 2) {
+          const row = rows[y] || rows[y - 1];
+          if (row && (!best || row.w > best.w)) best = row;
+        }
+        if (!best || best.w < 8) return;
+        const grassTop = fit.y + grass * scaleY;
+        seats.push({
+          el: el,
+          lbl: lbl,
+          img: img,
+          fit: fit,
+          rows: rows,
+          grass: grass,
+          scaleX: scaleX,
+          scaleY: scaleY,
+          grassTop: grassTop,
+          imgBottom: fit.y + fit.h,
+          rockW: best.w * scaleX,
+          room: Math.max(34, fit.y + fit.h - (grassTop + drop) - 2)
+        });
+        el.dataset.fy = String(rim.fy);
+      });
+      if (!seats.length) return;
+      const bySize = (key) => seats.map((s) => s[key]).sort((a, b) => a - b);
+      const rocks = bySize('rockW');
+      const rooms = bySize('room');
+      /* Skip the two narrowest undersides so one slim island does not shrink every sign. */
+      const pick = Math.min(2, rocks.length - 1);
+      const median = rocks[Math.floor(rocks.length / 2)];
+      const widthCap = Math.round(Math.max(narrow ? 132 : 158, median * 0.9));
+      const roomCap = rooms[pick];
+      const applySize = (px, boxW) => {
+        let maxH = 0;
+        let overflow = false;
+        seats.forEach((s) => {
+          const lbl = s.lbl;
+          lbl.style.position = 'absolute';
+          lbl.style.boxSizing = 'border-box';
+          lbl.style.width = boxW + 'px';
+          lbl.style.height = 'auto';
+          lbl.style.maxHeight = 'none';
+          lbl.style.overflow = 'visible';
+          lbl.style.fontSize = px + 'px';
+          const hgt = lbl.offsetHeight;
+          if (hgt > maxH) maxH = hgt;
+          if (lbl.scrollWidth > lbl.clientWidth + 2) overflow = true;
+        });
+        return { maxH: maxH, overflow: overflow };
+      };
+      let px = narrow ? 15 : 17;
+      let sized = applySize(px, widthCap);
+      let guard = 0;
+      while ((sized.overflow || sized.maxH > roomCap) && px > 11 && guard < 16) {
+        px -= 0.5;
+        sized = applySize(px, widthCap);
+        guard++;
+      }
+      /* If the longest line is shorter than the rock, pull the shared box in so the words fill it. */
+      let contentW = 0;
+      seats.forEach((s) => {
+        const head = s.lbl.querySelector('.thead');
+        if (head) contentW = Math.max(contentW, head.scrollWidth);
+        s.lbl.querySelectorAll('.tname,.tsnd').forEach((n) => {
+          const prev = n.style.whiteSpace;
+          n.style.whiteSpace = 'nowrap';
+          contentW = Math.max(contentW, n.scrollWidth);
+          n.style.whiteSpace = prev;
+        });
+      });
+      const boxW = Math.min(widthCap, Math.max(contentW + (narrow ? 12 : 16), Math.round(widthCap * 0.86)));
+      if (boxW !== widthCap) sized = applySize(px, boxW);
+      const uniformH = sized.maxH;
+      seats.forEach((s) => {
+        const lbl = s.lbl;
+        lbl.style.width = boxW + 'px';
+        lbl.style.height = uniformH + 'px';
+        lbl.style.fontSize = px + 'px';
+        lbl.style.textAlign = 'center';
+        lbl.style.alignItems = 'stretch';
+        lbl.style.justifyContent = 'flex-start';
+        const thead = lbl.querySelector('.thead');
+        if (thead) thead.style.justifyContent = 'center';
+        let top = Math.round(s.grassTop + drop);
+        if (top + uniformH > s.imgBottom - 2) top = Math.round(s.imgBottom - uniformH - 2);
+        if (top < s.grassTop + 2) top = Math.round(s.grassTop + 2);
+        const mid = Math.min(s.img.naturalHeight - 2, Math.round(s.grass + (top - s.grassTop + uniformH / 2) / s.scaleY));
+        const row = s.rows[mid - (mid % 2)] || s.rows[mid - 1];
+        const rockLeft = row ? s.fit.x + row.min * s.scaleX : s.fit.x;
+        const rockRight = row ? s.fit.x + row.max * s.scaleX : s.fit.x + s.fit.w;
+        let left = (rockLeft + rockRight) / 2 - boxW / 2;
+        const spare = (rockRight - rockLeft - boxW) / 2;
+        if (spare > 0) left = Math.max(rockLeft + 2, Math.min(left, rockRight - boxW - 2));
+        lbl.style.left = Math.round(left) + 'px';
+        lbl.style.right = 'auto';
+        lbl.style.top = top + 'px';
+        lbl.style.bottom = 'auto';
+        lbl.style.transform = 'none';
+      });
+    }
     function heightRoom(rowH, narrow, avail) {
       /* Phone islands stay a little under the laptop scale so each span stays a diagonal. */
       return Math.round(Math.min(rowH * (narrow ? 1.16 : 1.62), avail * (narrow ? 0.36 : 0.46)));
     }
     function placeLedges() {
+      if (layingLedges) { ledgesAgain = true; return; }
+      layingLedges = true;
+      try {
       const stops = [...trail.querySelectorAll('.skystop')];
       const book = trail.querySelector('.skybook');
-      if (!stops.length) return;
+      if (stops.length) {
       const w = trail.clientWidth;
       const narrow = w < 520;
       const sideEl = trail.closest('.skyhome').querySelector('.homeside');
@@ -868,30 +997,12 @@
         el.style.width = width + 'px';
         el.style.height = height + 'px';
         el.style.top = Math.round(i * rowH + 6) + 'px';
-        const lbl = el.querySelector('.skylbl');
-        if (lbl) {
-          const rim = img && img.naturalWidth ? grassRim(img, side === 'r') : { fy: 0.62 };
-          const fit = fittedArt(el, img);
-          /* On the outer grass rim, clear of the trunk, canopy, and bell. */
-          const fy = Math.min(0.72, Math.max(0.5, (rim.fy || 0.62) + 0.02));
-          lbl.style.position = 'absolute';
-          lbl.style.top = Math.round(fit.y + fit.h * fy) + 'px';
-          lbl.style.bottom = 'auto';
-          lbl.style.width = (narrow ? '6.2rem' : '6.8rem');
-          lbl.style.transform = 'none';
-          if (side === 'l') {
-            lbl.style.left = '0';
-            lbl.style.right = 'auto';
-          } else {
-            lbl.style.left = 'auto';
-            lbl.style.right = '0';
-          }
-        }
         /* Foundations keeps the a m s t letters inside the frame.
            On the phone the stops sit farther apart sideways so the span is a diagonal. */
         if (side === 'l') el.style.left = narrow ? '8px' : (i === 0 ? '16px' : '26px');
         else el.style.left = Math.max(narrow ? 8 : 16, Math.round(w - width - (narrow ? 8 : 20))) + 'px';
       });
+      placeLedgeLabels(stops, narrow);
       if (book) {
         book.style.position = 'absolute';
         book.style.width = (narrow ? 46 : 58) + 'px';
@@ -900,6 +1011,10 @@
         book.style.right = '12px';
         book.style.zIndex = '6';
       }
+      }
+      } catch (err) { /* a late image can retrigger layout; keep the last good pass */ }
+      layingLedges = false;
+      if (ledgesAgain) { ledgesAgain = false; placeLedges(); }
     }
     function paintRootBridges(svg, pts, NS) {
       const g = svgEl(NS, 'g', { class: 'skybridges' });
@@ -1071,16 +1186,19 @@
       const data = g.getImageData(0, 0, c.width, c.height).data;
       const rows = new Array(c.height);
       for (let y = 0; y < c.height; y += 2) {
-        let min = -1, max = -1;
         const stride = y * c.width * 4;
+        let runS = -1, bestL = 0, bestR = -1, best = 0;
         for (let x = 0; x < c.width; x += 2) {
-          if (data[stride + x * 4 + 3] > 36) {
-            if (min < 0) min = x;
-            max = x;
+          const on = data[stride + x * 4 + 3] > 36;
+          if (on && runS < 0) runS = x;
+          if (!on && runS >= 0) {
+            if (x - runS > best) { best = x - runS; bestL = runS; bestR = x - 2; }
+            runS = -1;
           }
         }
-        if (min >= 0) {
-          const row = { min: min, max: max, w: max - min, y: y };
+        if (runS >= 0 && c.width - runS > best) { best = c.width - runS; bestL = runS; bestR = c.width - 2; }
+        if (best > 8) {
+          const row = { min: bestL, max: bestR, w: best, y: y };
           rows[y] = row;
           if (y + 1 < c.height) rows[y + 1] = row;
         }
