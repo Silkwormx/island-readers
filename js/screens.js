@@ -380,7 +380,7 @@
     const atFoundations = continueTarget().href.indexOf('#/foundation') === 0;
     const hereUnit = atFoundations ? 0 : place.here;
     const spiral = /[?&]layout=spiral\b/.test(location.search);
-    const coilSide = (n) => spiral ? ['l', 'b', 'r'][n % 3] : (n % 2 === 1 ? 'r' : 'l');
+    const coilSide = (n) => (n % 2 === 1 ? 'r' : 'l');
     /* Paint Zip and Frill into the island daylight: drop the studio edge, warm the light, and leave no halo. */
     function paintIntoScene(img, done) {
       const paint = () => {
@@ -684,78 +684,177 @@
     function put(fig, x, y) {
       fig.style.transform = 'translate(' + (x - fig.offsetWidth / 2) + 'px,' + (y - fig.offsetHeight) + 'px)';
     }
-    function placeSpiral() {
+    function pillarPlan() {
       const stops = [...trail.querySelectorAll('.skystop')];
       const book = trail.querySelector('.skybook');
-      const spire = trail.querySelector('.skyspire');
-      const trunk = trail.querySelector('.skytrunk');
-      if (!stops.length || !spire) return;
       const w = trail.clientWidth;
       const narrow = w < 520;
-      const home = trail.closest('.skyhome');
-      const side = home && home.querySelector('.homeside');
-      const sideFixed = !!(side && getComputedStyle(side).position === 'fixed');
-      const trailTop = trail.getBoundingClientRect().top;
-      const limit = sideFixed ? side.getBoundingClientRect().top : window.innerHeight;
-      const avail = Math.max(narrow ? 480 : 540, limit - trailTop - 4);
-      const tileW = Math.round(w * (narrow ? 0.98 : 0.96));
-      const canNatural = Math.round(tileW * 720 / 1280);
-      const canH = Math.round(Math.min(canNatural, narrow ? 188 : 230));
-      const stairTop = Math.round(canH * 0.74);
-      const remain = Math.max(260, avail - stairTop);
-      let tileH = Math.round(remain / 0.82);
-      let artCap = Math.round(tileH * 0.26);
-      if (stairTop + tileH * 0.72 + artCap * 0.36 > avail) {
-        tileH = Math.round((avail - stairTop) / 0.86);
-        artCap = Math.round(tileH * 0.24);
-      }
-      const baseH = Math.round(Math.min(canH, tileW * 0.34));
-      const slots = [
-        { x: 0.3, y: 0.2, frac: narrow ? 0.48 : 0.34, anchor: 0.66 },
-        { x: narrow ? 0.4 : 0.36, y: 0.46, frac: narrow ? 0.46 : 0.32, anchor: 0.68 },
-        { x: 0.7, y: 0.72, frac: narrow ? 0.48 : 0.36, anchor: 0.66 }
-      ];
-      const last = stops.length - 1;
-      const lastSlot = slots[last % 3];
-      const stairH = Math.floor(last / 3) * tileH + Math.round((lastSlot.y + 0.22) * tileH);
-      const total = stairTop + stairH + Math.round(baseH * 0.36);
-      const left = Math.round((w - tileW) / 2);
-      const labelW = narrow ? 104 : 148;
-      trail.style.height = total + 'px';
-      spire.style.left = left + 'px';
-      spire.style.top = '0px';
-      spire.style.width = tileW + 'px';
-      spire.style.height = total + 'px';
-      spire.style.backgroundSize = tileW + 'px ' + canH + 'px, ' + tileW + 'px ' + tileH + 'px, ' + tileW + 'px ' + baseH + 'px';
-      spire.style.backgroundPosition = '0 0, 0 ' + stairTop + 'px, 0 ' + (total - baseH) + 'px';
-      if (trunk) {
-        trunk.style.left = left + 'px';
-        trunk.style.top = stairTop + 'px';
-        trunk.style.width = tileW + 'px';
-        trunk.style.height = stairH + 'px';
-        trunk.style.backgroundSize = tileW + 'px ' + tileH + 'px';
-      }
-      stops.forEach((s, i) => {
-        const slot = slots[i % 3];
-        const art = s.querySelector('.skyisland');
+      const sideEl = trail.closest('.skyhome').querySelector('.homeside');
+      const fixed = sideEl && getComputedStyle(sideEl).position === 'fixed';
+      const limit = fixed ? sideEl.getBoundingClientRect().top : window.innerHeight;
+      const avail = Math.max(narrow ? 500 : 560, limit - trail.getBoundingClientRect().top - 8);
+      const labelW = narrow ? 90 : 156;
+      const gap = narrow ? 6 : 10;
+      const edge = narrow ? 8 : 16;
+      const trunkW = narrow ? 72 : 108;
+      const cx = w / 2;
+      const libSpan = narrow ? 96 : 112;
+      let pitch = Math.round((avail - libSpan - 18) / 3);
+      pitch = Math.max(narrow ? 126 : 148, Math.min(pitch, narrow ? 154 : 184));
+      const vary = [1, 0.88, 1.1, 0.82, 0.96];
+      const level = (i, y, isLib) => {
+        const right = isLib ? true : (i % 2 === 1);
+        const art = isLib ? null : stops[i].querySelector('.skyisland');
         const aspect = art && art.naturalWidth ? art.naturalHeight / art.naturalWidth : 1.08;
-        let iw = Math.round(Math.min(tileW * slot.frac, artCap / aspect));
-        iw = Math.max(narrow ? 108 : 132, iw);
-        s.style.width = iw + 'px';
-        const artH = Math.round(iw * aspect);
-        let cx = left + slot.x * tileW;
-        const outer = s.classList.contains('sky-r') ? 'r' : 'l';
-        if (outer === 'l') cx = Math.max(cx, labelW + 8 + iw / 2);
-        else cx = Math.min(cx, w - labelW - 14 - iw / 2);
-        const cy = stairTop + Math.floor(i / 3) * tileH + slot.y * tileH;
-        s.style.left = Math.round(cx - iw / 2) + 'px';
-        s.style.top = Math.round(cy - artH * slot.anchor) + 'px';
+        const iw = isLib ? Math.round(narrow ? 48 : 62) : Math.round((narrow ? 98 : 154) * (0.9 + (i % 3) * 0.07));
+        const artH = Math.round(iw * (isLib ? 1.35 : aspect));
+        const pw = Math.round((iw + (narrow ? 28 : 40)) * vary[i % vary.length]);
+        const ph = Math.round((narrow ? 28 : 36) * (0.88 + (i % 3) * 0.1));
+        const ix = right ? w - edge - labelW - gap - iw : edge + labelW + gap;
+        const px = right ? cx - 6 : cx - pw + 6;
+        return { right: right, y: y, pw: Math.max(pw, Math.abs((right ? ix + iw : ix) - cx) + 18), ph: ph + 18, iw: iw, ix: ix, iy: y - Math.round(artH * 0.42), px: px, artH: artH, isLib: isLib };
+      };
+      const levels = [level(0, 70, true)];
+      for (let i = 0; i < stops.length; i++) levels.push(level(i, 70 + libSpan + i * pitch, false));
+      const last = levels[levels.length - 1];
+      return { w: w, narrow: narrow, trunkW: trunkW, cx: cx, levels: levels, total: last.y + last.ph + 26, pitch: pitch, labelW: labelW, book: book };
+    }
+    function placeSpiral() {
+      const stops = [...trail.querySelectorAll('.skystop')];
+      if (!stops.length) return;
+      const plan = pillarPlan();
+      trail._plan = plan;
+      trail.style.height = plan.total + 'px';
+      stops.forEach((s, i) => {
+        const lv = plan.levels[i + 1];
+        s.style.width = lv.iw + 'px';
+        s.style.left = Math.round(lv.ix) + 'px';
+        s.style.top = Math.round(lv.iy) + 'px';
       });
+      const book = plan.book;
       if (book) {
-        const bw = book.offsetWidth;
-        book.style.left = Math.round(left + tileW * 0.5 - bw / 2) + 'px';
-        book.style.top = Math.round(canH * 0.42) + 'px';
+        const lv = plan.levels[0];
+        const bh = book.offsetHeight || (plan.narrow ? 74 : 88);
+        book.style.width = plan.narrow ? '3.15rem' : '3.7rem';
+        book.style.left = Math.round(lv.ix) + 'px';
+        book.style.top = Math.max(10, Math.round(lv.y - bh + lv.ph)) + 'px';
       }
+    }
+    function svgEl(NS, name, attrs) {
+      const el = document.createElementNS(NS, name);
+      Object.keys(attrs).forEach((k) => el.setAttribute(k, attrs[k]));
+      return el;
+    }
+    function paintBridges(svg, pts, sagOf, NS) {
+      const g = svgEl(NS, 'g', { class: 'skybridges' });
+      const curve = (a, b, sag, t) => {
+        const cx = (a.x + b.x) / 2, cy = (a.y + b.y) / 2 + sag, u = 1 - t;
+        return { x: u * u * a.x + 2 * u * t * cx + t * t * b.x, y: u * u * a.y + 2 * u * t * cy + t * t * b.y };
+      };
+      const tangent = (a, b, sag, t) => {
+        const cx = (a.x + b.x) / 2, cy = (a.y + b.y) / 2 + sag, u = 1 - t;
+        return { x: 2 * u * (cx - a.x) + 2 * t * (b.x - cx), y: 2 * u * (cy - a.y) + 2 * t * (b.y - cy) };
+      };
+      for (let i = 0; i < pts.length - 1; i++) {
+        const a = pts[i], b = pts[i + 1], sag = sagOf(a, b);
+        const dist = Math.hypot(b.x - a.x, b.y - a.y);
+        const n = Math.max(5, Math.round(dist / 13));
+        const samples = [];
+        for (let s = 0; s <= n; s++) {
+          const t = s / n;
+          const p = curve(a, b, sag, t);
+          const tan = tangent(a, b, sag, t);
+          const len = Math.hypot(tan.x, tan.y) || 1;
+          samples.push({ x: p.x, y: p.y, nx: -tan.y / len, ny: tan.x / len });
+        }
+        const rope = (side, width, color) => {
+          let d = '';
+          samples.forEach((p, k) => {
+            const x = (p.x + p.nx * side).toFixed(1), y = (p.y + p.ny * side + 1).toFixed(1);
+            d += (k ? ' L ' : 'M ') + x + ' ' + y;
+          });
+          g.append(svgEl(NS, 'path', { d: d, fill: 'none', stroke: color, 'stroke-width': width, 'stroke-linecap': 'round' }));
+        };
+        rope(0, 14, 'rgba(40,26,12,.2)');
+        for (let s = 2; s < n - 1; s += 3) {
+          const p = samples[s];
+          const half = 13;
+          const x1 = p.x + p.nx * half, y1 = p.y + p.ny * half;
+          const x2 = p.x - p.nx * half, y2 = p.y - p.ny * half;
+          const wood = ['#C9954C', '#E2B56A', '#B8833C', '#D6A45A'][s % 4];
+          const lip = ['#6E4520', '#8A5A28', '#5C3816', '#7A4E22'][s % 4];
+          g.append(svgEl(NS, 'line', { x1: x1.toFixed(1), y1: (y1 + 4).toFixed(1), x2: x2.toFixed(1), y2: (y2 + 4).toFixed(1), stroke: lip, 'stroke-width': 7, 'stroke-linecap': 'round' }));
+          g.append(svgEl(NS, 'line', { x1: x1.toFixed(1), y1: y1.toFixed(1), x2: x2.toFixed(1), y2: y2.toFixed(1), stroke: wood, 'stroke-width': 6, 'stroke-linecap': 'round' }));
+        }
+        rope(14, 3.2, '#5A3A1E');
+        rope(-14, 3.2, '#5A3A1E');
+        rope(14, 1.3, '#F0D7A4');
+        rope(-14, 1.3, '#F0D7A4');
+      }
+      svg.append(g);
+    }
+    function paintPillar(svg, plan, NS) {
+      const g = svgEl(NS, 'g', { class: 'skypillar' });
+      const { cx, trunkW, total, levels } = plan;
+      const top = -80, bot = total + 10;
+      let left = '', right = '';
+      const steps = 48;
+      for (let i = 0; i <= steps; i++) {
+        const y = top + (bot - top) * (i / steps);
+        const twist = Math.sin(y * 0.018) * 7 + Math.sin(y * 0.047) * 3;
+        const half = trunkW / 2 + Math.sin(y * 0.03) * 4;
+        const xl = (cx + twist - half).toFixed(1), xr = (cx + twist + half).toFixed(1), yy = y.toFixed(1);
+        left += (i ? ' L ' : 'M ') + xl + ' ' + yy;
+        right = ' L ' + xr + ' ' + yy + right;
+      }
+      g.append(svgEl(NS, 'path', { d: left + right + ' Z', fill: '#8B6844' }));
+      g.append(svgEl(NS, 'path', { d: left, fill: 'none', stroke: '#F0D7A8', 'stroke-width': 3, opacity: '0.55', 'stroke-linecap': 'round' }));
+      for (let v = 0; v < 3; v++) {
+        let vine = '';
+        for (let i = 0; i <= steps; i++) {
+          const y = top + (bot - top) * (i / steps);
+          const twist = Math.sin(y * 0.018) * 7;
+          const half = trunkW / 2 - 4;
+          const side = Math.sin(y * 0.045 + v * 2.1);
+          const x = cx + twist + side * half;
+          vine += (i ? ' L ' : 'M ') + x.toFixed(1) + ' ' + y.toFixed(1);
+        }
+        g.append(svgEl(NS, 'path', { d: vine, fill: 'none', stroke: v === 1 ? '#6E8F4A' : '#3F6A3A', 'stroke-width': v === 1 ? 2.2 : 3.4, 'stroke-linecap': 'round', opacity: '0.9' }));
+      }
+      const grass = ['#7FA84A', '#8FB456', '#6E9440', '#A3C46A'];
+      const rock = ['#8D6A45', '#A07B52', '#745638', '#6B5034'];
+      levels.forEach((lv, i) => {
+        const reach = lv.right ? lv.ix + lv.iw + 28 : lv.ix - 22;
+        const inner = lv.right ? plan.cx - 4 : plan.cx + 4;
+        const outer = lv.right ? Math.max(reach, inner + 36) : Math.min(reach, inner - 36);
+        const y = lv.y, h = lv.ph;
+        const bulge = (i % 2 ? 10 : 16);
+        const d = lv.right
+          ? 'M ' + inner + ' ' + y + ' C ' + ((inner + outer) / 2) + ' ' + (y - 6) + ', ' + (outer - 20) + ' ' + (y - bulge) + ', ' + outer + ' ' + (y + 4) + ' C ' + (outer + 8) + ' ' + (y + h * 0.55) + ', ' + (outer - 12) + ' ' + (y + h) + ', ' + ((inner + outer) / 2) + ' ' + (y + h + 4) + ' L ' + inner + ' ' + (y + h - 2) + ' Z'
+          : 'M ' + inner + ' ' + y + ' C ' + ((inner + outer) / 2) + ' ' + (y - 6) + ', ' + (outer + 20) + ' ' + (y - bulge) + ', ' + outer + ' ' + (y + 4) + ' C ' + (outer - 8) + ' ' + (y + h * 0.55) + ', ' + (outer + 12) + ' ' + (y + h) + ', ' + ((inner + outer) / 2) + ' ' + (y + h + 4) + ' L ' + inner + ' ' + (y + h - 2) + ' Z';
+        g.append(svgEl(NS, 'path', { d: d, fill: rock[i % rock.length] }));
+        const gd = lv.right
+          ? 'M ' + inner + ' ' + y + ' C ' + ((inner + outer) / 2) + ' ' + (y - 6) + ', ' + (outer - 20) + ' ' + (y - bulge) + ', ' + outer + ' ' + (y + 4) + ' L ' + outer + ' ' + (y + 10) + ' C ' + (outer - 24) + ' ' + (y + 4) + ', ' + ((inner + outer) / 2) + ' ' + (y + 8) + ', ' + inner + ' ' + (y + 7) + ' Z'
+          : 'M ' + inner + ' ' + y + ' C ' + ((inner + outer) / 2) + ' ' + (y - 6) + ', ' + (outer + 20) + ' ' + (y - bulge) + ', ' + outer + ' ' + (y + 4) + ' L ' + outer + ' ' + (y + 10) + ' C ' + (outer + 24) + ' ' + (y + 4) + ', ' + ((inner + outer) / 2) + ' ' + (y + 8) + ', ' + inner + ' ' + (y + 7) + ' Z';
+        g.append(svgEl(NS, 'path', { d: gd, fill: grass[i % grass.length] }));
+      });
+      for (let i = 0; i < levels.length - 1; i++) {
+        const a = levels[i], b = levels[i + 1];
+        const x0 = a.right ? a.ix + 8 : a.ix + a.iw - 8;
+        const x1 = b.right ? b.ix + 8 : b.ix + b.iw - 8;
+        const y0 = a.y - 6, y1 = b.y + 8;
+        const n = Math.max(3, Math.min(6, Math.round((y1 - y0) / 16)));
+        for (let s = 0; s < n; s++) {
+          const t = s / n;
+          const y = y0 + (y1 - y0) * t;
+          const x = x0 + (x1 - x0) * t;
+          const sw = plan.narrow ? 26 : 34;
+          const stepH = (y1 - y0) / n;
+          g.append(svgEl(NS, 'rect', { x: (x - sw / 2).toFixed(1), y: (y + 5).toFixed(1), width: sw, height: Math.max(6, stepH - 5).toFixed(1), rx: 2, fill: '#6E5840' }));
+          g.append(svgEl(NS, 'rect', { x: (x - sw / 2).toFixed(1), y: y.toFixed(1), width: sw, height: 7, rx: 2, fill: s % 2 ? '#E7D4B2' : '#F6E6CC' }));
+        }
+      }
+      svg.append(g);
     }
     function layoutPath() {
       if (trail.closest('.spiral')) placeSpiral();
@@ -769,31 +868,38 @@
       svg.style.height = hgt + 'px';
       const origin = trail.getBoundingClientRect();
       const coil = !!trail.closest('.spiral');
+      const innerEdge = (s) => {
+        const art = s.querySelector('.skyisland').getBoundingClientRect();
+        const onRight = s.classList.contains('sky-r');
+          return {
+          x: art.left - origin.left + art.width * (onRight ? 0.34 : 0.66),
+          y: art.top - origin.top + art.height * 0.58
+        };
+      };
       const pts = stops.map((s) => {
         if (coil) {
           const art = s.querySelector('.skyisland').getBoundingClientRect();
-          const back = s.classList.contains('sky-b');
-          return { x: art.left - origin.left + art.width * (back ? 0.6 : 0.5), y: art.top - origin.top + art.height * 0.62 };
+          return { x: art.left - origin.left + art.width * 0.5, y: art.top - origin.top + art.height * 0.7 };
         }
-        const sign = s.querySelector('.skylbl').getBoundingClientRect();
-        return { x: sign.left - origin.left + sign.width / 2, y: sign.top - origin.top + sign.height * 0.5 };
+        return innerEdge(s);
       });
-      const cx = w * 0.5;
-      let d = 'M ' + pts[0].x.toFixed(1) + ' ' + Math.max(6, pts[0].y - 22).toFixed(1);
-      d += ' L ' + pts[0].x.toFixed(1) + ' ' + pts[0].y.toFixed(1);
+      const sagOf = (a, b) => Math.max(46, Math.min(120, Math.abs(b.x - a.x) * 0.42));
+      let d = 'M ' + pts[0].x.toFixed(1) + ' ' + pts[0].y.toFixed(1);
       for (let i = 0; i < pts.length - 1; i++) {
         const a = pts[i], b = pts[i + 1];
-        const mid = a.y + (b.y - a.y) * 0.5;
         if (coil) {
-          const y1 = a.y + (b.y - a.y) * 0.34;
-          const y2 = a.y + (b.y - a.y) * 0.68;
-          d += ' C ' + cx.toFixed(1) + ' ' + y1.toFixed(1) + ', ' + cx.toFixed(1) + ' ' + y2.toFixed(1) + ', ' + b.x.toFixed(1) + ' ' + b.y.toFixed(1);
+          const y1 = a.y + (b.y - a.y) * 0.45;
+          const y2 = a.y + (b.y - a.y) * 0.72;
+          d += ' C ' + (w * 0.5).toFixed(1) + ' ' + y1.toFixed(1) + ', ' + (w * 0.5).toFixed(1) + ' ' + y2.toFixed(1) + ', ' + b.x.toFixed(1) + ' ' + b.y.toFixed(1);
         } else {
-          d += ' C ' + a.x.toFixed(1) + ' ' + mid.toFixed(1) + ', ' + b.x.toFixed(1) + ' ' + mid.toFixed(1) + ', ' + b.x.toFixed(1) + ' ' + b.y.toFixed(1);
+          const sag = sagOf(a, b);
+          d += ' Q ' + ((a.x + b.x) / 2).toFixed(1) + ' ' + ((a.y + b.y) / 2 + sag).toFixed(1) + ', ' + b.x.toFixed(1) + ' ' + b.y.toFixed(1);
         }
       }
       const NS = 'http://www.w3.org/2000/svg';
       while (svg.firstChild) svg.removeChild(svg.firstChild);
+      if (coil && trail._plan) paintPillar(svg, trail._plan, NS);
+      if (!coil) paintBridges(svg, pts, sagOf, NS);
       const line = document.createElementNS(NS, 'path');
       line.setAttribute('class', 'skyline');
       line.setAttribute('d', d);

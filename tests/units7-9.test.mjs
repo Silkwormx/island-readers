@@ -135,7 +135,7 @@ test('phone-safe CSS: small viewport height, safe area, equal answer tracks', ()
 });
 
 test('service worker caches the new code and media', () => {
-  assert.match(sw, /const CACHE = 'ir-20261127v'/);
+  assert.match(sw, /const CACHE = 'ir-20261127w'/);
   for (const f of ['data_u789.js', 'js/u789.js', 'u789.css', 'img/u71_p01.webp', 'materials/unit9/slides/u94/manifest.json']) {
     assert.match(sw, new RegExp('"\\./' + f.replace(/[.]/g, '\\.') + '"'), f);
   }
