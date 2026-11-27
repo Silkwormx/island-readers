@@ -61,10 +61,10 @@
 .u789step .nkmeet .bubble{padding:.4rem .75rem 1.45rem;overflow:visible}
 .u789step .nkmeet .bubble:after{bottom:-14px;z-index:0}
 .u789step .nkmeet .bubble > *{position:relative;z-index:1}
-.u789step .chantact{justify-content:center;gap:.35rem;width:min(100%,40rem)}
-.u789step .chantpic{display:flex;align-items:flex-end;justify-content:center;position:relative;width:min(100%,26rem);min-height:0;flex:0 1 auto;margin:0;padding:0;border:0;background:transparent;box-shadow:none;cursor:pointer}
-.u789step .chantpic img{display:block;width:auto;max-width:100%;max-height:min(34vh,15rem);max-height:min(34svh,15rem);object-fit:contain;margin:0 auto}
-.u789step .chantpic .chantbase{max-height:min(30vh,13rem);max-height:min(30svh,13rem)}
+.u789step .chantact{justify-content:center;gap:.3rem;width:min(100%,56rem);flex:1 1 auto;min-height:0}
+.u789step .chantpic{display:flex;align-items:center;justify-content:center;position:relative;width:min(100%,52rem);min-height:0;flex:1 1 auto;margin:0 auto;padding:0;border:0;background:transparent;box-shadow:none;cursor:pointer}
+.u789step .chantpic img{display:block;width:auto;max-width:100%;max-height:100%;height:auto;object-fit:contain;margin:0 auto}
+.u789step .chantpic .chantbase{max-height:100%}
 .u789step .chantpic .chantactor{position:absolute;left:18%;bottom:18%;width:34%;max-height:46%;height:auto}
 .u789step .chantpic.go.hopin .chantactor{animation:chanthop 1s ease forwards}
 .u789step .chantpic.go.hop .chantactor,.u789step .chantpic.go.hop > img{animation:chanthop .8s ease}
@@ -91,11 +91,9 @@
 .u789step .chantline .chunk{color:inherit!important;background:none;box-shadow:none}
 .u789step .chantact.read .chunk{color:#C95A10!important;background:#FFE08A;box-shadow:0 0 0 2px #F28C00;border-radius:.15rem}
 .u789step .chantturn{margin:0;min-height:1.3rem;font-weight:700;font-size:1.05rem;text-align:center}
-.u1012step .hoeword{display:inline-flex;flex-direction:column;align-items:center;justify-content:center;gap:.12rem;max-width:100%}
-.u1012step .hoepic{display:block;width:auto;height:2.1rem;max-width:4.2rem;object-fit:contain}
-.u1012step .chipstack{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:.2rem;min-width:0}
-.u1012step .chipstack .hoepic{height:4.4rem;max-width:6.2rem}
-.u1012step .bigword .hoepic,.u1012step .sorword .hoepic{height:4.4rem;max-width:6rem}
+.u1012step .hoeword{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.2rem;width:100%}
+.u1012step .hoepic,.u1012step .hoeround > .hoepic{display:block;width:auto;max-width:min(92%,24rem);max-height:min(28vh,14rem);max-height:min(28svh,14rem);height:auto;margin:0 auto;object-fit:contain}
+.u1012step .bellgame > .hoepic{max-height:min(16vh,7rem);max-height:min(16svh,7rem)}
 @media (prefers-reduced-motion:reduce){
   .u789step .chantpic.go .chantactor,.u789step .chantpic.go > img{animation:none}
 }
@@ -131,6 +129,8 @@ body:not(.teach) .u789step .recneed{display:none}
   .u789step .u1pic img{max-height:24vh;max-height:24svh}
   .u789step .nkmeet .panelwrap.small{display:none}
   .u789step .chantact .panelwrap.small{display:none}
+  .u789step .chantpic{max-height:46%}
+  .u789step .chantline{font-size:1.35rem}
   .u789step .chainopts > .chainpick{height:2.6rem}
   .u789step .chainslot{height:2.6rem}
   .u123step .activity.story,

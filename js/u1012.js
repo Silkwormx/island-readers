@@ -167,9 +167,8 @@
           h('div', { class: 'panelwrap small' }, h('img', { class: 'panel', src: face, alt: b.who === 'frill' ? 'Frill' : 'Zip' })),
           h('p', { class: 'bigword' }, colorWord(b.word, L)), pure),
         b.cap ? h('p', { class: 'cap' }, b.cap) : null, rec,
-        h('div', { class: 'chips' }, ...(b.chips || []).map((w) => h('span', { class: 'chipstack' },
-          bare(w) === 'hoe' ? h('img', { class: 'hoepic', src: 'img/u12pics/hoe.webp', alt: 'a garden hoe' }) : null,
-          h('button', { class: 'chip', type: 'button', onclick: () => say(w) }, colorWord(w, L)))))));
+        (b.chips || []).some((w) => bare(w) === 'hoe') ? h('img', { class: 'hoepic', src: 'img/u12pics/hoe.webp', alt: 'a garden hoe' }) : null,
+        h('div', { class: 'chips' }, ...(b.chips || []).map((w) => h('button', { class: 'chip', type: 'button', onclick: () => say(w) }, colorWord(w, L))))));
       ctx.setNextLabel(i === beats.length - 1 ? 'Activities' : 'Next');
       Snd.play(P(b.audio)).then(() => { if (b.snd && PH(b.snd) && ctx.scr.ok()) Snd.play(PH(b.snd)); });
     };

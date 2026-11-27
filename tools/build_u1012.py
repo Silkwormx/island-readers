@@ -306,9 +306,9 @@ def icon(word, path):
         d.ellipse([60, 180, 300, 320], fill=(244, 206, 170, 255), outline=ink, width=6)
         d.ellipse([250, 150, 340, 240], fill=(244, 206, 170, 255), outline=ink, width=6)
     def hoe():
-        d.polygon([(168, 36), (196, 36), (214, 250), (150, 250)], fill=(176, 122, 64, 255), outline=ink)
-        d.polygon([(78, 248), (300, 248), (286, 292), (92, 292)], fill=(150, 158, 166, 255), outline=ink)
-        d.line([(92, 270), (286, 270)], fill=(90, 98, 108, 255), width=4)
+        painted = Image.open(os.path.join(ROOT, 'img', 'u12pics', 'hoe.webp')).convert('RGBA')
+        painted.thumbnail((380, 380), Image.Resampling.LANCZOS)
+        im.paste(painted, ((400 - painted.width) // 2, (400 - painted.height) // 2), painted)
     def snow():
         d.ellipse([150, 40, 250, 140], fill=(255, 255, 255, 255), outline=ink, width=6)
         d.ellipse([80, 110, 210, 250], fill=(255, 255, 255, 255), outline=ink, width=6)
@@ -376,18 +376,18 @@ def slide_image(L, day, kind, lines, path, n, total):
         for part in wrap_text(d, line, body, 900):
             x = 70
             bits = part.split(' ')
-            for n, bit in enumerate(bits):
-                token = bit + (' ' if n < len(bits) - 1 else '')
+            line_h = 64
+            for bi, bit in enumerate(bits):
+                token = bit + (' ' if bi < len(bits) - 1 else '')
                 d.text((x, y), token, font=body, fill=INK)
                 x += d.textlength(token, font=body)
                 if re.sub(r'[^A-Za-z]', '', bit).lower() == 'hoe' and os.path.exists(hoe_icon):
                     icon_im = Image.open(hoe_icon).convert('RGBA')
-                    icon_im.thumbnail((54, 54), Image.Resampling.LANCZOS)
-                    base_rgba = im.convert('RGBA') if im.mode != 'RGBA' else im
-                    # im is RGB; paste onto it after converting the icon
-                    im.paste(icon_im, (int(x) + 4, int(y) - 6), icon_im)
-                    x += 62
-            y += 64
+                    icon_im.thumbnail((150, 150), Image.Resampling.LANCZOS)
+                    im.paste(icon_im, (int(x) + 6, int(y) - 18), icon_im)
+                    x += icon_im.width + 12
+                    line_h = max(line_h, icon_im.height + 16)
+            y += line_h
     d.text((70, SLIDE_H - 70), 'Island Readers', font=F(28, False), fill=TEAL)
     d.text((SLIDE_W - 70, SLIDE_H - 70), '%d of %d' % (n, total), font=F(28, True), fill=INK, anchor='ra')
     sprite = SPRITES[(n + L['unit']) % len(SPRITES)]
