@@ -15,24 +15,41 @@
   const PROG_KEY = 'ir_u11_prog';
   const SESS_KEY = 'ir_u11_trail';
   const SIT_KEY = 'ir_u11_sit';
-  const SESSION_LEN = 3;
+  /* Research dosage. One place for the numbers. */
+  const DOSE = {
+    groupMin: 6,
+    groupMax: 10,
+    groupDefault: 8,
+    heartMin: 3,
+    heartMax: 5,
+    heartMissedMax: 3,
+    compMin: 2,
+    compMax: 3,
+    sittingMin: 4,
+    sittingMax: 6,
+    sittingDefault: 5,
+    recapMin: 3,
+    recapMax: 5,
+    firstTryGem: 0.9,
+    longerPerSitting: 1
+  };
+  const ACC_KEY = 'ir_u11_acc';
+  const SEEN_KEY = 'ir_u11_seen';
+  const LONG_KEY = 'ir_u11_long';
   const FOCUS = '#C95A10';
   const REC = { a: 1, m: 1, n: 1, p: 1, s: 1, t: 1 };
   let timer = 0;
 
   const SVG = {
-    map: '<svg viewBox="0 0 120 80" aria-hidden="true"><path d="M18 16 h52 l12 10 v34 l-12 10 H18 z" fill="#F6E7B2" stroke="#2B2540" stroke-width="3"/><path d="M36 32 h22 M36 44 h30 M36 56 h16" stroke="#C45A3A" stroke-width="3"/></svg>',
-    man: '<svg viewBox="0 0 120 80" aria-hidden="true"><circle cx="60" cy="22" r="12" fill="#F0C9A0" stroke="#2B2540" stroke-width="3"/><path d="M40 70 V44 h40 v26" fill="#3D7EA6" stroke="#2B2540" stroke-width="3"/></svg>',
-    fan: '<svg viewBox="0 0 80 80" aria-hidden="true"><path d="M40 70 V36" stroke="#5c4030" stroke-width="4"/><path d="M40 40 Q18 18 16 36 Q28 34 40 40 Q62 18 64 36 Q52 34 40 40 Z" fill="#F4E4C4" stroke="#2B2540" stroke-width="3"/></svg>',
     tree: '<svg viewBox="0 0 200 120" aria-hidden="true"><path d="M100 110 V48" stroke="#6b4a2e" stroke-width="8" stroke-linecap="round"/><path d="M100 78 C70 90 40 70 28 96 M100 70 C130 88 160 66 176 94 M100 60 C76 40 48 48 36 30 M100 56 C128 34 162 42 174 24" fill="none" stroke="#7d5a38" stroke-width="3"/><ellipse cx="100" cy="36" rx="46" ry="22" fill="#3f7d45"/><ellipse cx="78" cy="42" rx="28" ry="16" fill="#4e9454"/><ellipse cx="126" cy="40" rx="30" ry="16" fill="#2f6a3a"/></svg>',
     lock: '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2" fill="currentColor"/><path d="M8 11V8a4 4 0 018 0v3" fill="none" stroke="currentColor" stroke-width="2.4"/></svg>'
   };
   const PICS = {
     mat: { kind: 'img', src: 'foundation/img/story/single-mat.jpg', alt: 'A mat' },
     pan: { kind: 'img', src: 'foundation/img/story/single-pan.jpg', alt: 'A pan' },
-    map: { kind: 'svg', svg: SVG.map, alt: 'A map' },
-    man: { kind: 'svg', svg: SVG.man, alt: 'A man' },
-    fan: { kind: 'svg', svg: SVG.fan, alt: 'A fan' }
+    map: { kind: 'img', src: 'img/u11-map.jpg', alt: 'A map' },
+    man: { kind: 'img', src: 'img/u11-man.jpg', alt: 'A man' },
+    fan: { kind: 'img', src: 'img/u11-fan.jpg', alt: 'A fan' }
   };
   const POSE = {
     zip: 'img/zip-show/listen.webp',
@@ -50,11 +67,11 @@
 
   const STOPS = [
     { id: 'listen', name: 'Listen', gem: 'img/gem_01_ruby.webp', gemName: 'ruby', beats: ['concept', 'hear', 'match'] },
-    { id: 'satchel', name: 'Pack the satchel', gem: 'img/gem_03_amber.webp', gemName: 'amber', beats: ['satchel'] },
-    { id: 'words', name: 'Match', gem: 'img/gem_05_emerald.webp', gemName: 'emerald', beats: ['drag', 'fill'] },
-    { id: 'raft', name: 'Build a raft', gem: 'img/gem_07_sapphire.webp', gemName: 'sapphire', beats: ['raft'] },
-    { id: 'read', name: 'Read', gem: 'img/gem_08_amethyst.webp', gemName: 'amethyst', beats: ['picsent', 'yesno', 'comp'] },
-    { id: 'tree', name: 'Light the tree', gem: 'img/gem_10_gold.webp', gemName: 'gold', beats: ['tree'] }
+    { id: 'satchel', name: 'Pack the satchel', gem: 'img/gem_03_amber.webp', gemName: 'amber', beats: ['review', 'satchel'], review: ['mat', 'sat', 'map', 'pan', 'man'] },
+    { id: 'words', name: 'Match', gem: 'img/gem_05_emerald.webp', gemName: 'emerald', beats: ['drag', 'fill', 'picsent'] },
+    { id: 'raft', name: 'Build a raft', gem: 'img/gem_07_sapphire.webp', gemName: 'sapphire', beats: ['review', 'raft'], review: ['fan', 'mat', 'map', 'sat', 'tap'] },
+    { id: 'read', name: 'Read', gem: 'img/gem_08_amethyst.webp', gemName: 'amethyst', beats: ['heart', 'yesno', 'comp'] },
+    { id: 'tree', name: 'Light the tree', gem: 'img/gem_10_gold.webp', gemName: 'gold', beats: ['review', 'tree'], review: ['tap', 'pat', 'mat', 'nap', 'man'] }
   ];
 
   const BOOKS = [
@@ -159,6 +176,10 @@
     files.push(W(word));
     return { files: files, missing: missing };
   }
+  function cueWord(word) {
+    const bits = partsOf(word);
+    return Snd.seq(bits.files, 160);
+  }
   function wordNode(w) {
     const s = String(w);
     const box = h('span', { class: 'u11t-wd' });
@@ -195,7 +216,7 @@
   function afterStop() {
     const st = load();
     if (st.gems.length >= STOPS.length) { location.hash = '#/u1/u11/trail/end'; return; }
-    if (sitting() >= SESSION_LEN) { location.hash = '#/u1/u11/trail/bye'; return; }
+    if (sitting() >= DOSE.sittingDefault) { location.hash = '#/u1/u11/trail/bye'; return; }
     location.hash = '#/u1/u11';
   }
   function reads() {
@@ -270,7 +291,9 @@
     back.addEventListener('click', () => { Snd.stop(); clearTimeout(timer); doBack(); });
     forward.addEventListener('click', () => { Snd.stop(); clearTimeout(timer); doNext(); });
     repeat.addEventListener('click', () => { Snd.stop(); replay(); });
-    const bar = h('div', { class: 'u11t-bar' }, unitBtn, home);
+    const corner = o.corner || 'unit';
+    const bar = h('div', { class: 'u11t-bar' + (corner === 'home' ? ' is-home' : ' is-unit') },
+      corner === 'home' ? home : unitBtn);
     const top = h('div', { class: 'u11t-top' }, h('h2', { class: 'acttitle' }, o.title || ''));
     if (o.teach) top.append(h('div', { class: 'u11t-teach' }, IR.teacherBox(teacherPlan())));
     const showNext = PREVIEW_NEXT && o.preview !== false;
@@ -300,20 +323,25 @@
     };
   }
 
+  const STOP_LABEL = ['Listen', 'Satchel', 'Match', 'Raft', 'Read', 'Lights'];
   function pts() {
     const wide = window.matchMedia('(min-width: 900px)').matches;
     return wide
-      ? [{ x: 8, y: 74 }, { x: 22, y: 52 }, { x: 37, y: 76 }, { x: 52, y: 48 }, { x: 67, y: 74 }, { x: 82, y: 46 }, { x: 93, y: 28 }]
-      : [{ x: 28, y: 80 }, { x: 70, y: 70 }, { x: 30, y: 60 }, { x: 68, y: 50 }, { x: 32, y: 40 }, { x: 66, y: 30 }, { x: 48, y: 16 }];
+      ? [{ x: 12, y: 78 }, { x: 28, y: 50 }, { x: 44, y: 78 }, { x: 58, y: 46 }, { x: 72, y: 76 }, { x: 86, y: 44 }, { x: 94, y: 22 }]
+      : [{ x: 62, y: 90 }, { x: 24, y: 76 }, { x: 76, y: 62 }, { x: 26, y: 48 }, { x: 74, y: 36 }, { x: 30, y: 22 }, { x: 68, y: 10 }];
   }
   function curve(list) {
     let d = 'M ' + list[0].x + ' ' + list[0].y;
     for (let i = 1; i < list.length; i++) {
       const p = list[i];
       const a = list[i - 1];
-      const cx = (a.x + p.x) / 2 + (i % 2 ? 7 : -7);
-      const cy = (a.y + p.y) / 2;
-      d += ' Q ' + cx + ' ' + cy + ' ' + p.x + ' ' + p.y;
+      const mx = (a.x + p.x) / 2;
+      const my = (a.y + p.y) / 2;
+      const dx = p.x - a.x;
+      const dy = p.y - a.y;
+      const len = Math.hypot(dx, dy) || 1;
+      const bow = 16 * (i % 2 ? 1 : -1);
+      d += ' Q ' + (mx + (-dy / len) * bow) + ' ' + (my + (dx / len) * bow * 0.45) + ' ' + p.x + ' ' + p.y;
     }
     return d;
   }
@@ -325,37 +353,45 @@
     const view = shell(app, {
       title: 'Short a',
       view: 'map',
+      corner: 'home',
       preview: false,
       confirm: false,
       teach: true,
-      unitTo: '#/u1',
-      unitLabel: 'Lessons',
       count: st.gems.length + ' of ' + STOPS.length,
       onNext() { if (here >= STOPS.length) location.hash = '#/u1/u11/trail/end'; else location.hash = '#/u1/u11/trail/' + here; },
       onBack() { location.hash = '#/u1'; }
     });
     view.setReplay(() => Snd.play('audio/phonemes/a.mp3'));
     const d = curve(list);
+    const gems = h('div', { class: 'u11t-gembar', 'aria-label': st.gems.length + ' gems collected' });
+    STOPS.forEach((stop, i) => {
+      const got = st.gems.indexOf(i) >= 0;
+      gems.append(h('span', { class: 'u11t-gemslot' + (got ? ' got' : '') }, got ? h('img', { src: stop.gem, alt: '' }) : null));
+    });
     const board = h('div', { class: 'u11t-map' },
-      h('svg', { class: 'u11t-path', viewBox: '0 0 100 100', preserveAspectRatio: 'none', 'aria-hidden': 'true', html:
-        '<path d="' + d + '" fill="none" stroke="#fff6df" stroke-width="5.2" stroke-linecap="round"/>' +
-        '<path d="' + d + '" fill="none" stroke="#8a5a32" stroke-width="2.4" stroke-linecap="round"/>' }));
+      h('div', { class: 'u11t-path', html:
+        '<svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">' +
+        '<path d="' + d + '" fill="none" stroke="#4a2e16" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>' +
+        '<path d="' + d + '" fill="none" stroke="#f3d7a1" stroke-width="4.6" stroke-linecap="round" stroke-linejoin="round"/>' +
+        '<path d="' + d + '" fill="none" stroke="#b67a3c" stroke-width="1.3" stroke-linecap="round" stroke-dasharray="1.8 2.2"/>' +
+        '</svg>' }));
     list.forEach((p, i) => {
       if (i >= STOPS.length) return;
       const stop = STOPS[i];
       const locked = i > here;
       const done = st.gems.indexOf(i) >= 0;
+      const face = h('span', { class: 'u11t-stop-face' });
+      if (done) face.append(h('img', { src: stop.gem, alt: '' }));
+      else if (locked) face.append(h('span', { class: 'u11t-lock', html: SVG.lock }));
+      else face.append(h('span', null, String(i + 1)));
       const btn = h('button', {
         class: 'u11t-stop' + (locked ? ' is-locked' : '') + (!locked && !done && i === here ? ' is-now' : ''),
         type: 'button',
         style: 'left:' + p.x + '%;top:' + p.y + '%',
-        'aria-label': (locked ? 'Locked. ' : '') + stop.name + (locked && demo() ? '. Open in this sample.' : '')
-      });
-      if (done) btn.append(h('img', { src: stop.gem, alt: '' }));
-      else if (locked) btn.append(h('span', { class: 'u11t-lock', html: SVG.lock }));
-      else btn.append(h('span', null, String(i + 1)));
+        'aria-label': (locked ? 'Locked. ' : '') + STOP_LABEL[i] + (locked && demo() ? '. Open in this sample.' : '')
+      }, face, h('span', { class: 'u11t-stop-name' }, STOP_LABEL[i]));
       if (!locked || demo()) btn.addEventListener('click', () => {
-        if (!done && sitting() >= SESSION_LEN && !PREVIEW_NEXT) { location.hash = '#/u1/u11/trail/bye'; return; }
+        if (!done && sitting() >= DOSE.sittingDefault && !PREVIEW_NEXT) { location.hash = '#/u1/u11/trail/bye'; return; }
         location.hash = '#/u1/u11/trail/' + i;
       });
       else btn.disabled = true;
@@ -368,40 +404,39 @@
       type: 'button',
       style: 'left:' + endP.x + '%;top:' + endP.y + '%',
       'aria-label': endLocked ? 'Bells. Locked until the gems are in.' : 'Bells'
-    }, endLocked ? h('span', { class: 'u11t-lock', html: SVG.lock }) : h('img', { src: 'img/bell_lit.png', alt: '' }));
+    }, h('span', { class: 'u11t-stop-face' }, endLocked ? h('span', { class: 'u11t-lock', html: SVG.lock }) : h('img', { src: 'img/bell_lit.png', alt: '' })),
+      h('span', { class: 'u11t-stop-name' }, 'Bells'));
     if (!endLocked || demo()) end.addEventListener('click', () => { location.hash = '#/u1/u11/trail/end'; });
     else end.disabled = true;
     board.append(end);
     const finds = [
-      { id: 'twist', at: 0, near: 0, dx: -14, dy: 4 },
-      { id: 'chant', at: 1, near: 1, dx: 12, dy: -6 },
-      { id: 'book:map-pan', at: 2, near: 2, dx: -12, dy: 6 },
-      { id: 'book:fat-fan', at: 4, near: 4, dx: 11, dy: 6 },
-      { id: 'book:tap-map', at: 5, near: 5, dx: -10, dy: -6 }
+      { id: 'twist', at: 0, near: 0, dx: 16, dy: 0, src: 'img/u11-twist.jpg', name: 'Twister' },
+      { id: 'chant', at: 1, near: 1, dx: -16, dy: 2, src: 'img/u11-chant.jpg', name: 'Chant' },
+      { id: 'book:map-pan', at: 2, near: 2, dx: 16, dy: 0, src: 'img/u11-book.jpg', name: 'Book' },
+      { id: 'book:fat-fan', at: 4, near: 4, dx: -16, dy: 2, src: 'img/u11-book.jpg', name: 'Book' },
+      { id: 'book:tap-map', at: 5, near: 5, dx: 16, dy: 0, src: 'img/u11-book.jpg', name: 'Book' }
     ];
     finds.forEach((f) => {
-      if (here < f.at) return;
       const base = list[f.near];
-      const x = Math.max(8, Math.min(92, base.x + f.dx));
-      const y = Math.max(10, Math.min(90, base.y + f.dy));
-      const iconSrc = f.id === 'chant' ? 'img/bell_lit.png' : (f.id === 'twist' ? 'img/zip-show/shell.webp' : 'img/zip-show/frill-shell.webp');
+      const x = Math.max(10, Math.min(90, base.x + f.dx));
+      const y = Math.max(8, Math.min(92, base.y + f.dy));
+      const open = here >= f.at;
       const b = h('button', {
-        class: 'u11t-find',
+        class: 'u11t-find' + (open ? '' : ' is-ahead'),
         type: 'button',
         style: 'left:' + x + '%;top:' + y + '%',
-        'aria-label': f.id.indexOf('book:') === 0 ? 'A hidden book' : (f.id === 'chant' ? 'A hidden chant' : 'A hidden tongue twister')
-      }, h('img', { src: iconSrc, alt: '' }));
-      b.addEventListener('click', () => { location.hash = '#/u1/u11/trail/find/' + f.id; });
+        'aria-label': f.name + (open ? '' : '. Further along the path.')
+      }, h('img', { src: f.src, alt: '' }), h('span', null, f.name));
+      if (open) b.addEventListener('click', () => { location.hash = '#/u1/u11/trail/find/' + f.id; });
       board.append(b);
     });
     const dest = list[Math.min(here, list.length - 1)];
     const from = st.moveFrom == null ? dest : list[Math.min(st.moveFrom, list.length - 1)];
     if (st.moveFrom != null) { st.moveFrom = null; save(st); }
     const marker = h('div', { class: 'u11t-marker', style: 'left:' + from.x + '%;top:' + from.y + '%' },
-      h('img', { src: 'img/zip-show/bell.webp', alt: '' }),
-      h('img', { src: 'img/zip-show/frill-wave.webp', alt: '' }));
+      h('img', { src: 'img/u11-zip-frill.png', alt: 'Zip and Frill' }));
     board.append(marker);
-    view.stage.append(board);
+    view.stage.append(h('div', { class: 'u11t-mapwrap' }, gems, board));
     if (from !== dest) {
       requestAnimationFrame(() => requestAnimationFrame(() => {
         if (!view.scr.ok()) return;
@@ -412,20 +447,16 @@
     view.setReplay(() => Snd.play('audio/phonemes/a.mp3'));
   }
 
-  function runStop(app, si, beat, startStep, warmed) {
+  function runStop(app, si, beat, startStep, warmed, stats) {
     const stop = STOPS[si];
     if (!stop) { map(app); return; }
+    stats = stats || { firstOk: 0, firstN: 0, missed: [] };
     const jump = takeJump();
     if (jump && jump.stop === si) {
       if (jump.beat != null) beat = jump.beat;
       if (jump.step != null) startStep = jump.step;
     }
-    const skipWarm = warmed || (jump && (jump.beat > 0 || jump.step || jump.skipWarm));
-    if (!skipWarm && beat === 0 && !startStep) {
-      warmUp(app, si, () => runStop(app, si, 0, 0, true));
-      return;
-    }
-    if (beat >= stop.beats.length) { celebrate(app, si); return; }
+    if (beat >= stop.beats.length) { finishStop(app, si, stats); return; }
     const kind = stop.beats[beat];
     const ctx = {
       app: app,
@@ -433,10 +464,58 @@
       si: si,
       beat: beat,
       startStep: startStep || 0,
-      next() { runStop(app, si, beat + 1, 0); },
-      prev() { if (beat > 0) runStop(app, si, beat - 1, 0); else map(app); }
+      stats: stats,
+      next() {
+        if (beat + 1 >= stop.beats.length) finishStop(app, si, stats);
+        else runStop(app, si, beat + 1, 0, true, stats);
+      },
+      prev() { if (beat > 0) runStop(app, si, beat - 1, 0, true, stats); else map(app); }
     };
     (PLAY[kind] || map)(ctx);
+  }
+
+  function loadJson(key) {
+    try { return JSON.parse(localStorage.getItem(key) || '{}') || {}; } catch (e) { return {}; }
+  }
+  function saveJson(key, val) {
+    try { localStorage.setItem(key, JSON.stringify(val)); } catch (e) { /* ignore */ }
+  }
+  function seenGame(id) { return !!loadJson(SEEN_KEY)[id]; }
+  function markSeen(id) { const s = loadJson(SEEN_KEY); s[id] = 1; saveJson(SEEN_KEY, s); }
+  function recentMissed() {
+    const book = loadJson(ACC_KEY);
+    const out = [];
+    Object.keys(book).forEach((k) => (book[k].missed || []).forEach((w) => { if (out.indexOf(w) < 0) out.push(w); }));
+    return out.slice(0, DOSE.heartMissedMax);
+  }
+  function finishStop(app, si, stats) {
+    const book = loadJson(ACC_KEY);
+    book[STOPS[si].id] = { firstOk: stats.firstOk, firstN: stats.firstN, missed: stats.missed.slice(), at: Date.now() };
+    saveJson(ACC_KEY, book);
+    const rate = stats.firstN ? stats.firstOk / stats.firstN : 1;
+    if (rate < DOSE.firstTryGem && stats.missed.length) {
+      const recap = [];
+      while (recap.length < DOSE.recapMin) recap.push(stats.missed[recap.length % stats.missed.length]);
+      runRecap(app, recap.slice(0, DOSE.recapMax), () => celebrate(app, si));
+      return;
+    }
+    celebrate(app, si);
+  }
+  function runRecap(app, words, done) {
+    const items = words.map((word) => ({
+      word: word, answer: word,
+      choices: shuffle([word].concat(shuffle(['mat', 'map', 'man', 'sat', 'pan', 'fan', 'tap'].filter((w) => w !== word)).slice(0, 2)))
+    }));
+    playRounds({ app: app, stats: null, next: done, prev: () => map(app) }, {
+      title: 'One more look', view: 'recap', items: items, track: false,
+      speak(item) { return sayText(item.word); },
+      render(item, status, hit) {
+        return h('div', { class: 'u11t-card' },
+          h('p', { class: 'u11t-line' }, 'Tap the word.'),
+          choiceRow(item.choices, (w, b) => hit(w === item.answer, b)),
+          status);
+      }
+    });
   }
 
   function celebrate(app, si) {
@@ -546,6 +625,18 @@
       if (i >= queue.length) { ctx.next(); return; }
       locked = false;
       const item = queue[i];
+      if (o.game && i === 0 && !item.again && !seenGame(o.game)) {
+        markSeen(o.game);
+        item.guide = true;
+        view.stage.innerHTML = '';
+        view.setCount('Watch');
+        view.stage.append(h('div', { class: 'u11t-card' },
+          h('p', { class: 'u11t-line' }, o.demo || 'Watch.'),
+          h('p', { class: 'u11t-letter', style: 'font-size:clamp(2.4rem,8vw,4rem)' }, wordNode(item.answer || item.word))));
+        sayText(item.answer || item.word);
+        view.auto(1400, () => { if (view.scr.ok()) round(); });
+        return;
+      }
       view.setCount((i + 1) + ' of ' + queue.length);
       view.stage.innerHTML = '';
       view.arm(item.answer || item.word);
@@ -563,28 +654,44 @@
         const ans = item.answer || item.word;
         if (!ok) {
           locked = true;
+          if (!item.touched && ctx.stats && !item.again) {
+            item.touched = true;
+            item.wasWrong = true;
+            ctx.stats.firstN++;
+            if (ctx.stats.missed.indexOf(ans) < 0) ctx.stats.missed.push(ans);
+          }
           const rightBtn = view.stage.querySelector('[data-w="' + ans + '"]');
           if (rightBtn) rightBtn.classList.add('right');
           status.textContent = ans;
-          if (!item.again) {
-            item.again = 1;
-            queue.splice(Math.min(queue.length, i + 3), 0, Object.assign({}, item));
-          }
-          let moved = false;
-          const go = () => { if (moved || !view.scr.ok()) return; moved = true; goOn(); };
-          view.setNext(go);
-          sayText(ans).then(() => { if (!moved && view.scr.ok()) view.auto(700, go); });
+          const release = () => { if (view.scr.ok()) { locked = false; status.textContent = 'Tap ' + ans; } };
+          view.setReplay(() => cueWord(ans));
+          cueWord(ans).then(release);
           return;
+        }
+        if (!item.touched && ctx.stats && !item.again) {
+          item.touched = true;
+          ctx.stats.firstN++;
+          ctx.stats.firstOk++;
         }
         locked = true;
         if (btn) btn.classList.add('right');
-        status.textContent = ans;
+        status.textContent = 'Yes. ' + ans;
+        if (item.wasWrong && !item.again) {
+          queue.splice(Math.min(queue.length, i + 3), 0, { word: item.word, answer: ans, line: item.line, before: item.before, after: item.after, pic: item.pic, choices: item.choices, say: item.say, yes: item.yes, again: 1 });
+        }
         let moved = false;
         const go = () => { if (moved || !view.scr.ok()) return; moved = true; goOn(); };
         view.setNext(go);
         sayText(item.say || ans).then(() => { if (!moved && view.scr.ok()) view.auto(450, go); });
       });
       view.stage.append(body);
+      if (item.guide) {
+        const ans = item.answer || item.word;
+        const rightBtn = view.stage.querySelector('[data-w="' + ans + '"]');
+        if (rightBtn) rightBtn.classList.add('right');
+        const st = view.stage.querySelector('.u11t-status');
+        if (st) st.textContent = 'Tap ' + ans;
+      }
       const spoken = o.speak ? o.speak(item) : sayText(item.say || item.word || item.line || '');
       view.setReplay(() => { if (o.speak) o.speak(item); else sayText(item.say || item.word || item.line || ''); });
       spoken;
@@ -628,10 +735,12 @@
     hear(ctx) {
       const items = [
         { word: 'mat', choices: shuffle(['mat', 'map', 'man']) },
-        { word: 'sat', choices: shuffle(['sat', 'pat', 'sap']) }
+        { word: 'sat', choices: shuffle(['sat', 'pat', 'sap']) },
+        { word: 'pan', choices: shuffle(['pan', 'pat', 'nap']) },
+        { word: 'map', choices: shuffle(['map', 'man', 'mat']) }
       ];
       playRounds(ctx, {
-        title: 'Hear and Pick', view: 'hear', items: items,
+        title: 'Hear and Pick', view: 'hear', game: 'hear', demo: 'Watch. Tap the word you hear.', items: items,
         speak(item) { return sayText(item.word); },
         render(item, status, hit) {
           const row = choiceRow(item.choices, (w, b) => hit(w === item.word, b));
@@ -644,14 +753,59 @@
     match(ctx) {
       const items = [
         { word: 'mat', pic: 'mat', choices: shuffle(['mat', 'map', 'man']) },
+        { word: 'fan', pic: 'fan', choices: shuffle(['fan', 'fat', 'pan']) },
+        { word: 'man', pic: 'man', choices: shuffle(['man', 'map', 'mat']) },
         { word: 'pan', pic: 'pan', choices: shuffle(['pan', 'pat', 'nap']) }
       ];
       playRounds(ctx, {
-        title: 'Match the picture', view: 'match', items: items,
+        title: 'Match the picture', view: 'match', game: 'match', demo: 'Watch. Tap the word for the picture.', items: items,
         speak(item) { return sayText(item.word); },
         render(item, status, hit) {
           const row = choiceRow(item.choices, (w, b) => hit(w === item.word, b));
           return h('div', { class: 'u11t-card' }, picNode(item.pic), row, status);
+        }
+      });
+    },
+    review(ctx) {
+      const words = ctx.stop.review || ['mat', 'sat'];
+      const bank = ['mat', 'map', 'man', 'sat', 'pan', 'fan', 'tap', 'pat', 'nap'];
+      const items = words.map((word) => ({
+        word: word, answer: word,
+        choices: shuffle([word].concat(shuffle(bank.filter((w) => w !== word)).slice(0, 2)))
+      }));
+      playRounds(ctx, {
+        title: 'Warm-up', view: 'review', items: items,
+        speak(item) { return sayText(item.word); },
+        render(item, status, hit) {
+          return h('div', { class: 'u11t-card' },
+            h('p', { class: 'u11t-line' }, 'Tap the word.'),
+            choiceRow(item.choices, (w, b) => hit(w === item.answer, b)),
+            status);
+        }
+      });
+    },
+    heart(ctx) {
+      const base = [
+        { word: 'I', answer: 'I', choices: shuffle(['I', 'a', 'am']) },
+        { word: 'a', answer: 'a', choices: shuffle(['a', 'I', 'at']) },
+        { word: 'I', answer: 'I', choices: shuffle(['I', 'am', 'a']) },
+        { word: 'a', answer: 'a', choices: shuffle(['a', 'at', 'an']) }
+      ].slice(0, DOSE.heartMax);
+      while (base.length < DOSE.heartMin) base.push({ word: 'a', answer: 'a', choices: shuffle(['a', 'I', 'at']) });
+      const extra = recentMissed().slice(0, Math.min(DOSE.heartMissedMax, DOSE.groupMax - (base.length + DOSE.compMin + 2)));
+      const bank = ['mat', 'map', 'man', 'sat', 'pan', 'fan', 'tap'];
+      extra.forEach((word) => base.push({
+        word: word, answer: word,
+        choices: shuffle([word].concat(shuffle(bank.filter((w) => w !== word)).slice(0, 2)))
+      }));
+      playRounds(ctx, {
+        title: 'Heart words', view: 'heart', items: base,
+        speak(item) { return sayText(item.word); },
+        render(item, status, hit) {
+          return h('div', { class: 'u11t-card' },
+            h('p', { class: 'u11t-line' }, 'Tap the word.'),
+            choiceRow(item.choices, (w, b) => hit(w === item.answer, b)),
+            status);
         }
       });
     },
@@ -661,7 +815,7 @@
         { line: 'A man sat at a mat.', answer: 'mat', before: 'A man sat at a', after: '.', choices: shuffle(['mat', 'map', 'nap']) }
       ];
       playRounds(ctx, {
-        title: 'Fill the blank', view: 'fill', items: items,
+        title: 'Fill the blank', view: 'fill', game: 'fill', demo: 'Watch. Tap the missing word.', items: items,
         speak(item) { return sayText(item.before + ' ' + item.after); },
         render(item, status, hit) {
           const row = choiceRow(item.choices, (w, b) => hit(w === item.answer, b));
@@ -717,20 +871,27 @@
           const ok = yes === item.yes;
           if (!ok) {
             locked = true;
-            (item.yes ? yesBtn : noBtn).classList.add('right');
-            status.textContent = item.yes ? 'Yes' : 'No';
-            if (!item.again) {
-              item.again = 1;
-              queue.splice(Math.min(queue.length, i + 3), 0, Object.assign({}, item));
+            if (!item.touched && ctx.stats && !item.again) {
+              item.touched = true;
+              item.wasWrong = true;
+              ctx.stats.firstN++;
+              if (ctx.stats.missed.indexOf(item.word) < 0) ctx.stats.missed.push(item.word);
             }
-            let moved = false;
-            const go = () => { if (moved || !view.scr.ok()) return; moved = true; goOn(); };
-            view.setNext(go);
-            sayText(item.word).then(() => { if (!moved && view.scr.ok()) view.auto(700, go); });
+            (item.yes ? yesBtn : noBtn).classList.add('right');
+            status.textContent = (item.yes ? 'Yes. ' : 'No. ') + item.word;
+            cueWord(item.word).then(() => { if (view.scr.ok()) { locked = false; status.textContent = 'Tap ' + (item.yes ? 'Yes' : 'No'); } });
             return;
           }
+          if (!item.touched && ctx.stats && !item.again) {
+            item.touched = true;
+            ctx.stats.firstN++;
+            ctx.stats.firstOk++;
+          }
           locked = true;
-          status.textContent = item.word;
+          status.textContent = 'Yes. ' + item.word;
+          if (item.wasWrong && !item.again) {
+            queue.splice(Math.min(queue.length, i + 3), 0, { word: item.word, yes: item.yes, answer: item.answer, again: 1 });
+          }
           let moved = false;
           const go = () => { if (moved || !view.scr.ok()) return; moved = true; goOn(); };
           view.setNext(go);
@@ -782,15 +943,39 @@
     const placed = {};
     let picked = '';
     let left = 4;
+    const later = [];
     const bank = h('div', { class: 'u11t-bank' });
     const grid = h('div', { class: 'u11t-pics' });
     const status = h('p', { class: 'u11t-status' }, 'Drag the word to its picture.');
     const note = h('div');
     function finishIf() {
       if (left > 0) return;
+      if (later.length) {
+        later.splice(0).forEach((word) => {
+          placed[word] = 0;
+          left++;
+          const tile = bank.querySelector('[data-word="' + word + '"]');
+          if (tile) { tile.classList.remove('gone'); tile.dataset.wrong = ''; }
+          const cap = grid.querySelector('[data-pic="' + word + '"] .snapped');
+          if (cap) cap.remove();
+        });
+        status.textContent = 'One more time.';
+        return;
+      }
       view.auto(700, () => ctx.next());
     }
     function snap(word, tile) {
+      if (!tile.dataset.touched && ctx.stats) {
+        tile.dataset.touched = '1';
+        ctx.stats.firstN++;
+        if (tile.dataset.wrong) {
+          if (ctx.stats.missed.indexOf(word) < 0) ctx.stats.missed.push(word);
+        } else ctx.stats.firstOk++;
+      }
+      if (tile.dataset.wrong && !tile.dataset.requeued) {
+        tile.dataset.requeued = '1';
+        later.push(word);
+      }
       placed[word] = 1;
       left--;
       tile.classList.add('gone');
@@ -804,6 +989,12 @@
       Snd.seq(sound.files, 180).then(() => finishIf());
     }
     function wrong(word, tile) {
+      tile.dataset.wrong = '1';
+      if (!tile.dataset.touched && ctx.stats) {
+        tile.dataset.touched = '1';
+        ctx.stats.firstN++;
+        if (ctx.stats.missed.indexOf(word) < 0) ctx.stats.missed.push(word);
+      }
       status.textContent = word;
       const pic = grid.querySelector('[data-pic="' + word + '"]');
       if (pic) {
@@ -813,7 +1004,7 @@
       const sound = partsOf(word);
       note.innerHTML = '';
       if (sound.missing.length) note.append(recNote(sound.missing));
-      Snd.seq(sound.files, 180);
+      cueWord(word);
     }
     function dropOn(word, picId, tile) {
       if (placed[word]) return;
@@ -908,21 +1099,19 @@
 
   function buildScene(kind) {
     if (kind === 'satchel') {
-      return h('div', { class: 'u11-scene', 'data-scene': 'satchel' },
-        h('div', { class: 'bag' },
-          h('span', { class: 'strap' }), h('span', { class: 'buckle' }),
-          h('span', { class: 'item map', 'data-part': 'map' }, picNode('map', 'u11t-svg')),
-          h('span', { class: 'item fan', 'data-part': 'fan' }, picNode('fan', 'u11t-svg')),
-          h('span', { class: 'item mat', 'data-part': 'mat' }, picNode('mat', 'u11t-pic'))));
+      return h('div', { class: 'u11-scene u11-satchel', 'data-scene': 'satchel' },
+        h('img', { class: 'satchel-art', src: 'img/u11-satchel.jpg', alt: 'An open satchel' }),
+        h('img', { class: 'pack map', 'data-part': 'map', src: 'img/u11-map.jpg', alt: '' }),
+        h('img', { class: 'pack fan', 'data-part': 'fan', src: 'img/u11-fan.jpg', alt: '' }),
+        h('img', { class: 'pack mat', 'data-part': 'mat', src: PICS.mat.src, alt: '' }));
     }
     if (kind === 'raft') {
       return h('div', { class: 'u11-scene', 'data-scene': 'raft' },
         h('div', { class: 'water' }),
         h('img', { class: 'deckmat', 'data-part': 'mat', src: PICS.mat.src, alt: '' }),
         h('div', { class: 'raftbox' }),
-        h('div', { class: 'mast', 'data-part': 'fan' }),
-        h('div', { class: 'sail', 'data-part': 'fan' }),
-        h('span', { class: 'pinmap', 'data-part': 'map' }, picNode('map', 'u11t-svg')));
+        h('img', { class: 'sailpic', 'data-part': 'fan', src: 'img/u11-fan.jpg', alt: '' }),
+        h('img', { class: 'pinmap', 'data-part': 'map', src: 'img/u11-map.jpg', alt: '' }));
     }
     return h('div', { class: 'u11-scene', 'data-scene': 'tree' },
       h('span', { class: 'banyan', html: SVG.tree }),
@@ -986,28 +1175,29 @@
         if (locked) return;
         if (w !== item.answer) {
           locked = true;
+          if (!item.touched && ctx.stats && !item.again) {
+            item.touched = true;
+            item.wasWrong = true;
+            ctx.stats.firstN++;
+            if (ctx.stats.missed.indexOf(item.answer) < 0) ctx.stats.missed.push(item.answer);
+          }
           const rightBtn = row.querySelector('[data-w="' + item.answer + '"]');
           if (rightBtn) rightBtn.classList.add('right');
           status.textContent = item.answer;
-          if (!item.again) {
-            item.again = 1;
-            spec.steps.splice(Math.min(spec.steps.length, step + 3), 0, Object.assign({}, item));
-          }
-          let moved = false;
-          const go = () => {
-            if (moved || !view.scr.ok()) return;
-            moved = true;
-            step++;
-            if (step >= spec.steps.length) finale();
-            else round();
-          };
-          view.setNext(go);
-          sayText(item.answer).then(() => { if (!moved && view.scr.ok()) view.auto(700, go); });
+          cueWord(item.answer).then(() => { if (view.scr.ok()) { locked = false; status.textContent = 'Tap ' + item.answer; } });
           return;
+        }
+        if (!item.touched && ctx.stats && !item.again) {
+          item.touched = true;
+          ctx.stats.firstN++;
+          ctx.stats.firstOk++;
+        }
+        if (item.wasWrong && !item.again) {
+          spec.steps.splice(Math.min(spec.steps.length, step + 3), 0, { line: 'Tap ' + item.answer + '.', say: item.answer, choices: item.choices, answer: item.answer, again: 1 });
         }
         locked = true;
         b.classList.add('right');
-        done[item.part] = 1;
+        if (item.part) done[item.part] = 1;
         step++;
         paintParts();
         status.textContent = item.answer;
@@ -1158,9 +1348,7 @@
     }
     const got = reads();
     const view = shell(app, {
-      title: 'Library', view: 'library', preview: false, confirm: false, count: '',
-      unitTo: '#/u1/u11',
-      unitLabel: 'Back to Unit',
+      title: 'Library', view: 'library', corner: 'home', preview: false, confirm: false, count: '',
       onBack() { location.hash = '#/home'; },
       onNext() {}
     });
@@ -1202,6 +1390,13 @@
   }
 
   function openFind(app, id) {
+    const longer = id === 'chant' || id.indexOf('book:') === 0;
+    if (longer) {
+      let n = 0;
+      try { n = parseInt(sessionStorage.getItem(LONG_KEY) || '0', 10) || 0; } catch (e) { n = 0; }
+      if (n >= DOSE.longerPerSitting) { goodbye(app); return; }
+      try { sessionStorage.setItem(LONG_KEY, String(n + 1)); } catch (e) { /* ignore */ }
+    }
     if (id === 'twist') { twist(app); return; }
     if (id === 'chant') { chant(app); return; }
     if (id.indexOf('book:') === 0) {

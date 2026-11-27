@@ -15,7 +15,7 @@ test('short a trail is wired and other units stay on the old route', () => {
   assert.match(html, /u11trail\.css/);
   assert.match(html, /js\/u11trail\.js/);
   assert.match(u123, /L\.key === 'u11' && IR\.u11Trail/);
-  assert.match(sw, /const CACHE = 'ir-20261127i'/);
+  assert.match(sw, /const CACHE = 'ir-20261127j'/);
   assert.match(sw, /js\/u11trail\.js/);
   assert.match(screens, /#\/library/);
   assert.match(screens, /class: 'homebook'/);
@@ -39,7 +39,9 @@ test('choices are numbered, misses are calm, and a sitting stays short', () => {
   assert.match(trail, /aria-label': '2\. No'/);
   assert.match(trail, /data-pic/);
   assert.doesNotMatch(trail, /tryagain/);
-  assert.match(trail, /SESSION_LEN = 3/);
+  assert.match(trail, /sittingDefault: 5/);
+  assert.match(trail, /const DOSE = \{/);
+  assert.match(trail, /firstTryGem: 0\.9/);
   assert.match(trail, /Great job, see you next time/);
   assert.match(trail, /ir_u11_prog/);
   assert.match(trail, /Warm-up/);
