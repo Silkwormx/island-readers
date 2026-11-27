@@ -178,15 +178,25 @@
   }
 
   function runChant(ctx, L) {
-    const st = ctx.stage; st.innerHTML = '';
+    const lines = L.chant; let i = 0; const st = ctx.stage; let first = true;
     ctx.setInstr('Say it with Frill. Clap the beat!', 'chant');
-    ctx.progress(0);
-    const lines = L.chant.map((t) => h('p', { class: 'chantline' }, ...t.split(' ').map((w, k) => [k ? ' ' : '', h('button', { class: 'w', type: 'button', onclick: () => say(w) }, w)]).flat()));
-    const play = speakerBtn(() => Snd.play('audio/u789_chant_' + L.key + '.mp3'), 'Hear the chant'); play.classList.add('huge');
-    st.append(h('div', { class: 'activity chantact' }, h('div', { class: 'panelwrap small' }, h('img', { class: 'panel', src: ACT('frill_drum'), alt: 'Frill drums the beat' })), play, h('div', { class: 'chantlines' }, ...lines)));
-    ctx.setNextLabel('Activities');
-    ctx.setBack(() => false); ctx.setNext(() => false);
-    IR.sayItem(ctx, P('chant'), 'audio/u789_chant_' + L.key + '.mp3');
+    let countEl = st.parentElement.querySelector(':scope > .qcount');
+    if (!countEl) { countEl = h('p', { class: 'qcount', 'aria-live': 'polite' }, ''); st.after(countEl); }
+    const replay = () => Snd.seq(lines[i].split(' ').map((w) => W(w)), 140);
+    const show = () => {
+      ctx.progress(i / lines.length);
+      countEl.textContent = (i + 1) + ' of ' + lines.length;
+      st.innerHTML = '';
+      const line = h('p', { class: 'chantline' }, ...lines[i].split(' ').map((w, k) => [k ? ' ' : '', h('button', { class: 'w', type: 'button', onclick: () => say(w) }, w)]).flat());
+      st.append(h('div', { class: 'activity chantact' }, h('div', { class: 'panelwrap small' }, h('img', { class: 'panel', src: ACT('frill_drum'), alt: 'Frill drums the beat' })), line));
+      ctx.setNextLabel(i === lines.length - 1 ? 'Activities' : 'Next');
+      if (ctx.setRepeat) ctx.setRepeat(replay);
+      if (first) { first = false; const p = IR.sayItem(ctx, P('chant'), null); if (p && p.then) p.then(() => { if (ctx.scr.ok()) replay(); }); else replay(); }
+      else replay();
+    };
+    ctx.setBack(() => { if (i > 0) { i--; show(); return true; } return false; });
+    ctx.setNext(() => { if (i < lines.length - 1) { i++; show(); return true; } return false; });
+    show();
   }
 
   function runHear(ctx, L) {

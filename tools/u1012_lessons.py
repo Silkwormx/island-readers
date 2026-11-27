@@ -538,7 +538,7 @@ add({
         meet('frill', 'u121_m2', 'toast', ['toast', 'soap', 'float', 'road'],
              'Keep the long o sound in the middle.',
              'Toast. Soap. Float. Road. oa sits in the middle and says the long o sound.'),
-        meet('zip', 'u121_m3', 'toe', ['toe', 'hoe', 'boat', 'coat'],
+        meet('zip', 'u121_m3', 'toe', ['toe', 'hoe', 'Joe', 'foe'],
              'oe says the long o sound at the end.',
              'Toe. Hoe. At the end, oe says the long o sound, the same sound as oa.'),
     ],
@@ -627,12 +627,12 @@ add({
             ['boat', 'toad', 'coat', 'road'],
             ['bat', 'boat', 'top', 'toad', 'cot', 'coat'],
             [['-oat', ['boat', 'coat', 'goat']], ['-oad', ['toad', 'road']]]),
-        day('Day 2', 'oe', 'oe says the long o sound at the end. Toe and hoe.',
-            ['toe', 'hoe'], ['toe', 'boat', 'hoe', 'coat'],
-            ['toe', 'hoe', 'boat', 'toad'],
-            ['toe', 'hoe', 'boat', 'soap'],
-            ['top', 'toe', 'hop', 'hoe', 'cot', 'coat'],
-            [['-oe', ['toe', 'hoe']], ['-oat', ['boat', 'coat']]]),
+        day('Day 2', 'oe', 'oe says the long o sound at the end. Toe, hoe, Joe, and foe.',
+            ['toe', 'hoe', 'Joe', 'foe'], ['toe', 'hoe', 'doe', 'woe'],
+            ['toe', 'hoe', 'Joe', 'foe', 'doe', 'woe'],
+            ['toe', 'hoe', 'Joe', 'foe'],
+            ['toe', 'hoe', 'Joe', 'foe', 'doe', 'woe'],
+            [['-oe', ['toe', 'hoe', 'Joe', 'foe', 'doe', 'woe']]]),
         day('Day 3', 'oa and oe', 'Mix oa and oe. Same long o sound.',
             ['boat', 'toe', 'toast', 'hoe'], ['coat', 'toad', 'float', 'road'],
             ['boat', 'toe', 'coat', 'hoe', 'toast', 'road', 'soap', 'float'],
@@ -665,7 +665,7 @@ LESSONS[-1]['sort'][9] = sort('moat', 'oat')
 # Better fourth: "coal" c,oa,l and "goal" g,oa,l. Chain: coal, goal, goat, coat.
 # coal (c,oa,l) goal (g,oa,l) one change. goal (g,oa,l) goat (g,oa,t) one change. goat (g,oa,t) coat (c,oa,t) one change.
 LESSONS[-1]['chains'][1] = ['coal', 'goal', 'goat', 'coat']
-LESSONS[-1]['bellExtra'] = ['goat', 'moat', 'load', 'float', 'road', 'hoe', 'coal', 'goal', 'soak', 'dock', 'rock']
+LESSONS[-1]['bellExtra'] = ['hop', 'rod', 'goat', 'moat', 'load', 'float', 'road', 'hoe', 'coal', 'goal', 'soak', 'dock', 'rock']
 
 add({
     'key': 'u122', 'n': '12.2', 'unit': 12, 'name': 'ow',

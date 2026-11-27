@@ -2945,8 +2945,8 @@ window.IR_DATA_U1012 = {
      "chips": [
       "toe",
       "hoe",
-      "boat",
-      "coat"
+      "Joe",
+      "foe"
      ],
      "cap": "oe says the long o sound at the end.",
      "text": "Toe. Hoe. At the end, oe says the long o sound, the same sound as oa."
@@ -3034,6 +3034,8 @@ window.IR_DATA_U1012 = {
     "toe",
     "hoe",
     "road",
+    "hop",
+    "rod",
     "goat",
     "moat",
     "load",
@@ -3044,9 +3046,7 @@ window.IR_DATA_U1012 = {
     "rock",
     "bat",
     "top",
-    "cot",
-    "hop",
-    "rod"
+    "cot"
    ],
    "build": [
     {
@@ -3261,6 +3261,8 @@ window.IR_DATA_U1012 = {
     "toe",
     "hoe",
     "road",
+    "hop",
+    "rod",
     "goat",
     "moat",
     "load",
@@ -3272,8 +3274,10 @@ window.IR_DATA_U1012 = {
     "bat",
     "top",
     "cot",
-    "hop",
-    "rod"
+    "Joe",
+    "foe",
+    "doe",
+    "woe"
    ],
    "days": [
     "oa",

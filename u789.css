@@ -4,7 +4,7 @@
    Every answer button in an activity is the same size: grids use equal tracks and the buttons fill them. */
 .u789step{position:absolute;inset:0;height:100vh;height:100dvh;height:100svh;max-height:100vh;max-height:100dvh;max-height:100svh;display:flex;flex-direction:column;overflow:hidden;box-sizing:border-box;padding-top:env(safe-area-inset-top)}
 .u789step > .lesson-top,.u789step > .instr{flex:none}
-.u789step > .stage{flex:1 1 0;min-height:0;overflow:hidden;display:flex;flex-direction:column}
+.u789step > .stage{flex:1 1 0;min-height:0;overflow:hidden;display:flex;flex-direction:column;align-items:center}
 .u789step > .stage > .activity{flex:1 1 0;min-height:0;max-height:100%;overflow:hidden;display:flex;flex-direction:column;align-items:center;gap:.3rem;width:100%;box-sizing:border-box}
 .u789step > .lesson-nav{flex:none;position:relative;z-index:5;background:var(--cream);padding-bottom:calc(.35rem + env(safe-area-inset-bottom))!important;min-height:2.9rem;box-sizing:border-box}
 /* Equal answer buttons */
@@ -55,10 +55,14 @@
 .u789step .activity.story .row{padding-bottom:env(safe-area-inset-bottom)}
 .u789step .nkmeet .panelwrap.small .panel{max-height:16vh;max-height:16svh}
 .u789step .chips{display:flex;flex-wrap:wrap;justify-content:center;gap:.35rem}
-.u789step .chantact .panel{max-height:18vh;max-height:18svh}
+.u789step .chantact{justify-content:center;gap:.45rem;width:min(100%,36rem)}
+.u789step .chantact .panel{max-height:min(18vh,8rem);max-height:min(18svh,8rem)}
 .u789step .chantlines{display:flex;flex-direction:column;gap:.15rem;align-items:center}
-.u789step .chantline{margin:0;font-size:clamp(1.15rem,min(5.4vw,4.4vh),2rem);line-height:1.25;text-align:center}
+.u789step .chantline{margin:0;max-width:100%;font-size:clamp(1.85rem,min(7.4vw,8vh),3.5rem);font-weight:700;line-height:1.2;text-align:center}
 .u789step .chantline .w{background:none;border:0;padding:0;font:inherit;color:inherit;cursor:pointer}
+@media (min-width:900px){
+  .u789step > .instr{justify-content:center}
+}
 .u789step .syl{font-weight:700}
 .u789step .partyes{animation:partyes .55s ease}
 @keyframes partyes{0%{transform:scale(.96)}45%{transform:scale(1.12)}100%{transform:scale(1)}}
