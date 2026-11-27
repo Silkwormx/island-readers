@@ -691,29 +691,43 @@
       const trunk = trail.querySelector('.skytrunk');
       if (!stops.length || !spire) return;
       const w = trail.clientWidth;
-      const tileW = Math.round(w < 520 ? Math.min(w * 0.72, 248) : Math.min(w * 0.34, 280));
-      const tileH = Math.round(tileW * 1280 / 720);
-      const canH = Math.round(tileW * 720 / 1280);
-      const baseH = canH;
-      /* Cover the canopy's cut trunk; the stair's top bark matches that width. */
-      const stairTop = Math.round(canH * 0.78);
+      const narrow = w < 520;
+      const home = trail.closest('.skyhome');
+      const side = home && home.querySelector('.homeside');
+      const sideFixed = !!(side && getComputedStyle(side).position === 'fixed');
+      const trailTop = trail.getBoundingClientRect().top;
+      const limit = sideFixed ? side.getBoundingClientRect().top : window.innerHeight;
+      const avail = Math.max(narrow ? 480 : 540, limit - trailTop - 4);
+      const tileW = Math.round(w * (narrow ? 0.98 : 0.96));
+      const canNatural = Math.round(tileW * 720 / 1280);
+      const canH = Math.round(Math.min(canNatural, narrow ? 188 : 230));
+      const stairTop = Math.round(canH * 0.74);
+      const remain = Math.max(260, avail - stairTop);
+      let tileH = Math.round(remain / 0.82);
+      let artCap = Math.round(tileH * 0.26);
+      if (stairTop + tileH * 0.72 + artCap * 0.36 > avail) {
+        tileH = Math.round((avail - stairTop) / 0.86);
+        artCap = Math.round(tileH * 0.24);
+      }
+      const baseH = Math.round(Math.min(canH, tileW * 0.34));
       const slots = [
-        { x: 0.28, y: 0.21, w: 0.4, anchor: 0.64 },
-        { x: 0.34, y: 0.45, w: 0.3, anchor: 0.7 },
-        { x: 0.72, y: 0.7, w: 0.42, anchor: 0.64 }
+        { x: 0.3, y: 0.2, frac: narrow ? 0.48 : 0.34, anchor: 0.66 },
+        { x: narrow ? 0.4 : 0.36, y: 0.46, frac: narrow ? 0.46 : 0.32, anchor: 0.68 },
+        { x: 0.7, y: 0.72, frac: narrow ? 0.48 : 0.36, anchor: 0.66 }
       ];
       const last = stops.length - 1;
       const lastSlot = slots[last % 3];
-      const stairH = Math.floor(last / 3) * tileH + Math.round((lastSlot.y + 0.2) * tileH);
-      const total = stairTop + stairH + Math.round(baseH * 0.32);
+      const stairH = Math.floor(last / 3) * tileH + Math.round((lastSlot.y + 0.22) * tileH);
+      const total = stairTop + stairH + Math.round(baseH * 0.36);
       const left = Math.round((w - tileW) / 2);
+      const labelW = narrow ? 104 : 148;
       trail.style.height = total + 'px';
       spire.style.left = left + 'px';
       spire.style.top = '0px';
       spire.style.width = tileW + 'px';
       spire.style.height = total + 'px';
-      spire.style.backgroundSize = tileW + 'px ' + canH + 'px, ' + tileW + 'px ' + baseH + 'px';
-      spire.style.backgroundPosition = '0 0, 0 ' + (total - baseH) + 'px';
+      spire.style.backgroundSize = tileW + 'px ' + canH + 'px, ' + tileW + 'px ' + tileH + 'px, ' + tileW + 'px ' + baseH + 'px';
+      spire.style.backgroundPosition = '0 0, 0 ' + stairTop + 'px, 0 ' + (total - baseH) + 'px';
       if (trunk) {
         trunk.style.left = left + 'px';
         trunk.style.top = stairTop + 'px';
@@ -724,11 +738,15 @@
       stops.forEach((s, i) => {
         const slot = slots[i % 3];
         const art = s.querySelector('.skyisland');
-        const iw = Math.max(64, Math.round(tileW * slot.w));
-        s.style.width = iw + 'px';
         const aspect = art && art.naturalWidth ? art.naturalHeight / art.naturalWidth : 1.08;
+        let iw = Math.round(Math.min(tileW * slot.frac, artCap / aspect));
+        iw = Math.max(narrow ? 108 : 132, iw);
+        s.style.width = iw + 'px';
         const artH = Math.round(iw * aspect);
-        const cx = left + slot.x * tileW;
+        let cx = left + slot.x * tileW;
+        const outer = s.classList.contains('sky-r') ? 'r' : 'l';
+        if (outer === 'l') cx = Math.max(cx, labelW + 8 + iw / 2);
+        else cx = Math.min(cx, w - labelW - 14 - iw / 2);
         const cy = stairTop + Math.floor(i / 3) * tileH + slot.y * tileH;
         s.style.left = Math.round(cx - iw / 2) + 'px';
         s.style.top = Math.round(cy - artH * slot.anchor) + 'px';
@@ -736,7 +754,7 @@
       if (book) {
         const bw = book.offsetWidth;
         book.style.left = Math.round(left + tileW * 0.5 - bw / 2) + 'px';
-        book.style.top = Math.round(canH * 0.56) + 'px';
+        book.style.top = Math.round(canH * 0.42) + 'px';
       }
     }
     function layoutPath() {

@@ -4006,28 +4006,29 @@ body:has(.tmscreen) #soundfix,body:has(.u123step) #soundfix,body:has(.u789step) 
 .skyhome.spiral .skytrail{position:relative}
 .skyhome.spiral .skyspire{
   display:block;position:absolute;z-index:0;pointer-events:none;
-  background-image:url("img/sky/spiral_canopy.webp"),url("img/sky/spiral_base.webp");
-  background-repeat:no-repeat,no-repeat;
+  background-image:url("img/sky/spiral_canopy.webp"),url("img/sky/spiral.webp"),url("img/sky/spiral_base.webp");
+  background-repeat:no-repeat,repeat-y,no-repeat;
 }
 .skyhome.spiral .skytrunk{
   display:block;position:absolute;z-index:2;pointer-events:none;overflow:hidden;
   background:url("img/sky/spiral.webp") repeat-y top left;
+  clip-path:inset(0 30% 0 36%);
 }
 .skyhome.spiral .skypath{opacity:0}
 .skyhome.spiral .skybook{position:absolute;z-index:6;margin:0;align-self:auto;width:3.6rem}
 .skyhome.spiral .skystop{position:absolute;margin:0!important;width:112px;z-index:4;overflow:visible}
-.skyhome.spiral .skystop.sky-b{z-index:auto}
-.skyhome.spiral .skystop.sky-b .skyisland{position:relative;z-index:1}
-.skyhome.spiral .skystop.sky-b .skybody{filter:saturate(.8) brightness(1.05);z-index:1}
 .skyhome.spiral .skylbl{
-  position:absolute;z-index:6;left:0;right:auto;top:auto;bottom:7%;
-  width:7.5rem;height:auto;min-height:2.4rem;margin:0;
+  position:absolute;z-index:6;top:46%;bottom:auto;left:auto;right:calc(100% + .45rem);
+  width:6.5rem;height:auto;min-height:0;margin:0;transform:translateY(-50%);
+  font-family:Andika,sans-serif;
 }
-.skyhome.spiral .sky-r .skylbl{left:auto;right:0}
-.skyhome.spiral .sky-b .skylbl{left:auto;right:78%;top:22%;bottom:auto;width:6.5rem;z-index:6}
+.skyhome.spiral .sky-r .skylbl{right:auto;left:calc(100% + .45rem)}
+.skyhome.spiral .sky-b .skylbl{right:calc(100% + .45rem);left:auto;top:42%}
+.skyhome.spiral .skyfig{width:2.05rem}
 @media (min-width:1000px){
-  .skyhome.spiral .skylbl{width:8.4rem}
-  .skyhome.spiral .skybook{width:4.2rem}
+  .skyhome.spiral .skylbl{width:9.25rem}
+  .skyhome.spiral .skybook{width:4.6rem}
+  .skyhome.spiral .skyfig{width:2.55rem}
 }
 @media (max-width:999px){
   .skyhome .skybook{align-self:flex-end;width:3.4rem;margin:0 .15rem .55rem 0}
