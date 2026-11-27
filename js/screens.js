@@ -469,32 +469,23 @@
       if (img.complete && img.naturalWidth) paint();
       else img.addEventListener('load', paint, { once: true });
     }
-    const PAINTED = ['img/sky/island_a.webp', 'img/sky/island_b.webp', 'img/sky/island_d.webp'];
-    function skyBridge(i) {
-      const src = i % 2 ? 'img/sky/bridge_vine.webp' : 'img/sky/bridge_clouds.webp';
-      return h('span', { class: 'skybridge', 'aria-hidden': 'true', html:
-        '<img src="' + src + '" alt="">' +
-        '<svg class="skybridge-path" viewBox="0 0 240 48"><path class="vine" d="M18 30 C 70 6, 170 6, 222 30"/></svg>' });
-    }
+    const GEMN = ['ruby', 'coral', 'amber', 'topaz', 'emerald', 'aquamarine', 'sapphire', 'amethyst', 'rosequartz', 'gold'];
     function skyStop(opts) {
-      const pic = h('img', { class: 'skypic', src: opts.img, alt: '', loading: opts.lazy ? 'lazy' : 'eager' });
-      if (opts.onpic) opts.onpic(pic);
+      const gem = opts.done && opts.n
+        ? h('img', { class: 'skygem', src: 'img/gem_' + String(((opts.n - 1) % 10) + 1).padStart(2, '0') + '_' + GEMN[(opts.n - 1) % 10] + '.webp', alt: '' })
+        : null;
       const b = h('button', {
         class: 'tcard skystop sky-' + opts.side + (opts.here ? ' is-here t-current' : '') + (opts.soon ? ' is-soon' : '') + (opts.done ? ' is-done' : ''),
         type: 'button',
         'data-id': opts.id,
         'data-kind': 'island',
         'data-n': opts.n,
+        title: opts.title,
         'aria-label': opts.label
       },
-        h('span', { class: 'skyart' },
-          h('img', { class: 'skyisland', src: PAINTED[opts.theme % PAINTED.length], alt: '' }),
-          pic),
-        h('span', { class: 'skylbl' },
-          opts.here ? h('span', { class: 'herechip' }, 'You are here') : opts.soon ? h('span', { class: 'herechip soonchip' }, 'Coming soon') : null,
-          h('b', null, opts.num),
-          h('span', { class: 'skytitle' }, opts.title)));
-      if (opts.bridge) b.append(opts.bridge);
+        h('img', { class: 'skyisland', src: opts.island, alt: '', loading: opts.lazy ? 'lazy' : 'eager' }),
+        h('span', { class: 'skybadge' }, opts.mark, opts.soon ? h('span', { class: 'skylock', 'aria-hidden': 'true' }, icon('lock')) : null),
+        gem);
       b.addEventListener('click', opts.onclick);
       return b;
     }
@@ -516,12 +507,10 @@
         here: st === 'here',
         soon: st === 'soon',
         done: st === 'done',
-        theme: n % 3,
-        bridge: skyBridge(n),
-        img: 'img/units/tile' + String(n).padStart(2, '0') + '.webp',
+        island: 'img/sky/stops/u' + String(n).padStart(2, '0') + '.webp',
         lazy: n > 8,
-        num: 'Unit ' + n,
-        title: t[0],
+        mark: String(n),
+        title: 'Unit ' + n + ': ' + t[0],
         label: label,
         onclick: () => { if (hop) { Snd.stop(); location.hash = hop; } else if (u123 || u789) { Snd.stop(); location.hash = '#/u' + n; } else if (u6) { Snd.stop(); location.hash = '#/u6'; } else if (u5) { Snd.stop(); location.hash = '#/u5'; } else if (isl) openIsland(BUILT_ID); else { Snd.stop(); toast('Unit ' + n + ' is coming soon.'); } }
       });
@@ -532,17 +521,11 @@
       n: 0,
       side: 'l',
       here: atFoundations,
-      theme: 2,
-      img: coverSrc,
-      num: 'Foundations',
-      title: 'Learn the letters',
+      island: 'img/sky/stops/f.webp',
+      mark: 'F',
+      title: 'Foundations: Learn the letters',
       label: 'Foundations. Learn the letters. Opens Foundation Skills.' + (atFoundations ? ' You are here. Zip and Frill are here.' : ''),
-      onclick: () => { Snd.stop(); location.hash = '#/foundation'; },
-      onpic(pic) {
-        pic.addEventListener('error', () => {
-          pic.remove();
-        });
-      }
+      onclick: () => { Snd.stop(); location.hash = '#/foundation'; }
     });
     const cards = [foundations];
     for (let n = 1; n <= 22; n++) cards.push(unit(n));
@@ -553,7 +536,11 @@
       'aria-label': 'Library. Opens the Library.',
       onclick: () => { Snd.stop(); location.hash = '#/library'; }
     }, h('span', { class: 'skybookart', html: BOOK, 'aria-hidden': 'true' }), h('b', null, 'Library'));
-    const trailBits = [library].concat(cards);
+    const NS = 'http://www.w3.org/2000/svg';
+    const pathSvg = document.createElementNS(NS, 'svg');
+    pathSvg.setAttribute('class', 'skypath');
+    pathSvg.setAttribute('aria-hidden', 'true');
+    const trailBits = [pathSvg, library].concat(cards);
     const zipImg = h('img', { class: 'skyfigpic', alt: '', src: 'img/zipA.webp' });
     const frillImg = h('img', { class: 'skyfigpic', alt: '', src: 'img/zip-show/frill-glide.webp' });
     const zipFig = h('div', { class: 'skyfig zip is-painting' }, h('span', { class: 'skyshade', 'aria-hidden': 'true' }), zipImg);
@@ -640,36 +627,74 @@
     };
     paintIntoScene(zipImg, go);
     paintIntoScene(frillImg, go);
-    function feet(stop) {
-      const art = stop.querySelector('.skyart');
+    function standAt(stop) {
+      const art = stop.querySelector('.skyisland');
       const a = art.getBoundingClientRect();
       const t = trail.getBoundingClientRect();
-      const y = a.top - t.top + a.height * 0.4;
-      return { y: y, zipX: a.left - t.left + a.width * 0.24, frillX: a.left - t.left + a.width * 0.76, midX: a.left - t.left + a.width * 0.5 };
+      const y = a.top - t.top + a.height * 0.46;
+      return { y: y, zipX: a.left - t.left + a.width * 0.28, frillX: a.left - t.left + a.width * 0.74, midX: a.left - t.left + a.width * 0.5 };
     }
     function put(fig, x, y) {
       fig.style.transform = 'translate(' + (x - fig.offsetWidth / 2) + 'px,' + (y - fig.offsetHeight) + 'px)';
     }
-    function bridgePts(fromStop, toStop) {
-      const bridge = toStop.querySelector('.skybridge');
-      const path = bridge && bridge.querySelector('.vine');
-      const t = trail.getBoundingClientRect();
-      if (!path || !bridge.classList.contains('skybridge')) return [];
-      const br = bridge.getBoundingClientRect();
-      const len = path.getTotalLength();
-      const pts = [];
-      for (let i = 0; i <= 16; i++) {
-        const p = path.getPointAtLength(len * i / 16);
-        pts.push({
-          x: br.left - t.left + (p.x / 240) * br.width,
-          y: br.top - t.top + (p.y / 48) * br.height
-        });
+    function layoutPath() {
+      const svg = trail.querySelector('.skypath');
+      const stops = [...trail.querySelectorAll('.skystop')];
+      if (!svg || !stops.length) return;
+      const w = trail.clientWidth;
+      const hgt = trail.scrollHeight;
+      svg.setAttribute('viewBox', '0 0 ' + w + ' ' + hgt);
+      svg.style.width = w + 'px';
+      svg.style.height = hgt + 'px';
+      const origin = trail.getBoundingClientRect();
+      const pts = stops.map((s) => {
+        const a = s.querySelector('.skyisland').getBoundingClientRect();
+        return { x: a.left - origin.left + a.width / 2, y: a.top - origin.top + a.height * 0.62 };
+      });
+      let d = 'M ' + pts[0].x.toFixed(1) + ' ' + Math.max(6, pts[0].y - 22).toFixed(1);
+      d += ' L ' + pts[0].x.toFixed(1) + ' ' + pts[0].y.toFixed(1);
+      for (let i = 0; i < pts.length - 1; i++) {
+        const a = pts[i], b = pts[i + 1];
+        const mid = a.y + (b.y - a.y) * 0.5;
+        d += ' C ' + a.x.toFixed(1) + ' ' + mid.toFixed(1) + ', ' + b.x.toFixed(1) + ' ' + mid.toFixed(1) + ', ' + b.x.toFixed(1) + ' ' + b.y.toFixed(1);
       }
-      const from = feet(fromStop);
-      if (pts.length && pts[0].y < from.y - 4) pts.reverse();
-      return pts;
+      const NS = 'http://www.w3.org/2000/svg';
+      while (svg.firstChild) svg.removeChild(svg.firstChild);
+      const line = document.createElementNS(NS, 'path');
+      line.setAttribute('class', 'skyline');
+      line.setAttribute('d', d);
+      const stones = document.createElementNS(NS, 'path');
+      stones.setAttribute('class', 'skystones');
+      stones.setAttribute('d', d);
+      svg.append(line, stones);
+      const path = line;
+      const len = path.getTotalLength();
+      const samples = [];
+      for (let dist = 0; dist <= len; dist += 7) {
+        const p = path.getPointAtLength(Math.min(dist, len));
+        samples.push({ x: p.x, y: p.y });
+      }
+      trail._stopAt = pts.map((pt) => {
+        let best = 0, bd = 1e12;
+        for (let i = 0; i < samples.length; i++) {
+          const dx = samples[i].x - pt.x, dy = samples[i].y - pt.y, dd = dx * dx + dy * dy;
+          if (dd < bd) { bd = dd; best = i; }
+        }
+        return best;
+      });
+      trail._samples = samples;
+    }
+    function pathBetween(fromIndex, toIndex) {
+      const samples = trail._samples || [];
+      const at = trail._stopAt || [];
+      if (!samples.length || at[fromIndex] == null || at[toIndex] == null) return [];
+      const a = at[fromIndex], b = at[toIndex];
+      const slice = samples.slice(Math.min(a, b), Math.max(a, b) + 1);
+      if (a > b) slice.reverse();
+      return slice;
     }
     function placePair() {
+      layoutPath();
       const stops = [...trail.querySelectorAll('.skystop')];
       const now = stops[here] || stops[0];
       if (!now) return;
@@ -678,7 +703,7 @@
       const fromIndex = prev == null ? here : Number(prev);
       const from = stops[fromIndex] || now;
       const hop = prev != null && fromIndex + 1 === here && from !== now;
-      const end = feet(now);
+      const end = standAt(now);
       if (!hop || reduce) {
         put(zipFig, end.zipX, end.y);
         put(frillFig, end.frillX, end.y);
@@ -687,8 +712,9 @@
         try { sessionStorage.setItem(STOOD, String(here)); } catch (e) { /* ignore */ }
         return;
       }
-      const start = feet(from);
-      const line = [{ x: start.midX, y: start.y }].concat(bridgePts(from, now), [{ x: end.midX, y: end.y }]);
+      const start = standAt(from);
+      const line = pathBetween(fromIndex, here);
+      if (line.length < 2) line.push({ x: start.midX, y: start.y }, { x: end.midX, y: end.y });
       /* They keep the drawn pose. A mirror would move the satchel and scarf off model. */
       zipFig.classList.add('is-walking');
       frillFig.classList.add('is-walking');
@@ -729,6 +755,18 @@
       requestAnimationFrame(step);
       setTimeout(finish, WALK_MS + 60);
     }
+    const onResize = () => {
+      if (!trail.isConnected) { window.removeEventListener('resize', onResize); return; }
+      if (zipFig.classList.contains('is-walking')) return;
+      layoutPath();
+      const stops = [...trail.querySelectorAll('.skystop')];
+      const now = stops[here];
+      if (!now) return;
+      const end = standAt(now);
+      put(zipFig, end.zipX, end.y);
+      put(frillFig, end.frillX, end.y);
+    };
+    window.addEventListener('resize', onResize);
   }
   function gemScreen() {
     IR.newScreen(); const earned = gemsEarned(); const nEarned = earned.filter(Boolean).length; const nx = gemNext();
