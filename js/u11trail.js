@@ -49,7 +49,13 @@
     pan: { kind: 'img', src: 'img/u11-pan.jpg', alt: 'A pan' },
     map: { kind: 'img', src: 'img/u11-map.jpg', alt: 'A map' },
     man: { kind: 'img', src: 'img/u11-man.jpg', alt: 'A man' },
-    fan: { kind: 'img', src: 'img/u11-fan.jpg', alt: 'A fan' }
+    fan: { kind: 'img', src: 'img/u11-fan.jpg', alt: 'A fan' },
+    samsat: { kind: 'img', src: 'img/u11-sam-sat.jpg', alt: 'Sam sat at a mat' },
+    sammap: { kind: 'img', src: 'img/u11-sam-map.jpg', alt: 'Sam taps a map' },
+    sampan: { kind: 'img', src: 'img/u11-sam-pan.jpg', alt: 'Sam taps a pan' },
+    samfan: { kind: 'img', src: 'img/u11-sam-fan.jpg', alt: 'Sam taps a fan' },
+    mansat: { kind: 'img', src: 'img/u11-man-sat.jpg', alt: 'A man sat at a mat' },
+    pamsat: { kind: 'img', src: 'img/u11-pam-sat.jpg', alt: 'Pam sat at a mat' }
   };
   const POSE = {
     zip: 'img/zip-show/listen.webp',
@@ -65,8 +71,17 @@
     both: 'img/zip-show/frill-highfive.webp'
   };
 
-  const TWIST_LINES = ['Sam sat at a mat.', 'Pam sat at a mat.', 'A fat man sat at a mat.'];
-  const CHANT_LINES = ['Mat. Map. Man.', 'Sat. Sap. Sam.', 'Tap. Tap. Pan.', 'Pam sat. Sam sat.'];
+  const TWIST_LINES = [
+    { line: 'Sam sat at a mat.', art: 'img/u11-sam-sat.jpg' },
+    { line: 'Pam sat at a mat.', art: 'img/u11-pam-sat.jpg' },
+    { line: 'A fat man sat at a mat.', art: 'img/u11-man-sat.jpg' }
+  ];
+  const CHANT_LINES = [
+    { line: 'Mat. Map. Man.', art: 'img/u11-man.jpg' },
+    { line: 'Sat. Sap. Sam.', art: 'img/u11-sam-sat.jpg' },
+    { line: 'Tap. Tap. Pan.', art: 'img/u11-sam-pan.jpg' },
+    { line: 'Pam sat. Sam sat.', art: 'img/u11-sam-pam.jpg' }
+  ];
   const STOPS = [
     { id: 'listen', name: 'Find the sound', gem: 'img/gem_01_ruby.webp', gemName: 'ruby', beats: ['concept', 'hear', 'twist'] },
     { id: 'spell', name: 'Build a word', gem: 'img/gem_02_coral.webp', gemName: 'coral', beats: ['buildword'] },
@@ -81,16 +96,16 @@
 
   const BOOKS = [
     {
-      id: 'map-pan', title: 'Sam and a map', at: 2, pose: 'both',
+      id: 'map-pan', title: 'Sam and a map', at: 2, thumb: 'img/u11-sam-hello.jpg',
       blurb: 'I tap a map. Sam sat at a mat.',
       pages: [
-        { line: 'I am Sam.', pose: 'zip' },
-        { line: 'I tap a map.', pose: 'tap', prop: 'map' },
-        { line: 'Sam sat at a mat.', pose: 'zip', prop: 'mat' },
-        { line: 'A man sat at a mat.', pose: 'zip', prop: 'man' },
-        { line: 'Pam sat at a mat.', pose: 'frill', prop: 'mat' },
-        { line: 'Sam sat. Pam sat.', pose: 'both' },
-        { line: 'I nap at a mat.', pose: 'nap', prop: 'mat' }
+        { line: 'I am Sam.', art: 'img/u11-sam-hello.jpg', hello: true, alt: 'Sam waves hello to Zip and Frill' },
+        { line: 'I tap a map.', art: 'img/u11-sam-map.jpg', alt: 'Sam taps a map' },
+        { line: 'Sam sat at a mat.', art: 'img/u11-sam-sat.jpg', alt: 'Sam sat at a mat' },
+        { line: 'A man sat at a mat.', art: 'img/u11-man-sat.jpg', alt: 'A man sat at a mat' },
+        { line: 'Pam sat at a mat.', art: 'img/u11-pam-sat.jpg', alt: 'Pam sat at a mat' },
+        { line: 'Sam sat. Pam sat.', art: 'img/u11-sam-pam.jpg', alt: 'Sam and Pam sat' },
+        { line: 'I nap at a mat.', art: 'img/u11-sam-nap.jpg', alt: 'Sam naps at a mat' }
       ],
       ask: [
         { line: 'I tap a map.', choices: ['map', 'mat', 'man'], answer: 'map' },
@@ -98,16 +113,16 @@
       ]
     },
     {
-      id: 'fat-fan', title: 'Pam and a fan', at: 4, pose: 'frill',
+      id: 'fat-fan', title: 'Pam and a fan', at: 4, thumb: 'img/u11-pam-hello.jpg',
       blurb: 'I tap a fan. Pam sat at a mat.',
       pages: [
-        { line: 'I am Pam.', pose: 'frill' },
-        { line: 'I tap a fan.', pose: 'frill', prop: 'fan' },
-        { line: 'Pam sat at a mat.', pose: 'frill', prop: 'mat' },
-        { line: 'A fat man sat.', pose: 'zip', prop: 'man' },
-        { line: 'Pat sat at a mat.', pose: 'zip', prop: 'mat' },
-        { line: 'Pam sat. Sam sat.', pose: 'both' },
-        { line: 'I nap.', pose: 'nap' }
+        { line: 'I am Pam.', art: 'img/u11-pam-hello.jpg', hello: true, alt: 'Pam waves hello to Zip and Frill' },
+        { line: 'I tap a fan.', art: 'img/u11-pam-fan.jpg', alt: 'Pam taps a fan' },
+        { line: 'Pam sat at a mat.', art: 'img/u11-pam-sat.jpg', alt: 'Pam sat at a mat' },
+        { line: 'A fat man sat.', art: 'img/u11-man-sat.jpg', alt: 'A fat man sat' },
+        { line: 'Pat sat at a mat.', art: 'img/u11-pat-sat.jpg', alt: 'Pat sat at a mat' },
+        { line: 'Pam sat. Sam sat.', art: 'img/u11-sam-pam.jpg', alt: 'Pam and Sam sat' },
+        { line: 'I nap.', art: 'img/u11-pam-nap.jpg', alt: 'Pam naps' }
       ],
       ask: [
         { line: 'I tap a fan.', choices: ['fan', 'pan', 'map'], answer: 'fan' },
@@ -115,15 +130,15 @@
       ]
     },
     {
-      id: 'tap-map', title: 'Pat and a map', at: 5, pose: 'point',
+      id: 'tap-map', title: 'Pat and a map', at: 5, thumb: 'img/u11-pat-sat.jpg',
       blurb: 'Pat sat at a mat. I tap a map.',
       pages: [
-        { line: 'Pat sat at a mat.', pose: 'point', prop: 'mat' },
-        { line: 'I tap a map.', pose: 'tap', prop: 'map' },
-        { line: 'I tap a pan.', pose: 'frill', prop: 'pan' },
-        { line: 'A man sat at a mat.', pose: 'zip', prop: 'man' },
-        { line: 'Pat sat. Pam sat.', pose: 'both' },
-        { line: 'I sat at a mat.', pose: 'nap', prop: 'mat' }
+        { line: 'Pat sat at a mat.', art: 'img/u11-pat-sat.jpg', alt: 'Pat sat at a mat' },
+        { line: 'I tap a map.', art: 'img/u11-pat-map.jpg', alt: 'Pat taps a map' },
+        { line: 'I tap a pan.', art: 'img/u11-pat-pan.jpg', alt: 'Pat taps a pan' },
+        { line: 'A man sat at a mat.', art: 'img/u11-man-sat.jpg', alt: 'A man sat at a mat' },
+        { line: 'Pat sat. Pam sat.', art: 'img/u11-pat-pam.jpg', alt: 'Pat and Pam sat' },
+        { line: 'I sat at a mat.', art: 'img/u11-pat-sat.jpg', alt: 'Pat sat at a mat' }
       ],
       ask: [
         { line: 'I tap a map.', choices: ['map', 'mat', 'pan'], answer: 'map' },
@@ -771,7 +786,7 @@
         onBack() { ctx.prev(); }
       });
       view.stage.append(h('div', { class: 'u11t-card' },
-        h('img', { class: 'u11t-scene', src: 'img/u11-cast.jpg', alt: 'Zip and Frill in the banyan' }),
+        h('img', { class: 'u11t-scene', src: 'img/u11-guides.jpg', alt: 'Zip and Frill in the banyan' }),
         h('div', { class: 'u11t-letter' }, 'a'),
         h('p', { class: 'u11t-line' }, 'The a says /a/.'),
         h('p', { class: 'u11t-line' }, 'Open wide.'),
@@ -882,12 +897,12 @@
     },
     picsent(ctx) {
       const items = [
-        { line: 'Sam sat at a mat.', answer: 'mat', pic: 'mat', before: 'Sam sat at a', after: '.', choices: shuffle(['mat', 'pan', 'fan']) },
-        { line: 'I tap a pan.', answer: 'pan', pic: 'pan', before: 'I tap a', after: '.', choices: shuffle(['pan', 'map', 'nap']) },
-        { line: 'I tap a map.', answer: 'map', pic: 'map', before: 'I tap a', after: '.', choices: shuffle(['map', 'mat', 'man']) },
-        { line: 'I tap a fan.', answer: 'fan', pic: 'fan', before: 'I tap a', after: '.', choices: shuffle(['fan', 'fat', 'pan']) },
-        { line: 'A fat man sat.', answer: 'man', pic: 'man', before: 'A fat', after: 'sat.', choices: shuffle(['man', 'map', 'mat']) },
-        { line: 'Pam sat at a mat.', answer: 'mat', pic: 'mat', before: 'Pam sat at a', after: '.', choices: shuffle(['mat', 'pan', 'map']) }
+        { line: 'Sam sat at a mat.', answer: 'mat', pic: 'samsat', before: 'Sam sat at a', after: '.', choices: shuffle(['mat', 'pan', 'fan']) },
+        { line: 'I tap a pan.', answer: 'pan', pic: 'sampan', before: 'I tap a', after: '.', choices: shuffle(['pan', 'map', 'nap']) },
+        { line: 'I tap a map.', answer: 'map', pic: 'sammap', before: 'I tap a', after: '.', choices: shuffle(['map', 'mat', 'man']) },
+        { line: 'I tap a fan.', answer: 'fan', pic: 'samfan', before: 'I tap a', after: '.', choices: shuffle(['fan', 'fat', 'pan']) },
+        { line: 'A fat man sat.', answer: 'man', pic: 'mansat', before: 'A fat', after: 'sat.', choices: shuffle(['man', 'map', 'mat']) },
+        { line: 'Pam sat at a mat.', answer: 'mat', pic: 'pamsat', before: 'Pam sat at a', after: '.', choices: shuffle(['mat', 'pan', 'map']) }
       ];
       playRounds(ctx, {
         title: 'Picture and sentence', view: 'picsent', items: items,
@@ -1012,7 +1027,7 @@
             row.append(b);
           });
           return h('div', { class: 'u11t-card' },
-            h('p', { class: 'u11t-line' }, 'Man or map?'),
+            h('p', { class: 'u11t-prompt' }, 'Man or map?'),
             h('p', { class: 'u11t-line' }, wordNode(item.word)),
             row, status);
         }
@@ -1076,7 +1091,7 @@
           row.append(b);
         });
         view.stage.append(h('div', { class: 'u11t-card' },
-          h('p', { class: 'u11t-line' }, 'Tap the letters.'),
+          h('p', { class: 'u11t-prompt' }, 'Tap the letters.'),
           slots, row, status));
         view.setReplay(() => sayText(word));
         sayText(word);
@@ -1420,9 +1435,11 @@
         onNext() { i++; show(); },
         onBack() { if (i > 0) { i--; show(); } else location.hash = backHash; }
       });
-      const art = page.prop && PICS[page.prop] ? PICS[page.prop].src : 'img/u11-cast.jpg';
+      const scene = h('div', { class: 'u11t-page' + (page.hello ? ' is-hello' : '') },
+        h('img', { class: 'u11t-scene', src: page.art, alt: page.alt || '' }));
+      if (page.hello) scene.append(h('p', { class: 'u11t-bubble', 'aria-hidden': 'true' }, page.line));
       view.stage.append(h('div', { class: 'u11t-book' },
-        h('img', { class: 'u11t-scene', src: art, alt: '' }),
+        scene,
         h('p', { class: 'u11t-line' }, wordNode(page.line))));
       view.setReplay(() => sayText(page.line));
       sayText(page.line);
@@ -1494,11 +1511,13 @@
         onNext() { if (!last) { i++; show(); } else finish(); },
         onBack() { if (i > 0) { i--; show(); } else if (o.back) o.back(); else finish(); }
       });
+      const line = lines[i].line || lines[i];
+      const art = lines[i].art || 'img/u11-guides.jpg';
       view.stage.append(h('div', { class: 'u11t-card' },
-        h('img', { class: 'u11t-scene', src: 'img/u11-cast.jpg', alt: 'Zip and Frill' }),
-        h('p', { class: 'u11t-line' }, wordNode(lines[i]))));
-      view.setReplay(() => sayText(lines[i]));
-      sayText(lines[i]);
+        h('img', { class: 'u11t-scene', src: art, alt: '' }),
+        h('p', { class: 'u11t-line' }, wordNode(line))));
+      view.setReplay(() => sayText(line));
+      sayText(line);
       view.auto(o.ms || 2200, () => {
         if (!view.scr.ok() || finished) return;
         if (!last) { i++; show(); }
@@ -1526,7 +1545,7 @@
         class: 'u11t-librow', type: 'button',
         'aria-label': book.title + (got[book.id] ? '. Read.' : '. Not read yet.')
       },
-        h('img', { src: POSE[book.pose] || POSE.zip, alt: '' }),
+        h('img', { src: book.thumb || 'img/u11-book.jpg', alt: '' }),
         h('span', null, h('b', null, book.title), h('span', { style: 'display:block;font-weight:400' }, book.blurb)),
         got[book.id] ? h('span', { class: 'u11t-check' }, icon('check')) : h('span'));
       row.addEventListener('click', () => { location.hash = '#/library/' + book.id; });
