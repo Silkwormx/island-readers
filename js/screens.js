@@ -376,6 +376,158 @@
       ['Suffixes', '-er \u00b7 -est \u00b7 -ly \u00b7 -ful', 6, ['purple', 'purple']], ['Suffix Spelling Rules', 'double \u00b7 drop e \u00b7 y to i', 4, ['pink', 'pink']],
       ['Prefixes', 'un- \u00b7 pre- \u00b7 re- \u00b7 dis-', 5, ['rainbow']], ['Big Endings', '-tion \u00b7 -ture \u00b7 -ment', 6, ['gold']]];
     const BUILT = 4, BUILT_ID = 'i3';
+    const place = trailPlace();
+    const atFoundations = continueTarget().href.indexOf('#/foundation') === 0;
+    const hereUnit = atFoundations ? 0 : place.here;
+    const spiral = /[?&]layout=spiral\b/.test(location.search);
+    const coilSide = (n) => spiral ? ['l', 'b', 'r'][n % 3] : (n % 2 === 1 ? 'r' : 'l');
+    /* Paint Zip and Frill into the island daylight: drop the studio edge, warm the light, and leave no halo. */
+    function paintIntoScene(img, done) {
+      const paint = () => {
+        const w = img.naturalWidth, ht = img.naturalHeight;
+        if (!w || !ht || img.dataset.painted) { if (done) done(); return; }
+        img.dataset.painted = '1';
+        const scale = Math.min(1, 420 / w);
+        const c = document.createElement('canvas');
+        c.width = Math.max(1, Math.round(w * scale));
+        c.height = Math.max(1, Math.round(ht * scale));
+        const g = c.getContext('2d', { willReadFrequently: true });
+        if (!g) { if (done) done(); return; }
+        g.drawImage(img, 0, 0, c.width, c.height);
+        const frame = g.getImageData(0, 0, c.width, c.height);
+        const p = frame.data;
+        const W = c.width, H = c.height;
+        const N = W * H;
+        const cream = (i) => {
+          const r = p[i], gg = p[i + 1], b = p[i + 2], a = p[i + 3];
+          if (a < 16) return true;
+          const light = r > 214 && gg > 206 && b > 186;
+          const pale = r > 196 && gg > 188 && b > 170 && (r - b) < 70 && Math.abs(r - gg) < 36;
+          return light || pale;
+        };
+        const seen = new Uint8Array(N);
+        const qx = new Int16Array(N);
+        const qy = new Int16Array(N);
+        let qs = 0, qe = 0;
+        const seed = (x, y) => {
+          const k = y * W + x;
+          if (seen[k] || !cream(k * 4)) return;
+          seen[k] = 1;
+          qx[qe] = x; qy[qe] = y; qe++;
+        };
+        for (let x = 0; x < W; x++) { seed(x, 0); seed(x, H - 1); }
+        for (let y = 0; y < H; y++) { seed(0, y); seed(W - 1, y); }
+        while (qs < qe) {
+          const x = qx[qs], y = qy[qs]; qs++;
+          p[(y * W + x) * 4 + 3] = 0;
+          if (x > 0) seed(x - 1, y);
+          if (x + 1 < W) seed(x + 1, y);
+          if (y > 0) seed(x, y - 1);
+          if (y + 1 < H) seed(x, y + 1);
+        }
+        const solid = new Uint8Array(N);
+        for (let i = 0; i < N; i++) solid[i] = p[i * 4 + 3] > 20 ? 1 : 0;
+        const eroded = new Uint8Array(N);
+        for (let y = 0; y < H; y++) {
+          for (let x = 0; x < W; x++) {
+            let ok = 1;
+            for (let dy = -2; dy <= 2 && ok; dy++) {
+              for (let dx = -2; dx <= 2; dx++) {
+                const xx = x + dx, yy = y + dy;
+                if (xx < 0 || yy < 0 || xx >= W || yy >= H || !solid[yy * W + xx]) { ok = 0; break; }
+              }
+            }
+            eroded[y * W + x] = ok;
+          }
+        }
+        for (let y = 0; y < H; y++) {
+          for (let x = 0; x < W; x++) {
+            const k = y * W + x;
+            const i = k * 4;
+            if (!eroded[k]) { p[i + 3] = 0; continue; }
+            let r = p[i], gg = p[i + 1], b = p[i + 2];
+            const lum = r * 0.3 + gg * 0.52 + b * 0.18;
+            r = r * 0.72 + lum * 0.28;
+            gg = gg * 0.72 + lum * 0.28;
+            b = b * 0.72 + lum * 0.28;
+            r = r * 0.9 + 138 * 0.1;
+            gg = gg * 0.9 + 128 * 0.1;
+            b = b * 0.9 + 112 * 0.1;
+            r = r * 0.93 + 255 * 0.07;
+            gg = gg * 0.95 + 232 * 0.05;
+            b = b * 0.9 + 196 * 0.05;
+            let edge = 0;
+            for (let dy = -1; dy <= 1 && !edge; dy++) {
+              for (let dx = -1; dx <= 1; dx++) {
+                const xx = x + dx, yy = y + dy;
+                if (xx < 0 || yy < 0 || xx >= W || yy >= H || !eroded[yy * W + xx]) edge = 1;
+              }
+            }
+            if (edge && x < W * 0.72) {
+              const rim = 0.28 * (1 - x / (W * 0.72)) * (0.55 + 0.45 * (1 - y / H));
+              r = r * (1 - rim) + 255 * rim;
+              gg = gg * (1 - rim) + 236 * rim;
+              b = b * (1 - rim) + 206 * rim;
+            }
+            p[i] = r < 0 ? 0 : r > 255 ? 255 : r;
+            p[i + 1] = gg < 0 ? 0 : gg > 255 ? 255 : gg;
+            p[i + 2] = b < 0 ? 0 : b > 255 ? 255 : b;
+            p[i + 3] = 255;
+          }
+        }
+        let minX = W, minY = H, maxX = 0, maxY = 0;
+        for (let y = 0; y < H; y++) {
+          for (let x = 0; x < W; x++) {
+            if (!eroded[y * W + x]) continue;
+            if (x < minX) minX = x;
+            if (y < minY) minY = y;
+            if (x > maxX) maxX = x;
+            if (y > maxY) maxY = y;
+          }
+        }
+        g.putImageData(frame, 0, 0);
+        if (maxX > minX && maxY > minY) {
+          const cut = document.createElement('canvas');
+          cut.width = maxX - minX + 1;
+          cut.height = maxY - minY + 1;
+          cut.getContext('2d').drawImage(c, minX, minY, cut.width, cut.height, 0, 0, cut.width, cut.height);
+          img.onload = null;
+          img.src = cut.toDataURL('image/png');
+        } else {
+          img.onload = null;
+          img.src = c.toDataURL('image/png');
+        }
+        if (!done) return;
+        if (img.complete && img.naturalWidth) done();
+        else img.addEventListener('load', done, { once: true });
+      };
+      if (img.complete && img.naturalWidth) paint();
+      else img.addEventListener('load', paint, { once: true });
+    }
+    const GEMN = ['ruby', 'coral', 'amber', 'topaz', 'emerald', 'aquamarine', 'sapphire', 'amethyst', 'rosequartz', 'gold'];
+    function skyStop(opts) {
+      const gem = opts.done && opts.n
+        ? h('img', { class: 'skygem', src: 'img/gem_' + String(((opts.n - 1) % 10) + 1).padStart(2, '0') + '_' + GEMN[(opts.n - 1) % 10] + '.webp', alt: '' })
+        : null;
+      const b = h('button', {
+        class: 'tcard skystop sky-' + opts.side + (opts.here ? ' is-here t-current' : '') + (opts.soon ? ' is-soon' : '') + (opts.done ? ' is-done' : ''),
+        type: 'button',
+        'data-id': opts.id,
+        'data-kind': 'island',
+        'data-n': opts.n,
+        title: opts.title,
+        'aria-label': opts.label
+      },
+        h('span', { class: 'skybody' },
+          h('img', { class: 'skyisland', src: opts.img, alt: '', loading: opts.lazy ? 'lazy' : 'eager' })),
+        h('span', { class: 'skylbl' },
+          h('b', null, opts.kicker),
+          h('small', null, opts.name),
+          opts.soon ? h('span', { class: 'skylock', 'aria-hidden': 'true' }, icon('lock')) : null),
+        gem);
+      b.addEventListener('click', opts.onclick);
+      return b;
+    }
     const unit = (n) => {
       const t = TILES[n]; const isl = n === BUILT && !!(D.islands || {})[BUILT_ID];
       const u5 = n === 5 && !!IR.u5Route;   /* Nov 3 2026 local: Unit 5 Silent e is open (js/u5.js: same lesson flow as Unit 4; picker data islands.i5) */
@@ -384,42 +536,61 @@
       const u789 = n >= 7 && n <= 9 && !!IR.u789Route;   /* Nov 27 2026: Units 7 to 9 (js/u789.js), same lesson flow as Units 1 to 3 */
       const hop = builtUnitHref(n);
       const built = isl || u5 || u6 || u123 || u789 || !!hop;
-      const st = !built ? 'soon' : n === BUILT && complete ? 'done' : n === BUILT ? 'here' : 'open';
+      const st = !built ? 'soon' : n === hereUnit ? 'here' : (place.finished[n] ? 'done' : 'open');
       const note = st === 'here' ? 'You are here' : st === 'done' ? 'Done' : st === 'open' ? 'Open' : 'Coming soon';
-      const label = 'Unit ' + n + ': ' + t[0] + ', ' + t[1].replace(/\u00b7/g, ',') + ', ' + t[2] + (t[2] === 1 ? ' lesson. ' : ' lessons. ') + note + (built ? '. Opens Unit ' + n + '.' : '.');
-      const b = h('button', { class: 'tcard t-' + st + (st === 'here' ? ' t-current' : ''), type: 'button', 'data-id': 'u' + n, 'data-kind': 'island', 'data-n': n, 'aria-label': label },
-        h('span', { class: 'tpic' }, h('img', { src: 'img/units/tile' + String(n).padStart(2, '0') + '.webp', alt: '', width: 600, height: 600, loading: n > 8 ? 'lazy' : 'eager' }),
-          st === 'here' ? h('span', { class: 'herechip' }, 'You are here') : st === 'soon' ? h('span', { class: 'herechip soonchip' }, 'Coming soon') : null),
-        h('span', { class: 'tbody' },
-          h('span', { class: 'thead' }, h('span', { class: 'tdots', 'aria-hidden': 'true' }, ...t[3].map((c) => h('i', { class: 'tdot td-' + c }))), h('b', { class: 'tnum' }, 'Unit ' + n)),
-          h('span', { class: 'tname' }, t[0]),
-          h('span', { class: 'tsnd' }, t[1]),
-          h('span', { class: 'tcount' }, t[2] + (t[2] === 1 ? ' lesson' : ' lessons'))));
-      b.addEventListener('click', () => { if (hop) { Snd.stop(); location.hash = hop; } else if (u123 || u789) { Snd.stop(); location.hash = '#/u' + n; } else if (u6) { Snd.stop(); location.hash = '#/u6'; } else if (u5) { Snd.stop(); location.hash = '#/u5'; } else if (isl) openIsland(BUILT_ID); else { Snd.stop(); toast('Unit ' + n + ' is coming soon.'); } });
-      return b;
+      const label = 'Unit ' + n + ': ' + t[0] + ', ' + t[1].replace(/\u00b7/g, ',') + ', ' + t[2] + (t[2] === 1 ? ' lesson. ' : ' lessons. ') + note + (built ? '. Opens Unit ' + n + '.' : '.') + (st === 'here' ? ' Zip and Frill are here.' : '');
+      return skyStop({
+        id: 'u' + n,
+        n: n,
+        side: coilSide(n),
+        here: st === 'here',
+        soon: st === 'soon',
+        done: st === 'done',
+        img: 'img/sky/stops/u' + String(n).padStart(2, '0') + '.webp', /* painted from img/units/tile */
+        lazy: n > 8,
+        kicker: 'Unit ' + n,
+        name: t[0],
+        title: 'Unit ' + n + ': ' + t[0],
+        label: label,
+        onclick: () => { if (hop) { Snd.stop(); location.hash = hop; } else if (u123 || u789) { Snd.stop(); location.hash = '#/u' + n; } else if (u6) { Snd.stop(); location.hash = '#/u6'; } else if (u5) { Snd.stop(); location.hash = '#/u5'; } else if (isl) openIsland(BUILT_ID); else { Snd.stop(); toast('Unit ' + n + ' is coming soon.'); } }
+      });
     };
-    const cover = h('img', { src: 'foundation/img/foundations_cover.jpg', alt: '' });
-    const pic = h('span', { class: 'tpic' }, cover);
-    cover.addEventListener('error', () => {
-      pic.className = 'tpic tfaces';
-      pic.replaceChildren(...['a_apple.jpg', 'm_manny_mangrove.jpg', 's_sami_sea_snake.jpg', 't_tama_sea_turtle.jpg'].map((file) => h('img', { src: 'foundation/img/letters/' + file, alt: '' })));
+    const coverSrc = 'foundation/img/foundations_cover.jpg';
+    const foundations = skyStop({
+      id: 'foundations',
+      n: 0,
+      side: coilSide(0),
+      here: atFoundations,
+      img: 'img/sky/stops/f.webp', /* painted from coverSrc, foundation/img/foundations_cover.jpg */
+      kicker: 'Foundations',
+      name: 'Learn the letters',
+      title: 'Foundations: Learn the letters',
+      label: 'Foundations. Learn the letters. Opens Foundation Skills.' + (atFoundations ? ' You are here. Zip and Frill are here.' : ''),
+      onclick: () => { Snd.stop(); location.hash = '#/foundation'; }
     });
-    const foundations = h('button', {
-      class: 'tcard',
-      type: 'button',
-      'data-id': 'foundations',
-      'aria-label': 'Foundations. Learn the letters. Opens Foundation Skills.'
-    },
-      pic,
-      h('span', { class: 'tbody' },
-        h('span', { class: 'thead' }, h('b', { class: 'tnum' }, 'Foundations')),
-        h('span', { class: 'tname' }, 'Learn the letters'),
-        h('span', { class: 'tsnd' }, '\u00a0'),
-        h('span', { class: 'tcount' }, '\u00a0')));
-    foundations.addEventListener('click', () => { Snd.stop(); location.hash = '#/foundation'; });
     const cards = [foundations];
     for (let n = 1; n <= 22; n++) cards.push(unit(n));
-    const grid = h('div', { class: 'bellpath', id: 'skymap' }, h('div', { class: 'bellgrid' }, ...cards));
+    const BOOK = '<svg viewBox="0 0 140 110" class="bookpic" aria-hidden="true"><ellipse cx="70" cy="102" rx="46" ry="7" fill="#2b2540" opacity=".14"/><ellipse cx="48" cy="96" rx="22" ry="6" fill="#fff" opacity=".85"/><ellipse cx="70" cy="94" rx="26" ry="7" fill="#fff"/><ellipse cx="94" cy="96" rx="20" ry="6" fill="#fff" opacity=".8"/><path d="M18 20h46c7 8 14 11 20 12v60c-6-2-13-5-20-11H18z" fill="#f4ead8" stroke="#7a5230" stroke-width="2.4" stroke-linejoin="round"/><path d="M122 20H76c-7 8-14 11-20 12v60c6-2 13-5 20-11h46z" fill="#c4552a" stroke="#7a3218" stroke-width="2.4" stroke-linejoin="round"/><path d="M70 32v50" stroke="#7a5230" stroke-width="2.2"/><path d="M82 38h26M82 48h20M82 58h24" stroke="#f8e6d0" stroke-width="2.4" stroke-linecap="round"/></svg>';
+    const library = h('button', {
+      class: 'skybook',
+      type: 'button',
+      'aria-label': 'Library. Opens the Library.',
+      onclick: () => { Snd.stop(); location.hash = '#/library'; }
+    }, h('span', { class: 'skybookart', html: BOOK, 'aria-hidden': 'true' }), h('b', null, 'Library'));
+    const NS = 'http://www.w3.org/2000/svg';
+    const pathSvg = document.createElementNS(NS, 'svg');
+    pathSvg.setAttribute('class', 'skypath');
+    pathSvg.setAttribute('aria-hidden', 'true');
+    const spire = h('div', { class: 'skyspire', 'aria-hidden': 'true' });
+    const trunk = h('div', { class: 'skytrunk', 'aria-hidden': 'true' });
+    const trailBits = [pathSvg, spire, trunk, library].concat(cards);
+    const zipImg = h('img', { class: 'skyfigpic', alt: '', src: 'img/zipA.webp' });
+    const frillImg = h('img', { class: 'skyfigpic', alt: '', src: 'img/zip-show/frill-glide.webp' });
+    const tuft = () => h('img', { class: 'skygrass', alt: '', src: 'img/sky/grass_tuft.webp' });
+    const zipFig = h('div', { class: 'skyfig zip is-painting' }, h('span', { class: 'skyshade', 'aria-hidden': 'true' }), zipImg, tuft());
+    const frillFig = h('div', { class: 'skyfig frill is-painting' }, h('span', { class: 'skyshade', 'aria-hidden': 'true' }), frillImg, tuft());
+    const walkers = h('div', { class: 'skywalk', 'aria-hidden': 'true' }, zipFig, frillFig);
+    const grid = h('div', { class: 'bellpath skytrail', id: 'skymap' }, ...trailBits, walkers);
     const tab = (href, name, icoName) => h('a', { class: 'hometab', href: href, 'aria-label': name },
       h('span', { class: 'hometab-ico', 'aria-hidden': 'true' }, icon(icoName)),
       h('span', { class: 'hometab-name' }, name));
@@ -473,109 +644,248 @@
       window.addEventListener('hashchange', stop, { once: true });
       return b;
     }
-    /* Home card in the left column. 'A' = the picture on top (default); 'B' = heading above the picture. Test with ?hero=B. */
+    /* Home card in the left column. On a phone these controls sit in the bottom bar. */
     const HERO_VARIANT = (/[?&]hero=B\b/.test(location.search) ? 'B' : 'A');
     const hero = h('section', { class: 'homefeature zf' + HERO_VARIANT, 'aria-label': 'Learn to read with Zip and Frill' },
-      h('div', { class: 'zfpics' }, h('img', { class: 'homeart', src: 'img/home_zip_frill.webp', width: 1280, height: 720, alt: 'Zip and Frill sit on a tree root reading a book together. An orange bell hangs from the banyan behind them, and the island coast glows at sunset.' })),
       h('div', { class: 'hfbody' },
         h('div', { class: 'zfhead' }, h('h2', { class: 'zfline' }, 'Learn to read with Zip and Frill'), readAloudBtn()),
         h('p', { class: 'zfsub' }, 'Ring every bell by learning its sounds.'),
         continueButton()));
-    app.append(h('div', { class: 'screen home mapscreen gridhome bellfit bellspeek' }, h('div', { class: 'mwrap' }, banner, h('div', { class: 'homelay' }, h('div', { class: 'homeside' }, aboutDrop, hero, tabs), h('div', { class: 'bellslot' }, grid)))));
-    const fitBells = () => {
-        const root = app.querySelector('.gridhome.bellspeek');
-        const bells = root && root.querySelector('.bellgrid');
-        if (!root || !bells || !root.isConnected) return;
-        bells.style.gridTemplateColumns = '';
-        bells.querySelectorAll('.tpic, .tcard').forEach((el) => {
-          el.style.height = '';
-          el.style.minHeight = '';
-          el.style.aspectRatio = '';
-          el.style.overflow = '';
-        });
+    app.append(h('div', { class: 'screen home mapscreen gridhome skyhome' + (spiral ? ' spiral' : '') }, h('div', { class: 'mwrap' }, banner, h('div', { class: 'homelay' }, h('div', { class: 'homeside' }, aboutDrop, hero, tabs), h('div', { class: 'bellslot' }, grid)))));
+    standOnTrail(grid, hereUnit, zipFig, frillFig, zipImg, frillImg, paintIntoScene);
+  }
+  /* Zip and Frill stand on the current island. After a unit is completed they walk the path to the next one. */
+  function standOnTrail(trail, here, zipFig, frillFig, zipImg, frillImg, paintIntoScene) {
+    const WALK_MS = 2000;
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const STOOD = 'ir_sky_stood';
+    let ready = 0;
+    const go = () => {
+      ready++;
+      if (ready < 2 || !trail.isConnected) return;
+      requestAnimationFrame(() => {
+        placePair();
+        zipFig.classList.remove('is-painting');
+        frillFig.classList.remove('is-painting');
+      });
     };
-    /* Nov 3 2026: the whole left sidebar (About, Start here, Practice) stays in one spot while the tiles scroll (wide layouts only). */
-    const side = app.querySelector('.homeside'); const scr = app.querySelector('.screen.home');
-    let layoutHome = function () {};
-    const pin = () => {
-      if (!side || !scr || !side.isConnected) { window.removeEventListener('resize', layoutHome); return; }
-      const nav = side.querySelector('.hometabs');
-      const tabEls = nav ? [...nav.querySelectorAll('.hometab')] : [];
-      const hero = side.querySelector('.homefeature');
-      const pics = side.querySelector('.zfpics');
-      const artEl = side.querySelector('.homeart');
-      const goBtn = side.querySelector('.zfstart2');
-      const relax = () => {
-        side.style.removeProperty('height');
-        side.style.removeProperty('max-height');
-        side.style.removeProperty('overflow-y');
-        side.style.removeProperty('gap');
-        if (nav) nav.style.removeProperty('gap');
-        tabEls.forEach((t) => { t.style.removeProperty('height'); t.style.removeProperty('min-height'); t.style.removeProperty('max-height'); });
-        if (artEl) artEl.style.removeProperty('max-height');
-        if (pics) { pics.style.removeProperty('max-height'); pics.style.removeProperty('flex-grow'); pics.style.removeProperty('flex-basis'); }
-      };
-      if (!matchMedia('(min-width:1000px)').matches) { side.style.removeProperty('--side-top'); relax(); return; }
-      const banner = scr.querySelector('.hbanner');
-      const bannerH = banner ? banner.offsetHeight : 0;
-      side.style.setProperty('--side-top', bannerH + 'px');
-      const top = side.getBoundingClientRect().top;
-      const room = Math.max(200, Math.floor(scr.getBoundingClientRect().bottom - top - 8));
-      side.style.height = room + 'px';
-      side.style.maxHeight = room + 'px';
-      if (artEl) artEl.style.removeProperty('max-height');
-      if (pics) { pics.style.removeProperty('max-height'); pics.style.removeProperty('flex-grow'); pics.style.removeProperty('flex-basis'); }
-      const open = side.querySelector('.sidedrop.is-open');
-      if (open) return;
-      const shadow = 4;
-      const limits = () => {
-        const sideBox = side.getBoundingClientRect();
-        const heroBox = hero ? hero.getBoundingClientRect() : sideBox;
-        const viewBottom = Math.min(window.innerHeight, scr.getBoundingClientRect().bottom);
-        return { sideBox, heroBox, viewBottom };
-      };
-      const buttonPast = () => {
-        if (!goBtn) return false;
-        const btn = goBtn.getBoundingClientRect();
-        const box = limits();
-        const edge = Math.min(box.heroBox.bottom, box.sideBox.bottom, box.viewBottom);
-        return btn.bottom + shadow > edge + 1;
-      };
-      const sideOverflow = () => side.scrollHeight > side.clientHeight + 2;
-      const heroOverflow = () => !!(hero && hero.scrollHeight > hero.clientHeight + 2);
-      if (buttonPast() || sideOverflow() || heroOverflow()) {
-        side.style.gap = '6px';
-        if (nav) nav.style.gap = '6px';
-        tabEls.forEach((t) => {
-          if (t.classList.contains('trailtab')) return;
-          t.style.height = '42px';
-          t.style.minHeight = '42px';
-          t.style.maxHeight = '42px';
-        });
+    paintIntoScene(zipImg, go);
+    paintIntoScene(frillImg, go);
+    function standAt(stop) {
+      const art = stop.querySelector('.skyisland');
+      const a = art.getBoundingClientRect();
+      const t = trail.getBoundingClientRect();
+      const back = stop.classList.contains('sky-b');
+      const y = a.top - t.top + a.height * 0.62;
+      const zipR = back ? 0.52 : 0.28;
+      const frillR = back ? 0.74 : 0.7;
+      return { y: y, zipX: a.left - t.left + a.width * zipR, frillX: a.left - t.left + a.width * frillR, midX: a.left - t.left + a.width * (back ? 0.3 : 0.5) };
+    }
+    function put(fig, x, y) {
+      fig.style.transform = 'translate(' + (x - fig.offsetWidth / 2) + 'px,' + (y - fig.offsetHeight) + 'px)';
+    }
+    function placeSpiral() {
+      const stops = [...trail.querySelectorAll('.skystop')];
+      const book = trail.querySelector('.skybook');
+      const spire = trail.querySelector('.skyspire');
+      const trunk = trail.querySelector('.skytrunk');
+      if (!stops.length || !spire) return;
+      const w = trail.clientWidth;
+      const tileW = Math.round(w < 520 ? Math.min(w * 0.72, 248) : Math.min(w * 0.34, 280));
+      const tileH = Math.round(tileW * 1280 / 720);
+      const canH = Math.round(tileW * 720 / 1280);
+      const baseH = canH;
+      /* Cover the canopy's cut trunk; the stair's top bark matches that width. */
+      const stairTop = Math.round(canH * 0.78);
+      const slots = [
+        { x: 0.28, y: 0.21, w: 0.4, anchor: 0.64 },
+        { x: 0.34, y: 0.45, w: 0.3, anchor: 0.7 },
+        { x: 0.72, y: 0.7, w: 0.42, anchor: 0.64 }
+      ];
+      const last = stops.length - 1;
+      const lastSlot = slots[last % 3];
+      const stairH = Math.floor(last / 3) * tileH + Math.round((lastSlot.y + 0.2) * tileH);
+      const total = stairTop + stairH + Math.round(baseH * 0.32);
+      const left = Math.round((w - tileW) / 2);
+      trail.style.height = total + 'px';
+      spire.style.left = left + 'px';
+      spire.style.top = '0px';
+      spire.style.width = tileW + 'px';
+      spire.style.height = total + 'px';
+      spire.style.backgroundSize = tileW + 'px ' + canH + 'px, ' + tileW + 'px ' + baseH + 'px';
+      spire.style.backgroundPosition = '0 0, 0 ' + (total - baseH) + 'px';
+      if (trunk) {
+        trunk.style.left = left + 'px';
+        trunk.style.top = stairTop + 'px';
+        trunk.style.width = tileW + 'px';
+        trunk.style.height = stairH + 'px';
+        trunk.style.backgroundSize = tileW + 'px ' + tileH + 'px';
       }
-      if (pics && (buttonPast() || heroOverflow())) {
-        const btn = goBtn ? goBtn.getBoundingClientRect() : null;
-        const box = limits();
-        const edge = Math.min(box.heroBox.bottom, box.sideBox.bottom, box.viewBottom);
-        const past = btn ? Math.ceil(btn.bottom + shadow - edge) : 0;
-        const extra = hero ? Math.max(0, hero.scrollHeight - hero.clientHeight) : 0;
-        const cut = Math.max(past, extra);
-        if (cut > 1) {
-          const next = Math.max(72, Math.round(pics.getBoundingClientRect().height - cut - 2));
-          pics.style.flexGrow = '0';
-          pics.style.flexBasis = 'auto';
-          pics.style.maxHeight = next + 'px';
+      stops.forEach((s, i) => {
+        const slot = slots[i % 3];
+        const art = s.querySelector('.skyisland');
+        const iw = Math.max(64, Math.round(tileW * slot.w));
+        s.style.width = iw + 'px';
+        const aspect = art && art.naturalWidth ? art.naturalHeight / art.naturalWidth : 1.08;
+        const artH = Math.round(iw * aspect);
+        const cx = left + slot.x * tileW;
+        const cy = stairTop + Math.floor(i / 3) * tileH + slot.y * tileH;
+        s.style.left = Math.round(cx - iw / 2) + 'px';
+        s.style.top = Math.round(cy - artH * slot.anchor) + 'px';
+      });
+      if (book) {
+        const bw = book.offsetWidth;
+        book.style.left = Math.round(left + tileW * 0.5 - bw / 2) + 'px';
+        book.style.top = Math.round(canH * 0.56) + 'px';
+      }
+    }
+    function layoutPath() {
+      if (trail.closest('.spiral')) placeSpiral();
+      const svg = trail.querySelector('.skypath');
+      const stops = [...trail.querySelectorAll('.skystop')];
+      if (!svg || !stops.length) return;
+      const w = trail.clientWidth;
+      const hgt = trail.scrollHeight;
+      svg.setAttribute('viewBox', '0 0 ' + w + ' ' + hgt);
+      svg.style.width = w + 'px';
+      svg.style.height = hgt + 'px';
+      const origin = trail.getBoundingClientRect();
+      const coil = !!trail.closest('.spiral');
+      const pts = stops.map((s) => {
+        if (coil) {
+          const art = s.querySelector('.skyisland').getBoundingClientRect();
+          const back = s.classList.contains('sky-b');
+          return { x: art.left - origin.left + art.width * (back ? 0.6 : 0.5), y: art.top - origin.top + art.height * 0.62 };
+        }
+        const sign = s.querySelector('.skylbl').getBoundingClientRect();
+        return { x: sign.left - origin.left + sign.width / 2, y: sign.top - origin.top + sign.height * 0.5 };
+      });
+      const cx = w * 0.5;
+      let d = 'M ' + pts[0].x.toFixed(1) + ' ' + Math.max(6, pts[0].y - 22).toFixed(1);
+      d += ' L ' + pts[0].x.toFixed(1) + ' ' + pts[0].y.toFixed(1);
+      for (let i = 0; i < pts.length - 1; i++) {
+        const a = pts[i], b = pts[i + 1];
+        const mid = a.y + (b.y - a.y) * 0.5;
+        if (coil) {
+          const y1 = a.y + (b.y - a.y) * 0.34;
+          const y2 = a.y + (b.y - a.y) * 0.68;
+          d += ' C ' + cx.toFixed(1) + ' ' + y1.toFixed(1) + ', ' + cx.toFixed(1) + ' ' + y2.toFixed(1) + ', ' + b.x.toFixed(1) + ' ' + b.y.toFixed(1);
+        } else {
+          d += ' C ' + a.x.toFixed(1) + ' ' + mid.toFixed(1) + ', ' + b.x.toFixed(1) + ' ' + mid.toFixed(1) + ', ' + b.x.toFixed(1) + ' ' + b.y.toFixed(1);
         }
       }
-      const stillTight = buttonPast() || sideOverflow() || heroOverflow();
-      if (matchMedia('(max-height:520px)').matches && stillTight) side.style.overflowY = 'auto';
-      else side.style.removeProperty('overflow-y');
+      const NS = 'http://www.w3.org/2000/svg';
+      while (svg.firstChild) svg.removeChild(svg.firstChild);
+      const line = document.createElementNS(NS, 'path');
+      line.setAttribute('class', 'skyline');
+      line.setAttribute('d', d);
+      const stones = document.createElementNS(NS, 'path');
+      stones.setAttribute('class', 'skystones');
+      stones.setAttribute('d', d);
+      svg.append(line, stones);
+      const path = line;
+      const len = path.getTotalLength();
+      const samples = [];
+      for (let dist = 0; dist <= len; dist += 7) {
+        const p = path.getPointAtLength(Math.min(dist, len));
+        samples.push({ x: p.x, y: p.y });
+      }
+      trail._stopAt = pts.map((pt) => {
+        let best = 0, bd = 1e12;
+        for (let i = 0; i < samples.length; i++) {
+          const dx = samples[i].x - pt.x, dy = samples[i].y - pt.y, dd = dx * dx + dy * dy;
+          if (dd < bd) { bd = dd; best = i; }
+        }
+        return best;
+      });
+      trail._samples = samples;
+    }
+    function pathBetween(fromIndex, toIndex) {
+      const samples = trail._samples || [];
+      const at = trail._stopAt || [];
+      if (!samples.length || at[fromIndex] == null || at[toIndex] == null) return [];
+      const a = at[fromIndex], b = at[toIndex];
+      const slice = samples.slice(Math.min(a, b), Math.max(a, b) + 1);
+      if (a > b) slice.reverse();
+      return slice;
+    }
+    function placePair() {
+      layoutPath();
+      const stops = [...trail.querySelectorAll('.skystop')];
+      const now = stops[here] || stops[0];
+      if (!now) return;
+      let prev = null;
+      try { prev = sessionStorage.getItem(STOOD); } catch (e) { /* storage blocked */ }
+      const fromIndex = prev == null ? here : Number(prev);
+      const from = stops[fromIndex] || now;
+      const hop = prev != null && fromIndex + 1 === here && from !== now;
+      const end = standAt(now);
+      if (!hop || reduce) {
+        put(zipFig, end.zipX, end.y);
+        put(frillFig, end.frillX, end.y);
+        zipFig.classList.remove('is-walking');
+        frillFig.classList.remove('is-walking');
+        try { sessionStorage.setItem(STOOD, String(here)); } catch (e) { /* ignore */ }
+        return;
+      }
+      const start = standAt(from);
+      const line = pathBetween(fromIndex, here);
+      if (line.length < 2) line.push({ x: start.midX, y: start.y }, { x: end.midX, y: end.y });
+      /* They keep the drawn pose. A mirror would move the satchel and scarf off model. */
+      zipFig.classList.add('is-walking');
+      frillFig.classList.add('is-walking');
+      const scr = trail.closest('.skyhome');
+      if (scr) {
+        const y = from.getBoundingClientRect().top - scr.getBoundingClientRect().top + scr.scrollTop;
+        scr.scrollTop = Math.max(0, y - 72);
+      }
+      const t0 = performance.now();
+      let finished = false;
+      const finish = () => {
+        if (finished || !trail.isConnected) return;
+        finished = true;
+        put(zipFig, end.zipX, end.y);
+        put(frillFig, end.frillX, end.y);
+        zipFig.classList.remove('is-walking');
+        frillFig.classList.remove('is-walking');
+        try { sessionStorage.setItem(STOOD, String(here)); } catch (e) { /* ignore */ }
+      };
+      const step = (nowMs) => {
+        if (finished || !trail.isConnected) return;
+        const raw = Math.min(1, (nowMs - t0) / WALK_MS);
+        const t = raw < 0.5 ? 4 * raw * raw * raw : 1 - Math.pow(-2 * raw + 2, 3) / 2;
+        const seg = t * (line.length - 1);
+        const i = Math.min(line.length - 2, Math.floor(seg));
+        const u = seg - i;
+        const x = line[i].x + (line[i + 1].x - line[i].x) * u;
+        const y = line[i].y + (line[i + 1].y - line[i].y) * u - Math.sin(raw * Math.PI * 3) * 3;
+        const spread0 = start.frillX - start.zipX;
+        const spread1 = end.frillX - end.zipX;
+        const together = 0.46 + 0.54 * (0.5 + 0.5 * Math.cos(raw * Math.PI));
+        const spread = (spread0 + (spread1 - spread0) * raw) * together;
+        put(zipFig, x - spread / 2, y);
+        put(frillFig, x + spread / 2, y);
+        if (raw < 1) requestAnimationFrame(step);
+        else finish();
+      };
+      requestAnimationFrame(step);
+      setTimeout(finish, WALK_MS + 60);
+    }
+    const onResize = () => {
+      if (!trail.isConnected) { window.removeEventListener('resize', onResize); return; }
+      if (zipFig.classList.contains('is-walking')) return;
+      layoutPath();
+      const stops = [...trail.querySelectorAll('.skystop')];
+      const now = stops[here];
+      if (!now) return;
+      const end = standAt(now);
+      put(zipFig, end.zipX, end.y);
+      put(frillFig, end.frillX, end.y);
     };
-    layoutHome = () => { pin(); fitBells(); };
-    requestAnimationFrame(layoutHome); window.addEventListener('resize', layoutHome);
-    const art = side.querySelector('.homeart');
-    if (art && !art.complete) art.addEventListener('load', layoutHome, { once: true });
-    if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { if (side.isConnected) layoutHome(); });
+    window.addEventListener('resize', onResize);
+    trail.querySelectorAll('.skyisland').forEach((img) => {
+      if (!img.complete) img.addEventListener('load', onResize, { once: true });
+    });
   }
   function gemScreen() {
     IR.newScreen(); const earned = gemsEarned(); const nEarned = earned.filter(Boolean).length; const nx = gemNext();
@@ -1914,6 +2224,22 @@
     fluency.forEach((g) => g.items.forEach(addSearch));
     return { unit: unit, skill: skill, sight: sight, fluency: fluency, search: search };
   }
+  function libraryScreen() {
+    IR.newScreen();
+    const stories = fluencyStories();
+    const cards = stories.map((s) => h('a', {
+      class: 'libcard',
+      href: s.href,
+      'aria-label': (s.title || s.name) + '. ' + s.lesson
+    },
+      h('span', { class: 'libmark', 'aria-hidden': 'true' }),
+      h('span', { class: 'libtxt' }, h('b', null, s.title || s.name), h('small', null, s.lesson))));
+    app.append(h('div', { class: 'screen home simplepage libpage' }, h('div', { class: 'mwrap' },
+      h('div', { class: 'gtop' }, pageNav('#/home')),
+      h('h1', null, 'Library'),
+      h('p', { class: 'calm' }, stories.length ? 'Stories to read again.' : 'Stories will show up here as units open.'),
+      cards.length ? h('div', { class: 'liblist' }, ...cards) : null)));
+  }
   function findScreen() {
     IR.newScreen();
     const data = findCatalog();
@@ -2006,6 +2332,7 @@
     else if (hash.startsWith('#/gems')) gemScreen();
     else if (hash.startsWith('#/about')) aboutScreen();
     else if (hash.startsWith('#/trail')) islandTrailPage();
+    else if (hash.startsWith('#/library')) libraryScreen();
     else if (hash.startsWith('#/find')) findScreen();
     else if ((m = /^#\/teachers\/slides\/(u1[012]\d)$/.exec(hash)) && IR.slides1012) IR.slides1012(m[1]);
     else if ((m = /^#\/teachers\/slides\/(ng|nk|u5|tricky|u61|u62|u63|u11|u12|u13|u14|u21|u22|u23|u24|u31|u32|u71|u72|u73|u81|u82|u83|u91|u92|u93|u94)$/.exec(hash))) slidesViewer(m[1]);
