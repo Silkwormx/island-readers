@@ -526,9 +526,13 @@
         h('span', { class: 'skybody' },
           h('img', { class: 'skyisland', src: opts.img, alt: '', loading: opts.lazy ? 'lazy' : 'eager' })),
         h('span', { class: 'skylbl' },
-          h('b', null, opts.kicker),
-          h('small', null, opts.name),
-          opts.soon ? h('span', { class: 'skylock', 'aria-hidden': 'true' }, icon('lock')) : null),
+          h('span', { class: 'thead' },
+            opts.dots && opts.dots.length ? h('span', { class: 'tdots', 'aria-hidden': 'true' }, ...opts.dots.map((c) => h('i', { class: 'tdot td-' + c }))) : null,
+            h('b', { class: 'tnum' }, opts.kicker),
+            opts.soon ? h('span', { class: 'skylock', 'aria-hidden': 'true' }, icon('lock')) : null),
+          h('span', { class: 'tname' }, opts.name),
+          opts.sounds ? h('span', { class: 'tsnd' }, opts.sounds) : null,
+          opts.count ? h('span', { class: 'tcount' }, opts.count) : null),
         gem);
       b.addEventListener('click', opts.onclick);
       return b;
@@ -555,6 +559,9 @@
         lazy: n > 8,
         kicker: 'Unit ' + n,
         name: t[0],
+        sounds: t[1],
+        count: t[2] + (t[2] === 1 ? ' lesson' : ' lessons'),
+        dots: t[3],
         title: 'Unit ' + n + ': ' + t[0],
         label: label,
         onclick: () => { if (hop) { Snd.stop(); location.hash = hop; } else if (u123 || u789) { Snd.stop(); location.hash = '#/u' + n; } else if (u6) { Snd.stop(); location.hash = '#/u6'; } else if (u5) { Snd.stop(); location.hash = '#/u5'; } else if (isl) openIsland(BUILT_ID); else { Snd.stop(); toast('Unit ' + n + ' is coming soon.'); } }
@@ -870,22 +877,53 @@
         el.style.top = Math.round(i * rowH + 6) + 'px';
         const lbl = el.querySelector('.skylbl');
         if (lbl) {
-          const rim = img && img.naturalWidth ? grassRim(img, side === 'r') : { fy: 0.62 };
           const fit = fittedArt(el, img);
-          /* On the outer grass rim, clear of the trunk, canopy, and bell. */
-          const fy = Math.min(0.72, Math.max(0.5, (rim.fy || 0.62) + 0.02));
-          lbl.style.position = 'absolute';
-          lbl.style.top = Math.round(fit.y + fit.h * fy) + 'px';
-          lbl.style.bottom = 'auto';
-          lbl.style.width = (narrow ? '6.2rem' : '6.8rem');
-          lbl.style.transform = 'none';
-          if (side === 'l') {
-            lbl.style.left = '0';
-            lbl.style.right = 'auto';
-          } else {
-            lbl.style.left = 'auto';
-            lbl.style.right = '0';
+          const rim = img && img.naturalWidth ? plateauRim(img) : null;
+          const rows = img && img.naturalWidth ? islandRows(img) : null;
+          let topPx = Math.round(fit.y + fit.h * 0.74);
+          let labelW = Math.round(width * (narrow ? 0.62 : 0.58));
+          let cx = fit.x + fit.w / 2;
+          let room = Math.round(fit.h * 0.28);
+          if (rim && rim.ok && rows && img.naturalHeight) {
+            const grass = rim.fy * img.naturalHeight;
+            const scaleX = fit.w / img.naturalWidth;
+            const scaleY = fit.h / img.naturalHeight;
+            let best = null;
+            const yEnd = Math.min(img.naturalHeight - 2, Math.round(grass + (img.naturalHeight - grass) * 0.36));
+            for (let y = Math.round(grass) + 4; y <= yEnd; y += 2) {
+              const row = rows[y] || rows[y - 1];
+              if (row && (!best || row.w > best.w)) best = row;
+            }
+            if (best && best.w > 8) {
+              const rockW = best.w * scaleX;
+              labelW = Math.max(72, Math.min(Math.round(rockW * 0.92), Math.round(rockW - 4)));
+              cx = fit.x + ((best.min + best.max) / 2) * scaleX;
+            }
+            topPx = Math.round(fit.y + grass * scaleY + 4);
+            room = Math.max(36, Math.round(fit.y + fit.h - topPx - 2));
+            el.dataset.fy = String(rim.fy);
           }
+          lbl.style.width = labelW + 'px';
+          lbl.style.fontSize = '';
+          /* Keep the whole sign on the rock. Ease the type down only when the lines would pass the tip. */
+          let px = parseFloat(getComputedStyle(lbl).fontSize);
+          let guard = 0;
+          while (lbl.offsetHeight > room && px > 11 && guard < 8) {
+            px -= 0.5;
+            lbl.style.fontSize = px + 'px';
+            guard++;
+          }
+          lbl.style.position = 'absolute';
+          lbl.style.boxSizing = 'border-box';
+          lbl.style.width = labelW + 'px';
+          lbl.style.height = 'auto';
+          lbl.style.maxHeight = 'none';
+          lbl.style.overflow = 'visible';
+          lbl.style.left = Math.round(cx - labelW / 2) + 'px';
+          lbl.style.right = 'auto';
+          lbl.style.top = topPx + 'px';
+          lbl.style.bottom = 'auto';
+          lbl.style.transform = 'none';
         }
         /* Foundations keeps the a m s t letters inside the frame.
            On the phone the stops sit farther apart sideways so the span is a diagonal. */
@@ -1071,16 +1109,19 @@
       const data = g.getImageData(0, 0, c.width, c.height).data;
       const rows = new Array(c.height);
       for (let y = 0; y < c.height; y += 2) {
-        let min = -1, max = -1;
         const stride = y * c.width * 4;
+        let runS = -1, bestL = 0, bestR = -1, best = 0;
         for (let x = 0; x < c.width; x += 2) {
-          if (data[stride + x * 4 + 3] > 36) {
-            if (min < 0) min = x;
-            max = x;
+          const on = data[stride + x * 4 + 3] > 36;
+          if (on && runS < 0) runS = x;
+          if (!on && runS >= 0) {
+            if (x - runS > best) { best = x - runS; bestL = runS; bestR = x - 2; }
+            runS = -1;
           }
         }
-        if (min >= 0) {
-          const row = { min: min, max: max, w: max - min, y: y };
+        if (runS >= 0 && c.width - runS > best) { best = c.width - runS; bestL = runS; bestR = c.width - 2; }
+        if (best > 8) {
+          const row = { min: bestL, max: bestR, w: best, y: y };
           rows[y] = row;
           if (y + 1 < c.height) rows[y + 1] = row;
         }

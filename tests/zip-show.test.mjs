@@ -110,7 +110,7 @@ test('Frill actions keep the upright v4 B poses and do not repeat in a row', () 
 test('action art is on disk and the new files are precached', () => {
   const zs = load();
   const sw = read('sw.js');
-  assert.match(sw, /ir-20261128k/);
+  assert.match(sw, /ir-20261128l/);
   assert.match(sw, /js\/zip-show\.js/);
   assert.match(sw, /zip-show\.css/);
   zs.SCENES.forEach((scene) => {
