@@ -15,7 +15,7 @@ test('short a trail is wired and other units stay on the old route', () => {
   assert.match(html, /u11trail\.css/);
   assert.match(html, /js\/u11trail\.js/);
   assert.match(u123, /L\.key === 'u11' && IR\.u11Trail/);
-  assert.match(sw, /const CACHE = 'ir-20261128d'/);
+  assert.match(sw, /const CACHE = 'ir-20261128g'/);
   assert.match(sw, /u11-zip-frill-cheer\.png/);
   assert.match(sw, /js\/u11trail\.js/);
   assert.match(screens, /#\/library/);
