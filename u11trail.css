@@ -8,8 +8,8 @@
 .u11t-bar.is-unit{justify-content:flex-start}
 .u11t-bar.is-home{justify-content:flex-end}
 .u11t-unit,.u11t-home{
-  flex:none;display:inline-flex;align-items:center;gap:.2rem;height:1.9rem;margin:0;padding:0 .5rem;
-  font:700 .72rem/1 Andika,sans-serif;cursor:pointer
+  flex:none;display:inline-flex;align-items:center;gap:.35rem;height:3rem;margin:0;padding:0 .9rem;
+  font:700 1.15rem/1 Andika,sans-serif;cursor:pointer
 }
 .u11t-unit{background:#fff;color:#2B2540;border:2px solid #5c5648;border-radius:.55rem}
 .u11t-unit .ico{width:.9rem;height:.9rem}
@@ -41,10 +41,10 @@
   background:#FFF8E7
 }
 .u11trail .u11t-nav .ir-btn{
-  flex:0 1 auto;min-width:7.4rem;height:3.4rem;min-height:3.4rem;margin:0;padding:.15rem .9rem;
-  display:inline-flex;align-items:center;justify-content:center;gap:.25rem;
-  border:3px solid #5c5648;border-radius:.9rem;background:#fff;color:#2B2540;box-shadow:none;
-  font-family:Andika,sans-serif;font-weight:700;font-size:1.15rem;line-height:1;cursor:pointer
+  flex:1 1 0;min-width:0;max-width:16rem;height:4.2rem;min-height:4.2rem;margin:0;padding:.2rem .6rem;
+  display:inline-flex;align-items:center;justify-content:center;gap:.3rem;
+  border:3px solid #5c5648;border-radius:1rem;background:#fff;color:#2B2540;box-shadow:none;
+  font-family:Andika,sans-serif;font-weight:700;font-size:1.4rem;line-height:1;cursor:pointer
 }
 .u11trail .u11t-nav .ir-btn .ico{width:1.15rem;height:1.15rem;flex:none}
 .u11trail .u11t-nav .ir-back,
@@ -121,31 +121,28 @@ body:not(.teach) .u11t-rec{display:none}
 }
 
 /* Concept, intros, games */
-.u11t-card{width:min(100%,36rem);height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.35rem;text-align:center}
-.u11t-line{margin:0;font-size:clamp(1.35rem,5vw,2rem);font-weight:700;line-height:1.25}
+.u11t-card{width:min(100%,24rem);height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.7rem;text-align:center}
+.u11t-line{margin:0;font-size:2.35rem;font-weight:700;line-height:1.2}
 .u11t-letter{font-size:clamp(4.2rem,16vw,7rem);font-weight:700;line-height:.9;color:#C95A10}
 .u11t-pose{height:clamp(7rem,28vh,12rem);width:auto;max-width:70%;object-fit:contain}
 .u11t-row{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:.4rem;width:100%}
-.u11t-choices{display:flex;flex-direction:column;align-items:center;gap:.55rem;width:min(100%,22rem)}
-@media (min-width:900px){
-  .u11t-choices{flex-direction:row;flex-wrap:wrap;width:min(100%,46rem);gap:.8rem}
-}
+.u11t-choices{display:flex;flex-direction:column;align-items:stretch;gap:.7rem;width:min(100%,24rem)}
 .u11t-choice{
-  position:relative;min-width:6.6rem;min-height:4.6rem;padding:.55rem 1rem .4rem 2.3rem;border-radius:1rem;border:4px solid #2B2540;
-  background:#fff;font:700 clamp(1.55rem,6vw,2.2rem)/1.1 Andika,sans-serif;color:#2B2540;cursor:pointer
+  position:relative;width:100%;min-height:6.2rem;padding:.7rem 1rem .55rem 2.8rem;border-radius:1.1rem;border:4px solid #2B2540;
+  background:#fff;font:700 2.35rem/1.1 Andika,sans-serif;color:#2B2540;cursor:pointer
 }
 .u11trail .irnum{
-  position:absolute;top:-.45rem;left:-.45rem;z-index:2;pointer-events:none;
-  width:2rem;height:2rem;font-size:1.25rem;border-width:3px;box-shadow:0 2px 0 #2B2540
+  position:absolute;top:-.55rem;left:-.35rem;z-index:2;pointer-events:none;
+  width:2.4rem;height:2.4rem;font-size:1.45rem;border-width:3px;box-shadow:0 2px 0 #2B2540
 }
 .u11t-choice .a{color:#C95A10}
 .u11t-choice.right{background:#E5F6EC;border-color:#2E9E6B}
-.u11t-sortbtn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.3rem;min-width:8.5rem}
-.u11t-sortbtn img{width:7.2rem;height:5rem;object-fit:cover;border-radius:.55rem;border:0}
+.u11t-sortbtn{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:.35rem;padding:.45rem .45rem .55rem;min-height:11rem}
+.u11t-sortbtn img{width:100%;height:7.4rem;object-fit:cover;object-position:18% 42%;border-radius:.7rem;border:0}
 .u11t-choice.nudge{animation:u11nudge .35s}
 @keyframes u11nudge{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
 .u11t-scene,.u11t-pic{
-  width:min(100%,28rem);height:clamp(8.5rem,32vh,15rem);object-fit:cover;object-position:center;
+  width:min(100%,24rem);height:clamp(10rem,30vh,14rem);object-fit:cover;object-position:center;
   border-radius:1rem;border:3px solid #2B2540;background:#c9e4c2
 }
 .u11t-svg{height:clamp(4.2rem,16vh,7rem);width:4.6rem;display:flex;align-items:center;justify-content:center}
@@ -153,10 +150,10 @@ body:not(.teach) .u11t-rec{display:none}
 .u11t-pichit .u11t-svg{width:4.4rem;height:4.2rem}
 .u11t-status{min-height:1.3rem;margin:0;font-weight:700;font-size:1rem}
 .u11t-spk{width:3.2rem;height:3.2rem;border-radius:50%;border:3px solid #2B2540;background:#fff;display:inline-flex;align-items:center;justify-content:center;cursor:pointer}
-.u11t-slots{display:flex;gap:.4rem;justify-content:center}
+.u11t-slots{display:flex;gap:.55rem;justify-content:center}
 .u11t-slot{
-  min-width:3.4rem;height:3.2rem;border:3px dashed #C9B99A;border-radius:.8rem;background:#FFFDF6;
-  font:700 1.8rem/1 Andika,sans-serif;display:flex;align-items:center;justify-content:center;cursor:pointer
+  min-width:5.4rem;height:5.4rem;border:4px dashed #C9B99A;border-radius:1rem;background:#FFFDF6;
+  font:700 3rem/1 Andika,sans-serif;display:flex;align-items:center;justify-content:center;cursor:pointer
 }
 .u11t-slot .a{color:#C95A10}
 .u11t-demo{position:relative;height:4.2rem;width:min(100%,16rem)}
@@ -259,16 +256,22 @@ body:not(.teach) .u11t-rec{display:none}
   .u11t-map{background-image:url("img/u11-forest-wide.jpg");background-position:center 60%}
   .u11t-celebrate{background-image:url("img/u11-forest-wide.jpg");background-position:center 55%}
   .u11t-marker{width:6.4rem;height:5.6rem}
-  .u11trail .acttitle{font-size:2rem}
-  .u11t-line{font-size:2.15rem}
-  .u11t-choice{min-width:12rem;min-height:6.2rem;font-size:2.6rem;padding:.7rem 1.3rem .55rem 3rem}
-  .u11trail .irnum{width:2.6rem;height:2.6rem;font-size:1.6rem}
-  .u11t-yes,.u11t-no{width:12rem;height:8rem;font-size:2.6rem}
-  .u11trail .u11t-nav .ir-btn{min-width:11rem;height:4.4rem;min-height:4.4rem;font-size:1.5rem}
-  .u11t-scene,.u11t-pic{height:min(34vh,16rem);width:min(100%,36rem)}
+  .u11t-card{width:min(100%,68rem);gap:1rem}
+  .u11t-choices{flex-direction:row;flex-wrap:wrap;justify-content:center;align-items:stretch;width:min(100%,68rem);gap:1.1rem}
+  .u11trail .acttitle{font-size:2.6rem}
+  .u11t-line{font-size:4.5rem}
+  .u11t-choice{width:auto;min-width:18rem;min-height:11rem;font-size:3.4rem;padding:1rem 1.4rem .8rem 3.4rem}
+  .u11trail .irnum{width:3.4rem;height:3.4rem;font-size:2rem}
+  .u11t-yes,.u11t-no{width:16rem;height:11rem;font-size:3.2rem}
+  .u11trail .u11t-nav .ir-btn{flex:0 1 auto;min-width:14rem;max-width:none;height:5.2rem;min-height:5.2rem;font-size:1.9rem}
+  .u11t-unit,.u11t-home{height:3.6rem;font-size:1.4rem;padding:0 1.1rem}
+  .u11t-slot{min-width:9rem;height:9rem;font-size:4.6rem}
+  .u11t-scene,.u11t-pic{height:min(32vh,16rem);width:min(100%,42rem)}
+  .u11t-sortbtn{min-width:20rem;min-height:18rem}
+  .u11t-sortbtn img{height:12rem;object-position:22% 40%}
   .u11t-pics{width:min(100%,40rem)}
   .u11t-pichit img{height:82%}
-  .u11-scene{height:min(48vh,20rem)}
+  .u11-scene{width:min(100%,36rem);height:min(28vh,14rem)}
 }
 @media (max-height:740px){
   .u11t-pose,.u11t-cast{height:6.2rem}
@@ -281,8 +284,8 @@ body:not(.teach) .u11t-rec{display:none}
 
 /* Build-it projects: satchel, raft, banyan lanterns */
 .u11-build{width:min(100%,40rem);height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.55rem}
-.u11-scene{position:relative;width:min(100%,32rem);height:min(46vh,18rem);flex:none}
-.u11-satchel .satchel-art{width:100%;height:100%;object-fit:contain}
+.u11-scene{position:relative;width:min(100%,24rem);height:min(28vh,12rem);flex:none}
+.u11-satchel .satchel-art{width:100%;height:100%;object-fit:cover;border-radius:1rem}
 .pack{position:absolute;width:18%;border-radius:.35rem;opacity:0;transform:translateY(-10px) scale(.7);transition:.4s}
 .pack.is-on{opacity:1;transform:none}
 .pack.map{left:22%;top:34%}

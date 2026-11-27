@@ -65,7 +65,7 @@
     both: 'img/zip-show/frill-highfive.webp'
   };
 
-  const TWIST_LINES = ['Sam sat at a mat.', 'Pam sat at a pan.', 'A fat man sat at a fan.'];
+  const TWIST_LINES = ['Sam sat at a mat.', 'Pam sat at a mat.', 'A fat man sat at a mat.'];
   const CHANT_LINES = ['Mat. Map. Man.', 'Sat. Sap. Sam.', 'Tap. Tap. Pan.', 'Pam sat. Sam sat.'];
   const STOPS = [
     { id: 'listen', name: 'Find the sound', gem: 'img/gem_01_ruby.webp', gemName: 'ruby', beats: ['concept', 'hear', 'twist'] },
@@ -82,52 +82,52 @@
   const BOOKS = [
     {
       id: 'map-pan', title: 'Sam and a map', at: 2, pose: 'both',
-      blurb: 'Sam sat at a map. Pam sat at a pan.',
+      blurb: 'I tap a map. Sam sat at a mat.',
       pages: [
         { line: 'I am Sam.', pose: 'zip' },
-        { line: 'Sam sat at a map.', pose: 'point', prop: 'map' },
         { line: 'I tap a map.', pose: 'tap', prop: 'map' },
-        { line: 'A man sat at a mat.', pose: 'zip', prop: 'mat' },
-        { line: 'Pam sat at a pan.', pose: 'frill', prop: 'pan' },
+        { line: 'Sam sat at a mat.', pose: 'zip', prop: 'mat' },
+        { line: 'A man sat at a mat.', pose: 'zip', prop: 'man' },
+        { line: 'Pam sat at a mat.', pose: 'frill', prop: 'mat' },
         { line: 'Sam sat. Pam sat.', pose: 'both' },
         { line: 'I nap at a mat.', pose: 'nap', prop: 'mat' }
       ],
       ask: [
-        { line: 'Sam sat at a map.', choices: ['Sam', 'Pam', 'man'], answer: 'Sam' },
-        { line: 'Pam sat at a pan.', choices: ['pan', 'mat', 'fan'], answer: 'pan' }
+        { line: 'I tap a map.', choices: ['map', 'mat', 'man'], answer: 'map' },
+        { line: 'Sam sat at a mat.', choices: ['mat', 'pan', 'fan'], answer: 'mat' }
       ]
     },
     {
       id: 'fat-fan', title: 'Pam and a fan', at: 4, pose: 'frill',
-      blurb: 'Pam sat at a fan. A fat man sat at a fan.',
+      blurb: 'I tap a fan. Pam sat at a mat.',
       pages: [
         { line: 'I am Pam.', pose: 'frill' },
-        { line: 'Pam sat at a fan.', pose: 'frill', prop: 'fan' },
-        { line: 'A fat man sat at a fan.', pose: 'frill', prop: 'fan' },
+        { line: 'I tap a fan.', pose: 'frill', prop: 'fan' },
+        { line: 'Pam sat at a mat.', pose: 'frill', prop: 'mat' },
+        { line: 'A fat man sat.', pose: 'zip', prop: 'man' },
         { line: 'Pat sat at a mat.', pose: 'zip', prop: 'mat' },
-        { line: 'Sam sat at a mat.', pose: 'zip', prop: 'mat' },
         { line: 'Pam sat. Sam sat.', pose: 'both' },
         { line: 'I nap.', pose: 'nap' }
       ],
       ask: [
-        { line: 'Pam sat at a fan.', choices: ['Pam', 'Sam', 'man'], answer: 'Pam' },
-        { line: 'Sam sat at a mat.', choices: ['mat', 'pan', 'map'], answer: 'mat' }
+        { line: 'I tap a fan.', choices: ['fan', 'pan', 'map'], answer: 'fan' },
+        { line: 'Pam sat at a mat.', choices: ['mat', 'pan', 'map'], answer: 'mat' }
       ]
     },
     {
       id: 'tap-map', title: 'Pat and a map', at: 5, pose: 'point',
-      blurb: 'Pat sat at a map. A man sat at a tap.',
+      blurb: 'Pat sat at a mat. I tap a map.',
       pages: [
-        { line: 'Pat sat at a map.', pose: 'point', prop: 'map' },
+        { line: 'Pat sat at a mat.', pose: 'point', prop: 'mat' },
         { line: 'I tap a map.', pose: 'tap', prop: 'map' },
-        { line: 'Pam sat at a tap.', pose: 'frill' },
-        { line: 'A man sat at a tap.', pose: 'zip', prop: 'man' },
+        { line: 'I tap a pan.', pose: 'frill', prop: 'pan' },
+        { line: 'A man sat at a mat.', pose: 'zip', prop: 'man' },
         { line: 'Pat sat. Pam sat.', pose: 'both' },
-        { line: 'I sat at a map.', pose: 'nap', prop: 'map' }
+        { line: 'I sat at a mat.', pose: 'nap', prop: 'mat' }
       ],
       ask: [
-        { line: 'Pat sat at a map.', choices: ['Pat', 'Pam', 'Sam'], answer: 'Pat' },
-        { line: 'A man sat at a tap.', choices: ['tap', 'mat', 'fan'], answer: 'tap' }
+        { line: 'I tap a map.', choices: ['map', 'mat', 'pan'], answer: 'map' },
+        { line: 'A man sat at a mat.', choices: ['mat', 'pan', 'fan'], answer: 'mat' }
       ]
     }
   ];
@@ -137,25 +137,25 @@
       title: 'Pack the satchel', scene: 'satchel', done: 'Packed.',
       steps: [
         { line: 'I tap a map.', say: 'I tap a map.', choices: ['map', 'man', 'nap'], answer: 'map', part: 'map' },
-        { line: 'Pam sat at a', blank: true, say: 'Pam sat at a fan.', choices: ['fan', 'pan', 'pat'], answer: 'fan', part: 'fan' },
+        { line: 'I tap a', blank: true, say: 'I tap a fan.', choices: ['fan', 'pan', 'pat'], answer: 'fan', part: 'fan' },
         { line: 'I tap a mat.', say: 'I tap a mat.', choices: ['mat', 'map', 'man'], answer: 'mat', part: 'mat' },
-        { line: 'Sam sat at a pan.', say: 'Sam sat at a pan.', choices: ['pan', 'pat', 'nap'], answer: 'pan' }
+        { line: 'I tap a pan.', say: 'I tap a pan.', choices: ['pan', 'pat', 'nap'], answer: 'pan' }
       ]
     },
     raft: {
       title: 'Build a raft', scene: 'raft', done: 'The raft is set.',
       steps: [
         { line: 'A fat man sat at a', blank: true, say: 'A fat man sat at a', choices: ['mat', 'map', 'nap'], answer: 'mat', part: 'mat' },
-        { line: 'Tap fan.', say: 'fan', choices: ['fan', 'fat', 'pan'], answer: 'fan', part: 'fan' },
-        { line: 'Tap map.', say: 'map', choices: ['map', 'man', 'mat'], answer: 'map', part: 'map' }
+        { line: 'I tap a fan.', say: 'I tap a fan.', choices: ['fan', 'fat', 'pan'], answer: 'fan', part: 'fan' },
+        { line: 'I tap a map.', say: 'I tap a map.', choices: ['map', 'man', 'mat'], answer: 'map', part: 'map' }
       ]
     },
     tree: {
       title: 'Light the tree', scene: 'tree', done: 'Lit.',
       steps: [
-        { line: 'Tap tap.', say: 'tap', choices: ['tap', 'tan', 'pat'], answer: 'tap', part: 'l1' },
+        { line: 'I tap. I tap.', say: 'I tap. I tap.', choices: ['tap', 'tan', 'pat'], answer: 'tap', part: 'l1' },
         { line: 'Pat sat at a', blank: true, say: 'Pat sat at a', choices: ['mat', 'map', 'man'], answer: 'mat', part: 'l2' },
-        { line: 'Tap pan.', say: 'pan', choices: ['pan', 'pat', 'nap'], answer: 'pan', part: 'l3' }
+        { line: 'I tap a pan.', say: 'I tap a pan.', choices: ['pan', 'pat', 'nap'], answer: 'pan', part: 'l3' }
       ]
     }
   };
@@ -862,12 +862,12 @@
     },
     fill(ctx) {
       const items = [
-        { line: 'Sam sat at a map.', answer: 'sat', before: 'Sam', after: 'at a map.', choices: shuffle(['sat', 'pan', 'fan']) },
+        { line: 'Sam sat at a mat.', answer: 'sat', before: 'Sam', after: 'at a mat.', choices: shuffle(['sat', 'pan', 'fan']) },
         { line: 'A man sat at a mat.', answer: 'mat', before: 'A man sat at a', after: '.', choices: shuffle(['mat', 'map', 'nap']) },
-        { line: 'Pam sat at a pan.', answer: 'pan', before: 'Pam sat at a', after: '.', choices: shuffle(['pan', 'map', 'fan']) },
-        { line: 'Pat sat at a fan.', answer: 'fan', before: 'Pat sat at a', after: '.', choices: shuffle(['fan', 'fat', 'pan']) },
         { line: 'I tap a map.', answer: 'tap', before: 'I', after: 'a map.', choices: shuffle(['tap', 'sat', 'nap']) },
-        { line: 'A fat man sat at a fan.', answer: 'fan', before: 'A fat man sat at a', after: '.', choices: shuffle(['fan', 'mat', 'map']) }
+        { line: 'I tap a pan.', answer: 'pan', before: 'I tap a', after: '.', choices: shuffle(['pan', 'map', 'fan']) },
+        { line: 'I tap a fan.', answer: 'fan', before: 'I tap a', after: '.', choices: shuffle(['fan', 'fat', 'pan']) },
+        { line: 'Pam sat at a mat.', answer: 'mat', before: 'Pam sat at a', after: '.', choices: shuffle(['mat', 'map', 'man']) }
       ];
       playRounds(ctx, {
         title: 'Read and choose', view: 'fill', game: 'fill', demo: 'Read. Tap the missing word.', items: items,
@@ -883,11 +883,11 @@
     picsent(ctx) {
       const items = [
         { line: 'Sam sat at a mat.', answer: 'mat', pic: 'mat', before: 'Sam sat at a', after: '.', choices: shuffle(['mat', 'pan', 'fan']) },
-        { line: 'Pam sat at a pan.', answer: 'pan', pic: 'pan', before: 'Pam sat at a', after: '.', choices: shuffle(['pan', 'map', 'nap']) },
-        { line: 'A man sat at a map.', answer: 'map', pic: 'map', before: 'A man sat at a', after: '.', choices: shuffle(['map', 'mat', 'man']) },
-        { line: 'Pat sat at a fan.', answer: 'fan', pic: 'fan', before: 'Pat sat at a', after: '.', choices: shuffle(['fan', 'fat', 'pan']) },
+        { line: 'I tap a pan.', answer: 'pan', pic: 'pan', before: 'I tap a', after: '.', choices: shuffle(['pan', 'map', 'nap']) },
+        { line: 'I tap a map.', answer: 'map', pic: 'map', before: 'I tap a', after: '.', choices: shuffle(['map', 'mat', 'man']) },
+        { line: 'I tap a fan.', answer: 'fan', pic: 'fan', before: 'I tap a', after: '.', choices: shuffle(['fan', 'fat', 'pan']) },
         { line: 'A fat man sat.', answer: 'man', pic: 'man', before: 'A fat', after: 'sat.', choices: shuffle(['man', 'map', 'mat']) },
-        { line: 'I tap a map.', answer: 'map', pic: 'map', before: 'I tap a', after: '.', choices: shuffle(['map', 'mat', 'pan']) }
+        { line: 'Pam sat at a mat.', answer: 'mat', pic: 'mat', before: 'Pam sat at a', after: '.', choices: shuffle(['mat', 'pan', 'map']) }
       ];
       playRounds(ctx, {
         title: 'Picture and sentence', view: 'picsent', items: items,
@@ -973,7 +973,7 @@
     comp(ctx) {
       const items = [
         { line: 'A fat man sat at a mat.', choices: shuffle(['man', 'Pam', 'Sam']), answer: 'man' },
-        { line: 'Pam sat at a pan.', choices: shuffle(['pan', 'map', 'fan']), answer: 'pan' }
+        { line: 'I tap a pan.', choices: shuffle(['pan', 'map', 'fan']), answer: 'pan' }
       ];
       playRounds(ctx, {
         title: 'Tap the match', view: 'comp', items: items,
@@ -1549,8 +1549,8 @@
       h('div', { class: 'u11t-faces' },
         h('img', { src: POSE.bell, alt: 'Zip' }),
         h('img', { src: POSE.frill, alt: 'Frill' })),
-      h('p', { class: 'u11t-joke' }, 'Pam sat at a pan.'),
-      h('p', { class: 'u11t-joke' }, 'Pat sat at a map.'),
+      h('p', { class: 'u11t-joke' }, 'I tap a pan.'),
+      h('p', { class: 'u11t-joke' }, 'I tap a map.'),
       h('p', { class: 'u11t-rec' }, 'Recording needed: Zip and Frill say the joke. The bell sounds are ready.')));
     const tune = () => Snd.seq([SFX.ding, SFX.tap, SFX.ding, SFX.gong, SFX.ding], 160);
     view.setReplay(tune);
