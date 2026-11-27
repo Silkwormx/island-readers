@@ -65,13 +65,18 @@
     both: 'img/zip-show/frill-highfive.webp'
   };
 
+  const TWIST_LINES = ['Sam sat at a mat.', 'Pam sat at a pan.', 'A fat man sat at a fan.'];
+  const CHANT_LINES = ['Mat. Map. Man.', 'Sat. Sap. Sam.', 'Tap. Tap. Pan.', 'Pam sat. Sam sat.'];
   const STOPS = [
-    { id: 'listen', name: 'Listen', gem: 'img/gem_01_ruby.webp', gemName: 'ruby', beats: ['concept', 'hear', 'match'] },
-    { id: 'satchel', name: 'Pack the satchel', gem: 'img/gem_03_amber.webp', gemName: 'amber', beats: ['review', 'satchel'], review: ['mat', 'sat', 'map', 'pan', 'man'] },
-    { id: 'words', name: 'Match', gem: 'img/gem_05_emerald.webp', gemName: 'emerald', beats: ['drag', 'fill', 'picsent'] },
-    { id: 'raft', name: 'Build a raft', gem: 'img/gem_07_sapphire.webp', gemName: 'sapphire', beats: ['review', 'raft'], review: ['fan', 'mat', 'map', 'sat', 'tap'] },
-    { id: 'read', name: 'Read', gem: 'img/gem_08_amethyst.webp', gemName: 'amethyst', beats: ['heart', 'yesno', 'comp'] },
-    { id: 'tree', name: 'Light the tree', gem: 'img/gem_10_gold.webp', gemName: 'gold', beats: ['review', 'tree'], review: ['tap', 'pat', 'mat', 'nap', 'man'] }
+    { id: 'listen', name: 'Listen', gem: 'img/gem_01_ruby.webp', gemName: 'ruby', beats: ['concept', 'hear', 'match', 'twist'] },
+    { id: 'satchel', name: 'Pack the satchel', gem: 'img/gem_02_coral.webp', gemName: 'coral', beats: ['review', 'satchel', 'chant'], review: ['mat', 'sat', 'map'] },
+    { id: 'words', name: 'Match', gem: 'img/gem_03_amber.webp', gemName: 'amber', beats: ['drag', 'fill', 'picsent'] },
+    { id: 'book-map-pan', name: 'A Map at a Pan', gem: 'img/gem_04_topaz.webp', gemName: 'topaz', beats: ['book'], book: 'map-pan' },
+    { id: 'raft', name: 'Build a raft', gem: 'img/gem_05_emerald.webp', gemName: 'emerald', beats: ['review', 'raft'], review: ['fan', 'mat', 'map', 'sat', 'tap'] },
+    { id: 'read', name: 'Read', gem: 'img/gem_06_aquamarine.webp', gemName: 'aquamarine', beats: ['heart', 'yesno', 'comp'] },
+    { id: 'book-fat-fan', name: 'A Fat Fan', gem: 'img/gem_07_sapphire.webp', gemName: 'sapphire', beats: ['book'], book: 'fat-fan' },
+    { id: 'tree', name: 'Light the tree', gem: 'img/gem_08_amethyst.webp', gemName: 'amethyst', beats: ['review', 'tree'], review: ['tap', 'pat', 'mat', 'nap', 'man'] },
+    { id: 'book-tap-map', name: 'Tap a Map', gem: 'img/gem_09_rosequartz.webp', gemName: 'rose quartz', beats: ['book'], book: 'tap-map' }
   ];
 
   const BOOKS = [
@@ -213,6 +218,15 @@
   function setSitting(n) {
     try { sessionStorage.setItem(SIT_KEY, String(n)); } catch (e) { /* ignore */ }
   }
+  function longerCount() {
+    try { return parseInt(sessionStorage.getItem(LONG_KEY) || '0', 10) || 0; } catch (e) { return 0; }
+  }
+  function reserveLonger() {
+    const n = longerCount();
+    if (n >= DOSE.longerPerSitting) return false;
+    try { sessionStorage.setItem(LONG_KEY, String(n + 1)); } catch (e) { /* ignore */ }
+    return true;
+  }
   function afterStop() {
     const st = load();
     if (st.gems.length >= STOPS.length) { location.hash = '#/u1/u11/trail/end'; return; }
@@ -259,6 +273,7 @@
 
   function shell(app, o) {
     const scr = IR.newScreen();
+    app.querySelectorAll(':scope > .screen.u11trail').forEach((el) => el.remove());
     clearTimeout(timer);
     let doNext = () => { if (o.onNext) o.onNext(); };
     let doBack = () => { if (o.onBack) o.onBack(); };
@@ -323,27 +338,81 @@
     };
   }
 
-  const STOP_LABEL = ['Listen', 'Satchel', 'Match', 'Raft', 'Read', 'Lights'];
   function pts() {
     const wide = window.matchMedia('(min-width: 900px)').matches;
     return wide
-      ? [{ x: 12, y: 78 }, { x: 28, y: 50 }, { x: 44, y: 78 }, { x: 58, y: 46 }, { x: 72, y: 76 }, { x: 86, y: 44 }, { x: 94, y: 22 }]
-      : [{ x: 62, y: 90 }, { x: 24, y: 76 }, { x: 76, y: 62 }, { x: 26, y: 48 }, { x: 74, y: 36 }, { x: 30, y: 22 }, { x: 68, y: 10 }];
+      ? [
+          { x: 8, y: 74 }, { x: 17, y: 40 }, { x: 27, y: 76 }, { x: 37, y: 38 }, { x: 47, y: 78 },
+          { x: 57, y: 36 }, { x: 67, y: 76 }, { x: 77, y: 38 }, { x: 87, y: 72 }, { x: 94, y: 32 }
+        ]
+      : [
+          { x: 34, y: 90 }, { x: 68, y: 80 }, { x: 32, y: 70 }, { x: 70, y: 60 }, { x: 30, y: 50 },
+          { x: 68, y: 40 }, { x: 32, y: 30 }, { x: 66, y: 21 }, { x: 36, y: 13 }, { x: 64, y: 6 }
+        ];
+  }
+  function controlsFor(list) {
+    const segs = [];
+    for (let i = 1; i < list.length; i++) {
+      const a = list[i - 1];
+      const b = list[i];
+      const mx = (a.x + b.x) / 2;
+      const my = (a.y + b.y) / 2;
+      const dx = b.x - a.x;
+      const dy = b.y - a.y;
+      const len = Math.hypot(dx, dy) || 1;
+      const bow = 7 * (i % 2 ? 1 : -1);
+      segs.push({ a: a, b: b, c: { x: mx + (-dy / len) * bow, y: my + (dx / len) * bow * 0.45 } });
+    }
+    return segs;
   }
   function curve(list) {
+    const segs = controlsFor(list);
     let d = 'M ' + list[0].x + ' ' + list[0].y;
-    for (let i = 1; i < list.length; i++) {
-      const p = list[i];
-      const a = list[i - 1];
-      const mx = (a.x + p.x) / 2;
-      const my = (a.y + p.y) / 2;
-      const dx = p.x - a.x;
-      const dy = p.y - a.y;
-      const len = Math.hypot(dx, dy) || 1;
-      const bow = 16 * (i % 2 ? 1 : -1);
-      d += ' Q ' + (mx + (-dy / len) * bow) + ' ' + (my + (dx / len) * bow * 0.45) + ' ' + p.x + ' ' + p.y;
-    }
+    segs.forEach((s) => { d += ' Q ' + s.c.x + ' ' + s.c.y + ' ' + s.b.x + ' ' + s.b.y; });
     return d;
+  }
+  function quad(a, c, b, t) {
+    const u = 1 - t;
+    return {
+      x: u * u * a.x + 2 * u * t * c.x + t * t * b.x,
+      y: u * u * a.y + 2 * u * t * c.y + t * t * b.y
+    };
+  }
+  function walkPair(marker, list, fromI, toI, scr) {
+    const dest = list[toI];
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    function idleAt(p) {
+      marker.classList.remove('is-walk');
+      marker.classList.add('is-idle');
+      marker.style.left = p.x + '%';
+      marker.style.top = p.y + '%';
+    }
+    if (reduce || fromI === toI) { idleAt(dest); return; }
+    const segs = controlsFor(list);
+    const samples = [];
+    const dir = toI > fromI ? 1 : -1;
+    for (let i = fromI; i !== toI; i += dir) {
+      const seg = segs[dir > 0 ? i : i - 1];
+      const n = 28;
+      for (let s = 0; s <= n; s++) {
+        const t = dir > 0 ? s / n : 1 - s / n;
+        samples.push(quad(seg.a, seg.c, seg.b, t));
+      }
+    }
+    marker.classList.add('is-walk');
+    const ms = 1800;
+    const t0 = performance.now();
+    function frame(now) {
+      if (!scr.ok()) return;
+      const u = Math.min(1, (now - t0) / ms);
+      const eased = u < 0.5 ? 2 * u * u : 1 - Math.pow(-2 * u + 2, 2) / 2;
+      const p = samples[Math.min(samples.length - 1, Math.round(eased * (samples.length - 1)))];
+      marker.style.left = p.x + '%';
+      marker.style.top = p.y + '%';
+      if (u < 1) requestAnimationFrame(frame);
+      else idleAt(dest);
+    }
+    requestAnimationFrame(frame);
   }
 
   function map(app) {
@@ -385,13 +454,14 @@
       else if (locked) face.append(h('span', { class: 'u11t-lock', html: SVG.lock }));
       else face.append(h('span', null, String(i + 1)));
       const btn = h('button', {
-        class: 'u11t-stop' + (locked ? ' is-locked' : '') + (!locked && !done && i === here ? ' is-now' : ''),
+        class: 'u11t-stop' + (done ? ' is-done' : '') + (locked ? ' is-locked' : '') + (!locked && !done && i === here ? ' is-now' : ''),
         type: 'button',
         style: 'left:' + p.x + '%;top:' + p.y + '%',
-        'aria-label': (locked ? 'Locked. ' : '') + STOP_LABEL[i] + (locked && demo() ? '. Open in this sample.' : '')
+        'aria-label': (locked ? 'Locked. ' : '') + stop.name + (locked && demo() ? '. Open in this sample.' : '')
       }, face);
       if (!locked || demo()) btn.addEventListener('click', () => {
         if (!done && sitting() >= DOSE.sittingDefault && !PREVIEW_NEXT) { location.hash = '#/u1/u11/trail/bye'; return; }
+        if (!done && stop.book && longerCount() >= DOSE.longerPerSitting && !PREVIEW_NEXT) { location.hash = '#/u1/u11/trail/bye'; return; }
         location.hash = '#/u1/u11/trail/' + i;
       });
       else btn.disabled = true;
@@ -408,41 +478,16 @@
     if (!endLocked || demo()) end.addEventListener('click', () => { location.hash = '#/u1/u11/trail/end'; });
     else end.disabled = true;
     board.append(end);
-    const finds = [
-      { id: 'twist', at: 0, near: 0, dx: 16, dy: 0, src: 'img/u11-twist.jpg', name: 'Twister' },
-      { id: 'chant', at: 1, near: 1, dx: -16, dy: 2, src: 'img/u11-chant.jpg', name: 'Chant' },
-      { id: 'book:map-pan', at: 2, near: 2, dx: 16, dy: 0, src: 'img/u11-book.jpg', name: 'Book' },
-      { id: 'book:fat-fan', at: 4, near: 4, dx: -16, dy: 2, src: 'img/u11-book.jpg', name: 'Book' },
-      { id: 'book:tap-map', at: 5, near: 5, dx: 16, dy: 0, src: 'img/u11-book.jpg', name: 'Book' }
-    ];
-    finds.forEach((f) => {
-      const base = list[f.near];
-      const x = Math.max(10, Math.min(90, base.x + f.dx));
-      const y = Math.max(8, Math.min(92, base.y + f.dy));
-      const open = here >= f.at;
-      const b = h('button', {
-        class: 'u11t-find' + (open ? '' : ' is-ahead'),
-        type: 'button',
-        style: 'left:' + x + '%;top:' + y + '%',
-        'aria-label': f.name + (open ? '' : '. Further along the path.')
-      }, h('img', { src: f.src, alt: '' }));
-      if (open) b.addEventListener('click', () => { location.hash = '#/u1/u11/trail/find/' + f.id; });
-      board.append(b);
-    });
-    const dest = list[Math.min(here, list.length - 1)];
-    const from = st.moveFrom == null ? dest : list[Math.min(st.moveFrom, list.length - 1)];
+    const toI = Math.min(here, list.length - 1);
+    const fromI = st.moveFrom == null ? toI : Math.min(st.moveFrom, list.length - 1);
     if (st.moveFrom != null) { st.moveFrom = null; save(st); }
-    const marker = h('div', { class: 'u11t-marker', style: 'left:' + from.x + '%;top:' + from.y + '%' },
-      h('img', { src: 'img/u11-zip-frill.png', alt: 'Zip and Frill' }));
+    const marker = h('div', {
+      class: 'u11t-marker',
+      style: 'left:' + list[fromI].x + '%;top:' + list[fromI].y + '%'
+    }, h('span', { class: 'u11t-ground' }), h('img', { src: 'img/u11-zip-frill.png', alt: 'Zip and Frill' }));
     board.append(marker);
     view.stage.append(h('div', { class: 'u11t-mapwrap' }, gems, board));
-    if (from !== dest) {
-      requestAnimationFrame(() => requestAnimationFrame(() => {
-        if (!view.scr.ok()) return;
-        marker.style.left = dest.x + '%';
-        marker.style.top = dest.y + '%';
-      }));
-    }
+    walkPair(marker, list, fromI, toI, view.scr);
     view.setReplay(() => Snd.play('audio/phonemes/a.mp3'));
   }
 
@@ -536,12 +581,13 @@
       onNext() { afterStop(); },
       onBack() { afterStop(); }
     });
-    view.stage.append(h('div', { class: 'u11t-gem' },
-      h('div', { class: 'u11t-faces' },
-        h('img', { src: POSE.cheer, alt: 'Zip' }),
-        h('img', { src: POSE.frillcheer, alt: 'Frill' })),
+    const prize = fresh ? stop.gemName.charAt(0).toUpperCase() + stop.gemName.slice(1) + '.' : 'Gem safe.';
+    view.stage.append(h('div', { class: 'u11t-celebrate' },
+      h('div', { class: 'u11t-cast' },
+        h('span', { class: 'u11t-ground' }),
+        h('img', { src: 'img/u11-zip-frill-cheer.png', alt: 'Zip and Frill' })),
       h('img', { class: 'prize', src: stop.gem, alt: '' }),
-      h('p', { class: 'u11t-line' }, fresh ? stop.gemName.charAt(0).toUpperCase() + stop.gemName.slice(1) + '.' : 'Gem safe.')));
+      h('p', { class: 'u11t-line' }, prize)));
     Snd.seq([SFX.ding, SFX.done], 120);
     view.setReplay(() => Snd.seq([SFX.ding, SFX.done], 120));
     view.auto(2200, afterStop);
@@ -737,7 +783,7 @@
         { word: 'sat', choices: shuffle(['sat', 'pat', 'sap']) },
         { word: 'pan', choices: shuffle(['pan', 'pat', 'nap']) },
         { word: 'map', choices: shuffle(['map', 'man', 'mat']) }
-      ];
+      ].slice(0, 3);
       playRounds(ctx, {
         title: 'Hear and Pick', view: 'hear', game: 'hear', demo: 'Watch. Tap the word you hear.', items: items,
         speak(item) { return sayText(item.word); },
@@ -755,7 +801,7 @@
         { word: 'fan', pic: 'fan', choices: shuffle(['fan', 'fat', 'pan']) },
         { word: 'man', pic: 'man', choices: shuffle(['man', 'map', 'mat']) },
         { word: 'pan', pic: 'pan', choices: shuffle(['pan', 'pat', 'nap']) }
-      ];
+      ].slice(0, 3);
       playRounds(ctx, {
         title: 'Match the picture', view: 'match', game: 'match', demo: 'Watch. Tap the word for the picture.', items: items,
         speak(item) { return sayText(item.word); },
@@ -927,7 +973,26 @@
     drag(ctx) { dragGame(ctx); },
     satchel(ctx) { buildGame(ctx, BUILDS.satchel); },
     raft(ctx) { buildGame(ctx, BUILDS.raft); },
-    tree(ctx) { buildGame(ctx, BUILDS.tree); }
+    tree(ctx) { buildGame(ctx, BUILDS.tree); },
+    twist(ctx) {
+      runLines(ctx.app, {
+        title: 'Tongue twister', view: 'twist', pose: POSE.frill, ms: 2400, lines: TWIST_LINES,
+        done() { ctx.next(); }, back() { ctx.prev(); }
+      });
+    },
+    chant(ctx) {
+      runLines(ctx.app, {
+        title: 'Chant', view: 'chant', poses: [POSE.tap, POSE.frill], ms: 2200, lines: CHANT_LINES,
+        done() { ctx.next(); }, back() { ctx.prev(); }
+      });
+    },
+    book(ctx) {
+      const book = BOOKS.filter((b) => b.id === ctx.stop.book)[0];
+      if (!book) { ctx.next(); return; }
+      const passed = load().gems.indexOf(ctx.si) >= 0;
+      if (!passed && !reserveLonger() && !PREVIEW_NEXT) { goodbye(ctx.app); return; }
+      readBook(ctx.app, book, '#/u1/u11', () => ctx.next());
+    }
   };
 
   function dragGame(ctx) {
@@ -1222,7 +1287,7 @@
     round();
   }
 
-  function readBook(app, book, backHash) {
+  function readBook(app, book, backHash, onDone) {
     let i = 0;
     const pages = book.pages;
     const ask = book.ask.map((q) => Object.assign({}, q));
@@ -1232,7 +1297,8 @@
       else if (i < len()) showAsk();
       else {
         markRead(book.id);
-        location.hash = backHash;
+        if (onDone) onDone();
+        else location.hash = backHash;
       }
     }
     function showPage() {
@@ -1298,43 +1364,35 @@
     show();
   }
 
-  function chant(app) {
-    const lines = ['Mat. Map. Man.', 'Sat. Sap. Sam.', 'Tap. Tap. Pan.', 'Pam sat. Sam sat.'];
+  function runLines(app, o) {
+    const lines = o.lines;
     let i = 0;
-    function show() {
-      const view = shell(app, {
-        title: 'Chant', view: 'chant', count: (i + 1) + ' of ' + lines.length,
-        home: '#/u1/u11',
-        onNext() { if (i < lines.length - 1) { i++; show(); } else location.hash = '#/u1/u11'; },
-        onBack() { if (i > 0) { i--; show(); } else location.hash = '#/u1/u11'; }
-      });
-      view.stage.append(h('div', { class: 'u11t-card' },
-        h('img', { class: 'u11t-pose', src: i % 2 ? POSE.frill : POSE.tap, alt: '' }),
-        h('p', { class: 'u11t-line' }, wordNode(lines[i]))));
-      view.setReplay(() => sayText(lines[i]));
-      sayText(lines[i]);
-      view.auto(2200, () => { if (!view.scr.ok()) return; if (i < lines.length - 1) { i++; show(); } });
+    let finished = false;
+    function finish() {
+      if (finished) return;
+      finished = true;
+      if (o.done) o.done();
+      else location.hash = o.home || '#/u1/u11';
     }
-    show();
-  }
-
-  function twist(app) {
-    const lines = ['Sam sat at a mat.', 'Pam sat at a pan.', 'A fat man sat at a fan.'];
-    let i = 0;
     function show() {
       const last = i === lines.length - 1;
       const view = shell(app, {
-        title: 'Tongue twister', view: 'twist', count: (i + 1) + ' of ' + lines.length,
-        home: '#/u1/u11',
-        onNext() { if (!last) { i++; show(); } else location.hash = '#/u1/u11'; },
-        onBack() { if (i > 0) { i--; show(); } else location.hash = '#/u1/u11'; }
+        title: o.title, view: o.view, count: (i + 1) + ' of ' + lines.length,
+        home: o.home || '#/u1/u11',
+        onNext() { if (!last) { i++; show(); } else finish(); },
+        onBack() { if (i > 0) { i--; show(); } else if (o.back) o.back(); else finish(); }
       });
+      const pose = o.poses ? o.poses[i % o.poses.length] : (o.pose || POSE.frill);
       view.stage.append(h('div', { class: 'u11t-card' },
-        h('img', { class: 'u11t-pose', src: POSE.frill, alt: 'Frill' }),
+        h('img', { class: 'u11t-pose', src: pose, alt: '' }),
         h('p', { class: 'u11t-line' }, wordNode(lines[i]))));
       view.setReplay(() => sayText(lines[i]));
       sayText(lines[i]);
-      if (!last) view.auto(2400, () => { if (view.scr.ok()) { i++; show(); } });
+      view.auto(o.ms || 2200, () => {
+        if (!view.scr.ok() || finished) return;
+        if (!last) { i++; show(); }
+        else finish();
+      });
     }
     show();
   }
@@ -1396,12 +1454,19 @@
       if (n >= DOSE.longerPerSitting) { goodbye(app); return; }
       try { sessionStorage.setItem(LONG_KEY, String(n + 1)); } catch (e) { /* ignore */ }
     }
-    if (id === 'twist') { twist(app); return; }
-    if (id === 'chant') { chant(app); return; }
+    if (id === 'twist') {
+      runLines(app, { title: 'Tongue twister', view: 'twist', pose: POSE.frill, ms: 2400, lines: TWIST_LINES });
+      return;
+    }
+    if (id === 'chant') {
+      runLines(app, { title: 'Chant', view: 'chant', poses: [POSE.tap, POSE.frill], ms: 2200, lines: CHANT_LINES });
+      return;
+    }
     if (id.indexOf('book:') === 0) {
       const book = BOOKS.filter((b) => b.id === id.slice(5))[0];
       if (!book) { map(app); return; }
-      if (markerIndex(load().gems) < book.at) { map(app); return; }
+      const si = STOPS.findIndex((s) => s.book === book.id);
+      if (si >= 0 && markerIndex(load().gems) < si) { map(app); return; }
       readBook(app, book, '#/u1/u11');
       return;
     }

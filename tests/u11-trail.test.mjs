@@ -15,7 +15,8 @@ test('short a trail is wired and other units stay on the old route', () => {
   assert.match(html, /u11trail\.css/);
   assert.match(html, /js\/u11trail\.js/);
   assert.match(u123, /L\.key === 'u11' && IR\.u11Trail/);
-  assert.match(sw, /const CACHE = 'ir-20261127k'/);
+  assert.match(sw, /const CACHE = 'ir-20261127l'/);
+  assert.match(sw, /u11-zip-frill-cheer\.png/);
   assert.match(sw, /js\/u11trail\.js/);
   assert.match(screens, /#\/library/);
   assert.match(screens, /class: 'homebook'/);
@@ -45,6 +46,13 @@ test('choices are numbered, misses are calm, and a sitting stays short', () => {
   assert.match(trail, /Great job, see you next time/);
   assert.match(trail, /ir_u11_prog/);
   assert.match(trail, /Warm-up/);
+  assert.match(trail, /beats: \['concept', 'hear', 'match', 'twist'\]/);
+  assert.match(trail, /beats: \['review', 'satchel', 'chant'\]/);
+  assert.match(trail, /book: 'map-pan'/);
+  assert.match(trail, /is-done/);
+  assert.match(trail, /is-walk/);
+  assert.match(trail, /prefers-reduced-motion: reduce/);
+  assert.doesNotMatch(trail, /u11t-find/);
 });
 
 test('book lines stay inside Unit 1 short a', () => {

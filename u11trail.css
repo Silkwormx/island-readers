@@ -58,10 +58,10 @@ body:not(.teach) .u11t-rec{display:none}
 
 /* Trail map */
 .u11t-mapwrap{width:min(100%,68rem);height:100%;display:flex;flex-direction:column;align-items:center;min-height:0}
-.u11t-gembar{flex:none;display:flex;gap:.28rem;margin:0 0 .2rem}
-.u11t-gemslot{width:1.35rem;height:1.35rem;border-radius:50%;border:2px solid #C9B48A;background:#fff;display:flex;align-items:center;justify-content:center}
+.u11t-gembar{flex:none;display:flex;gap:.22rem;margin:0 0 .2rem}
+.u11t-gemslot{width:1.15rem;height:1.15rem;border-radius:50%;border:2px solid #C9B48A;background:#fff;display:flex;align-items:center;justify-content:center}
 .u11t-gemslot.got{border-color:#C95A10;background:#fff6e4}
-.u11t-gemslot img{width:1.05rem;height:1.05rem;object-fit:contain}
+.u11t-gemslot img{width:.9rem;height:.9rem;object-fit:contain}
 .u11t-map{
   position:relative;width:100%;flex:1;min-height:0;
   border-radius:1rem;overflow:hidden;
@@ -69,37 +69,54 @@ body:not(.teach) .u11t-rec{display:none}
 }
 .u11t-path{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:1}
 .u11t-path svg{width:100%;height:100%;display:block}
-.u11t-stop,.u11t-end,.u11t-find,.u11t-marker{z-index:2}
-.u11t-stop,.u11t-end,.u11t-find,.u11t-marker{position:absolute}
+.u11t-stop,.u11t-end,.u11t-marker{z-index:2}
+.u11t-stop,.u11t-end,.u11t-marker{position:absolute}
 .u11t-stop,.u11t-end{
   width:auto;transform:translate(-50%,-50%);
   display:flex;align-items:center;justify-content:center;
   padding:0;border:0;background:transparent;box-shadow:none;cursor:pointer
 }
 .u11t-stop-face{
-  width:3.15rem;height:3.15rem;border-radius:50%;border:3px solid #2B2540;background:#FFF8E7;
+  width:2.45rem;height:2.45rem;border-radius:50%;border:3px solid #2B2540;background:#FFF8E7;
   display:flex;align-items:center;justify-content:center;
-  box-shadow:0 3px 0 rgba(43,37,64,.28);font:700 1.2rem/1 Andika,sans-serif;color:#2B2540
+  box-shadow:0 3px 0 rgba(43,37,64,.28);font:700 1rem/1 Andika,sans-serif;color:#2B2540
 }
-.u11t-stop-face img{width:1.7rem;height:1.7rem;object-fit:contain}
+.u11t-stop-face img{width:1.35rem;height:1.35rem;object-fit:contain}
+.u11t-stop.is-done .u11t-stop-face{
+  width:2.65rem;height:2.65rem;border:0;background:transparent;box-shadow:none;border-radius:0
+}
+.u11t-stop.is-done .u11t-stop-face img{
+  width:2.65rem;height:2.65rem;filter:drop-shadow(0 2px 1px rgba(43,37,64,.35))
+}
 .u11t-stop.is-now .u11t-stop-face{box-shadow:0 0 0 3px #F28C00, 0 3px 0 rgba(43,37,64,.28)}
 .u11t-stop.is-locked .u11t-stop-face,.u11t-end.is-locked .u11t-stop-face{background:#E7E0D2;color:#6d6578;filter:saturate(.45)}
-.u11t-lock{width:1.2rem;height:1.2rem;display:block}
-.u11t-find{
-  width:2.7rem;height:2.7rem;transform:translate(-50%,-50%);
-  display:flex;align-items:center;justify-content:center;
-  border:0;background:transparent;padding:0;cursor:pointer
-}
-.u11t-find img{width:2.7rem;height:2.7rem;object-fit:cover;border-radius:.45rem;border:2px solid #2B2540;background:#fff}
-.u11t-find.is-ahead{opacity:.85}
+.u11t-lock{width:1.05rem;height:1.05rem;display:block}
 .u11t-marker{
-  width:7.4rem;height:5.6rem;z-index:5;pointer-events:none;
-  transform:translate(-50%,-115%);
-  transition:left .9s ease,top .9s ease
+  width:4.6rem;height:4.15rem;z-index:5;pointer-events:none;
+  transform:translate(-50%,-100%);transform-origin:50% 100%
 }
-.u11t-marker img{width:100%;height:100%;object-fit:contain;background:transparent;border:0;border-radius:0;box-shadow:none}
+.u11t-marker img{
+  position:relative;z-index:1;width:100%;height:100%;object-fit:contain;object-position:center bottom;
+  background:transparent;border:0;border-radius:0;box-shadow:none;
+  filter:saturate(.9) sepia(.12) brightness(1.02) contrast(1.04)
+}
+.u11t-ground{
+  position:absolute;left:50%;bottom:.05rem;z-index:0;width:68%;height:.55rem;
+  transform:translateX(-50%);pointer-events:none;
+  background:radial-gradient(ellipse at center, rgba(42,24,8,.42), rgba(42,24,8,0) 72%)
+}
+.u11t-marker.is-idle{animation:u11t-idle 2.8s ease-in-out infinite}
+.u11t-marker.is-walk{animation:u11t-walk .42s ease-in-out infinite}
+@keyframes u11t-idle{
+  0%,100%{transform:translate(-50%,-100%) scale(1,1)}
+  50%{transform:translate(-50%,-100%) translateY(-3px) scale(1.012,.988)}
+}
+@keyframes u11t-walk{
+  0%,100%{transform:translate(-50%,-100%) translateY(0) rotate(-2.5deg)}
+  50%{transform:translate(-50%,-100%) translateY(-5px) rotate(2.5deg)}
+}
 @media (prefers-reduced-motion:reduce){
-  .u11t-marker{transition:none}
+  .u11t-marker,.u11t-marker.is-idle,.u11t-marker.is-walk{animation:none}
   .u11t-stop.is-now{animation:none}
 }
 
@@ -192,6 +209,27 @@ body:not(.teach) .u11t-rec{display:none}
 .u11t-check .ico{width:1.1rem;height:1.1rem}
 
 /* Gem and bells */
+.u11t-celebrate{
+  position:relative;width:min(100%,42rem);height:100%;min-height:0;
+  border-radius:1rem;overflow:hidden;
+  display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:.2rem;
+  padding:0 0 .4rem;
+  background:#c9e4c2 url("img/u11-forest-phone.jpg") center 42%/cover no-repeat
+}
+.u11t-celebrate .u11t-cast{
+  position:relative;height:clamp(8.2rem,36vh,15rem);width:min(18rem,88%);
+  filter:saturate(.9) sepia(.1) contrast(1.03)
+}
+.u11t-celebrate .u11t-cast img{
+  height:100%;width:auto;max-width:100%;object-fit:contain;object-position:center bottom;
+  background:transparent;border:0;box-shadow:none
+}
+.u11t-celebrate .u11t-ground{bottom:.2rem;width:46%;height:.7rem}
+.u11t-celebrate .prize{position:relative;z-index:1;width:4.2rem;height:4.2rem;object-fit:contain;animation:u11pop .6s ease}
+.u11t-celebrate .u11t-line{
+  position:relative;z-index:1;background:rgba(255,248,231,.92);
+  border-radius:.55rem;padding:.08rem .6rem
+}
 .u11t-gem{width:min(100%,28rem);text-align:center;display:flex;flex-direction:column;align-items:center;gap:.3rem}
 .u11t-gem img.prize{width:5.5rem;height:5.5rem;object-fit:contain;animation:u11pop .6s ease}
 .u11t-faces{display:flex;align-items:flex-end;justify-content:center}
@@ -206,15 +244,16 @@ body:not(.teach) .u11t-rec{display:none}
 @keyframes u11ring{0%,100%{transform:rotate(-8deg)}50%{transform:rotate(8deg)}}
 .u11t-joke{margin:.1rem 0 0;font-size:clamp(1.05rem,3.5vw,1.35rem);font-weight:700;line-height:1.3}
 @media (prefers-reduced-motion:reduce){
-  .u11t-bells img,.u11t-gem img.prize,.u11t-demo b{animation:none}
+  .u11t-bells img,.u11t-gem img.prize,.u11t-celebrate .prize,.u11t-demo b{animation:none}
 }
 
 @media (min-width:900px){
   .u11t-map{background-image:url("img/u11-forest-wide.jpg");background-position:center 60%}
+  .u11t-celebrate{background-image:url("img/u11-forest-wide.jpg");background-position:center 55%}
+  .u11t-marker{width:6.4rem;height:5.6rem}
   .u11trail .acttitle{font-size:1.6rem}
   .u11t-pics{width:min(100%,40rem)}
   .u11t-pichit img{height:82%}
-  .u11t-marker{width:9rem;height:6.8rem}
   .u11-scene{height:min(48vh,20rem)}
 }
 @media (max-height:740px){
