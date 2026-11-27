@@ -4022,7 +4022,30 @@ body:has(.tmscreen) #soundfix,body:has(.u123step) #soundfix,body:has(.u789step) 
   content:"";position:absolute;left:8%;right:8%;bottom:-2%;height:.7rem;z-index:0;pointer-events:none;
   background:radial-gradient(ellipse at 50% 50%, rgba(28,22,14,.42), rgba(28,22,14,0) 72%);
 }
-.skyhome.spiral .skyline,.skyhome.spiral .skystones{stroke:none}
+.skyhome.spiral .skyline,.skyhome.spiral .skystones,.skyhome.ledges .skyline,.skyhome.ledges .skystones{stroke:none}
+.skyhome.ledges{background:#F3E6C4}
+.skyhome.ledges .mwrap > .hbanner{background:#F3E6C4}
+.skyhome.ledges .skytrail{
+  position:relative;overflow:clip;
+  border:4px solid #7A5430;border-radius:1.35rem;
+  background:#d7eef8 url("img/sky/sky_far.webp") center 28% / cover no-repeat fixed;
+  box-shadow:inset 0 0 0 2px #E7D3A4, 0 8px 16px rgba(70,46,20,.12);
+}
+.skyhome.ledges .skystop{position:absolute;margin:0!important;width:auto;z-index:4;overflow:visible}
+.skyhome.ledges .skyisland{display:block;width:100%;height:auto}
+.skyhome.ledges .skylbl{
+  position:absolute;z-index:6;top:22%;bottom:auto;width:6.6rem;height:auto;margin:0;
+  transform:none;white-space:normal;font-family:Andika,sans-serif;
+}
+.skyhome.ledges .sky-l .skylbl{left:calc(100% + .2rem);right:auto}
+.skyhome.ledges .sky-r .skylbl{right:calc(100% + .2rem);left:auto}
+.skyhome.ledges .skybook{position:absolute;z-index:6;margin:0}
+.skyhome.ledges .skyfig{width:2.85rem;z-index:8}
+.skyhome.spiral .skygrass,.skyhome.ledges .skygrass{height:18%;bottom:-2%;left:6%;right:6%}
+@media (min-width:1000px){
+  .skyhome.ledges .skylbl{width:8.6rem}
+  .skyhome.ledges .skyfig{width:3.6rem}
+}
 .skyhome.spiral .skybook{position:absolute;z-index:6;margin:0;align-self:auto;width:3.6rem}
 .skyhome.spiral .skystop{position:absolute;margin:0!important;width:112px;z-index:4;overflow:visible}
 .skyhome.spiral .skylbl{

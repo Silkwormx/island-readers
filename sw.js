@@ -1,7 +1,7 @@
 /* Island Readers sample service worker.
    Code (HTML/JS/CSS/data) is network-first so a new version always wins; the cache is only an offline fallback.
    Media (images/audio/video) is cache-first. Install never fails because of one file. */
-const CACHE = 'ir-20261127y';
+const CACHE = 'ir-20261127z';
 const ASSETS = [
  "./index.html",
  "./js/wordplay.js",
@@ -768,6 +768,29 @@ const ASSETS = [
  "./img/sky/rooted/u20.webp",
  "./img/sky/rooted/u21.webp",
  "./img/sky/rooted/u22.webp",
+ "./img/sky/seated/f.webp",
+ "./img/sky/seated/u01.webp",
+ "./img/sky/seated/u02.webp",
+ "./img/sky/seated/u03.webp",
+ "./img/sky/seated/u04.webp",
+ "./img/sky/seated/u05.webp",
+ "./img/sky/seated/u06.webp",
+ "./img/sky/seated/u07.webp",
+ "./img/sky/seated/u08.webp",
+ "./img/sky/seated/u09.webp",
+ "./img/sky/seated/u10.webp",
+ "./img/sky/seated/u11.webp",
+ "./img/sky/seated/u12.webp",
+ "./img/sky/seated/u13.webp",
+ "./img/sky/seated/u14.webp",
+ "./img/sky/seated/u15.webp",
+ "./img/sky/seated/u16.webp",
+ "./img/sky/seated/u17.webp",
+ "./img/sky/seated/u18.webp",
+ "./img/sky/seated/u19.webp",
+ "./img/sky/seated/u20.webp",
+ "./img/sky/seated/u21.webp",
+ "./img/sky/seated/u22.webp",
  "./img/sw_chest.webp",
  "./img/w1.webp",
  "./img/w10.webp",

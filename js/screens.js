@@ -379,7 +379,9 @@
     const place = trailPlace();
     const atFoundations = continueTarget().href.indexOf('#/foundation') === 0;
     const hereUnit = atFoundations ? 0 : place.here;
-    const spiral = /[?&]layout=spiral\b/.test(location.search);
+    const ledgesHome = /[?&]home=ledges\b/.test(location.search);
+    const spiral = /[?&]layout=spiral\b/.test(location.search) && !ledgesHome;
+    const artDir = ledgesHome ? 'img/sky/stops/' : (spiral ? 'img/sky/seated/' : 'img/sky/stops/');
     const coilSide = (n) => (n % 2 === 1 ? 'r' : 'l');
     /* Paint Zip and Frill into the island daylight: drop the studio edge, warm the light, and leave no halo. */
     function paintIntoScene(img, done) {
@@ -425,6 +427,11 @@
           if (y > 0) seed(x, y - 1);
           if (y + 1 < H) seed(x, y + 1);
         }
+        /* Drop only the studio backdrop. Do not erode or recolor, or Frill's wavy foot becomes legs. */
+        g.putImageData(frame, 0, 0);
+        img.src = c.toDataURL('image/png');
+        if (done) done();
+        return;
         const solid = new Uint8Array(N);
         for (let i = 0; i < N; i++) solid[i] = p[i * 4 + 3] > 20 ? 1 : 0;
         const eroded = new Uint8Array(N);
@@ -546,7 +553,7 @@
         here: st === 'here',
         soon: st === 'soon',
         done: st === 'done',
-        img: (spiral ? 'img/sky/rooted/u' : 'img/sky/stops/u') + String(n).padStart(2, '0') + '.webp', /* painted from img/units/tile */
+        img: artDir + 'u' + String(n).padStart(2, '0') + '.webp', /* painted from img/units/tile */
         lazy: n > 8,
         kicker: 'Unit ' + n,
         name: t[0],
@@ -561,7 +568,7 @@
       n: 0,
       side: coilSide(0),
       here: atFoundations,
-      img: (spiral ? 'img/sky/rooted/f.webp' : 'img/sky/stops/f.webp'), /* painted from coverSrc, foundation/img/foundations_cover.jpg */
+      img: artDir + 'f.webp', /* painted from coverSrc, foundation/img/foundations_cover.jpg */
       kicker: 'Foundations',
       name: 'Learn the letters',
       title: 'Foundations: Learn the letters',
@@ -652,7 +659,7 @@
         h('div', { class: 'zfhead' }, h('h2', { class: 'zfline' }, 'Learn to read with Zip and Frill'), readAloudBtn()),
         h('p', { class: 'zfsub' }, 'Ring every bell by learning its sounds.'),
         continueButton()));
-    app.append(h('div', { class: 'screen home mapscreen gridhome skyhome' + (spiral ? ' spiral' : '') }, h('div', { class: 'mwrap' }, banner, h('div', { class: 'homelay' }, h('div', { class: 'homeside' }, aboutDrop, hero, tabs), h('div', { class: 'bellslot' }, grid)))));
+    app.append(h('div', { class: 'screen home mapscreen gridhome skyhome' + (ledgesHome ? ' ledges' : spiral ? ' spiral' : '') }, h('div', { class: 'mwrap' }, banner, h('div', { class: 'homelay' }, h('div', { class: 'homeside' }, aboutDrop, hero, tabs), h('div', { class: 'bellslot' }, grid)))));
     standOnTrail(grid, hereUnit, zipFig, frillFig, zipImg, frillImg, paintIntoScene);
   }
   /* Zip and Frill stand on the current island. After a unit is completed they walk the path to the next one. */
@@ -677,10 +684,13 @@
       const a = art.getBoundingClientRect();
       const t = trail.getBoundingClientRect();
       const back = stop.classList.contains('sky-b');
-      const coil = trail.closest('.skyhome').classList.contains('spiral');
-      const y = a.top - t.top + a.height * (coil ? 0.96 : 0.62);
-      const zipR = back ? 0.52 : 0.28;
-      const frillR = back ? 0.74 : 0.7;
+      const home = trail.closest('.skyhome');
+      const coil = home.classList.contains('spiral');
+      const ledges = home.classList.contains('ledges');
+      const onRight = stop.classList.contains('sky-r');
+      const y = a.top - t.top + a.height * (ledges ? 0.66 : coil ? 0.7 : 0.62);
+      const zipR = ledges ? (onRight ? 0.28 : 0.58) : (back ? 0.52 : 0.28);
+      const frillR = ledges ? (onRight ? 0.42 : 0.74) : (back ? 0.74 : 0.7);
       return { y: y, zipX: a.left - t.left + a.width * zipR, frillX: a.left - t.left + a.width * frillR, midX: a.left - t.left + a.width * (back ? 0.3 : 0.5) };
     }
     function put(fig, x, y) {
@@ -697,21 +707,19 @@
       const fixed = sideEl && getComputedStyle(sideEl).position === 'fixed';
       const limit = fixed ? sideEl.getBoundingClientRect().top : window.innerHeight;
       const avail = Math.max(narrow ? 480 : 540, limit - trail.getBoundingClientRect().top - 10);
-      /* Grass tops on the rocky shelves in beanstalk.webp. */
+      /* Tips of the alternating shelves in beanstalk.webp (1658×1152). */
       const slots = [
-        { x: 0.36, y: 0.132 },
-        { x: 0.64, y: 0.358 },
-        { x: 0.36, y: 0.602 },
-        { x: 0.64, y: 0.862 }
+        { x: 0.32, y: 0.118, tip: 0.192 },
+        { x: 0.64, y: 0.355, tip: 0.741 },
+        { x: 0.34, y: 0.598, tip: 0.201 },
+        { x: 0.72, y: 0.862, tip: 0.868 }
       ];
-      const native = 1152 / 864;
-      const labelW = narrow ? 112 : 172;
-      const treeFrac = narrow ? 0.38 : 0.40;
-      const big = Math.round(w * (narrow ? 0.98 : 0.82));
-      /* Leave room under the grass so the rocky lip of unit 2 stays inside the frame. */
-      const fit = Math.round((avail - 16) / ((slots[3].y + 0.08) * native));
-      let tileW = Math.min(big, Math.max(narrow ? 240 : 500, fit));
-      tileW = Math.max(narrow ? 220 : 480, Math.min(w - 2, tileW));
+      const native = 1152 / 1658;
+      const labelW = narrow ? 108 : 156;
+      const treeFrac = narrow ? 0.42 : 0.34;
+      const big = Math.round(w * (narrow ? 0.99 : 0.98));
+      const fit = Math.round((avail - 8) / ((slots[3].y + 0.06) * native));
+      let tileW = Math.min(w - 2, Math.max(narrow ? 300 : 680, Math.min(big, fit)));
       let tileH = Math.round(tileW * native);
       let iw = Math.round(tileW * treeFrac);
       let artH = Math.round(iw * 0.9);
@@ -744,7 +752,18 @@
           el.classList.add(side === 'r' ? 'sky-r' : 'sky-l');
           el.style.width = width + 'px';
           el.style.left = Math.round(cx - width / 2) + 'px';
-          el.style.top = Math.round(grass - height + 2) + 'px';
+          el.style.top = Math.round(grass - height * 0.68) + 'px';
+          const lbl = el.querySelector('.skylbl');
+          if (lbl) {
+            const stopLeft = cx - width / 2;
+            const tipPx = left + slot.tip * tileW;
+            lbl.style.right = 'auto';
+            lbl.style.top = 'auto';
+            lbl.style.bottom = '38%';
+            lbl.style.transform = 'none';
+            if (side === 'l') lbl.style.left = Math.round(Math.max(4 - stopLeft, tipPx - stopLeft - labelW + 14)) + 'px';
+            else lbl.style.left = Math.round(Math.min(w - labelW - 22 - stopLeft, tipPx - stopLeft - 8)) + 'px';
+          }
         } else {
           el.style.left = Math.round(cx - width / 2) + 'px';
           el.style.top = Math.round(grass - height * 0.82) + 'px';
@@ -880,8 +899,133 @@
       }
       svg.append(g);
     }
+    function placeLedges() {
+      const stops = [...trail.querySelectorAll('.skystop')];
+      const book = trail.querySelector('.skybook');
+      const spire = trail.querySelector('.skyspire');
+      if (!stops.length) return;
+      const w = trail.clientWidth;
+      const narrow = w < 520;
+      const sideEl = trail.closest('.skyhome').querySelector('.homeside');
+      const fixed = sideEl && getComputedStyle(sideEl).position === 'fixed';
+      const limit = fixed ? sideEl.getBoundingClientRect().top : window.innerHeight;
+      const avail = Math.max(narrow ? 520 : 600, limit - trail.getBoundingClientRect().top - 8);
+      const rowH = Math.round((avail - 8) / (narrow ? 3.6 : 3.15));
+      const total = stops.length * rowH + 28;
+      trail.style.height = total + 'px';
+      if (spire) spire.style.display = 'none';
+      stops.forEach((el, i) => {
+        const side = i % 2 === 0 ? 'l' : 'r';
+        const img = el.querySelector('.skyisland');
+        const aspect = img && img.naturalWidth ? img.naturalHeight / img.naturalWidth : 1.15;
+        let width = Math.round((rowH * 0.92) / aspect);
+        width = Math.max(width, Math.round(w * (narrow ? 0.62 : 0.5)));
+        el.classList.remove('sky-l', 'sky-r', 'sky-b');
+        el.classList.add(side === 'r' ? 'sky-r' : 'sky-l');
+        el.dataset.land = String(Math.floor(Math.max(0, i - 1) / 6));
+        el.style.width = width + 'px';
+        el.style.top = Math.round(i * rowH + 6) + 'px';
+        if (side === 'l') el.style.left = Math.round(-width * 0.28) + 'px';
+        else el.style.left = Math.round(w - width * 0.72) + 'px';
+      });
+      if (book) {
+        book.style.position = 'absolute';
+        book.style.width = (narrow ? 46 : 58) + 'px';
+        book.style.top = '10px';
+        book.style.left = Math.round(w * (narrow ? 0.34 : 0.22)) + 'px';
+        book.style.zIndex = '6';
+      }
+    }
+    function paintRootBridges(svg, pts, NS) {
+      const g = svgEl(NS, 'g', { class: 'skybridges' });
+      const defs = svgEl(NS, 'defs', {});
+      const filter = svgEl(NS, 'filter', { id: 'rootmist', x: '-40%', y: '-40%', width: '180%', height: '180%' });
+      filter.append(svgEl(NS, 'feGaussianBlur', { stdDeviation: '8' }));
+      defs.append(filter);
+      svg.append(defs);
+      const curve = (a, b, sag, t) => {
+        const cx = (a.x + b.x) / 2, cy = (a.y + b.y) / 2 + sag, u = 1 - t;
+        return { x: u * u * a.x + 2 * u * t * cx + t * t * b.x, y: u * u * a.y + 2 * u * t * cy + t * t * b.y };
+      };
+      const kinds = ['net', 'plank', 'deck', 'lantern'];
+      for (let i = 0; i < pts.length - 1; i++) {
+        const a = pts[i], b = pts[i + 1];
+        const sag = Math.max(28, Math.min(78, Math.abs(b.x - a.x) * 0.22 + 16));
+        const kind = kinds[i % 4];
+        const n = 16;
+        const samples = [];
+        for (let s = 0; s <= n; s++) samples.push(curve(a, b, sag, s / n));
+        const mid = samples[8];
+        g.append(svgEl(NS, 'ellipse', {
+          cx: mid.x.toFixed(1), cy: (mid.y - 8).toFixed(1),
+          rx: (Math.abs(b.x - a.x) * 0.34).toFixed(1), ry: '26',
+          fill: 'rgba(210,224,214,.42)', filter: 'url(#rootmist)'
+        }));
+        const rails = kind === 'net' ? [-16, -6, 8, 18] : kind === 'deck' ? [-30, -6, 12] : [-12, 11];
+        rails.forEach((dy, r) => {
+          let d = '';
+          samples.forEach((p, k) => {
+            const wave = Math.sin(k * 0.85 + r * 1.3) * (kind === 'net' ? 2.2 : 3.4);
+            d += (k ? ' L ' : 'M ') + (p.x + wave).toFixed(1) + ' ' + (p.y + dy).toFixed(1);
+          });
+          g.append(svgEl(NS, 'path', {
+            d: d, fill: 'none', stroke: r % 2 ? '#2E4A30' : '#4E3A28',
+            'stroke-width': kind === 'net' ? '4.2' : '7', 'stroke-linecap': 'round'
+          }));
+        });
+        if (kind === 'net') {
+          for (let s = 1; s < n; s += 2) {
+            const p = samples[s], q = samples[Math.min(n, s + 1)];
+            g.append(svgEl(NS, 'line', {
+              x1: p.x.toFixed(1), y1: (p.y - 14).toFixed(1),
+              x2: q.x.toFixed(1), y2: (q.y + 16).toFixed(1),
+              stroke: '#4A6844', 'stroke-width': '1.4'
+            }));
+          }
+        }
+        const decks = kind === 'deck' ? [0, -42] : [0];
+        decks.forEach((deck) => {
+          for (let s = 1; s < n; s++) {
+            const p = samples[s];
+            const bamboo = kind === 'plank';
+            g.append(svgEl(NS, 'line', {
+              x1: (p.x - 8).toFixed(1), y1: (p.y + deck + 2).toFixed(1),
+              x2: (p.x + 8).toFixed(1), y2: (p.y + deck + 2).toFixed(1),
+              stroke: '#6A4A2A', 'stroke-width': '4.5', 'stroke-linecap': 'round'
+            }));
+            g.append(svgEl(NS, 'line', {
+              x1: (p.x - 8).toFixed(1), y1: (p.y + deck).toFixed(1),
+              x2: (p.x + 8).toFixed(1), y2: (p.y + deck).toFixed(1),
+              stroke: bamboo ? '#E6D09A' : '#C9A86A', 'stroke-width': '3', 'stroke-linecap': 'round'
+            }));
+          }
+        });
+        if (kind === 'lantern') {
+          for (let s = 3; s < n; s += 5) {
+            const p = samples[s];
+            g.append(svgEl(NS, 'line', { x1: p.x.toFixed(1), y1: (p.y - 10).toFixed(1), x2: p.x.toFixed(1), y2: (p.y + 1).toFixed(1), stroke: '#5A4330', 'stroke-width': '1.1' }));
+            g.append(svgEl(NS, 'ellipse', { cx: p.x.toFixed(1), cy: (p.y + 4).toFixed(1), rx: '3.4', ry: '4.4', fill: '#F2D48A', stroke: '#8A6230', 'stroke-width': '0.7' }));
+          }
+        }
+        [a, b].forEach((end, ei) => {
+          const dir = ei === 0 ? 1 : -1;
+          g.append(svgEl(NS, 'path', {
+            d: 'M ' + end.x.toFixed(1) + ' ' + end.y.toFixed(1) + ' C ' + (end.x + dir * 16).toFixed(1) + ' ' + (end.y + 10).toFixed(1) + ', ' + (end.x + dir * 6).toFixed(1) + ' ' + (end.y + 24).toFixed(1) + ', ' + end.x.toFixed(1) + ' ' + (end.y + 30).toFixed(1),
+            fill: 'none', stroke: '#4A3828', 'stroke-width': '3.6', 'stroke-linecap': 'round'
+          }));
+          g.append(svgEl(NS, 'path', {
+            d: 'M ' + end.x.toFixed(1) + ' ' + (end.y - 8).toFixed(1) + ' C ' + (end.x + dir * 22).toFixed(1) + ' ' + (end.y - 4).toFixed(1) + ', ' + (end.x + dir * 10).toFixed(1) + ' ' + (end.y + 16).toFixed(1) + ', ' + (end.x + dir * 4).toFixed(1) + ' ' + (end.y + 26).toFixed(1),
+            fill: 'none', stroke: '#2F6A3C', 'stroke-width': '2.4', 'stroke-linecap': 'round'
+          }));
+        });
+      }
+      svg.append(g);
+    }
     function layoutPath() {
-      if (trail.closest('.spiral')) placeSpiral();
+      const home = trail.closest('.skyhome');
+      const ledges = !!(home && home.classList.contains('ledges'));
+      if (ledges) placeLedges();
+      else if (home && home.classList.contains('spiral')) placeSpiral();
       const svg = trail.querySelector('.skypath');
       const stops = [...trail.querySelectorAll('.skystop')];
       if (!svg || !stops.length) return;
@@ -891,7 +1035,7 @@
       svg.style.width = w + 'px';
       svg.style.height = hgt + 'px';
       const origin = trail.getBoundingClientRect();
-      const coil = !!trail.closest('.spiral');
+      const coil = !!(home && home.classList.contains('spiral'));
       const innerEdge = (s) => {
         const art = s.querySelector('.skyisland').getBoundingClientRect();
         const onRight = s.classList.contains('sky-r');
@@ -901,10 +1045,15 @@
         };
       };
       const pts = stops.map((s) => {
-        if (coil) {
-          const art = s.querySelector('.skyisland').getBoundingClientRect();
-          return { x: art.left - origin.left + art.width * 0.5, y: art.top - origin.top + art.height * 0.7 };
+        const art = s.querySelector('.skyisland').getBoundingClientRect();
+        if (ledges) {
+          const onRight = s.classList.contains('sky-r');
+          return {
+            x: art.left - origin.left + art.width * (onRight ? 0.34 : 0.66),
+            y: art.top - origin.top + art.height * 0.64
+          };
         }
+        if (coil) return { x: art.left - origin.left + art.width * 0.5, y: art.top - origin.top + art.height * 0.7 };
         return innerEdge(s);
       });
       const sagOf = (a, b) => Math.max(46, Math.min(120, Math.abs(b.x - a.x) * 0.42));
@@ -922,7 +1071,8 @@
       }
       const NS = 'http://www.w3.org/2000/svg';
       while (svg.firstChild) svg.removeChild(svg.firstChild);
-      if (!coil) paintBridges(svg, pts, sagOf, NS);
+      if (ledges) paintRootBridges(svg, pts, NS);
+      else if (!coil) paintBridges(svg, pts, sagOf, NS);
       const line = document.createElementNS(NS, 'path');
       line.setAttribute('class', 'skyline');
       line.setAttribute('d', d);
