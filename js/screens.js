@@ -526,9 +526,13 @@
         h('span', { class: 'skybody' },
           h('img', { class: 'skyisland', src: opts.img, alt: '', loading: opts.lazy ? 'lazy' : 'eager' })),
         h('span', { class: 'skylbl' },
-          h('b', null, opts.kicker),
-          h('small', null, opts.name),
-          opts.soon ? h('span', { class: 'skylock', 'aria-hidden': 'true' }, icon('lock')) : null),
+          h('span', { class: 'thead' },
+            opts.dots && opts.dots.length ? h('span', { class: 'tdots', 'aria-hidden': 'true' }, ...opts.dots.map((c) => h('i', { class: 'tdot td-' + c }))) : null,
+            h('b', { class: 'tnum' }, opts.kicker),
+            opts.soon ? h('span', { class: 'skylock', 'aria-hidden': 'true' }, icon('lock')) : null),
+          h('span', { class: 'tname' }, opts.name),
+          opts.sounds ? h('span', { class: 'tsnd' }, opts.sounds) : null,
+          opts.count ? h('span', { class: 'tcount' }, opts.count) : null),
         gem);
       b.addEventListener('click', opts.onclick);
       return b;
@@ -555,6 +559,9 @@
         lazy: n > 8,
         kicker: 'Unit ' + n,
         name: t[0],
+        sounds: t[1],
+        count: t[2] + (t[2] === 1 ? ' lesson' : ' lessons'),
+        dots: t[3],
         title: 'Unit ' + n + ': ' + t[0],
         label: label,
         onclick: () => { if (hop) { Snd.stop(); location.hash = hop; } else if (u123 || u789) { Snd.stop(); location.hash = '#/u' + n; } else if (u6) { Snd.stop(); location.hash = '#/u6'; } else if (u5) { Snd.stop(); location.hash = '#/u5'; } else if (isl) openIsland(BUILT_ID); else { Snd.stop(); toast('Unit ' + n + ' is coming soon.'); } }
@@ -877,7 +884,12 @@
           lbl.style.position = 'absolute';
           lbl.style.top = Math.round(fit.y + fit.h * fy) + 'px';
           lbl.style.bottom = 'auto';
-          lbl.style.width = (narrow ? '6.2rem' : '6.8rem');
+          /* Stay on the outer rim. A tall island such as Unit 1 is narrower, so the sign must not spread across the rocky point. */
+          const cap = Math.max(86, Math.round(width * (narrow ? 0.62 : 0.5)));
+          lbl.style.width = Math.min(narrow ? 112 : 128, cap) + 'px';
+          lbl.style.height = 'auto';
+          lbl.style.maxHeight = 'none';
+          lbl.style.overflow = 'visible';
           lbl.style.transform = 'none';
           if (side === 'l') {
             lbl.style.left = '0';
