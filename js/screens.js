@@ -839,7 +839,8 @@
       svg.append(g);
     }
     function heightRoom(rowH, narrow, avail) {
-      return Math.round(Math.min(rowH * (narrow ? 1.36 : 1.62), avail * (narrow ? 0.4 : 0.46)));
+      /* Phone islands stay a little under the laptop scale so each span stays a diagonal. */
+      return Math.round(Math.min(rowH * (narrow ? 1.16 : 1.62), avail * (narrow ? 0.36 : 0.46)));
     }
     function placeLedges() {
       const stops = [...trail.querySelectorAll('.skystop')];
@@ -850,7 +851,7 @@
       const sideEl = trail.closest('.skyhome').querySelector('.homeside');
       const fixed = sideEl && getComputedStyle(sideEl).position === 'fixed';
       const limit = fixed ? sideEl.getBoundingClientRect().top : window.innerHeight;
-      const avail = Math.max(narrow ? 560 : 620, limit - trail.getBoundingClientRect().top - 8);
+      const avail = Math.max(narrow ? 500 : 620, limit - trail.getBoundingClientRect().top - 8);
       const rowH = Math.round((avail - 12) / (narrow ? 3.15 : 3.48));
       const total = Math.round((stops.length - 1) * rowH + heightRoom(rowH, narrow, avail) + 36);
       trail.style.height = total + 'px';
@@ -860,7 +861,7 @@
         const aspect = img && img.naturalWidth ? img.naturalHeight / img.naturalWidth : 1.15;
         const height = heightRoom(rowH, narrow, avail);
         let width = Math.round(height / aspect);
-        width = Math.min(width, Math.round(w * (narrow ? 0.72 : 0.62)));
+        width = Math.min(width, Math.round(w * (narrow ? 0.46 : 0.62)));
         el.classList.remove('sky-l', 'sky-r', 'sky-b');
         el.classList.add(side === 'r' ? 'sky-r' : 'sky-l');
         el.dataset.land = String(Math.floor(Math.max(0, i - 1) / 6));
@@ -870,10 +871,11 @@
         const lbl = el.querySelector('.skylbl');
         if (lbl) {
           const rim = img && img.naturalWidth ? grassRim(img, side === 'r') : { fy: 0.62 };
-          /* On the outer rock rim, just under the grass, clear of the trunk, canopy, and bell. */
-          const fy = Math.min(0.68, Math.max(0.54, (rim.fy || 0.62) + 0.015));
+          const fit = fittedArt(el, img);
+          /* On the outer grass rim, clear of the trunk, canopy, and bell. */
+          const fy = Math.min(0.72, Math.max(0.5, (rim.fy || 0.62) + 0.02));
           lbl.style.position = 'absolute';
-          lbl.style.top = Math.round(height * fy) + 'px';
+          lbl.style.top = Math.round(fit.y + fit.h * fy) + 'px';
           lbl.style.bottom = 'auto';
           lbl.style.width = (narrow ? '6.2rem' : '6.8rem');
           lbl.style.transform = 'none';
@@ -885,9 +887,10 @@
             lbl.style.right = '0';
           }
         }
-        /* Foundations keeps the a m s t letters inside the frame. */
-        if (side === 'l') el.style.left = (i === 0 ? '16px' : '26px');
-        else el.style.left = Math.max(16, Math.round(w - width - (narrow ? 12 : 20))) + 'px';
+        /* Foundations keeps the a m s t letters inside the frame.
+           On the phone the stops sit farther apart sideways so the span is a diagonal. */
+        if (side === 'l') el.style.left = narrow ? '8px' : (i === 0 ? '16px' : '26px');
+        else el.style.left = Math.max(narrow ? 8 : 16, Math.round(w - width - (narrow ? 8 : 20))) + 'px';
       });
       if (book) {
         book.style.position = 'absolute';
@@ -986,20 +989,77 @@
       img._ink = { minX, minY, maxX: Math.max(minX + 1, maxX), maxY: Math.max(minY + 1, maxY) };
       return img._ink;
     }
+    /* Where the painted island sits inside its box. object-fit is contain, pinned to the bottom. */
+    function fittedArt(el, img) {
+      const bw = el.clientWidth, bh = el.clientHeight;
+      const nw = img && img.naturalWidth, nh = img && img.naturalHeight;
+      if (!nw || !nh || !bw || !bh) return { x: 0, y: 0, w: bw || 0, h: bh || 0 };
+      const scale = Math.min(bw / nw, bh / nh);
+      const w = nw * scale, h = nh * scale;
+      return { x: (bw - w) / 2, y: bh - h, w: w, h: h };
+    }
+    /* Grass rim: the top of the wide plateau, inset so a span meets moss rather than a rock tip or a root. */
     function grassRim(img, onRight) {
-      const rows = islandRows(img);
-      let yFirst = -1, yLast = -1;
-      for (let y = 0; y < rows.length; y++) if (rows[y]) { if (yFirst < 0) yFirst = y; yLast = y; }
-      const span = Math.max(1, yLast - yFirst);
-      const y0 = Math.floor(yFirst + span * 0.58);
-      const y1 = Math.floor(yFirst + span * 0.74);
-      let best = null;
-      for (let y = y0; y <= y1; y += 2) {
-        const row = rows[y];
-        if (row && (!best || row.w > best.w)) best = row;
+      if (!img.complete || !img.naturalWidth) return { fx: onRight ? 0.28 : 0.72, fy: 0.6 };
+      if (!img._plateau) {
+        const p = plateauRim(img);
+        if (p.ok) img._plateau = p;
+        else return { fx: onRight ? 0.28 : 0.72, fy: 0.6 };
       }
-      if (!best) return { fx: onRight ? 0.22 : 0.78, fy: 0.6 };
-      return { fx: (onRight ? best.min : best.max) / img.naturalWidth, fy: best.y / img.naturalHeight, y: best.y };
+      const p = img._plateau;
+      return { fx: onRight ? p.left : p.right, fy: p.fy };
+    }
+    function plateauRim(img) {
+      const w = img.naturalWidth, h = img.naturalHeight;
+      const c = document.createElement('canvas');
+      c.width = w;
+      c.height = h;
+      const g = c.getContext('2d', { willReadFrequently: true });
+      g.drawImage(img, 0, 0);
+      const data = g.getImageData(0, 0, w, h).data;
+      const runs = [];
+      let y0 = h, y1 = 0;
+      for (let y = 0; y < h; y += 2) {
+        let bestL = 0, bestR = -1, bestLen = 0, runS = -1;
+        const stride = y * w * 4;
+        for (let x = 0; x < w; x += 2) {
+          const op = data[stride + x * 4 + 3] > 48;
+          if (op && runS < 0) runS = x;
+          if (!op && runS >= 0) {
+            const len = x - runS;
+            if (len > bestLen) { bestLen = len; bestL = runS; bestR = x - 2; }
+            runS = -1;
+          }
+        }
+        if (runS >= 0) {
+          const len = w - runS;
+          if (len > bestLen) { bestLen = len; bestL = runS; bestR = w - 2; }
+        }
+        if (bestLen > 0) { if (y < y0) y0 = y; y1 = y; }
+        runs.push({ y: y, l: bestL, r: bestR, len: bestLen });
+      }
+      const span = Math.max(1, y1 - y0);
+      let maxl = 1;
+      const sm = runs.map((row, i) => {
+        let s = 0, n = 0;
+        for (let k = Math.max(0, i - 2); k <= Math.min(runs.length - 1, i + 2); k++) { s += runs[k].len; n++; }
+        const v = s / n;
+        if (v > maxl) maxl = v;
+        return v;
+      });
+      const wide = (i) => runs[i].y > y0 + span * 0.40 && sm[i] > maxl * 0.62;
+      let bestSeg = null;
+      for (let i = 0; i < runs.length; i++) {
+        if (!wide(i)) continue;
+        let j = i;
+        while (j < runs.length && wide(j)) j++;
+        if (!bestSeg || j - i > bestSeg[1] - bestSeg[0]) bestSeg = [i, j];
+        i = j - 1;
+      }
+      if (!bestSeg) return { left: 0.22, right: 0.78, fy: 0.6, ok: false };
+      const row = runs[Math.min(bestSeg[1] - 1, bestSeg[0] + 3)];
+      const inset = Math.max(8, Math.round(row.len * 0.08));
+      return { left: (row.l + inset) / w, right: (row.r - inset) / w, fy: row.y / h, ok: row.len > w * 0.35 };
     }
     function islandRows(img) {
       if (img._rows) return img._rows;
@@ -1045,8 +1105,9 @@
       ctx.save();
       ctx.translate(left.x, left.y);
       ctx.rotate(ang);
-      const tuck = Math.min(36, dist * 0.08);
-      ctx.drawImage(img, box.minX, box.minY, bw, bh, -tuck, -rail * 0.32, dist + tuck * 2, rail);
+      /* Shift the end post back onto the grass, so the ropes meet the rim instead of a floating root. */
+      const tuck = Math.min(slim ? 36 : 56, dist * 0.16);
+      ctx.drawImage(img, box.minX, box.minY, bw, bh, -tuck, -rail * 0.38, dist + tuck * 2, rail);
       ctx.restore();
     }
     function layoutPath() {
@@ -1076,11 +1137,13 @@
         if (ledges) {
           const onRight = s.classList.contains('sky-r');
           const img = s.querySelector('.skyisland');
-          const rim = img && img.naturalWidth ? grassRim(img, onRight) : { fx: onRight ? 0.22 : 0.78, fy: 0.6 };
-          const tuck = onRight ? 10 : -10;
+          const rim = img && img.naturalWidth ? grassRim(img, onRight) : { fx: onRight ? 0.28 : 0.72, fy: 0.6 };
+          const fit = fittedArt(s, img);
+          /* Step onto the grass, toward the middle of this island. */
+          const inward = onRight ? 6 : -6;
           return {
-            x: art.left - origin.left + art.width * rim.fx + tuck,
-            y: art.top - origin.top + art.height * rim.fy
+            x: art.left - origin.left + fit.x + fit.w * rim.fx + inward,
+            y: art.top - origin.top + fit.y + fit.h * rim.fy
           };
         }
         if (coil) return { x: art.left - origin.left + art.width * 0.5, y: art.top - origin.top + art.height * 0.7 };
