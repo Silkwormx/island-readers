@@ -4006,6 +4006,10 @@ body:has(.tmscreen) #soundfix,body:has(.u123step) #soundfix,body:has(.u789step) 
 .skyhome .skyspire,.skyhome .skytrunk{display:none}
 .skyhome.spiral{background:#F3E6C4}
 .skyhome.spiral .mwrap > .hbanner{background:#F3E6C4}
+.skyhome.spiral .skyspire{
+  display:block;position:absolute;z-index:0;pointer-events:none;
+  background:url("img/sky/beanstalk.webp") repeat-y top left;
+}
 .skyhome.spiral .skytrail{
   position:relative;overflow:hidden;
   border:4px solid #7A5430;border-radius:1.35rem;
@@ -4017,7 +4021,7 @@ body:has(.tmscreen) #soundfix,body:has(.u123step) #soundfix,body:has(.u789step) 
 .skyhome.spiral .skystop{position:absolute;margin:0!important;width:112px;z-index:4;overflow:visible}
 .skyhome.spiral .skylbl{
   position:absolute;z-index:6;top:46%;bottom:auto;left:auto;right:calc(100% + .45rem);
-  width:5.6rem;height:auto;min-height:0;margin:0;transform:translateY(-50%);
+  width:4.8rem;height:auto;min-height:0;margin:0;transform:translateY(-50%);
   font-family:Andika,sans-serif;
 }
 .skyhome.spiral .sky-r .skylbl{right:auto;left:calc(100% + .45rem)}

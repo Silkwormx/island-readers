@@ -684,61 +684,75 @@
     function put(fig, x, y) {
       fig.style.transform = 'translate(' + (x - fig.offsetWidth / 2) + 'px,' + (y - fig.offsetHeight) + 'px)';
     }
-    function pillarPlan() {
+    function placeSpiral() {
       const stops = [...trail.querySelectorAll('.skystop')];
       const book = trail.querySelector('.skybook');
+      const spire = trail.querySelector('.skyspire');
+      if (!stops.length || !spire) return;
       const w = trail.clientWidth;
       const narrow = w < 520;
       const sideEl = trail.closest('.skyhome').querySelector('.homeside');
       const fixed = sideEl && getComputedStyle(sideEl).position === 'fixed';
       const limit = fixed ? sideEl.getBoundingClientRect().top : window.innerHeight;
-      const avail = Math.max(narrow ? 500 : 560, limit - trail.getBoundingClientRect().top - 8);
-      const labelW = narrow ? 90 : 156;
-      const gap = narrow ? 6 : 10;
-      const edge = narrow ? 8 : 16;
-      const trunkW = narrow ? 72 : 108;
-      const cx = w / 2;
-      const libSpan = narrow ? 96 : 112;
-      let pitch = Math.round((avail - libSpan - 18) / 3);
-      pitch = Math.max(narrow ? 126 : 148, Math.min(pitch, narrow ? 154 : 184));
-      const vary = [1, 0.88, 1.1, 0.82, 0.96];
-      const level = (i, y, isLib) => {
-        const right = isLib ? true : (i % 2 === 1);
-        const art = isLib ? null : stops[i].querySelector('.skyisland');
-        const aspect = art && art.naturalWidth ? art.naturalHeight / art.naturalWidth : 1.08;
-        const iw = isLib ? Math.round(narrow ? 48 : 62) : Math.round((narrow ? 98 : 154) * (0.9 + (i % 3) * 0.07));
-        const artH = Math.round(iw * (isLib ? 1.35 : aspect));
-        const pw = Math.round((iw + (narrow ? 28 : 40)) * vary[i % vary.length]);
-        const ph = Math.round((narrow ? 28 : 36) * (0.88 + (i % 3) * 0.1));
-        const ix = right ? w - edge - labelW - gap - iw : edge + labelW + gap;
-        const px = right ? cx - 6 : cx - pw + 6;
-        return { right: right, y: y, pw: Math.max(pw, Math.abs((right ? ix + iw : ix) - cx) + 18), ph: ph + 18, iw: iw, ix: ix, iy: y - Math.round(artH * 0.42), px: px, artH: artH, isLib: isLib };
-      };
-      const levels = [level(0, 70, true)];
-      for (let i = 0; i < stops.length; i++) levels.push(level(i, 70 + libSpan + i * pitch, false));
-      const last = levels[levels.length - 1];
-      return { w: w, narrow: narrow, trunkW: trunkW, cx: cx, levels: levels, total: last.y + last.ph + 26, pitch: pitch, labelW: labelW, book: book };
-    }
-    function placeSpiral() {
-      const stops = [...trail.querySelectorAll('.skystop')];
-      if (!stops.length) return;
-      const plan = pillarPlan();
-      trail._plan = plan;
-      trail.style.height = plan.total + 'px';
-      stops.forEach((s, i) => {
-        const lv = plan.levels[i + 1];
-        s.style.width = lv.iw + 'px';
-        s.style.left = Math.round(lv.ix) + 'px';
-        s.style.top = Math.round(lv.iy) + 'px';
-      });
-      const book = plan.book;
-      if (book) {
-        const lv = plan.levels[0];
-        const bh = book.offsetHeight || (plan.narrow ? 74 : 88);
-        book.style.width = plan.narrow ? '3.15rem' : '3.7rem';
-        book.style.left = Math.round(lv.ix) + 'px';
-        book.style.top = Math.max(10, Math.round(lv.y - bh + lv.ph)) + 'px';
+      const avail = Math.max(narrow ? 480 : 540, limit - trail.getBoundingClientRect().top - 10);
+      /* Painted plateaus in beanstalk.webp: left, right, left, right. */
+      const slots = [
+        { x: 0.28, y: 0.17 },
+        { x: 0.73, y: 0.37 },
+        { x: 0.28, y: 0.57 },
+        { x: 0.74, y: 0.76 }
+      ];
+      const native = 1280 / 720;
+      let tileW = Math.round(w * (narrow ? 0.74 : 0.52));
+      let tileH = Math.round(tileW * native);
+      let iw = Math.round(tileW * (narrow ? 0.34 : 0.3));
+      let artH = Math.round(iw * 1.08);
+      let bottom = Math.round(slots[3].y * tileH + artH * 0.45);
+      if (bottom > avail - 6) {
+        const scale = (avail - 6) / bottom;
+        tileW = Math.max(narrow ? 200 : 340, Math.round(tileW * scale));
+        tileH = Math.round(tileW * native);
+        iw = Math.round(tileW * (narrow ? 0.34 : 0.3));
+        artH = Math.round(iw * 1.08);
       }
+      const count = stops.length + 1;
+      const last = count - 1;
+      const total = Math.floor(last / 4) * tileH + Math.round(slots[last % 4].y * tileH + artH * 0.55 + 18);
+      const left = Math.round((w - tileW) / 2);
+      trail.style.height = total + 'px';
+      spire.style.display = 'block';
+      spire.style.left = left + 'px';
+      spire.style.top = '0px';
+      spire.style.width = tileW + 'px';
+      spire.style.height = total + 'px';
+      spire.style.backgroundSize = tileW + 'px ' + tileH + 'px';
+      spire.style.backgroundPosition = '0 0';
+      const placeLevel = (index, el, isBook) => {
+        const slot = slots[index % 4];
+        const story = Math.floor(index / 4);
+        const side = index % 2 === 0 ? 'l' : 'r';
+        const aspect = !isBook && el.querySelector('.skyisland').naturalWidth ? el.querySelector('.skyisland').naturalHeight / el.querySelector('.skyisland').naturalWidth : 1.08;
+        const width = isBook ? Math.round(narrow ? 52 : 64) : iw;
+        const height = Math.round(width * (isBook ? 1.4 : aspect));
+        const labelW = narrow ? 82 : 160;
+        let cx = left + slot.x * tileW;
+        if (side === 'l') cx = Math.max(cx, labelW + 6 + width / 2);
+        else cx = Math.min(cx, w - labelW - 6 - width / 2);
+        const grass = story * tileH + slot.y * tileH;
+        if (!isBook) {
+          el.classList.remove('sky-l', 'sky-r', 'sky-b');
+          el.classList.add(side === 'r' ? 'sky-r' : 'sky-l');
+          el.style.width = width + 'px';
+          el.style.left = Math.round(cx - width / 2) + 'px';
+          el.style.top = Math.round(grass - height * 0.7) + 'px';
+        } else {
+          el.style.left = Math.round(cx - width / 2) + 'px';
+          el.style.top = Math.round(grass - height * 0.72) + 'px';
+          el.style.width = width + 'px';
+        }
+      };
+      if (book) placeLevel(0, book, true);
+      stops.forEach((s, i) => placeLevel(i + 1, s, false));
     }
     function svgEl(NS, name, attrs) {
       const el = document.createElementNS(NS, name);
@@ -898,7 +912,6 @@
       }
       const NS = 'http://www.w3.org/2000/svg';
       while (svg.firstChild) svg.removeChild(svg.firstChild);
-      if (coil && trail._plan) paintPillar(svg, trail._plan, NS);
       if (!coil) paintBridges(svg, pts, sagOf, NS);
       const line = document.createElementNS(NS, 'path');
       line.setAttribute('class', 'skyline');
