@@ -3904,7 +3904,7 @@ body:has(.tmscreen) #soundfix,body:has(.u123step) #soundfix,body:has(.u789step) 
   overflow-y:auto;
   background:#FFF8E7;
 }
-.skyhome .mwrap{max-width:84rem;padding:.12rem .7rem 1.2rem;overflow-x:hidden}
+.skyhome .mwrap{max-width:84rem;padding:.12rem .7rem 1.2rem;overflow:visible}
 .skyhome .mwrap > .hbanner{
   display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:.35rem .7rem;
   position:relative;padding:.15rem .2rem .05rem;background:transparent;margin:0;

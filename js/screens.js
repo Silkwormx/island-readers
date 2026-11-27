@@ -848,16 +848,16 @@
       const fixed = sideEl && getComputedStyle(sideEl).position === 'fixed';
       const limit = fixed ? sideEl.getBoundingClientRect().top : window.innerHeight;
       const avail = Math.max(narrow ? 520 : 600, limit - trail.getBoundingClientRect().top - 8);
-      const rowH = Math.round((avail - 28) / (narrow ? 3.25 : 3.05));
-      const total = Math.round((stops.length - 1) * rowH + rowH * 0.84 + 40);
+      const rowH = Math.round((avail - 20) / (narrow ? 3.25 : 3.02));
+      const total = Math.round((stops.length - 1) * rowH + rowH * 1.15 + 24);
       trail.style.height = total + 'px';
       stops.forEach((el, i) => {
         const side = i % 2 === 0 ? 'l' : 'r';
         const img = el.querySelector('.skyisland');
         const aspect = img && img.naturalWidth ? img.naturalHeight / img.naturalWidth : 1.15;
-        const height = Math.round(rowH * 0.84);
+        const height = Math.round(Math.min(rowH * 1.08, avail * 0.38));
         let width = Math.round(height / aspect);
-        width = Math.min(width, Math.round(w * (narrow ? 0.74 : 0.48)));
+        width = Math.min(width, Math.round(w * (narrow ? 0.62 : 0.58)));
         el.classList.remove('sky-l', 'sky-r', 'sky-b');
         el.classList.add(side === 'r' ? 'sky-r' : 'sky-l');
         el.dataset.land = String(Math.floor(Math.max(0, i - 1) / 6));
@@ -866,12 +866,13 @@
         el.style.top = Math.round(i * rowH + 6) + 'px';
         const lbl = el.querySelector('.skylbl');
         if (lbl) {
+          const rim = img && img.naturalWidth ? grassRim(img, side === 'r') : { fy: 0.58 };
           lbl.style.position = 'absolute';
-          lbl.style.top = Math.round(height * 0.58) + 'px';
+          lbl.style.top = Math.round(height * Math.max(0.4, rim.fy - 0.12)) + 'px';
           lbl.style.bottom = 'auto';
           lbl.style.left = '50%';
           lbl.style.right = 'auto';
-          lbl.style.width = '7.4rem';
+          lbl.style.width = '7.2rem';
           lbl.style.transform = 'translateX(-50%)';
         }
         /* Foundations keeps the a m s t letters inside the frame. */
@@ -975,35 +976,67 @@
       img._ink = { minX, minY, maxX: Math.max(minX + 1, maxX), maxY: Math.max(minY + 1, maxY) };
       return img._ink;
     }
+    function grassRim(img, onRight) {
+      const rows = islandRows(img);
+      let yFirst = -1, yLast = -1;
+      for (let y = 0; y < rows.length; y++) if (rows[y]) { if (yFirst < 0) yFirst = y; yLast = y; }
+      const span = Math.max(1, yLast - yFirst);
+      const y0 = Math.floor(yFirst + span * 0.58);
+      const y1 = Math.floor(yFirst + span * 0.74);
+      let best = null;
+      for (let y = y0; y <= y1; y += 2) {
+        const row = rows[y];
+        if (row && (!best || row.w > best.w)) best = row;
+      }
+      if (!best) return { fx: onRight ? 0.22 : 0.78, fy: 0.6 };
+      return { fx: (onRight ? best.min : best.max) / img.naturalWidth, fy: best.y / img.naturalHeight, y: best.y };
+    }
+    function islandRows(img) {
+      if (img._rows) return img._rows;
+      const c = document.createElement('canvas');
+      c.width = img.naturalWidth;
+      c.height = img.naturalHeight;
+      const g = c.getContext('2d', { willReadFrequently: true });
+      g.drawImage(img, 0, 0);
+      const data = g.getImageData(0, 0, c.width, c.height).data;
+      const rows = new Array(c.height);
+      for (let y = 0; y < c.height; y += 2) {
+        let min = -1, max = -1;
+        const stride = y * c.width * 4;
+        for (let x = 0; x < c.width; x += 2) {
+          if (data[stride + x * 4 + 3] > 36) {
+            if (min < 0) min = x;
+            max = x;
+          }
+        }
+        if (min >= 0) {
+          const row = { min: min, max: max, w: max - min, y: y };
+          rows[y] = row;
+          if (y + 1 < c.height) rows[y + 1] = row;
+        }
+      }
+      img._rows = rows;
+      return rows;
+    }
     function hangBridge(ctx, img, a, b, frameW) {
       const left = a.x <= b.x ? a : b;
       const right = a.x <= b.x ? b : a;
-      const x1 = Math.max(16, Math.min(frameW - 16, left.x));
-      const x2 = Math.max(16, Math.min(frameW - 16, right.x));
-      if (x2 - x1 < 24) return;
-      const span = x2 - x1;
-      const sag = Math.max(26, Math.min(72, span * 0.18));
-      const rail = Math.max(72, Math.min(150, span * 0.32));
+      const dx = right.x - left.x;
+      const dy = right.y - left.y;
+      const dist = Math.hypot(dx, dy);
+      if (dist < 18) return;
+      const slim = frameW < 520;
       const box = bridgeInk(img);
-      const steps = 36;
-      const cy = (left.y + right.y) / 2 + sag;
-      const at = (t) => {
-        const u = 1 - t;
-        return {
-          x: u * u * x1 + 2 * u * t * ((x1 + x2) / 2) + t * t * x2,
-          y: u * u * left.y + 2 * u * t * cy + t * t * right.y
-        };
-      };
-      for (let s = 0; s < steps; s++) {
-        const p = at(s / steps);
-        const q = at((s + 1) / steps);
-        const sx = Math.floor(box.minX + (s / steps) * (box.maxX - box.minX));
-        const sw = Math.max(1, Math.ceil((box.maxX - box.minX) / steps));
-        ctx.save();
-        ctx.setTransform(q.x - p.x, q.y - p.y, 0, rail, p.x, p.y - rail);
-        ctx.drawImage(img, sx, box.minY, sw, Math.max(1, box.maxY - box.minY), 0, 0, 1, 1);
-        ctx.restore();
-      }
+      const bw = Math.max(1, box.maxX - box.minX);
+      const bh = Math.max(1, box.maxY - box.minY);
+      let rail = dist * (bh / bw);
+      rail = Math.max(slim ? 42 : 54, Math.min(slim ? 68 : 80, rail * (slim ? 0.7 : 0.48)));
+      const ang = Math.atan2(dy, dx);
+      ctx.save();
+      ctx.translate(left.x, left.y);
+      ctx.rotate(ang);
+      ctx.drawImage(img, box.minX, box.minY, bw, bh, 0, -rail * 0.34, dist, rail);
+      ctx.restore();
     }
     function layoutPath() {
       const home = trail.closest('.skyhome');
@@ -1031,9 +1064,12 @@
         const art = s.querySelector('.skyisland').getBoundingClientRect();
         if (ledges) {
           const onRight = s.classList.contains('sky-r');
+          const img = s.querySelector('.skyisland');
+          const rim = img && img.naturalWidth ? grassRim(img, onRight) : { fx: onRight ? 0.22 : 0.78, fy: 0.6 };
+          const tuck = onRight ? 10 : -10;
           return {
-            x: art.left - origin.left + art.width * (onRight ? 0.2 : 0.8),
-            y: art.top - origin.top + art.height * 0.7
+            x: art.left - origin.left + art.width * rim.fx + tuck,
+            y: art.top - origin.top + art.height * rim.fy
           };
         }
         if (coil) return { x: art.left - origin.left + art.width * 0.5, y: art.top - origin.top + art.height * 0.7 };
