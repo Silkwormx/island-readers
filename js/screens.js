@@ -848,7 +848,6 @@
       svg.append(g);
     }
     function placeLedgeLabels(stops, narrow) {
-      const sideLabels = /[?&]labels=side\b/.test(location.search);
       /* A small drop from the seat just under the grass: about 14px on a laptop, less on a phone. */
       const drop = narrow ? 8 : 14;
       const seats = [];
@@ -876,7 +875,6 @@
           el: el,
           lbl: lbl,
           img: img,
-          side: el.classList.contains('sky-r') ? 'r' : 'l',
           fit: fit,
           rows: rows,
           grass: grass,
@@ -940,16 +938,15 @@
       if (boxW !== widthCap) sized = applySize(px, boxW);
       const uniformH = sized.maxH;
       seats.forEach((s) => {
-        const align = !sideLabels ? 'center' : (s.side === 'l' ? 'left' : 'right');
         const lbl = s.lbl;
         lbl.style.width = boxW + 'px';
         lbl.style.height = uniformH + 'px';
         lbl.style.fontSize = px + 'px';
-        lbl.style.textAlign = align;
+        lbl.style.textAlign = 'center';
         lbl.style.alignItems = 'stretch';
         lbl.style.justifyContent = 'flex-start';
         const thead = lbl.querySelector('.thead');
-        if (thead) thead.style.justifyContent = align === 'left' ? 'flex-start' : align === 'right' ? 'flex-end' : 'center';
+        if (thead) thead.style.justifyContent = 'center';
         let top = Math.round(s.grassTop + drop);
         if (top + uniformH > s.imgBottom - 2) top = Math.round(s.imgBottom - uniformH - 2);
         if (top < s.grassTop + 2) top = Math.round(s.grassTop + 2);
@@ -959,10 +956,6 @@
         const rockRight = row ? s.fit.x + row.max * s.scaleX : s.fit.x + s.fit.w;
         let left = (rockLeft + rockRight) / 2 - boxW / 2;
         const spare = (rockRight - rockLeft - boxW) / 2;
-        if (sideLabels && spare > 4) {
-          const nudge = Math.min(narrow ? 8 : 12, spare - 4);
-          left += s.side === 'l' ? -nudge : nudge;
-        }
         if (spare > 0) left = Math.max(rockLeft + 2, Math.min(left, rockRight - boxW - 2));
         lbl.style.left = Math.round(left) + 'px';
         lbl.style.right = 'auto';
