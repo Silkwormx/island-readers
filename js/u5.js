@@ -332,7 +332,7 @@
         pick: true,
         kicker: 'Lesson',
         goLabel: 'Open lesson',
-        img: /refresh/i.test(item.href) ? 'img/lesson_zip_frill.webp' : (KEY === 'u53' ? 'img/frill.webp' : 'img/zipA.webp')
+        img: /refresh/i.test(item.href) ? IR.pickerScene.review : IR.pickerScene[KEY]
       }));
       const pageName = KEY === 'u53' ? 'Tricky e' : capName(N.name);
       app.append(h('div', { class: 'screen trailscreen unitpage unitA u5menu stepage ngpreview' },
@@ -746,7 +746,7 @@
         kicker: 'Lesson ' + IR.kidLesson(L.n),
         title: title,
         href: '#/' + L.key,
-        img: L.key === 'u53' ? 'img/frill.webp' : 'img/zipA.webp',
+        img: IR.pickerScene[L.key],
         alt: title,
         note: data.storyTitle || '',
         stars: prog ? { done: prog.done, total: prog.total } : null,
@@ -758,12 +758,12 @@
       kicker: 'Unit Review',
       title: 'Mixed games',
       href: '#/u5/review',
-      img: 'img/lesson_zip_frill.webp',
+      img: IR.pickerScene.review,
       alt: 'Zip and Frill',
       note: 'Words from every lesson',
       goLabel: 'Open review'
     });
-    app.append(h('div', { class: 'screen trailscreen unitpage unitA u5menu stepage ngpreview u5lessons' },
+    app.append(h('div', { class: 'screen trailscreen unitpage unitA u5menu stepage ngpreview lessonpick u5lessons' },
       h('header', { class: 'uA-top' }, IR.ui.pageNav('#/home'), h('h1', { class: 'uA-title' }, h('small', null, 'Unit 5'), 'Silent e'), IR.teacherBox(u5Teach('hub'))),
       IR.modeBar({
         lesson: cards
