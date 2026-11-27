@@ -663,6 +663,10 @@
     const L = PACK.lessons.filter((x) => x.key === lm[1] && x.unit === u)[0];
     if (!L) return false;
     const sub = lm[2] || '';
+    if (L.key === 'u11' && IR.u11Trail && IR.u11Trail.wants(sub)) {
+      IR.u11Trail.open(app, L, sub);
+      return true;
+    }
     if (!sub) { lessonMenu(app, L); return true; }
     if (sub === 'result') { resultPage(app, L); return true; }
     const STEPS = stepsFor(L);
