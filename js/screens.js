@@ -379,6 +379,8 @@
     const place = trailPlace();
     const atFoundations = continueTarget().href.indexOf('#/foundation') === 0;
     const hereUnit = atFoundations ? 0 : place.here;
+    const spiral = /[?&]layout=spiral\b/.test(location.search);
+    const coilSide = (n) => spiral ? ['l', 'b', 'r'][n % 3] : (n % 2 === 1 ? 'r' : 'l');
     /* Paint Zip and Frill into the island daylight: drop the studio edge, warm the light, and leave no halo. */
     function paintIntoScene(img, done) {
       const paint = () => {
@@ -540,7 +542,7 @@
       return skyStop({
         id: 'u' + n,
         n: n,
-        side: n % 2 === 1 ? 'r' : 'l',
+        side: coilSide(n),
         here: st === 'here',
         soon: st === 'soon',
         done: st === 'done',
@@ -557,7 +559,7 @@
     const foundations = skyStop({
       id: 'foundations',
       n: 0,
-      side: 'l',
+      side: coilSide(0),
       here: atFoundations,
       img: 'img/sky/stops/f.webp', /* painted from coverSrc, foundation/img/foundations_cover.jpg */
       kicker: 'Foundations',
@@ -575,13 +577,13 @@
       'aria-label': 'Library. Opens the Library.',
       onclick: () => { Snd.stop(); location.hash = '#/library'; }
     }, h('span', { class: 'skybookart', html: BOOK, 'aria-hidden': 'true' }), h('b', null, 'Library'));
-    const spiral = /[?&]layout=spiral\b/.test(location.search);
     const NS = 'http://www.w3.org/2000/svg';
     const pathSvg = document.createElementNS(NS, 'svg');
     pathSvg.setAttribute('class', 'skypath');
     pathSvg.setAttribute('aria-hidden', 'true');
     const spire = h('div', { class: 'skyspire', 'aria-hidden': 'true' });
-    const trailBits = [pathSvg, spire, library].concat(cards);
+    const trunk = h('div', { class: 'skytrunk', 'aria-hidden': 'true' });
+    const trailBits = [pathSvg, spire, trunk, library].concat(cards);
     const zipImg = h('img', { class: 'skyfigpic', alt: '', src: 'img/zipA.webp' });
     const frillImg = h('img', { class: 'skyfigpic', alt: '', src: 'img/zip-show/frill-glide.webp' });
     const tuft = () => h('img', { class: 'skygrass', alt: '', src: 'img/sky/grass_tuft.webp' });
@@ -673,13 +675,72 @@
       const art = stop.querySelector('.skyisland');
       const a = art.getBoundingClientRect();
       const t = trail.getBoundingClientRect();
-      const y = a.top - t.top + a.height * 0.66;
-      return { y: y, zipX: a.left - t.left + a.width * 0.28, frillX: a.left - t.left + a.width * 0.72, midX: a.left - t.left + a.width * 0.5 };
+      const back = stop.classList.contains('sky-b');
+      const y = a.top - t.top + a.height * 0.62;
+      const zipR = back ? 0.52 : 0.28;
+      const frillR = back ? 0.74 : 0.7;
+      return { y: y, zipX: a.left - t.left + a.width * zipR, frillX: a.left - t.left + a.width * frillR, midX: a.left - t.left + a.width * (back ? 0.3 : 0.5) };
     }
     function put(fig, x, y) {
       fig.style.transform = 'translate(' + (x - fig.offsetWidth / 2) + 'px,' + (y - fig.offsetHeight) + 'px)';
     }
+    function placeSpiral() {
+      const stops = [...trail.querySelectorAll('.skystop')];
+      const book = trail.querySelector('.skybook');
+      const spire = trail.querySelector('.skyspire');
+      const trunk = trail.querySelector('.skytrunk');
+      if (!stops.length || !spire) return;
+      const w = trail.clientWidth;
+      const tileW = Math.round(w < 520 ? Math.min(w * 0.72, 248) : Math.min(w * 0.34, 280));
+      const tileH = Math.round(tileW * 1280 / 720);
+      const canH = Math.round(tileW * 720 / 1280);
+      const baseH = canH;
+      /* Cover the canopy's cut trunk; the stair's top bark matches that width. */
+      const stairTop = Math.round(canH * 0.78);
+      const slots = [
+        { x: 0.28, y: 0.21, w: 0.4, anchor: 0.64 },
+        { x: 0.34, y: 0.45, w: 0.3, anchor: 0.7 },
+        { x: 0.72, y: 0.7, w: 0.42, anchor: 0.64 }
+      ];
+      const last = stops.length - 1;
+      const lastSlot = slots[last % 3];
+      const stairH = Math.floor(last / 3) * tileH + Math.round((lastSlot.y + 0.2) * tileH);
+      const total = stairTop + stairH + Math.round(baseH * 0.32);
+      const left = Math.round((w - tileW) / 2);
+      trail.style.height = total + 'px';
+      spire.style.left = left + 'px';
+      spire.style.top = '0px';
+      spire.style.width = tileW + 'px';
+      spire.style.height = total + 'px';
+      spire.style.backgroundSize = tileW + 'px ' + canH + 'px, ' + tileW + 'px ' + baseH + 'px';
+      spire.style.backgroundPosition = '0 0, 0 ' + (total - baseH) + 'px';
+      if (trunk) {
+        trunk.style.left = left + 'px';
+        trunk.style.top = stairTop + 'px';
+        trunk.style.width = tileW + 'px';
+        trunk.style.height = stairH + 'px';
+        trunk.style.backgroundSize = tileW + 'px ' + tileH + 'px';
+      }
+      stops.forEach((s, i) => {
+        const slot = slots[i % 3];
+        const art = s.querySelector('.skyisland');
+        const iw = Math.max(64, Math.round(tileW * slot.w));
+        s.style.width = iw + 'px';
+        const aspect = art && art.naturalWidth ? art.naturalHeight / art.naturalWidth : 1.08;
+        const artH = Math.round(iw * aspect);
+        const cx = left + slot.x * tileW;
+        const cy = stairTop + Math.floor(i / 3) * tileH + slot.y * tileH;
+        s.style.left = Math.round(cx - iw / 2) + 'px';
+        s.style.top = Math.round(cy - artH * slot.anchor) + 'px';
+      });
+      if (book) {
+        const bw = book.offsetWidth;
+        book.style.left = Math.round(left + tileW * 0.5 - bw / 2) + 'px';
+        book.style.top = Math.round(canH * 0.56) + 'px';
+      }
+    }
     function layoutPath() {
+      if (trail.closest('.spiral')) placeSpiral();
       const svg = trail.querySelector('.skypath');
       const stops = [...trail.querySelectorAll('.skystop')];
       if (!svg || !stops.length) return;
@@ -689,11 +750,16 @@
       svg.style.width = w + 'px';
       svg.style.height = hgt + 'px';
       const origin = trail.getBoundingClientRect();
+      const coil = !!trail.closest('.spiral');
       const pts = stops.map((s) => {
+        if (coil) {
+          const art = s.querySelector('.skyisland').getBoundingClientRect();
+          const back = s.classList.contains('sky-b');
+          return { x: art.left - origin.left + art.width * (back ? 0.6 : 0.5), y: art.top - origin.top + art.height * 0.62 };
+        }
         const sign = s.querySelector('.skylbl').getBoundingClientRect();
         return { x: sign.left - origin.left + sign.width / 2, y: sign.top - origin.top + sign.height * 0.5 };
       });
-      const coil = !!trail.closest('.spiral');
       const cx = w * 0.5;
       let d = 'M ' + pts[0].x.toFixed(1) + ' ' + Math.max(6, pts[0].y - 22).toFixed(1);
       d += ' L ' + pts[0].x.toFixed(1) + ' ' + pts[0].y.toFixed(1);
@@ -817,6 +883,9 @@
       put(frillFig, end.frillX, end.y);
     };
     window.addEventListener('resize', onResize);
+    trail.querySelectorAll('.skyisland').forEach((img) => {
+      if (!img.complete) img.addEventListener('load', onResize, { once: true });
+    });
   }
   function gemScreen() {
     IR.newScreen(); const earned = gemsEarned(); const nEarned = earned.filter(Boolean).length; const nx = gemNext();
