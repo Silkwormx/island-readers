@@ -551,19 +551,20 @@
       kicker: 'Lesson ' + IR.kidLesson(L.n),
       title: L.name,
       href: '#/u6/' + L.key,
-      img: 'img/lesson_zip_frill.webp',
-      alt: L.name
+      img: IR.pickerScene[L.key],
+      alt: L.storyTitle,
+      note: L.storyTitle
     }));
     lessons.push({
       kicker: 'Unit Review',
       title: 'Mixed games',
       href: '#/u6/review',
-      img: 'img/lesson_zip_frill.webp',
+      img: IR.pickerScene.review,
       alt: 'Zip and Frill',
       note: 'Words from every lesson',
       goLabel: 'Open review'
     });
-    app.append(h('div', { class: 'screen trailscreen unitpage unitA stepage ngpreview' },
+    app.append(h('div', { class: 'screen trailscreen unitpage unitA stepage ngpreview lessonpick' },
       h('header', { class: 'uA-top' }, IR.ui.pageNav('#/home'), h('h1', { class: 'uA-title' }, h('small', null, 'Unit 6'), 'Endings'), IR.teacherBox(u6Teach('hub'))),
       IR.modeBar({
         lesson: lessons
