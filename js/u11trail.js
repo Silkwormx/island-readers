@@ -389,7 +389,7 @@
         type: 'button',
         style: 'left:' + p.x + '%;top:' + p.y + '%',
         'aria-label': (locked ? 'Locked. ' : '') + STOP_LABEL[i] + (locked && demo() ? '. Open in this sample.' : '')
-      }, face, h('span', { class: 'u11t-stop-name' }, STOP_LABEL[i]));
+      }, face);
       if (!locked || demo()) btn.addEventListener('click', () => {
         if (!done && sitting() >= DOSE.sittingDefault && !PREVIEW_NEXT) { location.hash = '#/u1/u11/trail/bye'; return; }
         location.hash = '#/u1/u11/trail/' + i;
@@ -404,8 +404,7 @@
       type: 'button',
       style: 'left:' + endP.x + '%;top:' + endP.y + '%',
       'aria-label': endLocked ? 'Bells. Locked until the gems are in.' : 'Bells'
-    }, h('span', { class: 'u11t-stop-face' }, endLocked ? h('span', { class: 'u11t-lock', html: SVG.lock }) : h('img', { src: 'img/bell_lit.png', alt: '' })),
-      h('span', { class: 'u11t-stop-name' }, 'Bells'));
+    }, h('span', { class: 'u11t-stop-face' }, endLocked ? h('span', { class: 'u11t-lock', html: SVG.lock }) : h('img', { src: 'img/bell_lit.png', alt: '' })));
     if (!endLocked || demo()) end.addEventListener('click', () => { location.hash = '#/u1/u11/trail/end'; });
     else end.disabled = true;
     board.append(end);
@@ -426,7 +425,7 @@
         type: 'button',
         style: 'left:' + x + '%;top:' + y + '%',
         'aria-label': f.name + (open ? '' : '. Further along the path.')
-      }, h('img', { src: f.src, alt: '' }), h('span', null, f.name));
+      }, h('img', { src: f.src, alt: '' }));
       if (open) b.addEventListener('click', () => { location.hash = '#/u1/u11/trail/find/' + f.id; });
       board.append(b);
     });
