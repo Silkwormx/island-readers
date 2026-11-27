@@ -4,7 +4,7 @@
    Every answer button in an activity is the same size: grids use equal tracks and the buttons fill them. */
 .u789step{position:absolute;inset:0;height:100vh;height:100dvh;height:100svh;max-height:100vh;max-height:100dvh;max-height:100svh;display:flex;flex-direction:column;overflow:hidden;box-sizing:border-box;padding-top:env(safe-area-inset-top)}
 .u789step > .lesson-top,.u789step > .instr{flex:none}
-.u789step > .stage{flex:1 1 0;min-height:0;overflow:hidden;display:flex;flex-direction:column}
+.u789step > .stage{flex:1 1 0;min-height:0;overflow:hidden;display:flex;flex-direction:column;align-items:center}
 .u789step > .stage > .activity{flex:1 1 0;min-height:0;max-height:100%;overflow:hidden;display:flex;flex-direction:column;align-items:center;gap:.3rem;width:100%;box-sizing:border-box}
 .u789step > .lesson-nav{flex:none;position:relative;z-index:5;background:var(--cream);padding-bottom:calc(.35rem + env(safe-area-inset-bottom))!important;min-height:2.9rem;box-sizing:border-box}
 /* Equal answer buttons */
@@ -15,8 +15,11 @@
 .u789step .choices.fishpond{grid-template-columns:repeat(3,minmax(0,1fr));max-height:none}
 .u789step .choices > .choice{width:100%!important;height:100%!important;min-height:0!important;max-width:none!important;margin:0;box-sizing:border-box;display:flex;align-items:center;justify-content:center;overflow:hidden;font-size:clamp(1.1rem,min(5.2vw,5vh),2.2rem)!important;padding:.2rem .3rem!important;white-space:nowrap}
 .u789step .choices > .choice > span{white-space:nowrap}
-.u789step .sortbins{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-rows:minmax(3.2rem,1fr);gap:.4rem;width:min(100%,40rem);flex:1 1 0;min-height:0;max-height:15rem}
-.u789step .sortbin{width:100%;height:100%;min-height:0;margin:0;box-sizing:border-box;display:flex;align-items:center;justify-content:center;text-align:center;font-size:clamp(.95rem,4vw,1.5rem);padding:.2rem .3rem;overflow:hidden}
+.u789step .sortbins{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-rows:minmax(3.2rem,1fr);gap:.4rem;width:min(100%,40rem);flex:1 1 0;min-height:0;max-height:15rem;counter-reset:irpick}
+.u789step .sortbin{width:100%;height:100%;min-height:0;margin:0;box-sizing:border-box;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;font-size:clamp(.95rem,4vw,1.5rem);padding:.2rem .3rem;overflow:hidden;counter-increment:irpick;gap:.2rem}
+.u789step .sortbin::after{content:counter(irpick);margin-top:.1rem;flex:none;font-family:Andika,sans-serif;font-weight:700;font-size:1.15rem;line-height:1;color:#2B2540;background:#FFF1C4;border:2px solid #2B2540;border-radius:999px;min-width:1.55rem;height:1.55rem;padding:0 .3rem;display:inline-flex;align-items:center;justify-content:center;pointer-events:none;box-sizing:border-box}
+.u789step .choice.yn-yes::after,.u789step .sortbin.yn-yes::after{content:'1';background:#1E8F4A;color:#fff;border-color:#146636}
+.u789step .choice.yn-no::after,.u789step .sortbin.yn-no::after{content:'2';background:#D23B32;color:#fff;border-color:#8E241E}
 .u789step .chainopts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.4rem;width:min(100%,32rem)}
 .u789step .chainopts > .chainpick{width:100%;min-width:0;height:3.6rem;margin:0;box-sizing:border-box}
 .u789step .chainslots{display:flex;flex-wrap:nowrap;gap:.3rem;justify-content:center;max-width:100%}
@@ -55,10 +58,51 @@
 .u789step .activity.story .row{padding-bottom:env(safe-area-inset-bottom)}
 .u789step .nkmeet .panelwrap.small .panel{max-height:16vh;max-height:16svh}
 .u789step .chips{display:flex;flex-wrap:wrap;justify-content:center;gap:.35rem}
-.u789step .chantact .panel{max-height:18vh;max-height:18svh}
-.u789step .chantlines{display:flex;flex-direction:column;gap:.15rem;align-items:center}
-.u789step .chantline{margin:0;font-size:clamp(1.15rem,min(5.4vw,4.4vh),2rem);line-height:1.25;text-align:center}
-.u789step .chantline .w{background:none;border:0;padding:0;font:inherit;color:inherit;cursor:pointer}
+.u789step .nkmeet .bubble{padding:.4rem .75rem 1.45rem;overflow:visible}
+.u789step .nkmeet .bubble:after{bottom:-14px;z-index:0}
+.u789step .nkmeet .bubble > *{position:relative;z-index:1}
+.u789step .chantact{justify-content:center;gap:.3rem;width:min(100%,56rem);flex:1 1 auto;min-height:0}
+.u789step .chantpic{display:flex;align-items:center;justify-content:center;position:relative;width:min(100%,52rem);min-height:0;flex:1 1 auto;margin:0 auto;padding:0;border:0;background:transparent;box-shadow:none;cursor:pointer}
+.u789step .chantpic img{display:block;width:auto;max-width:100%;max-height:100%;height:auto;object-fit:contain;margin:0 auto}
+.u789step .chantpic .chantbase{max-height:100%}
+.u789step .chantpic .chantactor{position:absolute;left:18%;bottom:18%;width:34%;max-height:46%;height:auto}
+.u789step .chantpic.go.hopin .chantactor{animation:chanthop 1s ease forwards}
+.u789step .chantpic.go.hop .chantactor,.u789step .chantpic.go.hop > img{animation:chanthop .8s ease}
+.u789step .chantpic.go.float > img{animation:chantfloat 1.4s ease}
+.u789step .chantpic.go.drop > img,.u789step .chantpic.go.settle > img{animation:chantdrop .7s ease}
+.u789step .chantpic.go.spin > img,.u789step .chantpic.go.twirl > img,.u789step .chantpic.go.flip > img{animation:chantspin .8s ease}
+.u789step .chantpic.go.glow > img,.u789step .chantpic.go.night > img,.u789step .chantpic.go.star > img{animation:chantglow 1s ease}
+.u789step .chantpic.go.rain > img,.u789step .chantpic.go.storm > img{animation:chantrain .8s ease}
+.u789step .chantpic.go.shake > img,.u789step .chantpic.go.nudge > img,.u789step .chantpic.go.scratch > img,.u789step .chantpic.go.bark > img{animation:chantshake .5s ease}
+.u789step .chantpic.go.row > img,.u789step .chantpic.go.away > img,.u789step .chantpic.go.go > img,.u789step .chantpic.go.run > img,.u789step .chantpic.go.drive > img,.u789step .chantpic.go.swim > img{animation:chantslide .9s ease}
+.u789step .chantpic.go > img{animation:chantbob .7s ease}
+@keyframes chanthop{0%{transform:translate(-70%,-80%)}45%{transform:translate(-10%,-120%)}100%{transform:translate(0,0)}}
+@keyframes chantfloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+@keyframes chantdrop{0%{transform:translateY(-28px)}100%{transform:translateY(0)}}
+@keyframes chantspin{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}
+@keyframes chantglow{0%,100%{filter:brightness(1)}50%{filter:brightness(1.25)}}
+@keyframes chantrain{0%,100%{transform:translateY(0)}50%{transform:translateY(6px)}}
+@keyframes chantshake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+@keyframes chantslide{0%{transform:translateX(-18px)}100%{transform:translateX(0)}}
+@keyframes chantbob{0%{transform:translateY(0)}40%{transform:translateY(-8px)}100%{transform:translateY(0)}}
+.u789step .chantline{margin:0;max-width:100%;font-size:clamp(1.7rem,min(6.6vw,7vh),3.2rem);font-weight:700;line-height:1.25;text-align:center}
+.u789step .chantline .w{background:none;border:0;padding:0 .12rem;font:inherit;color:inherit;cursor:pointer;border-radius:.35rem}
+.u789step .chantline .w.on{background:#FFE3B0}
+.u789step .chantline .chunk{color:inherit!important;background:none;box-shadow:none}
+.u789step .chantact.read .chunk{color:#C95A10!important;background:#FFE08A;box-shadow:0 0 0 2px #F28C00;border-radius:.15rem}
+.u789step .chantturn{margin:0;min-height:1.3rem;font-weight:700;font-size:1.05rem;text-align:center}
+.u1012step .hoeword{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.2rem;width:100%}
+.u1012step .hoepic,.u1012step .hoeround > .hoepic{display:block;width:auto;max-width:min(92%,24rem);max-height:min(28vh,14rem);max-height:min(28svh,14rem);height:auto;margin:0 auto;object-fit:contain}
+.u1012step .bellgame > .hoepic{max-height:min(16vh,7rem);max-height:min(16svh,7rem)}
+.u1012step .bigword .hoepic,.u1012step .sorword .hoepic{max-height:min(16vh,6.5rem);max-height:min(16svh,6.5rem);max-width:8rem}
+.u1012step .chips > .chip.haspic{height:auto!important;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:.12rem;padding:.28rem .2rem .4rem;font-size:1.25rem}
+.u1012step .chips > .chip.haspic .chippic{display:block;width:auto;height:4.4rem;max-width:100%;max-height:4.4rem;object-fit:contain;margin:0 auto}
+@media (prefers-reduced-motion:reduce){
+  .u789step .chantpic.go .chantactor,.u789step .chantpic.go > img{animation:none}
+}
+@media (min-width:900px){
+  .u789step > .instr{justify-content:center}
+}
 .u789step .syl{font-weight:700}
 .u789step .partyes{animation:partyes .55s ease}
 @keyframes partyes{0%{transform:scale(.96)}45%{transform:scale(1.12)}100%{transform:scale(1)}}
@@ -75,7 +119,7 @@ body:not(.teach) .u789step .recneed{display:none}
   .u789step .choices.fishpond > .choice span{letter-spacing:0;word-spacing:0}
 }
 @media (max-height:900px) and (min-height:501px){
-  .u789step .nkmeet .bubble{padding:.4rem .7rem}
+  .u789step .nkmeet .bubble{padding:.4rem .7rem 1.35rem}
   .u789step .nkmeet .bubble p{font-size:1.05rem;line-height:1.3}
   .u789step .nkmeet .panelwrap.small .panel{max-height:11vh;max-height:11svh}
   .u789step .nkmeet .cap{margin:0;font-size:1rem}
@@ -88,6 +132,8 @@ body:not(.teach) .u789step .recneed{display:none}
   .u789step .u1pic img{max-height:24vh;max-height:24svh}
   .u789step .nkmeet .panelwrap.small{display:none}
   .u789step .chantact .panelwrap.small{display:none}
+  .u789step .chantpic{max-height:46%}
+  .u789step .chantline{font-size:1.35rem}
   .u789step .chainopts > .chainpick{height:2.6rem}
   .u789step .chainslot{height:2.6rem}
   .u123step .activity.story,
@@ -143,7 +189,7 @@ body:not(.teach) .u789step .recneed{display:none}
   .u789step .chainact .bigprompt{margin:0}
   .u789step .chainact .row .btn{min-height:0;padding:.3rem .9rem}
   .u789step .chainact{gap:.2rem}
-  .u789step .nkmeet .bubble{padding:.35rem .7rem;flex:none}
+  .u789step .nkmeet .bubble{padding:.35rem .7rem 1.25rem;flex:none}
   .u789step .nkmeet .bubble p{font-size:1rem;line-height:1.3;margin:0}
   .u789step .nkmeet .bubble .speaker{width:2.4rem;height:2.4rem}
   .u789step .nkmeet .cap{margin:0}

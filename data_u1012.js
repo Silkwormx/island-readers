@@ -2945,8 +2945,8 @@ window.IR_DATA_U1012 = {
      "chips": [
       "toe",
       "hoe",
-      "boat",
-      "coat"
+      "Joe",
+      "foe"
      ],
      "cap": "oe says the long o sound at the end.",
      "text": "Toe. Hoe. At the end, oe says the long o sound, the same sound as oa."
@@ -3034,6 +3034,8 @@ window.IR_DATA_U1012 = {
     "toe",
     "hoe",
     "road",
+    "hop",
+    "rod",
     "goat",
     "moat",
     "load",
@@ -3044,9 +3046,7 @@ window.IR_DATA_U1012 = {
     "rock",
     "bat",
     "top",
-    "cot",
-    "hop",
-    "rod"
+    "cot"
    ],
    "build": [
     {
@@ -3261,6 +3261,8 @@ window.IR_DATA_U1012 = {
     "toe",
     "hoe",
     "road",
+    "hop",
+    "rod",
     "goat",
     "moat",
     "load",
@@ -3272,8 +3274,10 @@ window.IR_DATA_U1012 = {
     "bat",
     "top",
     "cot",
-    "hop",
-    "rod"
+    "Joe",
+    "foe",
+    "doe",
+    "woe"
    ],
    "days": [
     "oa",
@@ -3517,7 +3521,17 @@ window.IR_DATA_U1012 = {
     "coat": "img/u12pics/coat.webp",
     "soap": "img/u12pics/soap.webp",
     "toast": "img/u12pics/toast.webp",
-    "toe": "img/u12pics/toe.webp"
+    "toe": "img/u12pics/toe.webp",
+    "hoe": "img/u12pics/hoe.webp",
+    "Joe": "img/u12pics/joe.webp",
+    "foe": "img/u12pics/foe.webp",
+    "doe": "img/u12pics/doe.webp",
+    "woe": "img/u12pics/woe.webp",
+    "float": "img/u12pics/float.webp",
+    "road": "img/u12pics/road.webp",
+    "goat": "img/u12pics/goat.webp",
+    "load": "img/u12pics/load.webp",
+    "moat": "img/u12pics/moat.webp"
    },
    "story": [
     {

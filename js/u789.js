@@ -138,10 +138,16 @@
   }
   function whichAudio(L) { return 'which_' + (L.whichKey || L.key); }
 
+  function ynMark(w) {
+    const t = String(w).trim().toLowerCase();
+    if (t === 'yes') return ' yn-yes';
+    if (t === 'no') return ' yn-no';
+    return '';
+  }
   function choiceGrid(words, onPick, L, cls) {
     const grid = h('div', { class: 'choices ' + (cls || (words.length > 2 ? 'three' : 'two')) });
     words.forEach((w) => {
-      const b = h('button', { class: 'choice', type: 'button', 'data-w': w }, plainWord(w));
+      const b = h('button', { class: 'choice' + ynMark(w), type: 'button', 'data-w': w }, plainWord(w));
       b.addEventListener('click', () => onPick(w, b, grid));
       grid.append(b);
     });
@@ -178,15 +184,8 @@
   }
 
   function runChant(ctx, L) {
-    const st = ctx.stage; st.innerHTML = '';
     ctx.setInstr('Say it with Frill. Clap the beat!', 'chant');
-    ctx.progress(0);
-    const lines = L.chant.map((t) => h('p', { class: 'chantline' }, ...t.split(' ').map((w, k) => [k ? ' ' : '', h('button', { class: 'w', type: 'button', onclick: () => say(w) }, w)]).flat()));
-    const play = speakerBtn(() => Snd.play('audio/u789_chant_' + L.key + '.mp3'), 'Hear the chant'); play.classList.add('huge');
-    st.append(h('div', { class: 'activity chantact' }, h('div', { class: 'panelwrap small' }, h('img', { class: 'panel', src: ACT('frill_drum'), alt: 'Frill drums the beat' })), play, h('div', { class: 'chantlines' }, ...lines)));
-    ctx.setNextLabel('Activities');
-    ctx.setBack(() => false); ctx.setNext(() => false);
-    IR.sayItem(ctx, P('chant'), 'audio/u789_chant_' + L.key + '.mp3');
+    IR.mountChant(ctx, { key: L.key, lines: L.chant, audio: (w) => W(w), color: (w) => colorWord(w, L), intro: P('chant') });
   }
 
   function runHear(ctx, L) {
@@ -508,7 +507,7 @@
       const status = h('p', { class: 'status' }, '\u00a0');
       const bins = h('div', { class: 'sortbins u1bins' });
       L.bins.forEach((b) => {
-        const btn = h('button', { class: 'sortbin', type: 'button', 'data-bin': b.id }, h('b', null, b.label));
+        const btn = h('button', { class: 'sortbin' + ynMark(b.label), type: 'button', 'data-bin': b.id }, h('b', null, b.label));
         btn.addEventListener('click', async () => {
           if (locked || btn.classList.contains('tried')) return;
           if (b.id === it.bin) { locked = true; btn.classList.add('right'); revealPart(wordBtn, it.word, L); status.textContent = 'Yes!'; await ding(it.word); if (!ctx.scr.ok()) return; i++; if (i >= items.length) ctx.finish(); else round(); }
@@ -535,7 +534,7 @@
       const opts = (L.whichItems && L.whichItems[it.word]) || L.whichChoices;
       const grid = h('div', { class: 'choices ' + (opts.length > 3 ? 'many' : opts.length === 2 ? 'two' : 'three') });
       shuffle(opts.slice()).forEach((v) => {
-        const b = h('button', { class: 'choice', type: 'button', 'data-w': v }, v);
+        const b = h('button', { class: 'choice' + ynMark(v), type: 'button', 'data-w': v }, v);
         b.addEventListener('click', async () => {
           if (locked || b.classList.contains('tried')) return;
           if (v === it.part) { locked = true; b.classList.add('right'); revealPart(wordEl, it.word, L); status.textContent = 'Yes! ' + it.word; await ding(it.word); if (!ctx.scr.ok()) return; i++; if (i >= items.length) ctx.finish(); else round(); }

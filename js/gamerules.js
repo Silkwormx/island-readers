@@ -148,6 +148,117 @@
     };
   };
 
+  /* One line of a Units 7-12 chant: picture, echo read, your turn, then the team glows. */
+  IR.CHANT_MOVE = {
+    u71: ['set', 'still', 'pop', 'clap'],
+    u72: ['hop', 'stop', 'pop', 'run'],
+    u73: ['go', 'no', 'wave', 'zip'],
+    u81: ['catch', 'scratch', 'flip', 'stitch'],
+    u82: ['drop', 'wedge', 'nudge', 'smudge'],
+    u83: ['cold', 'gold', 'wild', 'kind'],
+    u91: ['drive', 'star', 'bark', 'swim'],
+    u92: ['fork', 'storm', 'snore', 'more'],
+    u93: ['fern', 'butter', 'seasons', 'better'],
+    u94: ['bird', 'worm', 'twirl', 'curl'],
+    u101: ['fair', 'stair', 'share', 'air'],
+    u102: ['hear', 'year', 'gear', 'fear'],
+    u111: ['rain', 'wait', 'ray', 'play'],
+    u112: ['bee', 'key', 'beach', 'reach'],
+    u121: ['hopin', 'settle', 'drop', 'float'],
+    u122: ['row', 'glow', 'low', 'away'],
+    u123: ['night', 'tie', 'path', 'pie']
+  };
+  IR.mountChant = function (ctx, opts) {
+    const lines = opts.lines;
+    let i = 0;
+    let token = 0;
+    const st = ctx.stage;
+    let countEl = st.parentElement.querySelector(':scope > .qcount');
+    if (!countEl) {
+      countEl = h('p', { class: 'qcount', 'aria-live': 'polite' }, '');
+      st.after(countEl);
+    }
+    function picture(index) {
+      const move = (IR.CHANT_MOVE[opts.key] || [])[index] || 'bob';
+      const n = index + 1;
+      const btn = h('button', { class: 'chantpic ' + move, type: 'button', 'aria-label': 'Watch the picture' });
+      if (move === 'hopin') {
+        btn.append(
+          h('img', { class: 'chantbase', src: 'img/chants/' + opts.key + '_' + n + '_base.webp', alt: '' }),
+          h('img', { class: 'chantactor', src: 'img/chants/' + opts.key + '_' + n + '_actor.webp', alt: '' })
+        );
+      } else {
+        btn.append(h('img', { src: 'img/chants/' + opts.key + '_' + n + '.webp', alt: '' }));
+      }
+      btn.addEventListener('click', () => {
+        btn.classList.remove('go');
+        void btn.offsetWidth;
+        btn.classList.add('go');
+      });
+      return btn;
+    }
+    function show() {
+      const my = ++token;
+      const words = lines[i].split(' ').filter(Boolean);
+      ctx.progress(i / lines.length);
+      countEl.textContent = (i + 1) + ' of ' + lines.length;
+      st.innerHTML = '';
+      let phase = 'echo';
+      const turn = h('p', { class: 'chantturn' }, '');
+      const buttons = words.map((w) => {
+        const bare = w.replace(/[^A-Za-z']/g, '');
+        const b = h('button', { class: 'w', type: 'button', 'data-w': bare }, opts.color(w));
+        b.addEventListener('click', () => {
+          IR.Snd.play(opts.audio(bare), { manual: true });
+          if (phase !== 'turn') return;
+          b.classList.add('said');
+          if (buttons.every((x) => x.classList.contains('said'))) {
+            const act = st.querySelector('.chantact');
+            if (act) act.classList.add('read');
+            turn.textContent = 'The team is glowing.';
+          }
+        });
+        return b;
+      });
+      const line = h('p', { class: 'chantline' });
+      buttons.forEach((b, k) => { if (k) line.append(' '); line.append(b); });
+      st.append(h('div', { class: 'activity chantact' }, picture(i), line, turn));
+      ctx.setNextLabel(i === lines.length - 1 ? 'Activities' : 'Next');
+      const echo = async () => {
+        const id = ++token;
+        phase = 'echo';
+        const act = st.querySelector('.chantact');
+        if (act) act.classList.remove('read');
+        buttons.forEach((b) => b.classList.remove('on', 'said'));
+        turn.textContent = '';
+        for (let k = 0; k < buttons.length; k++) {
+          if (id !== token || !ctx.scr.ok()) return;
+          buttons.forEach((b) => b.classList.remove('on'));
+          buttons[k].classList.add('on');
+          await Promise.race([
+            IR.Snd.play(opts.audio(buttons[k].dataset.w), { keep: true }),
+            IR.sleep(1400)
+          ]);
+          if (id !== token || !ctx.scr.ok()) return;
+          await IR.sleep(80);
+        }
+        if (id !== token || !ctx.scr.ok()) return;
+        buttons.forEach((b) => b.classList.remove('on'));
+        phase = 'turn';
+        turn.textContent = 'Your turn. Read the line.';
+      };
+      if (ctx.setRepeat) ctx.setRepeat(() => echo());
+      if (opts.intro && i === 0 && !show.introPlayed) {
+        show.introPlayed = true;
+        const p = IR.sayItem(ctx, opts.intro, null);
+        Promise.resolve(p).then(() => { if (my === token && ctx.scr.ok()) echo(); });
+      } else echo();
+    }
+    ctx.setBack(() => { if (i > 0) { i--; show(); return true; } return false; });
+    ctx.setNext(() => { if (i < lines.length - 1) { i++; show(); return true; } return false; });
+    show();
+  };
+
   IR.sayItem = function (ctx, instr, item) {
     const said = ctx._saidInstr || (ctx._saidInstr = Object.create(null));
     if (instr && !said[instr]) {
@@ -278,6 +389,7 @@
           h('img', { src: 'img/frill.webp', alt: 'Frill' }),
           h('p', null, 'Ring the bell you hear.'),
           again),
+        opts.banner ? opts.banner(current) : null,
         h('div', { class: 'bellscene', style: 'background-image:url(img/ob_scene.jpg)' }),
         row, status));
       speak(false);
