@@ -3312,6 +3312,19 @@ html.teach .u5step .sentact .tile.word{font-size:clamp(1.7rem,4vh,2.4rem)!import
 .ngpreview .lessontab .uk{font-size:.85rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
 .ngpreview .lessontab h2{margin:0;font-size:clamp(1.6rem,3vw,2.2rem);line-height:1.1}
 .ngpreview .lessontab .obtn{margin-top:.35rem;min-height:2.6rem;padding:0 1rem;border-radius:1rem;border:3px solid #B5510D;background:#F28C00;color:#fff;font:700 1.1rem Andika,sans-serif;box-shadow:0 3px 0 #B5510D;display:inline-flex;align-items:center;justify-content:center}
+/* Units 7 to 12 lesson pickers: the picture sits on the card, and the words stay inside it. */
+.lessonpick .lessonrow{display:grid;grid-template-columns:repeat(auto-fit,minmax(16rem,1fr));gap:1rem;align-items:stretch;width:100%}
+.lessonpick .lessontab{display:flex;flex-direction:column;align-items:stretch;justify-content:flex-start;text-align:center;min-height:15rem;height:auto;overflow:hidden}
+.lessonpick .lessontab .uimg{display:flex!important;align-items:flex-end;justify-content:center;height:8.5rem;min-height:8.5rem;width:100%;padding:.35rem .5rem 0;box-sizing:border-box;background:transparent}
+.lessonpick .lessontab .uimg img{display:block;height:100%;width:auto;max-width:92%;object-fit:contain;object-position:center bottom}
+.lessonpick .lessontab .ubody{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;text-align:center;width:100%;min-width:0;box-sizing:border-box;gap:.12rem;padding:.3rem .75rem .85rem}
+.lessonpick .lessontab .uk,.lessonpick .lessontab .umin{max-width:100%;text-align:center;line-height:1.2;overflow-wrap:break-word}
+.lessonpick .lessontab h2{margin:0;max-width:100%;text-align:center;font-size:clamp(1.15rem,2.1vw,1.8rem);line-height:1.15;white-space:normal;overflow-wrap:break-word}
+.lessonpick .lessontab .obtn{margin-top:.4rem;max-width:calc(100% - .4rem);text-align:center;white-space:nowrap}
+@media (max-width:800px){
+  .lessonpick .lessonrow{grid-template-columns:1fr}
+  .lessonpick .lessontab h2{font-size:clamp(1.25rem,5vw,1.7rem)}
+}
 .ngpreview .lessontab.teachled{background:#F28C00;border-color:#C95A10;color:#fff;box-shadow:0 6px 0 #B5510D}
 .ngpreview .lessontab.teachled .uimg{display:none}
 .ngpreview .lessontab.teachled .ubody{justify-content:center;flex:1}

@@ -703,10 +703,10 @@
     const info = unitInfo(u);
     const lessons = lessonsOf(u).map((L) => ({
       kicker: 'Lesson ' + IR.kidLesson(L.n), title: L.name, href: '#/u' + u + '/' + L.key,
-      img: 'img/cover_' + L.key + '.webp', alt: L.storyTitle
+      img: IR.pickerScene[L.key], alt: L.storyTitle, note: L.storyTitle
     }));
-    lessons.push({ kicker: 'Unit Review', title: 'Mixed games', href: '#/u' + u + '/review', img: 'img/lesson_zip_frill.webp', alt: 'Zip and Frill', note: 'Words from every lesson', goLabel: 'Open review' });
-    app.append(h('div', { class: 'screen trailscreen unitpage unitA stepage ngpreview' },
+    lessons.push({ kicker: 'Unit Review', title: 'Mixed games', href: '#/u' + u + '/review', img: IR.pickerScene.review, alt: 'Zip and Frill', note: 'Words from every lesson', goLabel: 'Open review' });
+    app.append(h('div', { class: 'screen trailscreen unitpage unitA stepage ngpreview lessonpick' },
       h('header', { class: 'uA-top' }, IR.ui.pageNav('#/home'), h('h1', { class: 'uA-title' }, h('small', null, 'Unit ' + u), info.name), IR.teacherBox(teach(u, 'hub'))),
       IR.modeBar({ lesson: lessons })));
   }

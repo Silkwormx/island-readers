@@ -6,8 +6,24 @@
   const IR = window.IR;
   const { h } = IR;
   /* One picture for every lesson card. Swap this when the shared teaching art arrives. */
-  IR.lessonArt = 'img/lesson_zip_frill.webp';
-  IR.lessonArtAlt = 'Zip and Frill teaching at a chalkboard';
+  IR.lessonArt = 'img/pick_review.webp';
+  IR.lessonArtAlt = 'Zip and Frill on the beach';
+  /* Full story scenes for every lesson button. Frill keeps the small arms from her action sprites. */
+  IR.pickerScene = {
+    u11: 'img/u11_p01.webp', u12: 'img/u12_p01.webp', u13: 'img/u13_p01.webp', u14: 'img/u14_p01.webp',
+    u21: 'img/pick_u21.webp', u22: 'img/pick_u22.webp', u23: 'img/pick_u23.webp', u24: 'img/pick_u24.webp',
+    u31: 'img/pick_u31.webp', u32: 'img/pick_u32.webp',
+    ng: 'img/pick_ng.webp', nk: 'img/pick_nk.webp',
+    u51: 'img/pick_u51.webp', u53: 'img/pick_u53.webp',
+    u61: 'img/pick_u61.webp', u62: 'img/pick_u62.webp', u63: 'img/pick_u63.webp',
+    u71: 'img/pick_u71.webp', u72: 'img/pick_u72.webp', u73: 'img/pick_u73.webp',
+    u81: 'img/pick_u81.webp', u82: 'img/pick_u82.webp', u83: 'img/pick_u83.webp',
+    u91: 'img/pick_u91.webp', u92: 'img/pick_u92.webp', u93: 'img/pick_u93.webp', u94: 'img/pick_u94.webp',
+    u101: 'img/pick_u101.webp', u102: 'img/pick_u102.webp',
+    u111: 'img/pick_u111.webp', u112: 'img/pick_u112.webp',
+    u121: 'img/pick_u121.webp', u122: 'img/pick_u122.webp', u123: 'img/pick_u123.webp',
+    review: 'img/pick_review.webp'
+  };
   IR.artFrame = function (src, alt) {
     return h('span', { class: 'bframe' }, h('img', { src: src, alt: alt || '' }));
   };

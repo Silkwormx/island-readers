@@ -71,13 +71,13 @@
     const pick = (group) => all.filter((r) => r.group === group).map((r) => ({
       id: r.id, title: r.title, href: r.href, note: TIPS[r.id], min: r.min,
       pick: group === 'lesson', kicker: group === 'lesson' ? 'Student' : '',
-      img: group === 'lesson' ? 'img/lesson_zip_frill.webp' : '',
+      img: group === 'lesson' ? IR.pickerScene.nk : '',
       alt: group === 'lesson' ? 'Zip and Frill' : '',
       goLabel: group === 'lesson' ? 'Open lesson' : ''
     }));
     const story = pick('story')[0];
-    if (story) { story.title = N.storyTitle || story.title; story.note = 'Story Time'; story.img = IR.storyCovers['4.2']; story.alt = N.storyTitle || ''; story.big = true; }
-    app.append(h('div', { class: 'screen trailscreen unitpage unitA nkunit stepage ngpreview' },
+    if (story) { story.title = N.storyTitle || story.title; story.note = 'Story Time'; story.img = IR.pickerScene.nk; story.alt = N.storyTitle || ''; story.big = true; }
+    app.append(h('div', { class: 'screen trailscreen unitpage unitA nkunit stepage ngpreview lessonpick' },
       h('header', { class: 'uA-top' }, IR.ui.pageNav('#/home'), h('h1', { class: 'uA-title' }, h('small', null, 'Unit 4 Lesson 2'), 'nk'), IR.teacherBox({
         slides: '#/teachers/slides/nk',
         days: (IR.weekDays && IR.weekDays.nk) || [],

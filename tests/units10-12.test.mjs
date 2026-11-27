@@ -38,6 +38,7 @@ test('every lesson has 3 days, a 6-page story, a chant, word audio and a 10-item
       assert.ok(exists('audio/' + l.key + '_s_' + (i + 1) + '.mp3'), l.key + ' page audio');
     });
     assert.ok(exists('img/cover_' + l.key + '.webp'), l.key + ' cover');
+    assert.ok(exists('img/' + l.key + '_p01.webp'), l.key + ' picker scene');
     for (const w of l.bellWords.concat(l.words)) {
       const file = 'audio/w_' + w.toLowerCase().replace(/[^a-z]/g, '') + '.mp3';
       assert.ok(exists(file), file);
@@ -108,7 +109,7 @@ test('house style: no em dashes, no banned words, no letter-name speech', () => 
 });
 
 test('service worker caches the new units', () => {
-  assert.match(sw, /const CACHE = 'ir-20261127h'/);
+  assert.match(sw, /const CACHE = 'ir-20261127n'/);
   for (const f of ['data_u1012.js', 'js/u1012.js', 'u1012.css', 'img/u101_p01.webp', 'materials/unit12/slides/u123/manifest.json']) {
     assert.match(sw, new RegExp('"\\./' + f.replace(/[.]/g, '\\.') + '"'), f);
   }
@@ -173,7 +174,9 @@ test('phone viewports fit, and story pages do not scroll', { timeout: 300000 }, 
     const measure = () => ev(`(() => {
       const bad = [];
       const se = document.scrollingElement;
-      if (se.scrollHeight > innerHeight + 2 || se.scrollWidth > innerWidth + 2) bad.push('page scrolls');
+      const menu = document.querySelector('.u1012page');
+      if (!menu && (se.scrollHeight > innerHeight + 2 || se.scrollWidth > innerWidth + 2)) bad.push('page scrolls');
+      if (menu && se.scrollWidth > innerWidth + 2) bad.push('page scrolls sideways');
       const stage = document.querySelector('.u1012step .stage');
       if (stage && stage.scrollHeight > stage.clientHeight + 4) bad.push('stage scrolls');
       const nav = document.querySelector('.u1012step .lesson-nav, .u1012slides .slidebar');
@@ -181,11 +184,30 @@ test('phone viewports fit, and story pages do not scroll', { timeout: 300000 }, 
         const r = nav.getBoundingClientRect();
         if (r.bottom > innerHeight + 1) bad.push('bottom control cut off');
       }
-      document.querySelectorAll('.u1012page .lessontab, .u1012page .gamecard, .u1012page .storycard').forEach((el) => {
+      const inside = (box, node, label) => {
+        if (!node) return;
+        const q = node.getBoundingClientRect();
+        if (!q.width) return;
+        if (q.left < box.left - 1 || q.right > box.right + 1 || q.top < box.top - 1 || q.bottom > box.bottom + 1) bad.push('text outside: ' + label);
+      };
+      document.querySelectorAll('.u1012page .lessontab').forEach((el) => {
+        const r = el.getBoundingClientRect();
+        if (!r.width) return;
+        if (r.right > innerWidth + 1 || r.left < -1) bad.push('card cut off: ' + (el.innerText || '').trim().slice(0, 18));
+        const img = el.querySelector('.uimg img');
+        const ir = img ? img.getBoundingClientRect() : null;
+        if (!ir || ir.height < 48 || ir.width < 48) bad.push('no picture: ' + (el.innerText || '').trim().slice(0, 18));
+        inside(r, el.querySelector('h2'), (el.querySelector('h2') || {}).textContent || '');
+        inside(r, el.querySelector('.uk'), 'kicker');
+        inside(r, el.querySelector('.umin'), 'note');
+        inside(r, el.querySelector('.obtn'), 'open');
+      });
+      document.querySelectorAll('.u1012page .gamecard, .u1012page .storycard').forEach((el) => {
         const r = el.getBoundingClientRect();
         if (!r.width) return;
         if (r.height < 36) bad.push('collapsed: ' + (el.innerText || '').trim().slice(0, 18));
-        if (r.bottom > innerHeight + 1 || r.top < -1 || r.right > innerWidth + 1) bad.push('card cut off: ' + (el.innerText || '').trim().slice(0, 18));
+        if (r.right > innerWidth + 1 || r.left < -1) bad.push('card cut off: ' + (el.innerText || '').trim().slice(0, 18));
+        inside(r, el.querySelector('b'), (el.querySelector('b') || {}).textContent || '');
       });
       document.querySelectorAll('.u1012step .activity button, .u1012slides button').forEach((el) => {
         const r = el.getBoundingClientRect();

@@ -818,7 +818,7 @@
       kicker: generic ? 'Independent' : kick,
       goLabel: item.goLabel || 'Open lesson'
     });
-    if (!next.img && !(next.imgs && next.imgs.length)) next.img = 'img/lesson_zip_frill.webp';
+    if (!next.img && !(next.imgs && next.imgs.length)) next.img = IR.lessonArt || 'img/pick_review.webp';
     next.stars = null;
     return next;
   }
@@ -887,7 +887,7 @@
     }));
     const lesson = byId.intro;
     const listen = byId.listen;
-    app.append(h('div', { class: 'screen trailscreen unitpage unitA orangeunit stepage ngpreview' },
+    app.append(h('div', { class: 'screen trailscreen unitpage unitA orangeunit stepage ngpreview lessonpick' },
       h('header', { class: 'uA-top' }, pageNav('#/home'), h('h1', { class: 'uA-title' }, h('small', null, 'Unit 4 Lesson 1'), 'ng'), teacherBox({
         slides: '#/teachers/slides/ng',
         days: WEEK_DAYS.ng,
@@ -900,7 +900,7 @@
         lesson: [{
           kicker: 'Independent',
           title: lesson ? lesson.title : 'Meet ng',
-          img: 'img/lesson_zip_frill.webp',
+          img: IR.pickerScene.ng,
           alt: 'Zip and Frill',
           done: !!(lesson && lesson.done),
           go: () => { Snd.stop(); location.hash = lesson ? lesson.href : '#/lesson/1'; }
@@ -910,7 +910,7 @@
           title: (D && D.storyTitle) || (listen && listen.title) || 'Story Time',
           note: 'Story Time',
           big: true,
-          img: IR.storyCovers['4.1'],
+          img: IR.pickerScene.ng,
           alt: (D && D.storyTitle) || 'Story',
           href: listen ? listen.href : '#/lesson/2',
           done: !!(listen && listen.done)
