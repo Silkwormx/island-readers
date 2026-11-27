@@ -138,10 +138,16 @@
   }
   function whichAudio(L) { return 'which_' + (L.whichKey || L.key); }
 
+  function ynMark(w) {
+    const t = String(w).trim().toLowerCase();
+    if (t === 'yes') return ' yn-yes';
+    if (t === 'no') return ' yn-no';
+    return '';
+  }
   function choiceGrid(words, onPick, L, cls) {
     const grid = h('div', { class: 'choices ' + (cls || (words.length > 2 ? 'three' : 'two')) });
     words.forEach((w) => {
-      const b = h('button', { class: 'choice', type: 'button', 'data-w': w }, plainWord(w));
+      const b = h('button', { class: 'choice' + ynMark(w), type: 'button', 'data-w': w }, plainWord(w));
       b.addEventListener('click', () => onPick(w, b, grid));
       grid.append(b);
     });
@@ -518,7 +524,7 @@
       const status = h('p', { class: 'status' }, '\u00a0');
       const bins = h('div', { class: 'sortbins u1bins' });
       L.bins.forEach((b) => {
-        const btn = h('button', { class: 'sortbin', type: 'button', 'data-bin': b.id }, h('b', null, b.label));
+        const btn = h('button', { class: 'sortbin' + ynMark(b.label), type: 'button', 'data-bin': b.id }, h('b', null, b.label));
         btn.addEventListener('click', async () => {
           if (locked || btn.classList.contains('tried')) return;
           if (b.id === it.bin) { locked = true; btn.classList.add('right'); revealPart(wordBtn, it.word, L); status.textContent = 'Yes!'; await ding(it.word); if (!ctx.scr.ok()) return; i++; if (i >= items.length) ctx.finish(); else round(); }
@@ -545,7 +551,7 @@
       const opts = (L.whichItems && L.whichItems[it.word]) || L.whichChoices;
       const grid = h('div', { class: 'choices ' + (opts.length > 3 ? 'many' : opts.length === 2 ? 'two' : 'three') });
       shuffle(opts.slice()).forEach((v) => {
-        const b = h('button', { class: 'choice', type: 'button', 'data-w': v }, v);
+        const b = h('button', { class: 'choice' + ynMark(v), type: 'button', 'data-w': v }, v);
         b.addEventListener('click', async () => {
           if (locked || b.classList.contains('tried')) return;
           if (v === it.part) { locked = true; b.classList.add('right'); revealPart(wordEl, it.word, L); status.textContent = 'Yes! ' + it.word; await ding(it.word); if (!ctx.scr.ok()) return; i++; if (i >= items.length) ctx.finish(); else round(); }
