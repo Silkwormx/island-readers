@@ -8,8 +8,8 @@
 .u11t-bar.is-unit{justify-content:flex-start}
 .u11t-bar.is-home{justify-content:flex-end}
 .u11t-unit,.u11t-home{
-  flex:none;display:inline-flex;align-items:center;gap:.2rem;height:1.9rem;margin:0;padding:0 .5rem;
-  font:700 .72rem/1 Andika,sans-serif;cursor:pointer
+  flex:none;display:inline-flex;align-items:center;gap:.35rem;height:3rem;margin:0;padding:0 .9rem;
+  font:700 1.15rem/1 Andika,sans-serif;cursor:pointer
 }
 .u11t-unit{background:#fff;color:#2B2540;border:2px solid #5c5648;border-radius:.55rem}
 .u11t-unit .ico{width:.9rem;height:.9rem}
@@ -30,10 +30,10 @@
 .u11trail .teachbox{min-height:1.8rem;padding:.1rem .4rem;font-size:.72rem;border-width:2px;border-radius:.6rem;box-shadow:none}
 .u11trail .teachslides-sub{display:none}
 .u11t-stage{
-  flex:1 1 auto;min-height:0;display:flex;align-items:center;justify-content:center;
-  overflow:hidden;padding:.15rem .45rem;box-sizing:border-box
+  flex:1 1 auto;min-height:0;display:flex;align-items:stretch;justify-content:center;
+  overflow:hidden;padding:.35rem .5rem .15rem;box-sizing:border-box
 }
-.u11trail .qcount{flex:none;margin:0;padding:.05rem .4rem;text-align:center;font-weight:800;font-size:1.05rem;line-height:1.2}
+.u11trail .qcount{position:relative;z-index:3;flex:none;margin:0;padding:.16rem .4rem .18rem;text-align:center;font-weight:800;font-size:1.05rem;line-height:1.2;background:#FFF8E7}
 .u11trail .u11t-nav{
   flex:none;display:flex;flex-wrap:nowrap;align-items:center;justify-content:center;
   gap:.45rem;width:100%;box-sizing:border-box;
@@ -41,10 +41,10 @@
   background:#FFF8E7
 }
 .u11trail .u11t-nav .ir-btn{
-  flex:0 1 auto;min-width:6.2rem;height:44px;min-height:44px;margin:0;padding:.1rem .7rem;
-  display:inline-flex;align-items:center;justify-content:center;gap:.2rem;
-  border:3px solid #5c5648;border-radius:.8rem;background:#fff;color:#2B2540;box-shadow:none;
-  font-family:Andika,sans-serif;font-weight:700;font-size:.95rem;line-height:1;cursor:pointer
+  flex:1 1 0;min-width:0;max-width:16rem;height:4.2rem;min-height:4.2rem;margin:0;padding:.2rem .6rem;
+  display:inline-flex;align-items:center;justify-content:center;gap:.3rem;
+  border:3px solid #5c5648;border-radius:1rem;background:#fff;color:#2B2540;box-shadow:none;
+  font-family:Andika,sans-serif;font-weight:700;font-size:1.4rem;line-height:1;cursor:pointer
 }
 .u11trail .u11t-nav .ir-btn .ico{width:1.15rem;height:1.15rem;flex:none}
 .u11trail .u11t-nav .ir-back,
@@ -121,34 +121,41 @@ body:not(.teach) .u11t-rec{display:none}
 }
 
 /* Concept, intros, games */
-.u11t-card{width:min(100%,36rem);height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.35rem;text-align:center}
-.u11t-line{margin:0;font-size:clamp(1.15rem,4.2vw,1.7rem);font-weight:700;line-height:1.25}
+.u11t-card{width:min(100%,24rem);height:100%;min-height:0;max-height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.55rem;text-align:center;overflow:hidden}
+.u11t-line{margin:0;font-size:clamp(1.7rem,4.6vh,2.35rem);font-weight:700;line-height:1.15}
+.u11t-prompt{margin:0;font-size:clamp(1.25rem,3vh,1.7rem);font-weight:700;line-height:1.25}
 .u11t-letter{font-size:clamp(4.2rem,16vw,7rem);font-weight:700;line-height:.9;color:#C95A10}
 .u11t-pose{height:clamp(7rem,28vh,12rem);width:auto;max-width:70%;object-fit:contain}
 .u11t-row{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:.4rem;width:100%}
-.u11t-choices{display:flex;flex-wrap:wrap;justify-content:center;gap:.4rem;width:100%}
+.u11t-choices{display:flex;flex-direction:column;align-items:stretch;gap:.7rem;width:min(100%,24rem)}
 .u11t-choice{
-  position:relative;min-width:4.6rem;min-height:3.2rem;padding:.35rem .7rem .2rem 1.6rem;border-radius:.9rem;border:3px solid #2B2540;
-  background:#fff;font:700 clamp(1.25rem,5vw,1.8rem)/1.1 Andika,sans-serif;color:#2B2540;cursor:pointer
+  position:relative;width:100%;min-height:6.2rem;padding:.7rem 1rem .55rem 2.8rem;border-radius:1.1rem;border:4px solid #2B2540;
+  background:#fff;font:700 2.35rem/1.1 Andika,sans-serif;color:#2B2540;cursor:pointer
 }
 .u11trail .irnum{
-  position:absolute;top:-.4rem;left:-.4rem;z-index:2;pointer-events:none;
-  font-size:clamp(16px,4vmin,30px);border-width:3px;box-shadow:0 2px 0 #2B2540
+  position:absolute;top:-.55rem;left:-.35rem;z-index:2;pointer-events:none;
+  width:2.4rem;height:2.4rem;font-size:1.45rem;border-width:3px;box-shadow:0 2px 0 #2B2540
 }
 .u11t-choice .a{color:#C95A10}
 .u11t-choice.right{background:#E5F6EC;border-color:#2E9E6B}
+.u11t-sortbtn{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:.3rem;padding:.4rem .45rem .45rem;min-height:0}
+.u11t-sortbtn img{width:auto;max-width:100%;height:min(22vh,10rem);object-fit:contain;object-position:center bottom;border-radius:.7rem;border:0;background:transparent}
 .u11t-choice.nudge{animation:u11nudge .35s}
 @keyframes u11nudge{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
-.u11t-pic{height:clamp(5.5rem,22vh,9rem);width:auto;max-width:100%;object-fit:contain;background:#fff;border-radius:.8rem}
+.u11t-scene,.u11t-pic{
+  width:auto;max-width:min(100%,28rem);height:auto;max-height:min(28vh,13rem);object-fit:contain;object-position:center;
+  border-radius:1rem;border:3px solid #2B2540;background:transparent;flex:0 1 auto;min-height:0;display:block
+}
 .u11t-svg{height:clamp(4.2rem,16vh,7rem);width:4.6rem;display:flex;align-items:center;justify-content:center}
 .u11t-svg svg{width:100%;height:100%;display:block}
 .u11t-pichit .u11t-svg{width:4.4rem;height:4.2rem}
 .u11t-status{min-height:1.3rem;margin:0;font-weight:700;font-size:1rem}
-.u11t-spk{width:3.2rem;height:3.2rem;border-radius:50%;border:3px solid #2B2540;background:#fff;display:inline-flex;align-items:center;justify-content:center;cursor:pointer}
-.u11t-slots{display:flex;gap:.4rem;justify-content:center}
+.u11t-spk{width:4.8rem;height:4.8rem;border-radius:50%;border:3px solid #2B2540;background:#fff;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;flex:none}
+.u11t-spk .ico{width:2.15rem;height:2.15rem}
+.u11t-slots{display:flex;gap:.55rem;justify-content:center}
 .u11t-slot{
-  min-width:3.4rem;height:3.2rem;border:3px dashed #C9B99A;border-radius:.8rem;background:#FFFDF6;
-  font:700 1.8rem/1 Andika,sans-serif;display:flex;align-items:center;justify-content:center;cursor:pointer
+  min-width:5.4rem;height:5.4rem;border:4px dashed #C9B99A;border-radius:1rem;background:#FFFDF6;
+  font:700 3rem/1 Andika,sans-serif;display:flex;align-items:center;justify-content:center;cursor:pointer
 }
 .u11t-slot .a{color:#C95A10}
 .u11t-demo{position:relative;height:4.2rem;width:min(100%,16rem)}
@@ -161,8 +168,8 @@ body:not(.teach) .u11t-rec{display:none}
 /* Yes / No */
 .u11t-yn{display:flex;gap:.7rem;justify-content:center;width:100%}
 .u11t-yes,.u11t-no{
-  position:relative;width:7.2rem;height:7.2rem;border-radius:.6rem;border:4px solid #1d3b2c;color:#fff;
-  font:700 1.7rem/1 Andika,sans-serif;cursor:pointer
+  position:relative;width:8.4rem;height:6.6rem;border-radius:.7rem;border:4px solid #1d3b2c;color:#fff;
+  font:700 2rem/1 Andika,sans-serif;cursor:pointer
 }
 .u11t-yes{background:#2E9E6B}
 .u11t-no{background:#D64545;border-color:#6e1d1d}
@@ -247,14 +254,54 @@ body:not(.teach) .u11t-rec{display:none}
   .u11t-bells img,.u11t-gem img.prize,.u11t-celebrate .prize,.u11t-demo b{animation:none}
 }
 
+.u11t-page{position:relative;display:inline-block;max-width:100%;line-height:0}
+.u11t-book .u11t-scene{width:auto;max-width:100%;height:auto;max-height:min(46vh,22rem);object-fit:contain;display:block}
+.u11t-bubble{
+  position:absolute;left:4%;top:4%;z-index:2;margin:0;line-height:1.15;
+  padding:.12rem .7rem;border:3px solid #2B2540;border-radius:1rem;background:#FFF8E7;
+  font:700 clamp(1.05rem,2.4vh,1.55rem) Andika,sans-serif;color:#2B2540;
+  box-shadow:0 3px 0 rgba(43,37,64,.2)
+}
+.u11t-bubble:after{
+  content:"";position:absolute;left:1rem;bottom:-.7rem;
+  border:.48rem solid transparent;border-top-color:#2B2540
+}
+.u11trail[data-view="hear"] .u11t-choices,
+.u11trail[data-view="fill"] .u11t-choices{flex:1 1 auto;min-height:0;align-self:stretch}
+.u11trail[data-view="hear"] .u11t-choice,
+.u11trail[data-view="fill"] .u11t-choice{flex:1 1 0;min-height:6.6rem}
 @media (min-width:900px){
   .u11t-map{background-image:url("img/u11-forest-wide.jpg");background-position:center 60%}
   .u11t-celebrate{background-image:url("img/u11-forest-wide.jpg");background-position:center 55%}
   .u11t-marker{width:6.4rem;height:5.6rem}
-  .u11trail .acttitle{font-size:1.6rem}
+  .u11t-card{width:min(100%,68rem);gap:.7rem}
+  .u11t-choices{flex-direction:row;flex-wrap:nowrap;justify-content:center;align-items:stretch;width:min(100%,68rem);gap:.9rem}
+  .u11trail .acttitle{font-size:clamp(1.7rem,4.2vh,2.35rem);line-height:1.15;padding-bottom:.15rem}
+  .u11t-line{font-size:clamp(2.2rem,5.4vh,3.6rem)}
+  .u11t-prompt{font-size:clamp(1.45rem,3.2vh,2rem)}
+  .u11t-choice{width:auto;min-width:0;flex:1 1 0;min-height:clamp(6.4rem,16vh,9.5rem);font-size:clamp(2.2rem,4.6vh,3.1rem);padding:.8rem 1rem .6rem 3.2rem}
+  .u11trail[data-view="hear"] .u11t-choice,
+  .u11trail[data-view="fill"] .u11t-choice{min-height:clamp(8.5rem,22vh,13rem);font-size:clamp(2.6rem,5.6vh,3.8rem)}
+  .u11t-spk{width:6.4rem;height:6.4rem}
+  .u11t-spk .ico{width:2.7rem;height:2.7rem}
+  .u11trail .irnum{width:3.1rem;height:3.1rem;font-size:1.85rem}
+  .u11t-yes,.u11t-no{width:14rem;height:9rem;font-size:2.8rem}
+  .u11trail .u11t-nav .ir-btn{flex:0 1 auto;min-width:12rem;max-width:none;height:4.6rem;min-height:4.6rem;font-size:1.7rem}
+  .u11t-unit,.u11t-home{height:3.4rem;font-size:1.3rem;padding:0 1rem}
+  .u11t-slot{min-width:7.2rem;height:7.2rem;font-size:3.8rem}
+  .u11t-scene,.u11t-pic{max-height:min(30vh,15rem);max-width:min(92%,46rem)}
+  .u11t-book .u11t-scene{max-height:min(48vh,24rem);width:auto}
+  .u11t-sortbtn{min-width:0;min-height:0;flex:1 1 0}
+  .u11t-sortbtn img{height:min(34vh,16rem)}
   .u11t-pics{width:min(100%,40rem)}
   .u11t-pichit img{height:82%}
-  .u11-scene{height:min(48vh,20rem)}
+  .u11-build .u11t-choices{width:100%}
+  .u11-build .u11t-choice{min-height:clamp(5.6rem,14vh,8.2rem)}
+  .u11-satchel .satchel-art{max-height:min(32vh,15rem);max-width:min(70%,42rem)}
+  .u11-scene{width:min(100%,40rem);max-height:min(28vh,13rem)}
+  .u11trail[data-view="buildword"] .u11t-stage{padding-top:.7rem}
+  .u11trail[data-view="sort"] .u11t-stage{padding-top:.45rem}
+  .u11trail[data-view="buildword"] .u11t-prompt{margin-bottom:.35rem}
 }
 @media (max-height:740px){
   .u11t-pose,.u11t-cast{height:6.2rem}
@@ -264,11 +311,60 @@ body:not(.teach) .u11t-rec{display:none}
   .u11t-bells{height:4.6rem}
   .u11t-bells img{width:2.4rem}
 }
+@media (max-height:740px) and (min-width:900px){
+  .u11trail .acttitle{font-size:1.7rem}
+  .u11t-line{font-size:clamp(1.8rem,4.6vh,2.6rem)}
+  .u11t-prompt{font-size:1.35rem}
+  .u11t-choice{min-height:clamp(5.2rem,14vh,7.2rem);font-size:clamp(1.8rem,4vh,2.4rem)}
+  .u11trail[data-view="hear"] .u11t-choice,
+  .u11trail[data-view="fill"] .u11t-choice{min-height:clamp(6.4rem,18vh,9rem);font-size:clamp(2rem,4.4vh,2.8rem)}
+  .u11t-scene,.u11t-pic{max-height:20vh}
+  .u11t-book .u11t-scene{max-height:40vh}
+  .u11t-sortbtn img{height:min(28vh,12rem)}
+  .u11-scene{max-height:22vh}
+  .u11t-slot{min-width:5.6rem;height:5.6rem;font-size:3rem}
+  .u11trail .u11t-nav .ir-btn{height:4rem;min-height:4rem}
+  .u11t-spk{width:5rem;height:5rem}
+}
 
 /* Build-it projects: satchel, raft, banyan lanterns */
-.u11-build{width:min(100%,40rem);height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.55rem}
-.u11-scene{position:relative;width:min(100%,32rem);height:min(46vh,18rem);flex:none}
-.u11-satchel .satchel-art{width:100%;height:100%;object-fit:contain}
+.u11-build{width:min(100%,72rem);height:100%;min-height:0;max-height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.4rem;overflow:hidden}
+.u11-scene{position:relative;width:min(100%,34rem);aspect-ratio:16/9;height:auto;max-height:28vh;flex:0 1 auto;min-height:0}
+.u11-satchel{width:auto;height:auto;max-height:none;aspect-ratio:auto}
+.u11-satchel .satchel-art{
+  display:block;width:auto;height:auto;max-width:min(62vw,16rem);max-height:22vh;
+  object-fit:contain;object-position:center;border-radius:1rem;border:3px solid #2B2540;background:transparent
+}
+@media (max-width:899px){
+  .u11-build{justify-content:flex-start;gap:.55rem;padding-top:.15rem}
+  .u11-build .u11t-line{flex:none;margin:.15rem 0 .05rem}
+  .u11-build .u11t-choice{min-height:4.8rem}
+  .u11-satchel .satchel-art{max-height:20vh;max-width:min(70vw,14rem)}
+}
+@media (min-width:900px){
+  .u11t-book{width:min(100%,92rem);gap:.35rem}
+  .u11t-book .u11t-line{font-size:clamp(2rem,4.4vh,3.1rem)}
+  .u11t-page{width:auto;max-width:100%}
+  .u11t-book .u11t-scene{max-width:80vw;max-height:62vh}
+  .u11trail[data-view="picsent"] .u11t-pic,
+  .u11trail[data-view="picsent"] .u11t-scene{flex:0 0 auto;max-width:min(78vw,62rem);max-height:48vh}
+  .u11trail[data-view="picsent"] .u11t-choice{min-height:clamp(5rem,12vh,7rem)}
+  .u11-build{gap:.85rem}
+  .u11-build .u11t-line{flex:none;position:relative;z-index:2;background:#FFF8E7;padding:.05rem .5rem}
+  .u11-satchel .satchel-art{max-width:min(38vh,18rem);max-height:min(38vh,18rem)}
+  .u11trail[data-view="buildword"] .u11t-prompt{font-size:clamp(2rem,4.6vh,3rem);margin:.2rem 0 .45rem}
+  .u11trail[data-view="buildword"] .u11t-choice{min-height:clamp(8.2rem,22vh,13rem);font-size:clamp(3.2rem,7vh,4.8rem)}
+  .u11trail[data-view="buildword"] .u11t-slot{min-width:clamp(7.4rem,16vh,11rem);height:clamp(7.4rem,16vh,11rem);font-size:clamp(3.6rem,8vh,5.4rem)}
+}
+@media (max-height:740px) and (min-width:900px){
+  .u11t-book .u11t-scene{max-height:56vh;max-width:78vw}
+  .u11trail[data-view="picsent"] .u11t-pic,
+  .u11trail[data-view="picsent"] .u11t-scene{max-height:34vh;max-width:70vw}
+  .u11-satchel .satchel-art{max-width:min(36vh,18rem);max-height:min(36vh,18rem)}
+  .u11trail[data-view="buildword"] .u11t-choice{min-height:clamp(6.6rem,18vh,9rem);font-size:clamp(2.6rem,5.5vh,3.6rem)}
+  .u11trail[data-view="buildword"] .u11t-slot{min-width:clamp(5.8rem,12vh,8rem);height:clamp(5.8rem,12vh,8rem);font-size:clamp(2.8rem,6vh,4rem)}
+  .u11trail[data-view="buildword"] .u11t-prompt{font-size:clamp(1.6rem,3.4vh,2.2rem)}
+}
 .pack{position:absolute;width:18%;border-radius:.35rem;opacity:0;transform:translateY(-10px) scale(.7);transition:.4s}
 .pack.is-on{opacity:1;transform:none}
 .pack.map{left:22%;top:34%}
