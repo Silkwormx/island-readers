@@ -346,15 +346,15 @@
         { x: 68, y: 40 }, { x: 32, y: 30 }, { x: 66, y: 21 }, { x: 36, y: 13 }, { x: 64, y: 6 }
       ];
     }
-    /* Same switchbacks as the phone, gathered in the middle of the wide scene. */
+    /* Horizontal W from 00a064b: across the banyan, gem at the lower left. */
     return [
-      { x: 43, y: 90 }, { x: 58, y: 80 }, { x: 42, y: 70 }, { x: 59, y: 60 }, { x: 41, y: 50 },
-      { x: 58, y: 40 }, { x: 42, y: 30 }, { x: 57, y: 21 }, { x: 44, y: 13 }, { x: 56, y: 6 }
+      { x: 8, y: 74 }, { x: 17, y: 40 }, { x: 27, y: 76 }, { x: 37, y: 38 }, { x: 47, y: 78 },
+      { x: 57, y: 36 }, { x: 67, y: 76 }, { x: 77, y: 38 }, { x: 87, y: 72 }, { x: 94, y: 32 }
     ];
   }
   function controlsFor(list) {
     const segs = [];
-    const bowBase = trailWide() ? 3 : 7;
+    const bowBase = 7;
     for (let i = 1; i < list.length; i++) {
       const a = list[i - 1];
       const b = list[i];
@@ -435,10 +435,6 @@
     });
     view.setReplay(() => Snd.play('audio/phonemes/a.mp3'));
     const d = curve(list);
-    const wideStroke = trailWide();
-    const edgeW = wideStroke ? 2.5 : 7;
-    const fillW = wideStroke ? 1.65 : 4.6;
-    const dashW = wideStroke ? 0.48 : 1.3;
     const gems = h('div', { class: 'u11t-gembar', 'aria-label': st.gems.length + ' gems collected' });
     STOPS.forEach((stop, i) => {
       const got = st.gems.indexOf(i) >= 0;
@@ -447,9 +443,9 @@
     const board = h('div', { class: 'u11t-map' },
       h('div', { class: 'u11t-path', html:
         '<svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">' +
-        '<path d="' + d + '" fill="none" stroke="#4a2e16" stroke-width="' + edgeW + '" stroke-linecap="round" stroke-linejoin="round"/>' +
-        '<path d="' + d + '" fill="none" stroke="#f3d7a1" stroke-width="' + fillW + '" stroke-linecap="round" stroke-linejoin="round"/>' +
-        '<path d="' + d + '" fill="none" stroke="#b67a3c" stroke-width="' + dashW + '" stroke-linecap="round" stroke-dasharray="1.8 2.2"/>' +
+        '<path d="' + d + '" fill="none" stroke="#4a2e16" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>' +
+        '<path d="' + d + '" fill="none" stroke="#f3d7a1" stroke-width="4.6" stroke-linecap="round" stroke-linejoin="round"/>' +
+        '<path d="' + d + '" fill="none" stroke="#b67a3c" stroke-width="1.3" stroke-linecap="round" stroke-dasharray="1.8 2.2"/>' +
         '</svg>' }));
     list.forEach((p, i) => {
       if (i >= STOPS.length) return;
