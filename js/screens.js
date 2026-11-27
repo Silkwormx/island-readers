@@ -483,7 +483,9 @@
         title: opts.title,
         'aria-label': opts.label
       },
-        h('img', { class: 'skyisland', src: opts.island, alt: '', loading: opts.lazy ? 'lazy' : 'eager' }),
+        h('span', { class: 'skybody' },
+          h('img', { class: 'skytop', src: opts.img, alt: '', loading: opts.lazy ? 'lazy' : 'eager' }),
+          h('img', { class: 'skyrock', src: 'img/sky/rock_base.webp', alt: '' })),
         h('span', { class: 'skybadge' }, opts.mark, opts.soon ? h('span', { class: 'skylock', 'aria-hidden': 'true' }, icon('lock')) : null),
         gem);
       b.addEventListener('click', opts.onclick);
@@ -507,7 +509,7 @@
         here: st === 'here',
         soon: st === 'soon',
         done: st === 'done',
-        island: 'img/sky/stops/u' + String(n).padStart(2, '0') + '.webp',
+        img: 'img/units/tile' + String(n).padStart(2, '0') + '.webp',
         lazy: n > 8,
         mark: String(n),
         title: 'Unit ' + n + ': ' + t[0],
@@ -521,7 +523,7 @@
       n: 0,
       side: 'l',
       here: atFoundations,
-      island: 'img/sky/stops/f.webp',
+      img: coverSrc,
       mark: 'F',
       title: 'Foundations: Learn the letters',
       label: 'Foundations. Learn the letters. Opens Foundation Skills.' + (atFoundations ? ' You are here. Zip and Frill are here.' : ''),
@@ -628,11 +630,11 @@
     paintIntoScene(zipImg, go);
     paintIntoScene(frillImg, go);
     function standAt(stop) {
-      const art = stop.querySelector('.skyisland');
+      const art = stop.querySelector('.skytop');
       const a = art.getBoundingClientRect();
       const t = trail.getBoundingClientRect();
-      const y = a.top - t.top + a.height * 0.46;
-      return { y: y, zipX: a.left - t.left + a.width * 0.28, frillX: a.left - t.left + a.width * 0.74, midX: a.left - t.left + a.width * 0.5 };
+      const y = a.top - t.top + a.height * 0.84;
+      return { y: y, zipX: a.left - t.left + a.width * 0.28, frillX: a.left - t.left + a.width * 0.72, midX: a.left - t.left + a.width * 0.5 };
     }
     function put(fig, x, y) {
       fig.style.transform = 'translate(' + (x - fig.offsetWidth / 2) + 'px,' + (y - fig.offsetHeight) + 'px)';
@@ -648,8 +650,8 @@
       svg.style.height = hgt + 'px';
       const origin = trail.getBoundingClientRect();
       const pts = stops.map((s) => {
-        const a = s.querySelector('.skyisland').getBoundingClientRect();
-        return { x: a.left - origin.left + a.width / 2, y: a.top - origin.top + a.height * 0.62 };
+        const badge = s.querySelector('.skybadge').getBoundingClientRect();
+        return { x: badge.left - origin.left + badge.width / 2, y: badge.top - origin.top + badge.height * 0.45 };
       });
       let d = 'M ' + pts[0].x.toFixed(1) + ' ' + Math.max(6, pts[0].y - 22).toFixed(1);
       d += ' L ' + pts[0].x.toFixed(1) + ' ' + pts[0].y.toFixed(1);

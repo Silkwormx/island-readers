@@ -73,7 +73,7 @@ test('home shows Zip and Frill again and keeps the left-column layout', () => {
   assert.ok(screens.includes('Find It'));
   assert.ok(screens.includes('Parent and Teacher Materials'));
   assert.ok(screens.includes('Take the Placement Test'));
-  assert.ok(screens.includes('img/sky/stops/u'));
+  assert.ok(screens.includes('img/units/tile'));
   assert.ok(screens.includes('img/trail/trail_map.webp'));
   assert.ok(screens.includes('Golden Bell'));
   assert.equal(screens.includes('youbar'), false);
@@ -81,7 +81,7 @@ test('home shows Zip and Frill again and keeps the left-column layout', () => {
   assert.equal(home.includes('banner, hero,'), false);
   const sw = fs.readFileSync(new URL('../sw.js', import.meta.url), 'utf8');
   assert.equal(sw.includes('home_banyan_c.jpg'), false);
-  assert.ok(sw.includes('ir-20261127q'));
+  assert.ok(sw.includes('ir-20261127r'));
   assert.ok(sw.includes('home_zip_frill.webp'));
 });
 
