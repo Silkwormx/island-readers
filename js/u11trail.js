@@ -340,31 +340,32 @@
 
   function trailWide() { return window.matchMedia('(min-width: 900px)').matches; }
   function pts() {
-    if (!trailWide()) {
-      return [
-        { x: 34, y: 90 }, { x: 68, y: 80 }, { x: 32, y: 70 }, { x: 70, y: 60 }, { x: 30, y: 50 },
-        { x: 68, y: 40 }, { x: 32, y: 30 }, { x: 66, y: 21 }, { x: 36, y: 13 }, { x: 64, y: 6 }
-      ];
-    }
-    /* Same switchbacks as the phone, gathered in the middle of the wide scene. */
-    return [
-      { x: 43, y: 90 }, { x: 58, y: 80 }, { x: 42, y: 70 }, { x: 59, y: 60 }, { x: 41, y: 50 },
-      { x: 58, y: 40 }, { x: 42, y: 30 }, { x: 57, y: 21 }, { x: 44, y: 13 }, { x: 56, y: 6 }
-    ];
+    /* Sample only: one slow S through the roots. Not the published switchbacks. */
+    return trailWide()
+      ? [
+          { x: 10, y: 74 }, { x: 20, y: 58 }, { x: 32, y: 46 }, { x: 44, y: 40 }, { x: 55, y: 50 },
+          { x: 64, y: 64 }, { x: 74, y: 72 }, { x: 84, y: 58 }, { x: 92, y: 46 }, { x: 96, y: 34 }
+        ]
+      : [
+          { x: 28, y: 88 }, { x: 46, y: 78 }, { x: 64, y: 66 }, { x: 66, y: 54 }, { x: 48, y: 44 },
+          { x: 30, y: 34 }, { x: 28, y: 24 }, { x: 46, y: 16 }, { x: 64, y: 11 }, { x: 74, y: 6 }
+        ];
   }
   function controlsFor(list) {
     const segs = [];
-    const bowBase = trailWide() ? 3 : 7;
     for (let i = 1; i < list.length; i++) {
       const a = list[i - 1];
       const b = list[i];
-      const mx = (a.x + b.x) / 2;
-      const my = (a.y + b.y) / 2;
+      const prev = list[i - 2] || { x: a.x * 2 - b.x, y: a.y * 2 - b.y };
       const dx = b.x - a.x;
       const dy = b.y - a.y;
       const len = Math.hypot(dx, dy) || 1;
-      const bow = bowBase * (i % 2 ? 1 : -1);
-      segs.push({ a: a, b: b, c: { x: mx + (-dy / len) * bow, y: my + (dx / len) * bow * 0.45 } });
+      const cross = (a.x - prev.x) * dy - (a.y - prev.y) * dx;
+      const sign = cross > 0 ? 1 : (cross < 0 ? -1 : 0);
+      const bow = 4 * sign;
+      const mx = (a.x + b.x) / 2;
+      const my = (a.y + b.y) / 2;
+      segs.push({ a: a, b: b, c: { x: mx + (-dy / len) * bow, y: my + (dx / len) * bow } });
     }
     return segs;
   }
@@ -435,10 +436,6 @@
     });
     view.setReplay(() => Snd.play('audio/phonemes/a.mp3'));
     const d = curve(list);
-    const wideStroke = trailWide();
-    const edgeW = wideStroke ? 2.5 : 7;
-    const fillW = wideStroke ? 1.65 : 4.6;
-    const dashW = wideStroke ? 0.48 : 1.3;
     const gems = h('div', { class: 'u11t-gembar', 'aria-label': st.gems.length + ' gems collected' });
     STOPS.forEach((stop, i) => {
       const got = st.gems.indexOf(i) >= 0;
@@ -447,9 +444,9 @@
     const board = h('div', { class: 'u11t-map' },
       h('div', { class: 'u11t-path', html:
         '<svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">' +
-        '<path d="' + d + '" fill="none" stroke="#4a2e16" stroke-width="' + edgeW + '" stroke-linecap="round" stroke-linejoin="round"/>' +
-        '<path d="' + d + '" fill="none" stroke="#f3d7a1" stroke-width="' + fillW + '" stroke-linecap="round" stroke-linejoin="round"/>' +
-        '<path d="' + d + '" fill="none" stroke="#b67a3c" stroke-width="' + dashW + '" stroke-linecap="round" stroke-dasharray="1.8 2.2"/>' +
+        '<path d="' + d + '" fill="none" stroke="#4a2e16" stroke-width="16" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke"/>' +
+        '<path d="' + d + '" fill="none" stroke="#f3d7a1" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke"/>' +
+        '<path d="' + d + '" fill="none" stroke="#b67a3c" stroke-width="2.2" stroke-linecap="round" stroke-dasharray="8 10" vector-effect="non-scaling-stroke"/>' +
         '</svg>' }));
     list.forEach((p, i) => {
       if (i >= STOPS.length) return;
