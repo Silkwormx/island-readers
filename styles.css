@@ -4014,7 +4014,8 @@ body:has(.tmscreen) #soundfix,body:has(.u123step) #soundfix,body:has(.u789step) 
 .skyhome.ledges .skylbl .tnum{font-size:.78rem;line-height:1.15;font-weight:700;color:#0E7C7C;white-space:normal}
 .skyhome.ledges .skylbl .tname,
 .skyhome.ledges .skylbl .tsnd,
-.skyhome.ledges .skylbl .tcount{
+.skyhome.ledges .skylbl .tcount,
+.skyhome.ledges .skylbl .tnum{
   display:block;width:100%;height:auto;max-height:none;overflow:visible;white-space:normal;text-align:center;
 }
 .skyhome.ledges .skylbl .tname{font-size:.72rem;font-weight:700;line-height:1.2;color:#2B2540}

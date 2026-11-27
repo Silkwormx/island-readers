@@ -866,15 +866,23 @@
         const side = i % 2 === 0 ? 'l' : 'r';
         const img = el.querySelector('.skyisland');
         const aspect = img && img.naturalWidth ? img.naturalHeight / img.naturalWidth : 1.15;
-        const height = heightRoom(rowH, narrow, avail);
-        let width = Math.round(height / aspect);
-        width = Math.min(width, Math.round(w * (narrow ? 0.46 : 0.62)));
+        const fitH = heightRoom(rowH, narrow, avail);
+        const maxW = Math.round(w * (narrow ? 0.46 : 0.62));
+        let width = Math.min(maxW, Math.round(fitH / aspect));
+        /* A long rocky point must not shrink the tree. Grow the box downward instead. */
+        const usualW = Math.min(maxW, Math.round(fitH / 1.15));
+        if (width < usualW * 0.84) width = Math.round(usualW * 0.9);
+        const height = Math.max(fitH, Math.round(width * aspect));
         el.classList.remove('sky-l', 'sky-r', 'sky-b');
         el.classList.add(side === 'r' ? 'sky-r' : 'sky-l');
         el.dataset.land = String(Math.floor(Math.max(0, i - 1) / 6));
         el.style.width = width + 'px';
         el.style.height = height + 'px';
         el.style.top = Math.round(i * rowH + 6) + 'px';
+        /* Foundations keeps the a m s t letters inside the frame.
+           On the phone the stops sit farther apart sideways so the span is a diagonal. */
+        if (side === 'l') el.style.left = narrow ? '8px' : (i === 0 ? '16px' : '26px');
+        else el.style.left = Math.max(narrow ? 8 : 16, Math.round(w - width - (narrow ? 8 : 20))) + 'px';
         const lbl = el.querySelector('.skylbl');
         if (lbl) {
           const rim = img && img.naturalWidth ? grassRim(img, side === 'r') : { fy: 0.62 };
@@ -882,27 +890,28 @@
           /* On the outer grass rim, clear of the trunk, canopy, and bell. */
           const fy = Math.min(0.72, Math.max(0.5, (rim.fy || 0.62) + 0.02));
           lbl.style.position = 'absolute';
-          lbl.style.top = Math.round(fit.y + fit.h * fy) + 'px';
-          lbl.style.bottom = 'auto';
-          /* Stay on the outer rim. A tall island such as Unit 1 is narrower, so the sign must not spread across the rocky point. */
-          const cap = Math.max(86, Math.round(width * (narrow ? 0.62 : 0.5)));
-          lbl.style.width = Math.min(narrow ? 112 : 128, cap) + 'px';
+          /* Wide enough for the sound line to stay inside the sign, then grow taller for the name. */
+          const lblW = Math.min(narrow ? 148 : 168, Math.max(narrow ? 120 : 132, Math.round(width * 0.7)));
+          lbl.style.boxSizing = 'border-box';
+          lbl.style.width = lblW + 'px';
           lbl.style.height = 'auto';
           lbl.style.maxHeight = 'none';
           lbl.style.overflow = 'visible';
           lbl.style.transform = 'none';
-          if (side === 'l') {
-            lbl.style.left = '0';
-            lbl.style.right = 'auto';
-          } else {
-            lbl.style.left = 'auto';
-            lbl.style.right = '0';
-          }
+          const stopLeft = parseFloat(el.style.left) || 0;
+          let left = side === 'l' ? 0 : width - lblW;
+          if (stopLeft + left < 8) left += 8 - (stopLeft + left);
+          if (stopLeft + left + lblW > w - 8) left -= (stopLeft + left + lblW) - (w - 8);
+          lbl.style.left = Math.round(left) + 'px';
+          lbl.style.right = 'auto';
+          const lh = lbl.offsetHeight || 96;
+          const stopTop = parseFloat(el.style.top) || 0;
+          let top = Math.round(fit.y + fit.h * fy);
+          const room = window.innerHeight - trail.getBoundingClientRect().top - 8;
+          if (stopTop + top + lh > room) top = Math.max(4, Math.round(room - stopTop - lh));
+          lbl.style.top = top + 'px';
+          lbl.style.bottom = 'auto';
         }
-        /* Foundations keeps the a m s t letters inside the frame.
-           On the phone the stops sit farther apart sideways so the span is a diagonal. */
-        if (side === 'l') el.style.left = narrow ? '8px' : (i === 0 ? '16px' : '26px');
-        else el.style.left = Math.max(narrow ? 8 : 16, Math.round(w - width - (narrow ? 8 : 20))) + 'px';
       });
       if (book) {
         book.style.position = 'absolute';
