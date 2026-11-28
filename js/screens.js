@@ -964,6 +964,8 @@
         const thead = lbl.querySelector('.thead');
         if (thead) thead.style.justifyContent = 'center';
         let top = Math.round(s.grassTop + drop);
+        /* Foundations creatures stand on the grass; drop this one sign a little so it clears them. */
+        if (s.el.dataset.id === 'foundations') top += narrow ? 8 : 16;
         if (top + uniformH > s.imgBottom - 2) top = Math.round(s.imgBottom - uniformH - 2);
         if (top < s.grassTop + 2) top = Math.round(s.grassTop + 2);
         const mid = Math.min(s.img.naturalHeight - 2, Math.round(s.grass + (top - s.grassTop + uniformH / 2) / s.scaleY));
