@@ -1004,17 +1004,26 @@
       const limit = fixed ? sideEl.getBoundingClientRect().top : window.innerHeight;
       /* The third laptop sign sits on the underside. Leave room for it and its shadow so it stays on the first screen. */
       const slack = narrow ? 8 : 16;
-      const avail = Math.max(narrow ? 500 : 540, limit - trail.getBoundingClientRect().top - slack);
-      const rowH = Math.round((avail - 12) / (narrow ? 3.15 : 3.48));
-      const total = Math.round((stops.length - 1) * rowH + heightRoom(rowH, narrow, avail) + 36);
+      const room = limit - trail.getBoundingClientRect().top - slack;
+      /* Laptop islands stay the size they have on a 1280x800 screen, even if the window is taller. */
+      const avail = Math.max(narrow ? 500 : 540, narrow ? room : Math.min(room, 610));
+      let rowH = Math.round((avail - 12) / (narrow ? 3.15 : 3.48));
+      let isleH = heightRoom(rowH, narrow, avail);
+      let total = Math.round((stops.length - 1) * rowH + isleH + 36);
+      /* Safari drops a canvas taller than 4096px, which deletes every bridge. */
+      if (total > 4080) {
+        rowH = Math.max(110, Math.floor((4080 - isleH - 36) / Math.max(1, stops.length - 1)));
+        total = Math.round((stops.length - 1) * rowH + isleH + 36);
+      }
       trail.style.height = total + 'px';
       stops.forEach((el, i) => {
         const side = i % 2 === 0 ? 'l' : 'r';
         const img = el.querySelector('.skyisland');
         const aspect = img && img.naturalWidth ? img.naturalHeight / img.naturalWidth : 1.15;
-        const height = heightRoom(rowH, narrow, avail);
+        const height = isleH;
         let width = Math.round(height / aspect);
-        width = Math.min(width, Math.round(w * (narrow ? 0.46 : 0.62)));
+        /* Keep a gap between the two sides so the bridge is not pinched into a line. */
+        width = Math.min(width, Math.round(w * (narrow ? 0.46 : 0.42)), narrow ? 220 : 280);
         el.classList.remove('sky-l', 'sky-r', 'sky-b');
         el.classList.add(side === 'r' ? 'sky-r' : 'sky-l');
         el.dataset.land = String(Math.floor(Math.max(0, i - 1) / 6));
@@ -1069,42 +1078,57 @@
       svg.append(g);
     }
     function placePaintedBridges(pts) {
-      let canvas = trail.querySelector('.skyrootspans');
-      if (!canvas || canvas.tagName !== 'CANVAS') {
-        if (canvas) canvas.remove();
-        canvas = document.createElement('canvas');
-        canvas.className = 'skyrootspans';
-        trail.append(canvas);
+      /* One img per span. A single canvas of the whole trail is taller than Safari will paint, and a source-rect draw of the webp can collapse to a line. */
+      let layer = trail.querySelector('.skyrootspans');
+      if (!layer || layer.tagName === 'CANVAS') {
+        if (layer) layer.remove();
+        layer = document.createElement('div');
+        layer.className = 'skyrootspans';
+        trail.append(layer);
       }
       const w = trail.clientWidth;
       const hgt = parseInt(trail.style.height, 10) || trail.scrollHeight;
-      canvas.width = Math.max(1, w);
-      canvas.height = Math.max(1, hgt);
-      canvas.style.width = w + 'px';
-      canvas.style.height = hgt + 'px';
-      const ctx = canvas.getContext('2d');
-      const kinds = ['img/sky/bridges/bridge-vine.webp', 'img/sky/bridges/bridge-net.webp', 'img/sky/bridges/bridge-deck.webp'];
-      const paint = () => {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.save();
-        ctx.beginPath();
-        ctx.rect(6, 0, Math.max(0, w - 12), hgt);
-        ctx.clip();
-        for (let i = 0; i < pts.length - 1; i++) {
-          const img = trail._bridgeImgs && trail._bridgeImgs[i % kinds.length];
-          if (img && img.complete && img.naturalWidth) hangBridge(ctx, img, pts[i], pts[i + 1], w);
-        }
-        ctx.restore();
-      };
+      layer.style.width = w + 'px';
+      layer.style.height = hgt + 'px';
+      /* Every span uses the plank bridge. The deck picture is two bridges with a hole, and the net picture is only ropes, so both read as a broken span once they are fitted between islands. */
+      const kinds = ['img/sky/bridges/bridge-vine.webp'];
       if (!trail._bridgeImgs) {
-        trail._bridgeImgs = kinds.map((src) => {
-          const img = new Image();
-          img.onload = () => { if (trail.isConnected) paint(); };
-          img.src = src;
-          return img;
+        const imgs = kinds.map(() => new Image());
+        trail._bridgeImgs = imgs;
+        imgs.forEach((img, n) => {
+          img.onload = () => { if (trail.isConnected) layoutPath(); };
+          img.src = kinds[n];
         });
       }
-      paint();
+      const count = Math.max(0, pts.length - 1);
+      while (layer.childNodes.length > count) layer.removeChild(layer.lastChild);
+      for (let i = 0; i < count; i++) {
+        let node = layer.childNodes[i];
+        if (!node) {
+          node = document.createElement('img');
+          node.alt = '';
+          node.setAttribute('aria-hidden', 'true');
+          node.draggable = false;
+          layer.append(node);
+        }
+        const srcImg = trail._bridgeImgs[i % kinds.length];
+        if (!srcImg.complete || !srcImg.naturalWidth) { node.style.display = 'none'; continue; }
+        if (node.getAttribute('src') !== srcImg.src) node.src = srcImg.src;
+        const frame = bridgeFrame(srcImg, pts[i], pts[i + 1], w);
+        if (!frame) { node.style.display = 'none'; continue; }
+        node.style.display = 'block';
+        node.style.position = 'absolute';
+        node.style.left = '0';
+        node.style.top = '0';
+        node.style.margin = '0';
+        node.style.maxWidth = 'none';
+        node.style.objectFit = 'fill';
+        node.style.transformOrigin = '0 0';
+        node.style.pointerEvents = 'none';
+        node.style.width = frame.dw.toFixed(1) + 'px';
+        node.style.height = frame.dh.toFixed(1) + 'px';
+        node.style.transform = 'translate(' + frame.x.toFixed(1) + 'px,' + frame.y.toFixed(1) + 'px) rotate(' + frame.ang.toFixed(4) + 'rad) translate(' + frame.tx.toFixed(1) + 'px,' + frame.ty.toFixed(1) + 'px)';
+      }
     }
     function bridgeInk(img) {
       if (img._ink) return img._ink;
@@ -1230,13 +1254,13 @@
       img._rows = rows;
       return rows;
     }
-    function hangBridge(ctx, img, a, b, frameW) {
+    function bridgeFrame(img, a, b, frameW) {
       const left = a.x <= b.x ? a : b;
       const right = a.x <= b.x ? b : a;
       const dx = right.x - left.x;
       const dy = right.y - left.y;
       const dist = Math.hypot(dx, dy);
-      if (dist < 18) return;
+      if (dist < 18) return null;
       const slim = frameW < 520;
       const box = bridgeInk(img);
       const bw = Math.max(1, box.maxX - box.minX);
@@ -1244,13 +1268,9 @@
       let rail = dist * (bh / bw);
       rail = Math.max(slim ? 42 : 54, Math.min(slim ? 68 : 80, rail * (slim ? 0.7 : 0.48)));
       const ang = Math.atan2(dy, dx);
-      ctx.save();
-      ctx.translate(left.x, left.y);
-      ctx.rotate(ang);
       /* Shift the end post back onto the grass, so the ropes meet the rim instead of a floating root. */
       const tuck = Math.min(slim ? 36 : 56, dist * 0.16);
-      ctx.drawImage(img, box.minX, box.minY, bw, bh, -tuck, -rail * 0.38, dist + tuck * 2, rail);
-      ctx.restore();
+      return { x: left.x, y: left.y, ang: ang, dw: dist + tuck * 2, dh: rail, tx: -tuck, ty: -rail * 0.38 };
     }
     function layoutPath() {
       const home = trail.closest('.skyhome');
