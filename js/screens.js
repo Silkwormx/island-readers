@@ -582,7 +582,7 @@
     });
     const cards = [foundations];
     for (let n = 1; n <= 22; n++) cards.push(unit(n));
-    const BOOK = '<svg viewBox="0 0 140 110" class="bookpic" aria-hidden="true"><ellipse cx="70" cy="102" rx="46" ry="7" fill="#2b2540" opacity=".14"/><ellipse cx="48" cy="96" rx="22" ry="6" fill="#fff" opacity=".85"/><ellipse cx="70" cy="94" rx="26" ry="7" fill="#fff"/><ellipse cx="94" cy="96" rx="20" ry="6" fill="#fff" opacity=".8"/><path d="M18 20h46c7 8 14 11 20 12v60c-6-2-13-5-20-11H18z" fill="#f4ead8" stroke="#7a5230" stroke-width="2.4" stroke-linejoin="round"/><path d="M122 20H76c-7 8-14 11-20 12v60c6-2 13-5 20-11h46z" fill="#c4552a" stroke="#7a3218" stroke-width="2.4" stroke-linejoin="round"/><path d="M70 32v50" stroke="#7a5230" stroke-width="2.2"/><path d="M82 38h26M82 48h20M82 58h24" stroke="#f8e6d0" stroke-width="2.4" stroke-linecap="round"/></svg>';
+    const BOOK = '<svg viewBox="0 0 48 48" aria-hidden="true"><path d="M14 7.5h20.2c2.2 0 3.8 1.7 3.8 3.8v26.2c0 1.5-1.2 2.6-2.6 2.6H16.2c-2.6 0-4.7-2-4.7-4.6V11.2c0-2 1.6-3.7 2.5-3.7z" fill="#C4552A" stroke="#6E3018" stroke-width="1.7"/><path d="M11.5 11.2v24.3c0 2.6 2.1 4.6 4.7 4.6" fill="#A33B1C" stroke="#6E3018" stroke-width="1.7"/><path d="M16.2 11.2h18.4c.8 0 1.4.6 1.4 1.4v22.2c0 .5-.3.9-.8 1.1-2.4.7-5.6.5-8.2-.8-2.2-1.1-5.4-1-8-.2-1.2.4-2.8-.4-2.8-1.7V12.6c0-.8.6-1.4 1.4-1.4z" fill="#FFF6E4" stroke="#E2C48A" stroke-width="1.1"/><path d="M19.2 16.2h12.2M19.2 20.2h12.2M19.2 24.2h8.4" stroke="#C9841A" stroke-width="1.25" stroke-linecap="round"/><path d="M16.2 7.5v32.6" stroke="#6E3018" stroke-width="1.5"/><circle cx="33.2" cy="30.4" r="2.15" fill="#E2B15A" stroke="#8A5A22" stroke-width="1.1"/><path d="M36.2 6.4c5.4 1 8.2 6.4 5.2 10.8-4.4-.7-8-5.4-5.2-10.8z" fill="#2E9E6B" stroke="#1B5E38" stroke-width="1.2"/></svg>';
     const library = h('button', {
       class: 'skybook',
       type: 'button',
@@ -594,7 +594,7 @@
     pathSvg.setAttribute('class', 'skypath');
     pathSvg.setAttribute('aria-hidden', 'true');
     const skyfar = ledgesHome ? h('div', { class: 'skyfar', 'aria-hidden': 'true' }) : null;
-    const trailBits = [skyfar, pathSvg, library].concat(cards).filter(Boolean);
+    const trailBits = [pathSvg, library].concat(cards);
     const zipImg = h('img', { class: 'skyfigpic', alt: '', src: 'img/zipA.webp' });
     const frillImg = h('img', { class: 'skyfigpic', alt: '', src: 'img/zip-show/frill-glide.webp' });
     const tuft = () => h('img', { class: 'skygrass', alt: '', src: 'img/sky/grass_tuft.webp' });
@@ -632,12 +632,8 @@
         body.append(h('p', { class: 'drop-soon' }, 'Units 9 and 10 come later.'));
       }
     });
-    const booksBtn = h('button', {
-      class: 'homebook', type: 'button', 'aria-label': 'Library. Open every book.',
-      onclick: () => { Snd.stop(); location.hash = '#/library'; }
-    }, h('span', { class: 'homebook-art', 'aria-hidden': 'true' }, h('i'), h('i'), h('i')), h('span', { class: 'homebook-name' }, 'Library'));
     const tabs = h('nav', { class: 'hometabs', 'aria-label': 'More places' },
-      booksBtn, trailBtn, sightDrop, tab('#/find', 'Find It', 'search'));
+      trailBtn, sightDrop, tab('#/find', 'Find It', 'search'));
     /* Nov 6 2026: full-width home feature (approved banyan scene), then About + the hero beside the unit grid */
     const banner = h('header', { class: 'hbanner' }, h('h1', null, 'Island Readers'), kidChip(),
       h('div', { class: 'grownwrap' }, h('span', { class: 'grownlab' }, 'Parent and Teacher Materials'), IR.ui.gearButton()));
@@ -668,7 +664,7 @@
         h('div', { class: 'zfhead' }, h('h2', { class: 'zfline' }, 'Learn to read with Zip and Frill'), readAloudBtn()),
         h('p', { class: 'zfsub' }, 'Ring every bell by learning its sounds.'),
         continueButton()));
-    app.append(h('div', { class: 'screen home mapscreen gridhome bellfit bellspeek skyhome' + (ledgesHome ? ' ledges' : '') }, h('div', { class: 'mwrap' }, banner, h('div', { class: 'homelay' }, h('div', { class: 'homeside' }, aboutDrop, hero, tabs), h('div', { class: 'bellslot' }, grid)))));
+    app.append(h('div', { class: 'screen home mapscreen gridhome bellfit bellspeek skyhome' + (ledgesHome ? ' ledges' : '') }, ...[skyfar, h('div', { class: 'mwrap' }, banner, h('div', { class: 'homelay' }, h('div', { class: 'homeside' }, aboutDrop, hero, tabs), h('div', { class: 'bellslot' }, grid)))].filter(Boolean)));
     if (ledgesHome) standOnTrail(grid, hereUnit, null, null, null, null, null);
     else standOnTrail(grid, hereUnit, zipFig, frillFig, zipImg, frillImg, paintIntoScene);
     const side = app.querySelector('.homeside'); const scr = app.querySelector('.screen.home');
@@ -677,6 +673,8 @@
       if (!side || !scr || !side.isConnected) { window.removeEventListener('resize', layoutHome); return; }
       const nav = side.querySelector('.hometabs');
       const tabEls = nav ? [...nav.querySelectorAll('.hometab')] : [];
+      const aboutBtn = side.querySelector('.aboutbtn');
+      const panelBtns = aboutBtn ? [aboutBtn, ...tabEls] : tabEls;
       const heroEl = side.querySelector('.homefeature');
       const pics = side.querySelector('.zfpics');
       const artEl = side.querySelector('.homeart');
@@ -687,7 +685,7 @@
         side.style.removeProperty('overflow-y');
         side.style.removeProperty('gap');
         if (nav) nav.style.removeProperty('gap');
-        tabEls.forEach((t) => { t.style.removeProperty('height'); t.style.removeProperty('min-height'); t.style.removeProperty('max-height'); });
+        panelBtns.forEach((t) => { t.style.removeProperty('height'); t.style.removeProperty('min-height'); t.style.removeProperty('max-height'); });
         if (artEl) artEl.style.removeProperty('max-height');
         if (pics) { pics.style.removeProperty('max-height'); pics.style.removeProperty('flex-grow'); pics.style.removeProperty('flex-basis'); }
       };
@@ -721,11 +719,10 @@
       if (buttonPast() || sideOverflow() || heroOverflow()) {
         side.style.gap = '6px';
         if (nav) nav.style.gap = '6px';
-        tabEls.forEach((t) => {
-          if (t.classList.contains('trailtab')) return;
-          t.style.height = '42px';
-          t.style.minHeight = '42px';
-          t.style.maxHeight = '42px';
+        panelBtns.forEach((t) => {
+          t.style.height = '48px';
+          t.style.minHeight = '48px';
+          t.style.maxHeight = '48px';
         });
       }
       if (pics && (buttonPast() || heroOverflow())) {
@@ -1038,7 +1035,7 @@
       placeLedgeLabels(stops, narrow);
       if (book) {
         book.style.position = 'absolute';
-        book.style.width = (narrow ? 46 : 58) + 'px';
+        book.style.width = 'max-content';
         book.style.top = '10px';
         book.style.left = 'auto';
         book.style.right = '12px';

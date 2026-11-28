@@ -4001,6 +4001,7 @@ body:has(.tmscreen) #soundfix,body:has(.u123step) #soundfix,body:has(.u789step) 
   position:fixed;left:0;top:0;right:0;bottom:0;z-index:0;pointer-events:none;
   background:#d5e8f6 url("img/sky/sky_far.webp") center 18% / cover no-repeat;
 }
+.skyhome.ledges .mwrap{position:relative;z-index:1}
 .skyhome.ledges .skytrail{
   position:relative;overflow:clip;
   border:4px solid #7A5430;border-radius:1.35rem;
@@ -4049,3 +4050,107 @@ body:has(.tmscreen) #soundfix,body:has(.u123step) #soundfix,body:has(.u789step) 
 }
 .skyhome.ledges .skybook{position:absolute;z-index:6;margin:0;top:10px;right:12px;left:auto;align-self:auto}
 .skyhome.ledges .skyfig{width:2.85rem;z-index:8}
+/* Continue stays in the markup for later. It is not shown on the home page. */
+.skyhome .zfstart2{display:none!important}
+.homebook-art{width:1.7rem;height:1.7rem;display:block;flex:none}
+.homebook-art svg,.skybookart svg{display:block;width:100%;height:100%}
+.skyhome.ledges .skybookart{display:block;width:1.7rem;height:1.7rem;flex:none}
+.skyhome.ledges .skybookart svg{width:1.7rem;height:1.7rem}
+.skyhome.ledges .skybook{
+  display:inline-flex;flex-direction:row;align-items:center;gap:.35rem;
+  width:auto;padding:.22rem .62rem .22rem .38rem;
+  background:#FFF8E7;border:3px solid #7A5430;border-radius:.9rem;
+  box-shadow:0 3px 0 #7A5430;
+}
+.skyhome.ledges .skybook b{background:transparent;border:0;padding:0;box-shadow:none;font-size:.95rem}
+/* About, Trail Map, Sight Words, and Find It share one box on the phone and on the desktop. */
+.skyhome.ledges .homeside .about-drop > .aboutbtn,
+.skyhome.ledges .homeside .hometabs .hometab{
+  box-sizing:border-box;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:100%;
+  height:3rem!important;
+  min-height:3rem!important;
+  max-height:3rem!important;
+  margin:0!important;
+  padding:0 .7rem!important;
+  gap:.4rem;
+  border-width:3px!important;
+  border-style:solid!important;
+  border-radius:1.15rem;
+  font-size:.92rem!important;
+  font-weight:700;
+  line-height:1.12;
+  text-align:center;
+  white-space:normal;
+}
+.skyhome.ledges .homeside .hometabs .hometab{
+  border-color:#C9841A!important;
+  background:linear-gradient(180deg,#FFE7B8,#F6C56A)!important;
+  color:#3A2400!important;
+  box-shadow:0 3px 0 #C9841A!important;
+}
+.skyhome.ledges .homeside .about-drop > .aboutbtn{
+  border-color:#7EB8B8!important;
+  background:#E4F6F6!important;
+  color:#085E5C!important;
+  box-shadow:0 3px 0 #7EB8B8!important;
+}
+.skyhome.ledges .homeside .about-drop > .aboutbtn .hometab-name,
+.skyhome.ledges .homeside .hometabs .hometab-name{
+  font-size:.92rem!important;
+  line-height:1.12;
+  text-align:center;
+  white-space:normal;
+}
+.skyhome.ledges .homeside .about-drop > .aboutbtn .hometab-ico,
+.skyhome.ledges .homeside .about-drop > .aboutbtn .ico,
+.skyhome.ledges .homeside .hometabs .hometab-ico,
+.skyhome.ledges .homeside .hometabs .hometab-ico .ico{
+  width:1.2rem!important;
+  height:1.2rem!important;
+  flex:none;
+}
+.skyhome.ledges .homeside .homefeature{padding-bottom:0!important;margin-bottom:0}
+.skyhome.ledges .homeside .homefeature .hfbody{padding-bottom:.05rem}
+.skyhome.ledges .homeside .hometabs{margin-top:.2rem!important}
+.skyhome.ledges .kidchip{display:none!important}
+/* Phone: the fixed sky sits under the sidebar and the framed trail. */
+@media (max-width:999px){
+  .skyhome.ledges .mwrap{padding:.12rem .4rem .4rem}
+  .skyhome.ledges .hbanner{position:relative;z-index:3;background:#FFF8E7;padding:.02rem .1rem .04rem;gap:.12rem .4rem}
+  .skyhome.ledges .mwrap > .hbanner h1{font-size:1.55rem!important;line-height:1.05}
+  .skyhome.ledges .mwrap > .hbanner h1::after{margin:.1rem auto 0;height:.28rem}
+  .skyhome.ledges .homeside{
+    position:relative;z-index:2;order:0;
+    display:flex!important;flex-direction:column;
+    height:auto!important;max-height:none!important;overflow:visible!important;
+    gap:.28rem;margin:0 0 .32rem;padding:.36rem .4rem .4rem;box-sizing:border-box;
+    background:#FFF8E7;border:4px solid #7A5430;border-radius:1.35rem;
+    box-shadow:inset 0 0 0 2px #E7D3A4, 0 8px 16px rgba(70,46,20,.12);
+  }
+  .skyhome.ledges .homefeature{overflow:visible;background:transparent;box-shadow:none;padding:0!important;margin:0;gap:.16rem}
+  .skyhome.ledges .zfpics{display:block!important;width:100%;flex:none;min-height:0;max-height:none;overflow:hidden;border-radius:.7rem}
+  .skyhome.ledges .homeart,
+  .skyhome.ledges .zfpics img.homeart{
+    display:block;width:100%;max-width:100%;height:auto!important;max-height:4.35rem!important;
+    object-fit:cover;object-position:center 40%;border-radius:.7rem;aspect-ratio:auto!important;
+  }
+  .skyhome.ledges .hfbody{gap:.06rem;padding:0 .1rem .02rem!important}
+  .skyhome.ledges .zfline{font-size:.88rem!important;line-height:1.12}
+  .skyhome.ledges .zfsub{font-size:.74rem!important;line-height:1.15}
+  .skyhome.ledges .zfspk{width:1.85rem;height:1.85rem}
+  .skyhome.ledges .zfspk .ico{width:1rem;height:1rem}
+  .skyhome.ledges .hometabs{margin-top:.1rem!important;gap:.28rem}
+  .skyhome.ledges .skytrail{
+    position:relative;z-index:1;
+    border:4px solid #7A5430!important;
+    border-radius:1.35rem;
+    box-shadow:inset 0 0 0 2px #E7D3A4, 0 8px 16px rgba(70,46,20,.12);
+  }
+}
+@media (min-width:1000px){
+  .skyhome.ledges .homeside .hometabs{margin-top:0!important;gap:.4rem}
+}
