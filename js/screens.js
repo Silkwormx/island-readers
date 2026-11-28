@@ -1090,8 +1090,14 @@
       const hgt = parseInt(trail.style.height, 10) || trail.scrollHeight;
       layer.style.width = w + 'px';
       layer.style.height = hgt + 'px';
-      /* Every span uses the plank bridge. The deck picture is two bridges with a hole, and the net picture is only ropes, so both read as a broken span once they are fitted between islands. */
-      const kinds = ['img/sky/bridges/bridge-vine.webp'];
+      /* Five single-plank bridges. Neighbors take the next one, so no two spans in a row match. */
+      const kinds = [
+        'img/sky/bridges/bridge-v1.webp',
+        'img/sky/bridges/bridge-v2.webp',
+        'img/sky/bridges/bridge-v3.webp',
+        'img/sky/bridges/bridge-v4.webp',
+        'img/sky/bridges/bridge-v5.webp'
+      ];
       if (!trail._bridgeImgs) {
         const imgs = kinds.map(() => new Image());
         trail._bridgeImgs = imgs;
