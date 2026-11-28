@@ -770,6 +770,10 @@
       if (islands.some((img) => !img.complete || !img.naturalWidth)) {
         Promise.all(islands.map(whenReady)).then(() => { if (trail.isConnected) draw(); });
       }
+      /* Andika can arrive after the first measure. Size the signs again so the words stay inside the box. */
+      if (document.fonts && document.fonts.ready) {
+        document.fonts.ready.then(() => { if (trail.isConnected) draw(); });
+      }
       return;
     }
     const WALK_MS = 2000;
@@ -998,7 +1002,9 @@
       const sideEl = trail.closest('.skyhome').querySelector('.homeside');
       const fixed = sideEl && getComputedStyle(sideEl).position === 'fixed';
       const limit = fixed ? sideEl.getBoundingClientRect().top : window.innerHeight;
-      const avail = Math.max(narrow ? 500 : 620, limit - trail.getBoundingClientRect().top - 8);
+      /* The third laptop sign sits on the underside. Leave room for it and its shadow so it stays on the first screen. */
+      const slack = narrow ? 8 : 16;
+      const avail = Math.max(narrow ? 500 : 540, limit - trail.getBoundingClientRect().top - slack);
       const rowH = Math.round((avail - 12) / (narrow ? 3.15 : 3.48));
       const total = Math.round((stops.length - 1) * rowH + heightRoom(rowH, narrow, avail) + 36);
       trail.style.height = total + 'px';
