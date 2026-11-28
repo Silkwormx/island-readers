@@ -593,7 +593,8 @@
     const pathSvg = document.createElementNS(NS, 'svg');
     pathSvg.setAttribute('class', 'skypath');
     pathSvg.setAttribute('aria-hidden', 'true');
-    const trailBits = [pathSvg, library].concat(cards);
+    const skyfar = ledgesHome ? h('div', { class: 'skyfar', 'aria-hidden': 'true' }) : null;
+    const trailBits = [skyfar, pathSvg, library].concat(cards).filter(Boolean);
     const zipImg = h('img', { class: 'skyfigpic', alt: '', src: 'img/zipA.webp' });
     const frillImg = h('img', { class: 'skyfigpic', alt: '', src: 'img/zip-show/frill-glide.webp' });
     const tuft = () => h('img', { class: 'skygrass', alt: '', src: 'img/sky/grass_tuft.webp' });
@@ -759,7 +760,20 @@
       const draw = () => { if (trail.isConnected) layoutPath(); };
       requestAnimationFrame(draw);
       window.addEventListener('resize', () => { if (trail.isConnected) draw(); });
-      trail.querySelectorAll('.skyisland').forEach((img) => { if (!img.complete) img.addEventListener('load', draw, { once: true }); });
+      const islands = [...trail.querySelectorAll('.skyisland')];
+      const whenReady = (img) => (img.complete && img.naturalWidth) ? Promise.resolve() : new Promise((res) => {
+        img.addEventListener('load', res, { once: true });
+        img.addEventListener('error', res, { once: true });
+      });
+      islands.forEach((img) => { if (!img.complete) img.addEventListener('load', draw, { once: true }); });
+      /* A large island can finish after the first layout and miss that pass, which leaves its sign small. */
+      if (islands.some((img) => !img.complete || !img.naturalWidth)) {
+        Promise.all(islands.map(whenReady)).then(() => { if (trail.isConnected) draw(); });
+      }
+      /* Andika can arrive after the first measure. Size the signs again so the words stay inside the box. */
+      if (document.fonts && document.fonts.ready) {
+        document.fonts.ready.then(() => { if (trail.isConnected) draw(); });
+      }
       return;
     }
     const WALK_MS = 2000;
@@ -869,7 +883,13 @@
           const row = rows[y] || rows[y - 1];
           if (row && (!best || row.w > best.w)) best = row;
         }
-        if (!best || best.w < 8) return;
+        if (!best || best.w < 8) {
+          best = {
+            min: Math.round(rim.left * img.naturalWidth),
+            max: Math.round(rim.right * img.naturalWidth),
+            w: Math.max(8, Math.round((rim.right - rim.left) * img.naturalWidth))
+          };
+        }
         const grassTop = fit.y + grass * scaleY;
         seats.push({
           el: el,
@@ -948,6 +968,8 @@
         const thead = lbl.querySelector('.thead');
         if (thead) thead.style.justifyContent = 'center';
         let top = Math.round(s.grassTop + drop);
+        /* Foundations creatures stand on the grass; drop this one sign a little so it clears them. */
+        if (s.el.dataset.id === 'foundations') top += narrow ? 8 : 16;
         if (top + uniformH > s.imgBottom - 2) top = Math.round(s.imgBottom - uniformH - 2);
         if (top < s.grassTop + 2) top = Math.round(s.grassTop + 2);
         const mid = Math.min(s.img.naturalHeight - 2, Math.round(s.grass + (top - s.grassTop + uniformH / 2) / s.scaleY));
@@ -980,7 +1002,9 @@
       const sideEl = trail.closest('.skyhome').querySelector('.homeside');
       const fixed = sideEl && getComputedStyle(sideEl).position === 'fixed';
       const limit = fixed ? sideEl.getBoundingClientRect().top : window.innerHeight;
-      const avail = Math.max(narrow ? 500 : 620, limit - trail.getBoundingClientRect().top - 8);
+      /* The third laptop sign sits on the underside. Leave room for it and its shadow so it stays on the first screen. */
+      const slack = narrow ? 8 : 16;
+      const avail = Math.max(narrow ? 500 : 540, limit - trail.getBoundingClientRect().top - slack);
       const rowH = Math.round((avail - 12) / (narrow ? 3.15 : 3.48));
       const total = Math.round((stops.length - 1) * rowH + heightRoom(rowH, narrow, avail) + 36);
       trail.style.height = total + 'px';
