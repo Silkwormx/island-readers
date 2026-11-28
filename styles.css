@@ -4042,5 +4042,10 @@ body:has(.tmscreen) #soundfix,body:has(.u123step) #soundfix,body:has(.u789step) 
   .skyhome.ledges .skylbl{font-size:.9rem}
 }
 .skyhome.ledges .skyrootspans{position:absolute;left:0;top:0;z-index:3;pointer-events:none}
+.skyhome.ledges .skyrootspans img{position:absolute;display:block;max-width:none;pointer-events:none}
+/* The sidebar is sized in rem, and the root type grows with the window. Cap it so the trail cannot be squeezed down to a single island. */
+@media (min-width:1100px){
+  .skyhome.ledges .homelay{grid-template-columns:min(21rem, 400px) minmax(0, 1fr)!important}
+}
 .skyhome.ledges .skybook{position:absolute;z-index:6;margin:0;top:10px;right:12px;left:auto;align-self:auto}
 .skyhome.ledges .skyfig{width:2.85rem;z-index:8}
