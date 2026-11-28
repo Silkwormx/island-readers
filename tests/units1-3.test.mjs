@@ -63,7 +63,7 @@ test('house style: no em dashes, no banned words, no letter-sound TTS', () => {
 });
 
 test('service worker caches the new code', () => {
-  assert.match(sw, /ir-20261128v/);
+  assert.match(sw, /ir-20261128x/);
   assert.match(sw, /"\.\/data_u123\.js"/);
   assert.match(sw, /"\.\/js\/u123\.js"/);
 });
