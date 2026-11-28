@@ -582,7 +582,7 @@
     });
     const cards = [foundations];
     for (let n = 1; n <= 22; n++) cards.push(unit(n));
-    const BOOK = '<svg viewBox="0 0 140 110" class="bookpic" aria-hidden="true"><ellipse cx="70" cy="102" rx="46" ry="7" fill="#2b2540" opacity=".14"/><ellipse cx="48" cy="96" rx="22" ry="6" fill="#fff" opacity=".85"/><ellipse cx="70" cy="94" rx="26" ry="7" fill="#fff"/><ellipse cx="94" cy="96" rx="20" ry="6" fill="#fff" opacity=".8"/><path d="M18 20h46c7 8 14 11 20 12v60c-6-2-13-5-20-11H18z" fill="#f4ead8" stroke="#7a5230" stroke-width="2.4" stroke-linejoin="round"/><path d="M122 20H76c-7 8-14 11-20 12v60c6-2 13-5 20-11h46z" fill="#c4552a" stroke="#7a3218" stroke-width="2.4" stroke-linejoin="round"/><path d="M70 32v50" stroke="#7a5230" stroke-width="2.2"/><path d="M82 38h26M82 48h20M82 58h24" stroke="#f8e6d0" stroke-width="2.4" stroke-linecap="round"/></svg>';
+    const BOOK = '<svg viewBox="0 0 48 48" aria-hidden="true"><rect x="5" y="29" width="30" height="10" rx="1.8" fill="#C4552A" stroke="#6E3018" stroke-width="1.7"/><rect x="8" y="18.5" width="30" height="10" rx="1.8" fill="#E2B15A" stroke="#8A5A22" stroke-width="1.7"/><rect x="6" y="8" width="30" height="10" rx="1.8" fill="#1C8F8C" stroke="#0C5C5A" stroke-width="1.7"/><path d="M10 13h20M11 23.5h18M10 34h18" stroke="#FFF6E4" stroke-width="1.35" stroke-linecap="round" opacity=".9"/><path d="M37 5.5c7 1.2 10.5 8 6.5 13.5-5.5-1.2-10.2-7-6.5-13.5z" fill="#2E9E6B" stroke="#1B5E38" stroke-width="1.4"/><path d="M39.2 10.2c2.2 2.4 2.4 5.2.2 7.4" fill="none" stroke="#E7F6D8" stroke-width="1.1" stroke-linecap="round"/></svg>';
     const library = h('button', {
       class: 'skybook',
       type: 'button',
@@ -635,7 +635,7 @@
     const booksBtn = h('button', {
       class: 'homebook', type: 'button', 'aria-label': 'Library. Open every book.',
       onclick: () => { Snd.stop(); location.hash = '#/library'; }
-    }, h('span', { class: 'homebook-art', 'aria-hidden': 'true' }, h('i'), h('i'), h('i')), h('span', { class: 'homebook-name' }, 'Library'));
+    }, h('span', { class: 'homebook-art', html: BOOK, 'aria-hidden': 'true' }), h('span', { class: 'homebook-name' }, 'Library'));
     const tabs = h('nav', { class: 'hometabs', 'aria-label': 'More places' },
       booksBtn, trailBtn, sightDrop, tab('#/find', 'Find It', 'search'));
     /* Nov 6 2026: full-width home feature (approved banyan scene), then About + the hero beside the unit grid */
@@ -1038,7 +1038,7 @@
       placeLedgeLabels(stops, narrow);
       if (book) {
         book.style.position = 'absolute';
-        book.style.width = (narrow ? 46 : 58) + 'px';
+        book.style.width = 'max-content';
         book.style.top = '10px';
         book.style.left = 'auto';
         book.style.right = '12px';

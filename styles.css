@@ -4049,3 +4049,36 @@ body:has(.tmscreen) #soundfix,body:has(.u123step) #soundfix,body:has(.u789step) 
 }
 .skyhome.ledges .skybook{position:absolute;z-index:6;margin:0;top:10px;right:12px;left:auto;align-self:auto}
 .skyhome.ledges .skyfig{width:2.85rem;z-index:8}
+/* Continue stays in the markup for later. It is not shown on the home page. */
+.skyhome .zfstart2{display:none!important}
+.homebook-art{width:1.7rem;height:1.7rem;display:block;flex:none}
+.homebook-art svg,.skybookart svg{display:block;width:100%;height:100%}
+.skyhome.ledges .skybookart{display:block;width:1.7rem;height:1.7rem;flex:none}
+.skyhome.ledges .skybookart svg{width:1.7rem;height:1.7rem}
+.skyhome.ledges .skybook{
+  display:inline-flex;flex-direction:row;align-items:center;gap:.35rem;
+  width:auto;padding:.22rem .62rem .22rem .38rem;
+  background:#FFF8E7;border:3px solid #7A5430;border-radius:.9rem;
+  box-shadow:0 3px 0 #7A5430;
+}
+.skyhome.ledges .skybook b{background:transparent;border:0;padding:0;box-shadow:none;font-size:.95rem}
+/* Phone: the fixed sky sits under the sidebar and the framed trail. */
+@media (max-width:999px){
+  .skyhome.ledges .hbanner{position:relative;z-index:3;background:#FFF8E7}
+  .skyhome.ledges .homeside{
+    position:relative;z-index:2;order:0;
+    display:flex!important;flex-direction:column;
+    height:auto!important;max-height:none!important;overflow:visible!important;
+    gap:.55rem;margin:0 0 .75rem;padding:.65rem .6rem .7rem;box-sizing:border-box;
+    background:#FFF8E7;border:4px solid #7A5430;border-radius:1.35rem;
+    box-shadow:inset 0 0 0 2px #E7D3A4, 0 8px 16px rgba(70,46,20,.12);
+  }
+  .skyhome.ledges .homefeature{overflow:visible;background:transparent;box-shadow:none;padding:0;margin:0;gap:.4rem}
+  .skyhome.ledges .zfpics{display:block!important;width:100%;flex:none;min-height:0;max-height:none;overflow:hidden;border-radius:.85rem}
+  .skyhome.ledges .homeart{
+    display:block;width:100%;height:auto;max-height:8.4rem;
+    object-fit:cover;object-position:center 40%;border-radius:.85rem;aspect-ratio:auto;
+  }
+  .skyhome.ledges .hometabs{margin-top:.15rem;gap:.4rem}
+  .skyhome.ledges .skytrail{position:relative;z-index:1}
+}
